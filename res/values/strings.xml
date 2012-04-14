@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">What The Duck</string>
+    <string name="username">Pseudonyme DucksManager</string>
+    <string name="password">Mot de passe</string>
+    <string name="remember_credentials">Se souvenir de mes identifiants</string>
+    <string name="no_result">Pas de résultat</string>
+    <string name="my_collection">Ma collection</string>
+    <string name="filter">Filtrer</string>
+    <string name="logout_menu">Déconnexion</string>
+    <string name="issue">Numéro</string>
+    <string name="issuecondition_description">Etat du numéro</string>
+    <string name="my_collection_menu">Retour à ma collection</string>
+    <string name="insert_issue_menu">Ajouter un numéro</string>
+    <string name="insert_issue__choose_country">Choisir un pays</string>
+    <string name="insert_issue__confirm">Ajout du numéro %1$s</string>
+    <string name="confirm">OK</string>
+    <string name="link_to_ducksmanager_website">WhatTheDuck est l\'application mobile de DucksManager. Cliquez ici pour accéder au site Web de DucksManager.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Annuler</string>
+    
+    <string name="condition_good">Bon état</string>
+    <string name="condition_notsogood">Etat moyen</string>
+    <string name="condition_bad">Mauvais état</string>
+    
+    <string name="confirmation_message">Confirmation</string>
+    <string name="confirmation_message__issue_inserted">Le numéro a été ajouté à votre collection</string>
+    
+    <string name="input_error">Erreur de saisie</string>
+    <string name="input_error__empty_credentials">Vous devez saisir votre pseudonyme et votre mot de passe pour continuer</string>
+    <string name="input_error__invalid_credentials">Vos identifiants sont invalides</string>
+    <string name="input_error__issue_already_possessed">Vous possédez déjà ce numéro</string>
+    <string name="input_error__select_condition">Veuillez sélectionner l\'état du numéro à ajouter</string>
+    
+    <string name="internal_error">Erreur interne</string>
+    <string name="internal_error__malformed_list">La liste des numéros est mal formée</string>
+    <string name="internal_error__crypting_failed">L\'encryptage de vos identifiants a échoué</string>
+    <string name="internal_error__credentials_reading_failed">La lecture de vos identifiants stockés a échoué</string>
+    <string name="internal_error__credentials_storage_failed">Le stockage de vos identifiants a échoué</string>
+    <string name="internal_error__issue_insertion_failed">L\'insertion du numéro dans votre collection a échoué</string>
+    
+    <string name="network_error">Erreur réseau</string>
+    <string name="network_error__cannot_retrieve_user_collection">Vos identifiants n\'ont pas pu être vérifiés en raison d\'un problème de réseau</string>
+    
+    <string name="error">Erreur</string>
+    <string name="error__malformed_url">L\'adresse Web est mal formée</string>
+</resources>

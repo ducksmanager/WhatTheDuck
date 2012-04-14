@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    <!-- 
+	<Button android:id="@+id/par_code" 
+	  android:text="@string/recherche_par_code"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content" />
+
+	<Button android:id="@+id/par_couverture" 
+	  android:text="@string/recherche_par_couverture"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content" />!-->
+
+	<EditText
+	    android:id="@+id/username"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:hint="@string/username" >
+
+	    <requestFocus />
+	</EditText>
+
+	<EditText
+	    android:id="@+id/password"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:hint="@string/password"
+	    android:inputType="textPassword" />
+
+	<CheckBox
+	    android:id="@+id/checkBoxRememberCredentials"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:checked="true"
+	    android:text="@string/remember_credentials" />
+
+	<Button
+	    android:id="@+id/login"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/confirm" />
+
+	<ProgressBar
+	    android:id="@+id/progressBarConnection"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+	    android:indeterminate="true"
+	    android:visibility="gone" />
+
+	<TextView
+	    android:id="@+id/linkToDM"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="20dp"
+	    android:text="@string/link_to_ducksmanager_website" />
+
+</LinearLayout>
