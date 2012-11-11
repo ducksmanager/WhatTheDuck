@@ -118,7 +118,7 @@ else if (isset($_GET['pseudo_user']) && isset($_GET['mdp_user'])) {
 		$pseudo=mysql_real_escape_string($_GET['pseudo_user']);
 		$mdp=mysql_real_escape_string($_GET['mdp_user']);
 			
-		$requete='SELECT ID FROM users WHERE username=\''.$pseudo.'\' AND MD5(password)=\''.$mdp.'\'';
+		$requete='SELECT ID FROM users WHERE username=\''.$pseudo.'\' AND password=\''.$mdp.'\'';
 		$resultats=Inducks::requete_select($requete,'db301759616','ducksmanager.net');
 		
 		if (isset($_GET['debug']))

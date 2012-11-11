@@ -37,7 +37,7 @@ public class WhatTheDuck extends Activity {
     private static final String SERVER_PAGE="http://87.106.165.63/WhatTheDuck.php";
     private static final String DUCKSMANAGER_URL="http://www.ducksmanager.net";
 	public static final String CREDENTIALS_FILENAME = "ducksmanager_credentials";
-	public static final String VERSION = "1.1";
+	public static final String VERSION = "1.1.2";
 	
     private static String username = null;
     private static String password = null;
@@ -162,7 +162,7 @@ public class WhatTheDuck extends Activity {
 		try {
             
 			if (getEncryptedPassword() == null) {
-				MessageDigest md = MessageDigest.getInstance("MD5");
+				MessageDigest md = MessageDigest.getInstance("SHA-1");
 				md.update(getPassword().getBytes());
 				setEncryptedPassword(byteArray2Hex(md.digest()));
 			}
