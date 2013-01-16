@@ -2,6 +2,7 @@ package net.ducksmanager.whattheduck;
 
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.app.ListActivity;
@@ -52,7 +53,7 @@ public class List extends ListActivity{
                 	String typedText = s.toString();
                 	ArrayList<String> filteredItems = new ArrayList<String>();
                 	for (String item : List.this.items)
-                		if (item.replace("* ", "").toLowerCase().contains(typedText.toLowerCase()))
+                		if (item.replace("* ", "").toLowerCase(Locale.FRANCE).contains(typedText.toLowerCase()))
                 			filteredItems.add(item);
                 	
                 	String[] lv_arr = (String[]) filteredItems.toArray(new String[0]);

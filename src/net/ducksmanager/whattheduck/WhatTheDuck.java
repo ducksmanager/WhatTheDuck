@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class WhatTheDuck extends Activity {
     private static final String SERVER_PAGE="http://87.106.165.63/WhatTheDuck.php";
@@ -103,6 +104,10 @@ public class WhatTheDuck extends Activity {
         });
     }
     
+    public void info(Context c, int titleId) {
+    	Toast.makeText(c, titleId, Toast.LENGTH_SHORT).show();
+    }
+    
     public void alert(String message) {
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle(getString(R.string.error));
@@ -121,12 +126,8 @@ public class WhatTheDuck extends Activity {
     	alert(this, titleId, extraTitle, messageId, extraMessage);
     }
     
-    public void alert(Context c, int titleId, int messageId) {
-    	alert(c, titleId, "", messageId, "");
-    }
-    
     public void alert(int titleId, int messageId) {
-    	alert(this, titleId, messageId);
+    	alert(this, titleId, "", messageId, "");
     }
     
 
