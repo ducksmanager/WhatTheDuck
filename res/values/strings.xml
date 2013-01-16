@@ -23,7 +23,6 @@
     <string name="condition_notsogood">Etat moyen</string>
     <string name="condition_bad">Mauvais état</string>
     
-    <string name="confirmation_message">Confirmation</string>
     <string name="confirmation_message__issue_inserted">Le numéro a été ajouté à votre collection</string>
     
     <string name="input_error">Erreur de saisie</string>
@@ -40,7 +39,8 @@
     <string name="internal_error__issue_insertion_failed">L\'insertion du numéro dans votre collection a échoué</string>
     
     <string name="network_error">Erreur réseau</string>
-    <string name="network_error__cannot_retrieve_user_collection">Vos identifiants n\'ont pas pu être vérifiés en raison d\'un problème de réseau</string>
+    <string name="network_error__no_connection">Vos identifiants n\'ont pas pu être vérifiés en raison d\'un problème de réseau : vérifiez votre connexion Internet</string>
+    <string name="network_error__server_unavailable">Vos identifiants n\'ont pas pu être vérifiés car le serveur ne répond pas</string>
     
     <string name="error">Erreur</string>
     <string name="error__malformed_url">L\'adresse Web est mal formée</string>
