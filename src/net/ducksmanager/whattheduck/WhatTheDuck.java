@@ -20,8 +20,9 @@ import org.apache.http.auth.AuthenticationException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -29,15 +30,15 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class WhatTheDuck extends Activity {
     private static final String SERVER_PAGE="http://87.106.165.63/WhatTheDuck.php";
     private static final String DUCKSMANAGER_URL="http://www.ducksmanager.net";
 	public static final String CREDENTIALS_FILENAME = "ducksmanager_credentials";
-	public static final String VERSION = "1.1.2";
+	public static final String VERSION = "1.1.3";
 	
     private static String username = null;
     private static String password = null;
@@ -102,6 +103,18 @@ public class WhatTheDuck extends Activity {
             }
         });
     }
+    
+    public void info(Context c, int titleId) {
+    	Toast.makeText(c, titleId, Toast.LENGTH_SHORT).show();
+    }
+    
+    public void alert(String message) {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setTitle(getString(R.string.error));
+    	builder.setMessage(message);
+    	builder.create().show();
+    }
+    
     public void alert(Context c, int titleId, String extraTitle, int messageId, String extraMessage) {
     	AlertDialog.Builder builder = new AlertDialog.Builder(c);
     	builder.setTitle(getString(titleId)+extraTitle);
@@ -113,12 +126,8 @@ public class WhatTheDuck extends Activity {
     	alert(this, titleId, extraTitle, messageId, extraMessage);
     }
     
-    public void alert(Context c, int titleId, int messageId) {
-    	alert(c, titleId, "", messageId, "");
-    }
-    
     public void alert(int titleId, int messageId) {
-    	alert(this, titleId, messageId);
+    	alert(this, titleId, "", messageId, "");
     }
     
 
@@ -160,12 +169,16 @@ public class WhatTheDuck extends Activity {
         if (progressBar != null)
         	progressBar.setVisibility(ProgressBar.VISIBLE);
 		try {
-            
+			if (!isOnline()) {
+				throw new Exception(""+R.string.network_error);
+			}
+			
 			if (getEncryptedPassword() == null) {
 				MessageDigest md = MessageDigest.getInstance("SHA-1");
 				md.update(getPassword().getBytes());
 				setEncryptedPassword(byteArray2Hex(md.digest()));
 			}
+			
 			URL userCollectionURL = new URL(SERVER_PAGE
 										  + "?pseudo_user="+URLEncoder.encode(username)
 										  + "&mdp_user="+encryptedPassword
@@ -191,7 +204,7 @@ public class WhatTheDuck extends Activity {
 		   			   R.string.error__malformed_url);
 		} catch (IOException e) {
 			this.alert(R.string.network_error,
-					   R.string.network_error__cannot_retrieve_user_collection);
+					   R.string.network_error__server_unavailable);
 		} catch (NoSuchAlgorithmException e) {
 			this.alert(R.string.internal_error,
 					   R.string.internal_error__crypting_failed);
@@ -200,6 +213,14 @@ public class WhatTheDuck extends Activity {
 					   R.string.input_error__invalid_credentials);
 			setUsername(null);
 			setPassword(null);
+		} catch (Exception e) {
+			if (e.getMessage() != null && e.getMessage().equals(R.string.network_error+"")) {
+				this.alert(R.string.network_error, 
+						   R.string.network_error__no_connection);
+			}
+			else {
+				this.alert(e.getMessage());
+			}
 		}
 		finally {
 	        if (progressBar != null) {
@@ -210,4 +231,12 @@ public class WhatTheDuck extends Activity {
 		return null;
 	}
 	
+	public boolean isOnline() {
+	    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnected()) {
+	        return true;
+	    }
+	    return false;
+	}
 }

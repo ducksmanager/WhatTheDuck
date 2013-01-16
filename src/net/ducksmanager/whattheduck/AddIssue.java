@@ -35,7 +35,7 @@ public class AddIssue extends AsyncTask {
 																   +"&numero="+URLEncoder.encode(selectedIssue.getIssueNumber(), "UTF-8")
 																   +"&etat="+URLEncoder.encode(selectedIssue.getIssueConditionStr(), "UTF-8"));
 	        		if (results.equals("OK")) {
-	        			WhatTheDuck.wtd.alert(AddIssue.issueList, R.string.confirmation_message, R.string.confirmation_message__issue_inserted);
+	        			WhatTheDuck.wtd.info(AddIssue.issueList, R.string.confirmation_message__issue_inserted);
 	        			WhatTheDuck.userCollection.addIssue(shortCountryAndPublication, selectedIssue);
 						((IssueList)issueList).show();
 	        		}
