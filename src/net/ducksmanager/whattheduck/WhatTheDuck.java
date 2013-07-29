@@ -12,6 +12,7 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
+import java.util.Locale;
 
 import net.ducksmanager.security.Security;
 
@@ -161,7 +162,9 @@ public class WhatTheDuck extends Activity {
         for (byte b : hash) {
             formatter.format("%02x", b);
         }
-        return formatter.toString();
+        String result = formatter.toString();
+        formatter.close();
+        return result;
     }
     
 	public String retrieveOrFail(int progressBarId, String urlSuffix)  {
@@ -180,7 +183,7 @@ public class WhatTheDuck extends Activity {
 			}
 			
 			URL userCollectionURL = new URL(SERVER_PAGE
-										  + "?pseudo_user="+URLEncoder.encode(username)
+										  + "?pseudo_user="+URLEncoder.encode(username, "UTF-8")
 										  + "&mdp_user="+encryptedPassword
 										  + "&mdp="+Security.SECURITY_PASSWORD
 										  + "&version="+VERSION
