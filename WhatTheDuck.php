@@ -2,22 +2,10 @@
 error_reporting(E_ALL);
 $database=isset($_GET['coa']) ? 'coa' : 'db301759616';
 
-@include_once('_priv/Database.priv.class.php');
-@include_once('../_priv/Database.priv.class.php');
 @include_once('Inducks.class.php');
 @include_once('../Inducks.priv.class.php');
-DatabasePriv::connect($database);
-if (isset($_GET['debug']))
-	echo 'Serveur : '.DatabasePriv::getProfilCourant()->server
-	  .', User : '.DatabasePriv::getProfilCourant()->user
-	  .', BD : '.$database."\n";
+include_once ('auth.php');
 
-if (!isset($_GET['mdp']) || !DatabasePriv::verifPassword($_GET['mdp'])) {
-	echo 'Erreur d\'authentification';
-	exit();
-}
-
-mysql_query('SET NAMES UTF8');
 $version=isset($_GET['version']) ? $_GET['version'] : '1.0';
 
 
@@ -124,87 +112,111 @@ else if (isset($_GET['pseudo_user']) && isset($_GET['mdp_user'])) {
 		if (isset($_GET['debug']))
 			echo $requete.'<br />';
 		//$resultats=mysql_query($requete);
-		if(count($resultats) > 0) {
-			$id_utilisateur=$resultats[0]['ID'];
-			if (isset($_GET['ajouter_numero'])) {
-				list($pays,$magazine)=explode('/',$_GET['pays_magazine']);
-				$numero=$_GET['numero'];
-				$etat=$_GET['etat'];
+		
+		$action=isset($_GET['action']) ? $_GET['action'] : '';
+		switch($action) {
+			case 'signup':
+				$user= $_GET['pseudo_user' ];
+				$pass= $_GET['mdp_user' ];
+				$pass2=$_GET['mdp_user2'];
+				$email=$_GET['email'];
 				
-				if ($version == '1.0') {
-					$requete='INSERT INTO numeros(Pays,Magazine,Numero, Etat, ID_Acquisition, ID_Utilisateur) '
-							.'VALUES(\''.$pays.'\', \''.$magazine.'\', \''.$numero.'\', \'indefini\', -2, '.$id_utilisateur.')';
+				include_once('Affichage.class.php');
+				
+				$erreur = Affichage::valider_formulaire_inscription($user, $pass, $pass2);
+				
+				if (is_null($erreur)) {
+					DM_Core::$d->nouveau_user($user, $email,$pass);
+					echo 'OK';
 				}
 				else {
-					$requete='INSERT INTO numeros(Pays,Magazine,Numero, Etat, ID_Acquisition, ID_Utilisateur) '
-							.'VALUES(\''.$pays.'\', \''.$magazine.'\', \''.$numero.'\', \''.$etat.'\', -2, '.$id_utilisateur.')';
+					echo utf8_encode(html_entity_decode($erreur));
 				}
-				$resultats=Inducks::requete_select($requete,'db301759616','ducksmanager.net');
-				
-				if (isset($_GET['debug']))
-					echo $requete.'<br />';
-				if (count($resultats)==0 && $resultats === array())
-					echo 'OK';
-				else
-					print_r($resultats);
-			}
-			else {
-				DatabasePriv::connect('coa');
-				mysql_query('SET NAMES UTF8');
-				foreach($resultats as $resultat) {
-					$retour=new stdClass();
-					$numeros=array();
-					$pays=array();
-					$magazines=array();
-					$requete_numeros='SELECT * FROM numeros WHERE ID_Utilisateur='.$resultat['ID'].' ORDER BY Pays, Magazine, Numero';
-					$resultats_numeros=Inducks::requete_select($requete_numeros,'db301759616','ducksmanager.net');
-					foreach($resultats_numeros as $resultat_numero) {
-						$pays_magazine=$resultat_numero['Pays'].'/'.$resultat_numero['Magazine'];
-						$numero=$resultat_numero['Numero'];
-						$etat=$resultat_numero['Etat'];
+			break;
+			default:		
+				if(count($resultats) > 0) {
+					$id_utilisateur=$resultats[0]['ID'];
+					if (isset($_GET['ajouter_numero'])) {
+						list($pays,$magazine)=explode('/',$_GET['pays_magazine']);
+						$numero=$_GET['numero'];
+						$etat=$_GET['etat'];
 						
-						if (!array_key_exists($pays_magazine,$numeros)) {
-							$numeros[$pays_magazine]=array();
-							$magazines[$pays_magazine]=$pays_magazine;
+						if ($version == '1.0') {
+							$requete='INSERT INTO numeros(Pays,Magazine,Numero, Etat, ID_Acquisition, ID_Utilisateur) '
+									.'VALUES(\''.$pays.'\', \''.$magazine.'\', \''.$numero.'\', \'indefini\', -2, '.$id_utilisateur.')';
 						}
-						switch($version) {
-							case '1.0':
-								$numeros[$pays_magazine][]=$numero;								
-							break;
-							default:
-								$numero_et_etat=new stdClass();
-								$numero_et_etat->Numero=$numero;
-								$numero_et_etat->Etat=$etat;
-								$numeros[$pays_magazine][]=$numero_et_etat;									
-							break;
+						else {
+							$requete='INSERT INTO numeros(Pays,Magazine,Numero, Etat, ID_Acquisition, ID_Utilisateur) '
+									.'VALUES(\''.$pays.'\', \''.$magazine.'\', \''.$numero.'\', \''.$etat.'\', -2, '.$id_utilisateur.')';
 						}
-							
+						$resultats=Inducks::requete_select($requete,'db301759616','ducksmanager.net');
+						
+						if (isset($_GET['debug']))
+							echo $requete.'<br />';
+						if (count($resultats)==0 && $resultats === array())
+							echo 'OK';
+						else
+							print_r($resultats);
 					}
-					
-					foreach(array_keys($magazines) as $nom_abrege) {
-						$requete_nom_complet_magazine='SELECT inducks_countryname.countryname as countryname, inducks_publication.title as title '
-													 .'FROM inducks_publication '
-													 .'INNER JOIN inducks_countryname ON inducks_publication.countrycode = inducks_countryname.countrycode '
-													 .'WHERE inducks_countryname.languagecode=\'fr\' '
-													 .'  AND inducks_publication.publicationcode=\''.$nom_abrege.'\'';
-						$resultats_nom_complet_magazine=mysql_query($requete_nom_complet_magazine);
-						while($resultat_nom_magazine = mysql_fetch_array($resultats_nom_complet_magazine)) {					
-							list($nom_pays,$nom_magazine)=explode('/',$nom_abrege);
-							$pays[$nom_pays]=$resultat_nom_magazine['countryname'];
-							$magazines[$nom_abrege]=$resultat_nom_magazine['title'];
+					else {
+						DatabasePriv::connect('coa');
+						mysql_query('SET NAMES UTF8');
+						foreach($resultats as $resultat) {
+							$retour=new stdClass();
+							$numeros=array();
+							$pays=array();
+							$magazines=array();
+							$requete_numeros='SELECT * FROM numeros WHERE ID_Utilisateur='.$resultat['ID'].' ORDER BY Pays, Magazine, Numero';
+							$resultats_numeros=Inducks::requete_select($requete_numeros,'db301759616','ducksmanager.net');
+							foreach($resultats_numeros as $resultat_numero) {
+								$pays_magazine=$resultat_numero['Pays'].'/'.$resultat_numero['Magazine'];
+								$numero=$resultat_numero['Numero'];
+								$etat=$resultat_numero['Etat'];
+								
+								if (!array_key_exists($pays_magazine,$numeros)) {
+									$numeros[$pays_magazine]=array();
+									$magazines[$pays_magazine]=$pays_magazine;
+								}
+								switch($version) {
+									case '1.0':
+										$numeros[$pays_magazine][]=$numero;								
+									break;
+									default:
+										$numero_et_etat=new stdClass();
+										$numero_et_etat->Numero=$numero;
+										$numero_et_etat->Etat=$etat;
+										$numeros[$pays_magazine][]=$numero_et_etat;									
+									break;
+								}
+									
+							}
+							
+							foreach(array_keys($magazines) as $nom_abrege) {
+								$requete_nom_complet_magazine='SELECT inducks_countryname.countryname as countryname, inducks_publication.title as title '
+															 .'FROM inducks_publication '
+															 .'INNER JOIN inducks_countryname ON inducks_publication.countrycode = inducks_countryname.countrycode '
+															 .'WHERE inducks_countryname.languagecode=\'fr\' '
+															 .'  AND inducks_publication.publicationcode=\''.$nom_abrege.'\'';
+								$resultats_nom_complet_magazine=mysql_query($requete_nom_complet_magazine);
+								while($resultat_nom_magazine = mysql_fetch_array($resultats_nom_complet_magazine)) {					
+									list($nom_pays,$nom_magazine)=explode('/',$nom_abrege);
+									$pays[$nom_pays]=$resultat_nom_magazine['countryname'];
+									$magazines[$nom_abrege]=$resultat_nom_magazine['title'];
+								}
+							}
 						}
+						
+						$retour->numeros = $numeros;
+						$retour->static=new stdClass();
+						$retour->static->magazines=$magazines;
+						$retour->static->pays=$pays;
+						echo json_encode($retour);
+						
 					}
 				}
-				
-				$retour->numeros = $numeros;
-				$retour->static=new stdClass();
-				$retour->static->magazines=$magazines;
-				$retour->static->pays=$pays;
-				echo json_encode($retour);
-				
-			}
+				else
+					echo '0';
+			break;
 		}
-		else
-			echo '0';
 	}
 }

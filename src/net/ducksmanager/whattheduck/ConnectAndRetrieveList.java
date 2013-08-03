@@ -41,7 +41,6 @@ public class ConnectAndRetrieveList extends AsyncTask {
 	        	 || ! WhatTheDuck.getUsername().equals(((EditText) wtd.findViewById(R.id.username)).getText().toString())
 		         || WhatTheDuck.getEncryptedPassword() == null) {
 	        	 	
-	        		WhatTheDuck.setEncryptedPassword(null);
 	        		WhatTheDuck.setUsername( ((EditText) wtd.findViewById(R.id.username)).getText().toString() );
 	        		WhatTheDuck.setPassword ( ((EditText) wtd.findViewById(R.id.password)).getText().toString() );
 					if (WhatTheDuck.getUsername().equals("") || (WhatTheDuck.getPassword().equals(""))) {
