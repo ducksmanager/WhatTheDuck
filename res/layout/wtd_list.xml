@@ -20,9 +20,7 @@
         android:id="@+id/android:list"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/addIssues"
         android:layout_below="@id/filter"
-        android:choiceMode="multipleChoice"
         android:clickable="true"
         android:longClickable="true" />
 

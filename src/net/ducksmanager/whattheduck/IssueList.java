@@ -77,6 +77,9 @@ public class IssueList extends List {
     public void show(ArrayList<Issue> issues, Boolean useless) {
     	this.issues = issues;
         
+        this.issueAdapter = new IssueAdapter(this, R.layout.row, this.issues, type);
+        setListAdapter(this.issueAdapter);
+        
     	if (issues.size() > 20) {
     		EditText filterEditText = (EditText) this.findViewById(R.id.filter);
     		filterEditText.setVisibility(EditText.VISIBLE);
