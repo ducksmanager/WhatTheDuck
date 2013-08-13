@@ -19,8 +19,10 @@
     <ListView
         android:id="@+id/android:list"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent" 
-        android:layout_below="@id/filter"/>
+        android:layout_height="match_parent"
+        android:layout_below="@id/filter"
+        android:clickable="true"
+        android:longClickable="true" />
 
   	<TextView android:id="@+id/android:empty"
     	android:layout_width="wrap_content"
