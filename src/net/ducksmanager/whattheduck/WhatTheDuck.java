@@ -20,8 +20,10 @@ import org.apache.http.auth.AuthenticationException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -29,15 +31,19 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class WhatTheDuck extends Activity {
-    private static final String SERVER_PAGE="http://87.106.165.63/WhatTheDuck.php";
+    private static final String DEFAULT_SERVER_URL="http://87.106.165.63";
+    private static final String SERVER_PAGE="WhatTheDuck.php";
     private static final String DUCKSMANAGER_URL="http://www.ducksmanager.net";
+    private static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
+    private static final String REGEX_SERVER_URL="http://([0-9]{1,3}\\.){3}[0-9]{1,3}";
+    
 	public static final String CREDENTIALS_FILENAME = "ducksmanager_credentials";
-	public static final String VERSION = "1.1.2";
+	
+	private static String serverURL;
 	
     private static String username = null;
     private static String password = null;
@@ -152,7 +158,9 @@ public class WhatTheDuck extends Activity {
         for (byte b : hash) {
             formatter.format("%02x", b);
         }
-        return formatter.toString();
+        String hex = formatter.toString();
+        formatter.close();
+        return hex;
     }
     
 	public String retrieveOrFail(int progressBarId, String urlSuffix)  {
@@ -166,32 +174,19 @@ public class WhatTheDuck extends Activity {
 				md.update(getPassword().getBytes());
 				setEncryptedPassword(byteArray2Hex(md.digest()));
 			}
-			URL userCollectionURL = new URL(SERVER_PAGE
-										  + "?pseudo_user="+URLEncoder.encode(username)
-										  + "&mdp_user="+encryptedPassword
-										  + "&mdp="+Security.SECURITY_PASSWORD
-										  + "&version="+VERSION
-										  + urlSuffix);
-			BufferedReader in = new BufferedReader(new InputStreamReader(userCollectionURL.openStream()));
-			
-			String inputLine;
-			String response="";
-			while ((inputLine = in.readLine()) != null)
-				response+=inputLine;
-			in.close();
-            
+			String response = getPage(getServerURL()+"/"+SERVER_PAGE
+								    + "?pseudo_user="+URLEncoder.encode(username)
+								    + "&mdp_user="+encryptedPassword
+								    + "&mdp="+Security.SECURITY_PASSWORD
+								    + "&version="+getApplicationVersion()
+								    + urlSuffix);
+
 			response = response.replaceAll("/\\/", "");
 			if (response.equals("0")) {	
 				throw new AuthenticationException();
 			}
 			else
 				return response;
-		} catch (MalformedURLException e) {
-			this.alert(R.string.error,
-		   			   R.string.error__malformed_url);
-		} catch (IOException e) {
-			this.alert(R.string.network_error,
-					   R.string.network_error__cannot_retrieve_user_collection);
 		} catch (NoSuchAlgorithmException e) {
 			this.alert(R.string.internal_error,
 					   R.string.internal_error__crypting_failed);
@@ -200,6 +195,8 @@ public class WhatTheDuck extends Activity {
 					   R.string.input_error__invalid_credentials);
 			setUsername(null);
 			setPassword(null);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
 		}
 		finally {
 	        if (progressBar != null) {
@@ -208,6 +205,41 @@ public class WhatTheDuck extends Activity {
 	        }
 		}
 		return null;
+	}
+	
+	private String getApplicationVersion() throws NameNotFoundException {
+		PackageManager manager = this.getPackageManager();
+		PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+		return info.versionName;
+	}
+	private String getPage(String url) {
+		String response="";
+		try {
+			URL userCollectionURL = new URL(url);
+			BufferedReader in = new BufferedReader(new InputStreamReader(userCollectionURL.openStream()));
+			
+			String inputLine;
+			while ((inputLine = in.readLine()) != null)
+			response+=inputLine;
+			in.close();
+		} catch (MalformedURLException e) {
+			this.alert(R.string.error,
+		   			   R.string.error__malformed_url);
+		} catch (IOException e) {
+			this.alert(R.string.network_error,
+					   R.string.network_error__cannot_retrieve_user_collection);
+		}
+		return response;
+	}
+	public String getServerURL() {
+		if (serverURL == null) {
+			serverURL = getPage(DUCKSMANAGER_URL+"/"+DUCKSMANAGER_PAGE_WITH_REMOTE_URL);
+			if (! serverURL.matches(REGEX_SERVER_URL)) {
+				serverURL = DEFAULT_SERVER_URL;
+			}
+			
+		}
+		return serverURL;
 	}
 	
 }
