@@ -24,6 +24,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -33,6 +35,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class WhatTheDuck extends Activity {
     private static final String SERVER_PAGE="WhatTheDuck.php";
@@ -106,6 +109,18 @@ public class WhatTheDuck extends Activity {
             }
         });
     }
+    
+    public void info(Context c, int titleId) {
+    	Toast.makeText(c, titleId, Toast.LENGTH_SHORT).show();
+    }
+    
+    public void alert(String message) {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setTitle(getString(R.string.error));
+    	builder.setMessage(message);
+    	builder.create().show();
+    }
+    
     public void alert(Context c, int titleId, String extraTitle, int messageId, String extraMessage) {
     	AlertDialog.Builder builder = new AlertDialog.Builder(c);
     	builder.setTitle(getString(titleId)+extraTitle);
@@ -117,12 +132,8 @@ public class WhatTheDuck extends Activity {
     	alert(this, titleId, extraTitle, messageId, extraMessage);
     }
     
-    public void alert(Context c, int titleId, int messageId) {
-    	alert(c, titleId, "", messageId, "");
-    }
-    
     public void alert(int titleId, int messageId) {
-    	alert(this, titleId, messageId);
+    	alert(this, titleId, "", messageId, "");
     }
     
 
@@ -166,6 +177,9 @@ public class WhatTheDuck extends Activity {
         if (progressBar != null)
         	progressBar.setVisibility(ProgressBar.VISIBLE);
 		try {
+			if (!isOnline()) {
+				throw new Exception(""+R.string.network_error);
+			}
             
 			if (getEncryptedPassword() == null) {
 				MessageDigest md = MessageDigest.getInstance("SHA-1");
@@ -195,6 +209,14 @@ public class WhatTheDuck extends Activity {
 			setPassword(null);
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			if (e.getMessage() != null && e.getMessage().equals(R.string.network_error+"")) {
+				this.alert(R.string.network_error, 
+						   R.string.network_error__no_connection);
+		}
+			else {
+				this.alert(e.getMessage());
+			}
 		}
 		finally {
 	        if (progressBar != null) {
@@ -205,7 +227,15 @@ public class WhatTheDuck extends Activity {
 		return null;
 	}
 	
-	private String getApplicationVersion() throws NameNotFoundException {
+	public boolean isOnline() {
+	    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnected()) {
+	        return true;
+	    }
+
+	    return false;
+	}	private String getApplicationVersion() throws NameNotFoundException {
 		PackageManager manager = this.getPackageManager();
 		PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
 		return info.versionName;
@@ -225,7 +255,7 @@ public class WhatTheDuck extends Activity {
 		   			   R.string.error__malformed_url);
 		} catch (IOException e) {
 			this.alert(R.string.network_error,
-					   R.string.network_error__cannot_retrieve_user_collection);
+					   R.string.network_error__no_connection);
 		}
 		return response;
 	}

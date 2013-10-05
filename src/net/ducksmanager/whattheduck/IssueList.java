@@ -1,6 +1,7 @@
 package net.ducksmanager.whattheduck;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import net.ducksmanager.inducks.coa.CoaListing;
 import net.ducksmanager.inducks.coa.CoaListing.ListType;
@@ -69,7 +70,7 @@ public class IssueList extends List {
                 	String typedText = s.toString();
                 	ArrayList<Issue> filteredIssues = new ArrayList<Issue>();
                 	for (Issue issue : IssueList.this.issues)
-                		if (issue.getIssueNumber().replace("* ", "").toLowerCase().contains(typedText.toLowerCase()))
+                		if (issue.getIssueNumber().replace("* ", "").toLowerCase(Locale.FRANCE).contains(typedText.toLowerCase()))
                 			filteredIssues.add(issue);
 
                     IssueList.this.issueAdapter = new IssueAdapter(IssueList.this, R.layout.row, filteredIssues);
@@ -122,7 +123,7 @@ public class IssueList extends List {
         if (type.equals(CollectionType.COA.toString())) {
         	selectedIssue = (Issue) this.getListView().getItemAtPosition(((Long)id).intValue());
         	if (selectedIssue.getIssueNumber().startsWith("* "))
-        		WhatTheDuck.wtd.alert(this, R.string.input_error, R.string.input_error__issue_already_possessed);
+        		WhatTheDuck.wtd.info(this, R.string.input_error__issue_already_possessed);
         	else {
         		final CharSequence[] items = {getString(R.string.condition_bad), getString(R.string.condition_notsogood), getString(R.string.condition_good)};
 
@@ -137,7 +138,7 @@ public class IssueList extends List {
         		        	   dialog.dismiss();                
         		        	   int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
         		        	   if (selectedPosition == -1) {
-        		        			WhatTheDuck.wtd.alert(IssueList.this, R.string.input_error, R.string.input_error__select_condition);
+        		        			WhatTheDuck.wtd.info(IssueList.this, R.string.input_error__select_condition);
         		                	return;
         		        	   }
         		        	   String condition = items[selectedPosition].toString();
