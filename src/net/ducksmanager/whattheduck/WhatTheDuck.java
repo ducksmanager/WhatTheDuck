@@ -35,11 +35,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class WhatTheDuck extends Activity {
-    private static final String DEFAULT_SERVER_URL="http://87.106.165.63";
     private static final String SERVER_PAGE="WhatTheDuck.php";
     private static final String DUCKSMANAGER_URL="http://www.ducksmanager.net";
     private static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
-    private static final String REGEX_SERVER_URL="http://([0-9]{1,3}\\.){3}[0-9]{1,3}";
     
 	public static final String CREDENTIALS_FILENAME = "ducksmanager_credentials";
 	
@@ -233,11 +231,7 @@ public class WhatTheDuck extends Activity {
 	}
 	public String getServerURL() {
 		if (serverURL == null) {
-			serverURL = getPage(DUCKSMANAGER_URL+"/"+DUCKSMANAGER_PAGE_WITH_REMOTE_URL);
-			if (! serverURL.matches(REGEX_SERVER_URL)) {
-				serverURL = DEFAULT_SERVER_URL;
-			}
-			
+			serverURL = getPage(DUCKSMANAGER_URL+"/"+DUCKSMANAGER_PAGE_WITH_REMOTE_URL);			
 		}
 		return serverURL;
 	}

@@ -5,7 +5,7 @@ $database=isset($_GET['coa']) ? 'coa' : 'db301759616';
 @include_once('_priv/Database.priv.class.php');
 @include_once('../_priv/Database.priv.class.php');
 @include_once('Inducks.class.php');
-@include_once('../Inducks.priv.class.php');
+@include_once('../Inducks.class.php');
 DatabasePriv::connect($database);
 if (isset($_GET['debug']))
 	echo 'Serveur : '.DatabasePriv::getProfilCourant()->server
