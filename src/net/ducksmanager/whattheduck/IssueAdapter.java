@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.content.Context;
-import android.opengl.Visibility;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

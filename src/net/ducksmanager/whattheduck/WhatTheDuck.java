@@ -252,11 +252,14 @@ public class WhatTheDuck extends Activity {
 	    }
 
 	    return false;
-	}	private String getApplicationVersion() throws NameNotFoundException {
+	}	
+	
+	private String getApplicationVersion() throws NameNotFoundException {
 		PackageManager manager = this.getPackageManager();
 		PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
 		return info.versionName;
 	}
+	
 	private String getPage(String url) {
 		String response="";
 		try {
@@ -282,5 +285,18 @@ public class WhatTheDuck extends Activity {
 		}
 		return serverURL;
 	}
+	
+	public String toSHA1(String text) {
+        try {
+                MessageDigest md = MessageDigest.getInstance("SHA-1");
+                md.update(text.getBytes());
+                return byteArray2Hex(md.digest());
+        }
+        catch (NoSuchAlgorithmException e) {
+                this.alert(R.string.internal_error,
+                                   R.string.internal_error__crypting_failed);
+                return "";
+        }
+}
 	
 }

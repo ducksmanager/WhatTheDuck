@@ -21,7 +21,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-public class ConnectAndRetrieveList extends AsyncTask {
+public class ConnectAndRetrieveList extends AsyncTask<Object,Integer,Object> {
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private CheckBox mCheckboxRememberCredentials;
     
@@ -75,6 +75,7 @@ public class ConnectAndRetrieveList extends AsyncTask {
             		JSONObject object = new JSONObject(response);
             		try {
             			JSONObject issues = object.getJSONObject("numeros");
+						@SuppressWarnings("unchecked")
 						Iterator<String> issueIterator = issues.keys();
 						while (issueIterator.hasNext()) {
 							String countryAndPublication=issueIterator.next();
@@ -87,6 +88,7 @@ public class ConnectAndRetrieveList extends AsyncTask {
 						}
 						
 						JSONObject countryNames = object.getJSONObject("static").getJSONObject("pays");
+						@SuppressWarnings("unchecked")
 						Iterator<String> countryNameIterator = countryNames.keys();
 						while (countryNameIterator.hasNext()) {
 							String countryShortName=countryNameIterator.next();
@@ -95,6 +97,7 @@ public class ConnectAndRetrieveList extends AsyncTask {
 						}
 						
 						JSONObject publicationNames = object.getJSONObject("static").getJSONObject("magazines");
+						@SuppressWarnings("unchecked")
 						Iterator<String> publicationNameIterator = publicationNames.keys();
 						while (publicationNameIterator.hasNext()) {
 							String shortName=publicationNameIterator.next();
