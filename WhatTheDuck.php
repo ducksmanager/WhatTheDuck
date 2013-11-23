@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 $database=isset($_GET['coa']) ? 'coa' : 'db301759616';
 
 @include_once('Inducks.class.php');
-@include_once('../Inducks.priv.class.php');
+@include_once('../Inducks.class.php');
 include_once ('auth.php');
 
 $version=isset($_GET['version']) ? $_GET['version'] : '1.0';

@@ -22,6 +22,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -36,10 +39,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class WhatTheDuck extends Activity {
-    private static final String SERVER_PAGE="http://87.106.165.63/WhatTheDuck.php";
+    private static final String SERVER_PAGE="WhatTheDuck.php";
     private static final String DUCKSMANAGER_URL="http://www.ducksmanager.net";
+    private static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
+    
 	public static final String CREDENTIALS_FILENAME = "ducksmanager_credentials";
-	public static final String VERSION = "1.2";
+
+	private static String serverURL;
 	
     private static String username = null;
     private static String password = null;
@@ -177,9 +183,9 @@ public class WhatTheDuck extends Activity {
         for (byte b : hash) {
             formatter.format("%02x", b);
         }
-        String result = formatter.toString();
+        String hex = formatter.toString();
         formatter.close();
-        return result;
+        return hex;
     }
 
 	public String retrieveOrFail(String urlSuffix)  {
@@ -195,37 +201,31 @@ public class WhatTheDuck extends Activity {
 				throw new Exception(""+R.string.network_error);
 			}
 			
-			URL userCollectionURL = new URL(SERVER_PAGE
+			if (getEncryptedPassword() == null) {
+				MessageDigest md = MessageDigest.getInstance("SHA-1");
+				md.update(getPassword().getBytes());
+				setEncryptedPassword(byteArray2Hex(md.digest()));
+			}
+			String response = getPage(getServerURL()+"/"+SERVER_PAGE
 										  + "?pseudo_user="+URLEncoder.encode(username, "UTF-8")
 										  + "&mdp_user="+encryptedPassword
 										  + "&mdp="+Security.SECURITY_PASSWORD
-										  + "&version="+VERSION
+								    + "&version="+getApplicationVersion()
 										  + urlSuffix);
-			BufferedReader in = new BufferedReader(new InputStreamReader(userCollectionURL.openStream()));
 			
-			String inputLine;
-			String response="";
-			while ((inputLine = in.readLine()) != null)
-				response+=inputLine;
-			in.close();
-            
 			response = response.replaceAll("/\\/", "");
 			if (response.equals("0")) {	
 				throw new AuthenticationException();
 			}
 			else
 				return response;
-		} catch (MalformedURLException e) {
-			this.alert(R.string.error,
-		   			   R.string.error__malformed_url);
-		} catch (IOException e) {
-			this.alert(R.string.network_error,
-					   R.string.network_error__server_unavailable);
 		} catch (AuthenticationException e) {
 			this.alert(R.string.input_error, 
 					   R.string.input_error__invalid_credentials);
 			setUsername("");
 			setPassword("");
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
 		} catch (Exception e) {
 			if (e.getMessage() != null && e.getMessage().equals(R.string.network_error+"")) {
 				this.alert(R.string.network_error, 
@@ -250,19 +250,37 @@ public class WhatTheDuck extends Activity {
 	    if (netInfo != null && netInfo.isConnected()) {
 	        return true;
 	    }
+
 	    return false;
+	}	private String getApplicationVersion() throws NameNotFoundException {
+		PackageManager manager = this.getPackageManager();
+		PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+		return info.versionName;
+	}
+	private String getPage(String url) {
+		String response="";
+		try {
+			URL userCollectionURL = new URL(url);
+			BufferedReader in = new BufferedReader(new InputStreamReader(userCollectionURL.openStream()));
+			
+			String inputLine;
+			while ((inputLine = in.readLine()) != null)
+			response+=inputLine;
+			in.close();
+		} catch (MalformedURLException e) {
+			this.alert(R.string.error,
+		   			   R.string.error__malformed_url);
+		} catch (IOException e) {
+			this.alert(R.string.network_error,
+					   R.string.network_error__no_connection);
+		}
+		return response;
+	}
+	public String getServerURL() {
+		if (serverURL == null) {
+			serverURL = getPage(DUCKSMANAGER_URL+"/"+DUCKSMANAGER_PAGE_WITH_REMOTE_URL);			
+		}
+		return serverURL;
 	}
 	
-	public String toSHA1(String text) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-1");
-			md.update(text.getBytes());
-			return byteArray2Hex(md.digest());
-		}
-		catch (NoSuchAlgorithmException e) {
-			this.alert(R.string.internal_error,
-					   R.string.internal_error__crypting_failed);
-			return "";
-		}
-	}
 }
