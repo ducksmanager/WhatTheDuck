@@ -2,8 +2,6 @@ package net.ducksmanager.whattheduck;
 
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 import android.app.Activity;
 import android.content.Intent;
