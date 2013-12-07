@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dip">
+	<RadioGroup
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="vertical"
+      android:id="@+id/chooseissuecondition">
+	  <RadioButton android:id="@+id/bad_condition"
+	      android:background="@color/bad_condition"
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:text="@string/condition_bad" />
+	  <RadioButton android:id="@+id/notsogood_condition"
+	      android:background="@color/notsogood_condition"
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:text="@string/condition_notsogood" />
+	  <RadioButton android:id="@+id/good_condition"
+	      android:background="@color/good_condition"
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:checked="true"
+	      android:text="@string/condition_good" />
+	</RadioGroup>
+</LinearLayout>

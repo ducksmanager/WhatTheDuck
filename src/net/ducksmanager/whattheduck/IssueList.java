@@ -55,7 +55,7 @@ public class IssueList extends List {
     public void show(ArrayList<Issue> issues, Boolean useless) {
     	this.issues = issues;
 
-        this.issueAdapter = new IssueAdapter(this, R.layout.row, this.issues, type);
+        this.issueAdapter = new IssueAdapter(this, R.layout.row, this.issues);
         setListAdapter(this.issueAdapter);
         
     	if (issues.size() > 20) {
@@ -73,7 +73,7 @@ public class IssueList extends List {
                 		if (issue.getIssueNumber().replace("* ", "").toLowerCase(Locale.FRANCE).contains(typedText.toLowerCase()))
                 			filteredIssues.add(issue);
 
-                    IssueList.this.issueAdapter = new IssueAdapter(IssueList.this, R.layout.row, filteredIssues, type);
+                    IssueList.this.issueAdapter = new IssueAdapter(IssueList.this, R.layout.row, filteredIssues);
                     setListAdapter(IssueList.this.issueAdapter);
                 }
             });
