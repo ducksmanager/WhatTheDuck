@@ -102,7 +102,7 @@ else if (isset($_GET['pseudo_user']) && isset($_GET['mdp_user'])) {
 	}
 	else { 
 		Inducks::$use_local_db=false;
-		// Récupération des informations sur la collection de l'utilisateur
+		// RÃ©cupÃ©ration des informations sur la collection de l'utilisateur
 		$pseudo=mysql_real_escape_string($_GET['pseudo_user']);
 		$mdp=mysql_real_escape_string($_GET['mdp_user']);
 			
@@ -138,25 +138,34 @@ else if (isset($_GET['pseudo_user']) && isset($_GET['mdp_user'])) {
 					$id_utilisateur=$resultats[0]['ID'];
 					if (isset($_GET['ajouter_numero'])) {
 						list($pays,$magazine)=explode('/',$_GET['pays_magazine']);
-						$numero=$_GET['numero'];
+						
+						if (isset($_GET['numero'])) {
+							$numeros = array($_GET['numero']);
+						}
+						elseif (isset($_GET['numeros'])) {
+							$numeros = explode(',', $_GET['numeros']);
+						}
+						
 						$etat=$_GET['etat'];
 						
-						if ($version == '1.0') {
-							$requete='INSERT INTO numeros(Pays,Magazine,Numero, Etat, ID_Acquisition, ID_Utilisateur) '
-									.'VALUES(\''.$pays.'\', \''.$magazine.'\', \''.$numero.'\', \'indefini\', -2, '.$id_utilisateur.')';
+						foreach($numeros as $numero) {
+							if ($version === '1.0') {
+								$requete='INSERT INTO numeros(Pays,Magazine,Numero, Etat, ID_Acquisition, ID_Utilisateur) '
+										.'VALUES(\''.$pays.'\', \''.$magazine.'\', \''.$numero.'\', \'indefini\', -2, '.$id_utilisateur.')';
+							}
+							else {
+								$requete='INSERT INTO numeros(Pays,Magazine,Numero, Etat, ID_Acquisition, ID_Utilisateur) '
+										.'VALUES(\''.$pays.'\', \''.$magazine.'\', \''.$numero.'\', \''.$etat.'\', -2, '.$id_utilisateur.')';
+							}
+							$resultats=Inducks::requete_select($requete,'db301759616','ducksmanager.net');
+							
+							if (isset($_GET['debug']))
+								echo $requete.'<br />';
+							if (count($resultats) === 0 && $resultats === array())
+								echo 'OK';
+							else
+								print_r($resultats);
 						}
-						else {
-							$requete='INSERT INTO numeros(Pays,Magazine,Numero, Etat, ID_Acquisition, ID_Utilisateur) '
-									.'VALUES(\''.$pays.'\', \''.$magazine.'\', \''.$numero.'\', \''.$etat.'\', -2, '.$id_utilisateur.')';
-						}
-						$resultats=Inducks::requete_select($requete,'db301759616','ducksmanager.net');
-						
-						if (isset($_GET['debug']))
-							echo $requete.'<br />';
-						if (count($resultats)==0 && $resultats === array())
-							echo 'OK';
-						else
-							print_r($resultats);
 					}
 					else {
 						DatabasePriv::connect('coa');

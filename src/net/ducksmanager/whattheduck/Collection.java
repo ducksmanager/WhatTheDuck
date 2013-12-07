@@ -131,7 +131,7 @@ public class Collection {
 		if (!hasPublication(shortCountryName, shortPublicationName))
 			return null;
 		for (Issue i : issues.get(shortCountryName).get(shortPublicationName)) {
-			if (i.getIssueNumber().equals(issueNumber))
+			if (i.getIssueNumber().equals(issueNumber.replaceAll("[ ]+", " ")))
 				return i;
 		}
 		return null;

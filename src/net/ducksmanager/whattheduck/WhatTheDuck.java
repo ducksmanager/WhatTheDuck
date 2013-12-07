@@ -268,7 +268,7 @@ public class WhatTheDuck extends Activity {
 			
 			String inputLine;
 			while ((inputLine = in.readLine()) != null)
-			response+=inputLine;
+				response+=inputLine;
 			in.close();
 		} catch (MalformedURLException e) {
 			this.alert(R.string.error,

@@ -20,7 +20,9 @@
         android:id="@+id/android:list"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/addIssues"
         android:layout_below="@id/filter"
+        android:choiceMode="multipleChoice"
         android:clickable="true"
         android:longClickable="true" />
 
@@ -47,5 +49,15 @@
   	    android:layout_alignParentTop="true"
   	    android:indeterminate="true"
   	    android:visibility="gone" />
+
+  	<Button
+  	    android:id="@+id/addIssues"
+  	    android:layout_width="wrap_content"
+  	    android:layout_height="wrap_content"
+  	    android:layout_alignParentBottom="true"
+  	    android:layout_alignParentLeft="true"
+  	    android:layout_alignParentRight="true"
+  	    android:text="@string/add_issues"
+  	    android:visibility="invisible" />
   	
 </RelativeLayout>
