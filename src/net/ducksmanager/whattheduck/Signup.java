@@ -3,6 +3,7 @@ package net.ducksmanager.whattheduck;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -36,17 +37,20 @@ public class Signup extends Activity {
             	
         		String response;
 				try {
-					response = URLDecoder.decode(WhatTheDuck.wtd.retrieveOrFail("&action=signup&mdp_user2="+password2+"&email="+email), "UTF-8");
-
-					if (response.equals("OK")) {
-						((EditText) WhatTheDuck.wtd.findViewById(R.id.username)).setText(WhatTheDuck.getUsername());
-						((EditText) WhatTheDuck.wtd.findViewById(R.id.password)).setText(WhatTheDuck.getPassword());
-					    Intent i = new Intent(Signup.this, WhatTheDuck.class);
-					    WhatTheDuck.wtd.startActivity(i);
-						WhatTheDuck.wtd.info(WhatTheDuck.wtd, R.string.signup__confirm);
-					}
-					else {
-						WhatTheDuck.wtd.alert(Signup.this, response);
+					response = WhatTheDuck.wtd.retrieveOrFail("&action=signup&mdp_user2="+password2+"&email="+email);
+					if (response != null) {
+						response = new String(response.getBytes("ISO8859-1"), "UTF-8");
+	
+						if (response.equals("OK")) {
+						    Intent i = new Intent(Signup.this, WhatTheDuck.class);
+						    WhatTheDuck.wtd.startActivity(i);
+							((EditText) WhatTheDuck.wtd.findViewById(R.id.username)).setText(WhatTheDuck.getUsername());
+							((EditText) WhatTheDuck.wtd.findViewById(R.id.password)).setText(WhatTheDuck.getPassword());
+							WhatTheDuck.wtd.info(WhatTheDuck.wtd, R.string.signup__confirm);
+						}
+						else {
+							WhatTheDuck.wtd.alert(Signup.this, response);
+						}
 					}
 				} catch (UnsupportedEncodingException e) {
 					WhatTheDuck.wtd.alert(Signup.this, getString(R.string.internal_error));
