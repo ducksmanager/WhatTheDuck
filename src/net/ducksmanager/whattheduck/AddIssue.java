@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 
-public class AddIssue extends AsyncTask {
+public class AddIssue extends AsyncTask<Object,Integer,Object> {
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private static int progressBarId;

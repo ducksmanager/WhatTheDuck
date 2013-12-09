@@ -20,7 +20,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 
-public class CoaListing extends AsyncTask {
+public class CoaListing extends AsyncTask<Object,Integer,Object> {
 	public static List displayedList;
 	public static enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST};
 	public static HashMap<String,String> countryNames=new HashMap<String,String>();
@@ -46,6 +46,9 @@ public class CoaListing extends AsyncTask {
 	}
 	
 	public static String getPublicationFullName (String shortCountryName, String shortPublicationName) {
+		if (publicationNames.get(shortCountryName) == null) {
+			System.out.println("Can't get publications of country "+shortCountryName);
+		}
 		return publicationNames.get(shortCountryName).get(shortPublicationName);
 	}
 	
@@ -106,6 +109,7 @@ public class CoaListing extends AsyncTask {
 							resetCountries();
 							JSONObject object = new JSONObject(response);
 							JSONObject countryName = object.getJSONObject("static").getJSONObject("pays");
+							@SuppressWarnings("unchecked")
 							Iterator<String> countryIterator = countryName.keys();
 							while (countryIterator.hasNext()) {
 								String shortName=countryIterator.next();
@@ -128,6 +132,7 @@ public class CoaListing extends AsyncTask {
 							resetPublications();
 							JSONObject object = new JSONObject(response);
 							JSONObject publicationName = object.getJSONObject("static").getJSONObject("magazines");
+							@SuppressWarnings("unchecked")
 							Iterator<String> publicationIterator = publicationName.keys();
 							while (publicationIterator.hasNext()) {
 								String shortName=publicationIterator.next();
