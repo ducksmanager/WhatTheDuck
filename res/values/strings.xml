@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">What The Duck</string>
-    <string name="username">Pseudonyme DucksManager</string>
+    <string name="username">Nom d\'utilisateur DucksManager</string>
     <string name="password">Mot de passe</string>
     <string name="remember_credentials">Se souvenir de mes identifiants</string>
-    <string name="no_result">Pas de résultat</string>
+    <string name="no_result">Pas de résultat. Accédez au menu pour ajouter un numéro à votre collection.</string>
     <string name="my_collection">Ma collection</string>
     <string name="filter">Filtrer</string>
     <string name="logout_menu">Déconnexion</string>
@@ -14,7 +14,9 @@
     <string name="insert_issue_menu">Ajouter un numéro</string>
     <string name="insert_issue__choose_country">Choisir un pays</string>
     <string name="insert_issue__confirm">Ajout du numéro %1$s</string>
-    <string name="confirm">OK</string>
+    <string name="signup">Inscription</string>
+    <string name="signup__confirm">L\'inscription à DucksManager est terminée, \nvous pouvez maintenant vous connecter.</string>
+    <string name="login">Connexion</string>
     <string name="link_to_ducksmanager_website">WhatTheDuck est l\'application mobile de DucksManager. Cliquez ici pour accéder au site Web de DucksManager.</string>
     <string name="ok">OK</string>
     <string name="cancel">Annuler</string>
@@ -44,4 +46,7 @@
     
     <string name="error">Erreur</string>
     <string name="error__malformed_url">L\'adresse Web est mal formée</string>
+    <string name="password_confirm">Confirmation mot de passe</string>
+    <string name="signup_end">Terminer l\'inscription</string>
+    <string name="email_address">Adresse e-mail</string>
 </resources>

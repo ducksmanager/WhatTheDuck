@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import net.ducksmanager.inducks.coa.CoaListing;
+import net.ducksmanager.whattheduck.Issue.IssueCondition;
 
 public class Collection {
 	private HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<String,HashMap<String,ArrayList<Issue>>>();
@@ -93,10 +94,17 @@ public class Collection {
 		ArrayList<Issue> finalList = new ArrayList<Issue>();
 		ArrayList<Issue> list = issues.get(shortCountryName).get(shortPublicationName);
 		for (Issue issue : list) {
-			Boolean isInCollection=type.equals(CollectionType.COA.toString()) && WhatTheDuck.userCollection.hasIssue(shortCountryName, shortPublicationName, issue.getIssueNumber());
-			Issue i = new Issue((isInCollection? "* ":"")+issue.getIssueNumber(),
+			Boolean isCoaCollection = type.equals(CollectionType.COA.toString());
+			Boolean isInCollection=false;
+			IssueCondition condition = null;
+			Issue existingIssue = WhatTheDuck.userCollection.getIssue(shortCountryName, shortPublicationName, issue.getIssueNumber()); 
+			if (existingIssue != null) {
+				isInCollection = true;
+				condition = existingIssue.getIssueCondition();
+			}
+			Issue i = new Issue((isInCollection && isCoaCollection ? "* ":"")+issue.getIssueNumber(),
 								isInCollection,
-						  	    issue.getIssueCondition());
+						  	    condition);
 			finalList.add(i);
 		}
 		Collections.sort(finalList, new NaturalOrderComparator());
@@ -119,14 +127,14 @@ public class Collection {
 			&& issues.get(shortCountryName).get(shortPublicationName).size() > 0;
 	}
 	
-	public boolean hasIssue (String shortCountryName, String shortPublicationName, String issueNumber) {
+	public Issue getIssue (String shortCountryName, String shortPublicationName, String issueNumber) {
 		if (!hasPublication(shortCountryName, shortPublicationName))
-			return false;
+			return null;
 		for (Issue i : issues.get(shortCountryName).get(shortPublicationName)) {
 			if (i.getIssueNumber().equals(issueNumber))
-				return true;
+				return i;
 		}
-		return false;
+		return null;
 	}
 
     

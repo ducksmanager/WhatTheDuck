@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 
 import net.ducksmanager.security.Security;
+import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import org.apache.http.auth.AuthenticationException;
 
@@ -43,7 +44,7 @@ public class WhatTheDuck extends Activity {
     private static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
     
 	public static final String CREDENTIALS_FILENAME = "ducksmanager_credentials";
-	
+
 	private static String serverURL;
 	
     private static String username = null;
@@ -92,7 +93,17 @@ public class WhatTheDuck extends Activity {
 			WhatTheDuck.this.alert(R.string.internal_error, 
 		   			   			   R.string.internal_error__credentials_reading_failed);
 		}
-		
+
+        Button signupButton = (Button) findViewById(R.id.end_signup);
+        signupButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+            	WhatTheDuck.setUsername(((EditText) WhatTheDuck.this.findViewById(R.id.username)).getText().toString());
+            	WhatTheDuck.setPassword(((EditText) WhatTheDuck.this.findViewById(R.id.password)).getText().toString());
+                Intent i = new Intent(wtd, Signup.class);
+                i.putExtra("type", CollectionType.USER.toString());
+                wtd.startActivity(i);
+            }
+        });
         
         Button loginButton = (Button) findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +126,11 @@ public class WhatTheDuck extends Activity {
     }
     
     public void alert(String message) {
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	alert(this, message);
+    }
+    
+    public void alert(Context c, String message) {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(c);
     	builder.setTitle(getString(R.string.error));
     	builder.setMessage(message);
     	builder.create().show();
@@ -151,13 +166,14 @@ public class WhatTheDuck extends Activity {
 
 	public static void setPassword(String password) {
 		WhatTheDuck.password = password;
+		setEncryptedPassword(wtd.toSHA1(password));
 	}
 
 	public static String getEncryptedPassword() {
 		return encryptedPassword;
 	}
 
-	public static void setEncryptedPassword(String encryptedPassword) {
+	private static void setEncryptedPassword(String encryptedPassword) {
 		WhatTheDuck.encryptedPassword = encryptedPassword;
 	}
 
@@ -171,7 +187,11 @@ public class WhatTheDuck extends Activity {
         formatter.close();
         return hex;
     }
-    
+
+	public String retrieveOrFail(String urlSuffix)  {
+		return retrieveOrFail(0, urlSuffix);
+	}
+	
 	public String retrieveOrFail(int progressBarId, String urlSuffix)  {
         ProgressBar progressBar = (ProgressBar) findViewById(progressBarId);
         if (progressBar != null)
@@ -180,40 +200,37 @@ public class WhatTheDuck extends Activity {
 			if (!isOnline()) {
 				throw new Exception(""+R.string.network_error);
 			}
-            
+			
 			if (getEncryptedPassword() == null) {
 				MessageDigest md = MessageDigest.getInstance("SHA-1");
 				md.update(getPassword().getBytes());
 				setEncryptedPassword(byteArray2Hex(md.digest()));
 			}
 			String response = getPage(getServerURL()+"/"+SERVER_PAGE
-								    + "?pseudo_user="+URLEncoder.encode(username)
-								    + "&mdp_user="+encryptedPassword
-								    + "&mdp="+Security.SECURITY_PASSWORD
+										  + "?pseudo_user="+URLEncoder.encode(username, "UTF-8")
+										  + "&mdp_user="+encryptedPassword
+										  + "&mdp="+Security.SECURITY_PASSWORD
 								    + "&version="+getApplicationVersion()
-								    + urlSuffix);
-
+										  + urlSuffix);
+			
 			response = response.replaceAll("/\\/", "");
 			if (response.equals("0")) {	
 				throw new AuthenticationException();
 			}
 			else
 				return response;
-		} catch (NoSuchAlgorithmException e) {
-			this.alert(R.string.internal_error,
-					   R.string.internal_error__crypting_failed);
 		} catch (AuthenticationException e) {
 			this.alert(R.string.input_error, 
 					   R.string.input_error__invalid_credentials);
-			setUsername(null);
-			setPassword(null);
+			setUsername("");
+			setPassword("");
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			if (e.getMessage() != null && e.getMessage().equals(R.string.network_error+"")) {
 				this.alert(R.string.network_error, 
 						   R.string.network_error__no_connection);
-		}
+			}
 			else {
 				this.alert(e.getMessage());
 			}
@@ -235,11 +252,14 @@ public class WhatTheDuck extends Activity {
 	    }
 
 	    return false;
-	}	private String getApplicationVersion() throws NameNotFoundException {
+	}	
+	
+	private String getApplicationVersion() throws NameNotFoundException {
 		PackageManager manager = this.getPackageManager();
 		PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
 		return info.versionName;
 	}
+	
 	private String getPage(String url) {
 		String response="";
 		try {
@@ -265,5 +285,18 @@ public class WhatTheDuck extends Activity {
 		}
 		return serverURL;
 	}
+	
+	public String toSHA1(String text) {
+        try {
+                MessageDigest md = MessageDigest.getInstance("SHA-1");
+                md.update(text.getBytes());
+                return byteArray2Hex(md.digest());
+        }
+        catch (NoSuchAlgorithmException e) {
+                this.alert(R.string.internal_error,
+                                   R.string.internal_error__crypting_failed);
+                return "";
+        }
+}
 	
 }

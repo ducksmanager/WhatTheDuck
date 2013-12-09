@@ -33,7 +33,7 @@ public class IssueAdapter extends ArrayAdapter<Issue> {
 			ImageView imageCondition = (ImageView) v.findViewById(R.id.issuecondition);
 			if (issueNumber != null)
 				issueNumber.setText(i.getIssueNumber());
-			if (imageCondition != null) {
+			if (imageCondition != null && i.getIssueCondition() != null) {
 				int resourceId = Issue.issueConditionToResourceId(i.getIssueCondition());
 				imageCondition.setImageResource(resourceId);
 			}
