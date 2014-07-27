@@ -1,11 +1,7 @@
 package net.ducksmanager.whattheduck;
 
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -13,6 +9,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 
+import android.widget.*;
 import net.ducksmanager.security.Security;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
@@ -32,11 +29,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class WhatTheDuck extends Activity {
     private static final String SERVER_PAGE="WhatTheDuck.php";
@@ -108,7 +100,7 @@ public class WhatTheDuck extends Activity {
         Button loginButton = (Button) findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-        		new ConnectAndRetrieveList(R.id.progressBarConnection).execute(new Object[0]);
+        		new ConnectAndRetrieveList(R.id.progressBarConnection).execute();
             }
         });
         
@@ -193,10 +185,7 @@ public class WhatTheDuck extends Activity {
 	}
 	
 	public String retrieveOrFail(int progressBarId, String urlSuffix)  {
-        ProgressBar progressBar = (ProgressBar) findViewById(progressBarId);
-        if (progressBar != null)
-        	progressBar.setVisibility(ProgressBar.VISIBLE);
-		try {
+        try {
 			if (!isOnline()) {
 				throw new Exception(""+R.string.network_error);
 			}
@@ -234,12 +223,6 @@ public class WhatTheDuck extends Activity {
 			else {
 				this.alert(e.getMessage());
 			}
-		}
-		finally {
-	        if (progressBar != null) {
-				progressBar.clearAnimation();
-				progressBar.setVisibility(ProgressBar.GONE);
-	        }
 		}
 		return null;
 	}
