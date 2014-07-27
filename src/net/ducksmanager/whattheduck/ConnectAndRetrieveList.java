@@ -22,12 +22,12 @@ import android.widget.ProgressBar;
 public class ConnectAndRetrieveList extends AsyncTask<Object,Integer,String> {
     private CheckBox mCheckboxRememberCredentials;
 
-    private static ProgressBar progressBar;
+    private static int progressBarId;
     private WhatTheDuck wtd;
 
     public ConnectAndRetrieveList(int progressBarId) {
         wtd = WhatTheDuck.wtd;
-        ConnectAndRetrieveList.progressBar = (ProgressBar) wtd.findViewById(progressBarId);
+        ConnectAndRetrieveList.progressBarId = progressBarId;
     }
 
     @Override
@@ -48,14 +48,13 @@ public class ConnectAndRetrieveList extends AsyncTask<Object,Integer,String> {
             }
         }
 
-        if (progressBar != null)
-            progressBar.setVisibility(ProgressBar.VISIBLE);
+        wtd.toggleProgressbarLoading(progressBarId, true);
     }
 
     @Override
     protected String doInBackground(Object... arg0) {
 
-        return wtd.retrieveOrFail(0, "");
+        return wtd.retrieveOrFail("");
     }
 
     @Override
@@ -117,10 +116,7 @@ public class ConnectAndRetrieveList extends AsyncTask<Object,Integer,String> {
                 if (issues.length() > 0)
                     throw e;
             } finally {
-                if (progressBar != null) {
-                    progressBar.clearAnimation();
-                    progressBar.setVisibility(ProgressBar.GONE);
-                }
+                wtd.toggleProgressbarLoading(progressBarId, false);
             }
         } catch (JSONException e) {
             wtd.alert(R.string.internal_error, "",

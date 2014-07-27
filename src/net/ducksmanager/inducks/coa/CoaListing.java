@@ -17,16 +17,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
 
-public class CoaListing extends AsyncTask<Object,Integer,Object> {
+public class CoaListing extends AsyncTask<Object,Integer,HashMap<CoaListing.ListType, String>> {
 	public static List displayedList;
-	public static enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST};
-	public static HashMap<String,String> countryNames=new HashMap<String,String>();
+	public static enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST}
+    public static HashMap<String,String> countryNames=new HashMap<String,String>();
 	public static HashMap<String,HashMap<String,String>> publicationNames=new HashMap<String,HashMap<String,String>>();
 
-    private Handler mHandler = new Handler(Looper.getMainLooper());
     private int progressBarId;
 	private ListType listType;
 	private String countryShortName;
@@ -93,82 +90,105 @@ public class CoaListing extends AsyncTask<Object,Integer,Object> {
 		publicationNames.get(countryShortName).put(shortName, fullName);
 		
 	}
+
+    @Override
+    protected void onPreExecute() {
+        WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, true);
+    }
 	
 	@Override
-	protected Object doInBackground(Object... params) {
-		mHandler.post(new Runnable() {
-	        public void run() {
-				try {
-		        	if (CoaListing.this.listType.equals(ListType.COUNTRY_LIST)
-				     || CoaListing.this.listType.equals(ListType.PUBLICATION_LIST)
-		        	 || CoaListing.this.listType.equals(ListType.ISSUE_LIST)) {
-		        		if (WhatTheDuck.coaCollection.isEmpty()) {
-			        		String response = WhatTheDuck.wtd.retrieveOrFail(progressBarId, "&coa=true&liste_pays=true");
-							if (response == null)
-								return;
-							resetCountries();
-							JSONObject object = new JSONObject(response);
-							JSONObject countryName = object.getJSONObject("static").getJSONObject("pays");
-							@SuppressWarnings("unchecked")
-							Iterator<String> countryIterator = countryName.keys();
-							while (countryIterator.hasNext()) {
-								String shortName=countryIterator.next();
-								String fullName = countryName.getString(shortName);
-								addCountry(shortName, fullName);
-								WhatTheDuck.coaCollection.addCountry(shortName);
-							}
-		        		}
-		        		
-						if (displayedList instanceof CountryList)
-							((CountryList)displayedList).show();
-					}
-		        	if (CoaListing.this.listType.equals(ListType.PUBLICATION_LIST)
-		        	 || CoaListing.this.listType.equals(ListType.ISSUE_LIST)) {
-		        		String countryShortName = CoaListing.this.countryShortName;
-		        		if (! WhatTheDuck.coaCollection.hasCountry(countryShortName)) {
-							String response = WhatTheDuck.wtd.retrieveOrFail(progressBarId, "&coa=true&liste_magazines=true&pays="+countryShortName);
-							if (response == null)
-								return;
-							resetPublications();
-							JSONObject object = new JSONObject(response);
-							JSONObject publicationName = object.getJSONObject("static").getJSONObject("magazines");
-							@SuppressWarnings("unchecked")
-							Iterator<String> publicationIterator = publicationName.keys();
-							while (publicationIterator.hasNext()) {
-								String shortName=publicationIterator.next();
-								String fullName = publicationName.getString(shortName);
-								addPublication(countryShortName, shortName, fullName);
-								WhatTheDuck.coaCollection.addPublication(countryShortName, shortName);
-							}
-		        		}
-		        		
-		        		if (displayedList instanceof PublicationList)
-							((PublicationList)displayedList).show();
-		        	}
-		        	if (CoaListing.this.listType.equals(ListType.ISSUE_LIST)) {
-		        		String shortCountryName = CoaListing.this.countryShortName;
-		        		String shortPublicationName = CoaListing.this.publicationShortName;
-		        		if (! WhatTheDuck.coaCollection.hasPublication(shortCountryName, shortPublicationName)) {		        		
-							String response = WhatTheDuck.wtd.retrieveOrFail(progressBarId, "&coa=true&liste_numeros=true&magazine="+shortPublicationName);
-							if (response == null)
-								return;
-							JSONObject object = new JSONObject(response);
-							JSONArray issues = object.getJSONObject("static").getJSONArray("numeros");
-							for (int i = 0; i< issues.length();i++) {
-								String issue=(String) issues.get(i);
-								WhatTheDuck.coaCollection.addIssue(shortCountryName, shortPublicationName, new Issue(issue, Boolean.FALSE, Issue.NO_CONDITION));
-							}
-		        		}
-		        		if (displayedList instanceof IssueList)
-							((IssueList)displayedList).show();
-		        	}
-					
-				} catch (JSONException e) {
-					WhatTheDuck.wtd.alert(R.string.internal_error,"",
-				   			   			  R.string.internal_error__malformed_list," : " + e.getMessage());
-				}
-	        }
-		});
-		return null;
+	protected HashMap<ListType, String> doInBackground(Object... params) {
+        HashMap<ListType, String> responses = new HashMap<ListType, String>();
+        if (CoaListing.this.listType.equals(ListType.COUNTRY_LIST)
+         || CoaListing.this.listType.equals(ListType.PUBLICATION_LIST)
+         || CoaListing.this.listType.equals(ListType.ISSUE_LIST)) {
+            if (WhatTheDuck.coaCollection.isEmpty()) {
+                responses.put(ListType.COUNTRY_LIST, WhatTheDuck.wtd.retrieveOrFail("&coa=true&liste_pays=true"));
+                if (responses.get(ListType.COUNTRY_LIST) == null) {
+                    return responses;
+                }
+            }
+        }
+        if (CoaListing.this.listType.equals(ListType.PUBLICATION_LIST)
+         || CoaListing.this.listType.equals(ListType.ISSUE_LIST)) {
+            String countryShortName = CoaListing.this.countryShortName;
+            if (! WhatTheDuck.coaCollection.hasCountry(countryShortName)) {
+                responses.put(ListType.PUBLICATION_LIST, WhatTheDuck.wtd.retrieveOrFail("&coa=true&liste_magazines=true&pays="+countryShortName));
+                if (responses.get(ListType.PUBLICATION_LIST) == null) {
+                    return responses;
+                }
+            }
+
+        }
+        if (CoaListing.this.listType.equals(ListType.ISSUE_LIST)) {
+            String shortCountryName = CoaListing.this.countryShortName;
+            String shortPublicationName = CoaListing.this.publicationShortName;
+
+            if (! WhatTheDuck.coaCollection.hasPublication(shortCountryName, shortPublicationName)) {
+                responses.put(ListType.ISSUE_LIST, WhatTheDuck.wtd.retrieveOrFail("&coa=true&liste_numeros=true&magazine="+shortPublicationName));
+            }
+        }
+
+        return responses;
+
 	}
+
+    @Override
+    protected void onPostExecute(HashMap<ListType, String> responses) {
+        try {
+            if (responses.get(ListType.COUNTRY_LIST) != null) {
+                resetCountries();
+                JSONObject object = new JSONObject(responses.get(ListType.COUNTRY_LIST));
+                JSONObject countryName = object.getJSONObject("static").getJSONObject("pays");
+                @SuppressWarnings("unchecked")
+                Iterator<String> countryIterator = countryName.keys();
+                while (countryIterator.hasNext()) {
+                    String shortName = countryIterator.next();
+                    String fullName = countryName.getString(shortName);
+                    addCountry(shortName, fullName);
+                    WhatTheDuck.coaCollection.addCountry(shortName);
+                }
+            }
+
+            if (responses.get(ListType.PUBLICATION_LIST) != null) {
+                resetPublications();
+                JSONObject object = new JSONObject(responses.get(ListType.PUBLICATION_LIST));
+                JSONObject publicationName = object.getJSONObject("static").getJSONObject("magazines");
+                @SuppressWarnings("unchecked")
+                Iterator<String> publicationIterator = publicationName.keys();
+                while (publicationIterator.hasNext()) {
+                    String shortName = publicationIterator.next();
+                    String fullName = publicationName.getString(shortName);
+                    addPublication(countryShortName, shortName, fullName);
+                    WhatTheDuck.coaCollection.addPublication(countryShortName, shortName);
+                }
+            }
+
+            if (responses.get(ListType.ISSUE_LIST) != null) {
+                String shortCountryName = CoaListing.this.countryShortName;
+                String shortPublicationName = CoaListing.this.publicationShortName;
+
+                JSONObject object = new JSONObject(responses.get(ListType.ISSUE_LIST));
+                JSONArray issues = object.getJSONObject("static").getJSONArray("numeros");
+                for (int i = 0; i < issues.length(); i++) {
+                    String issue = (String) issues.get(i);
+                    WhatTheDuck.coaCollection.addIssue(shortCountryName, shortPublicationName, new Issue(issue, Boolean.FALSE, Issue.NO_CONDITION));
+                }
+            }
+
+            if (displayedList instanceof CountryList) {
+                ((CountryList) displayedList).show();
+            }
+            if (displayedList instanceof PublicationList) {
+                ((PublicationList) displayedList).show();
+            }
+            if (displayedList instanceof IssueList) {
+                ((IssueList) displayedList).show();
+            }
+        }
+        catch (JSONException e) {
+            WhatTheDuck.wtd.alert(R.string.internal_error,"",
+                                  R.string.internal_error__malformed_list," : " + e.getMessage());
+        }
+    }
 }

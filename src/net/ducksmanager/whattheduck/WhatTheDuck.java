@@ -180,11 +180,21 @@ public class WhatTheDuck extends Activity {
         return hex;
     }
 
-	public String retrieveOrFail(String urlSuffix)  {
-		return retrieveOrFail(0, urlSuffix);
+	private String retrieveOrFail(int progressBarId, String urlSuffix)  {
+
+        if (progressBarId != 0) {
+            toggleProgressbarLoading(progressBarId, true);
+        }
+		String result = retrieveOrFail(0, urlSuffix);
+
+        if (progressBarId != 0) {
+            toggleProgressbarLoading(progressBarId, false);
+        }
+
+        return result;
 	}
 	
-	public String retrieveOrFail(int progressBarId, String urlSuffix)  {
+	public String retrieveOrFail(String urlSuffix)  {
         try {
 			if (!isOnline()) {
 				throw new Exception(""+R.string.network_error);
@@ -199,7 +209,7 @@ public class WhatTheDuck extends Activity {
 										  + "?pseudo_user="+URLEncoder.encode(username, "UTF-8")
 										  + "&mdp_user="+encryptedPassword
 										  + "&mdp="+Security.SECURITY_PASSWORD
-								    + "&version="+getApplicationVersion()
+								          + "&version="+getApplicationVersion()
 										  + urlSuffix);
 			
 			response = response.replaceAll("/\\/", "");
@@ -224,8 +234,24 @@ public class WhatTheDuck extends Activity {
 				this.alert(e.getMessage());
 			}
 		}
-		return null;
+        finally {
+        }
+        return null;
 	}
+
+    public void toggleProgressbarLoading(int progressBarId, boolean toggle) {
+        ProgressBar progressBar = (ProgressBar) wtd.findViewById(progressBarId);
+
+        if (progressBar != null) {
+            if (toggle) {
+                progressBar.setVisibility(ProgressBar.VISIBLE);
+            }
+            else {
+                progressBar.clearAnimation();
+                progressBar.setVisibility(ProgressBar.GONE);
+            }
+        }
+    }
 	
 	public boolean isOnline() {
 	    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
