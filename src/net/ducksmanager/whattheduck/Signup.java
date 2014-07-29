@@ -32,27 +32,8 @@ public class Signup extends Activity {
             	
             	String password2 = WhatTheDuck.wtd.toSHA1(((EditText) Signup.this.findViewById(R.id.password_confirmation)).getText().toString());
             	String email = ((EditText) Signup.this.findViewById(R.id.email_address)).getText().toString();
-            	
-        		String response;
-				try {
-					response = WhatTheDuck.wtd.retrieveOrFail("&action=signup&mdp_user2="+password2+"&email="+email);
-					if (response != null) {
-						response = new String(response.getBytes("ISO8859-1"), "UTF-8");
-	
-						if (response.equals("OK")) {
-						    Intent i = new Intent(Signup.this, WhatTheDuck.class);
-						    WhatTheDuck.wtd.startActivity(i);
-							((EditText) WhatTheDuck.wtd.findViewById(R.id.username)).setText(WhatTheDuck.getUsername());
-							((EditText) WhatTheDuck.wtd.findViewById(R.id.password)).setText(WhatTheDuck.getPassword());
-							WhatTheDuck.wtd.info(WhatTheDuck.wtd, R.string.signup__confirm);
-						}
-						else {
-							WhatTheDuck.wtd.alert(Signup.this, response);
-						}
-					}
-				} catch (UnsupportedEncodingException e) {
-					WhatTheDuck.wtd.alert(Signup.this, getString(R.string.internal_error));
-				}
+
+                new ConnectAndRetrieveList("&action=signup&mdp_user2="+password2+"&email="+email).execute();
             }
         });
         
@@ -63,5 +44,35 @@ public class Signup extends Activity {
                 Signup.this.startActivity(i);
             }
         });
+    }
+
+
+    public class ConnectAndRetrieveList extends RetrieveTask {
+
+        public ConnectAndRetrieveList(String urlSuffix) {
+            super(urlSuffix);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            super.onPostExecute(response);
+            if (response != null) {
+                try {
+                    response = new String(response.getBytes("ISO8859-1"), "UTF-8");
+
+                    if (response.equals("OK")) {
+                        Intent i = new Intent(Signup.this, WhatTheDuck.class);
+                        WhatTheDuck.wtd.startActivity(i);
+                        ((EditText) WhatTheDuck.wtd.findViewById(R.id.username)).setText(WhatTheDuck.getUsername());
+                        ((EditText) WhatTheDuck.wtd.findViewById(R.id.password)).setText(WhatTheDuck.getPassword());
+                        WhatTheDuck.wtd.info(WhatTheDuck.wtd, R.string.signup__confirm);
+                    } else {
+                        WhatTheDuck.wtd.alert(Signup.this, response);
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    WhatTheDuck.wtd.alert(Signup.this, getString(R.string.internal_error));
+                }
+            }
+        }
     }
 }

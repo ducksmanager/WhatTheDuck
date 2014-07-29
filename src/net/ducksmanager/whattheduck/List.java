@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
-public class List extends ListActivity{
+public abstract class List extends ListActivity{
     protected static final int INSERT_ID = 1;
     protected static final int MY_COLLECTION_ID = 2;
     protected static final int LOGOUT = 3;
@@ -34,6 +34,8 @@ public class List extends ListActivity{
 		
 		setContentView(R.layout.wtd_list);
     }
+
+    public abstract void show();
     
     public void show(ArrayList<String> items) {
     	this.items = items;

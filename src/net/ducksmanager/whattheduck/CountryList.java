@@ -2,6 +2,7 @@ package net.ducksmanager.whattheduck;
 
 import net.ducksmanager.inducks.coa.CoaListing;
 import net.ducksmanager.inducks.coa.CoaListing.ListType;
+import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,8 +21,13 @@ public class CountryList extends List {
 	        setTitle(R.string.my_collection);
         }
         else {
-    		new CoaListing(this, ListType.COUNTRY_LIST, R.id.progressBarLoading, null, null).execute(new Object[0]);
-        	setTitle(getString(R.string.insert_issue_menu)+">"+getString(R.string.insert_issue__choose_country));
+            if (WhatTheDuck.coaCollection.isEmpty()) {
+                new CountryListing(this, R.id.progressBarLoading, null, null).execute();
+            }
+            else {
+                this.show();
+            }
+            setTitle(getString(R.string.insert_issue_menu)+">"+getString(R.string.insert_issue__choose_country));
         }
     }
     

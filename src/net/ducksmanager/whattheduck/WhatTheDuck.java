@@ -179,64 +179,30 @@ public class WhatTheDuck extends Activity {
         formatter.close();
         return hex;
     }
-
-	private String retrieveOrFail(int progressBarId, String urlSuffix)  {
-
-        if (progressBarId != 0) {
-            toggleProgressbarLoading(progressBarId, true);
-        }
-		String result = retrieveOrFail(0, urlSuffix);
-
-        if (progressBarId != 0) {
-            toggleProgressbarLoading(progressBarId, false);
-        }
-
-        return result;
-	}
 	
-	public String retrieveOrFail(String urlSuffix)  {
-        try {
-			if (!isOnline()) {
-				throw new Exception(""+R.string.network_error);
-			}
-			
-			if (getEncryptedPassword() == null) {
-				MessageDigest md = MessageDigest.getInstance("SHA-1");
-				md.update(getPassword().getBytes());
-				setEncryptedPassword(byteArray2Hex(md.digest()));
-			}
-			String response = getPage(getServerURL()+"/"+SERVER_PAGE
-										  + "?pseudo_user="+URLEncoder.encode(username, "UTF-8")
-										  + "&mdp_user="+encryptedPassword
-										  + "&mdp="+Security.SECURITY_PASSWORD
-								          + "&version="+getApplicationVersion()
-										  + urlSuffix);
-			
-			response = response.replaceAll("/\\/", "");
-			if (response.equals("0")) {	
-				throw new AuthenticationException();
-			}
-			else
-				return response;
-		} catch (AuthenticationException e) {
-			this.alert(R.string.input_error, 
-					   R.string.input_error__invalid_credentials);
-			setUsername("");
-			setPassword("");
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			if (e.getMessage() != null && e.getMessage().equals(R.string.network_error+"")) {
-				this.alert(R.string.network_error, 
-						   R.string.network_error__no_connection);
-			}
-			else {
-				this.alert(e.getMessage());
-			}
-		}
-        finally {
+	public String retrieveOrFail(String urlSuffix) throws Exception {
+        if (!isOnline()) {
+            throw new Exception(""+R.string.network_error);
         }
-        return null;
+
+        if (getEncryptedPassword() == null) {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            md.update(getPassword().getBytes());
+            setEncryptedPassword(byteArray2Hex(md.digest()));
+        }
+        String response = getPage(getServerURL()+"/"+SERVER_PAGE
+                                      + "?pseudo_user="+URLEncoder.encode(username, "UTF-8")
+                                      + "&mdp_user="+encryptedPassword
+                                      + "&mdp="+Security.SECURITY_PASSWORD
+                                      + "&version="+getApplicationVersion()
+                                      + urlSuffix);
+
+        response = response.replaceAll("/\\/", "");
+        if (response.equals("0")) {
+            throw new AuthenticationException();
+        }
+        else
+            return response;
 	}
 
     public void toggleProgressbarLoading(int progressBarId, boolean toggle) {

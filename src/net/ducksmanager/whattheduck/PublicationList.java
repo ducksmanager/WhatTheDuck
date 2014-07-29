@@ -1,13 +1,13 @@
 package net.ducksmanager.whattheduck;
 
-import net.ducksmanager.inducks.coa.CoaListing;
-import net.ducksmanager.inducks.coa.CoaListing.ListType;
-import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import net.ducksmanager.inducks.coa.CoaListing;
+import net.ducksmanager.inducks.coa.PublicationListing;
+import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 public class PublicationList extends List {
     protected static final int ACTIVITY_PUBLICATIONLIST=1;
@@ -16,13 +16,20 @@ public class PublicationList extends List {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final String selectedCountry = getCollection().getSelectedCountry();
         if (type.equals(CollectionType.USER.toString())) {
-        	setTitle(getString(R.string.my_collection)+">"+CoaListing.getCountryFullName(getCollection().getSelectedCountry()));
-            show();
+        	setTitle(getString(R.string.my_collection)+">"+CoaListing.getCountryFullName(selectedCountry));
+            this.show();
         }
         else {
-        	setTitle(getString(R.string.insert_issue_menu)+">"+CoaListing.getCountryFullName(getCollection().getSelectedCountry()));
-    		new CoaListing(this, ListType.PUBLICATION_LIST, R.id.progressBarLoading, getCollection().getSelectedCountry(), null).execute(new Object[0]);
+        	setTitle(getString(R.string.insert_issue_menu)+">"+CoaListing.getCountryFullName(selectedCountry));
+
+            if (!WhatTheDuck.coaCollection.hasCountry(selectedCountry)) {
+                new PublicationListing(this, R.id.progressBarLoading, selectedCountry, null).execute();
+            }
+            else {
+                this.show();
+            }
         }
     }
     

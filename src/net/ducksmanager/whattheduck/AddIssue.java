@@ -7,20 +7,26 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 
-public class AddIssue extends AsyncTask<Object,Integer,Void> {
-    private Handler mHandler = new Handler(Looper.getMainLooper());
+public class AddIssue extends RetrieveTask {
 
     private static int progressBarId;
 
     private static IssueList issueList;
     private static String shortCountryAndPublication;
     private static Issue selectedIssue;
-	
+
     public AddIssue(IssueList il, int progressBarId, String shortCountryAndPublication, Issue selectedIssue) {
-    	AddIssue.issueList = il;
-    	AddIssue.progressBarId = progressBarId;
-    	AddIssue.shortCountryAndPublication = shortCountryAndPublication;
-    	AddIssue.selectedIssue = selectedIssue;
+        super(
+            "&ajouter_numero"
+            +"&pays_magazine="+shortCountryAndPublication
+            +"&numero="+selectedIssue.getIssueNumber()
+            +"&etat="+selectedIssue.getIssueConditionStr(),
+            true
+        );
+        AddIssue.issueList = il;
+        AddIssue.progressBarId = progressBarId;
+        AddIssue.shortCountryAndPublication = shortCountryAndPublication;
+        AddIssue.selectedIssue = selectedIssue;
     }
 
     @Override
@@ -28,31 +34,17 @@ public class AddIssue extends AsyncTask<Object,Integer,Void> {
         WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, true);
     }
 
-	@Override
-	protected Void doInBackground(Object... arg0) {
-        String results;
-        try {
-            results = WhatTheDuck.wtd.retrieveOrFail("&ajouter_numero"
-                                                    +"&pays_magazine="+shortCountryAndPublication
-                                                    +"&numero="+URLEncoder.encode(selectedIssue.getIssueNumber(), "UTF-8")
-                                                    +"&etat="+URLEncoder.encode(selectedIssue.getIssueConditionStr(), "UTF-8"));
-            if (results.equals("OK")) {
-                WhatTheDuck.wtd.info(AddIssue.issueList, R.string.confirmation_message__issue_inserted);
-                WhatTheDuck.userCollection.addIssue(shortCountryAndPublication, selectedIssue);
-                issueList.show();
-            }
-            else
-                WhatTheDuck.wtd.alert(R.string.internal_error, R.string.internal_error__issue_insertion_failed);
-        } catch (UnsupportedEncodingException e) {
-            WhatTheDuck.wtd.alert(R.string.internal_error,"",
-                                  R.string.internal_error__issue_insertion_failed,"");
+    @Override
+    protected void onPostExecute(String response) {
+        if (response.equals("OK")) {
+            WhatTheDuck.wtd.info(AddIssue.issueList, R.string.confirmation_message__issue_inserted);
+            WhatTheDuck.userCollection.addIssue(shortCountryAndPublication, selectedIssue);
+            issueList.show();
+        }
+        else {
+            WhatTheDuck.wtd.alert(R.string.internal_error, R.string.internal_error__issue_insertion_failed);
         }
 
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void unused) {
         WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, false);
     }
 

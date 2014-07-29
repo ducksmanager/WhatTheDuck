@@ -4,7 +4,7 @@
     <string name="username">Nom d\'utilisateur DucksManager</string>
     <string name="password">Mot de passe</string>
     <string name="remember_credentials">Se souvenir de mes identifiants</string>
-    <string name="no_result">Pas de résultat. Accédez au menu pour ajouter un numéro à votre collection.</string>
+    <string name="no_result">Pas de résultat.</string>
     <string name="my_collection">Ma collection</string>
     <string name="filter">Filtrer</string>
     <string name="logout_menu">Déconnexion</string>

@@ -19,13 +19,14 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-public class ConnectAndRetrieveList extends AsyncTask<Object,Integer,String> {
+public class ConnectAndRetrieveList extends RetrieveTask {
     private CheckBox mCheckboxRememberCredentials;
 
     private static int progressBarId;
     private WhatTheDuck wtd;
 
     public ConnectAndRetrieveList(int progressBarId) {
+        super("");
         wtd = WhatTheDuck.wtd;
         ConnectAndRetrieveList.progressBarId = progressBarId;
     }
@@ -33,9 +34,9 @@ public class ConnectAndRetrieveList extends AsyncTask<Object,Integer,String> {
     @Override
     protected void onPreExecute() {
         WhatTheDuck.userCollection = new Collection();
-        if (WhatTheDuck.getUsername() == null
-                || !WhatTheDuck.getUsername().equals(((EditText) wtd.findViewById(R.id.username)).getText().toString())
-                || WhatTheDuck.getEncryptedPassword() == null) {
+        if ( WhatTheDuck.getUsername() == null
+         || !WhatTheDuck.getUsername().equals(((EditText) wtd.findViewById(R.id.username)).getText().toString())
+         || WhatTheDuck.getEncryptedPassword() == null) {
 
             WhatTheDuck.setUsername(((EditText) wtd.findViewById(R.id.username)).getText().toString());
             WhatTheDuck.setPassword(((EditText) wtd.findViewById(R.id.password)).getText().toString());
@@ -45,6 +46,7 @@ public class ConnectAndRetrieveList extends AsyncTask<Object,Integer,String> {
                 ProgressBar mProgressBar = (ProgressBar) wtd.findViewById(R.id.progressBarConnection);
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                 cancel(true);
+                return;
             }
         }
 
@@ -52,13 +54,12 @@ public class ConnectAndRetrieveList extends AsyncTask<Object,Integer,String> {
     }
 
     @Override
-    protected String doInBackground(Object... arg0) {
-
-        return wtd.retrieveOrFail("");
-    }
-
-    @Override
     protected void onPostExecute(String response) {
+        super.onPostExecute(response);
+        if (super.hasFailed()) {
+            return;
+        }
+
         try {
             if (response == null) {
                 return;
@@ -75,7 +76,8 @@ public class ConnectAndRetrieveList extends AsyncTask<Object,Integer,String> {
                     fos.close();
                 } catch (IOException e) {
                     wtd.alert(R.string.internal_error,
-                            R.string.internal_error__credentials_storage_failed);
+                              R.string.internal_error__credentials_storage_failed);
+                    wtd.toggleProgressbarLoading(progressBarId, false);
                 }
             }
 

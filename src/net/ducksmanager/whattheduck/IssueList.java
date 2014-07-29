@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import net.ducksmanager.inducks.coa.CoaListing;
 import net.ducksmanager.inducks.coa.CoaListing.ListType;
+import net.ducksmanager.inducks.coa.IssueListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -28,20 +29,28 @@ public class IssueList extends List {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final String selectedCountry = getCollection().getSelectedCountry();
+        final String selectedPublication = getCollection().getSelectedPublication();
+
         if (type.equals(CollectionType.USER.toString())) {
 	        setTitle(getString(R.string.my_collection)
-	        		+">"+CoaListing.getCountryFullName(getCollection().getSelectedCountry())
-	        		+">"+CoaListing.getPublicationFullName(getCollection().getSelectedCountry(), 
-	        											   getCollection().getSelectedPublication()));
-	        show();
+	        		+">"+CoaListing.getCountryFullName(selectedCountry)
+	        		+">"+CoaListing.getPublicationFullName(selectedCountry,
+                    selectedPublication));
+	        this.show();
         }
         else {
         	setTitle(getString(R.string.insert_issue_menu)+">"
-        			+CoaListing.getCountryFullName(getCollection().getSelectedCountry())+">"
-        			+CoaListing.getPublicationFullName(getCollection().getSelectedCountry(), 
-							   						   getCollection().getSelectedPublication()));
-    		new CoaListing(this, ListType.ISSUE_LIST, R.id.progressBarLoading, getCollection().getSelectedCountry(), getCollection().getSelectedPublication()).execute(new Object[0]);
-        	
+        			+CoaListing.getCountryFullName(selectedCountry)+">"
+        			+CoaListing.getPublicationFullName(selectedCountry,
+                    selectedPublication));
+
+            if (! WhatTheDuck.coaCollection.hasPublication(selectedCountry, selectedPublication)) {
+                new IssueListing(this, R.id.progressBarLoading, selectedCountry, selectedPublication).execute();
+            }
+            else {
+                this.show();
+            }
         }
     }
     
