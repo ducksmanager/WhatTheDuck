@@ -13,8 +13,7 @@ public class AddIssue extends RetrieveTask {
             "&ajouter_numero"
             +"&pays_magazine="+shortCountryAndPublication
             +"&numero="+selectedIssue.getIssueNumber()
-            +"&etat="+selectedIssue.getIssueConditionStr(),
-            true
+            +"&etat="+selectedIssue.getIssueConditionStr()
         );
         AddIssue.issueList = il;
         AddIssue.progressBarId = progressBarId;
