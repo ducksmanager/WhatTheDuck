@@ -17,11 +17,11 @@ import android.widget.EditText;
 
 public abstract class List extends ListActivity{
     protected static final int INSERT_ID = 1;
-    protected static final int MY_COLLECTION_ID = 2;
-    protected static final int LOGOUT = 3;
+    private static final int MY_COLLECTION_ID = 2;
+    private static final int LOGOUT = 3;
     
     public String type;
-    public ArrayList<String> items;
+    private ArrayList<String> items;
     
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public abstract class List extends ListActivity{
     public void show(ArrayList<String> items) {
     	this.items = items;
     	
-    	String[] lv_arr = (String[]) items.toArray(new String[0]);
+    	String[] lv_arr = items.toArray(new String[items.size()]);
         setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lv_arr));
         
     	if (items.size() > 20) {
@@ -58,7 +58,7 @@ public abstract class List extends ListActivity{
                 		if (item.replace("* ", "").toLowerCase(Locale.FRANCE).contains(typedText.toLowerCase()))
                 			filteredItems.add(item);
                 	
-                	String[] lv_arr = (String[]) filteredItems.toArray(new String[0]);
+                	String[] lv_arr = filteredItems.toArray(new String[filteredItems.size()]);
                     setListAdapter(new ArrayAdapter<String>(List.this, android.R.layout.simple_list_item_1, lv_arr));
                     
     			}

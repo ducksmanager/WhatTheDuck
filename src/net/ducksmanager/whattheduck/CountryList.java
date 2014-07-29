@@ -1,7 +1,6 @@
 package net.ducksmanager.whattheduck;
 
 import net.ducksmanager.inducks.coa.CoaListing;
-import net.ducksmanager.inducks.coa.CoaListing.ListType;
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.widget.ListView;
 
 public class CountryList extends List {
-	protected static final int ACTIVITY_LISTEPAYS=0;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +20,7 @@ public class CountryList extends List {
         }
         else {
             if (WhatTheDuck.coaCollection.isEmpty()) {
-                new CountryListing(this, R.id.progressBarLoading, null, null).execute();
+                new CountryListing(this, R.id.progressBarLoading).execute();
             }
             else {
                 this.show();
@@ -36,23 +34,6 @@ public class CountryList extends List {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        saveState();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        saveState();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-    
-    @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         String selectedCountry = this.getListView().getItemAtPosition(((Long)id).intValue()).toString().replace("* ", "");
@@ -61,9 +42,5 @@ public class CountryList extends List {
         Intent i = new Intent(this, PublicationList.class);
         i.putExtra("type", this.type);
         startActivity(i);
-    }
-
-    private void saveState() {
-    	
     }
 }

@@ -10,7 +10,6 @@ import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 public class PublicationList extends List {
-    protected static final int ACTIVITY_PUBLICATIONLIST=1;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +24,7 @@ public class PublicationList extends List {
         	setTitle(getString(R.string.insert_issue_menu)+">"+CoaListing.getCountryFullName(selectedCountry));
 
             if (!WhatTheDuck.coaCollection.hasCountry(selectedCountry)) {
-                new PublicationListing(this, R.id.progressBarLoading, selectedCountry, null).execute();
+                new PublicationListing(this, R.id.progressBarLoading, selectedCountry).execute();
             }
             else {
                 this.show();
@@ -44,23 +43,6 @@ public class PublicationList extends List {
     	if (getCollection().getSelectedCountry() != null) {
 	    	super.show(getCollection().getPublicationList(getCollection().getSelectedCountry(), this.type));
     	}
-    }
-    
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        saveState();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        saveState();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
     
     @Override
@@ -87,8 +69,5 @@ public class PublicationList extends List {
         Intent i = new Intent(this, IssueList.class);
         i.putExtra("type", this.type);
         startActivity(i);
-    }
-
-    private void saveState() {
     }
 }

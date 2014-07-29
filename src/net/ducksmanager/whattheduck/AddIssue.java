@@ -1,12 +1,5 @@
 package net.ducksmanager.whattheduck;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
-
 public class AddIssue extends RetrieveTask {
 
     private static int progressBarId;

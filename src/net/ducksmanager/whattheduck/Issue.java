@@ -8,39 +8,24 @@ public class Issue {
 	public static final String GOOD_CONDITION="bon";
 	public static final String NO_CONDITION="indefini";
 
-	private String issueNumber;
-	private boolean inCollection = false;
-	public static enum IssueCondition {BAD_CONDITION, NOTSOGOOD_CONDITION, GOOD_CONDITION, NO_CONDITION};
+	private final String issueNumber;
+	public static enum IssueCondition {BAD_CONDITION, NOTSOGOOD_CONDITION, GOOD_CONDITION, NO_CONDITION}
 	private IssueCondition issueCondition;
 
-	public Issue(String issuenumber, boolean inCollection, String issueCondition) {
+	public Issue(String issuenumber, String issueCondition) {
 		super();
 		this.issueNumber = issuenumber;
-		this.inCollection = inCollection;
 		this.issueCondition=issueConditionStrToIssueCondition(issueCondition);
 	}
 	
-	public Issue(String issuenumber, boolean inCollection, IssueCondition issueCondition) {
+	public Issue(String issuenumber, IssueCondition issueCondition) {
 		super();
 		this.issueNumber = issuenumber;
-		this.inCollection = inCollection;
 		this.issueCondition = issueCondition;
 	}
 
 	public String getIssueNumber() {
 		return issueNumber;
-	}
-
-	public void setIssueNumber(String issueNumber) {
-		this.issueNumber = issueNumber;
-	}
-
-	public boolean isInCollection() {
-		return inCollection;
-	}
-
-	public void setInCollection(boolean inCollection) {
-		this.inCollection = inCollection;
 	}
 
 	public IssueCondition getIssueCondition() {
@@ -64,7 +49,7 @@ public class Issue {
 	}
 	
 	
-	public static String issueConditionToIssueConditionStr(IssueCondition issueCondition) {
+	private static String issueConditionToIssueConditionStr(IssueCondition issueCondition) {
 		if (issueCondition == null || issueCondition.equals(IssueCondition.NO_CONDITION))
 			return NO_CONDITION;
 		else if (issueCondition.equals(IssueCondition.BAD_CONDITION))

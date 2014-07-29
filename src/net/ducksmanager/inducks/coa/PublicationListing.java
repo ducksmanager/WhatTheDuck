@@ -1,8 +1,6 @@
 package net.ducksmanager.inducks.coa;
 
-import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.List;
-import net.ducksmanager.whattheduck.PublicationList;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,8 +9,8 @@ import java.util.Iterator;
 
 public class PublicationListing extends CoaListing {
 
-    public PublicationListing(List list, int progressBarId, String countryShortName, String publicationShortName) {
-        super(list, ListType.PUBLICATION_LIST, progressBarId, countryShortName, publicationShortName);
+    public PublicationListing(List list, int progressBarId, String countryShortName) {
+        super(list, ListType.PUBLICATION_LIST, progressBarId, countryShortName, null);
         this.urlSuffix+="&pays="+countryShortName;
     }
 

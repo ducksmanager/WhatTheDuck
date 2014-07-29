@@ -12,12 +12,11 @@ import android.widget.TextView;
 
 public class IssueAdapter extends ArrayAdapter<Issue> {
 
-	private ArrayList<Issue> items;
+    private final ArrayList<Issue> items;
 
-	public IssueAdapter(Context context, int textViewResourceId,
-			ArrayList<Issue> items) {
-		super(context, textViewResourceId, items);
-		this.items = items;
+	public IssueAdapter(Context context, ArrayList<Issue> items) {
+        super(context, R.layout.row, items);
+        this.items = items;
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import net.ducksmanager.inducks.coa.CoaListing;
-import net.ducksmanager.inducks.coa.CoaListing.ListType;
 import net.ducksmanager.inducks.coa.IssueListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.app.AlertDialog;
@@ -19,8 +18,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 public class IssueList extends List {
-    protected static final int ACTIVITY_LISTENUMEROS=2;
-    Issue selectedIssue = null;
+    private Issue selectedIssue = null;
 
     private ArrayList<Issue> issues = null;
     private IssueAdapter issueAdapter;
@@ -55,16 +53,12 @@ public class IssueList extends List {
     }
     
     public void show() {
-        show(getCollection().getIssueList(getCollection().getSelectedCountry(), 
-		   								  getCollection().getSelectedPublication(), 
-		   								  this.type),
-		   								  Boolean.FALSE);
-    }
-    
-    public void show(ArrayList<Issue> issues, Boolean useless) {
-    	this.issues = issues;
+        this.issues = getCollection().getIssueList(
+            getCollection().getSelectedCountry(),
+            getCollection().getSelectedPublication(),
+            this.type);
 
-        this.issueAdapter = new IssueAdapter(this, R.layout.row, this.issues);
+        this.issueAdapter = new IssueAdapter(this, this.issues);
         setListAdapter(this.issueAdapter);
         
     	if (issues.size() > 20) {
@@ -82,7 +76,7 @@ public class IssueList extends List {
                 		if (issue.getIssueNumber().replace("* ", "").toLowerCase(Locale.FRANCE).contains(typedText.toLowerCase()))
                 			filteredIssues.add(issue);
 
-                    IssueList.this.issueAdapter = new IssueAdapter(IssueList.this, R.layout.row, filteredIssues);
+                    IssueList.this.issueAdapter = new IssueAdapter(IssueList.this, filteredIssues);
                     setListAdapter(IssueList.this.issueAdapter);
                 }
             });
@@ -95,23 +89,6 @@ public class IssueList extends List {
         i.putExtra("type", type);
         startActivity(i);
 	}
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        saveState();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        saveState();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
     
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -151,7 +128,7 @@ public class IssueList extends List {
         		                	return;
         		        	   }
         		        	   String condition = items[selectedPosition].toString();
-        		        	   String DMcondition = null;
+        		        	   String DMcondition;
         		        	   if (condition.equals(getString(R.string.condition_bad)))
         		        		   DMcondition = Issue.BAD_CONDITION;
         		        	   else if (condition.equals(getString(R.string.condition_notsogood)))
@@ -159,7 +136,7 @@ public class IssueList extends List {
         		        	   else
         		        		   DMcondition = Issue.GOOD_CONDITION;
         		        	   selectedIssue.setIssueCondition(Issue.issueConditionStrToIssueCondition(DMcondition));
-        		        	   new AddIssue(IssueList.this, R.id.progressBarInsert, getCollection().getSelectedPublication(), selectedIssue).execute(new Object[0]);
+        		        	   new AddIssue(IssueList.this, R.id.progressBarInsert, getCollection().getSelectedPublication(), selectedIssue).execute();
         		           }
         		       })
         		       .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -171,8 +148,5 @@ public class IssueList extends List {
         	}
         }
     	super.onListItemClick(l, v, position, id);
-    }
-
-    private void saveState() {
     }
 }

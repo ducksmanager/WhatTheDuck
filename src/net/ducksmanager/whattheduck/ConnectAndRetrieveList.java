@@ -14,7 +14,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -23,7 +22,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
     private CheckBox mCheckboxRememberCredentials;
 
     private static int progressBarId;
-    private WhatTheDuck wtd;
+    private final WhatTheDuck wtd;
 
     public ConnectAndRetrieveList(int progressBarId) {
         super("");
@@ -92,7 +91,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                     for (int i = 0; i < publicationIssues.length(); i++) {
                         String issueNumber = publicationIssues.getJSONObject(i).getString("Numero");
                         String issueCondition = publicationIssues.getJSONObject(i).getString("Etat");
-                        WhatTheDuck.userCollection.addIssue(countryAndPublication, new Issue(issueNumber, Boolean.TRUE, issueCondition));
+                        WhatTheDuck.userCollection.addIssue(countryAndPublication, new Issue(issueNumber, issueCondition));
                     }
                 }
 

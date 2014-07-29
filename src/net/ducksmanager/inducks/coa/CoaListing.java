@@ -12,27 +12,25 @@ import java.util.HashMap;
 public abstract class CoaListing extends RetrieveTask {
 	public static List displayedList;
 	public static enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST}
-    public static HashMap<ListType, String> urlSuffixes = new HashMap<ListType, String>();
 
+    private static final HashMap<ListType, String> urlSuffixes = new HashMap<ListType, String>();
     static {
         urlSuffixes.put(ListType.COUNTRY_LIST, "&coa=true&liste_pays=true");
         urlSuffixes.put(ListType.PUBLICATION_LIST, "&coa=true&liste_magazines=true");
         urlSuffixes.put(ListType.ISSUE_LIST, "&coa=true&liste_numeros=true");
     }
 
-    public static HashMap<String,String> countryNames=new HashMap<String,String>();
-	public static HashMap<String,HashMap<String,String>> publicationNames=new HashMap<String,HashMap<String,String>>();
+    private static HashMap<String,String> countryNames=new HashMap<String,String>();
+	private static HashMap<String,HashMap<String,String>> publicationNames=new HashMap<String,HashMap<String,String>>();
 
-    private int progressBarId;
-	protected ListType listType;
-	protected String countryShortName;
-    protected String publicationShortName;
+    private final int progressBarId;
+	final String countryShortName;
+    final String publicationShortName;
 	
 	
-	public CoaListing(List list, ListType type, int progressBarId,  String countryShortName, String publicationShortName) {
+	CoaListing(List list, ListType type, int progressBarId, String countryShortName, String publicationShortName) {
         super(urlSuffixes.get(type));
-		displayedList = list; 
-		this.listType = type;
+		displayedList = list;
 		this.progressBarId = progressBarId;
 		this.countryShortName = countryShortName;
 		this.publicationShortName = publicationShortName;
@@ -66,11 +64,11 @@ public abstract class CoaListing extends RetrieveTask {
 		return null;
 	}
 		
-	public static void resetCountries() {
+	static void resetCountries() {
 		countryNames=new HashMap<String,String>();
 	}
 	
-	public static void resetPublications() {
+	static void resetPublications() {
 		publicationNames=new HashMap<String,HashMap<String,String>>();
 	}
 	
@@ -84,7 +82,7 @@ public abstract class CoaListing extends RetrieveTask {
 		addPublication(country, countryAndPublicationShortNames, fullName);
 	}
 	
-	public static void addPublication(String countryShortName, String shortName, String fullName) {
+	static void addPublication(String countryShortName, String shortName, String fullName) {
 		if (publicationNames.get(countryShortName) == null)
 			publicationNames.put(countryShortName, new HashMap<String, String>());
 		publicationNames.get(countryShortName).put(shortName, fullName);
@@ -102,7 +100,7 @@ public abstract class CoaListing extends RetrieveTask {
         WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, false);
     }
 
-    protected void handleJSONException(JSONException e) {
+    void handleJSONException(JSONException e) {
         WhatTheDuck.wtd.alert(displayedList,
                 R.string.internal_error,"",
                 R.string.internal_error__malformed_list," : " + e.getMessage());

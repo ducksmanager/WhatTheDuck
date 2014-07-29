@@ -11,12 +11,11 @@ import net.ducksmanager.inducks.coa.CoaListing;
 import net.ducksmanager.whattheduck.Issue.IssueCondition;
 
 public class Collection {
-	private HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<String,HashMap<String,ArrayList<Issue>>>();
-	String selectedCountry = null;
-	String selectedIssue = null;
-	String selectedPublication = null;
-	
-	enum CollectionType {COA,USER};
+	private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<String,HashMap<String,ArrayList<Issue>>>();
+	private String selectedCountry = null;
+	private String selectedPublication = null;
+
+	enum CollectionType {COA,USER}
 	
 
 	public String getSelectedCountry() {
@@ -34,16 +33,6 @@ public class Collection {
 	public void setSelectedPublication(String selectedPublication) {
 		this.selectedPublication = selectedPublication;
 	}
-
-	public String getSelectedIssue() {
-		return selectedIssue;
-	}
-
-	public void setSelectedIssue(String selectedIssue) {
-		this.selectedIssue = selectedIssue;
-	}
-	
-	
 	
 	public void addCountry(String country) {
 		issues.put(country, new HashMap<String,ArrayList<Issue>>());
@@ -103,8 +92,7 @@ public class Collection {
 				condition = existingIssue.getIssueCondition();
 			}
 			Issue i = new Issue((isInCollection && isCoaCollection ? "* ":"")+issue.getIssueNumber(),
-								isInCollection,
-						  	    condition);
+                    condition);
 			finalList.add(i);
 		}
 		Collections.sort(finalList, new NaturalOrderComparator());
@@ -150,7 +138,7 @@ public class Collection {
     }
 
     
-    public static class NamesComparator implements Comparator<String> {
+    private static class NamesComparator implements Comparator<String> {
 
 		@Override
 		public int compare(String issue1, String issue2) {

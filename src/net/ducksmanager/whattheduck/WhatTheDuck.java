@@ -222,12 +222,8 @@ public class WhatTheDuck extends Activity {
 	public boolean isOnline() {
 	    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
-	    if (netInfo != null && netInfo.isConnected()) {
-	        return true;
-	    }
-
-	    return false;
-	}	
+        return netInfo != null && netInfo.isConnected();
+    }
 	
 	private String getApplicationVersion() throws NameNotFoundException {
 		PackageManager manager = this.getPackageManager();

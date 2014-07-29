@@ -1,6 +1,5 @@
 package net.ducksmanager.inducks.coa;
 
-import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.List;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import org.json.JSONException;
@@ -10,8 +9,8 @@ import java.util.Iterator;
 
 public class CountryListing extends CoaListing {
 
-    public CountryListing(List list, int progressBarId, String countryShortName, String publicationShortName) {
-        super(list, ListType.COUNTRY_LIST, progressBarId, countryShortName, publicationShortName);
+    public CountryListing(List list, int progressBarId) {
+        super(list, ListType.COUNTRY_LIST, progressBarId, null, null);
     }
 
     @Override
