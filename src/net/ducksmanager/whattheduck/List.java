@@ -4,6 +4,7 @@ package net.ducksmanager.whattheduck;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import android.widget.TextView;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.app.ListActivity;
 import android.content.Intent;
@@ -39,6 +40,11 @@ public abstract class List extends ListActivity{
     
     public void show(ArrayList<String> items) {
     	this.items = items;
+
+        if (items.size() == 0) {
+            TextView emptyListText = (TextView) this.findViewById(R.id.emptyList);
+            emptyListText.setVisibility(TextView.VISIBLE);
+        }
     	
     	String[] lv_arr = items.toArray(new String[items.size()]);
         setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lv_arr));

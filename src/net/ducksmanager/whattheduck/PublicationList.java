@@ -22,13 +22,7 @@ public class PublicationList extends List {
         }
         else {
         	setTitle(getString(R.string.insert_issue_menu)+">"+CoaListing.getCountryFullName(selectedCountry));
-
-            if (!WhatTheDuck.coaCollection.hasCountry(selectedCountry)) {
-                new PublicationListing(this, R.id.progressBarLoading, selectedCountry).execute();
-            }
-            else {
-                this.show();
-            }
+            new PublicationListing(this, R.id.progressBarLoading, selectedCountry).execute();
         }
     }
     

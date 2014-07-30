@@ -205,8 +205,8 @@ public class WhatTheDuck extends Activity {
             return response;
 	}
 
-    public void toggleProgressbarLoading(int progressBarId, boolean toggle) {
-        ProgressBar progressBar = (ProgressBar) wtd.findViewById(progressBarId);
+    public void toggleProgressbarLoading(Activity activity, int progressBarId, boolean toggle) {
+        ProgressBar progressBar = (ProgressBar) activity.findViewById(progressBarId);
 
         if (progressBar != null) {
             if (toggle) {
@@ -217,6 +217,10 @@ public class WhatTheDuck extends Activity {
                 progressBar.setVisibility(ProgressBar.GONE);
             }
         }
+    }
+
+    public void toggleProgressbarLoading(int progressBarId, boolean toggle) {
+        toggleProgressbarLoading(WhatTheDuck.wtd, progressBarId, toggle);
     }
 	
 	public boolean isOnline() {

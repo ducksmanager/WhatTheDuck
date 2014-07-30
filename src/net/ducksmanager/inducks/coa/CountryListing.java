@@ -15,6 +15,7 @@ public class CountryListing extends CoaListing {
 
     @Override
     protected void onPostExecute(String response) {
+        super.onPostExecute(response);
         if (response != null) {
             try {
                 resetCountries();

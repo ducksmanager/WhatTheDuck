@@ -43,12 +43,7 @@ public class IssueList extends List {
         			+CoaListing.getPublicationFullName(selectedCountry,
                     selectedPublication));
 
-            if (! WhatTheDuck.coaCollection.hasPublication(selectedCountry, selectedPublication)) {
-                new IssueListing(this, R.id.progressBarLoading, selectedCountry, selectedPublication).execute();
-            }
-            else {
-                this.show();
-            }
+            new IssueListing(this, R.id.progressBarLoading, selectedCountry, selectedPublication).execute();
         }
     }
     
@@ -136,7 +131,7 @@ public class IssueList extends List {
         		        	   else
         		        		   DMcondition = Issue.GOOD_CONDITION;
         		        	   selectedIssue.setIssueCondition(Issue.issueConditionStrToIssueCondition(DMcondition));
-        		        	   new AddIssue(IssueList.this, R.id.progressBarInsert, getCollection().getSelectedPublication(), selectedIssue).execute();
+        		        	   new AddIssue(IssueList.this, R.id.progressBarLoading, getCollection().getSelectedPublication(), selectedIssue).execute();
         		           }
         		       })
         		       .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

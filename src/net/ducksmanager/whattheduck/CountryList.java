@@ -19,12 +19,7 @@ public class CountryList extends List {
 	        setTitle(R.string.my_collection);
         }
         else {
-            if (WhatTheDuck.coaCollection.isEmpty()) {
-                new CountryListing(this, R.id.progressBarLoading).execute();
-            }
-            else {
-                this.show();
-            }
+            new CountryListing(this, R.id.progressBarLoading).execute();
             setTitle(getString(R.string.insert_issue_menu)+">"+getString(R.string.insert_issue__choose_country));
         }
     }

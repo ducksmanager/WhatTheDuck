@@ -23,7 +23,7 @@ public class AddIssue extends RetrieveTask {
 
     @Override
     protected void onPreExecute() {
-        WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, true);
+        WhatTheDuck.wtd.toggleProgressbarLoading(AddIssue.issueList, progressBarId, true);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class AddIssue extends RetrieveTask {
             WhatTheDuck.wtd.alert(R.string.internal_error, R.string.internal_error__issue_insertion_failed);
         }
 
-        WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, false);
+        WhatTheDuck.wtd.toggleProgressbarLoading(AddIssue.issueList, progressBarId, false);
     }
 
 }

@@ -91,13 +91,13 @@ public abstract class CoaListing extends RetrieveTask {
 
     @Override
     protected void onPreExecute() {
-        WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, true);
+        WhatTheDuck.wtd.toggleProgressbarLoading(displayedList, progressBarId, true);
     }
 
     @Override
     protected void onPostExecute(String response) {
         super.onPostExecute(response);
-        WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, false);
+        WhatTheDuck.wtd.toggleProgressbarLoading(displayedList, progressBarId, false);
     }
 
     void handleJSONException(JSONException e) {
