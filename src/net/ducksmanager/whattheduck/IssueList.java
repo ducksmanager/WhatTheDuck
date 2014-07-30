@@ -3,8 +3,9 @@ package net.ducksmanager.whattheduck;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import net.ducksmanager.inducks.coa.CoaListing;
+import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.IssueListing;
+import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -32,15 +33,15 @@ public class IssueList extends List {
 
         if (type.equals(CollectionType.USER.toString())) {
 	        setTitle(getString(R.string.my_collection)
-	        		+">"+CoaListing.getCountryFullName(selectedCountry)
-	        		+">"+CoaListing.getPublicationFullName(selectedCountry,
+	        		+">"+ CountryListing.getCountryFullName(selectedCountry)
+	        		+">"+ PublicationListing.getPublicationFullName(selectedCountry,
                     selectedPublication));
 	        this.show();
         }
         else {
         	setTitle(getString(R.string.insert_issue_menu)+">"
-        			+CoaListing.getCountryFullName(selectedCountry)+">"
-        			+CoaListing.getPublicationFullName(selectedCountry,
+        			+ CountryListing.getCountryFullName(selectedCountry)+">"
+        			+ PublicationListing.getPublicationFullName(selectedCountry,
                     selectedPublication));
 
             new IssueListing(this, R.id.progressBarLoading, selectedCountry, selectedPublication).execute();

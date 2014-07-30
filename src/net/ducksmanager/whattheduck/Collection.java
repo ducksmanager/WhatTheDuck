@@ -7,7 +7,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Set;
 
-import net.ducksmanager.inducks.coa.CoaListing;
+import net.ducksmanager.inducks.coa.CountryListing;
+import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.whattheduck.Issue.IssueCondition;
 
 public class Collection {
@@ -62,7 +63,7 @@ public class Collection {
 		Set<String> countrySet = issues.keySet();
 		for (String shortCountryName : countrySet) {
 			countryList.add((type.equals(CollectionType.COA.toString()) && WhatTheDuck.userCollection.hasCountry(shortCountryName) ? "* ":"")
-							+CoaListing.getCountryFullName(shortCountryName));
+							+ CountryListing.getCountryFullName(shortCountryName));
 		}
 		Collections.sort(countryList, new Collection.NamesComparator());
 		return countryList;
@@ -73,7 +74,7 @@ public class Collection {
 		Set<String> publicationSet = issues.get(shortCountryName).keySet();
 		for (String shortPublicationName : publicationSet) {
 			publicationList.add((type.equals(CollectionType.COA.toString()) && WhatTheDuck.userCollection.hasPublication(shortCountryName, shortPublicationName) ? "* ":"")
-								+CoaListing.getPublicationFullName(shortCountryName, shortPublicationName));
+								+ PublicationListing.getPublicationFullName(shortCountryName, shortPublicationName));
 		}
 		Collections.sort(publicationList, new Collection.NamesComparator());
 		return publicationList;

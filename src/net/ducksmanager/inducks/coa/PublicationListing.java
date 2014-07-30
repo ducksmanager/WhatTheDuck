@@ -5,14 +5,49 @@ import net.ducksmanager.whattheduck.WhatTheDuck;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class PublicationListing extends CoaListing {
+
+    static HashMap<String,HashMap<String,String>> publicationNames=new HashMap<String,HashMap<String,String>>();
 
     public PublicationListing(List list, int progressBarId, String countryShortName) {
         super(list, ListType.PUBLICATION_LIST, progressBarId, countryShortName, null);
         this.urlSuffix+="&pays="+countryShortName;
     }
+
+    public static String getPublicationFullName (String shortCountryName, String shortPublicationName) {
+		if (publicationNames.get(shortCountryName) == null) {
+			System.out.println("Can't get publications of country "+shortCountryName);
+		}
+		return publicationNames.get(shortCountryName).get(shortPublicationName);
+	}
+
+    public static String getPublicationShortName (String shortCountryName, String fullPublicationName) {
+		HashMap<String,String> countryPublications = publicationNames.get(shortCountryName);
+		for (String shortPublicationName : countryPublications.keySet()) {
+			if (countryPublications.get(shortPublicationName).equals(fullPublicationName))
+				return shortPublicationName;
+		}
+		return null;
+	}
+
+    static void resetPublications() {
+		publicationNames =new HashMap<String,HashMap<String,String>>();
+	}
+
+    public static void addPublication(String countryAndPublicationShortNames, String fullName) {
+		String country=countryAndPublicationShortNames.split("/")[0];
+		addPublication(country, countryAndPublicationShortNames, fullName);
+	}
+
+    static void addPublication(String countryShortName, String shortName, String fullName) {
+		if (publicationNames.get(countryShortName) == null)
+			publicationNames.put(countryShortName, new HashMap<String, String>());
+		publicationNames.get(countryShortName).put(shortName, fullName);
+
+	}
 
     @Override
     protected void onPostExecute(String response) {

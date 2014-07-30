@@ -5,13 +5,36 @@ import net.ducksmanager.whattheduck.WhatTheDuck;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class CountryListing extends CoaListing {
 
+    static HashMap<String,String> countryNames=new HashMap<String,String>();
+
     public CountryListing(List list, int progressBarId) {
         super(list, ListType.COUNTRY_LIST, progressBarId, null, null);
     }
+
+    public static String getCountryFullName (String shortCountryName) {
+        return countryNames.get(shortCountryName);
+    }
+
+    public static String getCountryShortName(String fullCountryName) {
+        for (String shortCountryName : countryNames.keySet()) {
+            if (countryNames.get(shortCountryName).equals(fullCountryName))
+                return shortCountryName;
+        }
+        return null;
+    }
+
+    static void resetCountries() {
+        countryNames = new HashMap<String,String>();
+    }
+
+    public static void addCountry(String shortName, String fullName) {
+		countryNames.put(shortName, fullName);
+	}
 
     @Override
     protected void onPostExecute(String response) {

@@ -5,7 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
-import net.ducksmanager.inducks.coa.CoaListing;
+import net.ducksmanager.inducks.coa.CountryListing;
+import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import org.json.JSONArray;
@@ -101,7 +102,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                 while (countryNameIterator.hasNext()) {
                     String countryShortName = countryNameIterator.next();
                     String countryFullName = countryNames.getString(countryShortName);
-                    CoaListing.addCountry(countryShortName, countryFullName);
+                    CountryListing.addCountry(countryShortName, countryFullName);
                 }
 
                 JSONObject publicationNames = object.getJSONObject("static").getJSONObject("magazines");
@@ -110,7 +111,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                 while (publicationNameIterator.hasNext()) {
                     String shortName = publicationNameIterator.next();
                     String publicationFullName = publicationNames.getString(shortName);
-                    CoaListing.addPublication(shortName, publicationFullName);
+                    PublicationListing.addPublication(shortName, publicationFullName);
                 }
             } catch (JSONException e) {
                 JSONArray issues = object.getJSONArray("numeros");

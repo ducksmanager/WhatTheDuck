@@ -1,6 +1,5 @@
 package net.ducksmanager.whattheduck;
 
-import net.ducksmanager.inducks.coa.CoaListing;
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.content.Intent;
@@ -32,7 +31,7 @@ public class CountryList extends List {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         String selectedCountry = this.getListView().getItemAtPosition(((Long)id).intValue()).toString().replace("* ", "");
-        getCollection().setSelectedCountry (CoaListing.getCountryShortName(selectedCountry));
+        getCollection().setSelectedCountry (CountryListing.getCountryShortName(selectedCountry));
 
         Intent i = new Intent(this, PublicationList.class);
         i.putExtra("type", this.type);

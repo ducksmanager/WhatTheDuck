@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import net.ducksmanager.inducks.coa.CoaListing;
+import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
@@ -17,11 +17,11 @@ public class PublicationList extends List {
 
         final String selectedCountry = getCollection().getSelectedCountry();
         if (type.equals(CollectionType.USER.toString())) {
-        	setTitle(getString(R.string.my_collection)+">"+CoaListing.getCountryFullName(selectedCountry));
+        	setTitle(getString(R.string.my_collection)+">"+ CountryListing.getCountryFullName(selectedCountry));
             this.show();
         }
         else {
-        	setTitle(getString(R.string.insert_issue_menu)+">"+CoaListing.getCountryFullName(selectedCountry));
+        	setTitle(getString(R.string.insert_issue_menu)+">"+ CountryListing.getCountryFullName(selectedCountry));
             new PublicationListing(this, R.id.progressBarLoading, selectedCountry).execute();
         }
     }
@@ -56,8 +56,8 @@ public class PublicationList extends List {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        String publicationShortName = CoaListing.getPublicationShortName(getCollection().getSelectedCountry(), 
-        																 this.getListView().getItemAtPosition(((Long)id).intValue()).toString().replace("* ", ""));
+        String publicationShortName = PublicationListing.getPublicationShortName(getCollection().getSelectedCountry(),
+                this.getListView().getItemAtPosition(((Long) id).intValue()).toString().replace("* ", ""));
     	getCollection().setSelectedPublication (publicationShortName);
 
         Intent i = new Intent(this, IssueList.class);
