@@ -37,16 +37,10 @@ public class PublicationListing extends CoaListing {
 		publicationNames =new HashMap<String,HashMap<String,String>>();
 	}
 
-    public static void addPublication(String countryAndPublicationShortNames, String fullName) {
-		String country=countryAndPublicationShortNames.split("/")[0];
-		addPublication(country, countryAndPublicationShortNames, fullName);
-	}
-
     static void addPublication(String countryShortName, String shortName, String fullName) {
 		if (publicationNames.get(countryShortName) == null)
 			publicationNames.put(countryShortName, new HashMap<String, String>());
 		publicationNames.get(countryShortName).put(shortName, fullName);
-
 	}
 
     @Override
@@ -55,16 +49,7 @@ public class PublicationListing extends CoaListing {
         if (response != null) {
             try {
                 resetPublications();
-                JSONObject object = new JSONObject(response);
-                JSONObject publicationName = object.getJSONObject("static").getJSONObject("magazines");
-                @SuppressWarnings("unchecked")
-                Iterator<String> publicationIterator = publicationName.keys();
-                while (publicationIterator.hasNext()) {
-                    String shortName = publicationIterator.next();
-                    String fullName = publicationName.getString(shortName);
-                    addPublication(countryShortName, shortName, fullName);
-                    WhatTheDuck.coaCollection.addPublication(countryShortName, shortName);
-                }
+                addPublications(new JSONObject(response));
             }
             catch (JSONException e) {
                 handleJSONException(e);
@@ -72,5 +57,20 @@ public class PublicationListing extends CoaListing {
         }
 
         displayedList.show();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void addPublications(JSONObject object) throws JSONException {
+        JSONObject publicationName = object.getJSONObject("static").getJSONObject("magazines");
+        @SuppressWarnings("unchecked")
+        Iterator<String> publicationIterator = publicationName.keys();
+        while (publicationIterator.hasNext()) {
+            String publicationShortName = publicationIterator.next();
+            String publicationFullName = publicationName.getString(publicationShortName);
+            String countryShortName=publicationShortName.split("/")[0];
+
+            addPublication(countryShortName, publicationShortName, publicationFullName);
+            WhatTheDuck.coaCollection.addPublication(countryShortName, publicationShortName);
+        }
     }
 }

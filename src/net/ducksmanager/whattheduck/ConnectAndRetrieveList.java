@@ -96,23 +96,9 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                     }
                 }
 
-                JSONObject countryNames = object.getJSONObject("static").getJSONObject("pays");
-                @SuppressWarnings("unchecked")
-                Iterator<String> countryNameIterator = countryNames.keys();
-                while (countryNameIterator.hasNext()) {
-                    String countryShortName = countryNameIterator.next();
-                    String countryFullName = countryNames.getString(countryShortName);
-                    CountryListing.addCountry(countryShortName, countryFullName);
-                }
+                CountryListing.addCountries(object);
+                PublicationListing.addPublications(object);
 
-                JSONObject publicationNames = object.getJSONObject("static").getJSONObject("magazines");
-                @SuppressWarnings("unchecked")
-                Iterator<String> publicationNameIterator = publicationNames.keys();
-                while (publicationNameIterator.hasNext()) {
-                    String shortName = publicationNameIterator.next();
-                    String publicationFullName = publicationNames.getString(shortName);
-                    PublicationListing.addPublication(shortName, publicationFullName);
-                }
             } catch (JSONException e) {
                 JSONArray issues = object.getJSONArray("numeros");
                 if (issues.length() > 0)

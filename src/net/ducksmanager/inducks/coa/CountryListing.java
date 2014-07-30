@@ -42,16 +42,7 @@ public class CountryListing extends CoaListing {
         if (response != null) {
             try {
                 resetCountries();
-                JSONObject object = new JSONObject(response);
-                JSONObject countryName = object.getJSONObject("static").getJSONObject("pays");
-                @SuppressWarnings("unchecked")
-                Iterator<String> countryIterator = countryName.keys();
-                while (countryIterator.hasNext()) {
-                    String shortName = countryIterator.next();
-                    String fullName = countryName.getString(shortName);
-                    addCountry(shortName, fullName);
-                    WhatTheDuck.coaCollection.addCountry(shortName);
-                }
+                addCountries(new JSONObject(response));
             }
             catch (JSONException e) {
                 handleJSONException(e);
@@ -59,5 +50,18 @@ public class CountryListing extends CoaListing {
         }
 
         displayedList.show();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void addCountries(JSONObject object) throws JSONException {
+        JSONObject countryNames = object.getJSONObject("static").getJSONObject("pays");
+        Iterator<String> countryIterator = countryNames.keys();
+        while (countryIterator.hasNext()) {
+            String shortName = countryIterator.next();
+            String fullName = countryNames.getString(shortName);
+
+            addCountry(shortName, fullName);
+            WhatTheDuck.coaCollection.addCountry(shortName);
+        }
     }
 }
