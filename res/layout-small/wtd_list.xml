@@ -5,13 +5,28 @@
     android:gravity="center_horizontal"
     android:orientation="vertical" >
 
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Afficher tous les numéros référencés"
+        android:singleLine="false"
+        android:textOff="OFF"
+        android:textOn="ON"
+        android:thumbTextPadding="10dp"
+        android:height="20dp"
+        android:textSize="14dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
     <EditText
         android:id="@+id/filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/filter"
-        android:visibility="gone"
-        android:layout_alignParentTop="true"  >
+        android:visibility="visible"
+        android:layout_below="@id/switch1"
+        android:layout_alignParentLeft="true">
 
         <requestFocus />
     </EditText>
