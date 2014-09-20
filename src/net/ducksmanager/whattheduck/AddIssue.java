@@ -2,8 +2,6 @@ package net.ducksmanager.whattheduck;
 
 public class AddIssue extends RetrieveTask {
 
-    private static int progressBarId;
-
     private static IssueList issueList;
     private static String shortCountryAndPublication;
     private static Issue selectedIssue;
@@ -13,10 +11,10 @@ public class AddIssue extends RetrieveTask {
             "&ajouter_numero"
             +"&pays_magazine="+shortCountryAndPublication
             +"&numero="+selectedIssue.getIssueNumber()
-            +"&etat="+selectedIssue.getIssueConditionStr()
+            +"&etat="+selectedIssue.getIssueConditionStr(),
+            progressBarId
         );
         AddIssue.issueList = il;
-        AddIssue.progressBarId = progressBarId;
         AddIssue.shortCountryAndPublication = shortCountryAndPublication;
         AddIssue.selectedIssue = selectedIssue;
     }

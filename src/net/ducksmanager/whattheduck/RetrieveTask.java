@@ -7,10 +7,13 @@ import org.apache.http.auth.AuthenticationException;
 public class RetrieveTask extends AsyncTask<Object, Object, String> {
 
     protected String urlSuffix;
+    protected static Integer progressBarId;
+
     private Exception thrownException;
 
-    public RetrieveTask(String urlSuffix) {
+    public RetrieveTask(String urlSuffix, Integer progressBarId) {
         this.urlSuffix = urlSuffix;
+        RetrieveTask.progressBarId = progressBarId;
     }
 
     @Override
@@ -27,6 +30,10 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
     @Override
     protected void onPostExecute(String response) {
         if (this.thrownException != null) {
+            if (progressBarId != null) {
+                WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId.intValue(), false);
+            }
+
             if (this.thrownException instanceof AuthenticationException) {
                 WhatTheDuck.wtd.alert(
                         R.string.input_error, "",

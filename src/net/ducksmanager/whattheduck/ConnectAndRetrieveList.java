@@ -22,13 +22,11 @@ import android.widget.ProgressBar;
 public class ConnectAndRetrieveList extends RetrieveTask {
     private CheckBox mCheckboxRememberCredentials;
 
-    private static int progressBarId;
     private final WhatTheDuck wtd;
 
     public ConnectAndRetrieveList(int progressBarId) {
-        super("");
+        super("", progressBarId);
         wtd = WhatTheDuck.wtd;
-        ConnectAndRetrieveList.progressBarId = progressBarId;
     }
 
     @Override
