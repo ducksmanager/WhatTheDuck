@@ -50,7 +50,7 @@ public class Signup extends Activity {
     public class ConnectAndRetrieveList extends RetrieveTask {
 
         public ConnectAndRetrieveList(String urlSuffix) {
-            super(urlSuffix);
+            super(urlSuffix, null);
         }
 
         @Override
