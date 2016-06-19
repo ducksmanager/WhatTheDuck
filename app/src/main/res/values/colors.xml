@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bad_condition">#FF0000</color>
+    <color name="notsogood_condition">#FF8800</color>
+    <color name="good_condition">#2CA77B</color>
+</resources>

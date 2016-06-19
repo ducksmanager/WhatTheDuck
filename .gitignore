@@ -1,4 +1,8 @@
-
-/bin
-/gen
-/src/net/ducksmanager/security/Security.java
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+Sec
