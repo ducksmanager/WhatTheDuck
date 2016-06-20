@@ -4,14 +4,6 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="6dip">
-    <EditText
-        android:id="@+id/filter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/filter"
-        android:visibility="gone">
-        <requestFocus />
-    </EditText>
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="0dip"
