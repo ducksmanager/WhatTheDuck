@@ -1,3 +1,7 @@
+Version 1.2.3
+    
+    Disable focus on the filter text input when loading list views
+    
 Version 1.2.2
     
     Technical upgrade (migrate to Gradle)

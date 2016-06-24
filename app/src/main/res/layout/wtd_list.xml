@@ -13,8 +13,6 @@
         android:hint="@string/filter"
         android:visibility="visible"
         android:layout_alignParentLeft="true">
-
-        <requestFocus />
     </EditText>
 
     <ListView
