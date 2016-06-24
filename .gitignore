@@ -1,9 +1,8 @@
+**/Security.java
 *.iml
 .gradle
+/.idea/
+/app/build/
+/app/libs/
+/build/
 /local.properties
-/.idea
-.DS_Store
-/build
-/app/build
-libs/
-**/Security.java
