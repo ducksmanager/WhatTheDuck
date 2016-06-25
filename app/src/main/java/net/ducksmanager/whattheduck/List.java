@@ -1,11 +1,6 @@
 package net.ducksmanager.whattheduck;
 
 
-import java.util.ArrayList;
-import java.util.Locale;
-
-import android.widget.TextView;
-import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,8 +8,15 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import net.ducksmanager.whattheduck.Collection.CollectionType;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 public abstract class List extends ListActivity{
     protected static final int INSERT_ID = 1;
@@ -119,4 +121,24 @@ public abstract class List extends ListActivity{
 			? WhatTheDuck.userCollection 
 			: WhatTheDuck.coaCollection; 
     }
+
+	protected void setNavigationCountry(String countryFullName, String selectedCountry) {
+		View countryNavigationView = this.findViewById(R.id.navigationCountry);
+
+		TextView currentCountryBadgeText = (TextView) countryNavigationView.findViewById(R.id.selectedBadge);
+		currentCountryBadgeText.setText(selectedCountry);
+
+		TextView currentCountryText = (TextView) this.findViewById(R.id.navigationCountry).findViewById(R.id.selected);
+		currentCountryText.setText(countryFullName);
+	}
+
+	protected void setNavigationPublication(String publicationFullName, String selectedPublication) {
+		View publicationNavigationView = this.findViewById(R.id.navigationPublication);
+
+		TextView currentPublicationBadgeText = (TextView) publicationNavigationView.findViewById(R.id.selectedBadge);
+		currentPublicationBadgeText.setText(selectedPublication);
+
+		TextView currentPublicationText = (TextView) publicationNavigationView.findViewById(R.id.selected);
+		currentPublicationText.setText(publicationFullName);
+	}
 }

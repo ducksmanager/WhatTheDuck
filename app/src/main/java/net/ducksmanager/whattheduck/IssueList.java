@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.IssueListing;
@@ -34,30 +33,28 @@ public class IssueList extends List {
         final String selectedCountry = getCollection().getSelectedCountry();
         final String selectedPublication = getCollection().getSelectedPublication();
 
-        if (type.equals(CollectionType.USER.toString())) {
+		final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
+		final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
+
+		if (type.equals(CollectionType.USER.toString())) {
 	        setTitle(getString(R.string.my_collection)
-	        		+">"+ CountryListing.getCountryFullName(selectedCountry)
-	        		+">"+ PublicationListing.getPublicationFullName(selectedCountry,
-                    selectedPublication));
+	        		+">"+ countryFullName
+	        		+">"+ publicationFullName);
 	        this.show();
         }
         else {
         	setTitle(getString(R.string.insert_issue_menu)+">"
-        			+ CountryListing.getCountryFullName(selectedCountry)+">"
-        			+ PublicationListing.getPublicationFullName(selectedCountry,
-                    selectedPublication));
+        			+ countryFullName +">"
+        			+ publicationFullName);
 
             new IssueListing(this, R.id.progressBarLoading, selectedCountry, selectedPublication).execute();
         }
 
-		TextView currentCountryText = (TextView) this.findViewById(R.id.navigationCountry).findViewById(R.id.selected);
-		currentCountryText.setText(selectedCountry);
-
-		TextView currentPublicationText = (TextView) this.findViewById(R.id.navigationPublication).findViewById(R.id.selected);
-		currentPublicationText.setText(selectedPublication);
+		setNavigationCountry(countryFullName, selectedCountry);
+		setNavigationPublication(publicationFullName, selectedPublication);
     }
-    
-    public void show() {
+
+	public void show() {
         this.issues = getCollection().getIssueList(
             getCollection().getSelectedCountry(),
             getCollection().getSelectedPublication(),

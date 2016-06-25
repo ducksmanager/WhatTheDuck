@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
@@ -18,19 +17,20 @@ public class PublicationList extends List {
         super.onCreate(savedInstanceState);
 
         final String selectedCountry = getCollection().getSelectedCountry();
+        final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
+
         if (type.equals(CollectionType.USER.toString())) {
-        	setTitle(getString(R.string.my_collection)+">"+ CountryListing.getCountryFullName(selectedCountry));
+        	setTitle(getString(R.string.my_collection)+">"+ countryFullName);
             this.show();
         }
         else {
-        	setTitle(getString(R.string.insert_issue_menu)+">"+ CountryListing.getCountryFullName(selectedCountry));
+        	setTitle(getString(R.string.insert_issue_menu)+">"+ countryFullName);
             new PublicationListing(this, R.id.progressBarLoading, selectedCountry).execute();
         }
 
-        TextView currentCountryText = (TextView) this.findViewById(R.id.navigationCountry).findViewById(R.id.selected);
-        currentCountryText.setText(selectedCountry);
+        setNavigationCountry(countryFullName, selectedCountry);
     }
-    
+
     @Override
     public void onBackPressed() {
     	Intent i = new Intent(WhatTheDuck.wtd, CountryList.class);
