@@ -12,7 +12,6 @@
         android:hint="@string/username" >
 
         <requestFocus />
-        <requestFocus />
 
     </EditText>
 
