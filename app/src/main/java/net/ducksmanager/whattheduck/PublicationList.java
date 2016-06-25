@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
@@ -24,6 +26,9 @@ public class PublicationList extends List {
         	setTitle(getString(R.string.insert_issue_menu)+">"+ CountryListing.getCountryFullName(selectedCountry));
             new PublicationListing(this, R.id.progressBarLoading, selectedCountry).execute();
         }
+
+        TextView currentCountryText = (TextView) this.findViewById(R.id.navigationCountry).findViewById(R.id.selected);
+        currentCountryText.setText(selectedCountry);
     }
     
     @Override

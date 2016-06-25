@@ -1,14 +1,15 @@
 package net.ducksmanager.whattheduck;
 
-import net.ducksmanager.inducks.coa.CountryListing;
-import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import net.ducksmanager.inducks.coa.CountryListing;
+import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 public class CountryList extends List {
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +22,9 @@ public class CountryList extends List {
             new CountryListing(this, R.id.progressBarLoading).execute();
             setTitle(getString(R.string.insert_issue_menu)+">"+getString(R.string.insert_issue__choose_country));
         }
+
+        TextView currentCountryText = (TextView) this.findViewById(R.id.navigationCountry).findViewById(R.id.selected);
+        currentCountryText.setText("Aucun");
     }
     
     public void show() {

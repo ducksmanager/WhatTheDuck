@@ -5,6 +5,18 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:id="@+id/expandableListView"
+        android:layout_height="wrap_content">
+        <include
+            android:id="@+id/navigationCountry"
+            layout="@layout/wtd_list_navigation" />
+        <include
+            android:id="@+id/navigationPublication"
+            layout="@layout/wtd_list_navigation" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/filter"
@@ -12,7 +24,8 @@
         android:layout_height="wrap_content"
         android:hint="@string/filter"
         android:visibility="visible"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/expandableListView">
     </EditText>
 
     <ListView

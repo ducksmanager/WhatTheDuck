@@ -1,12 +1,6 @@
 package net.ducksmanager.whattheduck;
 
-import java.util.ArrayList;
-import java.util.Locale;
 
-import net.ducksmanager.inducks.coa.CountryListing;
-import net.ducksmanager.inducks.coa.IssueListing;
-import net.ducksmanager.inducks.coa.PublicationListing;
-import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +11,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import net.ducksmanager.inducks.coa.CountryListing;
+import net.ducksmanager.inducks.coa.IssueListing;
+import net.ducksmanager.inducks.coa.PublicationListing;
+import net.ducksmanager.whattheduck.Collection.CollectionType;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class IssueList extends List {
     private Issue selectedIssue = null;
@@ -46,6 +49,12 @@ public class IssueList extends List {
 
             new IssueListing(this, R.id.progressBarLoading, selectedCountry, selectedPublication).execute();
         }
+
+		TextView currentCountryText = (TextView) this.findViewById(R.id.navigationCountry).findViewById(R.id.selected);
+		currentCountryText.setText(selectedCountry);
+
+		TextView currentPublicationText = (TextView) this.findViewById(R.id.navigationPublication).findViewById(R.id.selected);
+		currentPublicationText.setText(selectedPublication);
     }
     
     public void show() {
