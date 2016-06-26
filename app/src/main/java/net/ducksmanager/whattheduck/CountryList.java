@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
@@ -23,8 +22,7 @@ public class CountryList extends List {
             setTitle(getString(R.string.insert_issue_menu)+">"+getString(R.string.insert_issue__choose_country));
         }
 
-        TextView currentCountryText = (TextView) this.findViewById(R.id.navigationCountry).findViewById(R.id.selected);
-        currentCountryText.setText("Aucun");
+        this.findViewById(R.id.navigation).setVisibility(View.GONE);
     }
     
     public void show() {
@@ -36,6 +34,8 @@ public class CountryList extends List {
         super.onListItemClick(l, v, position, id);
         String selectedCountry = this.getListView().getItemAtPosition(((Long)id).intValue()).toString().replace("* ", "");
         getCollection().setSelectedCountry (CountryListing.getCountryShortName(selectedCountry));
+
+        this.findViewById(R.id.navigation).setVisibility(View.VISIBLE);
 
         Intent i = new Intent(this, PublicationList.class);
         i.putExtra("type", this.type);

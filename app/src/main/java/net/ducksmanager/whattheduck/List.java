@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.ducksmanager.whattheduck.Collection.CollectionType;
@@ -125,8 +126,12 @@ public abstract class List extends ListActivity{
 	protected void setNavigationCountry(String countryFullName, String selectedCountry) {
 		View countryNavigationView = this.findViewById(R.id.navigationCountry);
 
-		TextView currentCountryBadgeText = (TextView) countryNavigationView.findViewById(R.id.selectedBadge);
-		currentCountryBadgeText.setText(selectedCountry);
+		String uri = "@drawable/flags_" + selectedCountry;
+		int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+
+		ImageView currentCountryFlag = (ImageView) countryNavigationView.findViewById(R.id.selectedBadgeImage);
+		currentCountryFlag.setVisibility(View.VISIBLE);
+		currentCountryFlag.setImageResource(imageResource);
 
 		TextView currentCountryText = (TextView) this.findViewById(R.id.navigationCountry).findViewById(R.id.selected);
 		currentCountryText.setText(countryFullName);
