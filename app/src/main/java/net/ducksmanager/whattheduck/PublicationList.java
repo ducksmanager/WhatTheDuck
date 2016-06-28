@@ -14,6 +14,8 @@ public class PublicationList extends List {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getCollection().setSelectedPublication(null);
+
         super.onCreate(savedInstanceState);
 
         final String selectedCountry = getCollection().getSelectedCountry();
@@ -29,6 +31,7 @@ public class PublicationList extends List {
         }
 
         setNavigationCountry(countryFullName, selectedCountry);
+        setNavigationPublication(null, null);
     }
 
     @Override

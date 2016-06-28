@@ -37,6 +37,24 @@ public abstract class List extends ListActivity{
 					: CollectionType.USER.toString();
 		
 		setContentView(R.layout.wtd_list);
+
+		this.findViewById(R.id.navigationCountry).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent i = new Intent(WhatTheDuck.wtd, PublicationList.class);
+				i.putExtra("type", type);
+				startActivity(i);
+			}
+		});
+
+		this.findViewById(R.id.navigationPublication).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent i = new Intent(WhatTheDuck.wtd, IssueList.class);
+				i.putExtra("type", type);
+				startActivity(i);
+			}
+		});
     }
 
     public abstract void show();
@@ -139,11 +157,18 @@ public abstract class List extends ListActivity{
 
 	protected void setNavigationPublication(String publicationFullName, String selectedPublication) {
 		View publicationNavigationView = this.findViewById(R.id.navigationPublication);
-
 		TextView currentPublicationBadgeText = (TextView) publicationNavigationView.findViewById(R.id.selectedBadge);
-		currentPublicationBadgeText.setText(selectedPublication);
 
-		TextView currentPublicationText = (TextView) publicationNavigationView.findViewById(R.id.selected);
-		currentPublicationText.setText(publicationFullName);
+		if (selectedPublication == null) {
+			publicationNavigationView.setVisibility(View.INVISIBLE);
+		}
+		else {
+			publicationNavigationView.setVisibility(View.VISIBLE);
+
+			currentPublicationBadgeText.setText(selectedPublication);
+
+			TextView currentPublicationText = (TextView) publicationNavigationView.findViewById(R.id.selected);
+			currentPublicationText.setText(publicationFullName);
+		}
 	}
 }
