@@ -11,6 +11,9 @@
         android:id="@+id/navigation"
         android:layout_height="wrap_content">
         <include
+            android:id="@+id/navigationAllCountries"
+            layout="@layout/wtd_list_navigation_all_countries" />
+        <include
             android:id="@+id/navigationCountry"
             layout="@layout/wtd_list_navigation_country" />
         <include

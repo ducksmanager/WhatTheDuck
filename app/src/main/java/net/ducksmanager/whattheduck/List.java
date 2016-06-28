@@ -38,24 +38,35 @@ public abstract class List extends ListActivity{
 		
 		setContentView(R.layout.wtd_list);
 
+		this.findViewById(R.id.navigationAllCountries).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				goToView(CountryList.class);
+			}
+		});
+
 		this.findViewById(R.id.navigationCountry).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Intent i = new Intent(WhatTheDuck.wtd, PublicationList.class);
-				i.putExtra("type", type);
-				startActivity(i);
+				goToView(PublicationList.class);
 			}
 		});
 
 		this.findViewById(R.id.navigationPublication).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Intent i = new Intent(WhatTheDuck.wtd, IssueList.class);
-				i.putExtra("type", type);
-				startActivity(i);
+				goToView(IssueList.class);
 			}
 		});
     }
+
+	private void goToView(Class<?> cls) {
+		if (!List.this.getClass().equals(cls)) {
+			Intent i = new Intent(WhatTheDuck.wtd, cls);
+			i.putExtra("type", type);
+			startActivity(i);
+		}
+	}
 
     public abstract void show();
     
