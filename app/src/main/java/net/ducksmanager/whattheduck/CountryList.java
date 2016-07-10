@@ -35,8 +35,6 @@ public class CountryList extends List {
         String selectedCountry = this.getListView().getItemAtPosition(((Long)id).intValue()).toString().replace("* ", "");
         getCollection().setSelectedCountry (CountryListing.getCountryShortName(selectedCountry));
 
-        this.findViewById(R.id.navigation).setVisibility(View.VISIBLE);
-
         Intent i = new Intent(this, PublicationList.class);
         i.putExtra("type", this.type);
         startActivity(i);
