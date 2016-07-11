@@ -176,7 +176,7 @@ public abstract class List extends ListActivity{
 		else {
 			publicationNavigationView.setVisibility(View.VISIBLE);
 
-			currentPublicationBadgeText.setText(selectedPublication);
+			currentPublicationBadgeText.setText(selectedPublication.split("/")[1]);
 
 			TextView currentPublicationText = (TextView) publicationNavigationView.findViewById(R.id.selected);
 			currentPublicationText.setText(publicationFullName);
