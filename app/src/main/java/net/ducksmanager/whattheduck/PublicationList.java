@@ -22,11 +22,9 @@ public class PublicationList extends List {
         final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
 
         if (type.equals(CollectionType.USER.toString())) {
-        	setTitle(getString(R.string.my_collection)+">"+ countryFullName);
             this.show();
         }
         else {
-        	setTitle(getString(R.string.insert_issue_menu)+">"+ countryFullName);
             new PublicationListing(this, R.id.progressBarLoading, selectedCountry).execute();
         }
 

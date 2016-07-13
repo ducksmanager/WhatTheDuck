@@ -74,6 +74,12 @@ public abstract class List extends ListActivity{
 				);
 			}
 		});
+
+		setTitle(
+				type.equals(CollectionType.USER.toString())
+						? getString(R.string.my_collection)
+						: getString(R.string.referenced_issues)
+		);
     }
 
 	private void goToView(Class<?> cls) {
@@ -129,10 +135,6 @@ public abstract class List extends ListActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        if (type.equals(CollectionType.USER.toString()))
-        	menu.add(0, INSERT_ID, 0, R.string.insert_issue_menu);
-        else
-        	menu.add(0, MY_COLLECTION_ID, 0, R.string.my_collection_menu);
         menu.add(0, LOGOUT, 1, R.string.logout_menu);
 
         return true;
@@ -147,14 +149,6 @@ public abstract class List extends ListActivity{
     	if (!alreadyDone) {
     		Intent i = null;
 	        switch(item.getItemId()) {
-	            case INSERT_ID:
-	    	        i = new Intent(WhatTheDuck.wtd, CountryList.class);
-	                i.putExtra("type", CollectionType.COA.toString());
-	            break;
-	            case MY_COLLECTION_ID:
-	    	        i = new Intent(WhatTheDuck.wtd, CountryList.class);
-	                i.putExtra("type", CollectionType.USER.toString());
-	            break;
 	            case LOGOUT:
 	    	        i = new Intent(WhatTheDuck.wtd, WhatTheDuck.class);
 	            	WhatTheDuck.userCollection = new Collection();

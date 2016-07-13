@@ -37,16 +37,9 @@ public class IssueList extends List {
 		final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
 
 		if (type.equals(CollectionType.USER.toString())) {
-	        setTitle(getString(R.string.my_collection)
-	        		+">"+ countryFullName
-	        		+">"+ publicationFullName);
 	        this.show();
         }
         else {
-        	setTitle(getString(R.string.insert_issue_menu)+">"
-        			+ countryFullName +">"
-        			+ publicationFullName);
-
             new IssueListing(this, R.id.progressBarLoading, selectedCountry, selectedPublication).execute();
         }
 

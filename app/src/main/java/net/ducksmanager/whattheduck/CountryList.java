@@ -15,11 +15,9 @@ public class CountryList extends List {
         
         if (type.equals(CollectionType.USER.toString())) {
         	show();
-	        setTitle(R.string.my_collection);
         }
         else {
             new CountryListing(this, R.id.progressBarLoading).execute();
-            setTitle(getString(R.string.insert_issue_menu)+">"+getString(R.string.insert_issue__choose_country));
         }
 
         this.findViewById(R.id.navigation).setVisibility(View.GONE);
