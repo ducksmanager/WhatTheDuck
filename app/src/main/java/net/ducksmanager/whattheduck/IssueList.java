@@ -30,13 +30,14 @@ public class IssueList extends List {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final String selectedCountry = getCollection().getSelectedCountry();
-        final String selectedPublication = getCollection().getSelectedPublication();
+        final String selectedCountry = WhatTheDuck.getSelectedCountry();
+        final String selectedPublication = WhatTheDuck.getSelectedPublication();
 
 		final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
 		final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
 
-		if (type.equals(CollectionType.USER.toString())) {
+		if (type.equals(CollectionType.USER.toString())
+		|| (type.equals(CollectionType.COA.toString()) && WhatTheDuck.coaCollection.hasPublication(selectedCountry, selectedPublication))) {
 	        this.show();
         }
         else {
@@ -49,8 +50,8 @@ public class IssueList extends List {
 
 	public void show() {
         this.issues = getCollection().getIssueList(
-            getCollection().getSelectedCountry(),
-            getCollection().getSelectedPublication(),
+			WhatTheDuck.getSelectedCountry(),
+			WhatTheDuck.getSelectedPublication(),
             this.type);
 
         this.issueAdapter = new IssueAdapter(this, this.issues);
@@ -89,8 +90,6 @@ public class IssueList extends List {
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch(item.getItemId()) {
             case INSERT_ID:
-            	WhatTheDuck.coaCollection.setSelectedCountry(getCollection().getSelectedCountry());
-            	WhatTheDuck.coaCollection.setSelectedPublication(getCollection().getSelectedPublication());
                 Intent i = new Intent(WhatTheDuck.wtd, IssueList.class);
                 i.putExtra("type", CollectionType.COA.toString());
                 startActivity(i);
@@ -131,7 +130,7 @@ public class IssueList extends List {
         		        	   else
         		        		   DMcondition = Issue.GOOD_CONDITION;
         		        	   selectedIssue.setIssueCondition(Issue.issueConditionStrToIssueCondition(DMcondition));
-        		        	   new AddIssue(IssueList.this, R.id.progressBarLoading, getCollection().getSelectedPublication(), selectedIssue).execute();
+        		        	   new AddIssue(IssueList.this, R.id.progressBarLoading, WhatTheDuck.getSelectedPublication(), selectedIssue).execute();
         		           }
         		       })
         		       .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

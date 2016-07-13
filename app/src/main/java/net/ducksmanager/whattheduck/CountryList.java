@@ -13,7 +13,9 @@ public class CountryList extends List {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        if (type.equals(CollectionType.USER.toString())) {
+        if (
+            (type.equals(CollectionType.USER.toString()))
+         || (type.equals(CollectionType.COA.toString()) && !WhatTheDuck.coaCollection.isEmpty())) {
         	show();
         }
         else {
@@ -31,7 +33,7 @@ public class CountryList extends List {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         String selectedCountry = this.getListView().getItemAtPosition(((Long)id).intValue()).toString().replace("* ", "");
-        getCollection().setSelectedCountry (CountryListing.getCountryShortName(selectedCountry));
+        WhatTheDuck.setSelectedCountry (CountryListing.getCountryShortName(selectedCountry));
 
         Intent i = new Intent(this, PublicationList.class);
         i.putExtra("type", this.type);
