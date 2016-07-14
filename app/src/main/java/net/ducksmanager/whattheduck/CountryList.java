@@ -15,7 +15,7 @@ public class CountryList extends List {
         
         if (
             (type.equals(CollectionType.USER.toString()))
-         || (type.equals(CollectionType.COA.toString()) && !WhatTheDuck.coaCollection.isEmpty())) {
+         || (type.equals(CollectionType.COA.toString()) && CountryListing.hasFullList())) {
         	show();
         }
         else {
@@ -24,7 +24,7 @@ public class CountryList extends List {
 
         this.findViewById(R.id.navigation).setVisibility(View.GONE);
     }
-    
+
     public void show() {
         super.show(getCollection().getCountryList(this.type));
     }
