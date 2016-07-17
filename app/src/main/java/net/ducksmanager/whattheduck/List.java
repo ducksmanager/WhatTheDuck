@@ -174,6 +174,10 @@ public abstract class List extends ListActivity{
 		String uri = "@drawable/flags_" + selectedCountry;
 		int imageResource = getResources().getIdentifier(uri, null, getPackageName());
 
+		if (imageResource == 0) {
+			imageResource = R.drawable.flags_unknown;
+		}
+
 		ImageView currentCountryFlag = (ImageView) countryNavigationView.findViewById(R.id.selectedBadgeImage);
 		currentCountryFlag.setVisibility(View.VISIBLE);
 		currentCountryFlag.setImageResource(imageResource);
