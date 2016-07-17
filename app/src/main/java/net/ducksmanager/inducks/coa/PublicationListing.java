@@ -34,7 +34,7 @@ public class PublicationListing extends CoaListing {
 	}
 
     static void resetPublications() {
-		publicationNames =new HashMap<String,HashMap<String,String>>();
+		publicationNames = new HashMap<String,HashMap<String,String>>();
 	}
 
     static void addPublication(String countryShortName, String shortName, String fullName) {

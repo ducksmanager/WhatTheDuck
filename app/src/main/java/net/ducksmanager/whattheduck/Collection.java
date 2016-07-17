@@ -1,39 +1,20 @@
 package net.ducksmanager.whattheduck;
 
 
+import net.ducksmanager.inducks.coa.CountryListing;
+import net.ducksmanager.inducks.coa.PublicationListing;
+import net.ducksmanager.whattheduck.Issue.IssueCondition;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Set;
 
-import net.ducksmanager.inducks.coa.CountryListing;
-import net.ducksmanager.inducks.coa.PublicationListing;
-import net.ducksmanager.whattheduck.Issue.IssueCondition;
-
 public class Collection {
 	private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<String,HashMap<String,ArrayList<Issue>>>();
-	private String selectedCountry = null;
-	private String selectedPublication = null;
 
 	enum CollectionType {COA,USER}
-	
-
-	public String getSelectedCountry() {
-		return selectedCountry;
-	}
-
-	public void setSelectedCountry(String selectedCountry) {
-		this.selectedCountry = selectedCountry;
-	}
-	
-	public String getSelectedPublication() {
-		return selectedPublication;
-	}
-
-	public void setSelectedPublication(String selectedPublication) {
-		this.selectedPublication = selectedPublication;
-	}
 	
 	public void addCountry(String country) {
 		issues.put(country, new HashMap<String,ArrayList<Issue>>());
@@ -71,32 +52,39 @@ public class Collection {
 	
 	public ArrayList<String> getPublicationList(String shortCountryName, String type) {
 		ArrayList<String> publicationList = new ArrayList<String>();
-		Set<String> publicationSet = issues.get(shortCountryName).keySet();
-		for (String shortPublicationName : publicationSet) {
-			publicationList.add((type.equals(CollectionType.COA.toString()) && WhatTheDuck.userCollection.hasPublication(shortCountryName, shortPublicationName) ? "* ":"")
-								+ PublicationListing.getPublicationFullName(shortCountryName, shortPublicationName));
+		HashMap<String, ArrayList<Issue>> publicationMap = issues.get(shortCountryName);
+		if (publicationMap != null) {
+			for (String shortPublicationName : publicationMap.keySet()) {
+				publicationList.add((type.equals(CollectionType.COA.toString()) && WhatTheDuck.userCollection.hasPublication(shortCountryName, shortPublicationName) ? "* " : "")
+						+ PublicationListing.getPublicationFullName(shortCountryName, shortPublicationName));
+			}
+			Collections.sort(publicationList, new NamesComparator());
 		}
-		Collections.sort(publicationList, new NamesComparator());
 		return publicationList;
 	}
 	
 	public ArrayList<Issue> getIssueList(String shortCountryName, String shortPublicationName, String type) {
 		ArrayList<Issue> finalList = new ArrayList<Issue>();
-		ArrayList<Issue> list = issues.get(shortCountryName).get(shortPublicationName);
-		for (Issue issue : list) {
-			Boolean isCoaCollection = type.equals(CollectionType.COA.toString());
-			Boolean isInCollection=false;
-			IssueCondition condition = null;
-			Issue existingIssue = WhatTheDuck.userCollection.getIssue(shortCountryName, shortPublicationName, issue.getIssueNumber()); 
-			if (existingIssue != null) {
-				isInCollection = true;
-				condition = existingIssue.getIssueCondition();
+		HashMap<String, ArrayList<Issue>> publicationMap = issues.get(shortCountryName);
+		if (publicationMap != null) {
+			ArrayList<Issue> list = publicationMap.get(shortPublicationName);
+			if (list != null) {
+				for (Issue issue : list) {
+					Boolean isCoaCollection = type.equals(CollectionType.COA.toString());
+					Boolean isInCollection = false;
+					IssueCondition condition = null;
+					Issue existingIssue = WhatTheDuck.userCollection.getIssue(shortCountryName, shortPublicationName, issue.getIssueNumber());
+					if (existingIssue != null) {
+						isInCollection = true;
+						condition = existingIssue.getIssueCondition();
+					}
+					Issue i = new Issue((isInCollection && isCoaCollection ? "* " : "") + issue.getIssueNumber(),
+							condition);
+					finalList.add(i);
+				}
+				Collections.sort(finalList, new NaturalOrderComparator());
 			}
-			Issue i = new Issue((isInCollection && isCoaCollection ? "* ":"")+issue.getIssueNumber(),
-                    condition);
-			finalList.add(i);
 		}
-		Collections.sort(finalList, new NaturalOrderComparator());
 		return finalList;
 	}
 	

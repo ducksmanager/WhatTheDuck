@@ -30,7 +30,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
     protected void onPostExecute(String response) {
         if (this.thrownException != null) {
             if (progressBarId != null) {
-                WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId.intValue(), false);
+                WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, false);
             }
 
             if (this.thrownException instanceof SecurityException) {

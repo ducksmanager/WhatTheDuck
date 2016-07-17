@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
@@ -13,19 +14,25 @@ public class PublicationList extends List {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        WhatTheDuck.setSelectedPublication(null);
+
         super.onCreate(savedInstanceState);
 
-        final String selectedCountry = getCollection().getSelectedCountry();
-        if (type.equals(CollectionType.USER.toString())) {
-        	setTitle(getString(R.string.my_collection)+">"+ CountryListing.getCountryFullName(selectedCountry));
+        final String selectedCountry = WhatTheDuck.getSelectedCountry();
+        final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
+
+        if (type.equals(CollectionType.USER.toString())
+        || (type.equals(CollectionType.COA.toString()) && WhatTheDuck.coaCollection.hasCountry(selectedCountry))) {
             this.show();
         }
         else {
-        	setTitle(getString(R.string.insert_issue_menu)+">"+ CountryListing.getCountryFullName(selectedCountry));
             new PublicationListing(this, R.id.progressBarLoading, selectedCountry).execute();
         }
+
+        setNavigationCountry(countryFullName, selectedCountry);
+        setNavigationPublication(null, null);
     }
-    
+
     @Override
     public void onBackPressed() {
     	Intent i = new Intent(WhatTheDuck.wtd, CountryList.class);
@@ -34,8 +41,8 @@ public class PublicationList extends List {
 	}
         
     public void show() {
-    	if (getCollection().getSelectedCountry() != null) {
-	    	super.show(getCollection().getPublicationList(getCollection().getSelectedCountry(), this.type));
+    	if (WhatTheDuck.getSelectedCountry() != null) {
+	    	super.show(getCollection().getPublicationList(WhatTheDuck.getSelectedCountry(), this.type));
     	}
     }
     
@@ -43,7 +50,6 @@ public class PublicationList extends List {
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch(item.getItemId()) {
             case INSERT_ID:
-            	WhatTheDuck.coaCollection.setSelectedCountry(getCollection().getSelectedCountry());
                 Intent i = new Intent(WhatTheDuck.wtd, PublicationList.class);
                 i.putExtra("type", CollectionType.COA.toString());
                 startActivity(i);
@@ -56,9 +62,11 @@ public class PublicationList extends List {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        String publicationShortName = PublicationListing.getPublicationShortName(getCollection().getSelectedCountry(),
-                this.getListView().getItemAtPosition(((Long) id).intValue()).toString().replace("* ", ""));
-    	getCollection().setSelectedPublication (publicationShortName);
+        String publicationShortName = PublicationListing.getPublicationShortName(
+            WhatTheDuck.getSelectedCountry(),
+            this.getListView().getItemAtPosition(((Long) id).intValue()).toString().replace("* ", "")
+        );
+        WhatTheDuck.setSelectedPublication (publicationShortName);
 
         Intent i = new Intent(this, IssueList.class);
         i.putExtra("type", this.type);

@@ -11,6 +11,11 @@ import java.util.Iterator;
 public class CountryListing extends CoaListing {
 
     static HashMap<String,String> countryNames=new HashMap<String,String>();
+    static boolean hasFullList = false;
+
+    public static boolean hasFullList() {
+        return hasFullList;
+    }
 
     public CountryListing(List list, int progressBarId) {
         super(list, ListType.COUNTRY_LIST, progressBarId, null, null);
@@ -42,7 +47,7 @@ public class CountryListing extends CoaListing {
         if (response != null) {
             try {
                 resetCountries();
-                addCountries(new JSONObject(response));
+                addCountriesFullList(new JSONObject(response));
             }
             catch (JSONException e) {
                 handleJSONException(e);
@@ -63,5 +68,10 @@ public class CountryListing extends CoaListing {
             addCountry(shortName, fullName);
             WhatTheDuck.coaCollection.addCountry(shortName);
         }
+    }
+
+    public static void addCountriesFullList(JSONObject object) throws JSONException {
+        hasFullList = true;
+        addCountries(object);
     }
 }

@@ -23,7 +23,7 @@ public class IssueListing extends CoaListing {
                 JSONArray issues = object.getJSONObject("static").getJSONArray("numeros");
                 for (int i = 0; i < issues.length(); i++) {
                     String issue = (String) issues.get(i);
-                    WhatTheDuck.coaCollection.addIssue(this.countryShortName, this.publicationShortName, new Issue(issue, Issue.NO_CONDITION));
+                    WhatTheDuck.coaCollection.addIssue(CoaListing.countryShortName, CoaListing.publicationShortName, new Issue(issue, Issue.NO_CONDITION));
                 }
             }
             catch (JSONException e) {

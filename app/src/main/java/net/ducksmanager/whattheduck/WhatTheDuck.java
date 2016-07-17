@@ -53,9 +53,12 @@ public class WhatTheDuck extends Activity {
 	
 	public static Collection userCollection = new Collection();
 	public static Collection coaCollection = new Collection();
-	
 
-    /** Called when the activity is first created. */
+	public static String selectedCountry = null;
+	public static String selectedPublication = null;
+
+
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	wtd=this;
@@ -278,6 +281,22 @@ public class WhatTheDuck extends Activity {
                                    R.string.internal_error__crypting_failed);
                 return "";
         }
-}
+	}
+
+	public static String getSelectedCountry() {
+		return WhatTheDuck.selectedCountry;
+	}
+
+	public static void setSelectedCountry(String selectedCountry) {
+		WhatTheDuck.selectedCountry = selectedCountry;
+	}
+
+	public static String getSelectedPublication() {
+		return WhatTheDuck.selectedPublication;
+	}
+
+	public static void setSelectedPublication(String selectedPublication) {
+		WhatTheDuck.selectedPublication = selectedPublication;
+	}
 	
 }

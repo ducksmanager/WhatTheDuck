@@ -20,15 +20,15 @@ public abstract class CoaListing extends RetrieveTask {
         urlSuffixes.put(ListType.ISSUE_LIST, "&coa=true&liste_numeros=true");
     }
 
-	final String countryShortName;
-    final String publicationShortName;
+	static String countryShortName;
+    static String publicationShortName;
 	
 	
 	CoaListing(List list, ListType type, int progressBarId, String countryShortName, String publicationShortName) {
         super(urlSuffixes.get(type), progressBarId);
 		displayedList = list;
-		this.countryShortName = countryShortName;
-		this.publicationShortName = publicationShortName;
+		CoaListing.countryShortName = countryShortName;
+		CoaListing.publicationShortName = publicationShortName;
 	}
 
     @Override

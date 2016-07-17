@@ -5,11 +5,10 @@
     <string name="remember_credentials">Se souvenir de mes identifiants</string>
     <string name="no_result">Pas de résultat.</string>
     <string name="my_collection">Ma collection</string>
+    <string name="referenced_issues">Numéros référencés</string>
     <string name="logout_menu">Déconnexion</string>
     <string name="issue">Numéro</string>
     <string name="issuecondition_description">Etat du numéro</string>
-    <string name="my_collection_menu">Retour à ma collection</string>
-    <string name="insert_issue_menu">Ajouter un numéro</string>
     <string name="insert_issue__choose_country">Choisir un pays</string>
     <string name="insert_issue__confirm">Ajout du numéro %1$s</string>
     <string name="signup">Inscription</string>
