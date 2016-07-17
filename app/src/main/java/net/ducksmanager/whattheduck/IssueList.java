@@ -1,12 +1,5 @@
 package net.ducksmanager.whattheduck;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
-import net.ducksmanager.inducks.coa.CountryListing;
-import net.ducksmanager.inducks.coa.IssueListing;
-import net.ducksmanager.inducks.coa.PublicationListing;
-import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import net.ducksmanager.inducks.coa.CountryListing;
+import net.ducksmanager.inducks.coa.IssueListing;
+import net.ducksmanager.inducks.coa.PublicationListing;
+import net.ducksmanager.whattheduck.Collection.CollectionType;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class IssueList extends List {
     private Issue selectedIssue = null;
@@ -56,10 +57,9 @@ public class IssueList extends List {
 
         this.issueAdapter = new IssueAdapter(this, this.issues);
         setListAdapter(this.issueAdapter);
-        
+
+		EditText filterEditText = (EditText) this.findViewById(R.id.filter);
     	if (issues.size() > 20) {
-    		EditText filterEditText = (EditText) this.findViewById(R.id.filter);
-    		filterEditText.setVisibility(EditText.VISIBLE);
     		filterEditText.requestFocus();
     		
     		filterEditText.addTextChangedListener(new TextWatcher() {
@@ -77,6 +77,9 @@ public class IssueList extends List {
                 }
             });
     	}
+		else {
+			filterEditText.setVisibility(EditText.GONE);
+		}
     }
     
     @Override
