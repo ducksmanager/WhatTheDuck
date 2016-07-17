@@ -19,6 +19,8 @@
     <string name="cancel">Annuler</string>
 
     <string name="filter">Filtrer</string>
+    <string name="all_countries">All countries</string>
+    <string name="show_my_collection_content_only">Show my collection content only</string>
 
     <string name="condition_good">Bon état</string>
     <string name="condition_notsogood">Etat moyen</string>

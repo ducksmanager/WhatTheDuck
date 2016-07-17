@@ -12,7 +12,7 @@
     <TextView
         android:id="@+id/selected"
         android:textAlignment="center"
-        android:text="All countries"
+        android:text="@string/all_countries"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#fff"

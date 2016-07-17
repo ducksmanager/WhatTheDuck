@@ -10,15 +10,15 @@ import java.util.Iterator;
 
 public class CountryListing extends CoaListing {
 
-    static HashMap<String,String> countryNames=new HashMap<String,String>();
-    static boolean hasFullList = false;
+    private static HashMap<String,String> countryNames= new HashMap<>();
+    private static boolean hasFullList = false;
 
     public static boolean hasFullList() {
         return hasFullList;
     }
 
-    public CountryListing(List list, int progressBarId) {
-        super(list, ListType.COUNTRY_LIST, progressBarId, null, null);
+    public CountryListing(List list) {
+        super(list, ListType.COUNTRY_LIST, null, null);
     }
 
     public static String getCountryFullName (String shortCountryName) {
@@ -33,11 +33,11 @@ public class CountryListing extends CoaListing {
         return null;
     }
 
-    static void resetCountries() {
-        countryNames = new HashMap<String,String>();
+    private static void resetCountries() {
+        countryNames = new HashMap<>();
     }
 
-    public static void addCountry(String shortName, String fullName) {
+    private static void addCountry(String shortName, String fullName) {
 		countryNames.put(shortName, fullName);
 	}
 
@@ -70,7 +70,7 @@ public class CountryListing extends CoaListing {
         }
     }
 
-    public static void addCountriesFullList(JSONObject object) throws JSONException {
+    private static void addCountriesFullList(JSONObject object) throws JSONException {
         hasFullList = true;
         addCountries(object);
     }

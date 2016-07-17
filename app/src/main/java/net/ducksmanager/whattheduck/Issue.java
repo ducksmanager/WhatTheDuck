@@ -9,7 +9,7 @@ public class Issue {
 	public static final String NO_CONDITION="indefini";
 
 	private final String issueNumber;
-	public static enum IssueCondition {BAD_CONDITION, NOTSOGOOD_CONDITION, GOOD_CONDITION, NO_CONDITION}
+	public enum IssueCondition {BAD_CONDITION, NOTSOGOOD_CONDITION, GOOD_CONDITION, NO_CONDITION}
 	private IssueCondition issueCondition;
 
 	public Issue(String issuenumber, String issueCondition) {

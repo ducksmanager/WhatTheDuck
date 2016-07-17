@@ -1,19 +1,11 @@
 package net.ducksmanager.whattheduck;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
-import net.ducksmanager.inducks.coa.CountryListing;
-import net.ducksmanager.inducks.coa.IssueListing;
-import net.ducksmanager.inducks.coa.PublicationListing;
-import net.ducksmanager.whattheduck.Collection.CollectionType;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -47,7 +39,7 @@ public class IssueList extends List {
 	        this.show();
         }
         else {
-            new IssueListing(this, R.id.progressBarLoading, selectedCountry, selectedPublication).execute();
+            new IssueListing(this, selectedCountry, selectedPublication).execute();
         }
 
 		setNavigationCountry(countryFullName, selectedCountry);
@@ -72,7 +64,7 @@ public class IssueList extends List {
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                 	String typedText = s.toString();
-                	ArrayList<Issue> filteredIssues = new ArrayList<Issue>();
+                	ArrayList<Issue> filteredIssues = new ArrayList<>();
                 	for (Issue issue : IssueList.this.issues)
                 		if (issue.getIssueNumber().replace("* ", "").toLowerCase(Locale.FRANCE).contains(typedText.toLowerCase()))
                 			filteredIssues.add(issue);
@@ -93,20 +85,8 @@ public class IssueList extends List {
         i.putExtra("type", type);
         startActivity(i);
 	}
-    
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        switch(item.getItemId()) {
-            case INSERT_ID:
-                Intent i = new Intent(WhatTheDuck.wtd, IssueList.class);
-                i.putExtra("type", CollectionType.COA.toString());
-                startActivity(i);
-                return super.onMenuItemSelected(featureId, item, true);
-        }
-        return super.onMenuItemSelected(featureId, item, false);
-    }
-    
-    @Override
+
+	@Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         if (type.equals(CollectionType.COA.toString())) {
         	selectedIssue = (Issue) this.getListView().getItemAtPosition(((Long)id).intValue());
@@ -138,7 +118,7 @@ public class IssueList extends List {
         		        	   else
         		        		   DMcondition = Issue.GOOD_CONDITION;
         		        	   selectedIssue.setIssueCondition(Issue.issueConditionStrToIssueCondition(DMcondition));
-        		        	   new AddIssue(IssueList.this, R.id.progressBarLoading, WhatTheDuck.getSelectedPublication(), selectedIssue).execute();
+        		        	   new AddIssue(IssueList.this, WhatTheDuck.getSelectedPublication(), selectedIssue).execute();
         		           }
         		       })
         		       .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

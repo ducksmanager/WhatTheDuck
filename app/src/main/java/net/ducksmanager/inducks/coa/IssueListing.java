@@ -9,8 +9,8 @@ import org.json.JSONObject;
 
 public class IssueListing extends CoaListing {
 
-    public IssueListing(List list, int progressBarId, String countryShortName, String publicationShortName) {
-        super(list, ListType.ISSUE_LIST, progressBarId, countryShortName, publicationShortName);
+    public IssueListing(List list, String countryShortName, String publicationShortName) {
+        super(list, ListType.ISSUE_LIST, countryShortName, publicationShortName);
         this.urlSuffix+="&pays="+countryShortName+"&magazine="+publicationShortName;
     }
 

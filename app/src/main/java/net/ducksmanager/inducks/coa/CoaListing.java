@@ -11,9 +11,9 @@ import java.util.HashMap;
 
 public abstract class CoaListing extends RetrieveTask {
 	public static List displayedList;
-	public static enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST}
+	public enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST}
 
-    private static final HashMap<ListType, String> urlSuffixes = new HashMap<ListType, String>();
+    private static final HashMap<ListType, String> urlSuffixes = new HashMap<>();
     static {
         urlSuffixes.put(ListType.COUNTRY_LIST, "&coa=true&liste_pays=true");
         urlSuffixes.put(ListType.PUBLICATION_LIST, "&coa=true&liste_magazines=true");
@@ -24,8 +24,8 @@ public abstract class CoaListing extends RetrieveTask {
     static String publicationShortName;
 	
 	
-	CoaListing(List list, ListType type, int progressBarId, String countryShortName, String publicationShortName) {
-        super(urlSuffixes.get(type), progressBarId);
+	CoaListing(List list, ListType type, String countryShortName, String publicationShortName) {
+        super(urlSuffixes.get(type), R.id.progressBarLoading);
 		displayedList = list;
 		CoaListing.countryShortName = countryShortName;
 		CoaListing.publicationShortName = publicationShortName;
@@ -44,7 +44,7 @@ public abstract class CoaListing extends RetrieveTask {
 
     void handleJSONException(JSONException e) {
         WhatTheDuck.wtd.alert(displayedList,
-                R.string.internal_error,"",
+                R.string.internal_error,
                 R.string.internal_error__malformed_list," : " + e.getMessage());
     }
 }

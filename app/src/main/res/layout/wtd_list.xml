@@ -28,6 +28,7 @@
         android:hint="@string/filter"
         android:visibility="visible"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@id/navigation">
     </EditText>
 
@@ -64,7 +65,7 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Show my collection content only"
+        android:text="@string/show_my_collection_content_only"
         android:id="@+id/onlyInCollectionSwitch"
         android:layout_toEndOf="@+id/emptyList"
         android:layout_toRightOf="@+id/emptyList"

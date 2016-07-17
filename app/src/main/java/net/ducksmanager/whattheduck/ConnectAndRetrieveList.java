@@ -23,8 +23,8 @@ public class ConnectAndRetrieveList extends RetrieveTask {
 
     private final WhatTheDuck wtd;
 
-    public ConnectAndRetrieveList(int progressBarId) {
-        super("", progressBarId);
+    public ConnectAndRetrieveList() {
+        super("", R.id.progressBarConnection);
         wtd = WhatTheDuck.wtd;
     }
 
@@ -108,7 +108,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                 wtd.toggleProgressbarLoading(progressBarId, false);
             }
         } catch (JSONException e) {
-            wtd.alert(R.string.internal_error, "",
+            wtd.alert(R.string.internal_error,
                     R.string.internal_error__malformed_list, " : " + e.getMessage());
         }
     }

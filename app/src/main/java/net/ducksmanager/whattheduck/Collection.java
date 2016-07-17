@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 public class Collection {
-	private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<String,HashMap<String,ArrayList<Issue>>>();
+	private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<>();
 
 	enum CollectionType {COA,USER}
 	
@@ -40,7 +40,7 @@ public class Collection {
 	}
 	
 	public ArrayList<String> getCountryList(String type) {
-		ArrayList<String> countryList = new ArrayList<String>();
+		ArrayList<String> countryList = new ArrayList<>();
 		Set<String> countrySet = issues.keySet();
 		for (String shortCountryName : countrySet) {
 			countryList.add((type.equals(CollectionType.COA.toString()) && WhatTheDuck.userCollection.hasCountry(shortCountryName) ? "* ":"")
@@ -51,7 +51,7 @@ public class Collection {
 	}
 	
 	public ArrayList<String> getPublicationList(String shortCountryName, String type) {
-		ArrayList<String> publicationList = new ArrayList<String>();
+		ArrayList<String> publicationList = new ArrayList<>();
 		HashMap<String, ArrayList<Issue>> publicationMap = issues.get(shortCountryName);
 		if (publicationMap != null) {
 			for (String shortPublicationName : publicationMap.keySet()) {
@@ -64,7 +64,7 @@ public class Collection {
 	}
 	
 	public ArrayList<Issue> getIssueList(String shortCountryName, String shortPublicationName, String type) {
-		ArrayList<Issue> finalList = new ArrayList<Issue>();
+		ArrayList<Issue> finalList = new ArrayList<>();
 		HashMap<String, ArrayList<Issue>> publicationMap = issues.get(shortCountryName);
 		if (publicationMap != null) {
 			ArrayList<Issue> list = publicationMap.get(shortPublicationName);
@@ -88,10 +88,6 @@ public class Collection {
 		return finalList;
 	}
 	
-	public boolean isEmpty() {
-		return issues.size() == 0;
-	}
-	
 	public boolean hasCountry (String countryShortName) {
 		return issues.get(countryShortName) != null 
 			&& issues.get(countryShortName).size() > 0;
@@ -104,11 +100,11 @@ public class Collection {
 			&& issues.get(shortCountryName).get(shortPublicationName).size() > 0;
 	}
 	
-	public Issue getIssue (String shortCountryName, String shortPublicationName, String issueNumber) {
+	private Issue getIssue(String shortCountryName, String shortPublicationName, String issueNumber) {
 		if (!hasPublication(shortCountryName, shortPublicationName))
 			return null;
 		for (Issue i : issues.get(shortCountryName).get(shortPublicationName)) {
-			if (i.getIssueNumber().equals(issueNumber))
+			if (i.getIssueNumber().replaceAll("[ ]+", " ").equals(issueNumber.replaceAll("[ ]+", " ")))
 				return i;
 		}
 		return null;

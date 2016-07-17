@@ -19,7 +19,7 @@ public class CountryList extends List {
         	show();
         }
         else {
-            new CountryListing(this, R.id.progressBarLoading).execute();
+            new CountryListing(this).execute();
         }
 
         this.findViewById(R.id.navigation).setVisibility(View.GONE);

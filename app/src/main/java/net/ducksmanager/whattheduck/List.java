@@ -21,9 +21,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public abstract class List extends ListActivity{
-    protected static final int INSERT_ID = 1;
-    private static final int MY_COLLECTION_ID = 2;
-    private static final int LOGOUT = 3;
+    private static final int LOGOUT = 1;
 
     public String type;
     private ArrayList<String> items;
@@ -107,7 +105,7 @@ public abstract class List extends ListActivity{
         }
 
     	String[] lv_arr = items.toArray(new String[items.size()]);
-        setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lv_arr));
+        setListAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lv_arr));
 
     	if (items.size() > 20) {
     		EditText filterEditText = (EditText) this.findViewById(R.id.filter);
@@ -119,13 +117,13 @@ public abstract class List extends ListActivity{
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                 	String typedText = s.toString();
-                	ArrayList<String> filteredItems = new ArrayList<String>();
+                	ArrayList<String> filteredItems = new ArrayList<>();
                 	for (String item : List.this.items)
                 		if (item.replace("* ", "").toLowerCase(Locale.FRANCE).contains(typedText.toLowerCase()))
                 			filteredItems.add(item);
 
                 	String[] lv_arr = filteredItems.toArray(new String[filteredItems.size()]);
-                    setListAdapter(new ArrayAdapter<String>(List.this, android.R.layout.simple_list_item_1, lv_arr));
+                    setListAdapter(new ArrayAdapter<>(List.this, android.R.layout.simple_list_item_1, lv_arr));
 
     			}
             });
@@ -142,24 +140,18 @@ public abstract class List extends ListActivity{
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
-    	return onMenuItemSelected(featureId, item, false);
-    }
+		Intent i = null;
+		switch(item.getItemId()) {
+            case LOGOUT:
+                i = new Intent(WhatTheDuck.wtd, WhatTheDuck.class);
+                WhatTheDuck.userCollection = new Collection();
+                WhatTheDuck.coaCollection = new Collection();
 
-    public boolean onMenuItemSelected(int featureId, MenuItem item, boolean alreadyDone) {
-    	if (!alreadyDone) {
-    		Intent i = null;
-	        switch(item.getItemId()) {
-	            case LOGOUT:
-	    	        i = new Intent(WhatTheDuck.wtd, WhatTheDuck.class);
-	            	WhatTheDuck.userCollection = new Collection();
-	            	WhatTheDuck.coaCollection = new Collection();
+                break;
+        }
+		startActivity(i);
 
-	            break;
-	        }
-	        startActivity(i);
-    	}
-
-        return super.onMenuItemSelected(featureId, item);
+		return super.onMenuItemSelected(featureId, item);
     }
 
     protected Collection getCollection() {

@@ -35,7 +35,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
 
             if (this.thrownException instanceof SecurityException) {
                 WhatTheDuck.wtd.alert(
-                        R.string.input_error, "",
+                        R.string.input_error,
                         R.string.input_error__invalid_credentials, "");
                 WhatTheDuck.setUsername("");
                 WhatTheDuck.setPassword("");

@@ -10,10 +10,10 @@ import java.util.Iterator;
 
 public class PublicationListing extends CoaListing {
 
-    static HashMap<String,HashMap<String,String>> publicationNames=new HashMap<String,HashMap<String,String>>();
+    private static HashMap<String,HashMap<String,String>> publicationNames= new HashMap<>();
 
-    public PublicationListing(List list, int progressBarId, String countryShortName) {
-        super(list, ListType.PUBLICATION_LIST, progressBarId, countryShortName, null);
+    public PublicationListing(List list, String countryShortName) {
+        super(list, ListType.PUBLICATION_LIST, countryShortName, null);
         this.urlSuffix+="&pays="+countryShortName;
     }
 
@@ -33,11 +33,11 @@ public class PublicationListing extends CoaListing {
 		return null;
 	}
 
-    static void resetPublications() {
-		publicationNames = new HashMap<String,HashMap<String,String>>();
+    private static void resetPublications() {
+		publicationNames = new HashMap<>();
 	}
 
-    static void addPublication(String countryShortName, String shortName, String fullName) {
+    private static void addPublication(String countryShortName, String shortName, String fullName) {
 		if (publicationNames.get(countryShortName) == null)
 			publicationNames.put(countryShortName, new HashMap<String, String>());
 		publicationNames.get(countryShortName).put(shortName, fullName);

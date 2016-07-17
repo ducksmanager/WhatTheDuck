@@ -6,13 +6,13 @@ public class AddIssue extends RetrieveTask {
     private static String shortCountryAndPublication;
     private static Issue selectedIssue;
 
-    public AddIssue(IssueList il, int progressBarId, String shortCountryAndPublication, Issue selectedIssue) {
+    public AddIssue(IssueList il, String shortCountryAndPublication, Issue selectedIssue) {
         super(
             "&ajouter_numero"
             +"&pays_magazine="+shortCountryAndPublication
             +"&numero="+selectedIssue.getIssueNumber()
             +"&etat="+selectedIssue.getIssueConditionStr(),
-            progressBarId
+                R.id.progressBarLoading
         );
         AddIssue.issueList = il;
         AddIssue.shortCountryAndPublication = shortCountryAndPublication;

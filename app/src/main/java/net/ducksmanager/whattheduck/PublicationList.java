@@ -2,7 +2,6 @@ package net.ducksmanager.whattheduck;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -26,7 +25,7 @@ public class PublicationList extends List {
             this.show();
         }
         else {
-            new PublicationListing(this, R.id.progressBarLoading, selectedCountry).execute();
+            new PublicationListing(this, selectedCountry).execute();
         }
 
         setNavigationCountry(countryFullName, selectedCountry);
@@ -45,19 +44,7 @@ public class PublicationList extends List {
 	    	super.show(getCollection().getPublicationList(WhatTheDuck.getSelectedCountry(), this.type));
     	}
     }
-    
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        switch(item.getItemId()) {
-            case INSERT_ID:
-                Intent i = new Intent(WhatTheDuck.wtd, PublicationList.class);
-                i.putExtra("type", CollectionType.COA.toString());
-                startActivity(i);
-                return super.onMenuItemSelected(featureId, item, true);
-        }
-        return super.onMenuItemSelected(featureId, item, false);
-    }
-    
+
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);

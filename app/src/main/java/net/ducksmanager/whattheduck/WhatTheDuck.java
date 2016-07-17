@@ -54,8 +54,8 @@ public class WhatTheDuck extends Activity {
 	public static Collection userCollection = new Collection();
 	public static Collection coaCollection = new Collection();
 
-	public static String selectedCountry = null;
-	public static String selectedPublication = null;
+	private static String selectedCountry = null;
+	private static String selectedPublication = null;
 
 
 	/** Called when the activity is first created. */
@@ -68,7 +68,7 @@ public class WhatTheDuck extends Activity {
         try {
 			FileInputStream fis = openFileInput(CREDENTIALS_FILENAME);
 			int ch;
-			StringBuffer response=new StringBuffer();
+			StringBuilder response=new StringBuilder();
 			while( (ch = fis.read()) != -1)
 				response.append((char)ch);
 			fis.close();
@@ -87,15 +87,12 @@ public class WhatTheDuck extends Activity {
 			});
 			((EditText) findViewById(R.id.password)).setText("******");
 		} catch (FileNotFoundException e1) {
-		} catch (IOException e) {
-			WhatTheDuck.this.alert(R.string.internal_error, 
-		   			   			   R.string.internal_error__credentials_reading_failed);
-		} catch (ArrayIndexOutOfBoundsException e) {
+		} catch (IOException | ArrayIndexOutOfBoundsException e) {
 			WhatTheDuck.this.alert(R.string.internal_error, 
 		   			   			   R.string.internal_error__credentials_reading_failed);
 		}
 
-        Button signupButton = (Button) findViewById(R.id.end_signup);
+		Button signupButton = (Button) findViewById(R.id.end_signup);
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
             	WhatTheDuck.setUsername(((EditText) WhatTheDuck.this.findViewById(R.id.username)).getText().toString());
@@ -109,7 +106,7 @@ public class WhatTheDuck extends Activity {
         Button loginButton = (Button) findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-        		new ConnectAndRetrieveList(R.id.progressBarConnection).execute();
+        		new ConnectAndRetrieveList().execute();
             }
         });
         
@@ -137,19 +134,19 @@ public class WhatTheDuck extends Activity {
     	builder.create().show();
     }
     
-    public void alert(Context c, int titleId, String extraTitle, int messageId, String extraMessage) {
+    public void alert(Context c, int titleId, int messageId, String extraMessage) {
     	AlertDialog.Builder builder = new AlertDialog.Builder(c);
-    	builder.setTitle(getString(titleId)+extraTitle);
+    	builder.setTitle(getString(titleId));
     	builder.setMessage(getString(messageId)+extraMessage);
     	builder.create().show();
     }
     
-    public void alert(int titleId, String extraTitle, int messageId, String extraMessage) {
-    	alert(this, titleId, extraTitle, messageId, extraMessage);
+    public void alert(int titleId, int messageId, String extraMessage) {
+    	alert(this, titleId, messageId, extraMessage);
     }
     
     public void alert(int titleId, int messageId) {
-    	alert(this, titleId, "", messageId, "");
+    	alert(this, titleId, messageId, "");
     }
     
 
@@ -232,7 +229,7 @@ public class WhatTheDuck extends Activity {
         toggleProgressbarLoading(WhatTheDuck.wtd, progressBarId, toggle);
     }
 	
-	public boolean isOnline() {
+	private boolean isOnline() {
 	    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnected();
@@ -263,7 +260,7 @@ public class WhatTheDuck extends Activity {
 		}
 		return response;
 	}
-	public String getServerURL() {
+	private String getServerURL() {
 		if (serverURL == null) {
 			serverURL = getPage(DUCKSMANAGER_URL+"/"+DUCKSMANAGER_PAGE_WITH_REMOTE_URL);			
 		}
