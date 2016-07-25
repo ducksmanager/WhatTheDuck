@@ -19,8 +19,8 @@
     <string name="cancel">Annuler</string>
 
     <string name="filter">Filtrer</string>
-    <string name="all_countries">All countries</string>
-    <string name="show_my_collection_content_only">Show my collection content only</string>
+    <string name="all_countries">Tous les pays</string>
+    <string name="show_my_collection_content_only">Contenu de ma collection seulement</string>
 
     <string name="condition_good">Bon état</string>
     <string name="condition_notsogood">Etat moyen</string>
@@ -50,4 +50,6 @@
     <string name="password_confirm">Confirmation mot de passe</string>
     <string name="signup_end">Terminer l\'inscription</string>
     <string name="email_address">Adresse e-mail</string>
+    <string name="welcomeTitle">Bienvenue sur What The Duck !</string>
+    <string name="welcomeMessage">Décochez l\'option \"Contenu de ma collection seulement\" pour faire apparaitre tous les numéros référencés, puis tapotez sur l\'un d\'entre eux pour l\'ajouter à votre collection</string>
 </resources>

@@ -16,6 +16,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,9 +26,9 @@ import net.ducksmanager.security.Security;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,19 +36,21 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
+import java.util.Properties;
 
 public class WhatTheDuck extends Activity {
     private static final String SERVER_PAGE="WhatTheDuck.php";
     private static final String DUCKSMANAGER_URL="http://www.ducksmanager.net";
     private static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
     
-	public static final String CREDENTIALS_FILENAME = "ducksmanager_credentials";
+	public static final String SETTINGS = "settings.properties";
 
 	private static String serverURL;
 	
     private static String username = null;
     private static String password = null;
     private static String encryptedPassword = null;
+    private static Boolean showWelcomeMessage = true;
 
 	public static WhatTheDuck wtd;
 	
@@ -64,33 +67,26 @@ public class WhatTheDuck extends Activity {
     	wtd=this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.whattheduck);
-        
-        try {
-			FileInputStream fis = openFileInput(CREDENTIALS_FILENAME);
-			int ch;
-			StringBuilder response=new StringBuilder();
-			while( (ch = fis.read()) != -1)
-				response.append((char)ch);
-			fis.close();
-			String username=response.toString().split("\n")[0];
-			String encryptedPassword=response.toString().split("\n")[1];
-			setUsername(username);
-			setEncryptedPassword(encryptedPassword);
-			EditText usernameEditText = ((EditText) findViewById(R.id.username));
-			usernameEditText.setText(username);
-			usernameEditText.addTextChangedListener(new TextWatcher() {
-				public void onTextChanged(CharSequence s, int start, int before, int count) {}
-				public void beforeTextChanged(CharSequence s, int start, int count,	int after) {}
-				public void afterTextChanged(Editable s) { 
-					((EditText) findViewById(R.id.password)).setText(""); 
-				}
-			});
+
+		loadSettings();
+		String username = getUsername();
+		String encryptedPassword = getEncryptedPassword();
+
+		((CheckBox) findViewById(R.id.checkBoxRememberCredentials)).setChecked(username != null);
+
+		EditText usernameEditText = ((EditText) findViewById(R.id.username));
+		usernameEditText.setText(username);
+		usernameEditText.addTextChangedListener(new TextWatcher() {
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			public void beforeTextChanged(CharSequence s, int start, int count,	int after) {}
+			public void afterTextChanged(Editable s) {
+				((EditText) findViewById(R.id.password)).setText("");
+			}
+		});
+		if (encryptedPassword != null) {
 			((EditText) findViewById(R.id.password)).setText("******");
-		} catch (FileNotFoundException e1) {
-		} catch (IOException | ArrayIndexOutOfBoundsException e) {
-			WhatTheDuck.this.alert(R.string.internal_error, 
-		   			   			   R.string.internal_error__credentials_reading_failed);
 		}
+
 
 		Button signupButton = (Button) findViewById(R.id.end_signup);
         signupButton.setOnClickListener(new View.OnClickListener() {
@@ -118,8 +114,8 @@ public class WhatTheDuck extends Activity {
             }
         });
     }
-    
-    public void info(Context c, int titleId) {
+
+	public void info(Context c, int titleId) {
     	Toast.makeText(c, titleId, Toast.LENGTH_SHORT).show();
     }
     
@@ -148,7 +144,34 @@ public class WhatTheDuck extends Activity {
     public void alert(int titleId, int messageId) {
     	alert(this, titleId, messageId, "");
     }
-    
+
+	private static void loadSettings() {
+		Properties props=new Properties();
+		InputStream inputStream;
+		try {
+			inputStream = wtd.openFileInput(SETTINGS);
+			props.load(inputStream);
+			setUsername((String)props.get("username"));
+			setEncryptedPassword((String)props.get("password"));
+			setShowWelcomeMessage(props.get("showWelcomeMessage") == null || props.get("showWelcomeMessage").equals("false"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void saveSettings() {
+		Properties props=new Properties();
+		FileOutputStream outputStream;
+		try {
+			outputStream = wtd.openFileOutput(SETTINGS, MODE_PRIVATE);
+			props.put("username", getUsername());
+			props.put("password", getEncryptedPassword());
+			props.put("showWelcomeMessage", getShowWelcomeMessage().toString());
+			props.store(outputStream, "");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static String getUsername() {
 		return username;
@@ -164,7 +187,12 @@ public class WhatTheDuck extends Activity {
 
 	public static void setPassword(String password) {
 		WhatTheDuck.password = password;
-		setEncryptedPassword(wtd.toSHA1(password));
+		if (password == null) {
+			setEncryptedPassword(null);
+		}
+		else {
+			setEncryptedPassword(wtd.toSHA1(password));
+		}
 	}
 
 	public static String getEncryptedPassword() {
@@ -175,6 +203,13 @@ public class WhatTheDuck extends Activity {
 		WhatTheDuck.encryptedPassword = encryptedPassword;
 	}
 
+	public static Boolean getShowWelcomeMessage() {
+		return showWelcomeMessage;
+	}
+
+	public static void setShowWelcomeMessage(Boolean showWelcomeMessage) {
+		WhatTheDuck.showWelcomeMessage = showWelcomeMessage;
+	}
 
     private static String byteArray2Hex(byte[] hash) {
         Formatter formatter = new Formatter();

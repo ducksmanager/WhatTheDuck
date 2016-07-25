@@ -1,5 +1,7 @@
 package net.ducksmanager.whattheduck;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +14,20 @@ public class CountryList extends List {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (WhatTheDuck.getShowWelcomeMessage()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(CountryList.this);
+            builder.setTitle(getString(R.string.welcomeTitle));
+            builder.setMessage(getString(R.string.welcomeMessage));
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                }
+            });
+            WhatTheDuck.setShowWelcomeMessage(false);
+            builder.create().show();
+        }
         
         if (
             (type.equals(CollectionType.USER.toString()))

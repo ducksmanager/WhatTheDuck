@@ -1,7 +1,6 @@
 package net.ducksmanager.whattheduck;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -14,8 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Iterator;
 
 public class ConnectAndRetrieveList extends RetrieveTask {
@@ -66,16 +63,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
             boolean rememberCredentials = mCheckboxRememberCredentials.isChecked();
 
             if (rememberCredentials) {
-                try {
-                    String credentials = WhatTheDuck.getUsername() + "\n" + WhatTheDuck.getEncryptedPassword();
-                    FileOutputStream fos = wtd.openFileOutput(WhatTheDuck.CREDENTIALS_FILENAME, Context.MODE_PRIVATE);
-                    fos.write(credentials.getBytes());
-                    fos.close();
-                } catch (IOException e) {
-                    wtd.alert(R.string.internal_error,
-                              R.string.internal_error__credentials_storage_failed);
-                    wtd.toggleProgressbarLoading(progressBarId, false);
-                }
+                WhatTheDuck.saveSettings();
             }
 
             JSONObject object = new JSONObject(response);

@@ -143,9 +143,12 @@ public abstract class List extends ListActivity{
 		Intent i = null;
 		switch(item.getItemId()) {
             case LOGOUT:
+				WhatTheDuck.userCollection = new Collection();
+				WhatTheDuck.coaCollection = new Collection();
+				WhatTheDuck.setUsername(null);
+				WhatTheDuck.setPassword(null);
+				WhatTheDuck.setPassword(null);
                 i = new Intent(WhatTheDuck.wtd, WhatTheDuck.class);
-                WhatTheDuck.userCollection = new Collection();
-                WhatTheDuck.coaCollection = new Collection();
 
                 break;
         }
