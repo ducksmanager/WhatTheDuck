@@ -64,7 +64,6 @@ public class IssueList extends List {
         EditText filterEditText = (EditText) this.findViewById(R.id.filter);
         if (issues.size() > 20) {
             filterEditText.setVisibility(EditText.VISIBLE);
-            filterEditText.requestFocus();
 
             filterEditText.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) { }

@@ -110,7 +110,6 @@ public abstract class List extends ListActivity{
         EditText filterEditText = (EditText) this.findViewById(R.id.filter);
         if (items.size() > 20) {
             filterEditText.setVisibility(EditText.VISIBLE);
-            filterEditText.requestFocus();
 
             filterEditText.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) { }
