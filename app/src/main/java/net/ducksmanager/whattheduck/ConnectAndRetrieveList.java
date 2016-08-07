@@ -81,6 +81,8 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                     }
                 }
 
+                CountryListing.hasFullList = false;
+
                 CountryListing.addCountries(object);
                 PublicationListing.addPublications(object);
 

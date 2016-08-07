@@ -11,7 +11,7 @@ import java.util.Iterator;
 public class CountryListing extends CoaListing {
 
     private static HashMap<String,String> countryNames= new HashMap<>();
-    private static boolean hasFullList = false;
+    public static boolean hasFullList = false;
 
     public static boolean hasFullList() {
         return hasFullList;
@@ -59,19 +59,21 @@ public class CountryListing extends CoaListing {
 
     @SuppressWarnings("unchecked")
     public static void addCountries(JSONObject object) throws JSONException {
-        JSONObject countryNames = object.getJSONObject("static").getJSONObject("pays");
-        Iterator<String> countryIterator = countryNames.keys();
-        while (countryIterator.hasNext()) {
-            String shortName = countryIterator.next();
-            String fullName = countryNames.getString(shortName);
+        if (!hasFullList) {
+            JSONObject countryNames = object.getJSONObject("static").getJSONObject("pays");
+            Iterator<String> countryIterator = countryNames.keys();
+            while (countryIterator.hasNext()) {
+                String shortName = countryIterator.next();
+                String fullName = countryNames.getString(shortName);
 
-            addCountry(shortName, fullName);
-            WhatTheDuck.coaCollection.addCountry(shortName);
+                addCountry(shortName, fullName);
+                WhatTheDuck.coaCollection.addCountry(shortName);
+            }
         }
     }
 
     private static void addCountriesFullList(JSONObject object) throws JSONException {
-        hasFullList = true;
         addCountries(object);
+        hasFullList = true;
     }
 }
