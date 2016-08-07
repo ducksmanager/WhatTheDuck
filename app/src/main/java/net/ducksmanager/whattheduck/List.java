@@ -107,8 +107,8 @@ public abstract class List extends ListActivity{
         String[] lv_arr = items.toArray(new String[items.size()]);
         setListAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lv_arr));
 
+        EditText filterEditText = (EditText) this.findViewById(R.id.filter);
         if (items.size() > 20) {
-            EditText filterEditText = (EditText) this.findViewById(R.id.filter);
             filterEditText.setVisibility(EditText.VISIBLE);
             filterEditText.requestFocus();
 
@@ -127,6 +127,9 @@ public abstract class List extends ListActivity{
 
                 }
             });
+        }
+        else {
+            filterEditText.setVisibility(EditText.GONE);
         }
     }
 
