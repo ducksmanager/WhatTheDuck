@@ -153,7 +153,8 @@ public class WhatTheDuck extends Activity {
             props.load(inputStream);
             setUsername((String)props.get("username"));
             setEncryptedPassword((String)props.get("password"));
-            setShowWelcomeMessage(props.get("showWelcomeMessage") == null || props.get("showWelcomeMessage").equals("false"));
+            setShowWelcomeMessage(props.get("showWelcomeMessage") == null || props.get("showWelcomeMessage").equals("true"));
+            inputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -161,15 +162,31 @@ public class WhatTheDuck extends Activity {
 
     public static void saveSettings(boolean withCredentials) {
         Properties props=new Properties();
+
+        InputStream inputStream;
+        try {
+            inputStream = wtd.openFileInput(SETTINGS);
+            props.load(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (withCredentials) {
+            props.put("username", getUsername());
+            props.put("password", getEncryptedPassword());
+        }
+        else {
+            props.remove("username");
+            props.remove("password");
+        }
+
+        props.put("showWelcomeMessage", getShowWelcomeMessage().toString());
+
         FileOutputStream outputStream;
         try {
             outputStream = wtd.openFileOutput(SETTINGS, MODE_PRIVATE);
-            if (withCredentials) {
-                props.put("username", getUsername());
-                props.put("password", getEncryptedPassword());
-            }
-            props.put("showWelcomeMessage", getShowWelcomeMessage().toString());
             props.store(outputStream, "");
+            outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
