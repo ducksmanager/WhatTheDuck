@@ -350,4 +350,7 @@ public class WhatTheDuck extends Activity {
         WhatTheDuck.selectedPublication = selectedPublication;
     }
 
+    @Override
+    public void onBackPressed() {
+    }
 }
