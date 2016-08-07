@@ -1,3 +1,9 @@
+Version 1.3
+    
+    New countries <-> publications <-> issues navigation menu
+    Faster loading of COA lists
+    Fix going back to collection when pressing the Back button from login view
+    
 Version 1.2.3
     
     Disable focus on the filter text input when loading list views
