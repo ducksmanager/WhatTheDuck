@@ -62,9 +62,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
             mCheckboxRememberCredentials = (CheckBox) wtd.findViewById(R.id.checkBoxRememberCredentials);
             boolean rememberCredentials = mCheckboxRememberCredentials.isChecked();
 
-            if (rememberCredentials) {
-                WhatTheDuck.saveSettings();
-            }
+            WhatTheDuck.saveSettings(rememberCredentials);
 
             JSONObject object = new JSONObject(response);
             try {

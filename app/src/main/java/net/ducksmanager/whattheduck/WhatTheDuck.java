@@ -159,13 +159,15 @@ public class WhatTheDuck extends Activity {
 		}
 	}
 
-	public static void saveSettings() {
+	public static void saveSettings(boolean withCredentials) {
 		Properties props=new Properties();
 		FileOutputStream outputStream;
 		try {
 			outputStream = wtd.openFileOutput(SETTINGS, MODE_PRIVATE);
-			props.put("username", getUsername());
-			props.put("password", getEncryptedPassword());
+			if (withCredentials) {
+				props.put("username", getUsername());
+				props.put("password", getEncryptedPassword());
+			}
 			props.put("showWelcomeMessage", getShowWelcomeMessage().toString());
 			props.store(outputStream, "");
 		} catch (IOException e) {
