@@ -10,8 +10,8 @@ import org.json.JSONException;
 import java.util.HashMap;
 
 public abstract class CoaListing extends RetrieveTask {
-	public static List displayedList;
-	public enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST}
+    public static List displayedList;
+    public enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST}
 
     private static final HashMap<ListType, String> urlSuffixes = new HashMap<>();
     static {
@@ -20,16 +20,16 @@ public abstract class CoaListing extends RetrieveTask {
         urlSuffixes.put(ListType.ISSUE_LIST, "&coa=true&liste_numeros=true");
     }
 
-	static String countryShortName;
+    static String countryShortName;
     static String publicationShortName;
-	
-	
-	CoaListing(List list, ListType type, String countryShortName, String publicationShortName) {
+
+
+    CoaListing(List list, ListType type, String countryShortName, String publicationShortName) {
         super(urlSuffixes.get(type), R.id.progressBarLoading);
-		displayedList = list;
-		CoaListing.countryShortName = countryShortName;
-		CoaListing.publicationShortName = publicationShortName;
-	}
+        displayedList = list;
+        CoaListing.countryShortName = countryShortName;
+        CoaListing.publicationShortName = publicationShortName;
+    }
 
     @Override
     protected void onPreExecute() {

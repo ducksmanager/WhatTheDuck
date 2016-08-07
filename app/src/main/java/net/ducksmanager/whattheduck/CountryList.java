@@ -33,7 +33,7 @@ public class CountryList extends List {
         if (
             (type.equals(CollectionType.USER.toString()))
          || (type.equals(CollectionType.COA.toString()) && CountryListing.hasFullList)) {
-        	show();
+            show();
         }
         else {
             new CountryListing(this).execute();

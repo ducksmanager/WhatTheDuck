@@ -43,56 +43,56 @@ public class WhatTheDuck extends Activity {
     private static final String DUCKSMANAGER_URL="http://www.ducksmanager.net";
     private static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
     
-	public static final String SETTINGS = "settings.properties";
+    public static final String SETTINGS = "settings.properties";
 
-	private static String serverURL;
-	
+    private static String serverURL;
+
     private static String username = null;
     private static String password = null;
     private static String encryptedPassword = null;
     private static Boolean showWelcomeMessage = true;
 
-	public static WhatTheDuck wtd;
-	
-	public static Collection userCollection = new Collection();
-	public static Collection coaCollection = new Collection();
+    public static WhatTheDuck wtd;
 
-	private static String selectedCountry = null;
-	private static String selectedPublication = null;
+    public static Collection userCollection = new Collection();
+    public static Collection coaCollection = new Collection();
+
+    private static String selectedCountry = null;
+    private static String selectedPublication = null;
 
 
-	/** Called when the activity is first created. */
+    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	wtd=this;
+        wtd=this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.whattheduck);
 
-		loadSettings();
-		String username = getUsername();
-		String encryptedPassword = getEncryptedPassword();
+        loadSettings();
+        String username = getUsername();
+        String encryptedPassword = getEncryptedPassword();
 
-		((CheckBox) findViewById(R.id.checkBoxRememberCredentials)).setChecked(username != null);
+        ((CheckBox) findViewById(R.id.checkBoxRememberCredentials)).setChecked(username != null);
 
-		EditText usernameEditText = ((EditText) findViewById(R.id.username));
-		usernameEditText.setText(username);
-		usernameEditText.addTextChangedListener(new TextWatcher() {
-			public void onTextChanged(CharSequence s, int start, int before, int count) {}
-			public void beforeTextChanged(CharSequence s, int start, int count,	int after) {}
-			public void afterTextChanged(Editable s) {
-				((EditText) findViewById(R.id.password)).setText("");
-			}
-		});
-		if (encryptedPassword != null) {
-			((EditText) findViewById(R.id.password)).setText("******");
-		}
+        EditText usernameEditText = ((EditText) findViewById(R.id.username));
+        usernameEditText.setText(username);
+        usernameEditText.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void beforeTextChanged(CharSequence s, int start, int count,    int after) {}
+            public void afterTextChanged(Editable s) {
+                ((EditText) findViewById(R.id.password)).setText("");
+            }
+        });
+        if (encryptedPassword != null) {
+            ((EditText) findViewById(R.id.password)).setText("******");
+        }
 
 
-		Button signupButton = (Button) findViewById(R.id.end_signup);
+        Button signupButton = (Button) findViewById(R.id.end_signup);
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-            	WhatTheDuck.setUsername(((EditText) WhatTheDuck.this.findViewById(R.id.username)).getText().toString());
-            	WhatTheDuck.setPassword(((EditText) WhatTheDuck.this.findViewById(R.id.password)).getText().toString());
+                WhatTheDuck.setUsername(((EditText) WhatTheDuck.this.findViewById(R.id.username)).getText().toString());
+                WhatTheDuck.setPassword(((EditText) WhatTheDuck.this.findViewById(R.id.password)).getText().toString());
                 Intent i = new Intent(wtd, Signup.class);
                 i.putExtra("type", CollectionType.USER.toString());
                 wtd.startActivity(i);
@@ -102,116 +102,116 @@ public class WhatTheDuck extends Activity {
         Button loginButton = (Button) findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-        		new ConnectAndRetrieveList().execute();
+                new ConnectAndRetrieveList().execute();
             }
         });
         
         TextView linkToDM = (TextView) findViewById(R.id.linkToDM);
         linkToDM.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-            	final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(DUCKSMANAGER_URL));
-            	WhatTheDuck.this.startActivity(intent);
+                final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(DUCKSMANAGER_URL));
+                WhatTheDuck.this.startActivity(intent);
             }
         });
     }
 
-	public void info(Context c, int titleId) {
-    	Toast.makeText(c, titleId, Toast.LENGTH_SHORT).show();
+    public void info(Context c, int titleId) {
+        Toast.makeText(c, titleId, Toast.LENGTH_SHORT).show();
     }
     
     public void alert(String message) {
-    	alert(this, message);
+        alert(this, message);
     }
     
     public void alert(Context c, String message) {
-    	AlertDialog.Builder builder = new AlertDialog.Builder(c);
-    	builder.setTitle(getString(R.string.error));
-    	builder.setMessage(message);
-    	builder.create().show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle(getString(R.string.error));
+        builder.setMessage(message);
+        builder.create().show();
     }
     
     public void alert(Context c, int titleId, int messageId, String extraMessage) {
-    	AlertDialog.Builder builder = new AlertDialog.Builder(c);
-    	builder.setTitle(getString(titleId));
-    	builder.setMessage(getString(messageId)+extraMessage);
-    	builder.create().show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle(getString(titleId));
+        builder.setMessage(getString(messageId)+extraMessage);
+        builder.create().show();
     }
     
     public void alert(int titleId, int messageId, String extraMessage) {
-    	alert(this, titleId, messageId, extraMessage);
+        alert(this, titleId, messageId, extraMessage);
     }
     
     public void alert(int titleId, int messageId) {
-    	alert(this, titleId, messageId, "");
+        alert(this, titleId, messageId, "");
     }
 
-	private static void loadSettings() {
-		Properties props=new Properties();
-		InputStream inputStream;
-		try {
-			inputStream = wtd.openFileInput(SETTINGS);
-			props.load(inputStream);
-			setUsername((String)props.get("username"));
-			setEncryptedPassword((String)props.get("password"));
-			setShowWelcomeMessage(props.get("showWelcomeMessage") == null || props.get("showWelcomeMessage").equals("false"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    private static void loadSettings() {
+        Properties props=new Properties();
+        InputStream inputStream;
+        try {
+            inputStream = wtd.openFileInput(SETTINGS);
+            props.load(inputStream);
+            setUsername((String)props.get("username"));
+            setEncryptedPassword((String)props.get("password"));
+            setShowWelcomeMessage(props.get("showWelcomeMessage") == null || props.get("showWelcomeMessage").equals("false"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public static void saveSettings(boolean withCredentials) {
-		Properties props=new Properties();
-		FileOutputStream outputStream;
-		try {
-			outputStream = wtd.openFileOutput(SETTINGS, MODE_PRIVATE);
-			if (withCredentials) {
-				props.put("username", getUsername());
-				props.put("password", getEncryptedPassword());
-			}
-			props.put("showWelcomeMessage", getShowWelcomeMessage().toString());
-			props.store(outputStream, "");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    public static void saveSettings(boolean withCredentials) {
+        Properties props=new Properties();
+        FileOutputStream outputStream;
+        try {
+            outputStream = wtd.openFileOutput(SETTINGS, MODE_PRIVATE);
+            if (withCredentials) {
+                props.put("username", getUsername());
+                props.put("password", getEncryptedPassword());
+            }
+            props.put("showWelcomeMessage", getShowWelcomeMessage().toString());
+            props.store(outputStream, "");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public static String getUsername() {
-		return username;
-	}
+    public static String getUsername() {
+        return username;
+    }
 
-	public static void setUsername(String username) {
-		WhatTheDuck.username = username;
-	}
+    public static void setUsername(String username) {
+        WhatTheDuck.username = username;
+    }
 
-	public static String getPassword() {
-		return password;
-	}
+    public static String getPassword() {
+        return password;
+    }
 
-	public static void setPassword(String password) {
-		WhatTheDuck.password = password;
-		if (password == null) {
-			setEncryptedPassword(null);
-		}
-		else {
-			setEncryptedPassword(wtd.toSHA1(password));
-		}
-	}
+    public static void setPassword(String password) {
+        WhatTheDuck.password = password;
+        if (password == null) {
+            setEncryptedPassword(null);
+        }
+        else {
+            setEncryptedPassword(wtd.toSHA1(password));
+        }
+    }
 
-	public static String getEncryptedPassword() {
-		return encryptedPassword;
-	}
+    public static String getEncryptedPassword() {
+        return encryptedPassword;
+    }
 
-	private static void setEncryptedPassword(String encryptedPassword) {
-		WhatTheDuck.encryptedPassword = encryptedPassword;
-	}
+    private static void setEncryptedPassword(String encryptedPassword) {
+        WhatTheDuck.encryptedPassword = encryptedPassword;
+    }
 
-	public static Boolean getShowWelcomeMessage() {
-		return showWelcomeMessage;
-	}
+    public static Boolean getShowWelcomeMessage() {
+        return showWelcomeMessage;
+    }
 
-	public static void setShowWelcomeMessage(Boolean showWelcomeMessage) {
-		WhatTheDuck.showWelcomeMessage = showWelcomeMessage;
-	}
+    public static void setShowWelcomeMessage(Boolean showWelcomeMessage) {
+        WhatTheDuck.showWelcomeMessage = showWelcomeMessage;
+    }
 
     private static String byteArray2Hex(byte[] hash) {
         Formatter formatter = new Formatter();
@@ -222,8 +222,8 @@ public class WhatTheDuck extends Activity {
         formatter.close();
         return hex;
     }
-	
-	public String retrieveOrFail(String urlSuffix) throws Exception {
+
+    public String retrieveOrFail(String urlSuffix) throws Exception {
         if (!isOnline()) {
             throw new Exception(""+R.string.network_error);
         }
@@ -246,7 +246,7 @@ public class WhatTheDuck extends Activity {
         }
         else
             return response;
-	}
+    }
 
     public void toggleProgressbarLoading(Activity activity, int progressBarId, boolean toggle) {
         ProgressBar progressBar = (ProgressBar) activity.findViewById(progressBarId);
@@ -265,46 +265,46 @@ public class WhatTheDuck extends Activity {
     public void toggleProgressbarLoading(int progressBarId, boolean toggle) {
         toggleProgressbarLoading(WhatTheDuck.wtd, progressBarId, toggle);
     }
-	
-	private boolean isOnline() {
-	    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnected();
     }
-	
-	private String getApplicationVersion() throws NameNotFoundException {
-		PackageManager manager = this.getPackageManager();
-		PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
-		return info.versionName;
-	}
-	
-	private String getPage(String url) {
-		String response="";
-		try {
-			URL userCollectionURL = new URL(url);
-			BufferedReader in = new BufferedReader(new InputStreamReader(userCollectionURL.openStream()));
-			
-			String inputLine;
-			while ((inputLine = in.readLine()) != null)
-			response+=inputLine;
-			in.close();
-		} catch (MalformedURLException e) {
-			this.alert(R.string.error,
-		   			   R.string.error__malformed_url);
-		} catch (IOException e) {
-			this.alert(R.string.network_error,
-					   R.string.network_error__no_connection);
-		}
-		return response;
-	}
-	private String getServerURL() {
-		if (serverURL == null) {
-			serverURL = getPage(DUCKSMANAGER_URL+"/"+DUCKSMANAGER_PAGE_WITH_REMOTE_URL);			
-		}
-		return serverURL;
-	}
-	
-	public String toSHA1(String text) {
+
+    private String getApplicationVersion() throws NameNotFoundException {
+        PackageManager manager = this.getPackageManager();
+        PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+        return info.versionName;
+    }
+
+    private String getPage(String url) {
+        String response="";
+        try {
+            URL userCollectionURL = new URL(url);
+            BufferedReader in = new BufferedReader(new InputStreamReader(userCollectionURL.openStream()));
+
+            String inputLine;
+            while ((inputLine = in.readLine()) != null)
+            response+=inputLine;
+            in.close();
+        } catch (MalformedURLException e) {
+            this.alert(R.string.error,
+                          R.string.error__malformed_url);
+        } catch (IOException e) {
+            this.alert(R.string.network_error,
+                       R.string.network_error__no_connection);
+        }
+        return response;
+    }
+    private String getServerURL() {
+        if (serverURL == null) {
+            serverURL = getPage(DUCKSMANAGER_URL+"/"+DUCKSMANAGER_PAGE_WITH_REMOTE_URL);
+        }
+        return serverURL;
+    }
+
+    public String toSHA1(String text) {
         try {
                 MessageDigest md = MessageDigest.getInstance("SHA-1");
                 md.update(text.getBytes());
@@ -315,22 +315,22 @@ public class WhatTheDuck extends Activity {
                                    R.string.internal_error__crypting_failed);
                 return "";
         }
-	}
+    }
 
-	public static String getSelectedCountry() {
-		return WhatTheDuck.selectedCountry;
-	}
+    public static String getSelectedCountry() {
+        return WhatTheDuck.selectedCountry;
+    }
 
-	public static void setSelectedCountry(String selectedCountry) {
-		WhatTheDuck.selectedCountry = selectedCountry;
-	}
+    public static void setSelectedCountry(String selectedCountry) {
+        WhatTheDuck.selectedCountry = selectedCountry;
+    }
 
-	public static String getSelectedPublication() {
-		return WhatTheDuck.selectedPublication;
-	}
+    public static String getSelectedPublication() {
+        return WhatTheDuck.selectedPublication;
+    }
 
-	public static void setSelectedPublication(String selectedPublication) {
-		WhatTheDuck.selectedPublication = selectedPublication;
-	}
-	
+    public static void setSelectedPublication(String selectedPublication) {
+        WhatTheDuck.selectedPublication = selectedPublication;
+    }
+
 }

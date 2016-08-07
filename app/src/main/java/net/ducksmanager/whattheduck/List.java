@@ -31,103 +31,103 @@ public abstract class List extends ListActivity{
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
-		type = extras != null && extras.getString("type") != null
-					? extras.getString("type")
-					: CollectionType.USER.toString();
+        type = extras != null && extras.getString("type") != null
+                    ? extras.getString("type")
+                    : CollectionType.USER.toString();
 
-		setContentView(R.layout.wtd_list);
+        setContentView(R.layout.wtd_list);
 
-		this.findViewById(R.id.navigationAllCountries).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				goToView(CountryList.class);
-			}
-		});
+        this.findViewById(R.id.navigationAllCountries).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToView(CountryList.class);
+            }
+        });
 
-		this.findViewById(R.id.navigationCountry).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				goToView(PublicationList.class);
-			}
-		});
+        this.findViewById(R.id.navigationCountry).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToView(PublicationList.class);
+            }
+        });
 
-		this.findViewById(R.id.navigationPublication).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				goToView(IssueList.class);
-			}
-		});
+        this.findViewById(R.id.navigationPublication).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToView(IssueList.class);
+            }
+        });
 
-		Switch onlyInCollectionSwitch = (Switch) this.findViewById(R.id.onlyInCollectionSwitch);
-		onlyInCollectionSwitch.setChecked(type.equals(CollectionType.USER.toString()));
+        Switch onlyInCollectionSwitch = (Switch) this.findViewById(R.id.onlyInCollectionSwitch);
+        onlyInCollectionSwitch.setChecked(type.equals(CollectionType.USER.toString()));
 
-		onlyInCollectionSwitch.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Switch onlyInCollectionSwitch = (Switch) view;
-				List.this.goToAlternativeView(
-					onlyInCollectionSwitch.isChecked()
-						? CollectionType.USER.toString()
-						: CollectionType.COA.toString()
-				);
-			}
-		});
+        onlyInCollectionSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            Switch onlyInCollectionSwitch = (Switch) view;
+            List.this.goToAlternativeView(
+                onlyInCollectionSwitch.isChecked()
+                    ? CollectionType.USER.toString()
+                    : CollectionType.COA.toString()
+            );
+            }
+        });
 
-		setTitle(
-				type.equals(CollectionType.USER.toString())
-						? getString(R.string.my_collection)
-						: getString(R.string.referenced_issues)
-		);
+        setTitle(
+            type.equals(CollectionType.USER.toString())
+                    ? getString(R.string.my_collection)
+                    : getString(R.string.referenced_issues)
+        );
     }
 
-	private void goToView(Class<?> cls) {
-		if (!List.this.getClass().equals(cls)) {
-			Intent i = new Intent(WhatTheDuck.wtd, cls);
-			i.putExtra("type", type);
-			startActivity(i);
-		}
-	}
+    private void goToView(Class<?> cls) {
+        if (!List.this.getClass().equals(cls)) {
+            Intent i = new Intent(WhatTheDuck.wtd, cls);
+            i.putExtra("type", type);
+            startActivity(i);
+        }
+    }
 
-	private void goToAlternativeView(String collectionType) {
-		Intent i = new Intent(WhatTheDuck.wtd, this.getClass());
-		i.putExtra("type", collectionType);
-		startActivity(i);
-	}
+    private void goToAlternativeView(String collectionType) {
+        Intent i = new Intent(WhatTheDuck.wtd, this.getClass());
+        i.putExtra("type", collectionType);
+        startActivity(i);
+    }
 
     public abstract void show();
 
     public void show(ArrayList<String> items) {
-    	this.items = items;
+        this.items = items;
 
         if (items.size() == 0) {
             TextView emptyListText = (TextView) this.findViewById(R.id.emptyList);
             emptyListText.setVisibility(TextView.VISIBLE);
         }
 
-    	String[] lv_arr = items.toArray(new String[items.size()]);
+        String[] lv_arr = items.toArray(new String[items.size()]);
         setListAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lv_arr));
 
-    	if (items.size() > 20) {
-    		EditText filterEditText = (EditText) this.findViewById(R.id.filter);
-    		filterEditText.setVisibility(EditText.VISIBLE);
-    		filterEditText.requestFocus();
+        if (items.size() > 20) {
+            EditText filterEditText = (EditText) this.findViewById(R.id.filter);
+            filterEditText.setVisibility(EditText.VISIBLE);
+            filterEditText.requestFocus();
 
-    		filterEditText.addTextChangedListener(new TextWatcher() {
+            filterEditText.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) { }
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                	String typedText = s.toString();
-                	ArrayList<String> filteredItems = new ArrayList<>();
-                	for (String item : List.this.items)
-                		if (item.replace("* ", "").toLowerCase(Locale.FRANCE).contains(typedText.toLowerCase()))
-                			filteredItems.add(item);
+                    String typedText = s.toString();
+                    ArrayList<String> filteredItems = new ArrayList<>();
+                    for (String item : List.this.items)
+                        if (item.replace("* ", "").toLowerCase(Locale.FRANCE).contains(typedText.toLowerCase()))
+                            filteredItems.add(item);
 
-                	String[] lv_arr = filteredItems.toArray(new String[filteredItems.size()]);
+                    String[] lv_arr = filteredItems.toArray(new String[filteredItems.size()]);
                     setListAdapter(new ArrayAdapter<>(List.this, android.R.layout.simple_list_item_1, lv_arr));
 
-    			}
+                }
             });
-    	}
+        }
     }
 
     @Override
@@ -140,61 +140,61 @@ public abstract class List extends ListActivity{
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		Intent i = null;
-		switch(item.getItemId()) {
+        Intent i = null;
+        switch(item.getItemId()) {
             case LOGOUT:
-				WhatTheDuck.userCollection = new Collection();
-				WhatTheDuck.coaCollection = new Collection();
-				WhatTheDuck.setUsername(null);
-				WhatTheDuck.setPassword(null);
-				WhatTheDuck.setPassword(null);
+                WhatTheDuck.userCollection = new Collection();
+                WhatTheDuck.coaCollection = new Collection();
+                WhatTheDuck.setUsername(null);
+                WhatTheDuck.setPassword(null);
+                WhatTheDuck.setPassword(null);
                 i = new Intent(WhatTheDuck.wtd, WhatTheDuck.class);
 
                 break;
         }
-		startActivity(i);
+        startActivity(i);
 
-		return super.onMenuItemSelected(featureId, item);
+        return super.onMenuItemSelected(featureId, item);
     }
 
     protected Collection getCollection() {
-    	return type == null || type.equals(CollectionType.USER.toString())
-			? WhatTheDuck.userCollection
-			: WhatTheDuck.coaCollection;
+        return type == null || type.equals(CollectionType.USER.toString())
+            ? WhatTheDuck.userCollection
+            : WhatTheDuck.coaCollection;
     }
 
-	protected void setNavigationCountry(String countryFullName, String selectedCountry) {
-		View countryNavigationView = this.findViewById(R.id.navigationCountry);
+    protected void setNavigationCountry(String countryFullName, String selectedCountry) {
+        View countryNavigationView = this.findViewById(R.id.navigationCountry);
 
-		String uri = "@drawable/flags_" + selectedCountry;
-		int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+        String uri = "@drawable/flags_" + selectedCountry;
+        int imageResource = getResources().getIdentifier(uri, null, getPackageName());
 
-		if (imageResource == 0) {
-			imageResource = R.drawable.flags_unknown;
-		}
+        if (imageResource == 0) {
+            imageResource = R.drawable.flags_unknown;
+        }
 
-		ImageView currentCountryFlag = (ImageView) countryNavigationView.findViewById(R.id.selectedBadgeImage);
-		currentCountryFlag.setVisibility(View.VISIBLE);
-		currentCountryFlag.setImageResource(imageResource);
+        ImageView currentCountryFlag = (ImageView) countryNavigationView.findViewById(R.id.selectedBadgeImage);
+        currentCountryFlag.setVisibility(View.VISIBLE);
+        currentCountryFlag.setImageResource(imageResource);
 
-		TextView currentCountryText = (TextView) this.findViewById(R.id.navigationCountry).findViewById(R.id.selected);
-		currentCountryText.setText(countryFullName);
-	}
+        TextView currentCountryText = (TextView) this.findViewById(R.id.navigationCountry).findViewById(R.id.selected);
+        currentCountryText.setText(countryFullName);
+    }
 
-	protected void setNavigationPublication(String publicationFullName, String selectedPublication) {
-		View publicationNavigationView = this.findViewById(R.id.navigationPublication);
-		TextView currentPublicationBadgeText = (TextView) publicationNavigationView.findViewById(R.id.selectedBadge);
+    protected void setNavigationPublication(String publicationFullName, String selectedPublication) {
+        View publicationNavigationView = this.findViewById(R.id.navigationPublication);
+        TextView currentPublicationBadgeText = (TextView) publicationNavigationView.findViewById(R.id.selectedBadge);
 
-		if (selectedPublication == null) {
-			publicationNavigationView.setVisibility(View.INVISIBLE);
-		}
-		else {
-			publicationNavigationView.setVisibility(View.VISIBLE);
+        if (selectedPublication == null) {
+            publicationNavigationView.setVisibility(View.INVISIBLE);
+        }
+        else {
+            publicationNavigationView.setVisibility(View.VISIBLE);
 
-			currentPublicationBadgeText.setText(selectedPublication.split("/")[1]);
+            currentPublicationBadgeText.setText(selectedPublication.split("/")[1]);
 
-			TextView currentPublicationText = (TextView) publicationNavigationView.findViewById(R.id.selected);
-			currentPublicationText.setText(publicationFullName);
-		}
-	}
+            TextView currentPublicationText = (TextView) publicationNavigationView.findViewById(R.id.selected);
+            currentPublicationText.setText(publicationFullName);
+        }
+    }
 }

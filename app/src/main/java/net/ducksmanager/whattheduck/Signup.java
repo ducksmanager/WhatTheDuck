@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class Signup extends Activity {
-	
+
 
     /** Called when the activity is first created. */
     @Override
@@ -21,17 +21,17 @@ public class Signup extends Activity {
         
         setTitle(R.string.app_name);
 
-		((EditText) Signup.this.findViewById(R.id.username_signup)).setText(WhatTheDuck.getUsername());
-		((EditText) Signup.this.findViewById(R.id.password_signup)).setText(WhatTheDuck.getPassword());
+        ((EditText) Signup.this.findViewById(R.id.username_signup)).setText(WhatTheDuck.getUsername());
+        ((EditText) Signup.this.findViewById(R.id.password_signup)).setText(WhatTheDuck.getPassword());
 
         Button endSignupButton = (Button) findViewById(R.id.end_signup);
         endSignupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-            	WhatTheDuck.setUsername(((EditText) Signup.this.findViewById(R.id.username_signup)).getText().toString());
-            	WhatTheDuck.setPassword(((EditText) Signup.this.findViewById(R.id.password_signup)).getText().toString());
-            	
-            	String password2 = WhatTheDuck.wtd.toSHA1(((EditText) Signup.this.findViewById(R.id.password_confirmation)).getText().toString());
-            	String email = ((EditText) Signup.this.findViewById(R.id.email_address)).getText().toString();
+                WhatTheDuck.setUsername(((EditText) Signup.this.findViewById(R.id.username_signup)).getText().toString());
+                WhatTheDuck.setPassword(((EditText) Signup.this.findViewById(R.id.password_signup)).getText().toString());
+
+                String password2 = WhatTheDuck.wtd.toSHA1(((EditText) Signup.this.findViewById(R.id.password_confirmation)).getText().toString());
+                String email = ((EditText) Signup.this.findViewById(R.id.email_address)).getText().toString();
 
                 new ConnectAndRetrieveList("&action=signup&mdp_user2="+password2+"&email="+email).execute();
             }

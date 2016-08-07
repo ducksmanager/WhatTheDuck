@@ -34,8 +34,8 @@ public class CountryListing extends CoaListing {
     }
 
     private static void addCountry(String shortName, String fullName) {
-		countryNames.put(shortName, fullName);
-	}
+        countryNames.put(shortName, fullName);
+    }
 
     @Override
     protected void onPostExecute(String response) {

@@ -34,15 +34,15 @@ public class PublicationList extends List {
 
     @Override
     public void onBackPressed() {
-    	Intent i = new Intent(WhatTheDuck.wtd, CountryList.class);
+        Intent i = new Intent(WhatTheDuck.wtd, CountryList.class);
         i.putExtra("type", type);
         startActivity(i);
-	}
+    }
         
     public void show() {
-    	if (WhatTheDuck.getSelectedCountry() != null) {
-	    	super.show(getCollection().getPublicationList(WhatTheDuck.getSelectedCountry(), this.type));
-    	}
+        if (WhatTheDuck.getSelectedCountry() != null) {
+            super.show(getCollection().getPublicationList(WhatTheDuck.getSelectedCountry(), this.type));
+        }
     }
 
     @Override

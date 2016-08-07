@@ -21,26 +21,26 @@ public class PublicationListing extends CoaListing {
     }
 
     public static String getPublicationFullName (String shortCountryName, String shortPublicationName) {
-		if (publicationNames.get(shortCountryName) == null) {
-			System.out.println("Can't get publications of country "+shortCountryName);
-		}
-		return publicationNames.get(shortCountryName).get(shortPublicationName);
-	}
+        if (publicationNames.get(shortCountryName) == null) {
+            System.out.println("Can't get publications of country "+shortCountryName);
+        }
+        return publicationNames.get(shortCountryName).get(shortPublicationName);
+    }
 
     public static String getPublicationShortName (String shortCountryName, String fullPublicationName) {
-		HashMap<String,String> countryPublications = publicationNames.get(shortCountryName);
-		for (String shortPublicationName : countryPublications.keySet()) {
-			if (countryPublications.get(shortPublicationName).equals(fullPublicationName))
-				return shortPublicationName;
-		}
-		return null;
-	}
+        HashMap<String,String> countryPublications = publicationNames.get(shortCountryName);
+        for (String shortPublicationName : countryPublications.keySet()) {
+            if (countryPublications.get(shortPublicationName).equals(fullPublicationName))
+                return shortPublicationName;
+        }
+        return null;
+    }
 
     private static void addPublication(String countryShortName, String shortName, String fullName) {
-		if (publicationNames.get(countryShortName) == null)
-			publicationNames.put(countryShortName, new HashMap<String, String>());
-		publicationNames.get(countryShortName).put(shortName, fullName);
-	}
+        if (publicationNames.get(countryShortName) == null)
+            publicationNames.put(countryShortName, new HashMap<String, String>());
+        publicationNames.get(countryShortName).put(shortName, fullName);
+    }
 
     public static boolean hasFullList(String country) {
         return fullListCountries.contains(country);
