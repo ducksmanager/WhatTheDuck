@@ -13,10 +13,6 @@ public class CountryListing extends CoaListing {
     private static HashMap<String,String> countryNames= new HashMap<>();
     public static boolean hasFullList = false;
 
-    public static boolean hasFullList() {
-        return hasFullList;
-    }
-
     public CountryListing(List list) {
         super(list, ListType.COUNTRY_LIST, null, null);
     }

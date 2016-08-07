@@ -2,15 +2,18 @@ package net.ducksmanager.inducks.coa;
 
 import net.ducksmanager.whattheduck.List;
 import net.ducksmanager.whattheduck.WhatTheDuck;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 
 public class PublicationListing extends CoaListing {
 
     private static HashMap<String,HashMap<String,String>> publicationNames= new HashMap<>();
+    private static HashSet<String> fullListCountries = new HashSet<>();
 
     public PublicationListing(List list, String countryShortName) {
         super(list, ListType.PUBLICATION_LIST, countryShortName, null);
@@ -33,23 +36,22 @@ public class PublicationListing extends CoaListing {
 		return null;
 	}
 
-    private static void resetPublications() {
-		publicationNames = new HashMap<>();
-	}
-
     private static void addPublication(String countryShortName, String shortName, String fullName) {
 		if (publicationNames.get(countryShortName) == null)
 			publicationNames.put(countryShortName, new HashMap<String, String>());
 		publicationNames.get(countryShortName).put(shortName, fullName);
 	}
 
+    public static boolean hasFullList(String country) {
+        return fullListCountries.contains(country);
+    }
+
     @Override
     protected void onPostExecute(String response) {
         super.onPostExecute(response);
         if (response != null) {
             try {
-                resetPublications();
-                addPublications(new JSONObject(response));
+                addFullPublications(countryShortName, new JSONObject(response));
             }
             catch (JSONException e) {
                 handleJSONException(e);
@@ -57,6 +59,11 @@ public class PublicationListing extends CoaListing {
         }
 
         displayedList.show();
+    }
+
+    private static void addFullPublications(String countryShortName, JSONObject object) throws JSONException {
+        addPublications(object);
+        fullListCountries.add(countryShortName);
     }
 
     @SuppressWarnings("unchecked")

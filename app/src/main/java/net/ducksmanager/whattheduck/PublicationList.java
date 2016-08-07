@@ -21,7 +21,7 @@ public class PublicationList extends List {
         final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
 
         if (type.equals(CollectionType.USER.toString())
-        || (type.equals(CollectionType.COA.toString()) && WhatTheDuck.coaCollection.hasCountry(selectedCountry))) {
+        || (type.equals(CollectionType.COA.toString()) && PublicationListing.hasFullList(selectedCountry))) {
             this.show();
         }
         else {

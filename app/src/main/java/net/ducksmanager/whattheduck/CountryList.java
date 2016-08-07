@@ -26,12 +26,13 @@ public class CountryList extends List {
                 }
             });
             WhatTheDuck.setShowWelcomeMessage(false);
+            WhatTheDuck.saveSettings(false);
             builder.create().show();
         }
         
         if (
             (type.equals(CollectionType.USER.toString()))
-         || (type.equals(CollectionType.COA.toString()) && CountryListing.hasFullList())) {
+         || (type.equals(CollectionType.COA.toString()) && CountryListing.hasFullList)) {
         	show();
         }
         else {

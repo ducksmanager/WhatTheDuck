@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.IssueListing;
@@ -35,7 +36,7 @@ public class IssueList extends List {
 		final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
 
 		if (type.equals(CollectionType.USER.toString())
-		|| (type.equals(CollectionType.COA.toString()) && WhatTheDuck.coaCollection.hasPublication(selectedCountry, selectedPublication))) {
+		|| (type.equals(CollectionType.COA.toString()) && IssueListing.hasFullList(selectedPublication))) {
 	        this.show();
         }
         else {
@@ -47,16 +48,22 @@ public class IssueList extends List {
     }
 
 	public void show() {
-        this.issues = getCollection().getIssueList(
+        issues = getCollection().getIssueList(
 			WhatTheDuck.getSelectedCountry(),
 			WhatTheDuck.getSelectedPublication(),
             this.type);
 
-        this.issueAdapter = new IssueAdapter(this, this.issues);
+        if (issues.size() == 0) {
+            TextView emptyListText = (TextView) this.findViewById(R.id.emptyList);
+            emptyListText.setVisibility(TextView.VISIBLE);
+        }
+
+        this.issueAdapter = new IssueAdapter(this, issues);
         setListAdapter(this.issueAdapter);
 
 		EditText filterEditText = (EditText) this.findViewById(R.id.filter);
     	if (issues.size() > 20) {
+    		filterEditText.setVisibility(EditText.VISIBLE);
     		filterEditText.requestFocus();
     		
     		filterEditText.addTextChangedListener(new TextWatcher() {
