@@ -1,3 +1,7 @@
+Version 1.3.1
+
+    Fix wrong issue condition images shown when scrolling in the issue list
+    
 Version 1.3
     
     New countries <-> publications <-> issues navigation menu
