@@ -21,6 +21,7 @@
         <activity android:name="net.ducksmanager.whattheduck.PublicationList" />
         <activity android:name="net.ducksmanager.whattheduck.IssueList" />
         <activity android:name="net.ducksmanager.whattheduck.Signup" />
+        <activity android:name="net.ducksmanager.util.CoverFlowActivity" />
     </application>
 
 </manifest>

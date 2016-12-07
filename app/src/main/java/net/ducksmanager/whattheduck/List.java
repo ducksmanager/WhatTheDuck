@@ -11,10 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import net.ducksmanager.util.CoverFlowActivity;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.util.ArrayList;
@@ -70,6 +72,17 @@ public abstract class List extends ListActivity{
                     ? CollectionType.USER.toString()
                     : CollectionType.COA.toString()
             );
+            }
+        });
+
+        ImageButton addToCollection = (ImageButton) this.findViewById(R.id.addToCollectionButton);
+        addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
+
+        addToCollection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(List.this, CoverFlowActivity.class);
+                List.this.startActivity(i);
             }
         });
 

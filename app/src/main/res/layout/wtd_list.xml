@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:orientation="vertical" >
+    android:orientation="vertical">
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
@@ -74,5 +74,19 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
+
+    <ImageButton
+        android:background="@drawable/roundedbutton"
+        android:id="@+id/addToCollectionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:contentDescription="Plus"
+        android:src="@android:drawable/ic_input_add"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_below="@+id/android:list"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
