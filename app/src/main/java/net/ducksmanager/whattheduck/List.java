@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import net.ducksmanager.util.CoverFlowActivity;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.util.ArrayList;
@@ -81,8 +80,7 @@ public abstract class List extends ListActivity{
         addToCollection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(List.this, CoverFlowActivity.class);
-                List.this.startActivity(i);
+            new CoverSearch(List.this).execute();
             }
         });
 

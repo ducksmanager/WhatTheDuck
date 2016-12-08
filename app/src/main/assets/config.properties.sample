@@ -1,1 +1,2 @@
 security_password=mypassword
+api_endpoint_url=http://myserver/dm-server

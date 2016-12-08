@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 public class RetrieveTask extends AsyncTask<Object, Object, String> {
 
+    private boolean legacyServer = true;
     protected String urlSuffix;
     protected static Integer progressBarId;
 
@@ -15,10 +16,21 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         RetrieveTask.progressBarId = progressBarId;
     }
 
+    public RetrieveTask(String urlSuffix, Integer progressBarId, boolean legacyServer) {
+        this.urlSuffix = urlSuffix;
+        RetrieveTask.progressBarId = progressBarId;
+        this.legacyServer = legacyServer;
+    }
+
     @Override
     protected String doInBackground(Object[] objects) {
         try {
-            return WhatTheDuck.wtd.retrieveOrFail(this.urlSuffix);
+            if (legacyServer) {
+                return WhatTheDuck.wtd.retrieveOrFail(this.urlSuffix);
+            }
+            else {
+                return WhatTheDuck.wtd.retrieveOrFailDmServer(this.urlSuffix);
+            }
 
         } catch (Exception e) {
             this.thrownException = e;

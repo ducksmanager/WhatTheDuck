@@ -23,8 +23,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.ducksmanager.util.MultipartUploadUtility;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,8 +46,9 @@ public class WhatTheDuck extends Activity {
     private static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
 
     public static final String CONFIG = "config.properties";
+    public static final String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
+    public static final String CONFIG_KEY_API_ENDPOINT_URL = "api_endpoint_url";
     public static Properties config = null;
-    public static String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
 
     public static final String USER_SETTINGS = "settings.properties";
 
@@ -265,6 +268,23 @@ public class WhatTheDuck extends Activity {
         String hex = formatter.toString();
         formatter.close();
         return hex;
+    }
+
+    public String retrieveOrFailDmServer(String urlSuffix) throws Exception {
+        if (!isOnline()) {
+            throw new Exception(""+R.string.network_error);
+        }
+
+        if (getEncryptedPassword() == null) {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            md.update(getPassword().getBytes());
+            setEncryptedPassword(byteArray2Hex(md.digest()));
+        }
+
+        MultipartUploadUtility multipart = new MultipartUploadUtility(config.getProperty(CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix, "UTF-8");
+        multipart.addFilePart("wtd.jpg", new BufferedInputStream(getResources().openRawResource(R.mipmap.wtd)));
+
+        return multipart.finish();
     }
 
     public String retrieveOrFail(String urlSuffix) throws Exception {

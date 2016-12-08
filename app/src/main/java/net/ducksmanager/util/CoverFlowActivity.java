@@ -15,6 +15,7 @@ import net.ducksmanager.whattheduck.Issue;
 import net.ducksmanager.whattheduck.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
 
@@ -31,9 +32,12 @@ public class CoverFlowActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coverflow);
 
-        mData.add(new Issue("1", Issue.NO_CONDITION));
-        mData.add(new Issue("2", Issue.NO_CONDITION));
-        mData.add(new Issue("3", Issue.NO_CONDITION));
+        Bundle extras = getIntent().getExtras();
+        List<String> issuesList = extras.getStringArrayList("issues");
+
+        for (String issueNumber : issuesList) {
+            mData.add(new Issue(issueNumber, Issue.NO_CONDITION));
+        }
 
         mTitle = (TextSwitcher) findViewById(R.id.title);
         mTitle.setFactory(new ViewSwitcher.ViewFactory() {
