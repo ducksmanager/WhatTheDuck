@@ -47,7 +47,7 @@ public class WhatTheDuck extends Activity {
     public static Properties config = null;
     public static String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
 
-    public static final String USER_SETTINGS = "config.properties";
+    public static final String USER_SETTINGS = "settings.properties";
 
     private static String serverURL;
 
