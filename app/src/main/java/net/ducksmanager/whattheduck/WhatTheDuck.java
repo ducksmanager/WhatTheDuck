@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -22,7 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.ducksmanager.security.Security;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.io.BufferedReader;
@@ -42,8 +42,12 @@ public class WhatTheDuck extends Activity {
     private static final String SERVER_PAGE="WhatTheDuck.php";
     private static final String DUCKSMANAGER_URL="http://www.ducksmanager.net";
     private static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
-    
-    public static final String SETTINGS = "settings.properties";
+
+    public static final String CONFIG = "config.properties";
+    public static Properties config = null;
+    public static String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
+
+    public static final String USER_SETTINGS = "config.properties";
 
     private static String serverURL;
 
@@ -68,7 +72,9 @@ public class WhatTheDuck extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.whattheduck);
 
-        loadSettings();
+        loadConfig(getAssets());
+
+        loadUserSettings();
         String username = getUsername();
         String encryptedPassword = getEncryptedPassword();
 
@@ -145,11 +151,11 @@ public class WhatTheDuck extends Activity {
         alert(this, titleId, messageId, "");
     }
 
-    private static void loadSettings() {
+    private static void loadUserSettings() {
         Properties props=new Properties();
         InputStream inputStream;
         try {
-            inputStream = wtd.openFileInput(SETTINGS);
+            inputStream = wtd.openFileInput(USER_SETTINGS);
             props.load(inputStream);
             setUsername((String)props.get("username"));
             setEncryptedPassword((String)props.get("password"));
@@ -160,12 +166,33 @@ public class WhatTheDuck extends Activity {
         }
     }
 
+    private static void loadConfig(AssetManager assets) {
+        InputStream reader = null;
+        try {
+            reader = assets.open(CONFIG);
+            config = new Properties();
+            config.load(reader);
+        } catch (IOException e) {
+            System.err.println("Config file not found, aborting");
+            System.exit(-1);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    System.err.println("Error while reading config file, aborting");
+                    System.exit(-1);
+                }
+            }
+        }
+    }
+
     public static void saveSettings(boolean withCredentials) {
         Properties props=new Properties();
 
         InputStream inputStream;
         try {
-            inputStream = wtd.openFileInput(SETTINGS);
+            inputStream = wtd.openFileInput(USER_SETTINGS);
             props.load(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
@@ -184,7 +211,7 @@ public class WhatTheDuck extends Activity {
 
         FileOutputStream outputStream;
         try {
-            outputStream = wtd.openFileOutput(SETTINGS, MODE_PRIVATE);
+            outputStream = wtd.openFileOutput(USER_SETTINGS, MODE_PRIVATE);
             props.store(outputStream, "");
             outputStream.close();
         } catch (IOException e) {
@@ -253,7 +280,7 @@ public class WhatTheDuck extends Activity {
         String response = getPage(getServerURL()+"/"+SERVER_PAGE
                                       + "?pseudo_user="+URLEncoder.encode(username, "UTF-8")
                                       + "&mdp_user="+encryptedPassword
-                                      + "&mdp="+Security.SECURITY_PASSWORD
+                                      + "&mdp="+ config.getProperty(CONFIG_KEY_SECURITY_PASSWORD)
                                       + "&version="+getApplicationVersion()
                                       + urlSuffix);
 
