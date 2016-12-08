@@ -1,4 +1,3 @@
-**/Security.java
 *.iml
 .gradle
 /.idea/
@@ -6,3 +5,4 @@
 /app/libs/
 /build/
 /local.properties
+/app/src/main/assets/config.properties
