@@ -9,21 +9,21 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import net.ducksmanager.whattheduck.Issue;
+import net.ducksmanager.whattheduck.IssueComplete;
 import net.ducksmanager.whattheduck.R;
 
 import java.util.ArrayList;
 
 public class CoverFlowAdapter extends BaseAdapter {
 
-    private ArrayList<Issue> mData = new ArrayList<>(0);
+    private ArrayList<IssueComplete> mData = new ArrayList<>(0);
     private Context mContext;
 
     public CoverFlowAdapter(Context context) {
         mContext = context;
     }
 
-    public void setData(ArrayList<Issue> data) {
+    public void setData(ArrayList<IssueComplete> data) {
         mData = data;
     }
 
@@ -62,7 +62,7 @@ public class CoverFlowAdapter extends BaseAdapter {
 
 //        holder.image.setImageResource(mData.get(position).imageResId);
         holder.image.setImageResource(R.drawable.flags_ae);
-        holder.text.setText(mData.get(position).getIssueNumber());
+        holder.text.setText(mData.get(position).getIssue().getIssueNumber());
 
         return rowView;
     }

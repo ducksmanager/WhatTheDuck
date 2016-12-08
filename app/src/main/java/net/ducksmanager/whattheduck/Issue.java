@@ -1,8 +1,9 @@
 package net.ducksmanager.whattheduck;
 
 
+import java.io.Serializable;
 
-public class Issue {
+public class Issue implements Serializable {
     public static final String BAD_CONDITION="mauvais";
     public static final String NOTSOGOOD_CONDITION="moyen";
     public static final String GOOD_CONDITION="bon";

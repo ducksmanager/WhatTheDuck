@@ -7,7 +7,6 @@ import net.ducksmanager.util.CoverFlowActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public class CoverSearch extends RetrieveTask {
@@ -26,23 +25,21 @@ public class CoverSearch extends RetrieveTask {
             return;
         }
 
-        ArrayList<String> issues = new ArrayList<>();
-
-
-        JSONObject object = null;
+        JSONObject object;
         try {
             object = new JSONObject(response);
+            Collection resultCollection = new Collection();
             Iterator<String> issueIterator = object.keys();
             while (issueIterator.hasNext()) {
                 String issueNumber = issueIterator.next();
-                issues.add(issueNumber);
+                resultCollection.addIssue("fr", "PM", new Issue(issueNumber, Issue.IssueCondition.NO_CONDITION));
             }
+            Intent i = new Intent(cls, CoverFlowActivity.class);
+            i.putExtra("resultCollection", resultCollection);
+            cls.startActivity(i);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Intent i = new Intent(cls, CoverFlowActivity.class);
-        i.putExtra("issues", issues);
-        cls.startActivity(i);
     }
 }

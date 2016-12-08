@@ -5,13 +5,14 @@ import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.whattheduck.Issue.IssueCondition;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Set;
 
-public class Collection {
+public class Collection implements Serializable {
     private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<>();
 
     enum CollectionType {COA,USER}
@@ -122,6 +123,18 @@ public class Collection {
         }
     }
 
+    public ArrayList<IssueComplete> getAllIssues() {
+        ArrayList<IssueComplete> completeIssues = new ArrayList<>();
+
+        for (String country : issues.keySet()) {
+            for (String publication: issues.get(country).keySet()) {
+                for (Issue issue : issues.get(country).get(publication)) {
+                    completeIssues.add(new IssueComplete(country, publication, issue));
+                }
+            }
+        }
+        return completeIssues;
+    }
     
     private static class NamesComparator implements Comparator<String> {
 

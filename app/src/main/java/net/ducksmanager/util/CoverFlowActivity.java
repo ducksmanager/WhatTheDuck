@@ -11,11 +11,11 @@ import android.widget.TextSwitcher;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import net.ducksmanager.whattheduck.Issue;
+import net.ducksmanager.whattheduck.Collection;
+import net.ducksmanager.whattheduck.IssueComplete;
 import net.ducksmanager.whattheduck.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
 
@@ -24,7 +24,7 @@ public class CoverFlowActivity extends Activity {
 
     private FeatureCoverFlow mCoverFlow;
     private CoverFlowAdapter mAdapter;
-    private ArrayList<Issue> mData = new ArrayList<>(0);
+    private ArrayList<IssueComplete> mData = new ArrayList<>(0);
     private TextSwitcher mTitle;
 
     @Override
@@ -33,11 +33,9 @@ public class CoverFlowActivity extends Activity {
         setContentView(R.layout.activity_coverflow);
 
         Bundle extras = getIntent().getExtras();
-        List<String> issuesList = extras.getStringArrayList("issues");
+        Collection resultCollection = (Collection) extras.get("resultCollection");
 
-        for (String issueNumber : issuesList) {
-            mData.add(new Issue(issueNumber, Issue.NO_CONDITION));
-        }
+        mData = resultCollection.getAllIssues();
 
         mTitle = (TextSwitcher) findViewById(R.id.title);
         mTitle.setFactory(new ViewSwitcher.ViewFactory() {
@@ -57,7 +55,7 @@ public class CoverFlowActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(CoverFlowActivity.this,
-                        mData.get(position % mData.size()).getIssueNumber(),
+                        mData.get(position % mData.size()).getIssue().getIssueNumber(),
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -65,7 +63,7 @@ public class CoverFlowActivity extends Activity {
         mCoverFlow.setOnScrollPositionListener(new FeatureCoverFlow.OnScrollPositionListener() {
             @Override
             public void onScrolledToPosition(int position) {
-                mTitle.setText(mData.get(position).getIssueNumber());
+                mTitle.setText(mData.get(position).getIssue().getIssueNumber());
             }
 
             @Override
