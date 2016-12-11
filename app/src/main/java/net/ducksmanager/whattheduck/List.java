@@ -80,7 +80,7 @@ public abstract class List extends ListActivity{
         addToCollection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            new CoverSearch(List.this).execute();
+                new CoverSearch(List.this, R.mipmap.wtd).execute();
             }
         });
 

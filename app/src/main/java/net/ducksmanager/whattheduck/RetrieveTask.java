@@ -3,6 +3,8 @@ package net.ducksmanager.whattheduck;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 
+import java.util.HashMap;
+
 public class RetrieveTask extends AsyncTask<Object, Object, String> {
 
     private boolean legacyServer = true;
@@ -10,16 +12,18 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
     protected static Integer progressBarId;
 
     private Exception thrownException;
+    private HashMap<String, Integer> files = new HashMap<>();
 
     public RetrieveTask(String urlSuffix, Integer progressBarId) {
         this.urlSuffix = urlSuffix;
         RetrieveTask.progressBarId = progressBarId;
     }
 
-    public RetrieveTask(String urlSuffix, Integer progressBarId, boolean legacyServer) {
+    public RetrieveTask(String urlSuffix, Integer progressBarId, boolean legacyServer, HashMap<String, Integer> files) {
         this.urlSuffix = urlSuffix;
         RetrieveTask.progressBarId = progressBarId;
         this.legacyServer = legacyServer;
+        this.files = files;
     }
 
     @Override
@@ -29,7 +33,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
                 return WhatTheDuck.wtd.retrieveOrFail(this.urlSuffix);
             }
             else {
-                return WhatTheDuck.wtd.retrieveOrFailDmServer(this.urlSuffix);
+                return WhatTheDuck.wtd.retrieveOrFailDmServer(this.urlSuffix, this.files);
             }
 
         } catch (Exception e) {

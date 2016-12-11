@@ -7,15 +7,22 @@ import net.ducksmanager.util.CoverFlowActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class CoverSearch extends RetrieveTask {
 
     private List cls;
 
-    public CoverSearch(List cls) {
-        super("/cover-id/search", R.id.progressBarConnection, false);
+    public CoverSearch(List cls, Integer imageResource) {
+        super("/cover-id/search", R.id.progressBarConnection, false, buildFileList(imageResource));
         this.cls = cls;
+    }
+
+    private static HashMap<String, Integer> buildFileList(Integer imageResource) {
+        HashMap<String, Integer> files = new HashMap<>();
+        files.put("wtd_jpg", imageResource);
+        return files;
     }
 
     @Override

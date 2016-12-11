@@ -2,28 +2,35 @@ package net.ducksmanager.util;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import net.ducksmanager.whattheduck.IssueComplete;
 import net.ducksmanager.whattheduck.R;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
-public class CoverFlowAdapter extends BaseAdapter {
+class CoverFlowAdapter extends BaseAdapter {
 
     private ArrayList<IssueComplete> mData = new ArrayList<>(0);
     private Context mContext;
 
-    public CoverFlowAdapter(Context context) {
+    CoverFlowAdapter(Context context) {
         mContext = context;
     }
 
-    public void setData(ArrayList<IssueComplete> data) {
+    void setData(ArrayList<IssueComplete> data) {
         mData = data;
     }
 
@@ -53,24 +60,68 @@ public class CoverFlowAdapter extends BaseAdapter {
 
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.text = (TextView) rowView.findViewById(R.id.label);
-            viewHolder.image = (ImageView) rowView
-                    .findViewById(R.id.image);
+            viewHolder.image = (ImageView) rowView.findViewById(R.id.image);
+            viewHolder.image.setTag("http://www.google.com/logos/2013/estonia_independence_day_2013-1057005.3-hp.jpg");
+            viewHolder.progressBar = (ProgressBar) rowView.findViewById(R.id.progressBarImageDownload);
+
+            DownloadImagesTask task = new DownloadImagesTask(viewHolder.progressBar);
+            task.execute(viewHolder.image);
+
             rowView.setTag(viewHolder);
         }
 
         ViewHolder holder = (ViewHolder) rowView.getTag();
 
-//        holder.image.setImageResource(mData.get(position).imageResId);
-        holder.image.setImageResource(R.drawable.flags_ae);
         holder.text.setText(mData.get(position).getIssue().getIssueNumber());
 
         return rowView;
     }
 
 
-    static class ViewHolder {
-        public TextView text;
-        public ImageView image;
+    private static class ViewHolder {
+        TextView text;
+        ImageView image;
+        ProgressBar progressBar;
+    }
+
+    private class DownloadImagesTask extends AsyncTask<ImageView, Void, Bitmap> {
+
+        ProgressBar progressBar = null;
+        ImageView imageView = null;
+
+        DownloadImagesTask(ProgressBar progressBar) {
+            this.progressBar = progressBar;
+        }
+
+        @Override
+        protected Bitmap doInBackground(ImageView... imageViews) {
+            this.imageView = imageViews[0];
+            return downloadImage((String)imageView.getTag());
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            imageView.setVisibility(View.VISIBLE);
+            imageView.setImageBitmap(result);
+            progressBar.setVisibility(View.GONE);
+        }
+
+        private Bitmap downloadImage(String url) {
+
+            Bitmap bmp;
+            try{
+                URL ulrn = new URL(url);
+                HttpURLConnection con = (HttpURLConnection)ulrn.openConnection();
+                InputStream is = con.getInputStream();
+                bmp = BitmapFactory.decodeStream(is);
+                if (null != bmp)
+                    return bmp;
+
+            } catch(Exception ignored){
+                // TODO show default cover
+            }
+            return null;
+        }
     }
 }
 

@@ -38,6 +38,7 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class WhatTheDuck extends Activity {
@@ -270,7 +271,7 @@ public class WhatTheDuck extends Activity {
         return hex;
     }
 
-    public String retrieveOrFailDmServer(String urlSuffix) throws Exception {
+    public String retrieveOrFailDmServer(String urlSuffix, HashMap<String, Integer> files) throws Exception {
         if (!isOnline()) {
             throw new Exception(""+R.string.network_error);
         }
@@ -282,7 +283,9 @@ public class WhatTheDuck extends Activity {
         }
 
         MultipartUploadUtility multipart = new MultipartUploadUtility(config.getProperty(CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix, "UTF-8");
-        multipart.addFilePart("wtd.jpg", new BufferedInputStream(getResources().openRawResource(R.mipmap.wtd)));
+        for (String fileName : files.keySet()) {
+            multipart.addFilePart(fileName, new BufferedInputStream(getResources().openRawResource(files.get(fileName))));
+        }
 
         return multipart.finish();
     }
