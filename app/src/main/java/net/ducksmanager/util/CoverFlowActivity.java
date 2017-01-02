@@ -11,8 +11,7 @@ import android.widget.TextSwitcher;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import net.ducksmanager.whattheduck.Collection;
-import net.ducksmanager.whattheduck.IssueComplete;
+import net.ducksmanager.whattheduck.IssueWithFullUrl;
 import net.ducksmanager.whattheduck.R;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class CoverFlowActivity extends Activity {
 
     private FeatureCoverFlow mCoverFlow;
     private CoverFlowAdapter mAdapter;
-    private ArrayList<IssueComplete> mData = new ArrayList<>(0);
+    private ArrayList<IssueWithFullUrl> mData = new ArrayList<>(0);
     private TextSwitcher mTitle;
 
     @Override
@@ -33,9 +32,7 @@ public class CoverFlowActivity extends Activity {
         setContentView(R.layout.activity_coverflow);
 
         Bundle extras = getIntent().getExtras();
-        Collection resultCollection = (Collection) extras.get("resultCollection");
-
-        mData = resultCollection.getAllIssues();
+        mData = (ArrayList<IssueWithFullUrl>) extras.get("resultCollection");
 
         mTitle = (TextSwitcher) findViewById(R.id.title);
         mTitle.setFactory(new ViewSwitcher.ViewFactory() {

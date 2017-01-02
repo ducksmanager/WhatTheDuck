@@ -11,7 +11,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
     protected String urlSuffix;
     protected static Integer progressBarId;
 
-    private Exception thrownException;
+    protected Exception thrownException;
     private HashMap<String, Integer> files = new HashMap<>();
 
     public RetrieveTask(String urlSuffix, Integer progressBarId) {

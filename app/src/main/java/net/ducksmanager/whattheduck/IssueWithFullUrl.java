@@ -1,14 +1,18 @@
 package net.ducksmanager.whattheduck;
 
-public class IssueComplete {
+import java.io.Serializable;
+
+public class IssueWithFullUrl implements Serializable {
     private String countryCode;
     private String publicationCode;
     private Issue issue;
+    private String fullUrl;
 
-    public IssueComplete(String countryCode, String publicationCode, Issue issue) {
+    public IssueWithFullUrl(String countryCode, String publicationCode, Issue issue, String fullUrl) {
         this.countryCode = countryCode;
         this.publicationCode = publicationCode;
         this.issue = issue;
+        this.fullUrl = fullUrl;
     }
 
     public String getCountryCode() {
@@ -33,5 +37,13 @@ public class IssueComplete {
 
     public void setIssue(Issue issue) {
         this.issue = issue;
+    }
+
+    public String getFullUrl() {
+        return fullUrl;
+    }
+
+    public void setFullUrl(String fullUrl) {
+        this.fullUrl = fullUrl;
     }
 }

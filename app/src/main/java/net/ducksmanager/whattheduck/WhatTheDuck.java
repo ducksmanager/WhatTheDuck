@@ -26,7 +26,6 @@ import android.widget.Toast;
 import net.ducksmanager.util.MultipartUploadUtility;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -284,7 +283,7 @@ public class WhatTheDuck extends Activity {
 
         MultipartUploadUtility multipart = new MultipartUploadUtility(config.getProperty(CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix, "UTF-8");
         for (String fileName : files.keySet()) {
-            multipart.addFilePart(fileName, new BufferedInputStream(getResources().openRawResource(files.get(fileName))));
+            multipart.addFilePart(fileName, fileName, getResources().openRawResource(files.get(fileName)));
         }
 
         return multipart.finish();
@@ -339,7 +338,7 @@ public class WhatTheDuck extends Activity {
         return netInfo != null && netInfo.isConnected();
     }
 
-    private String getApplicationVersion() throws NameNotFoundException {
+    public String getApplicationVersion() throws NameNotFoundException {
         PackageManager manager = this.getPackageManager();
         PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
         return info.versionName;
@@ -353,7 +352,7 @@ public class WhatTheDuck extends Activity {
 
             String inputLine;
             while ((inputLine = in.readLine()) != null)
-            response+=inputLine;
+                response+=inputLine;
             in.close();
         } catch (MalformedURLException e) {
             this.alert(R.string.error,
