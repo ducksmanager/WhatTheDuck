@@ -6,9 +6,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.TextSwitcher;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import net.ducksmanager.whattheduck.IssueWithFullUrl;
@@ -48,19 +46,10 @@ public class CoverFlowActivity extends Activity {
         mCoverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
         mCoverFlow.setAdapter(mAdapter);
 
-        mCoverFlow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(CoverFlowActivity.this,
-                        mData.get(position % mData.size()).getIssue().getIssueNumber(),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-
         mCoverFlow.setOnScrollPositionListener(new FeatureCoverFlow.OnScrollPositionListener() {
             @Override
             public void onScrolledToPosition(int position) {
-                mTitle.setText(mData.get(position).getIssue().getIssueNumber());
+                mTitle.setText(mData.get(position).toString());
             }
 
             @Override

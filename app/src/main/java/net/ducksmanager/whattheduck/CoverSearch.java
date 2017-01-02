@@ -50,9 +50,8 @@ public class CoverSearch extends RetrieveTask {
                 String issueNumber = issueIterator.next();
                 JSONObject issue = (JSONObject) object.get(issueNumber);
                 resultCollection.add(new IssueWithFullUrl(
-                        (String) issue.get("countrycode"),
                         (String) issue.get("publicationtitle"),
-                        new Issue(issueNumber, Issue.IssueCondition.NO_CONDITION),
+                        (String) issue.get("issuenumber"),
                         WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_API_ENDPOINT_URL) + "/cover-id/download/" + issue.get("fullurl"))
                 );
             }
