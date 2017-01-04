@@ -6,6 +6,22 @@
     android:background="@android:color/darker_gray"
     tools:context="net.ducksmanager.util.CoverFlowActivity">
 
+    <ImageSwitcher
+        android:id="@+id/coverResultCountryFlag"
+        android:layout_width="32dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="32dp"
+        android:paddingBottom="16dp" />
+
+    <TextSwitcher
+        android:id="@+id/coverResultTitle"
+        android:layout_below="@+id/coverResultCountryFlag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true" />
+
     <it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow
         android:id="@+id/coverflow"
         android:layout_width="match_parent"
@@ -17,13 +33,5 @@
         coverflow:rotationThreshold="0.5"
         coverflow:scalingThreshold="0.5"
         coverflow:spacing="0.6" />
-
-    <TextSwitcher
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerVertical="true" />
 
 </RelativeLayout>

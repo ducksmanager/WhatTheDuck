@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageSwitcher;
 import android.widget.TextSwitcher;
 import android.widget.ViewSwitcher;
 
@@ -23,6 +24,7 @@ public class CoverFlowActivity extends Activity {
     private CoverFlowAdapter mAdapter;
     private ArrayList<IssueWithFullUrl> mData = new ArrayList<>(0);
     private TextSwitcher mTitle;
+    private ImageSwitcher mFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,9 @@ public class CoverFlowActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         mData = (ArrayList<IssueWithFullUrl>) extras.get("resultCollection");
 
-        mTitle = (TextSwitcher) findViewById(R.id.title);
+        mFlag = (ImageSwitcher) findViewById(R.id.coverResultCountryFlag);
+
+        mTitle = (TextSwitcher) findViewById(R.id.coverResultTitle);
         mTitle.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
@@ -49,12 +53,15 @@ public class CoverFlowActivity extends Activity {
         mCoverFlow.setOnScrollPositionListener(new FeatureCoverFlow.OnScrollPositionListener() {
             @Override
             public void onScrolledToPosition(int position) {
+                mFlag.setVisibility(View.VISIBLE);
+                mFlag.setBackgroundResource(FlagHelper.getImageResource(CoverFlowActivity.this, mData.get(position).getCountryCode()));
                 mTitle.setText(mData.get(position).toString());
             }
 
             @Override
             public void onScrolling() {
                 mTitle.setText("");
+                mFlag.setVisibility(View.INVISIBLE);
             }
         });
 

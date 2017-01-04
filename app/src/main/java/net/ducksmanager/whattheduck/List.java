@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import net.ducksmanager.util.FlagHelper;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.util.ArrayList;
@@ -179,12 +180,7 @@ public abstract class List extends ListActivity{
     protected void setNavigationCountry(String countryFullName, String selectedCountry) {
         View countryNavigationView = this.findViewById(R.id.navigationCountry);
 
-        String uri = "@drawable/flags_" + selectedCountry;
-        int imageResource = getResources().getIdentifier(uri, null, getPackageName());
-
-        if (imageResource == 0) {
-            imageResource = R.drawable.flags_unknown;
-        }
+        int imageResource = FlagHelper.getImageResource(this, selectedCountry);
 
         ImageView currentCountryFlag = (ImageView) countryNavigationView.findViewById(R.id.selectedBadgeImage);
         currentCountryFlag.setVisibility(View.VISIBLE);
