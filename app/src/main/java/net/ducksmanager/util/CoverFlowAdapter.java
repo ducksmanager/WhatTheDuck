@@ -13,24 +13,29 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import net.ducksmanager.whattheduck.IssueComplete;
+import net.ducksmanager.whattheduck.IssueWithFullUrl;
 import net.ducksmanager.whattheduck.R;
+import net.ducksmanager.whattheduck.WhatTheDuck;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class CoverFlowAdapter extends BaseAdapter {
 
-    private ArrayList<IssueComplete> mData = new ArrayList<>(0);
+    private HashMap<String,Bitmap> imageCache = new HashMap<>();
+
+    private ArrayList<IssueWithFullUrl> mData = new ArrayList<>(0);
     private Context mContext;
 
     CoverFlowAdapter(Context context) {
         mContext = context;
     }
 
-    void setData(ArrayList<IssueComplete> data) {
+    void setData(ArrayList<IssueWithFullUrl> data) {
         mData = data;
     }
 
@@ -61,7 +66,7 @@ class CoverFlowAdapter extends BaseAdapter {
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.text = (TextView) rowView.findViewById(R.id.label);
             viewHolder.image = (ImageView) rowView.findViewById(R.id.image);
-            viewHolder.image.setTag("http://www.google.com/logos/2013/estonia_independence_day_2013-1057005.3-hp.jpg");
+            viewHolder.image.setTag(mData.get(position).getFullUrl());
             viewHolder.progressBar = (ProgressBar) rowView.findViewById(R.id.progressBarImageDownload);
 
             DownloadImagesTask task = new DownloadImagesTask(viewHolder.progressBar);
@@ -72,7 +77,7 @@ class CoverFlowAdapter extends BaseAdapter {
 
         ViewHolder holder = (ViewHolder) rowView.getTag();
 
-        holder.text.setText(mData.get(position).getIssue().getIssueNumber());
+        holder.text.setText(mData.get(position).getIssueNumber());
 
         return rowView;
     }
@@ -96,6 +101,7 @@ class CoverFlowAdapter extends BaseAdapter {
         @Override
         protected Bitmap doInBackground(ImageView... imageViews) {
             this.imageView = imageViews[0];
+            //noinspection WrongThread
             return downloadImage((String)imageView.getTag());
         }
 
@@ -107,18 +113,32 @@ class CoverFlowAdapter extends BaseAdapter {
         }
 
         private Bitmap downloadImage(String url) {
+            if (imageCache.containsKey(url)) {
+                return imageCache.get(url);
+            }
 
             Bitmap bmp;
             try{
                 URL ulrn = new URL(url);
                 HttpURLConnection con = (HttpURLConnection)ulrn.openConnection();
-                InputStream is = con.getInputStream();
-                bmp = BitmapFactory.decodeStream(is);
-                if (null != bmp)
-                    return bmp;
+                con.setRequestProperty("X-Dm-Version", WhatTheDuck.wtd.getApplicationVersion());
 
-            } catch(Exception ignored){
-                // TODO show default cover
+                InputStream is = con.getInputStream();
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                byte[] tmpBuffer = new byte[256];
+                int n;
+                while ((n = is.read(tmpBuffer)) >= 0) {
+                    bos.write(tmpBuffer, 0, n);
+                }
+
+                bmp = BitmapFactory.decodeByteArray(bos.toByteArray(), 0, bos.toByteArray().length);
+                if (null != bmp) {
+                    imageCache.put(url, bmp);
+                    return bmp;
+                }
+
+            } catch(Exception e){
+                System.err.println(e.getMessage());
             }
             return null;
         }

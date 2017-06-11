@@ -7,7 +7,7 @@
     <string name="my_collection">Ma collection</string>
     <string name="referenced_issues">Numéros référencés</string>
     <string name="logout_menu">Déconnexion</string>
-    <string name="issue">Numéro</string>
+    <string name="issueNumber">Numéro</string>
     <string name="issuecondition_description">Etat du numéro</string>
     <string name="insert_issue__choose_country">Choisir un pays</string>
     <string name="insert_issue__confirm">Ajout du numéro %1$s</string>

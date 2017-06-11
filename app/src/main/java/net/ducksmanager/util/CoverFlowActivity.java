@@ -7,12 +7,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageSwitcher;
+import android.widget.ImageView;
 import android.widget.TextSwitcher;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import net.ducksmanager.whattheduck.Collection;
-import net.ducksmanager.whattheduck.IssueComplete;
+import net.ducksmanager.whattheduck.IssueWithFullUrl;
 import net.ducksmanager.whattheduck.R;
 
 import java.util.ArrayList;
@@ -24,7 +25,9 @@ public class CoverFlowActivity extends Activity {
 
     private FeatureCoverFlow mCoverFlow;
     private CoverFlowAdapter mAdapter;
-    private ArrayList<IssueComplete> mData = new ArrayList<>(0);
+    private ArrayList<IssueWithFullUrl> mData = new ArrayList<>(0);
+    private TextSwitcher mResultNumber;
+    private ImageSwitcher mCountryBadge;
     private TextSwitcher mTitle;
 
     @Override
@@ -33,9 +36,23 @@ public class CoverFlowActivity extends Activity {
         setContentView(R.layout.activity_coverflow);
 
         Bundle extras = getIntent().getExtras();
-        Collection resultCollection = (Collection) extras.get("resultCollection");
+        mData = (ArrayList<IssueWithFullUrl>) extras.get("resultCollection");
 
-        mData = resultCollection.getAllIssues();
+        mResultNumber = (TextSwitcher) findViewById(R.id.resultNumber);
+        mResultNumber.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                LayoutInflater inflater = LayoutInflater.from(CoverFlowActivity.this);
+                return inflater.inflate(R.layout.item_title, null);
+            }
+        });
+
+        mCountryBadge = (ImageSwitcher) findViewById(R.id.imageSwitcherCountryBadge);
+        mCountryBadge.setFactory(new ViewSwitcher.ViewFactory() {
+             public View makeView() {
+                 return new ImageView(getApplicationContext());
+             }
+         });
 
         mTitle = (TextSwitcher) findViewById(R.id.title);
         mTitle.setFactory(new ViewSwitcher.ViewFactory() {
@@ -55,7 +72,7 @@ public class CoverFlowActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(CoverFlowActivity.this,
-                        mData.get(position % mData.size()).getIssue().getIssueNumber(),
+                        mData.get(position % mData.size()).getIssueNumber(),
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -63,7 +80,17 @@ public class CoverFlowActivity extends Activity {
         mCoverFlow.setOnScrollPositionListener(new FeatureCoverFlow.OnScrollPositionListener() {
             @Override
             public void onScrolledToPosition(int position) {
-                mTitle.setText(mData.get(position).getIssue().getIssueNumber());
+                String uri = "@drawable/flags_" + mData.get(position).getCountryCode();
+                int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+
+                if (imageResource == 0) {
+                    imageResource = R.drawable.flags_unknown;
+                }
+                mCountryBadge.setImageResource(imageResource);
+
+                mResultNumber.setText("Résultat " + (position + 1) + "/" + mData.size());
+                mTitle.setText(mData.get(position).getPublicationCode() + " "
+                             + mData.get(position).getIssueNumber());
             }
 
             @Override

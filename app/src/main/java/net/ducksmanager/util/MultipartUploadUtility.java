@@ -1,5 +1,9 @@
 package net.ducksmanager.util;
 
+import android.content.pm.PackageManager;
+
+import net.ducksmanager.whattheduck.WhatTheDuck;
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -88,12 +92,17 @@ public class MultipartUploadUtility {
 
     private boolean openConnection() throws IOException {
         httpConn = (HttpURLConnection) url.openConnection();
+        httpConn.setConnectTimeout(2000);
         httpConn.setUseCaches(false);
         httpConn.setDoOutput(true);    // indicates POST method
         httpConn.setDoInput(true);
         httpConn.setRequestProperty("Connection", "Keep-Alive");
         httpConn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-        httpConn.setRequestProperty("X-Wtd-Version", "2.0");
+        try {
+            httpConn.setRequestProperty("X-Wtd-Version", WhatTheDuck.wtd.getApplicationVersion());
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         outputStream = new BufferedOutputStream(httpConn.getOutputStream());
 
         writer = new PrintWriter(new OutputStreamWriter(outputStream, charset), true);

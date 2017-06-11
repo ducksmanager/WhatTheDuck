@@ -23,11 +23,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.ducksmanager.util.MultipartUploadUtility;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import net.ducksmanager.util.CoverFlowActivity;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
-import java.io.BufferedInputStream;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,8 +43,10 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Properties;
 
 public class WhatTheDuck extends Activity {
@@ -282,12 +290,50 @@ public class WhatTheDuck extends Activity {
             setEncryptedPassword(byteArray2Hex(md.digest()));
         }
 
-        MultipartUploadUtility multipart = new MultipartUploadUtility(config.getProperty(CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix, "UTF-8");
-        for (String fileName : files.keySet()) {
-            multipart.addFilePart(fileName, new BufferedInputStream(getResources().openRawResource(files.get(fileName))));
-        }
+        String fileName = "wtd_jpg";
 
-        return multipart.finish();
+        Ion.with(this.findViewById(android.R.id.content).getContext())
+            .load(config.getProperty(CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix)
+            .setHeader("x-dm-version", WhatTheDuck.wtd.getApplicationVersion())
+            .setMultipartFile(fileName, new File(this.findViewById(android.R.id.content).getContext().getFilesDir().getPath() + "/wtd_jpg"))
+            .asString()
+            .setCallback(new FutureCallback<String>() {
+                @Override
+                public void onCompleted(Exception e, String result) {
+                try {
+                    if (e != null)
+                        throw e;
+
+                    System.out.println("Success");
+                    JSONObject object;
+                    try {
+                        object = new JSONObject(result);
+                        ArrayList<IssueWithFullUrl> resultCollection = new ArrayList<>();
+                        Iterator<String> issueIterator = object.keys();
+                        while (issueIterator.hasNext()) {
+                            String issueCode = issueIterator.next();
+                            JSONObject issue = (JSONObject) object.get(issueCode);
+                            resultCollection.add(new IssueWithFullUrl(
+                                    (String) issue.get("countrycode"),
+                                    (String) issue.get("publicationtitle"),
+                                    (String) issue.get("issuenumber"),
+                                    WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_API_ENDPOINT_URL) + "/cover-id/download/" + issue.get("coverid"))
+                            );
+                        }
+                        Intent i = new Intent(CoverSearch.cls, CoverFlowActivity.class);
+                        i.putExtra("resultCollection", resultCollection);
+                        CoverSearch.cls.startActivity(i);
+                    } catch (JSONException jsone) {
+                        jsone.printStackTrace();
+                    }
+                }
+                catch (Exception ex) {
+                }
+
+                }
+            });
+
+        return "";
     }
 
     public String retrieveOrFail(String urlSuffix) throws Exception {
@@ -339,7 +385,7 @@ public class WhatTheDuck extends Activity {
         return netInfo != null && netInfo.isConnected();
     }
 
-    private String getApplicationVersion() throws NameNotFoundException {
+    public String getApplicationVersion() throws NameNotFoundException {
         PackageManager manager = this.getPackageManager();
         PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
         return info.versionName;

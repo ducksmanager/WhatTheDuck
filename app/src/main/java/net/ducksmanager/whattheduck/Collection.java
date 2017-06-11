@@ -122,19 +122,6 @@ public class Collection implements Serializable {
             return 0;
         }
     }
-
-    public ArrayList<IssueComplete> getAllIssues() {
-        ArrayList<IssueComplete> completeIssues = new ArrayList<>();
-
-        for (String country : issues.keySet()) {
-            for (String publication: issues.get(country).keySet()) {
-                for (Issue issue : issues.get(country).get(publication)) {
-                    completeIssues.add(new IssueComplete(country, publication, issue));
-                }
-            }
-        }
-        return completeIssues;
-    }
     
     private static class NamesComparator implements Comparator<String> {
 
