@@ -15,7 +15,7 @@ import java.util.Set;
 public class Collection implements Serializable {
     private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<>();
 
-    enum CollectionType {COA,USER}
+    public enum CollectionType {COA,USER}
 
     public void addCountry(String country) {
         issues.put(country, new HashMap<String,ArrayList<Issue>>());
@@ -101,7 +101,7 @@ public class Collection implements Serializable {
             && issues.get(shortCountryName).get(shortPublicationName).size() > 0;
     }
 
-    private Issue getIssue(String shortCountryName, String shortPublicationName, String issueNumber) {
+    public Issue getIssue(String shortCountryName, String shortPublicationName, String issueNumber) {
         if (!hasPublication(shortCountryName, shortPublicationName))
             return null;
         for (Issue i : issues.get(shortCountryName).get(shortPublicationName)) {

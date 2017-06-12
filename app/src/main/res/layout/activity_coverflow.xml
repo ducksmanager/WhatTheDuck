@@ -33,6 +33,29 @@
         coverflow:rotationThreshold="0.5"
         coverflow:scalingThreshold="0.5"
         coverflow:spacing="0.9" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingBottom="72dp"
+        android:layout_alignParentBottom="true" >
+        <ImageSwitcher
+            android:id="@+id/issuecondition"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="2dip"
+            android:layout_marginEnd="2dip"
+            android:contentDescription="@+id/issuecondition_description" />
+        <TextView
+            android:text="1st Page View"
+            android:id="@+id/t1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+
     <TextSwitcher
         android:id="@+id/resultNumber"
         android:layout_width="match_parent"

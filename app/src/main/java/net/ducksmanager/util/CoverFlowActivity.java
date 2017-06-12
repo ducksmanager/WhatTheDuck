@@ -13,8 +13,10 @@ import android.widget.TextSwitcher;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import net.ducksmanager.whattheduck.Issue;
 import net.ducksmanager.whattheduck.IssueWithFullUrl;
 import net.ducksmanager.whattheduck.R;
+import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import java.util.ArrayList;
 
@@ -28,6 +30,7 @@ public class CoverFlowActivity extends Activity {
     private ArrayList<IssueWithFullUrl> mData = new ArrayList<>(0);
     private TextSwitcher mResultNumber;
     private ImageSwitcher mCountryBadge;
+    private ImageSwitcher mIssueCondition;
     private TextSwitcher mTitle;
 
     @Override
@@ -49,6 +52,13 @@ public class CoverFlowActivity extends Activity {
 
         mCountryBadge = (ImageSwitcher) findViewById(R.id.imageSwitcherCountryBadge);
         mCountryBadge.setFactory(new ViewSwitcher.ViewFactory() {
+             public View makeView() {
+                 return new ImageView(getApplicationContext());
+             }
+         });
+
+        mIssueCondition = (ImageSwitcher) findViewById(R.id.issuecondition);
+        mIssueCondition.setFactory(new ViewSwitcher.ViewFactory() {
              public View makeView() {
                  return new ImageView(getApplicationContext());
              }
@@ -86,16 +96,28 @@ public class CoverFlowActivity extends Activity {
                 if (imageResource == 0) {
                     imageResource = R.drawable.flags_unknown;
                 }
+                mCountryBadge.setVisibility(View.VISIBLE);
                 mCountryBadge.setImageResource(imageResource);
 
+                mIssueCondition.setVisibility(View.VISIBLE);
+
+                Issue existingIssue = WhatTheDuck.userCollection.getIssue(mData.get(position).getCountryCode(), mData.get(position).getPublicationCode(), mData.get(position).getIssueNumber());
+                if (existingIssue != null) {
+                    Issue.IssueCondition condition = existingIssue.getIssueCondition();
+                    mIssueCondition.setImageResource(Issue.issueConditionToResourceId(condition));
+                }
+
                 mResultNumber.setText("Résultat " + (position + 1) + "/" + mData.size());
-                mTitle.setText(mData.get(position).getPublicationCode() + " "
+                mTitle.setText(mData.get(position).getPublicationTitle() + " "
                              + mData.get(position).getIssueNumber());
             }
 
             @Override
             public void onScrolling() {
+                mResultNumber.setText("");
                 mTitle.setText("");
+                mCountryBadge.setVisibility(View.INVISIBLE);
+                mIssueCondition.setVisibility(View.INVISIBLE);
             }
         });
 

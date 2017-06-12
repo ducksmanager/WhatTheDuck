@@ -315,6 +315,7 @@ public class WhatTheDuck extends Activity {
                             JSONObject issue = (JSONObject) object.get(issueCode);
                             resultCollection.add(new IssueWithFullUrl(
                                     (String) issue.get("countrycode"),
+                                    (String) issue.get("publicationcode"),
                                     (String) issue.get("publicationtitle"),
                                     (String) issue.get("issuenumber"),
                                     WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_API_ENDPOINT_URL) + "/cover-id/download/" + issue.get("coverid"))
