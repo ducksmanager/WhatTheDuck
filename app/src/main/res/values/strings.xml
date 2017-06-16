@@ -52,4 +52,8 @@
     <string name="email_address">Adresse e-mail</string>
     <string name="welcomeTitle">Bienvenue sur What The Duck !</string>
     <string name="welcomeMessage">Décochez l\'option \"Contenu de ma collection seulement\" pour faire apparaitre tous les numéros référencés, puis tapotez sur l\'un d\'entre eux pour l\'ajouter à votre collection</string>
+
+    <string name="ajouter_couverture">Cliquez sur la couverture\npour ajouter le numéro à la collection</string>
+    <string name="numero_deja_possede">Vous possédez déjà ce numéro dans votre collection</string>
+    <string name="resultat">Résultat</string>
 </resources>

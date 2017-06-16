@@ -23,6 +23,7 @@ public class PublicationListing extends CoaListing {
     public static String getPublicationFullName (String shortCountryName, String shortPublicationName) {
         if (publicationNames.get(shortCountryName) == null) {
             System.out.println("Can't get publications of country "+shortCountryName);
+            return null;
         }
         return publicationNames.get(shortCountryName).get(shortPublicationName);
     }

@@ -3,16 +3,16 @@ package net.ducksmanager.util;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextSwitcher;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import net.ducksmanager.whattheduck.AddIssue;
 import net.ducksmanager.whattheduck.Issue;
 import net.ducksmanager.whattheduck.IssueWithFullUrl;
 import net.ducksmanager.whattheduck.R;
@@ -25,14 +25,15 @@ import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
 
 public class CoverFlowActivity extends Activity {
 
-    private FeatureCoverFlow mCoverFlow;
-    private CoverFlowAdapter mAdapter;
     private ArrayList<IssueWithFullUrl> mData = new ArrayList<>(0);
     private TextSwitcher mResultNumber;
     private ImageSwitcher mCountryBadge;
     private ImageSwitcher mIssueCondition;
-    private TextSwitcher mIssueConditionText;
-    private TextSwitcher mTitle;
+
+    private TextView mIssueConditionText;
+    private TextView mTitleText;
+    
+    private IssueWithFullUrl current = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,42 +66,56 @@ public class CoverFlowActivity extends Activity {
             }
          });
 
-        mIssueConditionText = (TextSwitcher) findViewById(R.id.issuecondition_description);
-        mIssueConditionText.setFactory(new ViewSwitcher.ViewFactory() {
+        TextSwitcher mIssueConditionTextSwitcher = (TextSwitcher) findViewById(R.id.issuecondition_description);
+        mIssueConditionTextSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
-                LayoutInflater inflater = LayoutInflater.from(CoverFlowActivity.this);
-                return inflater.inflate(R.layout.item_title, null);
+                mIssueConditionText = new TextView(CoverFlowActivity.this);
+                return mIssueConditionText;
             }
         });
 
-        mTitle = (TextSwitcher) findViewById(R.id.title);
-        mTitle.setFactory(new ViewSwitcher.ViewFactory() {
+        TextSwitcher mTitleSwitcher = (TextSwitcher) findViewById(R.id.title);
+        mTitleSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
                 LayoutInflater inflater = LayoutInflater.from(CoverFlowActivity.this);
-                return inflater.inflate(R.layout.item_title, null);
+                mTitleText = (TextView) inflater.inflate(R.layout.item_title, null);
+                return mTitleText;
             }
         });
 
-        mAdapter = new CoverFlowAdapter(this);
+        CoverFlowAdapter mAdapter = new CoverFlowAdapter(this);
         mAdapter.setData(mData);
-        mCoverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
+
+        FeatureCoverFlow mCoverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
         mCoverFlow.setAdapter(mAdapter);
 
         mCoverFlow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(CoverFlowActivity.this,
-                        mData.get(position % mData.size()).getIssueNumber(),
-                        Toast.LENGTH_SHORT).show();
+            Issue existingIssue = WhatTheDuck.userCollection.getIssue(current.getCountryCode(), current.getPublicationCode(), current.getIssueNumber());
+            if (existingIssue == null) {
+                Issue newIssue = new Issue(current.getIssueNumber(), (Issue.IssueCondition) null);
+                WhatTheDuck.setSelectedPublication (current.getPublicationCode());
+                AddIssue.showAddIssueDialog(CoverFlowActivity.this, newIssue);
+            }
+            else {
+                Toast.makeText(
+                    CoverFlowActivity.this,
+                    R.string.numero_deja_possede,
+                    Toast.LENGTH_SHORT)
+                .show();
+            }
             }
         });
 
         mCoverFlow.setOnScrollPositionListener(new FeatureCoverFlow.OnScrollPositionListener() {
             @Override
             public void onScrolledToPosition(int position) {
-                String uri = "@drawable/flags_" + mData.get(position).getCountryCode();
+                current = mData.get(position);
+                
+                String uri = "@drawable/flags_" + current.getCountryCode();
                 int imageResource = getResources().getIdentifier(uri, null, getPackageName());
 
                 if (imageResource == 0) {
@@ -109,55 +124,37 @@ public class CoverFlowActivity extends Activity {
                 mCountryBadge.setVisibility(View.VISIBLE);
                 mCountryBadge.setImageResource(imageResource);
 
-                mIssueCondition.setVisibility(View.VISIBLE);
                 mIssueConditionText.setVisibility(View.VISIBLE);
 
-                Issue existingIssue = WhatTheDuck.userCollection.getIssue(mData.get(position).getCountryCode(), mData.get(position).getPublicationCode(), mData.get(position).getIssueNumber());
+                Issue existingIssue = WhatTheDuck.userCollection.getIssue(current.getCountryCode(), current.getPublicationCode(), current.getIssueNumber());
                 if (existingIssue != null) {
                     Issue.IssueCondition condition = existingIssue.getIssueCondition();
+                    mIssueCondition.setVisibility(View.VISIBLE);
                     mIssueCondition.setImageResource(Issue.issueConditionToResourceId(condition));
+                    mIssueConditionText.setText(getResources().getString(Issue.issueConditionToStringId(condition)));
+                    mIssueConditionText.setTextSize(18);
+                }
+                else {
+                    mIssueCondition.setVisibility(View.GONE);
+                    mIssueConditionText.setText(R.string.ajouter_couverture);
+                    mIssueConditionText.setTextSize(14);
                 }
 
-                mIssueCondition.setImageResource(Issue.issueConditionToResourceId(Issue.IssueCondition.NOTSOGOOD_CONDITION));
-                mIssueConditionText.setText(getResources().getString(Issue.issueConditionToStringId(Issue.IssueCondition.NOTSOGOOD_CONDITION)));
+                mResultNumber.setVisibility(View.VISIBLE);
+                mResultNumber.setText(getResources().getString(R.string.resultat) + " " + (position + 1) + "/" + mData.size());
 
-                mResultNumber.setText("Résultat " + (position + 1) + "/" + mData.size());
-                mTitle.setText(mData.get(position).getPublicationTitle() + " "
-                             + mData.get(position).getIssueNumber());
+                mTitleText.setVisibility(View.VISIBLE);
+                mTitleText.setText(mData.get(position).getPublicationTitle() + " " + mData.get(position).getIssueNumber());
             }
 
             @Override
             public void onScrolling() {
-                mResultNumber.setText("");
-                mTitle.setText("");
+                mResultNumber.setVisibility(View.INVISIBLE);
+                mTitleText.setVisibility(View.INVISIBLE);
                 mCountryBadge.setVisibility(View.INVISIBLE);
                 mIssueCondition.setVisibility(View.INVISIBLE);
                 mIssueConditionText.setVisibility(View.INVISIBLE);
             }
         });
-
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_coverflow_activity, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

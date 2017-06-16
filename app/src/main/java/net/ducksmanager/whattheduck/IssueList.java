@@ -1,7 +1,5 @@
 package net.ducksmanager.whattheduck;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -99,40 +97,7 @@ public class IssueList extends List {
             if (selectedIssue.getIssueNumber().startsWith("* "))
                 WhatTheDuck.wtd.info(this, R.string.input_error__issue_already_possessed);
             else {
-                final CharSequence[] items = {getString(R.string.condition_bad), getString(R.string.condition_notsogood), getString(R.string.condition_good)};
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.insert_issue__confirm,selectedIssue.getIssueNumber()))
-                       .setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
-                           public void onClick(DialogInterface dialog, int item) {}
-                        })
-                       .setCancelable(true)
-                       .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                           public void onClick(DialogInterface dialog, int id) {
-                               dialog.dismiss();
-                               int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
-                               if (selectedPosition == -1) {
-                                    WhatTheDuck.wtd.info(IssueList.this, R.string.input_error__select_condition);
-                                    return;
-                               }
-                               String condition = items[selectedPosition].toString();
-                               String DMcondition;
-                               if (condition.equals(getString(R.string.condition_bad)))
-                                   DMcondition = Issue.BAD_CONDITION;
-                               else if (condition.equals(getString(R.string.condition_notsogood)))
-                                   DMcondition = Issue.NOTSOGOOD_CONDITION;
-                               else
-                                   DMcondition = Issue.GOOD_CONDITION;
-                               selectedIssue.setIssueCondition(Issue.issueConditionStrToIssueCondition(DMcondition));
-                               new AddIssue(IssueList.this, WhatTheDuck.getSelectedPublication(), selectedIssue).execute();
-                           }
-                       })
-                       .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                           public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                           }
-                       });
-                builder.create().show();
+                AddIssue.showAddIssueDialog(IssueList.this, selectedIssue);
             }
         }
         super.onListItemClick(l, v, position, id);
