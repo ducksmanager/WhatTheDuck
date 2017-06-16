@@ -74,6 +74,16 @@ public class Issue implements Serializable {
         return R.drawable.condition_none;
     }
 
+    public static int issueConditionToStringId(IssueCondition issueCondition) {
+        if (issueCondition.equals(IssueCondition.BAD_CONDITION))
+            return R.string.condition_bad;
+        else if (issueCondition.equals(IssueCondition.NOTSOGOOD_CONDITION))
+            return R.string.condition_notsogood;
+        else if (issueCondition.equals(IssueCondition.GOOD_CONDITION))
+            return R.string.condition_good;
+        return -1;
+    }
+
     public String getIssueConditionStr() {
         return issueConditionToIssueConditionStr(issueCondition);
     }

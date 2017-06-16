@@ -31,6 +31,7 @@ public class CoverFlowActivity extends Activity {
     private TextSwitcher mResultNumber;
     private ImageSwitcher mCountryBadge;
     private ImageSwitcher mIssueCondition;
+    private TextSwitcher mIssueConditionText;
     private TextSwitcher mTitle;
 
     @Override
@@ -54,15 +55,24 @@ public class CoverFlowActivity extends Activity {
         mCountryBadge.setFactory(new ViewSwitcher.ViewFactory() {
              public View makeView() {
                  return new ImageView(getApplicationContext());
-             }
+            }
          });
 
         mIssueCondition = (ImageSwitcher) findViewById(R.id.issuecondition);
         mIssueCondition.setFactory(new ViewSwitcher.ViewFactory() {
              public View makeView() {
                  return new ImageView(getApplicationContext());
-             }
+            }
          });
+
+        mIssueConditionText = (TextSwitcher) findViewById(R.id.issuecondition_description);
+        mIssueConditionText.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                LayoutInflater inflater = LayoutInflater.from(CoverFlowActivity.this);
+                return inflater.inflate(R.layout.item_title, null);
+            }
+        });
 
         mTitle = (TextSwitcher) findViewById(R.id.title);
         mTitle.setFactory(new ViewSwitcher.ViewFactory() {
@@ -100,12 +110,16 @@ public class CoverFlowActivity extends Activity {
                 mCountryBadge.setImageResource(imageResource);
 
                 mIssueCondition.setVisibility(View.VISIBLE);
+                mIssueConditionText.setVisibility(View.VISIBLE);
 
                 Issue existingIssue = WhatTheDuck.userCollection.getIssue(mData.get(position).getCountryCode(), mData.get(position).getPublicationCode(), mData.get(position).getIssueNumber());
                 if (existingIssue != null) {
                     Issue.IssueCondition condition = existingIssue.getIssueCondition();
                     mIssueCondition.setImageResource(Issue.issueConditionToResourceId(condition));
                 }
+
+                mIssueCondition.setImageResource(Issue.issueConditionToResourceId(Issue.IssueCondition.NOTSOGOOD_CONDITION));
+                mIssueConditionText.setText(getResources().getString(Issue.issueConditionToStringId(Issue.IssueCondition.NOTSOGOOD_CONDITION)));
 
                 mResultNumber.setText("Résultat " + (position + 1) + "/" + mData.size());
                 mTitle.setText(mData.get(position).getPublicationTitle() + " "
@@ -118,6 +132,7 @@ public class CoverFlowActivity extends Activity {
                 mTitle.setText("");
                 mCountryBadge.setVisibility(View.INVISIBLE);
                 mIssueCondition.setVisibility(View.INVISIBLE);
+                mIssueConditionText.setVisibility(View.INVISIBLE);
             }
         });
 
