@@ -33,7 +33,9 @@ public class AddIssue extends RetrieveTask {
         if (response.equals("OK")) {
             WhatTheDuck.wtd.info(AddIssue.originActivity, R.string.confirmation_message__issue_inserted);
             WhatTheDuck.userCollection.addIssue(shortCountryAndPublication, selectedIssue);
-//            originActivity.show();
+            if (originActivity instanceof IssueList) {
+                ((IssueList) originActivity).show();
+            }
         }
         else {
             WhatTheDuck.wtd.alert(R.string.internal_error, R.string.internal_error__issue_insertion_failed);
