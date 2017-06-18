@@ -21,6 +21,14 @@
             layout="@layout/wtd_list_navigation_publication" />
     </LinearLayout>
 
+    <Switch
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/show_my_collection_content_only"
+        android:id="@+id/onlyInCollectionSwitch"
+        android:layout_below="@+id/navigation" />
+
     <EditText
         android:id="@+id/filter"
         android:layout_width="match_parent"
@@ -31,15 +39,14 @@
         android:visibility="visible"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/navigation">
+        android:layout_below="@id/onlyInCollectionSwitch">
     </EditText>
 
     <ListView
         android:id="@+id/android:list"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/filter"
-        android:layout_above="@+id/onlyInCollectionSwitch" />
+        android:layout_below="@id/filter" />
 
     <TextView
         android:id="@+id/emptyList"
@@ -57,23 +64,6 @@
         android:indeterminate="true"
         android:layout_centerHorizontal="true"
         android:visibility="gone"/>
-
-    <Switch
-        android:paddingTop="10dp"
-        android:paddingBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/show_my_collection_content_only"
-        android:id="@+id/onlyInCollectionSwitch"
-        android:layout_toEndOf="@+id/emptyList"
-        android:layout_toRightOf="@+id/emptyList"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
 
     <ImageButton
         android:background="@drawable/roundedbutton"
