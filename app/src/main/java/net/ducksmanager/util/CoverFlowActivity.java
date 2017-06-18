@@ -70,7 +70,8 @@ public class CoverFlowActivity extends Activity {
         mIssueConditionTextSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
-                mIssueConditionText = new TextView(CoverFlowActivity.this);
+                LayoutInflater inflater = LayoutInflater.from(CoverFlowActivity.this);
+                mIssueConditionText = (TextView) inflater.inflate(R.layout.item_title, null);
                 return mIssueConditionText;
             }
         });
@@ -103,7 +104,7 @@ public class CoverFlowActivity extends Activity {
             else {
                 Toast.makeText(
                     CoverFlowActivity.this,
-                    R.string.numero_deja_possede,
+                    R.string.issue_already_possessed,
                     Toast.LENGTH_SHORT)
                 .show();
             }
@@ -136,12 +137,12 @@ public class CoverFlowActivity extends Activity {
                 }
                 else {
                     mIssueCondition.setVisibility(View.GONE);
-                    mIssueConditionText.setText(R.string.ajouter_couverture);
+                    mIssueConditionText.setText(R.string.add_cover);
                     mIssueConditionText.setTextSize(14);
                 }
 
                 mResultNumber.setVisibility(View.VISIBLE);
-                mResultNumber.setText(getResources().getString(R.string.resultat) + " " + (position + 1) + "/" + mData.size());
+                mResultNumber.setText(getResources().getString(R.string.result) + " " + (position + 1) + "/" + mData.size());
 
                 mTitleText.setVisibility(View.VISIBLE);
                 mTitleText.setText(mData.get(position).getPublicationTitle() + " " + mData.get(position).getIssueNumber());
