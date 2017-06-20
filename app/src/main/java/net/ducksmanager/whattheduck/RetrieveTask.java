@@ -3,6 +3,9 @@ package net.ducksmanager.whattheduck;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 
+import com.koushikdutta.async.future.FutureCallback;
+
+import java.io.File;
 import java.util.HashMap;
 
 public class RetrieveTask extends AsyncTask<Object, Object, String> {
@@ -12,18 +15,20 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
     protected static Integer progressBarId;
 
     private Exception thrownException;
-    private HashMap<String, Integer> files = new HashMap<>();
+    private HashMap<String, File> files = new HashMap<>();
+    private FutureCallback futureCallback;
 
     public RetrieveTask(String urlSuffix, Integer progressBarId) {
         this.urlSuffix = urlSuffix;
         RetrieveTask.progressBarId = progressBarId;
     }
 
-    public RetrieveTask(String urlSuffix, Integer progressBarId, boolean legacyServer, HashMap<String, Integer> files) {
+    public RetrieveTask(String urlSuffix, Integer progressBarId, boolean legacyServer, HashMap<String, File> files, FutureCallback futureCallback) {
         this.urlSuffix = urlSuffix;
         RetrieveTask.progressBarId = progressBarId;
         this.legacyServer = legacyServer;
         this.files = files;
+        this.futureCallback = futureCallback;
     }
 
     @Override
@@ -33,7 +38,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
                 return WhatTheDuck.wtd.retrieveOrFail(this.urlSuffix);
             }
             else {
-                return WhatTheDuck.wtd.retrieveOrFailDmServer(this.urlSuffix, this.files);
+                return WhatTheDuck.wtd.retrieveOrFailDmServer(this.urlSuffix, this.files, this.futureCallback);
             }
 
         } catch (Exception e) {

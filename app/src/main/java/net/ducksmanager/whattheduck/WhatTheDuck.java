@@ -26,11 +26,7 @@ import android.widget.Toast;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import net.ducksmanager.util.CoverFlowActivity;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,10 +39,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Properties;
 
 public class WhatTheDuck extends Activity {
@@ -279,7 +273,7 @@ public class WhatTheDuck extends Activity {
         return hex;
     }
 
-    public String retrieveOrFailDmServer(String urlSuffix, HashMap<String, Integer> files) throws Exception {
+    public String retrieveOrFailDmServer(String urlSuffix, HashMap<String, File> files, FutureCallback<String> futureCallback) throws Exception {
         if (!isOnline()) {
             throw new Exception(""+R.string.network_error);
         }
@@ -291,48 +285,12 @@ public class WhatTheDuck extends Activity {
         }
 
         String fileName = "wtd_jpg";
-
         Ion.with(this.findViewById(android.R.id.content).getContext())
             .load(config.getProperty(CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix)
             .setHeader("x-dm-version", WhatTheDuck.wtd.getApplicationVersion())
-            .setMultipartFile(fileName, new File(this.findViewById(android.R.id.content).getContext().getFilesDir().getPath() + "/wtd_jpg"))
+            .setMultipartFile(fileName, files.get(fileName))
             .asString()
-            .setCallback(new FutureCallback<String>() {
-                @Override
-                public void onCompleted(Exception e, String result) {
-                try {
-                    if (e != null)
-                        throw e;
-
-                    System.out.println("Success");
-                    JSONObject object;
-                    try {
-                        object = new JSONObject(result);
-                        ArrayList<IssueWithFullUrl> resultCollection = new ArrayList<>();
-                        Iterator<String> issueIterator = object.keys();
-                        while (issueIterator.hasNext()) {
-                            String issueCode = issueIterator.next();
-                            JSONObject issue = (JSONObject) object.get(issueCode);
-                            resultCollection.add(new IssueWithFullUrl(
-                                    (String) issue.get("countrycode"),
-                                    (String) issue.get("publicationcode"),
-                                    (String) issue.get("publicationtitle"),
-                                    (String) issue.get("issuenumber"),
-                                    WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_API_ENDPOINT_URL) + "/cover-id/download/" + issue.get("coverid"))
-                            );
-                        }
-                        Intent i = new Intent(CoverSearch.cls, CoverFlowActivity.class);
-                        i.putExtra("resultCollection", resultCollection);
-                        CoverSearch.cls.startActivity(i);
-                    } catch (JSONException jsone) {
-                        jsone.printStackTrace();
-                    }
-                }
-                catch (Exception ex) {
-                }
-
-                }
-            });
+            .setCallback(futureCallback);
 
         return "";
     }
