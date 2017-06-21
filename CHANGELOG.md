@@ -1,3 +1,7 @@
+Version 1.4.0
+
+    Introduce adding an issue by taking a picture of its cover
+
 Version 1.3.1
 
     Fix wrong issue condition images shown when scrolling in the issue list
