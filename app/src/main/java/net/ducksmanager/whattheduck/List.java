@@ -54,17 +54,10 @@ public abstract class List extends ListActivity{
             }
         });
 
-        this.findViewById(R.id.navigationCountry).setOnClickListener(new View.OnClickListener() {
+        this.findViewById(R.id.navigationCountry).findViewById(R.id.selected).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goToView(PublicationList.class);
-            }
-        });
-
-        this.findViewById(R.id.navigationPublication).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToView(IssueList.class);
             }
         });
 
