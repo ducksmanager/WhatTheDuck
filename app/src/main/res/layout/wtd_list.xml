@@ -68,15 +68,12 @@
 
     <RelativeLayout
         android:id="@+id/addToCollectionWrapper"
-        android:layout_width="48dp"
+        android:layout_width="40dp"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true"
-        android:layout_centerHorizontal="false"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp">
+        android:layout_centerHorizontal="false">
 
         <ImageButton
             android:id="@+id/addToCollectionButton"
@@ -96,8 +93,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/roundedbutton"
             android:contentDescription="@string/add_cover_icon_plus"

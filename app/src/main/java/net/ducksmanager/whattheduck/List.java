@@ -98,6 +98,7 @@ public abstract class List extends ListActivity{
             .text(R.string.add_cover_tooltip)
             .gravity(Gravity.TOP)
             .animated(true)
+            .margin(5.0f)
             .transparentOverlay(true)
             .build()
             .show();
