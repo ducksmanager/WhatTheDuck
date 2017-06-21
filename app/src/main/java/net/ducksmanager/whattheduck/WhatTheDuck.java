@@ -40,7 +40,6 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
-import java.util.HashMap;
 import java.util.Properties;
 
 public class WhatTheDuck extends Activity {
@@ -273,7 +272,7 @@ public class WhatTheDuck extends Activity {
         return hex;
     }
 
-    public String retrieveOrFailDmServer(String urlSuffix, HashMap<String, File> files, FutureCallback<String> futureCallback) throws Exception {
+    public void retrieveOrFailDmServer(String urlSuffix, FutureCallback<String> futureCallback, String fileName, File file) throws Exception {
         if (!isOnline()) {
             throw new Exception(""+R.string.network_error);
         }
@@ -284,15 +283,12 @@ public class WhatTheDuck extends Activity {
             setEncryptedPassword(byteArray2Hex(md.digest()));
         }
 
-        String fileName = "wtd_jpg";
         Ion.with(this.findViewById(android.R.id.content).getContext())
             .load(config.getProperty(CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix)
             .setHeader("x-dm-version", WhatTheDuck.wtd.getApplicationVersion())
-            .setMultipartFile(fileName, files.get(fileName))
+            .setMultipartFile(fileName, file)
             .asString()
             .setCallback(futureCallback);
-
-        return "";
     }
 
     public String retrieveOrFail(String urlSuffix) throws Exception {

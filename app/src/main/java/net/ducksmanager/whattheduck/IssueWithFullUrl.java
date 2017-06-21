@@ -3,11 +3,11 @@ package net.ducksmanager.whattheduck;
 import java.io.Serializable;
 
 public class IssueWithFullUrl implements Serializable {
-    private String countryCode;
-    private String publicationCode;
-    private String publicationTitle;
-    private String issueNumber;
-    private String fullUrl;
+    private final String countryCode;
+    private final String publicationCode;
+    private final String publicationTitle;
+    private final String issueNumber;
+    private final String fullUrl;
 
     public IssueWithFullUrl(String countryCode, String publicationCode, String publicationTitle, String issueNumber, String fullUrl) {
         this.countryCode = countryCode;

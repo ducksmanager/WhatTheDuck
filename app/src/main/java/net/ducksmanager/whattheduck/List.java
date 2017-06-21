@@ -164,8 +164,8 @@ public abstract class List extends ListActivity{
     private void takeCoverPicture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File imagePath = new File(getFilesDir(), "Pictures");
-            File newFile = new File(imagePath, "wtd_jpg");
+            File imagePath = new File(getFilesDir(), CoverSearch.uploadTempDir);
+            File newFile = new File(imagePath, CoverSearch.uploadFileName);
             newFile.getParentFile().mkdirs();
             try {
                 newFile.createNewFile();
@@ -181,8 +181,8 @@ public abstract class List extends ListActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            File imagePath = new File(getFilesDir(), "Pictures");
-            File newFile = new File(imagePath, "wtd_jpg");
+            File imagePath = new File(getFilesDir(), CoverSearch.uploadTempDir);
+            File newFile = new File(imagePath, CoverSearch.uploadFileName);
 
             new CoverSearch(this, newFile).execute();
         }

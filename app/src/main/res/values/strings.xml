@@ -8,8 +8,6 @@
     <string name="referenced_issues">Numéros référencés</string>
     <string name="logout_menu">Déconnexion</string>
     <string name="issueNumber">Numéro</string>
-    <string name="issuecondition_description">Etat du numéro</string>
-    <string name="insert_issue__choose_country">Choisir un pays</string>
     <string name="insert_issue__confirm">Ajout du numéro %1$s</string>
     <string name="signup">Inscription</string>
     <string name="signup__confirm">L\'inscription à DucksManager est terminée, \nvous pouvez maintenant vous connecter.</string>
@@ -37,13 +35,10 @@
     <string name="internal_error">Erreur interne</string>
     <string name="internal_error__malformed_list">La liste des numéros est mal formée</string>
     <string name="internal_error__crypting_failed">L\'encryptage de vos identifiants a échoué</string>
-    <string name="internal_error__credentials_reading_failed">La lecture de vos identifiants stockés a échoué</string>
-    <string name="internal_error__credentials_storage_failed">Le stockage de vos identifiants a échoué</string>
     <string name="internal_error__issue_insertion_failed">L\'insertion du numéro dans votre collection a échoué</string>
 
     <string name="network_error">Erreur réseau</string>
     <string name="network_error__no_connection">Vos identifiants n\'ont pas pu être vérifiés en raison d\'un problème de réseau : vérifiez votre connexion Internet</string>
-    <string name="network_error__server_unavailable">Vos identifiants n\'ont pas pu être vérifiés car le serveur ne répond pas</string>
 
     <string name="error">Erreur</string>
     <string name="error__malformed_url">L\'adresse Web est mal formée</string>
@@ -56,6 +51,7 @@
     <string name="add_cover_tooltip">Nouveau! Ajoutez un numéro en photographiant sa couverture</string>
     <string name="add_cover_icon_camera">Camera</string>
     <string name="add_cover_icon_plus">add_cover_icon_plus</string>
+    <string name="cover_suggestion">Cover suggestion</string>
     <string name="add_cover">Cliquez sur la couverture\npour ajouter le numéro à la collection</string>
     <string name="issue_already_possessed">Vous possédez déjà ce numéro dans votre collection</string>
     <string name="result">Résultat</string>

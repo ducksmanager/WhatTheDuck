@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class IssueList extends List {
-    private Issue selectedIssue = null;
 
     private ArrayList<Issue> issues = null;
     private IssueAdapter issueAdapter;
@@ -93,7 +92,7 @@ public class IssueList extends List {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         if (type.equals(CollectionType.COA.toString())) {
-            selectedIssue = (Issue) this.getListView().getItemAtPosition(((Long)id).intValue());
+            Issue selectedIssue = (Issue) this.getListView().getItemAtPosition(((Long) id).intValue());
             if (selectedIssue.getIssueNumber().startsWith("* "))
                 WhatTheDuck.wtd.info(this, R.string.input_error__issue_already_possessed);
             else {

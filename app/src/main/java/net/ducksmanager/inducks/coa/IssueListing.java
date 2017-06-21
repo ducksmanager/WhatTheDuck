@@ -12,7 +12,7 @@ import java.util.HashSet;
 
 public class IssueListing extends CoaListing {
 
-    private static HashSet<String> fullListPublications = new HashSet<String>();
+    private static final HashSet<String> fullListPublications = new HashSet<>();
 
     public IssueListing(List list, String countryShortName, String publicationShortName) {
         super(list, ListType.ISSUE_LIST, countryShortName, publicationShortName);

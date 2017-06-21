@@ -12,8 +12,8 @@ import java.util.Iterator;
 
 public class PublicationListing extends CoaListing {
 
-    private static HashMap<String,HashMap<String,String>> publicationNames= new HashMap<>();
-    private static HashSet<String> fullListCountries = new HashSet<>();
+    private static final HashMap<String,HashMap<String,String>> publicationNames= new HashMap<>();
+    private static final HashSet<String> fullListCountries = new HashSet<>();
 
     public PublicationListing(List list, String countryShortName) {
         super(list, ListType.PUBLICATION_LIST, countryShortName, null);

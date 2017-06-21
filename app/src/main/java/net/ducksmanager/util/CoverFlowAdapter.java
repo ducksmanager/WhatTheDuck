@@ -26,10 +26,10 @@ import java.util.HashMap;
 
 class CoverFlowAdapter extends BaseAdapter {
 
-    private HashMap<String,Bitmap> imageCache = new HashMap<>();
+    private final HashMap<String,Bitmap> imageCache = new HashMap<>();
 
     private ArrayList<IssueWithFullUrl> mData = new ArrayList<>(0);
-    private Context mContext;
+    private final Context mContext;
 
     CoverFlowAdapter(Context context) {
         mContext = context;
