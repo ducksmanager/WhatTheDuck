@@ -3,20 +3,20 @@ package net.ducksmanager.whattheduck;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import static android.support.v4.content.FileProvider.getUriForFile;
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
 public abstract class List extends ListActivity{
     private static final int LOGOUT = 1;
@@ -83,7 +83,7 @@ public abstract class List extends ListActivity{
             }
         });
 
-        ImageButton addToCollection = (ImageButton) this.findViewById(R.id.addToCollectionButton);
+        RelativeLayout addToCollection = (RelativeLayout) this.findViewById(R.id.addToCollectionWrapper);
         addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
 
         addToCollection.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +92,15 @@ public abstract class List extends ListActivity{
                 takeCoverPicture();
             }
         });
+
+        new SimpleTooltip.Builder(this)
+            .anchorView(addToCollection)
+            .text(R.string.add_cover_tooltip)
+            .gravity(Gravity.TOP)
+            .animated(true)
+            .transparentOverlay(true)
+            .build()
+            .show();
 
         setTitle(
             type.equals(CollectionType.USER.toString())
@@ -160,7 +169,7 @@ public abstract class List extends ListActivity{
             newFile.getParentFile().mkdirs();
             try {
                 newFile.createNewFile();
-                Uri photoURI = getUriForFile(this, "net.ducksmanager.whattheduck.fileprovider", newFile);
+                Uri photoURI = FileProvider.getUriForFile(this, "net.ducksmanager.whattheduck.fileprovider", newFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             } catch (IOException e) {
@@ -169,20 +178,13 @@ public abstract class List extends ListActivity{
         }
     }
 
-    private void handleCoverPicture(File newFile) {
-        String filePath = newFile.getPath();
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-
-        new CoverSearch(this, newFile).execute();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             File imagePath = new File(getFilesDir(), "Pictures");
             File newFile = new File(imagePath, "wtd_jpg");
 
-            handleCoverPicture(newFile);
+            new CoverSearch(this, newFile).execute();
         }
     }
 
