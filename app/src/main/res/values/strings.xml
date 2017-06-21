@@ -48,7 +48,7 @@
     <string name="welcomeTitle">Bienvenue sur What The Duck !</string>
     <string name="welcomeMessage">Décochez l\'option \"Contenu de ma collection seulement\" pour faire apparaitre tous les numéros référencés, puis tapotez sur l\'un d\'entre eux pour l\'ajouter à votre collection</string>
 
-    <string name="add_cover_tooltip">Nouveau! Ajoutez un numéro en photographiant sa couverture</string>
+    <string name="add_cover_tooltip">Nouveau! Ajoutez un numéro en photographiant sa couverture.</string>
     <string name="add_cover_icon_camera">Camera</string>
     <string name="add_cover_icon_plus">add_cover_icon_plus</string>
     <string name="cover_suggestion">Cover suggestion</string>

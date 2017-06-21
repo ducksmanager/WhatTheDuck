@@ -83,25 +83,32 @@ public abstract class List extends ListActivity{
             }
         });
 
-        RelativeLayout addToCollection = (RelativeLayout) this.findViewById(R.id.addToCollectionWrapper);
-        addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
+        if (type.equals(CollectionType.USER.toString())) {
+            RelativeLayout addToCollection = (RelativeLayout) this.findViewById(R.id.addToCollectionWrapper);
 
-        addToCollection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                takeCoverPicture();
+            addToCollection.setVisibility(View.VISIBLE);
+            addToCollection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    takeCoverPicture();
+                }
+            });
+
+            if (WhatTheDuck.getShowCoverTooltip()) {
+                new SimpleTooltip.Builder(this)
+                    .anchorView(addToCollection)
+                    .text(R.string.add_cover_tooltip)
+                    .gravity(Gravity.TOP)
+                    .animated(true)
+                    .margin(5.0f)
+                    .transparentOverlay(true)
+                    .build()
+                    .show();
             }
-        });
 
-        new SimpleTooltip.Builder(this)
-            .anchorView(addToCollection)
-            .text(R.string.add_cover_tooltip)
-            .gravity(Gravity.TOP)
-            .animated(true)
-            .margin(5.0f)
-            .transparentOverlay(true)
-            .build()
-            .show();
+            WhatTheDuck.setShowCoverTooltip(false);
+            WhatTheDuck.saveSettings(false);
+        }
 
         setTitle(
             type.equals(CollectionType.USER.toString())

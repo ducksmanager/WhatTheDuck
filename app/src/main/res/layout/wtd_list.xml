@@ -73,7 +73,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true"
-        android:layout_centerHorizontal="false">
+        android:layout_centerHorizontal="false"
+        android:visibility="gone">
 
         <ImageButton
             android:id="@+id/addToCollectionButton"
