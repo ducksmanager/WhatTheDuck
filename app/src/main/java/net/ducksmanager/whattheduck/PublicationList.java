@@ -1,5 +1,6 @@
 package net.ducksmanager.whattheduck;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -7,7 +8,7 @@ import android.widget.ListView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
-import net.ducksmanager.whattheduck.Collection.CollectionType;
+import net.ducksmanager.util.SimpleCallback;
 
 public class PublicationList extends List {
     
@@ -20,12 +21,16 @@ public class PublicationList extends List {
         final String selectedCountry = WhatTheDuck.getSelectedCountry();
         final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
 
-        if (type.equals(CollectionType.USER.toString())
-        || (type.equals(CollectionType.COA.toString()) && PublicationListing.hasFullList(selectedCountry))) {
+        if (PublicationListing.hasFullList(selectedCountry)) {
             this.show();
         }
         else {
-            new PublicationListing(this, selectedCountry).execute();
+            new PublicationListing(this, selectedCountry, new SimpleCallback() {
+                @Override
+                public void onDownloadFinished(Activity activity) {
+                    ((List)activity).show();
+                }
+            }).execute();
         }
 
         setNavigationCountry(countryFullName, selectedCountry);

@@ -1,5 +1,6 @@
 package net.ducksmanager.whattheduck;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
+import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 public class CountryList extends List {
@@ -36,7 +38,12 @@ public class CountryList extends List {
             show();
         }
         else {
-            new CountryListing(this).execute();
+            new CountryListing(this, new SimpleCallback() {
+                @Override
+                public void onDownloadFinished(Activity activity) {
+                    ((List)activity).show();
+                }
+            }).execute();
         }
 
         this.findViewById(R.id.navigation).setVisibility(View.GONE);

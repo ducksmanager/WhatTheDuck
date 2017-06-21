@@ -98,6 +98,7 @@ public class CoverFlowActivity extends Activity {
             Issue existingIssue = WhatTheDuck.userCollection.getIssue(current.getCountryCode(), current.getPublicationCode(), current.getIssueNumber());
             if (existingIssue == null) {
                 Issue newIssue = new Issue(current.getIssueNumber(), (Issue.IssueCondition) null);
+                WhatTheDuck.setSelectedCountry (current.getCountryCode());
                 WhatTheDuck.setSelectedPublication (current.getPublicationCode());
                 AddIssue.showAddIssueDialog(CoverFlowActivity.this, newIssue);
             }

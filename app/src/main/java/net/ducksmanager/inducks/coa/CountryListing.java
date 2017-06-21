@@ -1,7 +1,10 @@
 package net.ducksmanager.inducks.coa;
 
-import net.ducksmanager.whattheduck.List;
+import android.app.Activity;
+
+import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.WhatTheDuck;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,8 +16,8 @@ public class CountryListing extends CoaListing {
     private static HashMap<String,String> countryNames= new HashMap<>();
     public static boolean hasFullList = false;
 
-    public CountryListing(List list) {
-        super(list, ListType.COUNTRY_LIST, null, null);
+    public CountryListing(Activity activity, SimpleCallback callback) {
+        super(activity, ListType.COUNTRY_LIST, null, null, callback);
     }
 
     public static String getCountryFullName (String shortCountryName) {
@@ -50,7 +53,7 @@ public class CountryListing extends CoaListing {
             }
         }
 
-        displayedList.show();
+        callback.onDownloadFinished(activity);
     }
 
     @SuppressWarnings("unchecked")

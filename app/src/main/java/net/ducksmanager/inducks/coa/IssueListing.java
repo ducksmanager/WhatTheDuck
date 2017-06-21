@@ -1,7 +1,9 @@
 package net.ducksmanager.inducks.coa;
 
+import android.app.Activity;
+
+import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.Issue;
-import net.ducksmanager.whattheduck.List;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import org.json.JSONArray;
@@ -14,8 +16,8 @@ public class IssueListing extends CoaListing {
 
     private static final HashSet<String> fullListPublications = new HashSet<>();
 
-    public IssueListing(List list, String countryShortName, String publicationShortName) {
-        super(list, ListType.ISSUE_LIST, countryShortName, publicationShortName);
+    public IssueListing(Activity activity, String countryShortName, String publicationShortName, SimpleCallback callback) {
+        super(activity, ListType.ISSUE_LIST, countryShortName, publicationShortName, callback);
         this.urlSuffix+="&pays="+countryShortName+"&magazine="+publicationShortName;
     }
 
@@ -41,6 +43,6 @@ public class IssueListing extends CoaListing {
             }
         }
 
-        displayedList.show();
+        callback.onDownloadFinished(activity);
     }
 }

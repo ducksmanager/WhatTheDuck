@@ -1,5 +1,6 @@
 package net.ducksmanager.whattheduck;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.IssueListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
+import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.util.ArrayList;
@@ -32,12 +34,16 @@ public class IssueList extends List {
         final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
         final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
 
-        if (type.equals(CollectionType.USER.toString())
-        || (type.equals(CollectionType.COA.toString()) && IssueListing.hasFullList(selectedPublication))) {
+        if (IssueListing.hasFullList(selectedPublication)) {
             this.show();
         }
         else {
-            new IssueListing(this, selectedCountry, selectedPublication).execute();
+            new IssueListing(this, selectedCountry, selectedPublication, new SimpleCallback() {
+                @Override
+                public void onDownloadFinished(Activity activity) {
+                    ((List)activity).show();
+                }
+            }).execute();
         }
 
         setNavigationCountry(countryFullName, selectedCountry);

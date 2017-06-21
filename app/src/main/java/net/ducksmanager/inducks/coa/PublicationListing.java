@@ -1,6 +1,8 @@
 package net.ducksmanager.inducks.coa;
 
-import net.ducksmanager.whattheduck.List;
+import android.app.Activity;
+
+import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import org.json.JSONException;
@@ -15,8 +17,8 @@ public class PublicationListing extends CoaListing {
     private static final HashMap<String,HashMap<String,String>> publicationNames= new HashMap<>();
     private static final HashSet<String> fullListCountries = new HashSet<>();
 
-    public PublicationListing(List list, String countryShortName) {
-        super(list, ListType.PUBLICATION_LIST, countryShortName, null);
+    public PublicationListing(Activity list, String countryShortName, SimpleCallback callback) {
+        super(list, ListType.PUBLICATION_LIST, countryShortName, null, callback);
         this.urlSuffix+="&pays="+countryShortName;
     }
 
@@ -59,7 +61,7 @@ public class PublicationListing extends CoaListing {
             }
         }
 
-        displayedList.show();
+        callback.onDownloadFinished(activity);
     }
 
     private static void addFullPublications(String countryShortName, JSONObject object) throws JSONException {

@@ -1,16 +1,20 @@
 package net.ducksmanager.inducks.coa;
 
 
-import net.ducksmanager.whattheduck.List;
+import android.app.Activity;
+
+import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
+
 import org.json.JSONException;
 
 import java.util.HashMap;
 
 public abstract class CoaListing extends RetrieveTask {
-    public static List displayedList;
+    public Activity activity;
+    public SimpleCallback callback;
     public enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST}
 
     private static final HashMap<ListType, String> urlSuffixes = new HashMap<>();
@@ -24,26 +28,27 @@ public abstract class CoaListing extends RetrieveTask {
     static String publicationShortName;
 
 
-    CoaListing(List list, ListType type, String countryShortName, String publicationShortName) {
+    CoaListing(Activity activity, ListType type, String countryShortName, String publicationShortName, SimpleCallback callback) {
         super(urlSuffixes.get(type), R.id.progressBarLoading);
-        displayedList = list;
+        this.activity = activity;
+        this.callback = callback;
         CoaListing.countryShortName = countryShortName;
         CoaListing.publicationShortName = publicationShortName;
     }
 
     @Override
     protected void onPreExecute() {
-        WhatTheDuck.wtd.toggleProgressbarLoading(displayedList, progressBarId, true);
+        WhatTheDuck.wtd.toggleProgressbarLoading(activity, progressBarId, true);
     }
 
     @Override
     protected void onPostExecute(String response) {
         super.onPostExecute(response);
-        WhatTheDuck.wtd.toggleProgressbarLoading(displayedList, progressBarId, false);
+        WhatTheDuck.wtd.toggleProgressbarLoading(activity, progressBarId, false);
     }
 
     void handleJSONException(JSONException e) {
-        WhatTheDuck.wtd.alert(displayedList,
+        WhatTheDuck.wtd.alert(activity,
                 R.string.internal_error,
                 R.string.internal_error__malformed_list," : " + e.getMessage());
     }
