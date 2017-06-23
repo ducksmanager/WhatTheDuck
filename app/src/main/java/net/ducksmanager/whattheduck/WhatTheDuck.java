@@ -40,6 +40,7 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
+import java.util.Locale;
 import java.util.Properties;
 
 public class WhatTheDuck extends Activity {
@@ -326,6 +327,7 @@ public class WhatTheDuck extends Activity {
                                       + "&mdp_user="+encryptedPassword
                                       + "&mdp="+ config.getProperty(CONFIG_KEY_SECURITY_PASSWORD)
                                       + "&version="+getApplicationVersion()
+                                      + "&language="+ Locale.getDefault().getLanguage()
                                       + urlSuffix);
 
         response = response.replaceAll("/\\/", "");
