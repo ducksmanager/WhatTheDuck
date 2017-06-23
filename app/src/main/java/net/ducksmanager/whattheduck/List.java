@@ -185,6 +185,9 @@ public abstract class List extends ListActivity{
             File imagePath = new File(getFilesDir(), CoverSearch.uploadTempDir);
             File newFile = new File(imagePath, CoverSearch.uploadFileName);
 
+            this.findViewById(R.id.addToCollectionWrapper).setVisibility(View.GONE);
+            this.findViewById(R.id.progressBarLoading).setVisibility(View.VISIBLE);
+
             new CoverSearch(this, newFile).execute();
         }
     }

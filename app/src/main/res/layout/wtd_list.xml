@@ -60,11 +60,12 @@
 
     <ProgressBar
         android:id="@+id/progressBarLoading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="true"
-        android:layout_centerHorizontal="true"
+        android:layout_width="40dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="false"
         android:visibility="gone"/>
 
     <RelativeLayout

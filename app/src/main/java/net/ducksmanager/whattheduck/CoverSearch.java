@@ -1,6 +1,7 @@
 package net.ducksmanager.whattheduck;
 
 import android.content.Intent;
+import android.view.View;
 
 import com.koushikdutta.async.future.FutureCallback;
 
@@ -23,6 +24,8 @@ public class CoverSearch extends RetrieveTask {
         @Override
         public void onCompleted(Exception e, String result) {
         try {
+            cls.findViewById(R.id.addToCollectionWrapper).setVisibility(View.VISIBLE);
+            cls.findViewById(R.id.progressBarLoading).setVisibility(View.GONE);
             if (e != null)
                 throw e;
 
