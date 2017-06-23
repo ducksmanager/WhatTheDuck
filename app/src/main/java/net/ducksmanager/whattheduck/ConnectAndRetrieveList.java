@@ -65,29 +65,38 @@ public class ConnectAndRetrieveList extends RetrieveTask {
 
             JSONObject object = new JSONObject(response);
             try {
-                JSONObject issues = object.getJSONObject("numeros");
-                @SuppressWarnings("unchecked")
-                Iterator<String> issueIterator = issues.keys();
-                while (issueIterator.hasNext()) {
-                    String countryAndPublication = issueIterator.next();
-                    JSONArray publicationIssues = issues.getJSONArray(countryAndPublication);
-                    for (int i = 0; i < publicationIssues.length(); i++) {
-                        String issueNumber = publicationIssues.getJSONObject(i).getString("Numero");
-                        String issueCondition = publicationIssues.getJSONObject(i).getString("Etat");
-                        WhatTheDuck.userCollection.addIssue(countryAndPublication, new Issue(issueNumber, issueCondition));
+                if (object.has("numeros")) {
+                    if (object.get("numeros").getClass().equals(JSONObject.class)) {
+                        JSONObject issues = object.getJSONObject("numeros");
+                        @SuppressWarnings("unchecked")
+                        Iterator<String> issueIterator = issues.keys();
+                        while (issueIterator.hasNext()) {
+                            String countryAndPublication = issueIterator.next();
+                            JSONArray publicationIssues = issues.getJSONArray(countryAndPublication);
+                            for (int i = 0; i < publicationIssues.length(); i++) {
+                                String issueNumber = publicationIssues.getJSONObject(i).getString("Numero");
+                                String issueCondition = publicationIssues.getJSONObject(i).getString("Etat");
+                                WhatTheDuck.userCollection.addIssue(countryAndPublication, new Issue(issueNumber, issueCondition));
+                            }
+                        }
+
+                        CountryListing.hasFullList = false;
+
+                        CountryListing.addCountries(object);
+                        PublicationListing.addPublications(object);
                     }
+                    else { // Empty list
+                        CountryListing.hasFullList = false;
+                    }
+
+                    Intent i = new Intent(wtd, CountryList.class);
+                    i.putExtra("type", Collection.CollectionType.USER.toString());
+                    wtd.startActivity(i);
+                } else {
+                    throw new JSONException("");
                 }
-
-                CountryListing.hasFullList = false;
-
-                CountryListing.addCountries(object);
-                PublicationListing.addPublications(object);
-
-                Intent i = new Intent(wtd, CountryList.class);
-                i.putExtra("type", Collection.CollectionType.USER.toString());
-                wtd.startActivity(i);
-
-            } catch (JSONException e) {
+            }
+            catch (JSONException e) {
                 JSONArray issues = object.getJSONArray("numeros");
                 if (issues.length() > 0)
                     throw e;
