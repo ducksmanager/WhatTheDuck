@@ -55,7 +55,7 @@ public class CoverSearch extends RetrieveTask {
                     if (object.has("type")) {
                         switch((String) object.get("type")) {
                             case "SEARCH_RESULTS":
-                                WhatTheDuck.wtd.alert(cls, "No result found for covers matching your photo, please try again.");
+                                WhatTheDuck.wtd.alert(cls, R.string.add_cover_no_results);
                             break;
                             default:
                                 WhatTheDuck.wtd.alert(cls, (String) object.get("type"));

@@ -54,6 +54,7 @@
     <string name="add_cover_error_file_too_big">The picture is too big, please try again.</string>
     <string name="cover_suggestion">Cover suggestion</string>
     <string name="add_cover">Cliquez sur la couverture\npour ajouter le numéro à la collection</string>
+    <string name="add_cover_no_results">No result found for covers matching your photo, please try again.</string>
     <string name="issue_already_possessed">Vous possédez déjà ce numéro dans votre collection</string>
     <string name="result">Résultat</string>
 </resources>
