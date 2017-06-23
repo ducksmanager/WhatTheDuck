@@ -1,3 +1,8 @@
+Version 1.5.0
+
+    Set English as default language and add its translations
+    Cover search minor fixes
+
 Version 1.4.0
 
     Introduce adding an issue by taking a picture of its cover
