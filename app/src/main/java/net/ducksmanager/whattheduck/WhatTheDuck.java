@@ -142,6 +142,13 @@ public class WhatTheDuck extends Activity {
         builder.create().show();
     }
     
+    public void alert(Context c, int messageId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle(R.string.error);
+        builder.setMessage(getString(messageId));
+        builder.create().show();
+    }
+
     public void alert(Context c, int titleId, int messageId, String extraMessage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle(getString(titleId));

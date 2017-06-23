@@ -60,7 +60,13 @@ public class CoverSearch extends RetrieveTask {
                     }
                 }
             } catch (JSONException jsone) {
-                jsone.printStackTrace();
+                if (result.contains("exceeds your upload")) {
+                    WhatTheDuck.wtd.alert(CoverSearch.cls, R.string.add_cover_error_file_too_big);
+                }
+                else {
+                    WhatTheDuck.wtd.alert(CoverSearch.cls, R.string.internal_error);
+                    jsone.printStackTrace();
+                }
             }
         } catch (Exception ex) {
             WhatTheDuck.wtd.alert(cls, ex.getMessage());
