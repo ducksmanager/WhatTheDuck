@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">What The Duck</string>
-    <string name="add_cover">Click on the cover to add it to your collection</string>
+    <string name="add_cover">Click on the cover\nto add it to your collection</string>
     <string name="add_cover_error_file_too_big">The picture is too big, please try again.</string>
     <string name="add_cover_icon_camera">Camera</string>
-    <string name="add_cover_icon_plus">Plis</string>
+    <string name="add_cover_icon_plus">Plus</string>
     <string name="add_cover_no_results">No cover matches your photo, please try again.</string>
     <string name="add_cover_tooltip">New! Add an issue by photographing its cover.</string>
     <string name="all_countries">All countries</string>
@@ -45,7 +45,7 @@
     <string name="result">Result</string>
     <string name="show_my_collection_content_only">Content of my collection only</string>
     <string name="signup">Signup</string>
-    <string name="signup__confirm">You hae signed up on DucksManager successfully, please login.</string>
+    <string name="signup__confirm">You have signed up to DucksManager successfully, please login.</string>
     <string name="signup_end">Finish signup</string>
     <string name="username">Username</string>
     <string name="welcomeMessage">Untick the option \"Content of my collection only\" to show all the referenced issues, then tap on an issue number to add it to your collection</string>

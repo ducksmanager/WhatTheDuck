@@ -50,7 +50,7 @@
 
     <string name="add_cover_tooltip">Nouveau! Ajoutez un numéro en photographiant sa couverture.</string>
     <string name="add_cover_icon_camera">App. photo</string>
-    <string name="add_cover_icon_plus">add_cover_icon_plus</string>
+    <string name="add_cover_icon_plus">Plus</string>
     <string name="add_cover_error_file_too_big">L\'image est trop grande, veuillez réessayer.</string>
     <string name="cover_suggestion">Suggestion de couverture</string>
     <string name="add_cover">Cliquez sur la couverture\npour ajouter le numéro à la collection</string>
