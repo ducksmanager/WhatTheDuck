@@ -12,7 +12,7 @@
     <string name="signup">Inscription</string>
     <string name="signup__confirm">L\'inscription à DucksManager est terminée, \nvous pouvez maintenant vous connecter.</string>
     <string name="login">Connexion</string>
-    <string name="link_to_ducksmanager_website">WhatTheDuck est l\'application mobile de DucksManager. Cliquez ici pour accéder au site Web de DucksManager.</string>
+    <string name="link_to_ducksmanager_website">What The Duck est l\'application mobile de DucksManager. Cliquez ici pour accéder au site Web de DucksManager.</string>
     <string name="ok">OK</string>
     <string name="cancel">Annuler</string>
 

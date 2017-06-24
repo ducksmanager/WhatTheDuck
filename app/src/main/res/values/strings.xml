@@ -30,7 +30,7 @@
     <string name="internal_error__malformed_list">The issue list is malformed</string>
     <string name="issueNumber">Issue number</string>
     <string name="issue_already_possessed">You already have this issue in your collection</string>
-    <string name="link_to_ducksmanager_website">WhatTheDuck is the mobile app of DucksManager. Click here to access the DucksManager website.</string>
+    <string name="link_to_ducksmanager_website">What The Duck is the mobile app of DucksManager. Click here to access the DucksManager website.</string>
     <string name="login">Login</string>
     <string name="logout_menu">Logout</string>
     <string name="my_collection">My collection</string>
