@@ -1,3 +1,7 @@
+Version 1.5.1
+
+    Add Swedish translation
+    
 Version 1.5.0
 
     Set English as default language and add its translations
