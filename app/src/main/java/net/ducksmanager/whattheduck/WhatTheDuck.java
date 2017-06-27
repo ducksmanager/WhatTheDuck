@@ -151,10 +151,15 @@ public class WhatTheDuck extends Activity {
     }
 
     public void alert(Context c, int titleId, int messageId, String extraMessage) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle(getString(titleId));
         builder.setMessage(getString(messageId)+extraMessage);
-        builder.create().show();
+
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                builder.create().show();
+            }
+        });
     }
     
     public void alert(int titleId, int messageId, String extraMessage) {
