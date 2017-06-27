@@ -33,4 +33,5 @@ dependencies {
     compile 'com.github.moondroid.coverflow:library:1.0'
     compile 'com.koushikdutta.ion:ion:2.1.9'
     compile 'com.github.douglasjunior:android-simple-tooltip:0.2.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

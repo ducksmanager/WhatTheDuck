@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -20,10 +19,10 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import net.ducksmanager.util.CoverFlowFileHandler;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -165,30 +164,31 @@ public abstract class List extends ListActivity{
     private void takeCoverPicture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File imagePath = new File(getFilesDir(), CoverSearch.uploadTempDir);
-            File newFile = new File(imagePath, CoverSearch.uploadFileName);
-            newFile.getParentFile().mkdirs();
-            try {
-                newFile.createNewFile();
-                Uri photoURI = FileProvider.getUriForFile(this, "net.ducksmanager.whattheduck.fileprovider", newFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            CoverFlowFileHandler.current = new CoverFlowFileHandler();
+            Uri photoURI = CoverFlowFileHandler.current.createEmptyFileForCamera(List.this);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            File imagePath = new File(getFilesDir(), CoverSearch.uploadTempDir);
-            File newFile = new File(imagePath, CoverSearch.uploadFileName);
-
             this.findViewById(R.id.addToCollectionWrapper).setVisibility(View.GONE);
             this.findViewById(R.id.progressBarLoading).setVisibility(View.VISIBLE);
 
-            new CoverSearch(this, newFile).execute();
+            CoverFlowFileHandler.current.resizeUntilFileSize(this, CoverFlowFileHandler.MAX_COVER_FILESIZE, new CoverFlowFileHandler.TransformationCallback() {
+                @Override
+                public void onComplete(File fileToUpload) {
+                    new CoverSearch(List.this, fileToUpload).execute();
+                }
+
+                @Override
+                public void onFail(File uploadFile) {
+                    List.this.findViewById(R.id.addToCollectionWrapper).setVisibility(View.VISIBLE);
+                    List.this.findViewById(R.id.progressBarLoading).setVisibility(View.GONE);
+                }
+            });
         }
     }
 
