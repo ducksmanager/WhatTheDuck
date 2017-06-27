@@ -28,7 +28,7 @@ public class CountryList extends List {
                 }
             });
             WhatTheDuck.setShowWelcomeMessage(false);
-            WhatTheDuck.saveSettings(false);
+            WhatTheDuck.saveSettings(null);
             builder.create().show();
         }
         

@@ -209,7 +209,7 @@ public class WhatTheDuck extends Activity {
         }
     }
 
-    public static void saveSettings(boolean withCredentials) {
+    public static void saveSettings(Boolean withCredentials) {
         Properties props=new Properties();
 
         InputStream inputStream;
@@ -220,13 +220,14 @@ public class WhatTheDuck extends Activity {
             e.printStackTrace();
         }
 
-        if (withCredentials) {
-            props.put("username", getUsername());
-            props.put("password", getEncryptedPassword());
-        }
-        else {
-            props.remove("username");
-            props.remove("password");
+        if (withCredentials != null) {
+            if (withCredentials.equals(Boolean.TRUE)) {
+                props.put("username", getUsername());
+                props.put("password", getEncryptedPassword());
+            } else {
+                props.remove("username");
+                props.remove("password");
+            }
         }
 
         props.put("showWelcomeMessage", getShowWelcomeMessage().toString());

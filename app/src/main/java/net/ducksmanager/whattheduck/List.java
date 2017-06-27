@@ -99,7 +99,7 @@ public abstract class List extends ListActivity{
             }
 
             WhatTheDuck.setShowCoverTooltip(false);
-            WhatTheDuck.saveSettings(false);
+            WhatTheDuck.saveSettings(null);
         }
 
         setTitle(
