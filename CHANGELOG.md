@@ -1,3 +1,9 @@
+Version 1.5.2
+
+    Resize cover before upload
+    Fix error when attempting to show alerts
+    Fix "Remember my credentials" not working
+    
 Version 1.5.1
 
     Add Swedish translation
