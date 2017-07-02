@@ -4,22 +4,24 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="6dip">
+    <ImageView
+        android:id="@+id/issuecondition"
+        android:layout_width="20dp"
+        android:layout_height="fill_parent"
+        android:layout_marginRight="4dp"
+        android:layout_marginEnd="4dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:contentDescription="@+id/issuecondition_description" />
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="0dip"
         android:layout_weight="1"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/issuenumber"
+            android:id="@+id/itemtitle"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:text="@string/issueNumber" />
+            android:text="@string/itemtitle" />
     </LinearLayout>
-    <ImageView
-        android:id="@+id/issuecondition"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_marginRight="2dip"
-        android:layout_marginEnd="2dip"
-        android:contentDescription="@+id/issuecondition_description" />
 </LinearLayout>

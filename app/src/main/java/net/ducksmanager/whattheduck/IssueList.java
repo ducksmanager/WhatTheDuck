@@ -17,12 +17,11 @@ import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
-public class IssueList extends List {
+public class IssueList extends List<Issue> {
 
     private ArrayList<Issue> issues = null;
-    private IssueAdapter issueAdapter;
+    private ItemAdapter itemAdapter;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +52,16 @@ public class IssueList extends List {
     public void show() {
         issues = getCollection().getIssueList(
             WhatTheDuck.getSelectedCountry(),
-            WhatTheDuck.getSelectedPublication(),
-            this.type);
+            WhatTheDuck.getSelectedPublication()
+        );
 
         if (issues.size() == 0) {
             TextView emptyListText = (TextView) this.findViewById(R.id.emptyList);
             emptyListText.setVisibility(TextView.VISIBLE);
         }
 
-        this.issueAdapter = new IssueAdapter(this, issues);
-        setListAdapter(this.issueAdapter);
+        this.itemAdapter = new IssueAdapter(this, issues);
+        setListAdapter(this.itemAdapter);
 
         EditText filterEditText = (EditText) this.findViewById(R.id.filter);
         if (issues.size() > 20) {
@@ -72,14 +71,8 @@ public class IssueList extends List {
                 public void afterTextChanged(Editable s) { }
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    String typedText = s.toString();
-                    ArrayList<Issue> filteredIssues = new ArrayList<>();
-                    for (Issue issue : IssueList.this.issues)
-                        if (issue.getIssueNumber().replace("* ", "").toLowerCase(Locale.FRANCE).contains(typedText.toLowerCase()))
-                            filteredIssues.add(issue);
-
-                    IssueList.this.issueAdapter = new IssueAdapter(IssueList.this, filteredIssues);
-                    setListAdapter(IssueList.this.issueAdapter);
+                    IssueList.this.itemAdapter = new IssueAdapter(IssueList.this, IssueList.this.itemAdapter.getFilteredList(s.toString()));
+                    setListAdapter(IssueList.this.itemAdapter);
                 }
             });
         }
@@ -99,8 +92,9 @@ public class IssueList extends List {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         if (type.equals(CollectionType.COA.toString())) {
             Issue selectedIssue = (Issue) this.getListView().getItemAtPosition(((Long) id).intValue());
-            if (selectedIssue.getIssueNumber().startsWith("* "))
+            if (WhatTheDuck.userCollection.getIssue(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), selectedIssue.getIssueNumber()) != null) {
                 WhatTheDuck.wtd.info(this, R.string.input_error__issue_already_possessed);
+            }
             else {
                 AddIssue.showAddIssueDialog(IssueList.this, selectedIssue);
             }

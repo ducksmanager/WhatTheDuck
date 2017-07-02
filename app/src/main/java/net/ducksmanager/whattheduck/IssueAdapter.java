@@ -1,46 +1,30 @@
 package net.ducksmanager.whattheduck;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.app.Activity;
 
 import java.util.ArrayList;
 
-public class IssueAdapter extends ArrayAdapter<Issue> {
-
-    private final ArrayList<Issue> items;
-
-    public IssueAdapter(Context context, ArrayList<Issue> items) {
-        super(context, R.layout.row, items);
-        this.items = items;
+public class IssueAdapter extends ItemAdapter<Issue> {
+    public IssueAdapter(List list, ArrayList<Issue> items) {
+        super(list, items);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View v = convertView;
-        if (v == null) {
-            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.row, null);
+    protected boolean isHighlighted(Issue i) {
+        return i.getIssueCondition() != null;
+    }
+
+    @Override
+    protected Integer getImageResource(Issue i, Activity activity) {
+        if (i.getIssueCondition() != null) {
+            return Issue.issueConditionToResourceId(i.getIssueCondition());
+        } else {
+            return android.R.color.transparent;
         }
-        Issue i = items.get(position);
-        if (i != null) {
-            TextView issueNumber = (TextView) v.findViewById(R.id.issuenumber);
-            ImageView imageCondition = (ImageView) v.findViewById(R.id.issuecondition);
-            if (issueNumber != null)
-                issueNumber.setText(i.getIssueNumber());
-            if (imageCondition != null) {
-                if (i.getIssueCondition() != null) {
-                    int resourceId = Issue.issueConditionToResourceId(i.getIssueCondition());
-                    imageCondition.setImageResource(resourceId);
-                } else {
-                    imageCondition.setImageResource(android.R.color.transparent);
-                }
-            }
-        }
-        return v;
+    }
+
+    @Override
+    protected String getText(Issue i) {
+        return i.getIssueNumber();
     }
 }

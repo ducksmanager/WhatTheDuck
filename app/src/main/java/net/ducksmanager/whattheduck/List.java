@@ -12,7 +12,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -24,15 +23,15 @@ import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
-public abstract class List extends ListActivity{
+public abstract class List<Item> extends ListActivity{
     private static final int LOGOUT = 1;
 
     public String type;
-    private ArrayList<String> items;
+    protected ArrayList<Item> items;
+    private ItemAdapter itemAdapter;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -125,16 +124,16 @@ public abstract class List extends ListActivity{
 
     public abstract void show();
 
-    public void show(ArrayList<String> items) {
-        this.items = items;
+    public void show(ItemAdapter itemAdapter) {
+        this.itemAdapter = itemAdapter;
+        this.items = (ArrayList<Item>) itemAdapter.getItems();
 
         if (items.size() == 0) {
             TextView emptyListText = (TextView) this.findViewById(R.id.emptyList);
             emptyListText.setVisibility(TextView.VISIBLE);
         }
 
-        String[] lv_arr = items.toArray(new String[items.size()]);
-        setListAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lv_arr));
+        setListAdapter(this.itemAdapter);
 
         EditText filterEditText = (EditText) this.findViewById(R.id.filter);
         if (items.size() > 20) {
@@ -144,15 +143,8 @@ public abstract class List extends ListActivity{
                 public void afterTextChanged(Editable s) { }
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    String typedText = s.toString();
-                    ArrayList<String> filteredItems = new ArrayList<>();
-                    for (String item : List.this.items)
-                        if (item.replace("* ", "").toLowerCase(Locale.FRANCE).contains(typedText.toLowerCase()))
-                            filteredItems.add(item);
-
-                    String[] lv_arr = filteredItems.toArray(new String[filteredItems.size()]);
-                    setListAdapter(new ArrayAdapter<>(List.this, android.R.layout.simple_list_item_1, lv_arr));
-
+                    List.this.itemAdapter = new CountryAdapter(List.this, List.this.itemAdapter.getFilteredList(s.toString()));
+                    setListAdapter(List.this.itemAdapter);
                 }
             });
         }

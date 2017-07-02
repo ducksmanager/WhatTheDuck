@@ -28,7 +28,7 @@
     <string name="internal_error__crypting_failed">Krypteringen av din information misslyckades</string>
     <string name="internal_error__issue_insertion_failed">Adderingen av utgåvan i din samling misslyckades</string>
     <string name="internal_error__malformed_list">Utgåvolistan är felaktig</string>
-    <string name="issueNumber">Utgåvans nummer</string>
+    <string name="itemtitle">Utgåvans nummer</string>
     <string name="link_to_ducksmanager_website">What The Duck är mobilappen av DucksManager. Klicka här för gå till DucksManagers hemsida.</string>
     <string name="login">Login</string>
     <string name="logout_menu">Logga ut</string>

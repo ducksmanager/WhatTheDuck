@@ -46,7 +46,7 @@ public class PublicationList extends List {
         
     public void show() {
         if (WhatTheDuck.getSelectedCountry() != null) {
-            super.show(getCollection().getPublicationList(WhatTheDuck.getSelectedCountry(), this.type));
+            super.show(new PublicationAdapter(this, getCollection().getPublicationList(WhatTheDuck.getSelectedCountry())));
         }
     }
 
@@ -54,11 +54,8 @@ public class PublicationList extends List {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        String publicationShortName = PublicationListing.getPublicationShortName(
-            WhatTheDuck.getSelectedCountry(),
-            this.getListView().getItemAtPosition(((Long) id).intValue()).toString().replace("* ", "")
-        );
-        WhatTheDuck.setSelectedPublication (publicationShortName);
+        PublicationAdapter.Publication selectedPublication = (PublicationAdapter.Publication) this.getListView().getItemAtPosition(((Long) id).intValue());
+        WhatTheDuck.setSelectedPublication (selectedPublication.getPublicationCode());
 
         Intent i = new Intent(this, IssueList.class);
         i.putExtra("type", this.type);
