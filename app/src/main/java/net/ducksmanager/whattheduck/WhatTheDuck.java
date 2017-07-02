@@ -13,6 +13,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -28,14 +29,10 @@ import com.koushikdutta.ion.Ion;
 
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -46,7 +43,9 @@ import java.util.Properties;
 public class WhatTheDuck extends Activity {
     private static final String SERVER_PAGE="WhatTheDuck.php";
     private static final String DUCKSMANAGER_URL="http://www.ducksmanager.net";
-    private static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
+
+    @VisibleForTesting
+    public static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
 
     public static final String CONFIG = "config.properties";
     public static final String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
@@ -318,7 +317,7 @@ public class WhatTheDuck extends Activity {
             .setCallback(futureCallback);
     }
 
-    public String retrieveOrFail(String urlSuffix) throws Exception {
+    public String retrieveOrFail(RetrieveTask.DownloadHandler downloadHandler, String urlSuffix) throws Exception {
         if (!isOnline()) {
             throw new Exception(""+R.string.network_error);
         }
@@ -328,7 +327,12 @@ public class WhatTheDuck extends Activity {
             md.update(getPassword().getBytes());
             setEncryptedPassword(byteArray2Hex(md.digest()));
         }
-        String response = getPage(getServerURL()+"/"+SERVER_PAGE
+
+        if (serverURL == null) {
+            serverURL = downloadHandler.getPage(DUCKSMANAGER_URL+"/"+DUCKSMANAGER_PAGE_WITH_REMOTE_URL);
+        }
+
+        String response = downloadHandler.getPage(serverURL+"/"+SERVER_PAGE
                                       + "?pseudo_user="+URLEncoder.encode(username, "UTF-8")
                                       + "&mdp_user="+encryptedPassword
                                       + "&mdp="+ config.getProperty(CONFIG_KEY_SECURITY_PASSWORD)
@@ -374,40 +378,14 @@ public class WhatTheDuck extends Activity {
         return info.versionName;
     }
 
-    private String getPage(String url) {
-        String response="";
-        try {
-            URL userCollectionURL = new URL(url);
-            BufferedReader in = new BufferedReader(new InputStreamReader(userCollectionURL.openStream()));
-
-            String inputLine;
-            while ((inputLine = in.readLine()) != null)
-            response+=inputLine;
-            in.close();
-        } catch (MalformedURLException e) {
-            this.alert(R.string.error,
-                          R.string.error__malformed_url);
-        } catch (IOException e) {
-            this.alert(R.string.network_error,
-                       R.string.network_error__no_connection);
-        }
-        return response;
-    }
-    private String getServerURL() {
-        if (serverURL == null) {
-            serverURL = getPage(DUCKSMANAGER_URL+"/"+DUCKSMANAGER_PAGE_WITH_REMOTE_URL);
-        }
-        return serverURL;
-    }
-
-    public String toSHA1(String text) {
+    public static String toSHA1(String text) {
         try {
                 MessageDigest md = MessageDigest.getInstance("SHA-1");
                 md.update(text.getBytes());
                 return byteArray2Hex(md.digest());
         }
         catch (NoSuchAlgorithmException e) {
-                this.alert(R.string.internal_error,
+                WhatTheDuck.wtd.alert(R.string.internal_error,
                                    R.string.internal_error__crypting_failed);
                 return "";
         }
