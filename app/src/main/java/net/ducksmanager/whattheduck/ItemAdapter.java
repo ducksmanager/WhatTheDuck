@@ -10,8 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.ducksmanager.util.NaturalOrderComparator;
+
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.Locale;
 
 public abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
@@ -21,7 +23,7 @@ public abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
     ItemAdapter(List list, ArrayList<Item> items) {
         super(list, R.layout.row, items);
         this.items = items;
-        this.sort(getComparator());
+        Collections.sort(this.items, getComparator());
     }
 
     ArrayList<Item> getFilteredList(String textFilter) {
@@ -32,11 +34,11 @@ public abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         return filteredItems;
     }
 
-    private Comparator<? super Item> getComparator() {
-        return new Comparator<Item>() {
+    private NaturalOrderComparator<Item> getComparator() {
+        return new NaturalOrderComparator<Item>() {
             @Override
-            public int compare(Item item1, Item item2) {
-                return getText(item1).compareTo(getText(item2));
+            public int compare(Item i1, Item i2) {
+                return super.compareObject(getText(i1), getText(i2));
             }
         };
     }
@@ -53,14 +55,16 @@ public abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
             TextView itemTitle = (TextView) v.findViewById(R.id.itemtitle);
             itemTitle.setText(getText(i));
 
-            if (isHighlighted(i)) {
-                itemTitle.setTypeface(null, Typeface.BOLD);
-            }
+            itemTitle.setTypeface(null, isHighlighted(i) ? Typeface.BOLD: Typeface.NORMAL);
 
             ImageView imageCondition = (ImageView) v.findViewById(R.id.issuecondition);
             if (imageCondition != null) {
                 Integer imageResource = getImageResource(i, (Activity) this.getContext());
-                if (imageResource != null) {
+                if (imageResource == null) {
+                    imageCondition.setVisibility(View.GONE);
+                }
+                else {
+                    imageCondition.setVisibility(View.VISIBLE);
                     imageCondition.setImageResource(imageResource);
                 }
             }
@@ -68,7 +72,7 @@ public abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         return v;
     }
 
-    protected ArrayList<Item> getItems() {
+    ArrayList<Item> getItems() {
         return this.items;
     }
 

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
-import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.util.SimpleCallback;
 
@@ -19,7 +18,6 @@ public class PublicationList extends List {
         super.onCreate(savedInstanceState);
 
         final String selectedCountry = WhatTheDuck.getSelectedCountry();
-        final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
 
         if (PublicationListing.hasFullList(selectedCountry)) {
             this.show();
@@ -33,8 +31,8 @@ public class PublicationList extends List {
             }).execute();
         }
 
-        setNavigationCountry(countryFullName, selectedCountry);
-        setNavigationPublication(null, null);
+        setNavigationCountry(selectedCountry);
+        setNavigationPublication(selectedCountry, null);
     }
 
     @Override

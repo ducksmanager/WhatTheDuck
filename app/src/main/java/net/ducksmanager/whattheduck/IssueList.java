@@ -10,18 +10,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.IssueListing;
-import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
-import java.util.ArrayList;
-
 public class IssueList extends List<Issue> {
-
-    private ArrayList<Issue> issues = null;
-    private ItemAdapter itemAdapter;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +22,6 @@ public class IssueList extends List<Issue> {
 
         final String selectedCountry = WhatTheDuck.getSelectedCountry();
         final String selectedPublication = WhatTheDuck.getSelectedPublication();
-
-        final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
-        final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
 
         if (IssueListing.hasFullList(selectedPublication)) {
             this.show();
@@ -45,26 +35,26 @@ public class IssueList extends List<Issue> {
             }).execute();
         }
 
-        setNavigationCountry(countryFullName, selectedCountry);
-        setNavigationPublication(publicationFullName, selectedPublication);
+        setNavigationCountry(selectedCountry);
+        setNavigationPublication(selectedCountry, selectedPublication);
     }
 
     public void show() {
-        issues = getCollection().getIssueList(
+        items = getCollection().getIssueList(
             WhatTheDuck.getSelectedCountry(),
             WhatTheDuck.getSelectedPublication()
         );
 
-        if (issues.size() == 0) {
+        if (items.size() == 0) {
             TextView emptyListText = (TextView) this.findViewById(R.id.emptyList);
             emptyListText.setVisibility(TextView.VISIBLE);
         }
 
-        this.itemAdapter = new IssueAdapter(this, issues);
+        this.itemAdapter = new IssueAdapter(this, items);
         setListAdapter(this.itemAdapter);
 
         EditText filterEditText = (EditText) this.findViewById(R.id.filter);
-        if (issues.size() > 20) {
+        if (items.size() > 20) {
             filterEditText.setVisibility(EditText.VISIBLE);
 
             filterEditText.addTextChangedListener(new TextWatcher() {

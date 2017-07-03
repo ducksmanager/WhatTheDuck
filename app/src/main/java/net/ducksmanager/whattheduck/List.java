@@ -18,6 +18,8 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import net.ducksmanager.inducks.coa.CountryListing;
+import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.util.CoverFlowFileHandler;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
@@ -31,7 +33,7 @@ public abstract class List<Item> extends ListActivity{
 
     public String type;
     protected ArrayList<Item> items;
-    private ItemAdapter itemAdapter;
+    protected ItemAdapter itemAdapter;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -217,7 +219,9 @@ public abstract class List<Item> extends ListActivity{
             : WhatTheDuck.coaCollection;
     }
 
-    protected void setNavigationCountry(String countryFullName, String selectedCountry) {
+    protected void setNavigationCountry(String selectedCountry) {
+        final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
+
         View countryNavigationView = this.findViewById(R.id.navigationCountry);
 
         String uri = "@drawable/flags_" + selectedCountry;
@@ -231,11 +235,13 @@ public abstract class List<Item> extends ListActivity{
         currentCountryFlag.setVisibility(View.VISIBLE);
         currentCountryFlag.setImageResource(imageResource);
 
-        TextView currentCountryText = (TextView) this.findViewById(R.id.navigationCountry).findViewById(R.id.selected);
+        TextView currentCountryText = (TextView) countryNavigationView.findViewById(R.id.selected);
         currentCountryText.setText(countryFullName);
     }
 
-    protected void setNavigationPublication(String publicationFullName, String selectedPublication) {
+    protected void setNavigationPublication(String selectedCountry, String selectedPublication) {
+        final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
+
         View publicationNavigationView = this.findViewById(R.id.navigationPublication);
         TextView currentPublicationBadgeText = (TextView) publicationNavigationView.findViewById(R.id.selectedBadge);
 
