@@ -24,14 +24,6 @@ public class CountryListing extends CoaListing {
         return countryNames.get(shortCountryName);
     }
 
-    public static String getCountryShortName(String fullCountryName) {
-        for (String shortCountryName : countryNames.keySet()) {
-            if (countryNames.get(shortCountryName).equals(fullCountryName))
-                return shortCountryName;
-        }
-        return null;
-    }
-
     private static void resetCountries() {
         countryNames = new HashMap<>();
     }

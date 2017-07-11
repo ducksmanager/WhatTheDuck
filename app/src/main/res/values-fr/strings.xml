@@ -7,7 +7,7 @@
     <string name="my_collection">Ma collection</string>
     <string name="referenced_issues">Numéros référencés</string>
     <string name="logout_menu">Déconnexion</string>
-    <string name="issueNumber">Numéro</string>
+    <string name="itemtitle">Numéro</string>
     <string name="insert_issue__confirm">Ajout du numéro %1$s</string>
     <string name="signup">Inscription</string>
     <string name="signup__confirm">L\'inscription à DucksManager est terminée, \nvous pouvez maintenant vous connecter.</string>

@@ -7,8 +7,6 @@ import net.ducksmanager.whattheduck.Issue.IssueCondition;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -40,50 +38,40 @@ public class Collection implements Serializable {
         issues.get(country).get(publication).add(issue);
     }
 
-    public ArrayList<String> getCountryList(String type) {
-        ArrayList<String> countryList = new ArrayList<>();
+    public ArrayList<CountryAdapter.Country> getCountryList() {
+        ArrayList<CountryAdapter.Country> countryList = new ArrayList<>();
         Set<String> countrySet = issues.keySet();
         for (String shortCountryName : countrySet) {
-            countryList.add((type.equals(CollectionType.COA.toString()) && WhatTheDuck.userCollection.hasCountry(shortCountryName) ? "* ":"")
-                            + CountryListing.getCountryFullName(shortCountryName));
+            countryList.add(new CountryAdapter.Country(shortCountryName, CountryListing.getCountryFullName(shortCountryName)));
         }
-        Collections.sort(countryList, new NamesComparator());
         return countryList;
     }
 
-    public ArrayList<String> getPublicationList(String shortCountryName, String type) {
-        ArrayList<String> publicationList = new ArrayList<>();
+    public ArrayList<PublicationAdapter.Publication> getPublicationList(String shortCountryName) {
+        ArrayList<PublicationAdapter.Publication> publicationList = new ArrayList<>();
         HashMap<String, ArrayList<Issue>> publicationMap = issues.get(shortCountryName);
         if (publicationMap != null) {
             for (String shortPublicationName : publicationMap.keySet()) {
-                publicationList.add((type.equals(CollectionType.COA.toString()) && WhatTheDuck.userCollection.hasPublication(shortCountryName, shortPublicationName) ? "* " : "")
-                        + PublicationListing.getPublicationFullName(shortCountryName, shortPublicationName));
+                publicationList.add(new PublicationAdapter.Publication(shortPublicationName, PublicationListing.getPublicationFullName(shortCountryName, shortPublicationName)));
             }
-            Collections.sort(publicationList, new NamesComparator());
         }
         return publicationList;
     }
 
-    public ArrayList<Issue> getIssueList(String shortCountryName, String shortPublicationName, String type) {
+    public ArrayList<Issue> getIssueList(String shortCountryName, String shortPublicationName) {
         ArrayList<Issue> finalList = new ArrayList<>();
         HashMap<String, ArrayList<Issue>> publicationMap = issues.get(shortCountryName);
         if (publicationMap != null) {
             ArrayList<Issue> list = publicationMap.get(shortPublicationName);
             if (list != null) {
                 for (Issue issue : list) {
-                    Boolean isCoaCollection = type.equals(CollectionType.COA.toString());
-                    Boolean isInCollection = false;
                     IssueCondition condition = null;
                     Issue existingIssue = WhatTheDuck.userCollection.getIssue(shortCountryName, shortPublicationName, issue.getIssueNumber());
                     if (existingIssue != null) {
-                        isInCollection = true;
                         condition = existingIssue.getIssueCondition();
                     }
-                    Issue i = new Issue((isInCollection && isCoaCollection ? "* " : "") + issue.getIssueNumber(),
-                            condition);
-                    finalList.add(i);
+                    finalList.add(new Issue(issue.getIssueNumber(), condition));
                 }
-                Collections.sort(finalList, new NaturalOrderComparator());
             }
         }
         return finalList;
@@ -109,25 +97,5 @@ public class Collection implements Serializable {
                 return i;
         }
         return null;
-    }
-
-    
-    public static class NaturalOrderComparator extends net.ducksmanager.util.NaturalOrderComparator {
-
-        public int compare(Object issue1, Object issue2) {
-            if (issue1 instanceof String)
-                return super.compare(((String)issue1).replace("* ", ""), ((String)issue2).replace("* ", ""));
-            if (issue1 instanceof Issue)
-                return compare(((Issue) issue1).getIssueNumber(), ((Issue) issue2).getIssueNumber());
-            return 0;
-        }
-    }
-    
-    private static class NamesComparator implements Comparator<String> {
-
-        @Override
-        public int compare(String issue1, String issue2) {
-            return issue1.replace("* ", "").compareTo(issue2.replace("* ", ""));
-        }
     }
 }

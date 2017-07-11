@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
-import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.util.SimpleCallback;
 
@@ -19,7 +18,6 @@ public class PublicationList extends List {
         super.onCreate(savedInstanceState);
 
         final String selectedCountry = WhatTheDuck.getSelectedCountry();
-        final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
 
         if (PublicationListing.hasFullList(selectedCountry)) {
             this.show();
@@ -33,8 +31,8 @@ public class PublicationList extends List {
             }).execute();
         }
 
-        setNavigationCountry(countryFullName, selectedCountry);
-        setNavigationPublication(null, null);
+        setNavigationCountry(selectedCountry);
+        setNavigationPublication(selectedCountry, null);
     }
 
     @Override
@@ -46,7 +44,7 @@ public class PublicationList extends List {
         
     public void show() {
         if (WhatTheDuck.getSelectedCountry() != null) {
-            super.show(getCollection().getPublicationList(WhatTheDuck.getSelectedCountry(), this.type));
+            super.show(new PublicationAdapter(this, getCollection().getPublicationList(WhatTheDuck.getSelectedCountry())));
         }
     }
 
@@ -54,11 +52,8 @@ public class PublicationList extends List {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        String publicationShortName = PublicationListing.getPublicationShortName(
-            WhatTheDuck.getSelectedCountry(),
-            this.getListView().getItemAtPosition(((Long) id).intValue()).toString().replace("* ", "")
-        );
-        WhatTheDuck.setSelectedPublication (publicationShortName);
+        PublicationAdapter.Publication selectedPublication = (PublicationAdapter.Publication) this.getListView().getItemAtPosition(((Long) id).intValue());
+        WhatTheDuck.setSelectedPublication (selectedPublication.getPublicationCode());
 
         Intent i = new Intent(this, IssueList.class);
         i.putExtra("type", this.type);

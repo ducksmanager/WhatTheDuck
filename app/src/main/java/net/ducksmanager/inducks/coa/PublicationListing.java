@@ -30,15 +30,6 @@ public class PublicationListing extends CoaListing {
         return publicationNames.get(shortCountryName).get(shortPublicationName);
     }
 
-    public static String getPublicationShortName (String shortCountryName, String fullPublicationName) {
-        HashMap<String,String> countryPublications = publicationNames.get(shortCountryName);
-        for (String shortPublicationName : countryPublications.keySet()) {
-            if (countryPublications.get(shortPublicationName).equals(fullPublicationName))
-                return shortPublicationName;
-        }
-        return null;
-    }
-
     private static void addPublication(String countryShortName, String shortName, String fullName) {
         if (publicationNames.get(countryShortName) == null)
             publicationNames.put(countryShortName, new HashMap<String, String>());
