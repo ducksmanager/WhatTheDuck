@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 class ScreenshotTestRule implements MethodRule {
+
+    public static final String SCREENSHOTS_PATH = "test-screenshots";
+
     public Statement apply(final Statement statement, final FrameworkMethod frameworkMethod, final Object o) {
         return new Statement() {
             @Override
@@ -39,7 +42,7 @@ class ScreenshotTestRule implements MethodRule {
         scrView.setDrawingCacheEnabled(false);
 
         OutputStream out = null;
-        File imagePath = new File(activity.getFilesDir(), "test-screenshots");
+        File imagePath = new File(activity.getFilesDir(), SCREENSHOTS_PATH);
         imagePath.mkdirs();
         File imageFile = new File(imagePath, name + ".png");
 
@@ -52,16 +55,13 @@ class ScreenshotTestRule implements MethodRule {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         } finally {
-
             try {
                 if (out != null) {
                     out.close();
                 }
-
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.err.println(e.getMessage());
             }
-
         }
     }
 }

@@ -7,7 +7,7 @@ import android.support.test.runner.lifecycle.Stage;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 
 import java.util.Collection;
@@ -32,8 +32,8 @@ class WtdTest extends AndroidJUnitRunner {
     @Rule
     public ActivityTestRule<WhatTheDuck> whatTheDuckActivityRule = new ActivityTestRule<>(WhatTheDuck.class);
 
-    @Before
-    public void initDownloadHelper() {
+    @BeforeClass
+    public static void initDownloadHelper() {
         RetrieveTask.downloadHandler = new DownloadHandlerMock();
         WhatTheDuck.setPassword(null);
     }
