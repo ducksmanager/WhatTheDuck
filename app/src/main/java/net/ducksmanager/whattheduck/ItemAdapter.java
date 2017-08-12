@@ -3,6 +3,7 @@ package net.ducksmanager.whattheduck;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,20 +19,22 @@ import java.util.Locale;
 
 public abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
 
-    private final ArrayList<Item> items;
+    private ArrayList<Item> items;
+    private ArrayList<Item> filteredItems;
 
     ItemAdapter(List list, ArrayList<Item> items) {
         super(list, R.layout.row, items);
         this.items = items;
         Collections.sort(this.items, getComparator());
+
+        this.filteredItems = new ArrayList<>(items);
     }
 
-    ArrayList<Item> getFilteredList(String textFilter) {
-        ArrayList<Item> filteredItems = new ArrayList<>();
+    void updateFilteredList(String textFilter) {
+        filteredItems = new ArrayList<>();
         for (Item item : items)
             if (getText(item).toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase()))
                 filteredItems.add(item);
-        return filteredItems;
     }
 
     private NaturalOrderComparator<Item> getComparator() {
@@ -44,26 +47,26 @@ public abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         if (v == null) {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(R.layout.row, null);
         }
-        Item i = items.get(position);
+        Item i = getItem(position);
         if (i != null) {
             TextView itemTitle = (TextView) v.findViewById(R.id.itemtitle);
             itemTitle.setText(getText(i));
 
-            itemTitle.setTypeface(null, isHighlighted(i) ? Typeface.BOLD: Typeface.NORMAL);
+            itemTitle.setTypeface(null, isHighlighted(i) ? Typeface.BOLD : Typeface.NORMAL);
 
             ImageView imageCondition = (ImageView) v.findViewById(R.id.issuecondition);
             if (imageCondition != null) {
                 Integer imageResource = getImageResource(i, (Activity) this.getContext());
                 if (imageResource == null) {
                     imageCondition.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     imageCondition.setVisibility(View.VISIBLE);
                     imageCondition.setImageResource(imageResource);
                 }
@@ -72,8 +75,14 @@ public abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         return v;
     }
 
-    ArrayList<Item> getItems() {
-        return this.items;
+    @Override
+    public int getCount() {
+        return filteredItems.size();
+    }
+
+    @Override
+    public Item getItem(int position) {
+        return filteredItems.get(position);
     }
 
     protected abstract boolean isHighlighted(Item i);
@@ -81,4 +90,8 @@ public abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
     protected abstract Integer getImageResource(Item i, Activity activity);
 
     protected abstract String getText(Item i);
+
+    public ArrayList<Item> getItems() {
+        return items;
+    }
 }

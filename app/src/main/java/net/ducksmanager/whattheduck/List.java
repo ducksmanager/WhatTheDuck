@@ -139,18 +139,20 @@ public abstract class List<Item> extends ListActivity{
 
         EditText filterEditText = (EditText) this.findViewById(R.id.filter);
         if (items.size() > 20) {
+            getListView().setTextFilterEnabled(true);
             filterEditText.setVisibility(EditText.VISIBLE);
 
             filterEditText.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) { }
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    List.this.itemAdapter = new CountryAdapter(List.this, List.this.itemAdapter.getFilteredList(s.toString()));
-                    setListAdapter(List.this.itemAdapter);
+                    List.this.itemAdapter.updateFilteredList(s.toString());
+                    List.this.itemAdapter.notifyDataSetInvalidated();
                 }
             });
         }
         else {
+            getListView().setTextFilterEnabled(false);
             filterEditText.setVisibility(EditText.GONE);
         }
     }
