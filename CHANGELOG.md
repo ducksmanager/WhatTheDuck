@@ -1,3 +1,9 @@
+Version 1.5.3
+
+    Improve GUI: show items in bold (instead of prefixing them with a star) when possessed
+    Small bugfixes
+    Internal changes
+
 Version 1.5.2
 
     Resize cover before upload
