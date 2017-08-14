@@ -10,7 +10,7 @@ android {
         applicationId "net.ducksmanager.whattheduck"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 20
+        versionCode 21
         versionName "1.5.3"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
