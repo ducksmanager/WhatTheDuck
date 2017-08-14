@@ -58,12 +58,14 @@ public class CountryListing extends CoaListing {
                 String fullName = countryNames.getString(shortName);
 
                 addCountry(shortName, fullName);
-                WhatTheDuck.coaCollection.addCountry(shortName);
+                if (!fullName.equals("Dummy") && !WhatTheDuck.coaCollection.hasCountry(shortName)) {
+                    WhatTheDuck.coaCollection.addCountry(shortName);
+                }
             }
         }
     }
 
-    private static void addCountriesFullList(JSONObject object) throws JSONException {
+    public static void addCountriesFullList(JSONObject object) throws JSONException {
         addCountries(object);
         hasFullList = true;
     }

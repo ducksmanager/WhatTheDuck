@@ -22,7 +22,9 @@ public class Collection implements Serializable {
     public void addPublication(String country, String publication) {
         if (issues.get(country) == null)
             this.addCountry(country);
-        issues.get(country).put(publication, new ArrayList<Issue>());
+        if (issues.get(country).get(publication) == null) {
+            issues.get(country).put(publication, new ArrayList<Issue>());
+        }
     }
 
     public void addIssue(String countryAndPublication, Issue issue) {
