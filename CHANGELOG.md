@@ -1,3 +1,7 @@
+Version 1.5.3.1
+
+    Fix filter box shown before list loading
+
 Version 1.5.3
 
     Improve GUI: show items in bold (instead of prefixing them with a star) when possessed
