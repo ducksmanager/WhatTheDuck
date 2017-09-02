@@ -5,6 +5,8 @@
     android:layout_width="0dp"
     android:layout_weight="1"
     android:gravity="center"
+    android:layout_marginTop="5dp"
+    android:background="?android:attr/selectableItemBackground"
     android:id="@+id/navigationItem"
     android:layout_height="50dp">
     <ScrollView
@@ -21,17 +23,16 @@
             <TextView
                 android:id="@+id/selectedBadge"
                 android:textColor="#000"
-                android:paddingTop="2dp"
                 android:background="@drawable/shape"
+                android:paddingTop="2dp"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="20dp"
                 android:textSize="14sp"/>
             <TextView
                 android:id="@+id/selected"
                 android:gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:textColor="#fff"
                 android:textSize="14sp"
                 android:layout_weight="2"/>
