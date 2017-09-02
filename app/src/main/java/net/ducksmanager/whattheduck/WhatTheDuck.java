@@ -27,8 +27,6 @@ import android.widget.Toast;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import net.ducksmanager.whattheduck.Collection.CollectionType;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -58,6 +56,7 @@ public class WhatTheDuck extends Activity {
 
     private static String username = null;
     private static String password = null;
+    private static Boolean rememberCredentials = null;
     private static String encryptedPassword = null;
     private static Boolean showWelcomeMessage = true;
     private static Boolean showCoverTooltip = true;
@@ -76,29 +75,37 @@ public class WhatTheDuck extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         wtd=this;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.whattheduck);
 
         loadConfig(getAssets());
-
         loadUserSettings();
-        String username = getUsername();
+
         String encryptedPassword = getEncryptedPassword();
 
+        if (encryptedPassword != null) {
+            new ConnectAndRetrieveList(false).execute();
+        }
+        else {
+            initUI();
+        }
+    }
+
+    public void initUI() {
+        setContentView(R.layout.whattheduck);
         ((CheckBox) findViewById(R.id.checkBoxRememberCredentials)).setChecked(username != null);
 
         EditText usernameEditText = ((EditText) findViewById(R.id.username));
         usernameEditText.setText(username);
         usernameEditText.addTextChangedListener(new TextWatcher() {
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            public void beforeTextChanged(CharSequence s, int start, int count,    int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             public void afterTextChanged(Editable s) {
                 ((EditText) findViewById(R.id.password)).setText("");
             }
         });
-        if (encryptedPassword != null) {
-            ((EditText) findViewById(R.id.password)).setText("******");
-        }
-
 
         Button signupButton = (Button) findViewById(R.id.end_signup);
         signupButton.setOnClickListener(new View.OnClickListener() {
@@ -106,18 +113,18 @@ public class WhatTheDuck extends Activity {
                 WhatTheDuck.setUsername(((EditText) WhatTheDuck.this.findViewById(R.id.username)).getText().toString());
                 WhatTheDuck.setPassword(((EditText) WhatTheDuck.this.findViewById(R.id.password)).getText().toString());
                 Intent i = new Intent(wtd, Signup.class);
-                i.putExtra("type", CollectionType.USER.toString());
+                i.putExtra("type", Collection.CollectionType.USER.toString());
                 wtd.startActivity(i);
             }
         });
-        
+
         Button loginButton = (Button) findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                new ConnectAndRetrieveList().execute();
+                new ConnectAndRetrieveList(true).execute();
             }
         });
-        
+
         TextView linkToDM = (TextView) findViewById(R.id.linkToDM);
         linkToDM.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -179,6 +186,7 @@ public class WhatTheDuck extends Activity {
             setEncryptedPassword((String)props.get("password"));
             setShowWelcomeMessage(props.get("showWelcomeMessage") == null || props.get("showWelcomeMessage").equals("true"));
             setShowCoverTooltip(props.get("showCoverTooltip") == null || props.get("showCoverTooltip").equals("true"));
+            setRememberCredentials(true);
             inputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -250,6 +258,14 @@ public class WhatTheDuck extends Activity {
         WhatTheDuck.username = username;
     }
 
+    public static Boolean getRememberCredentials() {
+        return rememberCredentials;
+    }
+
+    public static void setRememberCredentials(Boolean rememberCredentials) {
+        WhatTheDuck.rememberCredentials = rememberCredentials;
+    }
+
     public static String getPassword() {
         return password;
     }
@@ -260,7 +276,7 @@ public class WhatTheDuck extends Activity {
             setEncryptedPassword(null);
         }
         else {
-            setEncryptedPassword(wtd.toSHA1(password));
+            setEncryptedPassword(toSHA1(password));
         }
     }
 

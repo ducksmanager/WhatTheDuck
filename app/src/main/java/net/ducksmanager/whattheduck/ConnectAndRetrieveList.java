@@ -2,6 +2,7 @@ package net.ducksmanager.whattheduck;
 
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -18,29 +19,36 @@ import java.util.Iterator;
 public class ConnectAndRetrieveList extends RetrieveTask {
 
     private final WhatTheDuck wtd;
+    private final Boolean fromUI;
 
-    public ConnectAndRetrieveList() {
+    public ConnectAndRetrieveList(Boolean fromUI) {
         super("", R.id.progressBarConnection);
         wtd = WhatTheDuck.wtd;
+        this.fromUI = fromUI;
     }
 
     @Override
     protected void onPreExecute() {
         WhatTheDuck.userCollection = new Collection();
-        if ( WhatTheDuck.getUsername() == null
-         || !WhatTheDuck.getUsername().equals(((EditText) wtd.findViewById(R.id.username)).getText().toString())
-         || WhatTheDuck.getEncryptedPassword() == null) {
 
-            WhatTheDuck.setUsername(((EditText) wtd.findViewById(R.id.username)).getText().toString());
-            WhatTheDuck.setPassword(((EditText) wtd.findViewById(R.id.password)).getText().toString());
-            if (WhatTheDuck.getUsername().equals("") || (WhatTheDuck.getPassword().equals(""))) {
-                wtd.alert(R.string.input_error,
-                        R.string.input_error__empty_credentials);
-                ProgressBar mProgressBar = (ProgressBar) wtd.findViewById(R.id.progressBarConnection);
-                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                cancel(true);
-                return;
+        if (this.fromUI) {
+            if (WhatTheDuck.getUsername() == null
+                || !WhatTheDuck.getUsername().equals(((EditText) wtd.findViewById(R.id.username)).getText().toString())
+                || WhatTheDuck.getEncryptedPassword() == null) {
+
+                WhatTheDuck.setUsername(((EditText) wtd.findViewById(R.id.username)).getText().toString());
+                WhatTheDuck.setPassword(((EditText) wtd.findViewById(R.id.password)).getText().toString());
+                WhatTheDuck.setRememberCredentials(((CheckBox) wtd.findViewById(R.id.checkBoxRememberCredentials)).isChecked());
             }
+        }
+
+        if (TextUtils.isEmpty(WhatTheDuck.getUsername()) || (TextUtils.isEmpty(WhatTheDuck.getPassword()) && TextUtils.isEmpty(WhatTheDuck.getEncryptedPassword()))) {
+            wtd.alert(R.string.input_error,
+                R.string.input_error__empty_credentials);
+            ProgressBar mProgressBar = (ProgressBar) wtd.findViewById(R.id.progressBarConnection);
+            mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+            cancel(true);
+            return;
         }
 
         wtd.toggleProgressbarLoading(progressBarId, true);
@@ -58,10 +66,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                 return;
             }
 
-            CheckBox mCheckboxRememberCredentials = (CheckBox) wtd.findViewById(R.id.checkBoxRememberCredentials);
-            boolean rememberCredentials = mCheckboxRememberCredentials.isChecked();
-
-            WhatTheDuck.saveSettings(rememberCredentials);
+            WhatTheDuck.saveSettings(WhatTheDuck.getRememberCredentials());
 
             JSONObject object = new JSONObject(response);
             try {

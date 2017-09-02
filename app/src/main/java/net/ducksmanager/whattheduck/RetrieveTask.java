@@ -89,6 +89,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
     @Override
     protected void onPostExecute(String response) {
         if (this.thrownException != null) {
+            WhatTheDuck.wtd.initUI();
             if (progressBarId != null) {
                 WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, false);
             }

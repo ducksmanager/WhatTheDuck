@@ -205,7 +205,7 @@ public abstract class List<Item> extends ListActivity{
                 WhatTheDuck.coaCollection = new Collection();
                 WhatTheDuck.setUsername(null);
                 WhatTheDuck.setPassword(null);
-                WhatTheDuck.setPassword(null);
+                WhatTheDuck.saveSettings(false);
                 i = new Intent(WhatTheDuck.wtd, WhatTheDuck.class);
 
                 break;
