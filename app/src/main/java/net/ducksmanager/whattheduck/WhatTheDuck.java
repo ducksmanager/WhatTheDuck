@@ -17,6 +17,7 @@ import android.support.annotation.VisibleForTesting;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -121,6 +122,7 @@ public class WhatTheDuck extends Activity {
         Button loginButton = (Button) findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                hideKeyboard(view);
                 new ConnectAndRetrieveList(true).execute();
             }
         });
@@ -128,10 +130,18 @@ public class WhatTheDuck extends Activity {
         TextView linkToDM = (TextView) findViewById(R.id.linkToDM);
         linkToDM.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                hideKeyboard(view);
                 final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(DUCKSMANAGER_URL));
                 WhatTheDuck.this.startActivity(intent);
             }
         });
+    }
+
+    private void hideKeyboard(View view) {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     public void info(Context c, int titleId) {
