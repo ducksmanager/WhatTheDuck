@@ -65,7 +65,7 @@ public class CountryListing extends CoaListing {
         }
     }
 
-    public static void addCountriesFullList(JSONObject object) throws JSONException {
+    private static void addCountriesFullList(JSONObject object) throws JSONException {
         addCountries(object);
         hasFullList = true;
     }

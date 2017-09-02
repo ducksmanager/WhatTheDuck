@@ -27,12 +27,12 @@ public class CoverFlowFileHandler {
     public interface TransformationCallback {
         void onComplete(File outputFile);
 
-        void onFail(File uploadFile);
+        void onFail();
     }
 
     private File uploadFile = null;
 
-    private Target target = new Target() {
+    private final Target target = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
             try {
@@ -50,7 +50,7 @@ public class CoverFlowFileHandler {
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
             WhatTheDuck.wtd.alert(CoverSearch.cls, R.string.internal_error);
-            callback.onFail(uploadFile);
+            callback.onFail();
         }
 
         @Override
@@ -84,12 +84,12 @@ public class CoverFlowFileHandler {
         return null;
     }
 
-    public void resizeUntilFileSize(final Activity activity, long maxFileSize, final TransformationCallback callback) {
+    public void resizeUntilFileSize(final Activity activity, final TransformationCallback callback) {
         this.callback = callback;
 
         long fileSize = uploadFile.length();
 
-        if (fileSize < maxFileSize) {
+        if (fileSize < CoverFlowFileHandler.MAX_COVER_FILESIZE) {
             callback.onComplete(uploadFile);
         }
         else {

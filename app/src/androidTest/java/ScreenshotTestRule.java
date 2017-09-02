@@ -14,7 +14,7 @@ import java.io.OutputStream;
 
 class ScreenshotTestRule implements MethodRule {
 
-    public static final String SCREENSHOTS_PATH = "test-screenshots";
+    private static final String SCREENSHOTS_PATH = "test-screenshots";
 
     public Statement apply(final Statement statement, final FrameworkMethod frameworkMethod, final Object o) {
         return new Statement() {

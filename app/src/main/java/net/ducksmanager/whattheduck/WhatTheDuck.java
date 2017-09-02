@@ -46,12 +46,12 @@ public class WhatTheDuck extends Activity {
     @VisibleForTesting
     public static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
 
-    public static final String CONFIG = "config.properties";
-    public static final String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
+    private static final String CONFIG = "config.properties";
+    private static final String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
     public static final String CONFIG_KEY_API_ENDPOINT_URL = "api_endpoint_url";
     public static Properties config = null;
 
-    public static final String USER_SETTINGS = "settings.properties";
+    private static final String USER_SETTINGS = "settings.properties";
 
     private static String serverURL;
 

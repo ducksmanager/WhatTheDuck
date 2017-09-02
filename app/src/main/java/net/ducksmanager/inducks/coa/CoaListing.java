@@ -13,8 +13,8 @@ import org.json.JSONException;
 import java.util.HashMap;
 
 public abstract class CoaListing extends RetrieveTask {
-    public Activity activity;
-    public SimpleCallback callback;
+    Activity activity;
+    SimpleCallback callback;
     public enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST}
 
     private static final HashMap<ListType, String> urlSuffixes = new HashMap<>();

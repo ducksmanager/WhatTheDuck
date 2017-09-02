@@ -19,7 +19,7 @@ import java.util.Locale;
 
 public abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
 
-    private ArrayList<Item> items;
+    private final ArrayList<Item> items;
     private ArrayList<Item> filteredItems;
 
     ItemAdapter(List list, ArrayList<Item> items) {

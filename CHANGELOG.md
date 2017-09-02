@@ -1,3 +1,8 @@
+Version 1.5.4
+
+    Auto-login if the user has saved credentials
+    Small bugfixes
+
 Version 1.5.3.1
 
     Fix filter box shown before list loading

@@ -15,7 +15,7 @@ public class AddIssue extends RetrieveTask {
     private static String shortCountryAndPublication;
     private static Issue selectedIssue;
 
-    public AddIssue(Activity il, String shortCountryAndPublication, Issue selectedIssue) {
+    private AddIssue(Activity il, String shortCountryAndPublication, Issue selectedIssue) {
         super(
             "&ajouter_numero"
             +"&pays_magazine="+shortCountryAndPublication

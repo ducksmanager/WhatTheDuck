@@ -31,11 +31,11 @@ import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 public abstract class List<Item> extends ListActivity{
     private static final int LOGOUT = 1;
 
-    public String type;
-    protected ArrayList<Item> items;
-    protected ItemAdapter itemAdapter;
+    String type;
+    ArrayList<Item> items;
+    ItemAdapter itemAdapter;
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,9 +124,9 @@ public abstract class List<Item> extends ListActivity{
         startActivity(i);
     }
 
-    public abstract void show();
+    protected abstract void show();
 
-    public void show(ItemAdapter itemAdapter) {
+    void show(ItemAdapter itemAdapter) {
         this.itemAdapter = itemAdapter;
         this.items = (ArrayList<Item>) itemAdapter.getItems();
 
@@ -173,14 +173,14 @@ public abstract class List<Item> extends ListActivity{
             this.findViewById(R.id.addToCollectionWrapper).setVisibility(View.GONE);
             this.findViewById(R.id.progressBarLoading).setVisibility(View.VISIBLE);
 
-            CoverFlowFileHandler.current.resizeUntilFileSize(this, CoverFlowFileHandler.MAX_COVER_FILESIZE, new CoverFlowFileHandler.TransformationCallback() {
+            CoverFlowFileHandler.current.resizeUntilFileSize(this, new CoverFlowFileHandler.TransformationCallback() {
                 @Override
                 public void onComplete(File fileToUpload) {
                     new CoverSearch(List.this, fileToUpload).execute();
                 }
 
                 @Override
-                public void onFail(File uploadFile) {
+                public void onFail() {
                     List.this.findViewById(R.id.addToCollectionWrapper).setVisibility(View.VISIBLE);
                     List.this.findViewById(R.id.progressBarLoading).setVisibility(View.GONE);
                 }
@@ -215,13 +215,13 @@ public abstract class List<Item> extends ListActivity{
         return super.onMenuItemSelected(featureId, item);
     }
 
-    protected Collection getCollection() {
+    Collection getCollection() {
         return type == null || type.equals(CollectionType.USER.toString())
             ? WhatTheDuck.userCollection
             : WhatTheDuck.coaCollection;
     }
 
-    protected void setNavigationCountry(String selectedCountry) {
+    void setNavigationCountry(String selectedCountry) {
         final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
 
         View countryNavigationView = this.findViewById(R.id.navigationCountry);
@@ -241,7 +241,7 @@ public abstract class List<Item> extends ListActivity{
         currentCountryText.setText(countryFullName);
     }
 
-    protected void setNavigationPublication(String selectedCountry, String selectedPublication) {
+    void setNavigationPublication(String selectedCountry, String selectedPublication) {
         final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
 
         View publicationNavigationView = this.findViewById(R.id.navigationPublication);

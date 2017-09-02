@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class CountryAdapter extends ItemAdapter<CountryAdapter.Country> {
 
     public static class Country {
-        String shortName;
-        String fullName;
+        final String shortName;
+        final String fullName;
 
         public Country(String shortName, String fullName) {
             this.shortName = shortName;

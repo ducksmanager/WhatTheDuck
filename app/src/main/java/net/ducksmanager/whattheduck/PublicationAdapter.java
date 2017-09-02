@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class PublicationAdapter extends ItemAdapter<PublicationAdapter.Publication> {
 
     public static class Publication {
-        String publicationCode;
-        String publicationTitle;
+        final String publicationCode;
+        final String publicationTitle;
 
         public Publication(String publicationCode, String publicationTitle) {
             this.publicationCode = publicationCode;

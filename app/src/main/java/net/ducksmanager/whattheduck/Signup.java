@@ -1,14 +1,14 @@
 package net.ducksmanager.whattheduck;
 
 
-import java.io.UnsupportedEncodingException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.io.UnsupportedEncodingException;
 
 public class Signup extends Activity {
 
@@ -30,7 +30,7 @@ public class Signup extends Activity {
                 WhatTheDuck.setUsername(((EditText) Signup.this.findViewById(R.id.username_signup)).getText().toString());
                 WhatTheDuck.setPassword(((EditText) Signup.this.findViewById(R.id.password_signup)).getText().toString());
 
-                String password2 = WhatTheDuck.wtd.toSHA1(((EditText) Signup.this.findViewById(R.id.password_confirmation)).getText().toString());
+                String password2 = WhatTheDuck.toSHA1(((EditText) Signup.this.findViewById(R.id.password_confirmation)).getText().toString());
                 String email = ((EditText) Signup.this.findViewById(R.id.email_address)).getText().toString();
 
                 new ConnectAndRetrieveList("&action=signup&mdp_user2="+password2+"&email="+email).execute();

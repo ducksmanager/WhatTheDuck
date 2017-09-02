@@ -30,7 +30,7 @@ class WtdTest extends AndroidJUnitRunner {
     public ScreenshotTestRule screenshotTestRule = new ScreenshotTestRule();
 
     @Rule
-    public ActivityTestRule<WhatTheDuck> whatTheDuckActivityRule = new ActivityTestRule<>(WhatTheDuck.class);
+    public final ActivityTestRule<WhatTheDuck> whatTheDuckActivityRule = new ActivityTestRule<>(WhatTheDuck.class);
 
     @BeforeClass
     public static void initDownloadHelper() {

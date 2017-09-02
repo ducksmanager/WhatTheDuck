@@ -31,21 +31,21 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
     private class DefaultDownloadHandler implements DownloadHandler{
         @Override
         public String getPage(String url) {
-            String response="";
+            StringBuilder response= new StringBuilder();
             try {
                 URL userCollectionURL = new URL(url);
                 BufferedReader in = new BufferedReader(new InputStreamReader(userCollectionURL.openStream()));
 
                 String inputLine;
                 while ((inputLine = in.readLine()) != null)
-                    response+=inputLine;
+                    response.append(inputLine);
                 in.close();
             } catch (MalformedURLException e) {
                 WhatTheDuck.wtd.alert(R.string.error, R.string.error__malformed_url);
             } catch (IOException e) {
                 WhatTheDuck.wtd.alert(R.string.network_error, R.string.network_error__no_connection);
             }
-            return response;
+            return response.toString();
         }
     }
 
@@ -58,7 +58,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         RetrieveTask.progressBarId = progressBarId;
     }
 
-    public RetrieveTask(String urlSuffix, Integer progressBarId, boolean legacyServer, FutureCallback futureCallback, String fileName, File file) {
+    RetrieveTask(String urlSuffix, Integer progressBarId, boolean legacyServer, FutureCallback futureCallback, String fileName, File file) {
         this.urlSuffix = urlSuffix;
         RetrieveTask.progressBarId = progressBarId;
         this.legacyServer = legacyServer;
@@ -118,7 +118,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         }
     }
 
-    protected boolean hasFailed() {
+    boolean hasFailed() {
         return this.thrownException != null;
     }
 }
