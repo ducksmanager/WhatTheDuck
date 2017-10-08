@@ -1,3 +1,7 @@
+Version 1.5.5
+
+    Update build tools
+
 Version 1.5.4
 
     Auto-login if the user has saved credentials
