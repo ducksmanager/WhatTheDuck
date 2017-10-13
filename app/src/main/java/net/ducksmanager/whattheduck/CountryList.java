@@ -49,7 +49,7 @@ public class CountryList extends List {
         this.findViewById(R.id.navigation).setVisibility(View.GONE);
     }
 
-    public void show() {
+    protected void show() {
         super.show(new CountryAdapter(this, getCollection().getCountryList()));
     }
 

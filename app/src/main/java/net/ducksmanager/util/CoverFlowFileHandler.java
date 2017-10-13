@@ -20,7 +20,7 @@ import java.io.IOException;
 
 public class CoverFlowFileHandler {
 
-    public static final long MAX_COVER_FILESIZE = 2048 * 1024;
+    private static final long MAX_COVER_FILESIZE = 2048 * 1024;
 
     public static CoverFlowFileHandler current;
 

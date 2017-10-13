@@ -62,7 +62,7 @@ public abstract class List<Item> extends ListActivity{
             }
         });
 
-        Switch onlyInCollectionSwitch = (Switch) this.findViewById(R.id.onlyInCollectionSwitch);
+        Switch onlyInCollectionSwitch = this.findViewById(R.id.onlyInCollectionSwitch);
         onlyInCollectionSwitch.setChecked(type.equals(CollectionType.USER.toString()));
 
         onlyInCollectionSwitch.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +78,7 @@ public abstract class List<Item> extends ListActivity{
         });
 
         if (type.equals(CollectionType.USER.toString())) {
-            RelativeLayout addToCollection = (RelativeLayout) this.findViewById(R.id.addToCollectionWrapper);
+            RelativeLayout addToCollection = this.findViewById(R.id.addToCollectionWrapper);
 
             addToCollection.setVisibility(View.VISIBLE);
             addToCollection.setOnClickListener(new View.OnClickListener() {
@@ -132,13 +132,13 @@ public abstract class List<Item> extends ListActivity{
         this.items = (ArrayList<Item>) itemAdapter.getItems();
 
         if (items.size() == 0) {
-            TextView emptyListText = (TextView) this.findViewById(R.id.emptyList);
+            TextView emptyListText = this.findViewById(R.id.emptyList);
             emptyListText.setVisibility(TextView.VISIBLE);
         }
 
         setListAdapter(this.itemAdapter);
 
-        EditText filterEditText = (EditText) this.findViewById(R.id.filter);
+        EditText filterEditText = this.findViewById(R.id.filter);
         if (items.size() > 20) {
             getListView().setTextFilterEnabled(true);
             filterEditText.setVisibility(EditText.VISIBLE);
@@ -234,11 +234,11 @@ public abstract class List<Item> extends ListActivity{
             imageResource = R.drawable.flags_unknown;
         }
 
-        ImageView currentCountryFlag = (ImageView) countryNavigationView.findViewById(R.id.selectedBadgeImage);
+        ImageView currentCountryFlag = countryNavigationView.findViewById(R.id.selectedBadgeImage);
         currentCountryFlag.setVisibility(View.VISIBLE);
         currentCountryFlag.setImageResource(imageResource);
 
-        TextView currentCountryText = (TextView) countryNavigationView.findViewById(R.id.selected);
+        TextView currentCountryText = countryNavigationView.findViewById(R.id.selected);
         currentCountryText.setText(countryFullName);
     }
 
@@ -246,7 +246,7 @@ public abstract class List<Item> extends ListActivity{
         final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
 
         View publicationNavigationView = this.findViewById(R.id.navigationPublication);
-        TextView currentPublicationBadgeText = (TextView) publicationNavigationView.findViewById(R.id.selectedBadge);
+        TextView currentPublicationBadgeText = publicationNavigationView.findViewById(R.id.selectedBadge);
 
         if (selectedPublication == null) {
             publicationNavigationView.setVisibility(View.INVISIBLE);
@@ -256,7 +256,7 @@ public abstract class List<Item> extends ListActivity{
 
             currentPublicationBadgeText.setText(selectedPublication.split("/")[1]);
 
-            TextView currentPublicationText = (TextView) publicationNavigationView.findViewById(R.id.selected);
+            TextView currentPublicationText = publicationNavigationView.findViewById(R.id.selected);
             currentPublicationText.setText(publicationFullName);
         }
     }

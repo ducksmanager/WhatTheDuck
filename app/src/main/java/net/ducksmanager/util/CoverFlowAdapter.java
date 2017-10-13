@@ -64,10 +64,10 @@ class CoverFlowAdapter extends BaseAdapter {
             rowView = inflater.inflate(R.layout.item_coverflow, null);
 
             ViewHolder viewHolder = new ViewHolder();
-            viewHolder.text = (TextView) rowView.findViewById(R.id.label);
-            viewHolder.image = (ImageView) rowView.findViewById(R.id.image);
+            viewHolder.text = rowView.findViewById(R.id.label);
+            viewHolder.image = rowView.findViewById(R.id.image);
             viewHolder.image.setTag(mData.get(position).getFullUrl());
-            viewHolder.progressBar = (ProgressBar) rowView.findViewById(R.id.progressBarImageDownload);
+            viewHolder.progressBar = rowView.findViewById(R.id.progressBarImageDownload);
 
             DownloadImagesTask task = new DownloadImagesTask(viewHolder.progressBar);
             task.execute(viewHolder.image);

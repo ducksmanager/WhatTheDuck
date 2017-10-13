@@ -39,21 +39,21 @@ public class IssueList extends List<Issue> {
         setNavigationPublication(selectedCountry, selectedPublication);
     }
 
-    public void show() {
+    protected void show() {
         items = getCollection().getIssueList(
             WhatTheDuck.getSelectedCountry(),
             WhatTheDuck.getSelectedPublication()
         );
 
         if (items.size() == 0) {
-            TextView emptyListText = (TextView) this.findViewById(R.id.emptyList);
+            TextView emptyListText = this.findViewById(R.id.emptyList);
             emptyListText.setVisibility(TextView.VISIBLE);
         }
 
         this.itemAdapter = new IssueAdapter(this, items);
         setListAdapter(this.itemAdapter);
 
-        EditText filterEditText = (EditText) this.findViewById(R.id.filter);
+        EditText filterEditText = this.findViewById(R.id.filter);
         if (items.size() > 20) {
             filterEditText.setVisibility(EditText.VISIBLE);
 

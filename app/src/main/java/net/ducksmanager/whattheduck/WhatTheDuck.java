@@ -88,7 +88,7 @@ public class WhatTheDuck extends Activity {
         setContentView(R.layout.whattheduck);
         ((CheckBox) findViewById(R.id.checkBoxRememberCredentials)).setChecked(username != null);
 
-        EditText usernameEditText = ((EditText) findViewById(R.id.username));
+        EditText usernameEditText = findViewById(R.id.username);
         usernameEditText.setText(username);
         usernameEditText.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -102,7 +102,7 @@ public class WhatTheDuck extends Activity {
             }
         });
 
-        Button signupButton = (Button) findViewById(R.id.end_signup);
+        Button signupButton = findViewById(R.id.end_signup);
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 WhatTheDuck.setUsername(((EditText) WhatTheDuck.this.findViewById(R.id.username)).getText().toString());
@@ -113,7 +113,7 @@ public class WhatTheDuck extends Activity {
             }
         });
 
-        Button loginButton = (Button) findViewById(R.id.login);
+        Button loginButton = findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 hideKeyboard(view);
@@ -121,7 +121,7 @@ public class WhatTheDuck extends Activity {
             }
         });
 
-        TextView linkToDM = (TextView) findViewById(R.id.linkToDM);
+        TextView linkToDM = findViewById(R.id.linkToDM);
         linkToDM.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 hideKeyboard(view);
@@ -346,7 +346,7 @@ public class WhatTheDuck extends Activity {
     }
 
     public void toggleProgressbarLoading(Activity activity, int progressBarId, boolean toggle) {
-        ProgressBar progressBar = (ProgressBar) activity.findViewById(progressBarId);
+        ProgressBar progressBar = activity.findViewById(progressBarId);
 
         if (progressBar != null) {
             if (toggle) {

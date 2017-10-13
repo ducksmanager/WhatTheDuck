@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
-public abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
+abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
 
     private final ArrayList<Item> items;
     private ArrayList<Item> filteredItems;
@@ -56,12 +56,12 @@ public abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         }
         Item i = getItem(position);
         if (i != null) {
-            TextView itemTitle = (TextView) v.findViewById(R.id.itemtitle);
+            TextView itemTitle = v.findViewById(R.id.itemtitle);
             itemTitle.setText(getText(i));
 
             itemTitle.setTypeface(null, isHighlighted(i) ? Typeface.BOLD : Typeface.NORMAL);
 
-            ImageView imageCondition = (ImageView) v.findViewById(R.id.issuecondition);
+            ImageView imageCondition = v.findViewById(R.id.issuecondition);
             if (imageCondition != null) {
                 Integer imageResource = getImageResource(i, (Activity) this.getContext());
                 if (imageResource == null) {

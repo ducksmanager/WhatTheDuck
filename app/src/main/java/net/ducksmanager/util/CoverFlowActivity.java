@@ -46,7 +46,7 @@ public class CoverFlowActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         mData = (ArrayList<IssueWithFullUrl>) extras.get("resultCollection");
 
-        mResultNumber = (TextSwitcher) findViewById(R.id.resultNumber);
+        mResultNumber = findViewById(R.id.resultNumber);
         mResultNumber.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
@@ -55,21 +55,21 @@ public class CoverFlowActivity extends Activity {
             }
         });
 
-        mCountryBadge = (ImageSwitcher) findViewById(R.id.imageSwitcherCountryBadge);
+        mCountryBadge = findViewById(R.id.imageSwitcherCountryBadge);
         mCountryBadge.setFactory(new ViewSwitcher.ViewFactory() {
              public View makeView() {
                  return new ImageView(getApplicationContext());
             }
          });
 
-        mIssueCondition = (ImageSwitcher) findViewById(R.id.issuecondition);
+        mIssueCondition = findViewById(R.id.issuecondition);
         mIssueCondition.setFactory(new ViewSwitcher.ViewFactory() {
              public View makeView() {
                  return new ImageView(getApplicationContext());
             }
          });
 
-        TextSwitcher mIssueConditionTextSwitcher = (TextSwitcher) findViewById(R.id.issuecondition_description);
+        TextSwitcher mIssueConditionTextSwitcher = findViewById(R.id.issuecondition_description);
         mIssueConditionTextSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
@@ -79,7 +79,7 @@ public class CoverFlowActivity extends Activity {
             }
         });
 
-        TextSwitcher mTitleSwitcher = (TextSwitcher) findViewById(R.id.title);
+        TextSwitcher mTitleSwitcher = findViewById(R.id.title);
         mTitleSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
@@ -92,7 +92,7 @@ public class CoverFlowActivity extends Activity {
         CoverFlowAdapter mAdapter = new CoverFlowAdapter(this);
         mAdapter.setData(mData);
 
-        FeatureCoverFlow mCoverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
+        FeatureCoverFlow mCoverFlow = findViewById(R.id.coverflow);
         mCoverFlow.setAdapter(mAdapter);
 
         mCoverFlow.setOnItemClickListener(new AdapterView.OnItemClickListener() {

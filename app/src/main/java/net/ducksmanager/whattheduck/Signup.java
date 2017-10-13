@@ -26,7 +26,7 @@ public class Signup extends Activity {
         ((EditText) Signup.this.findViewById(R.id.username_signup)).setText(WhatTheDuck.getUsername());
         ((EditText) Signup.this.findViewById(R.id.password_signup)).setText(WhatTheDuck.getPassword());
 
-        Button endSignupButton = (Button) findViewById(R.id.end_signup);
+        Button endSignupButton = findViewById(R.id.end_signup);
         endSignupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 WhatTheDuck.setUsername(((EditText) Signup.this.findViewById(R.id.username_signup)).getText().toString());
@@ -39,7 +39,7 @@ public class Signup extends Activity {
             }
         });
         
-        Button cancelSignupButton = (Button) findViewById(R.id.cancel_signup);
+        Button cancelSignupButton = findViewById(R.id.cancel_signup);
         cancelSignupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent i = new Intent(Signup.this, WhatTheDuck.class);

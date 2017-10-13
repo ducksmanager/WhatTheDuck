@@ -42,7 +42,7 @@ public class PublicationList extends List {
         startActivity(i);
     }
         
-    public void show() {
+    protected void show() {
         if (WhatTheDuck.getSelectedCountry() != null) {
             super.show(new PublicationAdapter(this, getCollection().getPublicationList(WhatTheDuck.getSelectedCountry())));
         }

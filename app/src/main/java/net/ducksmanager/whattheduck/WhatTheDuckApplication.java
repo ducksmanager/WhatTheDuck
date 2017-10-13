@@ -16,9 +16,9 @@ import java.util.Properties;
 public class WhatTheDuckApplication extends Application {
     public static Properties config = null;
 
-    static final String CONFIG = "config.properties";
+    private static final String CONFIG = "config.properties";
     public static final String CONFIG_KEY_API_ENDPOINT_URL = "api_endpoint_url";
-    public static final String CONFIG_KEY_PIWIK_URL = "piwik_url";
+    private static final String CONFIG_KEY_PIWIK_URL = "piwik_url";
     static final String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
 
     private Tracker mPiwikTracker;
@@ -28,7 +28,7 @@ public class WhatTheDuckApplication extends Application {
         loadConfig(getAssets());
     }
 
-    static void loadConfig(AssetManager assets) {
+    private static void loadConfig(AssetManager assets) {
         InputStream reader = null;
         try {
             reader = assets.open(CONFIG);
@@ -51,7 +51,7 @@ public class WhatTheDuckApplication extends Application {
         }
     }
 
-    public synchronized Tracker getTracker() {
+    private synchronized Tracker getTracker() {
         if (mPiwikTracker != null) {
             return mPiwikTracker;
         }
