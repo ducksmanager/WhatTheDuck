@@ -1,3 +1,7 @@
+Version 1.5.6
+
+    Add analytics
+
 Version 1.5.5
 
     Update build tools
