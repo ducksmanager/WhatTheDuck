@@ -17,6 +17,7 @@ import net.ducksmanager.whattheduck.Issue;
 import net.ducksmanager.whattheduck.IssueWithFullUrl;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
+import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import java.util.ArrayList;
 
@@ -38,6 +39,8 @@ public class CoverFlowActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((WhatTheDuckApplication) getApplication()).trackActivity(this);
+
         setContentView(R.layout.activity_coverflow);
 
         Bundle extras = getIntent().getExtras();

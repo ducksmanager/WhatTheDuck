@@ -39,6 +39,7 @@ public abstract class List<Item> extends ListActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((WhatTheDuckApplication) getApplication()).trackActivity(this);
 
         Bundle extras = getIntent().getExtras();
         type = extras != null && extras.getString("type") != null

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -46,11 +45,6 @@ public class WhatTheDuck extends Activity {
     @VisibleForTesting
     public static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
 
-    private static final String CONFIG = "config.properties";
-    private static final String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
-    public static final String CONFIG_KEY_API_ENDPOINT_URL = "api_endpoint_url";
-    public static Properties config = null;
-
     private static final String USER_SETTINGS = "settings.properties";
 
     private static String serverURL;
@@ -76,8 +70,8 @@ public class WhatTheDuck extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         wtd=this;
         super.onCreate(savedInstanceState);
+        ((WhatTheDuckApplication) getApplication()).trackActivity(this);
 
-        loadConfig(getAssets());
         loadUserSettings();
 
         String encryptedPassword = getEncryptedPassword();
@@ -203,29 +197,6 @@ public class WhatTheDuck extends Activity {
         }
     }
 
-    private static void loadConfig(AssetManager assets) {
-        InputStream reader = null;
-        try {
-            reader = assets.open(CONFIG);
-            config = new Properties();
-            config.load(reader);
-        } catch (IOException e) {
-            WhatTheDuck.wtd.alert(WhatTheDuck.wtd, R.string.internal_error);
-            System.err.println("Config file not found, aborting");
-            System.exit(-1);
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    WhatTheDuck.wtd.alert(WhatTheDuck.wtd, R.string.internal_error);
-                    System.err.println("Error while reading config file, aborting");
-                    System.exit(-1);
-                }
-            }
-        }
-    }
-
     public static void saveSettings(Boolean withCredentials) {
         Properties props=new Properties();
 
@@ -336,7 +307,7 @@ public class WhatTheDuck extends Activity {
         }
 
         Ion.with(this.findViewById(android.R.id.content).getContext())
-            .load(config.getProperty(CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix)
+            .load(WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix)
             .setHeader("x-dm-version", WhatTheDuck.wtd.getApplicationVersion())
             .setMultipartFile(fileName, file)
             .asString()
@@ -361,7 +332,7 @@ public class WhatTheDuck extends Activity {
         String response = downloadHandler.getPage(serverURL+"/"+SERVER_PAGE
                                       + "?pseudo_user="+URLEncoder.encode(username, "UTF-8")
                                       + "&mdp_user="+encryptedPassword
-                                      + "&mdp="+ config.getProperty(CONFIG_KEY_SECURITY_PASSWORD)
+                                      + "&mdp="+ WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_SECURITY_PASSWORD)
                                       + "&version="+getApplicationVersion()
                                       + "&language="+ Locale.getDefault().getLanguage()
                                       + urlSuffix);

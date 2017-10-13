@@ -9,6 +9,7 @@
     <uses-feature android:name="android.hardware.camera" android:required="true" />
     <application
         android:theme="@android:style/Theme.Material"
+        android:name=".WhatTheDuckApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:supportsRtl="true"

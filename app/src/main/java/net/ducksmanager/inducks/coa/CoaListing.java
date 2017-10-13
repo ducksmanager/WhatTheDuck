@@ -7,10 +7,12 @@ import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
+import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.json.JSONException;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 public abstract class CoaListing extends RetrieveTask {
     Activity activity;
@@ -30,6 +32,7 @@ public abstract class CoaListing extends RetrieveTask {
 
     CoaListing(Activity activity, ListType type, String countryShortName, String publicationShortName, SimpleCallback callback) {
         super(urlSuffixes.get(type), R.id.progressBarLoading);
+        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("list/coa/" + type.name().toLowerCase(Locale.FRANCE));
         this.activity = activity;
         this.callback = callback;
         CoaListing.countryShortName = countryShortName;

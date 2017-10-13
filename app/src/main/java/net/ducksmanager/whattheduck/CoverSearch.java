@@ -45,7 +45,7 @@ public class CoverSearch extends RetrieveTask {
                             (String) issue.get("publicationcode"),
                             (String) issue.get("publicationtitle"),
                             (String) issue.get("issuenumber"),
-                            WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_API_ENDPOINT_URL) + "/cover-id/download/" + issue.get("coverid"))
+                            WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL) + "/cover-id/download/" + issue.get("coverid"))
                         );
                     }
                     Intent i = new Intent(CoverSearch.cls, CoverFlowActivity.class);
@@ -86,11 +86,13 @@ public class CoverSearch extends RetrieveTask {
     protected void onPreExecute() {
         super.onPreExecute();
         System.out.println("Starting cover search : " + System.currentTimeMillis());
+        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("coversearch/start");
     }
 
     @Override
     protected void onPostExecute(String response) {
         super.onPostExecute(response);
+        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("coversearch/finish");
         System.out.println("Ending cover search : " + System.currentTimeMillis());
     }
 }

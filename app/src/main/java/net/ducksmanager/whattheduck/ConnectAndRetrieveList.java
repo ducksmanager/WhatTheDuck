@@ -31,6 +31,8 @@ public class ConnectAndRetrieveList extends RetrieveTask {
     protected void onPreExecute() {
         WhatTheDuck.userCollection = new Collection();
 
+        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("retrievecollection/start");
+
         if (this.fromUI) {
             if (WhatTheDuck.getUsername() == null
                 || !WhatTheDuck.getUsername().equals(((EditText) wtd.findViewById(R.id.username)).getText().toString())
@@ -56,6 +58,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
 
     @Override
     protected void onPostExecute(String response) {
+        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("retrievecollection/finish");
         super.onPostExecute(response);
         if (super.hasFailed()) {
             return;

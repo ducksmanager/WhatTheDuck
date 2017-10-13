@@ -17,6 +17,8 @@ public class Signup extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((WhatTheDuckApplication) getApplication()).trackActivity(this);
+
         setContentView(R.layout.signup);
         
         setTitle(R.string.app_name);
@@ -56,6 +58,7 @@ public class Signup extends Activity {
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
+            ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("signup/finish");
             if (response != null) {
                 try {
                     response = new String(response.getBytes("ISO8859-1"), "UTF-8");

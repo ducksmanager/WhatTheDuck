@@ -31,10 +31,12 @@ public class AddIssue extends RetrieveTask {
     @Override
     protected void onPreExecute() {
         WhatTheDuck.wtd.toggleProgressbarLoading(AddIssue.originActivity, progressBarId, true);
+        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addissue/start");
     }
 
     @Override
     protected void onPostExecute(String response) {
+        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addissue/finish");
         if (response.equals("OK")) {
             WhatTheDuck.wtd.info(AddIssue.originActivity, R.string.confirmation_message__issue_inserted);
             WhatTheDuck.userCollection.addIssue(shortCountryAndPublication, selectedIssue);
