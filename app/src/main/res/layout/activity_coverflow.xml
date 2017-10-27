@@ -42,12 +42,12 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
         <ImageSwitcher
-            android:id="@+id/issuecondition"
+            android:id="@+id/prefiximage"
             android:layout_width="24dip"
             android:layout_height="fill_parent"
             android:paddingBottom="72dp" />
         <TextSwitcher
-            android:id="@+id/issuecondition_description"
+            android:id="@+id/prefiximage_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="72dp"

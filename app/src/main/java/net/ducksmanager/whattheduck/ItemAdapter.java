@@ -61,14 +61,14 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
 
             itemTitle.setTypeface(null, isHighlighted(i) ? Typeface.BOLD : Typeface.NORMAL);
 
-            ImageView imageCondition = v.findViewById(R.id.issuecondition);
-            if (imageCondition != null) {
+            ImageView prefixImage = v.findViewById(R.id.prefiximage);
+            if (prefixImage != null) {
                 Integer imageResource = getImageResource(i, (Activity) this.getContext());
                 if (imageResource == null) {
-                    imageCondition.setVisibility(View.GONE);
+                    prefixImage.setVisibility(View.GONE);
                 } else {
-                    imageCondition.setVisibility(View.VISIBLE);
-                    imageCondition.setImageResource(imageResource);
+                    prefixImage.setVisibility(View.VISIBLE);
+                    prefixImage.setImageResource(imageResource);
                 }
             }
         }

@@ -62,14 +62,14 @@ public class CoverFlowActivity extends Activity {
             }
          });
 
-        mIssueCondition = findViewById(R.id.issuecondition);
+        mIssueCondition = findViewById(R.id.prefiximage);
         mIssueCondition.setFactory(new ViewSwitcher.ViewFactory() {
              public View makeView() {
                  return new ImageView(getApplicationContext());
             }
          });
 
-        TextSwitcher mIssueConditionTextSwitcher = findViewById(R.id.issuecondition_description);
+        TextSwitcher mIssueConditionTextSwitcher = findViewById(R.id.prefiximage_description);
         mIssueConditionTextSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
