@@ -23,7 +23,7 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
     private ArrayList<Item> filteredItems;
 
     ItemAdapter(List list, ArrayList<Item> items) {
-        super(list, R.layout.row, items);
+        super(list, R.layout.row_edge, items);
         this.items = items;
         Collections.sort(this.items, getComparator());
 
@@ -46,31 +46,43 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         };
     }
 
+    LayoutInflater getLayoutInflater() {
+        return (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    protected View getNewView() {
+        return getLayoutInflater().inflate(R.layout.row, null);
+    }
+
+    protected void processView(View v, Item i) {
+        TextView itemTitle = v.findViewById(R.id.itemtitle);
+        itemTitle.setText(getText(i));
+
+        itemTitle.setTypeface(null, isHighlighted(i) ? Typeface.BOLD : Typeface.NORMAL);
+
+        ImageView prefixImage = v.findViewById(R.id.prefiximage);
+        if (prefixImage != null) {
+            Integer imageResource = getImageResource(i, (Activity) this.getContext());
+            if (imageResource == null) {
+                prefixImage.setVisibility(View.GONE);
+            } else {
+                prefixImage.setVisibility(View.VISIBLE);
+                prefixImage.setImageResource(imageResource);
+            }
+        }
+    }
+
     @Override
     @NonNull
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         if (v == null) {
-            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.row, null);
+            v = this.getNewView();
         }
+
         Item i = getItem(position);
         if (i != null) {
-            TextView itemTitle = v.findViewById(R.id.itemtitle);
-            itemTitle.setText(getText(i));
-
-            itemTitle.setTypeface(null, isHighlighted(i) ? Typeface.BOLD : Typeface.NORMAL);
-
-            ImageView prefixImage = v.findViewById(R.id.prefiximage);
-            if (prefixImage != null) {
-                Integer imageResource = getImageResource(i, (Activity) this.getContext());
-                if (imageResource == null) {
-                    prefixImage.setVisibility(View.GONE);
-                } else {
-                    prefixImage.setVisibility(View.VISIBLE);
-                    prefixImage.setImageResource(imageResource);
-                }
-            }
+            processView(v, i);
         }
         return v;
     }

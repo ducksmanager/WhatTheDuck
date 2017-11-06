@@ -15,13 +15,16 @@ import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 public class IssueList extends List<Issue> {
-    
+
+    private String selectedCountry;
+    private String selectedPublication;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final String selectedCountry = WhatTheDuck.getSelectedCountry();
-        final String selectedPublication = WhatTheDuck.getSelectedPublication();
+        selectedCountry = WhatTheDuck.getSelectedCountry();
+        selectedPublication = WhatTheDuck.getSelectedPublication();
 
         if (IssueListing.hasFullList(selectedPublication)) {
             this.show();
@@ -69,6 +72,8 @@ public class IssueList extends List<Issue> {
         else {
             filterEditText.setVisibility(EditText.GONE);
         }
+
+        this.getListView().setDivider(null);
     }
     
     @Override
@@ -90,5 +95,13 @@ public class IssueList extends List<Issue> {
             }
         }
         super.onListItemClick(l, v, position, id);
+    }
+
+    public String getSelectedCountry() {
+        return selectedCountry;
+    }
+
+    public String getSelectedPublication() {
+        return selectedPublication;
     }
 }
