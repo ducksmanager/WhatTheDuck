@@ -9,6 +9,7 @@
     <string name="add_cover_tooltip">New! Add an issue by photographing its cover.</string>
     <string name="all_countries">All countries</string>
     <string name="cancel">Cancel</string>
+    <string name="condition">Condition</string>
     <string name="condition_bad">Bad condition</string>
     <string name="condition_good">Good condition</string>
     <string name="condition_notsogood">Not-so-good condition</string>

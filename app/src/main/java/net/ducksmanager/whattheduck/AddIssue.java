@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
@@ -80,10 +81,7 @@ public class AddIssue extends RetrieveTask {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder
-            .setTitle(activity.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()))
-            .setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int item) {}
-            })
+            .setView(R.layout.addissue)
             .setCancelable(true)
             .setPositiveButton(activity.getString(R.string.ok), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
@@ -110,7 +108,11 @@ public class AddIssue extends RetrieveTask {
                     dialog.cancel();
                 }
             });
-        builder.create().show();
+
+        AlertDialog alert = builder.create();
+        alert.show();
+
+        ((TextView)alert.findViewById(R.id.addissue_title)).setText(activity.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()));
     }
 
 }
