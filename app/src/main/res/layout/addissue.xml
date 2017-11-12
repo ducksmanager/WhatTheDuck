@@ -41,49 +41,27 @@
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                           android:layout_width="fill_parent"
-                          android:layout_height="wrap_content"
+                          android:layout_height="20dp"
                           android:orientation="horizontal"
                           android:gravity="center">
-                <ImageView
+                <include
                     android:id="@+id/nocondition"
-                    android:layout_width="20dp"
-                    android:layout_height="fill_parent"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginRight="4dp"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/condition_notsogood"
-                    android:src="@drawable/condition_none"/>
-
-                <ImageView
+                    layout="@layout/checkable_condition" />
+                <include
                     android:id="@+id/badcondition"
-                    android:layout_width="20dp"
-                    android:layout_height="fill_parent"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginRight="4dp"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/condition_bad"
-                    android:src="@drawable/condition_bad"/>
-
-                <ImageView
+                    layout="@layout/checkable_condition" />
+                <include
                     android:id="@+id/notsogoodcondition"
-                    android:layout_width="20dp"
-                    android:layout_height="fill_parent"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginRight="4dp"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/condition_notsogood"
-                    android:src="@drawable/condition_notsogood"/>
-
-                <ImageView
+                    layout="@layout/checkable_condition" />
+                <include
                     android:id="@+id/goodcondition"
-                    android:layout_width="20dp"
-                    android:layout_height="fill_parent"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginRight="4dp"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/condition_good"
-                    android:src="@drawable/condition_good"/>
+                    layout="@layout/checkable_condition" />
             </LinearLayout>
+            <TextView
+                android:id="@+id/addissue_condition_text"
+                android:layout_width="fill_parent"
+                android:layout_height="20dp"
+                android:gravity="center" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

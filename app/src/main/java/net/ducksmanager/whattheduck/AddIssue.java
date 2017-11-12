@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.widget.CheckedTextView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.util.SimpleCallback;
+
+import java.util.HashMap;
 
 public class AddIssue extends RetrieveTask {
 
@@ -85,22 +90,22 @@ public class AddIssue extends RetrieveTask {
             .setCancelable(true)
             .setPositiveButton(activity.getString(R.string.ok), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-                int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
-                if (selectedPosition == -1) {
-                    WhatTheDuck.wtd.info(activity, R.string.input_error__select_condition);
-                    return;
-                }
-                String condition = items[selectedPosition].toString();
-                String DMcondition;
-                if (condition.equals(activity.getString(R.string.condition_bad)))
-                    DMcondition = Issue.BAD_CONDITION;
-                else if (condition.equals(activity.getString(R.string.condition_notsogood)))
-                    DMcondition = Issue.NOTSOGOOD_CONDITION;
-                else
-                    DMcondition = Issue.GOOD_CONDITION;
-                selectedIssue.setIssueCondition(Issue.issueConditionStrToIssueCondition(DMcondition));
-                new AddIssue(activity, WhatTheDuck.getSelectedPublication(), selectedIssue).execute();
+                    dialog.dismiss();
+                    int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                    if (selectedPosition == -1) {
+                        WhatTheDuck.wtd.info(activity, R.string.input_error__select_condition);
+                        return;
+                    }
+                    String condition = items[selectedPosition].toString();
+                    String DMcondition;
+                    if (condition.equals(activity.getString(R.string.condition_bad)))
+                        DMcondition = Issue.BAD_CONDITION;
+                    else if (condition.equals(activity.getString(R.string.condition_notsogood)))
+                        DMcondition = Issue.NOTSOGOOD_CONDITION;
+                    else
+                        DMcondition = Issue.GOOD_CONDITION;
+                    selectedIssue.setIssueCondition(Issue.issueConditionStrToIssueCondition(DMcondition));
+                    new AddIssue(activity, WhatTheDuck.getSelectedPublication(), selectedIssue).execute();
                 }
             })
             .setNegativeButton(activity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -113,6 +118,20 @@ public class AddIssue extends RetrieveTask {
         alert.show();
 
         ((TextView)alert.findViewById(R.id.addissue_title)).setText(activity.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()));
+
+        HashMap<Integer, Integer> conditions = new HashMap<>();
+        conditions.put(R.id.nocondition, R.drawable.condition_none);
+        conditions.put(R.id.badcondition, R.drawable.condition_bad);
+        conditions.put(R.id.notsogoodcondition, R.drawable.condition_notsogood);
+        conditions.put(R.id.goodcondition, R.drawable.condition_good);
+
+        for (Integer viewId : conditions.keySet()) {
+            FrameLayout layout = alert.findViewById(viewId);
+            ((ImageView)layout.findViewById(R.id.condition)).setImageResource(conditions.get(viewId));
+            if (viewId.equals(R.id.nocondition)) {
+                ((CheckedTextView)layout.findViewById(R.id.check)).setChecked(true);
+            }
+        }
     }
 
 }
