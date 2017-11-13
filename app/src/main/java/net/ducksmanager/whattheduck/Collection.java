@@ -7,11 +7,19 @@ import net.ducksmanager.whattheduck.Issue.IssueCondition;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
 public class Collection implements Serializable {
     private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<>();
+    private ArrayList<PurchaseAdapter.Purchase> purchaseList;
+
+    public ArrayList<PurchaseAdapter.Purchase> getPurchaseList() {
+        purchaseList = new ArrayList<>();
+        purchaseList.add(new PurchaseAdapter.Purchase(new Date(0), "My purchase"));
+        return purchaseList;
+    }
 
     public enum CollectionType {COA,USER}
 

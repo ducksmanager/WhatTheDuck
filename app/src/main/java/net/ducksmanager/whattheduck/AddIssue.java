@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
@@ -132,6 +133,9 @@ public class AddIssue extends RetrieveTask {
                 ((CheckedTextView)layout.findViewById(R.id.check)).setChecked(true);
             }
         }
+
+        ListView lv = alert.findViewById(R.id.purchase_list);
+        lv.setAdapter(new PurchaseAdapter(activity, WhatTheDuck.userCollection.getPurchaseList()));
     }
 
 }

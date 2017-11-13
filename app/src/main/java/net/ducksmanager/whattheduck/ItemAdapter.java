@@ -22,8 +22,8 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
     private final ArrayList<Item> items;
     private ArrayList<Item> filteredItems;
 
-    ItemAdapter(List list, ArrayList<Item> items) {
-        super(list, R.layout.row, items);
+    ItemAdapter(Context context, ArrayList<Item> items) {
+        super(context, R.layout.row, items);
         this.items = items;
         Collections.sort(this.items, getComparator());
 
@@ -46,13 +46,17 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         };
     }
 
+    protected int getResourceToInflate() {
+        return R.layout.row;
+    }
+
     @Override
     @NonNull
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         if (v == null) {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.row, null);
+            v = vi.inflate(getResourceToInflate(), null);
         }
         Item i = getItem(position);
         if (i != null) {

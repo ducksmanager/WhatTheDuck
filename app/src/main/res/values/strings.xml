@@ -41,6 +41,7 @@
     <string name="ok">OK</string>
     <string name="password">Password</string>
     <string name="password_confirm">Password confirmation</string>
+    <string name="purchase_date">Purchase date</string>
     <string name="referenced_issues">Referenced issue numbers</string>
     <string name="remember_credentials">Remember my credentials</string>
     <string name="result">Result</string>
