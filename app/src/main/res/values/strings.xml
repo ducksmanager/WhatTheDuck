@@ -38,6 +38,7 @@
     <string name="network_error">Network error</string>
     <string name="network_error__no_connection">Network issue: please check your Internet connection</string>
     <string name="no_result">No issue in this list.</string>
+    <string name="no_purchase_date">No purchase date</string>
     <string name="ok">OK</string>
     <string name="password">Password</string>
     <string name="password_confirm">Password confirmation</string>

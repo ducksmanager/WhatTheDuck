@@ -50,6 +50,10 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         return R.layout.row;
     }
 
+    protected TextView getTitleTextView(View mainView) {
+        return mainView.findViewById(R.id.itemtitle);
+    }
+
     @Override
     @NonNull
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -60,10 +64,8 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         }
         Item i = getItem(position);
         if (i != null) {
-            TextView itemTitle = v.findViewById(R.id.itemtitle);
-            itemTitle.setText(getText(i));
-
-            itemTitle.setTypeface(null, isHighlighted(i) ? Typeface.BOLD : Typeface.NORMAL);
+            getTitleTextView(v).setText(getText(i));
+            getTitleTextView(v).setTypeface(null, isHighlighted(i) ? Typeface.BOLD : Typeface.NORMAL);
 
             ImageView prefixImage = v.findViewById(R.id.prefiximage);
             if (prefixImage != null) {

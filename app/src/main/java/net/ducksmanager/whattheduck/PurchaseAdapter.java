@@ -1,13 +1,16 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
@@ -40,7 +43,15 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         View v = super.getView(position, convertView, parent);
 
         Purchase purchase = getItem(position);
-        ((TextView)v.findViewById(R.id.purchasedate)).setText(purchase.getPurchaseDate().toString());
+
+        TextView purchaseDate = v.findViewById(R.id.purchasedate);
+        purchaseDate.setVisibility(purchase == null ? View.GONE : View.VISIBLE);
+        purchaseDate.setText(purchase == null
+            ? "" :
+            new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(purchase.getPurchaseDate())
+        );
+
+        getTitleTextView(v).setTypeface(null, purchase == null ? Typeface.ITALIC : Typeface.NORMAL);
 
         return v;
     }
@@ -62,6 +73,8 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
     @Override
     protected String getText(Purchase i) {
-        return i.getPurchaseName();
+        return i == null
+            ? ""
+            : i.getPurchaseName();
     }
 }

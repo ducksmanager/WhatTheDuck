@@ -41,8 +41,7 @@
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                           android:layout_width="fill_parent"
                           android:layout_height="20dp"
-                          android:orientation="horizontal"
-                          android:gravity="center">
+                          android:orientation="horizontal">
                 <include
                     android:id="@+id/nocondition"
                     layout="@layout/checkable_condition" />
@@ -60,13 +59,15 @@
                 android:id="@+id/addissue_condition_text"
                 android:layout_width="fill_parent"
                 android:layout_height="20dp"
-                android:gravity="center" />
+                android:textSize="12sp"
+                android:text="test" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                  android:paddingTop="10dp"
                   android:orientation="horizontal">
         <TextView
             android:id="@+id/addissue_purchasedate"
@@ -80,26 +81,16 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                       xmlns:tools="http://schemas.android.com/tools"
                       android:layout_width="0dp"
+                      android:layout_height="180dp"
                       android:layout_weight="1"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical"
-                      android:gravity="center">
-
-            <EditText
-                android:id="@+id/filter"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:hint="@string/filter"
-                android:textSize="12sp"
-                android:visibility="visible"/>
+                      android:gravity="left|top"
+                      android:orientation="vertical">
 
             <ListView
                 android:id="@+id/purchase_list"
-                tools:listitem="@layout/row_purchase"
                 android:layout_width="fill_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                tools:listitem="@layout/row_purchase"/>
 
             <TextView
                 android:id="@+id/emptyList"
