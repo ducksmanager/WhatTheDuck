@@ -12,6 +12,7 @@
     <string name="condition">Condition</string>
     <string name="condition_bad">Bad condition</string>
     <string name="condition_good">Good condition</string>
+    <string name="condition_none">Unspecified condition</string>
     <string name="condition_notsogood">Not-so-good condition</string>
     <string name="confirmation_message__issue_inserted">The issue has been added to your collection</string>
     <string name="cover_suggestion">Cover suggestion</string>

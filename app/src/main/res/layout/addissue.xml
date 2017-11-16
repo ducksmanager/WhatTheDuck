@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content">
@@ -42,18 +43,49 @@
                           android:layout_width="fill_parent"
                           android:layout_height="20dp"
                           android:orientation="horizontal">
-                <include
+                <net.igenius.customcheckbox.CustomCheckBox
                     android:id="@+id/nocondition"
-                    layout="@layout/checkable_condition" />
-                <include
+                    android:layout_width="20dp"
+                    app:color_checked="#989898"
+                    app:color_unchecked="#989898"
+                    app:duration="1"
+                    app:stroke_width="5dp"
+                    android:contentDescription="@string/condition_none"
+                    android:checked="true"
+                    android:layout_height="fill_parent"/>
+
+                <net.igenius.customcheckbox.CustomCheckBox
                     android:id="@+id/badcondition"
-                    layout="@layout/checkable_condition" />
-                <include
+                    android:layout_width="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    app:color_checked="#FF0000"
+                    app:color_unchecked="#FF0000"
+                    app:duration="100"
+                    android:contentDescription="@string/condition_bad"
+                    android:layout_height="fill_parent"/>
+
+                <net.igenius.customcheckbox.CustomCheckBox
                     android:id="@+id/notsogoodcondition"
-                    layout="@layout/checkable_condition" />
-                <include
+                    android:layout_width="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    app:color_checked="#FF8000"
+                    app:color_unchecked="#FF8000"
+                    app:duration="100"
+                    android:contentDescription="@string/condition_notsogood"
+                    android:layout_height="fill_parent"/>
+
+                <net.igenius.customcheckbox.CustomCheckBox
                     android:id="@+id/goodcondition"
-                    layout="@layout/checkable_condition" />
+                    android:layout_width="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    app:color_checked="#2CA77B"
+                    app:color_unchecked="#2CA77B"
+                    app:duration="100"
+                    android:contentDescription="@string/condition_good"
+                    android:layout_height="fill_parent"/>
             </LinearLayout>
             <TextView
                 android:id="@+id/addissue_condition_text"

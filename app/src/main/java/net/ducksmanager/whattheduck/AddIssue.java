@@ -4,17 +4,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.widget.CheckedTextView;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.util.SimpleCallback;
+import net.igenius.customcheckbox.CustomCheckBox;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class AddIssue extends RetrieveTask {
 
@@ -115,23 +113,46 @@ public class AddIssue extends RetrieveTask {
                 }
             });
 
-        AlertDialog alert = builder.create();
+        final AlertDialog alert = builder.create();
         alert.show();
 
         ((TextView)alert.findViewById(R.id.addissue_title)).setText(activity.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()));
 
-        HashMap<Integer, Integer> conditions = new HashMap<>();
-        conditions.put(R.id.nocondition, R.drawable.condition_none);
-        conditions.put(R.id.badcondition, R.drawable.condition_bad);
-        conditions.put(R.id.notsogoodcondition, R.drawable.condition_notsogood);
-        conditions.put(R.id.goodcondition, R.drawable.condition_good);
+        final java.util.List<Integer> conditions = Arrays.asList(
+            R.id.nocondition,
+            R.id.badcondition,
+            R.id.notsogoodcondition,
+            R.id.goodcondition
+        );
 
-        for (Integer viewId : conditions.keySet()) {
-            FrameLayout layout = alert.findViewById(viewId);
-            ((ImageView)layout.findViewById(R.id.condition)).setImageResource(conditions.get(viewId));
-            if (viewId.equals(R.id.nocondition)) {
-                ((CheckedTextView)layout.findViewById(R.id.check)).setChecked(true);
-            }
+        ((CustomCheckBox) alert.findViewById(R.id.nocondition)).setChecked(true);
+
+        for (Integer viewId : conditions) {
+            final CustomCheckBox scb = alert.findViewById(viewId);
+            scb.setTag("");
+            scb.setOnCheckedChangeListener(new CustomCheckBox.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CustomCheckBox checkBox, boolean isChecked) {
+                    if (isChecked) {
+                        for (Integer viewId : conditions) {
+                            if (viewId != checkBox.getId()) {
+                                CustomCheckBox otherCheckbox = alert.findViewById(viewId);
+                                otherCheckbox.setTag("direct_uncheck=false");
+                                otherCheckbox.setChecked(false);
+                            }
+                        }
+                        ((TextView) alert.findViewById(R.id.addissue_condition_text)).setText(checkBox.getContentDescription());
+                    }
+                    else {
+                        if (checkBox.getTag().equals("direct_uncheck=false")) {
+                            checkBox.setTag("");
+                        }
+                        else {
+                            checkBox.setChecked(true);
+                        }
+                    }
+                }
+            });
         }
 
         ListView lv = alert.findViewById(R.id.purchase_list);
