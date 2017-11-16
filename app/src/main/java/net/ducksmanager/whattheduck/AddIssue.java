@@ -4,15 +4,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
+import net.ducksmanager.util.MultipleCustomCheckboxes;
 import net.ducksmanager.util.SimpleCallback;
-import net.igenius.customcheckbox.CustomCheckBox;
-
-import java.util.*;
 
 public class AddIssue extends RetrieveTask {
 
@@ -118,42 +117,12 @@ public class AddIssue extends RetrieveTask {
 
         ((TextView)alert.findViewById(R.id.addissue_title)).setText(activity.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()));
 
-        final java.util.List<Integer> conditions = Arrays.asList(
+        MultipleCustomCheckboxes conditionCheckboxes = new MultipleCustomCheckboxes(
+            (ViewGroup) alert.findViewById(R.id.condition_selector),
             R.id.nocondition,
-            R.id.badcondition,
-            R.id.notsogoodcondition,
-            R.id.goodcondition
+            (TextView) alert.findViewById(R.id.addissue_condition_text)
         );
-
-        ((CustomCheckBox) alert.findViewById(R.id.nocondition)).setChecked(true);
-
-        for (Integer viewId : conditions) {
-            final CustomCheckBox scb = alert.findViewById(viewId);
-            scb.setTag("");
-            scb.setOnCheckedChangeListener(new CustomCheckBox.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CustomCheckBox checkBox, boolean isChecked) {
-                    if (isChecked) {
-                        for (Integer viewId : conditions) {
-                            if (viewId != checkBox.getId()) {
-                                CustomCheckBox otherCheckbox = alert.findViewById(viewId);
-                                otherCheckbox.setTag("direct_uncheck=false");
-                                otherCheckbox.setChecked(false);
-                            }
-                        }
-                        ((TextView) alert.findViewById(R.id.addissue_condition_text)).setText(checkBox.getContentDescription());
-                    }
-                    else {
-                        if (checkBox.getTag().equals("direct_uncheck=false")) {
-                            checkBox.setTag("");
-                        }
-                        else {
-                            checkBox.setChecked(true);
-                        }
-                    }
-                }
-            });
-        }
+        conditionCheckboxes.init();
 
         ListView lv = alert.findViewById(R.id.purchase_list);
         lv.setAdapter(new PurchaseAdapter(activity, WhatTheDuck.userCollection.getPurchaseList()));
