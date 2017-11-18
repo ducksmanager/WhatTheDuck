@@ -15,12 +15,18 @@ import java.util.Locale;
 public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
     public static class Purchase {
+        Integer id = null;
         final Date purchaseDate;
         final String purchaseName;
 
-        public Purchase(Date purchaseDate, String purchaseName) {
+        public Purchase(Integer id, Date purchaseDate, String purchaseName) {
+            this.id = id;
             this.purchaseDate = purchaseDate;
             this.purchaseName = purchaseName;
+        }
+
+        public Integer getId() {
+            return id;
         }
 
         public Date getPurchaseDate() {
@@ -34,7 +40,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
 
     public PurchaseAdapter(Activity activity, ArrayList<Purchase> items) {
-        super(activity, items);
+        super(activity, R.layout.row_purchase, items);
     }
 
     @NonNull
@@ -43,15 +49,15 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         View v = super.getView(position, convertView, parent);
 
         Purchase purchase = getItem(position);
+        Boolean isNoPurchase = purchase == null;
 
         TextView purchaseDate = v.findViewById(R.id.purchasedate);
-        purchaseDate.setVisibility(purchase == null ? View.GONE : View.VISIBLE);
-        purchaseDate.setText(purchase == null
+        purchaseDate.setVisibility(isNoPurchase ? View.GONE : View.VISIBLE);
+        purchaseDate.setText(isNoPurchase
             ? "" :
             new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(purchase.getPurchaseDate())
         );
-
-        getTitleTextView(v).setTypeface(null, purchase == null ? Typeface.ITALIC : Typeface.NORMAL);
+        getTitleTextView(v).setTypeface(null, isNoPurchase ? Typeface.ITALIC : Typeface.NORMAL);
 
         return v;
     }

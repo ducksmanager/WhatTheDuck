@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.view.ViewGroup;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -12,6 +14,7 @@ import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.util.MultipleCustomCheckboxes;
 import net.ducksmanager.util.SimpleCallback;
+import net.igenius.customcheckbox.CustomCheckBox;
 
 public class AddIssue extends RetrieveTask {
 
@@ -82,9 +85,12 @@ public class AddIssue extends RetrieveTask {
     static public void showAddIssueDialog(final Activity activity, final Issue selectedIssue) {
         final CharSequence[] items = {activity.getString(R.string.condition_bad), activity.getString(R.string.condition_notsogood), activity.getString(R.string.condition_good)};
 
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.addissue, null);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder
-            .setView(R.layout.addissue)
+            .setView(dialogView)
             .setCancelable(true)
             .setPositiveButton(activity.getString(R.string.ok), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
@@ -112,20 +118,32 @@ public class AddIssue extends RetrieveTask {
                 }
             });
 
-        final AlertDialog alert = builder.create();
-        alert.show();
-
-        ((TextView)alert.findViewById(R.id.addissue_title)).setText(activity.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()));
+        ((TextView)dialogView.findViewById(R.id.addissue_title)).setText(activity.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()));
 
         MultipleCustomCheckboxes conditionCheckboxes = new MultipleCustomCheckboxes(
-            (ViewGroup) alert.findViewById(R.id.condition_selector),
-            R.id.nocondition,
-            (TextView) alert.findViewById(R.id.addissue_condition_text)
+            (TextView) dialogView.findViewById(R.id.addissue_condition_text)
         );
-        conditionCheckboxes.init();
+        conditionCheckboxes.initClickEvents(dialogView.findViewById(R.id.condition_selector));
+        conditionCheckboxes.checkInitialCheckbox(new MultipleCustomCheckboxes.CheckboxFilter() {
+            @Override
+            public boolean isMatched(CustomCheckBox checkbox) {
+                return checkbox.getId() == R.id.nocondition;
+            }
+        });
 
-        ListView lv = alert.findViewById(R.id.purchase_list);
+        final MultipleCustomCheckboxes purchaseDateCheckboxes = new MultipleCustomCheckboxes(null);
+
+        ListView lv = dialogView.findViewById(R.id.purchase_list);
         lv.setAdapter(new PurchaseAdapter(activity, WhatTheDuck.userCollection.getPurchaseList()));
-    }
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                purchaseDateCheckboxes.initClickEvents(adapterView);
+                ((CustomCheckBox)view.findViewById(R.id.purchasecheck)).setChecked(true);
+            }
+        });
 
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
 }

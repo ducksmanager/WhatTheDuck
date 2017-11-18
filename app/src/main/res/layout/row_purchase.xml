@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="36dp"
-    android:paddingBottom="10dp"
-    android:orientation="horizontal">
-    <RadioButton
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/condition_selector"
-        android:button="@android:color/transparent"
-        android:checked="true" />
+              android:layout_width="fill_parent"
+              android:layout_height="48dp"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:paddingBottom="10dp"
+              android:orientation="horizontal">
+
+    <net.igenius.customcheckbox.CustomCheckBox
+        android:id="@+id/purchasecheck"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        app:color_checked="#000"
+        app:color_unchecked="#000"
+        app:duration="100"/>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
-                  android:paddingBottom="5dp"
                   android:paddingLeft="5dp"
-                  android:clickable="true"
-                  android:orientation="vertical"
-                  android:focusable="true">
+                  android:paddingStart="5dp"
+                  android:clickable="false"
+                  android:focusable="false"
+                  android:orientation="vertical">
         <TextView
             android:id="@+id/purchasedate"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="start|center"
-            android:text="" />
+            android:text="abc" />
         <TextView
             android:id="@+id/itemtitle"
             android:gravity="start|center"
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:text="@string/no_purchase_date" />
     </LinearLayout>
 </LinearLayout>

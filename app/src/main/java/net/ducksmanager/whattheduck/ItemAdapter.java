@@ -30,6 +30,14 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         this.filteredItems = new ArrayList<>(items);
     }
 
+    ItemAdapter(Context context, int resource, ArrayList<Item> items) {
+        super(context, resource, R.id.itemtitle, items);
+        this.items = items;
+        Collections.sort(this.items, getComparator());
+
+        this.filteredItems = new ArrayList<>(items);
+    }
+
     void updateFilteredList(String textFilter) {
         filteredItems = new ArrayList<>();
         for (Item item : items)
