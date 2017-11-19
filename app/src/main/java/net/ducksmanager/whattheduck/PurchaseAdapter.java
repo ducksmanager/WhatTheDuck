@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import net.igenius.customcheckbox.CustomCheckBox;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +49,9 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View v = super.getView(position, convertView, parent);
 
+        CustomCheckBox purchaseCheck = v.findViewById(R.id.purchasecheck);
+        purchaseCheck.setOnCheckedChangeListener(AddIssue.purchaseDateCheckboxes.onCheckedListener);
+
         Purchase purchase = getItem(position);
         Boolean isNoPurchase = purchase == null;
 
@@ -64,6 +69,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
             noPurchaseTitle.setVisibility(View.GONE);
             purchaseDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(purchase.getPurchaseDate()));
         }
+
         return v;
     }
 

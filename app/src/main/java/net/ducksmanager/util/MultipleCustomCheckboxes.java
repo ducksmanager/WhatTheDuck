@@ -12,15 +12,45 @@ import java.util.List;
 
 public class MultipleCustomCheckboxes {
 
+    public CustomCheckBox.OnCheckedChangeListener onCheckedListener = new CustomCheckBox.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CustomCheckBox checkBox, boolean isChecked) {
+            MultipleCustomCheckboxes.this.initClickEvents();
+            if (isChecked) {
+                for (CustomCheckBox otherCheckbox : checkboxList) {
+                    if (!checkBox.equals(otherCheckbox)) {
+                        otherCheckbox.setTag(R.id.direct_uncheck, Boolean.FALSE);
+                        otherCheckbox.setChecked(false);
+                    }
+                }
+
+                if (checkedElementInfoTextView != null) {
+                    checkedElementInfoTextView.setText(checkBox.getContentDescription());
+                }
+            } else {
+                if (checkBox.getTag(R.id.direct_uncheck) != null
+                    && checkBox.getTag(R.id.direct_uncheck).equals(Boolean.FALSE)) {
+                    checkBox.setTag(R.id.direct_uncheck, null);
+                } else {
+                    checkBox.setChecked(true);
+                }
+            }
+        }
+    };
+
     public interface CheckboxFilter {
         boolean isMatched(CustomCheckBox checkbox);
     }
 
     private final TextView checkedElementInfoTextView;
+    private View container;
+    private int checkboxContainerId;
     private List<CustomCheckBox> checkboxList = new ArrayList<>();
 
-    public MultipleCustomCheckboxes(final TextView checkedElementInfoTextView) {
+    public MultipleCustomCheckboxes(final TextView checkedElementInfoTextView, View container, int checkboxContainerId) {
         this.checkedElementInfoTextView = checkedElementInfoTextView;
+        this.container = container;
+        this.checkboxContainerId = checkboxContainerId;
     }
 
     private void storeDescendantsOfType(ViewGroup v, Class type) {
@@ -45,36 +75,13 @@ public class MultipleCustomCheckboxes {
         }
     }
 
-    public void initClickEvents(View adapterView) {
+    public void initClickEvents() {
         if (this.checkboxList.size() == 0) {
-            this.storeDescendantsOfType((ViewGroup) adapterView, CustomCheckBox.class);
+            this.storeDescendantsOfType((ViewGroup) container.findViewById(checkboxContainerId), CustomCheckBox.class);
 
             for (CustomCheckBox checkBox : checkboxList) {
                 checkBox.setTag(R.id.direct_uncheck, null);
-                checkBox.setOnCheckedChangeListener(new CustomCheckBox.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CustomCheckBox checkBox, boolean isChecked) {
-                        if (isChecked) {
-                            for (CustomCheckBox otherCheckbox : checkboxList) {
-                                if (!checkBox.equals(otherCheckbox)) {
-                                    otherCheckbox.setTag(R.id.direct_uncheck, Boolean.FALSE);
-                                    otherCheckbox.setChecked(false);
-                                }
-                            }
-
-                            if (checkedElementInfoTextView != null) {
-                                checkedElementInfoTextView.setText(checkBox.getContentDescription());
-                            }
-                        } else {
-                            if (checkBox.getTag(R.id.direct_uncheck) != null
-                             && checkBox.getTag(R.id.direct_uncheck).equals(Boolean.FALSE)) {
-                                checkBox.setTag(R.id.direct_uncheck, null);
-                            } else {
-                                checkBox.setChecked(true);
-                            }
-                        }
-                    }
-                });
+                checkBox.setOnCheckedChangeListener(onCheckedListener);
             }
         }
     }

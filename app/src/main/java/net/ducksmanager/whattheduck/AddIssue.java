@@ -21,6 +21,8 @@ public class AddIssue extends RetrieveTask {
     private static Activity originActivity;
     private static String shortCountryAndPublication;
     private static Issue selectedIssue;
+    public static View dialogView;
+    static MultipleCustomCheckboxes purchaseDateCheckboxes;
 
     private AddIssue(Activity il, String shortCountryAndPublication, Issue selectedIssue) {
         super(
@@ -86,7 +88,7 @@ public class AddIssue extends RetrieveTask {
         final CharSequence[] items = {activity.getString(R.string.condition_bad), activity.getString(R.string.condition_notsogood), activity.getString(R.string.condition_good)};
 
         LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.addissue, null);
+        dialogView = inflater.inflate(R.layout.addissue, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder
@@ -118,12 +120,15 @@ public class AddIssue extends RetrieveTask {
                 }
             });
 
-        ((TextView)dialogView.findViewById(R.id.addissue_title)).setText(activity.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()));
+        ((TextView) dialogView.findViewById(R.id.addissue_title)).setText(activity.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()));
 
         MultipleCustomCheckboxes conditionCheckboxes = new MultipleCustomCheckboxes(
-            (TextView) dialogView.findViewById(R.id.addissue_condition_text)
+            (TextView) dialogView.findViewById(R.id.addissue_condition_text),
+            dialogView,
+            R.id.condition_selector
+
         );
-        conditionCheckboxes.initClickEvents(dialogView.findViewById(R.id.condition_selector));
+        conditionCheckboxes.initClickEvents();
         conditionCheckboxes.checkInitialCheckbox(new MultipleCustomCheckboxes.CheckboxFilter() {
             @Override
             public boolean isMatched(CustomCheckBox checkbox) {
@@ -131,14 +136,13 @@ public class AddIssue extends RetrieveTask {
             }
         });
 
-        final MultipleCustomCheckboxes purchaseDateCheckboxes = new MultipleCustomCheckboxes(null);
+        purchaseDateCheckboxes = new MultipleCustomCheckboxes(null, dialogView, R.id.purchase_list);
 
         ListView lv = dialogView.findViewById(R.id.purchase_list);
         lv.setAdapter(new PurchaseAdapter(activity, WhatTheDuck.userCollection.getPurchaseList()));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                purchaseDateCheckboxes.initClickEvents(adapterView);
                 ((CustomCheckBox)view.findViewById(R.id.purchasecheck)).setChecked(true);
             }
         });

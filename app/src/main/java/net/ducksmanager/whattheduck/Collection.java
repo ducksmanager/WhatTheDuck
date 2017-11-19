@@ -17,7 +17,10 @@ public class Collection implements Serializable {
 
     public ArrayList<PurchaseAdapter.Purchase> getPurchaseList() {
         purchaseList = new ArrayList<>();
-        purchaseList.add(new PurchaseAdapter.Purchase(1, new Date(0), "My purchase"));
+        purchaseList.add(new PurchaseAdapter.Purchase(1, new Date(0), "My purchase 1"));
+        purchaseList.add(new PurchaseAdapter.Purchase(2, new Date(1000000), "My purchase 2"));
+        purchaseList.add(new PurchaseAdapter.Purchase(3, new Date(2000000), "My purchase 3"));
+        purchaseList.add(new PurchaseAdapter.Purchase(4, new Date(3000000), "My purchase 4"));
         purchaseList.add(null);
         return purchaseList;
     }
