@@ -23,7 +23,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
     private final Calendar myCalendar = Calendar.getInstance();
 
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     public static class Purchase {
         Integer id = null;
@@ -140,6 +140,8 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         return v;
     }
 
+
+
     @Override
     protected int getResourceToInflate() {
         return R.layout.row_purchase;
@@ -160,5 +162,10 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         return i == null
             ? ""
             : i.getPurchaseName();
+    }
+
+    @Override
+    protected String getComparatorText(Purchase i) {
+        return i == null ? "" : dateFormat.format(i.getPurchaseDate());
     }
 }

@@ -103,7 +103,7 @@ public class AddIssue extends RetrieveTask {
 
     static public void showAddIssueDialog(final Activity activity, final Issue selectedIssue) {
         final CharSequence[] items = {activity.getString(R.string.condition_bad), activity.getString(R.string.condition_notsogood), activity.getString(R.string.condition_good)};
-        purchases = WhatTheDuck.userCollection.getPurchaseList();
+        purchases = WhatTheDuck.userCollection.getPurchaseListWithEmptyItem();
 
         LayoutInflater inflater = activity.getLayoutInflater();
         dialogView = inflater.inflate(R.layout.addissue, null);

@@ -49,7 +49,7 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         return new NaturalOrderComparator<Item>() {
             @Override
             public int compare(Item i1, Item i2) {
-                return super.compareObject(getText(i1), getText(i2));
+                return super.compareObject(getComparatorText(i1), getComparatorText(i2));
             }
         };
     }
@@ -102,6 +102,8 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
     protected abstract boolean isHighlighted(Item i);
 
     protected abstract Integer getImageResource(Item i, Activity activity);
+
+    protected abstract String getComparatorText(Item i);
 
     protected abstract String getText(Item i);
 

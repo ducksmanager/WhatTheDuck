@@ -7,7 +7,6 @@ import net.ducksmanager.whattheduck.Issue.IssueCondition;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -15,14 +14,18 @@ public class Collection implements Serializable {
     private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<>();
     private ArrayList<PurchaseAdapter.Purchase> purchaseList;
 
-    public ArrayList<PurchaseAdapter.Purchase> getPurchaseList() {
-        purchaseList = new ArrayList<>();
-        purchaseList.add(new PurchaseAdapter.Purchase(1, new Date(0), "My purchase 1"));
-        purchaseList.add(new PurchaseAdapter.Purchase(2, new Date(1000000), "My purchase 2"));
-        purchaseList.add(new PurchaseAdapter.Purchase(3, new Date(2000000), "My purchase 3"));
-        purchaseList.add(new PurchaseAdapter.Purchase(4, new Date(3000000), "My purchase 4"));
-        purchaseList.add(null);
+    void setPurchaseList(ArrayList<PurchaseAdapter.Purchase> purchaseList) {
+        this.purchaseList = purchaseList;
+    }
+
+    private ArrayList<PurchaseAdapter.Purchase> getPurchaseList() {
         return purchaseList;
+    }
+
+    ArrayList<PurchaseAdapter.Purchase> getPurchaseListWithEmptyItem() {
+        ArrayList<PurchaseAdapter.Purchase> purchaseListWithEmptyItem = (ArrayList<PurchaseAdapter.Purchase>) getPurchaseList().clone();
+        purchaseListWithEmptyItem.add(null);
+        return purchaseListWithEmptyItem;
     }
 
     public enum CollectionType {COA,USER}

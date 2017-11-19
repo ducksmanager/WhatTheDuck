@@ -27,4 +27,9 @@ public class IssueAdapter extends ItemAdapter<Issue> {
     protected String getText(Issue i) {
         return i.getIssueNumber();
     }
+
+    @Override
+    protected String getComparatorText(Issue i) {
+        return getText(i);
+    }
 }

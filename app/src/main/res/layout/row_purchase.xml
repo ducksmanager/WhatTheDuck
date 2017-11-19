@@ -87,6 +87,7 @@
             android:gravity="start|center"
             android:layout_width="fill_parent"
             android:ellipsize="end"
+            android:textSize="12sp"
             android:lines="1"
             android:layout_height="20dp"
             android:layout_weight="1" />
