@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
-              android:layout_height="48dp"
+              android:layout_height="40dp"
               xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:paddingBottom="10dp"
               android:orientation="horizontal">
 
     <net.igenius.customcheckbox.CustomCheckBox
         android:id="@+id/purchasecheck"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginTop="8dp"
-        app:color_checked="#000"
-        app:color_unchecked="#000"
+        android:focusable="false"
+        android:clickable="false"
+        android:layout_gravity="center"
+        app:color_checked="@android:color/secondary_text_light"
+        app:color_unchecked="@android:color/secondary_text_light"
         app:duration="100"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,22 +21,31 @@
                   android:layout_height="wrap_content"
                   android:paddingLeft="5dp"
                   android:paddingStart="5dp"
+                  android:layout_marginRight="50dp"
                   android:clickable="false"
                   android:focusable="false"
                   android:orientation="vertical">
         <TextView
             android:id="@+id/purchasedate"
             android:layout_width="fill_parent"
-            android:layout_height="0dp"
+            android:layout_height="20dp"
             android:layout_weight="1"
-            android:gravity="start|center"
-            android:text="abc" />
+            android:gravity="start|center" />
         <TextView
             android:id="@+id/itemtitle"
             android:gravity="start|center"
             android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:ellipsize="end"
+            android:lines="1"
+            android:layout_height="20dp"
+            android:layout_weight="1" />
+        <TextView
+            android:id="@+id/nopurchase"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:gravity="start|center"
+            android:textStyle="italic"
+            android:visibility="gone"
             android:text="@string/no_purchase_date" />
     </LinearLayout>
 </LinearLayout>

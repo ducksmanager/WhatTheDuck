@@ -1,7 +1,6 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,13 +51,19 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         Boolean isNoPurchase = purchase == null;
 
         TextView purchaseDate = v.findViewById(R.id.purchasedate);
-        purchaseDate.setVisibility(isNoPurchase ? View.GONE : View.VISIBLE);
-        purchaseDate.setText(isNoPurchase
-            ? "" :
-            new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(purchase.getPurchaseDate())
-        );
-        getTitleTextView(v).setTypeface(null, isNoPurchase ? Typeface.ITALIC : Typeface.NORMAL);
-
+        TextView purchaseTitle = getTitleTextView(v);
+        TextView noPurchaseTitle = v.findViewById(R.id.nopurchase);
+        if (isNoPurchase) {
+            purchaseDate.setVisibility(View.GONE);
+            purchaseTitle.setVisibility(View.GONE);
+            noPurchaseTitle.setVisibility(View.VISIBLE);
+        }
+        else {
+            purchaseDate.setVisibility(View.VISIBLE);
+            purchaseTitle.setVisibility(View.VISIBLE);
+            noPurchaseTitle.setVisibility(View.GONE);
+            purchaseDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(purchase.getPurchaseDate()));
+        }
         return v;
     }
 
