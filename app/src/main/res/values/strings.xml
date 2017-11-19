@@ -16,6 +16,7 @@
     <string name="condition_notsogood">Not-so-good condition</string>
     <string name="confirmation_message__issue_inserted">The issue has been added to your collection</string>
     <string name="cover_suggestion">Cover suggestion</string>
+    <string name="create">Create</string>
     <string name="email_address">E-mail</string>
     <string name="error">Error</string>
     <string name="error__malformed_url">The URL is malformed</string>
@@ -44,6 +45,7 @@
     <string name="password">Password</string>
     <string name="password_confirm">Password confirmation</string>
     <string name="purchase_date">Purchase date</string>
+    <string name="purchase_name">Purchase name</string>
     <string name="referenced_issues">Referenced issue numbers</string>
     <string name="remember_credentials">Remember my credentials</string>
     <string name="result">Result</string>

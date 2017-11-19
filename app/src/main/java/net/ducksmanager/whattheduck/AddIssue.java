@@ -16,6 +16,9 @@ import net.ducksmanager.util.MultipleCustomCheckboxes;
 import net.ducksmanager.util.SimpleCallback;
 import net.igenius.customcheckbox.CustomCheckBox;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 public class AddIssue extends RetrieveTask {
 
     private static Activity originActivity;
@@ -23,6 +26,7 @@ public class AddIssue extends RetrieveTask {
     private static Issue selectedIssue;
     public static View dialogView;
     static MultipleCustomCheckboxes purchaseDateCheckboxes;
+    public static ArrayList<PurchaseAdapter.Purchase> purchases;
 
     private AddIssue(Activity il, String shortCountryAndPublication, Issue selectedIssue) {
         super(
@@ -84,8 +88,22 @@ public class AddIssue extends RetrieveTask {
         }
     }
 
+    static void toggleAddPurchaseButton(Boolean toggle) {
+        dialogView.findViewById(R.id.addpurchase).setEnabled(toggle);
+    }
+
+    static void updatePurchases() {
+        ListView listView = dialogView.findViewById(R.id.purchase_list);
+        PurchaseAdapter adapter = (PurchaseAdapter) listView.getAdapter();
+
+        adapter.updateFilteredList("");
+        adapter.notifyDataSetInvalidated();
+        listView.setSelectionAfterHeaderView();
+    }
+
     static public void showAddIssueDialog(final Activity activity, final Issue selectedIssue) {
         final CharSequence[] items = {activity.getString(R.string.condition_bad), activity.getString(R.string.condition_notsogood), activity.getString(R.string.condition_good)};
+        purchases = WhatTheDuck.userCollection.getPurchaseList();
 
         LayoutInflater inflater = activity.getLayoutInflater();
         dialogView = inflater.inflate(R.layout.addissue, null);
@@ -139,11 +157,22 @@ public class AddIssue extends RetrieveTask {
         purchaseDateCheckboxes = new MultipleCustomCheckboxes(null, dialogView, R.id.purchase_list);
 
         ListView lv = dialogView.findViewById(R.id.purchase_list);
-        lv.setAdapter(new PurchaseAdapter(activity, WhatTheDuck.userCollection.getPurchaseList()));
+
+        lv.setAdapter(new PurchaseAdapter(activity, purchases));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ((CustomCheckBox)view.findViewById(R.id.purchasecheck)).setChecked(true);
+            }
+        });
+
+        dialogView.findViewById(R.id.addpurchase).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleAddPurchaseButton(false);
+
+                purchases.add(0, new PurchaseAdapter.Purchase(null, new Date(), "", true));
+                updatePurchases();
             }
         });
 

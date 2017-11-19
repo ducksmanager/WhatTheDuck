@@ -1,22 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
-              android:layout_height="40dp"
+              android:layout_height="100dp"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="horizontal">
-
+    <LinearLayout
+        android:id="@+id/newpurchase"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:layout_height="90dp"
+        android:layout_width="fill_parent">
+        <EditText
+            android:id="@+id/purchasedatenew"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="8dp"
+            android:gravity="start|center"
+            android:textSize="14sp"
+            android:hint="@string/purchase_date"
+            android:inputType="none">
+        </EditText>
+        <EditText
+            android:id="@+id/itemtitlenew"
+            android:gravity="start|center"
+            android:textSize="14sp"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:paddingBottom="8dp"
+            android:paddingTop="0dp"
+            android:hint="@string/purchase_name"
+            android:inputType="text"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_height="20dp"
+            android:layout_width="fill_parent">
+            <Button
+                android:id="@+id/createpurchase"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="fill_parent"
+                android:textColor="#84cfc6"
+                android:background="@android:color/transparent"
+                android:text="@string/create"/>
+            <Button
+                android:id="@+id/createpurchasecancel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/white"
+                android:background="@android:color/transparent"
+                android:text="@string/cancel"/>
+        </LinearLayout>
+    </LinearLayout>
     <net.igenius.customcheckbox.CustomCheckBox
         android:id="@+id/purchasecheck"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:focusable="false"
-        android:clickable="false"
         android:layout_gravity="center"
         app:color_checked="@android:color/secondary_text_light"
         app:color_unchecked="@android:color/secondary_text_light"
         app:duration="100"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/purchasedetails"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:paddingLeft="5dp"
@@ -39,6 +90,7 @@
             android:lines="1"
             android:layout_height="20dp"
             android:layout_weight="1" />
+
         <TextView
             android:id="@+id/nopurchase"
             android:layout_width="fill_parent"
