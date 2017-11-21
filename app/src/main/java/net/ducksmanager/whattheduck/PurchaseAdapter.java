@@ -16,6 +16,7 @@ import net.igenius.customcheckbox.CustomCheckBox;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
@@ -164,8 +165,17 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
             : i.getPurchaseName();
     }
 
+    protected Comparator<Purchase> getComparator() {
+        return new Comparator<Purchase>() {
+            @Override
+            public int compare(Purchase purchase1, Purchase purchase2) {
+                return PurchaseAdapter.this.getComparatorText(purchase2).compareTo(PurchaseAdapter.this.getComparatorText(purchase1));
+            }
+        };
+    }
+
     @Override
     protected String getComparatorText(Purchase i) {
-        return i == null ? "" : dateFormat.format(i.getPurchaseDate());
+        return i == null ? "_" : dateFormat.format(i.getPurchaseDate());
     }
 }

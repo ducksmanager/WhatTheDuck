@@ -15,6 +15,7 @@ import net.ducksmanager.util.NaturalOrderComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
@@ -45,7 +46,7 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
                 filteredItems.add(item);
     }
 
-    private NaturalOrderComparator<Item> getComparator() {
+    protected Comparator<Item> getComparator() {
         return new NaturalOrderComparator<Item>() {
             @Override
             public int compare(Item i1, Item i2) {
