@@ -21,7 +21,7 @@ import java.util.Date;
 
 public class AddIssue extends RetrieveTask {
 
-    private static Activity originActivity;
+    public static Activity originActivity;
     private static String shortCountryAndPublication;
     private static Issue selectedIssue;
     public static View dialogView;
@@ -43,7 +43,7 @@ public class AddIssue extends RetrieveTask {
 
     @Override
     protected void onPreExecute() {
-        WhatTheDuck.wtd.toggleProgressbarLoading(AddIssue.originActivity, progressBarId, true);
+        WhatTheDuck.wtd.toggleProgressbarLoading(originActivity, progressBarId, true);
         ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addissue/start");
     }
 
@@ -51,7 +51,7 @@ public class AddIssue extends RetrieveTask {
     protected void onPostExecute(String response) {
         ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addissue/finish");
         if (response.equals("OK")) {
-            WhatTheDuck.wtd.info(AddIssue.originActivity, R.string.confirmation_message__issue_inserted);
+            WhatTheDuck.wtd.info(originActivity, R.string.confirmation_message__issue_inserted);
             WhatTheDuck.userCollection.addIssue(shortCountryAndPublication, selectedIssue);
 
             updateNamesAndGoToIssueList();
@@ -60,7 +60,7 @@ public class AddIssue extends RetrieveTask {
             WhatTheDuck.wtd.alert(R.string.internal_error, R.string.internal_error__issue_insertion_failed);
         }
 
-        WhatTheDuck.wtd.toggleProgressbarLoading(AddIssue.originActivity, progressBarId, false);
+        WhatTheDuck.wtd.toggleProgressbarLoading(originActivity, progressBarId, false);
     }
 
     static private void updateNamesAndGoToIssueList() {
@@ -96,12 +96,15 @@ public class AddIssue extends RetrieveTask {
         ListView listView = dialogView.findViewById(R.id.purchase_list);
         PurchaseAdapter adapter = (PurchaseAdapter) listView.getAdapter();
 
+        adapter.setItems(purchases);
         adapter.updateFilteredList("");
         adapter.notifyDataSetInvalidated();
         listView.setSelectionAfterHeaderView();
     }
 
     static public void showAddIssueDialog(final Activity activity, final Issue selectedIssue) {
+        originActivity=activity;
+
         final CharSequence[] items = {activity.getString(R.string.condition_bad), activity.getString(R.string.condition_notsogood), activity.getString(R.string.condition_good)};
         purchases = WhatTheDuck.userCollection.getPurchaseListWithEmptyItem();
 

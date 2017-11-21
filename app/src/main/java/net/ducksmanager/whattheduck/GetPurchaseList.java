@@ -40,8 +40,6 @@ public abstract class GetPurchaseList extends RetrieveTask {
                 return;
             }
 
-            WhatTheDuck.saveSettings(WhatTheDuck.getRememberCredentials());
-
             JSONObject object = new JSONObject(response);
             if (object.has("achats")) {
                 ArrayList<PurchaseAdapter.Purchase> purchases = new ArrayList<>();

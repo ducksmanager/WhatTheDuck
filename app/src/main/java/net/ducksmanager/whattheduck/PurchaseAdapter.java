@@ -83,7 +83,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
         LinearLayout newPurchaseSection = v.findViewById(R.id.newpurchase);
         final EditText purchaseDateNew = v.findViewById(R.id.purchasedatenew);
-        EditText purchaseTitleNew = v.findViewById(R.id.itemtitlenew);
+        final EditText purchaseTitleNew = v.findViewById(R.id.itemtitlenew);
         Button purchaseCreate = v.findViewById(R.id.createpurchase);
         Button purchaseCreateCancel = v.findViewById(R.id.createpurchasecancel);
 
@@ -110,7 +110,6 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
             };
             purchaseDateNew.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     new DatePickerDialog(PurchaseAdapter.this.getContext(), date, myCalendar
@@ -119,10 +118,31 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
                 }
             });
 
+            purchaseCreate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View floatingButtonView) {
+                    floatingButtonView.setEnabled(true);
+
+                    new CreatePurchase(AddIssue.originActivity, purchaseDateNew.getText().toString(), purchaseTitleNew.getText().toString()) {
+                        @Override
+                        protected void afterDataHandling() {
+                            new GetPurchaseList(AddIssue.originActivity) {
+                                @Override
+                                protected void afterDataHandling() {
+                                    AddIssue.toggleAddPurchaseButton(true);
+                                    AddIssue.purchases = WhatTheDuck.userCollection.getPurchaseListWithEmptyItem();
+                                    AddIssue.updatePurchases();
+                                }
+                            }.execute();
+                        }
+                    }.execute();
+                }
+            });
+
             purchaseCreateCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    view.setEnabled(true);
+                public void onClick(View floatingButtonView) {
+                    floatingButtonView.setEnabled(true);
 
                     AddIssue.purchases.remove(0);
                     AddIssue.toggleAddPurchaseButton(true);
@@ -141,7 +161,9 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         return v;
     }
 
-
+    void setItems(ArrayList<Purchase> items) {
+        this.items = items;
+    }
 
     @Override
     protected int getResourceToInflate() {

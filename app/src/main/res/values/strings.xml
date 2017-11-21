@@ -31,6 +31,7 @@
     <string name="internal_error__crypting_failed">The encryption of your credentials failed</string>
     <string name="internal_error__issue_insertion_failed">Adding the issue in your collection failed</string>
     <string name="internal_error__malformed_list">The issue list is malformed</string>
+    <string name="internal_error__purchase_creation_failed">The creation of the purchase date failed</string>
     <string name="itemtitle">Item</string>
     <string name="issue_already_possessed">You already have this issue in your collection</string>
     <string name="link_to_ducksmanager_website">What The Duck is the mobile app of DucksManager. Click here to access the DucksManager website.</string>
