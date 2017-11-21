@@ -37,6 +37,7 @@ public class AddIssue extends RetrieveTask {
             "&ajouter_numero"
             +"&pays_magazine="+shortCountryAndPublication
             +"&numero="+selectedIssue.getIssueNumber()
+            +"&id_acquisition="+selectedIssue.getPurchaseId()
             +"&etat="+selectedIssue.getIssueConditionStr(),
                 R.id.progressBarLoading
         );
@@ -136,6 +137,7 @@ public class AddIssue extends RetrieveTask {
                     else
                         DMcondition = Issue.GOOD_CONDITION;
                     selectedIssue.setIssueCondition(Issue.issueConditionStrToIssueCondition(DMcondition));
+                    selectedIssue.setPurchaseId(selectedPurchaseId == null ? -2 : selectedPurchaseId);
                     new AddIssue(activity, WhatTheDuck.getSelectedPublication(), selectedIssue).execute();
                 }
             })
