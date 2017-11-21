@@ -12,6 +12,8 @@ import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
+import java.lang.ref.WeakReference;
+
 public class CountryList extends List {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,8 @@ public class CountryList extends List {
         else {
             new CountryListing(this, new SimpleCallback() {
                 @Override
-                public void onDownloadFinished(Activity activity) {
-                    ((List)activity).show();
+                public void onDownloadFinished(WeakReference<Activity> activity) {
+                    ((List)activity.get()).show();
                 }
             }).execute();
         }

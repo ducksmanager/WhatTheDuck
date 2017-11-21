@@ -1,6 +1,7 @@
 package net.ducksmanager.whattheduck;
 
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import net.ducksmanager.util.CoverFlowFileHandler;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
@@ -177,7 +179,7 @@ public abstract class List<Item> extends ListActivity{
             CoverFlowFileHandler.current.resizeUntilFileSize(this, new CoverFlowFileHandler.TransformationCallback() {
                 @Override
                 public void onComplete(File fileToUpload) {
-                    new CoverSearch(List.this, fileToUpload).execute();
+                    new CoverSearch(new WeakReference<Activity>(List.this), fileToUpload).execute();
                 }
 
                 @Override

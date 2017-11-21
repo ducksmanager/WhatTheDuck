@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -39,7 +40,7 @@ import java.util.Locale;
 import java.util.Properties;
 
 public class WhatTheDuck extends Activity {
-    private static final String SERVER_PAGE="WhatTheDuck.php";
+    private static final String SERVER_PAGE="WhatTheDuck2.php";
     private static final String DUCKSMANAGER_URL="http://www.ducksmanager.net";
 
     @VisibleForTesting
@@ -138,30 +139,35 @@ public class WhatTheDuck extends Activity {
         }
     }
 
-    public void info(Context c, int titleId) {
-        Toast.makeText(c, titleId, Toast.LENGTH_SHORT).show();
+    public void info(WeakReference<Activity> activity, int titleId) {
+        Toast.makeText(activity.get(), titleId, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void info(int titleId) {
+        Toast.makeText(WhatTheDuck.wtd, titleId, Toast.LENGTH_SHORT).show();
     }
     
     public void alert(String message) {
-        alert(this, message);
+        alert(new WeakReference<Activity>(this), message);
+    }
+
+    public void alert(int messageId) {
+        alert(new WeakReference<Activity>(this), getString(messageId));
     }
     
-    public void alert(Context c, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+    public void alert(WeakReference<Activity> activity, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity.get());
         builder.setTitle(getString(R.string.error));
         builder.setMessage(message);
         builder.create().show();
     }
     
-    public void alert(Context c, int messageId) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle(R.string.error);
-        builder.setMessage(getString(messageId));
-        builder.create().show();
+    public void alert(WeakReference<Activity> activity, int messageId) {
+        alert(activity, getString(messageId));
     }
 
-    public void alert(Context c, int titleId, int messageId, String extraMessage) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(c);
+    public void alert(WeakReference<Activity> activity, int titleId, int messageId, String extraMessage) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity.get());
         builder.setTitle(getString(titleId));
         builder.setMessage(getString(messageId)+extraMessage);
 
@@ -173,11 +179,11 @@ public class WhatTheDuck extends Activity {
     }
     
     public void alert(int titleId, int messageId, String extraMessage) {
-        alert(this, titleId, messageId, extraMessage);
+        alert(new WeakReference<Activity>(this), titleId, messageId, extraMessage);
     }
     
     public void alert(int titleId, int messageId) {
-        alert(this, titleId, messageId, "");
+        alert(new WeakReference<Activity>(this), titleId, messageId, "");
     }
 
     private static void loadUserSettings() {
@@ -345,8 +351,8 @@ public class WhatTheDuck extends Activity {
             return response;
     }
 
-    public void toggleProgressbarLoading(Activity activity, int progressBarId, boolean toggle) {
-        ProgressBar progressBar = activity.findViewById(progressBarId);
+    public void toggleProgressbarLoading(WeakReference<Activity> activity, int progressBarId, boolean toggle) {
+        ProgressBar progressBar = activity.get().findViewById(progressBarId);
 
         if (progressBar != null) {
             if (toggle) {
@@ -360,7 +366,7 @@ public class WhatTheDuck extends Activity {
     }
 
     public void toggleProgressbarLoading(int progressBarId, boolean toggle) {
-        toggleProgressbarLoading(WhatTheDuck.wtd, progressBarId, toggle);
+        toggleProgressbarLoading(new WeakReference<Activity>(WhatTheDuck.wtd), progressBarId, toggle);
     }
 
     private boolean isOnline() {

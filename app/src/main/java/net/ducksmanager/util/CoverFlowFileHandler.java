@@ -43,13 +43,13 @@ public class CoverFlowFileHandler {
 
                 callback.onComplete(uploadFile);
             } catch (IOException e) {
-                WhatTheDuck.wtd.alert(CoverSearch.cls, R.string.internal_error);
+                WhatTheDuck.wtd.alert(CoverSearch.originActivityRef, R.string.internal_error);
             }
         }
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
-            WhatTheDuck.wtd.alert(CoverSearch.cls, R.string.internal_error);
+            WhatTheDuck.wtd.alert(CoverSearch.originActivityRef, R.string.internal_error);
             callback.onFail();
         }
 
@@ -75,7 +75,7 @@ public class CoverFlowFileHandler {
                 uploadFile.delete();
             }
             if (!uploadFile.createNewFile()) {
-                WhatTheDuck.wtd.alert(context, R.string.internal_error);
+                WhatTheDuck.wtd.alert(R.string.internal_error);
             }
             return FileProvider.getUriForFile(context, "net.ducksmanager.whattheduck.fileprovider", uploadFile);
         } catch (IOException e) {

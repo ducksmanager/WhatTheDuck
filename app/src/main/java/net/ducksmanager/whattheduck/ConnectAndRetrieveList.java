@@ -14,46 +14,48 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.Iterator;
 
 public class ConnectAndRetrieveList extends RetrieveTask {
 
-    private final WhatTheDuck wtd;
+    private final WeakReference<WhatTheDuck> wtdActivityRef;
     private final Boolean fromUI;
 
     public ConnectAndRetrieveList(Boolean fromUI) {
         super("", R.id.progressBarConnection);
-        wtd = WhatTheDuck.wtd;
+        wtdActivityRef = new WeakReference<>(WhatTheDuck.wtd);
         this.fromUI = fromUI;
     }
 
     @Override
     protected void onPreExecute() {
         WhatTheDuck.userCollection = new Collection();
+        WhatTheDuck wtdActivity = wtdActivityRef.get();
 
         ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("retrievecollection/start");
 
         if (this.fromUI) {
             if (WhatTheDuck.getUsername() == null
-                || !WhatTheDuck.getUsername().equals(((EditText) wtd.findViewById(R.id.username)).getText().toString())
+                || !WhatTheDuck.getUsername().equals(((EditText) wtdActivity.findViewById(R.id.username)).getText().toString())
                 || WhatTheDuck.getEncryptedPassword() == null) {
 
-                WhatTheDuck.setUsername(((EditText) wtd.findViewById(R.id.username)).getText().toString());
-                WhatTheDuck.setPassword(((EditText) wtd.findViewById(R.id.password)).getText().toString());
-                WhatTheDuck.setRememberCredentials(((CheckBox) wtd.findViewById(R.id.checkBoxRememberCredentials)).isChecked());
+                WhatTheDuck.setUsername(((EditText) wtdActivity.findViewById(R.id.username)).getText().toString());
+                WhatTheDuck.setPassword(((EditText) wtdActivity.findViewById(R.id.password)).getText().toString());
+                WhatTheDuck.setRememberCredentials(((CheckBox) wtdActivity.findViewById(R.id.checkBoxRememberCredentials)).isChecked());
             }
         }
 
         if (TextUtils.isEmpty(WhatTheDuck.getUsername()) || (TextUtils.isEmpty(WhatTheDuck.getPassword()) && TextUtils.isEmpty(WhatTheDuck.getEncryptedPassword()))) {
-            wtd.alert(R.string.input_error,
+            WhatTheDuck.wtd.alert(R.string.input_error,
                 R.string.input_error__empty_credentials);
-            ProgressBar mProgressBar = wtd.findViewById(R.id.progressBarConnection);
+            ProgressBar mProgressBar = wtdActivity.findViewById(R.id.progressBarConnection);
             mProgressBar.setVisibility(ProgressBar.INVISIBLE);
             cancel(true);
             return;
         }
 
-        wtd.toggleProgressbarLoading(progressBarId, true);
+        WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, true);
     }
 
     @Override
@@ -63,6 +65,8 @@ public class ConnectAndRetrieveList extends RetrieveTask {
         if (super.hasFailed()) {
             return;
         }
+
+        WhatTheDuck wtdActivity = wtdActivityRef.get();
 
         try {
             if (response == null) {
@@ -97,9 +101,9 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                         CountryListing.hasFullList = false;
                     }
 
-                    Intent i = new Intent(wtd, CountryList.class);
+                    Intent i = new Intent(wtdActivity, CountryList.class);
                     i.putExtra("type", Collection.CollectionType.USER.toString());
-                    wtd.startActivity(i);
+                    wtdActivity.startActivity(i);
                 } else {
                     throw new JSONException("");
                 }
@@ -109,10 +113,10 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                 if (issues.length() > 0)
                     throw e;
             } finally {
-                wtd.toggleProgressbarLoading(progressBarId, false);
+                wtdActivity.toggleProgressbarLoading(progressBarId, false);
             }
         } catch (JSONException e) {
-            wtd.alert(R.string.internal_error,
+            WhatTheDuck.wtd.alert(R.string.internal_error,
                     R.string.internal_error__malformed_list, " : " + e.getMessage());
         }
     }

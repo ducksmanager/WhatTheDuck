@@ -1,5 +1,6 @@
 package net.ducksmanager.whattheduck;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
@@ -11,12 +12,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class CoverSearch extends RetrieveTask {
 
-    public static List cls;
+    public static WeakReference<Activity> originActivityRef;
     public static final String uploadTempDir = "Pictures";
     public static final String uploadFileName = "wtd_jpg";
 
@@ -24,8 +26,10 @@ public class CoverSearch extends RetrieveTask {
         @Override
         public void onCompleted(Exception e, String result) {
         try {
-            cls.findViewById(R.id.addToCollectionWrapper).setVisibility(View.VISIBLE);
-            cls.findViewById(R.id.progressBarLoading).setVisibility(View.GONE);
+            Activity originActivity = originActivityRef.get();
+
+            originActivity.findViewById(R.id.addToCollectionWrapper).setVisibility(View.VISIBLE);
+            originActivity.findViewById(R.id.progressBarLoading).setVisibility(View.GONE);
             if (e != null)
                 throw e;
 
@@ -48,38 +52,38 @@ public class CoverSearch extends RetrieveTask {
                             WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL) + "/cover-id/download/" + issue.get("coverid"))
                         );
                     }
-                    Intent i = new Intent(CoverSearch.cls, CoverFlowActivity.class);
+                    Intent i = new Intent(originActivity, CoverFlowActivity.class);
                     i.putExtra("resultCollection", resultCollection);
-                    CoverSearch.cls.startActivity(i);
+                    originActivity.startActivity(i);
                 } else {
                     if (object.has("type")) {
                         switch((String) object.get("type")) {
                             case "SEARCH_RESULTS":
-                                WhatTheDuck.wtd.alert(cls, R.string.add_cover_no_results);
+                                WhatTheDuck.wtd.alert(originActivityRef, R.string.add_cover_no_results);
                             break;
                             default:
-                                WhatTheDuck.wtd.alert(cls, (String) object.get("type"));
+                                WhatTheDuck.wtd.alert(originActivityRef, (String) object.get("type"));
                         }
                     }
                 }
             } catch (JSONException jsone) {
                 if (result.contains("exceeds your upload")) {
-                    WhatTheDuck.wtd.alert(CoverSearch.cls, R.string.add_cover_error_file_too_big);
+                    WhatTheDuck.wtd.alert(originActivityRef, R.string.add_cover_error_file_too_big);
                 }
                 else {
-                    WhatTheDuck.wtd.alert(CoverSearch.cls, R.string.internal_error);
+                    WhatTheDuck.wtd.alert(originActivityRef, R.string.internal_error);
                     jsone.printStackTrace();
                 }
             }
         } catch (Exception ex) {
-            WhatTheDuck.wtd.alert(cls, ex.getMessage());
+            WhatTheDuck.wtd.alert(originActivityRef, ex.getMessage());
         }
         }
     };
 
-    public CoverSearch(List cls, File coverPicture) {
+    public CoverSearch(WeakReference<Activity> originActivityRef, File coverPicture) {
         super("/cover-id/search", R.id.progressBarConnection, false, futureCallback, uploadFileName, coverPicture);
-        CoverSearch.cls = cls;
+        CoverSearch.originActivityRef = originActivityRef;
     }
 
     @Override

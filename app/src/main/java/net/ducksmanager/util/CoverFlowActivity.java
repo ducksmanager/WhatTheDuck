@@ -19,6 +19,7 @@ import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
@@ -103,7 +104,7 @@ public class CoverFlowActivity extends Activity {
                 Issue newIssue = new Issue(current.getIssueNumber(), (Issue.IssueCondition) null);
                 WhatTheDuck.setSelectedCountry (current.getCountryCode());
                 WhatTheDuck.setSelectedPublication (current.getPublicationCode());
-                AddIssue.showAddIssueDialog(CoverFlowActivity.this, newIssue);
+                AddIssue.showAddIssueDialog(new WeakReference<Activity>(CoverFlowActivity.this), newIssue);
             }
             else {
                 Toast.makeText(

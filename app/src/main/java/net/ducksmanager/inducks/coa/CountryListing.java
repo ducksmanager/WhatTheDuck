@@ -45,7 +45,7 @@ public class CountryListing extends CoaListing {
             }
         }
 
-        callback.onDownloadFinished(activity);
+        callback.onDownloadFinished(activityRef);
     }
 
     @SuppressWarnings("unchecked")

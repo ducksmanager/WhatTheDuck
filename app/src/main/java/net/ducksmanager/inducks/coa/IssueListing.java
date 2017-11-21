@@ -43,6 +43,6 @@ public class IssueListing extends CoaListing {
             }
         }
 
-        callback.onDownloadFinished(activity);
+        callback.onDownloadFinished(activityRef);
     }
 }

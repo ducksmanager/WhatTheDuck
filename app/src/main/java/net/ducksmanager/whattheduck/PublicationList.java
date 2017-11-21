@@ -9,6 +9,8 @@ import android.widget.ListView;
 import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.util.SimpleCallback;
 
+import java.lang.ref.WeakReference;
+
 public class PublicationList extends List {
     
     @Override
@@ -25,8 +27,8 @@ public class PublicationList extends List {
         else {
             new PublicationListing(this, selectedCountry, new SimpleCallback() {
                 @Override
-                public void onDownloadFinished(Activity activity) {
-                    ((List)activity).show();
+                public void onDownloadFinished(WeakReference<Activity> activity) {
+                    ((List)activity.get()).show();
                 }
             }).execute();
         }

@@ -11,11 +11,12 @@ import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.json.JSONException;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Locale;
 
 public abstract class CoaListing extends RetrieveTask {
-    Activity activity;
+    WeakReference<Activity> activityRef;
     SimpleCallback callback;
     public enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST}
 
@@ -33,7 +34,7 @@ public abstract class CoaListing extends RetrieveTask {
     CoaListing(Activity activity, ListType type, String countryShortName, String publicationShortName, SimpleCallback callback) {
         super(urlSuffixes.get(type), R.id.progressBarLoading);
         ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("list/coa/" + type.name().toLowerCase(Locale.FRANCE));
-        this.activity = activity;
+        this.activityRef = new WeakReference<Activity>(activity);
         this.callback = callback;
         CoaListing.countryShortName = countryShortName;
         CoaListing.publicationShortName = publicationShortName;
@@ -41,17 +42,17 @@ public abstract class CoaListing extends RetrieveTask {
 
     @Override
     protected void onPreExecute() {
-        WhatTheDuck.wtd.toggleProgressbarLoading(activity, progressBarId, true);
+        WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, progressBarId, true);
     }
 
     @Override
     protected void onPostExecute(String response) {
         super.onPostExecute(response);
-        WhatTheDuck.wtd.toggleProgressbarLoading(activity, progressBarId, false);
+        WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, progressBarId, false);
     }
 
     void handleJSONException(JSONException e) {
-        WhatTheDuck.wtd.alert(activity,
+        WhatTheDuck.wtd.alert(activityRef,
                 R.string.internal_error,
                 R.string.internal_error__malformed_list," : " + e.getMessage());
     }

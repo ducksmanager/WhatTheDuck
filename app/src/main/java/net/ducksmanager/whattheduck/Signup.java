@@ -9,9 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
 
 public class Signup extends Activity {
-
 
     /** Called when the activity is first created. */
     @Override
@@ -68,12 +68,12 @@ public class Signup extends Activity {
                         WhatTheDuck.wtd.startActivity(i);
                         ((EditText) WhatTheDuck.wtd.findViewById(R.id.username)).setText(WhatTheDuck.getUsername());
                         ((EditText) WhatTheDuck.wtd.findViewById(R.id.password)).setText(WhatTheDuck.getPassword());
-                        WhatTheDuck.wtd.info(WhatTheDuck.wtd, R.string.signup__confirm);
+                        WhatTheDuck.wtd.info(R.string.signup__confirm);
                     } else {
-                        WhatTheDuck.wtd.alert(Signup.this, response);
+                        WhatTheDuck.wtd.alert(new WeakReference<Activity>(Signup.this), response);
                     }
                 } catch (UnsupportedEncodingException e) {
-                    WhatTheDuck.wtd.alert(Signup.this, getString(R.string.internal_error));
+                    WhatTheDuck.wtd.alert(new WeakReference<Activity>(Signup.this), getString(R.string.internal_error));
                 }
             }
         }

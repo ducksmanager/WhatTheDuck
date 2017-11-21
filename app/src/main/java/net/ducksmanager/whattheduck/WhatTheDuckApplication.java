@@ -35,7 +35,7 @@ public class WhatTheDuckApplication extends Application {
             config = new Properties();
             config.load(reader);
         } catch (IOException e) {
-            WhatTheDuck.wtd.alert(WhatTheDuck.wtd, R.string.internal_error);
+            WhatTheDuck.wtd.alert(R.string.internal_error);
             System.err.println("Config file not found, aborting");
             System.exit(-1);
         } finally {
@@ -43,7 +43,7 @@ public class WhatTheDuckApplication extends Application {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    WhatTheDuck.wtd.alert(WhatTheDuck.wtd, R.string.internal_error);
+                    WhatTheDuck.wtd.alert(R.string.internal_error);
                     System.err.println("Error while reading config file, aborting");
                     System.exit(-1);
                 }

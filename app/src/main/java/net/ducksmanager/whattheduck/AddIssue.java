@@ -2,6 +2,7 @@ package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
@@ -9,13 +10,15 @@ import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.util.SimpleCallback;
 
+import java.lang.ref.WeakReference;
+
 public class AddIssue extends RetrieveTask {
 
-    private static Activity originActivity;
+    private static WeakReference<Activity> originActivityRef;
     private static String shortCountryAndPublication;
     private static Issue selectedIssue;
 
-    private AddIssue(Activity il, String shortCountryAndPublication, Issue selectedIssue) {
+    private AddIssue(WeakReference<Activity> originActivityRef, String shortCountryAndPublication, Issue selectedIssue) {
         super(
             "&ajouter_numero"
             +"&pays_magazine="+shortCountryAndPublication
@@ -23,14 +26,14 @@ public class AddIssue extends RetrieveTask {
             +"&etat="+selectedIssue.getIssueConditionStr(),
                 R.id.progressBarLoading
         );
-        AddIssue.originActivity = il;
+        AddIssue.originActivityRef = originActivityRef;
         AddIssue.shortCountryAndPublication = shortCountryAndPublication;
         AddIssue.selectedIssue = selectedIssue;
     }
 
     @Override
     protected void onPreExecute() {
-        WhatTheDuck.wtd.toggleProgressbarLoading(AddIssue.originActivity, progressBarId, true);
+        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, progressBarId, true);
         ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addissue/start");
     }
 
@@ -38,7 +41,7 @@ public class AddIssue extends RetrieveTask {
     protected void onPostExecute(String response) {
         ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addissue/finish");
         if (response.equals("OK")) {
-            WhatTheDuck.wtd.info(AddIssue.originActivity, R.string.confirmation_message__issue_inserted);
+            WhatTheDuck.wtd.info(originActivityRef, R.string.confirmation_message__issue_inserted);
             WhatTheDuck.userCollection.addIssue(shortCountryAndPublication, selectedIssue);
 
             updateNamesAndGoToIssueList();
@@ -47,26 +50,31 @@ public class AddIssue extends RetrieveTask {
             WhatTheDuck.wtd.alert(R.string.internal_error, R.string.internal_error__issue_insertion_failed);
         }
 
-        WhatTheDuck.wtd.toggleProgressbarLoading(AddIssue.originActivity, progressBarId, false);
+        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, progressBarId, false);
     }
 
     static private void updateNamesAndGoToIssueList() {
+        Activity callbackActivity = originActivityRef.get();
+
         String country=shortCountryAndPublication.split("/")[0];
         if (PublicationListing.hasFullList(country)) {
-            originActivity.startActivity(new Intent(originActivity, IssueList.class));
+            callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
         }
         else {
-            new PublicationListing(originActivity, country, new SimpleCallback() {
+            new PublicationListing(callbackActivity, country, new SimpleCallback() {
                 @Override
-                public void onDownloadFinished(Activity activity) {
+                public void onDownloadFinished(WeakReference<Activity> activityRef) {
+                    Activity callbackActivity = originActivityRef.get();
+
                     if (CountryListing.hasFullList) {
-                        originActivity.startActivity(new Intent(originActivity, IssueList.class));
+                        callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
                     }
                     else {
-                        new CountryListing(originActivity, new SimpleCallback() {
+                        new CountryListing(callbackActivity, new SimpleCallback() {
                             @Override
-                            public void onDownloadFinished(Activity activity) {
-                                originActivity.startActivity(new Intent(originActivity, IssueList.class));
+                            public void onDownloadFinished(WeakReference<Activity> activityRef) {
+                                Activity callbackActivity = originActivityRef.get();
+                                callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
                             }
                         }).execute();
                     }
@@ -75,37 +83,38 @@ public class AddIssue extends RetrieveTask {
         }
     }
 
-    static public void showAddIssueDialog(final Activity activity, final Issue selectedIssue) {
-        final CharSequence[] items = {activity.getString(R.string.condition_bad), activity.getString(R.string.condition_notsogood), activity.getString(R.string.condition_good)};
+    static public void showAddIssueDialog(final WeakReference<Activity> activityRef, final Issue selectedIssue) {
+        final Context appContext = WhatTheDuck.wtd.getApplicationContext();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        final CharSequence[] items = {appContext.getString(R.string.condition_bad), appContext.getString(R.string.condition_notsogood), appContext.getString(R.string.condition_good)};
+        AlertDialog.Builder builder = new AlertDialog.Builder(activityRef.get());
         builder
-            .setTitle(activity.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()))
+            .setTitle(appContext.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()))
             .setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {}
             })
             .setCancelable(true)
-            .setPositiveButton(activity.getString(R.string.ok), new DialogInterface.OnClickListener() {
+            .setPositiveButton(appContext.getString(R.string.ok), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
                 int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
                 if (selectedPosition == -1) {
-                    WhatTheDuck.wtd.info(activity, R.string.input_error__select_condition);
+                    WhatTheDuck.wtd.info(activityRef, R.string.input_error__select_condition);
                     return;
                 }
                 String condition = items[selectedPosition].toString();
                 String DMcondition;
-                if (condition.equals(activity.getString(R.string.condition_bad)))
+                if (condition.equals(appContext.getString(R.string.condition_bad)))
                     DMcondition = Issue.BAD_CONDITION;
-                else if (condition.equals(activity.getString(R.string.condition_notsogood)))
+                else if (condition.equals(appContext.getString(R.string.condition_notsogood)))
                     DMcondition = Issue.NOTSOGOOD_CONDITION;
                 else
                     DMcondition = Issue.GOOD_CONDITION;
                 selectedIssue.setIssueCondition(Issue.issueConditionStrToIssueCondition(DMcondition));
-                new AddIssue(activity, WhatTheDuck.getSelectedPublication(), selectedIssue).execute();
+                new AddIssue(activityRef, WhatTheDuck.getSelectedPublication(), selectedIssue).execute();
                 }
             })
-            .setNegativeButton(activity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            .setNegativeButton(appContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.cancel();
                 }

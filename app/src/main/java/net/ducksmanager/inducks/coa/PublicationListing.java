@@ -52,7 +52,7 @@ public class PublicationListing extends CoaListing {
             }
         }
 
-        callback.onDownloadFinished(activity);
+        callback.onDownloadFinished(activityRef);
     }
 
     private static void addFullPublications(String countryShortName, JSONObject object) throws JSONException {
