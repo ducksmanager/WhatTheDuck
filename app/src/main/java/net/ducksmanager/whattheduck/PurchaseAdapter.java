@@ -172,7 +172,11 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         }
         else {
             v.setMinimumHeight(40);
-            if (!isNoPurchase) {
+            if (isNoPurchase) {
+                purchaseCheck.setContentDescription(null);
+            }
+            else {
+                purchaseCheck.setContentDescription("" + purchase.getId());
                 purchaseDate.setText(dateFormat.format(purchase.getPurchaseDate()));
             }
         }

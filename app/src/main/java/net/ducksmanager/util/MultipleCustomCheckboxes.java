@@ -2,7 +2,6 @@ package net.ducksmanager.util;
 
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import net.ducksmanager.whattheduck.R;
 import net.igenius.customcheckbox.CustomCheckBox;
@@ -23,10 +22,7 @@ public class MultipleCustomCheckboxes {
                         otherCheckbox.setChecked(false);
                     }
                 }
-
-                if (checkedElementInfoTextView != null) {
-                    checkedElementInfoTextView.setText(checkBox.getContentDescription());
-                }
+                customOnClick.onClick(checkBox);
             } else {
                 if (checkBox.getTag(R.id.direct_uncheck) != null
                     && checkBox.getTag(R.id.direct_uncheck).equals(Boolean.FALSE)) {
@@ -42,15 +38,16 @@ public class MultipleCustomCheckboxes {
         boolean isMatched(CustomCheckBox checkbox);
     }
 
-    private final TextView checkedElementInfoTextView;
     private View container;
     private int checkboxContainerId;
+    private final View.OnClickListener customOnClick;
+
     private Set<CustomCheckBox> checkboxList = new HashSet<>();
 
-    public MultipleCustomCheckboxes(final TextView checkedElementInfoTextView, View container, int checkboxContainerId) {
-        this.checkedElementInfoTextView = checkedElementInfoTextView;
+    public MultipleCustomCheckboxes(View container, int checkboxContainerId, View.OnClickListener customOnClick) {
         this.container = container;
         this.checkboxContainerId = checkboxContainerId;
+        this.customOnClick = customOnClick;
     }
 
     private void storeDescendantsOfType(ViewGroup v, Class type) {

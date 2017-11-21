@@ -26,7 +26,11 @@ public class AddIssue extends RetrieveTask {
     private static Issue selectedIssue;
     public static View dialogView;
     static MultipleCustomCheckboxes purchaseDateCheckboxes;
-    public static ArrayList<PurchaseAdapter.Purchase> purchases;
+    private static MultipleCustomCheckboxes conditionCheckboxes;
+    static ArrayList<PurchaseAdapter.Purchase> purchases;
+
+    private static String selectedCondition = null;
+    private static Integer selectedPurchaseId = null;
 
     private AddIssue(Activity il, String shortCountryAndPublication, Issue selectedIssue) {
         super(
@@ -105,7 +109,11 @@ public class AddIssue extends RetrieveTask {
     static public void showAddIssueDialog(final Activity activity, final Issue selectedIssue) {
         originActivity=activity;
 
-        final CharSequence[] items = {activity.getString(R.string.condition_bad), activity.getString(R.string.condition_notsogood), activity.getString(R.string.condition_good)};
+        final CharSequence[] items = {
+            activity.getString(R.string.condition_bad),
+            activity.getString(R.string.condition_notsogood),
+            activity.getString(R.string.condition_good)
+        };
         purchases = WhatTheDuck.userCollection.getPurchaseListWithEmptyItem();
 
         LayoutInflater inflater = activity.getLayoutInflater();
@@ -118,16 +126,12 @@ public class AddIssue extends RetrieveTask {
             .setPositiveButton(activity.getString(R.string.ok), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.dismiss();
-                    int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                    if (selectedPosition == -1) {
-                        WhatTheDuck.wtd.info(activity, R.string.input_error__select_condition);
-                        return;
-                    }
-                    String condition = items[selectedPosition].toString();
                     String DMcondition;
-                    if (condition.equals(activity.getString(R.string.condition_bad)))
+                    if (selectedCondition.equals(activity.getString(R.string.condition_none)))
+                        DMcondition = Issue.NO_CONDITION;
+                    else if (selectedCondition.equals(activity.getString(R.string.condition_bad)))
                         DMcondition = Issue.BAD_CONDITION;
-                    else if (condition.equals(activity.getString(R.string.condition_notsogood)))
+                    else if (selectedCondition.equals(activity.getString(R.string.condition_notsogood)))
                         DMcondition = Issue.NOTSOGOOD_CONDITION;
                     else
                         DMcondition = Issue.GOOD_CONDITION;
@@ -143,10 +147,16 @@ public class AddIssue extends RetrieveTask {
 
         ((TextView) dialogView.findViewById(R.id.addissue_title)).setText(activity.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()));
 
-        MultipleCustomCheckboxes conditionCheckboxes = new MultipleCustomCheckboxes(
-            (TextView) dialogView.findViewById(R.id.addissue_condition_text),
+        conditionCheckboxes = new MultipleCustomCheckboxes(
             dialogView,
-            R.id.condition_selector
+            R.id.condition_selector,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectedCondition = view.getContentDescription().toString();
+                    ((TextView) dialogView.findViewById(R.id.addissue_condition_text)).setText(selectedCondition);
+                }
+            }
 
         );
         conditionCheckboxes.initClickEvents();
@@ -157,7 +167,22 @@ public class AddIssue extends RetrieveTask {
             }
         });
 
-        purchaseDateCheckboxes = new MultipleCustomCheckboxes(null, dialogView, R.id.purchase_list);
+        purchaseDateCheckboxes = new MultipleCustomCheckboxes(
+            dialogView,
+            R.id.purchase_list,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CharSequence contentDescription = view.getContentDescription();
+                    if (contentDescription == null) {
+                        selectedPurchaseId = null;
+                    }
+                    else {
+                        selectedPurchaseId = Integer.parseInt(contentDescription.toString());
+                    }
+                }
+            }
+        );
 
         ListView lv = dialogView.findViewById(R.id.purchase_list);
 
