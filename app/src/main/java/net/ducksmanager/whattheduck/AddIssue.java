@@ -98,7 +98,7 @@ public class AddIssue extends RetrieveTask {
 
         adapter.setItems(purchases);
         adapter.updateFilteredList("");
-        adapter.notifyDataSetInvalidated();
+        adapter.notifyDataSetChanged();
         listView.setSelectionAfterHeaderView();
     }
 

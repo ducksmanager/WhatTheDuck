@@ -2,7 +2,9 @@ package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -82,8 +84,8 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         TextView noPurchaseTitle = v.findViewById(R.id.nopurchase);
 
         LinearLayout newPurchaseSection = v.findViewById(R.id.newpurchase);
-        final EditText purchaseDateNew = v.findViewById(R.id.purchasedatenew);
-        final EditText purchaseTitleNew = v.findViewById(R.id.itemtitlenew);
+        EditText purchaseDateNew = v.findViewById(R.id.purchasedatenew);
+        EditText purchaseTitleNew = v.findViewById(R.id.itemtitlenew);
         Button purchaseCreate = v.findViewById(R.id.createpurchase);
         Button purchaseCreateCancel = v.findViewById(R.id.createpurchasecancel);
 
@@ -105,7 +107,8 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
                     myCalendar.set(Calendar.YEAR, year);
                     myCalendar.set(Calendar.MONTH, monthOfYear);
                     myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    purchaseDateNew.setText(dateFormat.format(myCalendar.getTime()));
+                    ((EditText)AddIssue.dialogView.findViewById(R.id.purchasedatenew))
+                        .setText(dateFormat.format(myCalendar.getTime()));
                 }
 
             };
@@ -118,10 +121,25 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
                 }
             });
 
+            purchaseTitleNew.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                    AddIssue.dialogView.findViewById(R.id.itemtitlenew).getBackground().setColorFilter(null);
+                    return false;
+                }
+            });
+
             purchaseCreate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View floatingButtonView) {
                     floatingButtonView.setEnabled(true);
+
+                    EditText purchaseDateNew = AddIssue.dialogView.findViewById(R.id.purchasedatenew);
+                    EditText purchaseTitleNew = AddIssue.dialogView.findViewById(R.id.itemtitlenew);
+                    if (purchaseTitleNew.getText().toString().equals("")) {
+                        purchaseTitleNew.getBackground().setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_IN);
+                        return;
+                    }
 
                     new CreatePurchase(AddIssue.originActivity, purchaseDateNew.getText().toString(), purchaseTitleNew.getText().toString()) {
                         @Override
