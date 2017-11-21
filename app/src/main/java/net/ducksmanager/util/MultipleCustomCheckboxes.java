@@ -7,16 +7,16 @@ import android.widget.TextView;
 import net.ducksmanager.whattheduck.R;
 import net.igenius.customcheckbox.CustomCheckBox;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MultipleCustomCheckboxes {
 
     public CustomCheckBox.OnCheckedChangeListener onCheckedListener = new CustomCheckBox.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CustomCheckBox checkBox, boolean isChecked) {
-            MultipleCustomCheckboxes.this.initClickEvents();
             if (isChecked) {
+                MultipleCustomCheckboxes.this.initClickEvents();
                 for (CustomCheckBox otherCheckbox : checkboxList) {
                     if (!checkBox.equals(otherCheckbox)) {
                         otherCheckbox.setTag(R.id.direct_uncheck, Boolean.FALSE);
@@ -45,7 +45,7 @@ public class MultipleCustomCheckboxes {
     private final TextView checkedElementInfoTextView;
     private View container;
     private int checkboxContainerId;
-    private List<CustomCheckBox> checkboxList = new ArrayList<>();
+    private Set<CustomCheckBox> checkboxList = new HashSet<>();
 
     public MultipleCustomCheckboxes(final TextView checkedElementInfoTextView, View container, int checkboxContainerId) {
         this.checkedElementInfoTextView = checkedElementInfoTextView;
@@ -68,21 +68,24 @@ public class MultipleCustomCheckboxes {
     }
 
     public void checkInitialCheckbox(CheckboxFilter filter) {
+        CustomCheckBox checkboxToCheck = null;
         for (CustomCheckBox checkbox : checkboxList) {
             if (filter.isMatched(checkbox)) {
-                checkbox.setChecked(true);
+                checkboxToCheck = checkbox; // Don't call setChecked() here to avoir concurrent access in initClickEvents() called in the OnCheckedChangeListener
             }
+        }
+        if (checkboxToCheck != null) {
+            checkboxToCheck.setChecked(true);
         }
     }
 
     public void initClickEvents() {
-        if (this.checkboxList.size() == 0) {
-            this.storeDescendantsOfType((ViewGroup) container.findViewById(checkboxContainerId), CustomCheckBox.class);
+        this.storeDescendantsOfType((ViewGroup) container.findViewById(checkboxContainerId), CustomCheckBox.class);
 
-            for (CustomCheckBox checkBox : checkboxList) {
-                checkBox.setTag(R.id.direct_uncheck, null);
-                checkBox.setOnCheckedChangeListener(onCheckedListener);
-            }
+        for (CustomCheckBox checkBox : checkboxList) {
+            checkBox.setTag(R.id.direct_uncheck, null);
+            checkBox.setOnCheckedChangeListener(onCheckedListener);
         }
+
     }
 }
