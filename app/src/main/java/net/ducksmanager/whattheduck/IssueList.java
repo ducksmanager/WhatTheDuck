@@ -16,6 +16,8 @@ import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.lang.ref.WeakReference;
 
+import java.lang.ref.WeakReference;
+
 public class IssueList extends List<Issue> {
     
     @Override
@@ -83,12 +85,17 @@ public class IssueList extends List<Issue> {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         if (type.equals(CollectionType.COA.toString())) {
-            Issue selectedIssue = (Issue) this.getListView().getItemAtPosition(((Long) id).intValue());
+            final Issue selectedIssue = (Issue) this.getListView().getItemAtPosition(((Long) id).intValue());
             if (WhatTheDuck.userCollection.getIssue(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), selectedIssue.getIssueNumber()) != null) {
                 WhatTheDuck.wtd.info(new WeakReference<Activity>(this), R.string.input_error__issue_already_possessed);
             }
             else {
-                AddIssue.showAddIssueDialog(new WeakReference<Activity>(IssueList.this), selectedIssue);
+                new GetPurchaseList(IssueList.this) {
+                    @Override
+                    protected void afterDataHandling() {
+                        AddIssue.showAddIssueDialog(new WeakReference<Activity>(IssueList.this), selectedIssue);
+                    }
+                }.execute();
             }
         }
         super.onListItemClick(l, v, position, id);

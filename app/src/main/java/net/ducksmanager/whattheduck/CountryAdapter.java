@@ -48,4 +48,9 @@ public class CountryAdapter extends ItemAdapter<CountryAdapter.Country> {
     protected String getText(Country i) {
         return i.getFullName();
     }
+
+    @Override
+    protected String getComparatorText(Country i) {
+        return getText(i);
+    }
 }

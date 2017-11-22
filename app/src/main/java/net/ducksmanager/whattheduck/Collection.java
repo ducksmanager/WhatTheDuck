@@ -12,6 +12,21 @@ import java.util.Set;
 
 public class Collection implements Serializable {
     private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<>();
+    private ArrayList<PurchaseAdapter.Purchase> purchaseList;
+
+    void setPurchaseList(ArrayList<PurchaseAdapter.Purchase> purchaseList) {
+        this.purchaseList = purchaseList;
+    }
+
+    private ArrayList<PurchaseAdapter.Purchase> getPurchaseList() {
+        return purchaseList;
+    }
+
+    ArrayList<PurchaseAdapter.Purchase> getPurchaseListWithEmptyItem() {
+        ArrayList<PurchaseAdapter.Purchase> purchaseListWithEmptyItem = (ArrayList<PurchaseAdapter.Purchase>) getPurchaseList().clone();
+        purchaseListWithEmptyItem.add(null);
+        return purchaseListWithEmptyItem;
+    }
 
     public enum CollectionType {COA,USER}
 

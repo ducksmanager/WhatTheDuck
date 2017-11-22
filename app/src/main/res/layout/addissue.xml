@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/addissue_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:text="@string/input_error__select_condition"
+        android:textAlignment="center"
+        android:textAppearance="?android:textAppearanceLargeInverse"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+        <TextView
+            android:id="@+id/addissue_condition"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:text="@string/condition" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:layout_width="0dp"
+                      android:layout_weight="2"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      android:gravity="center">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                          android:id="@+id/condition_selector"
+                          android:layout_width="fill_parent"
+                          android:layout_height="20dp"
+                          android:orientation="horizontal">
+                <net.igenius.customcheckbox.CustomCheckBox
+                    android:id="@+id/nocondition"
+                    android:layout_width="20dp"
+                    app:color_checked="#989898"
+                    app:color_unchecked="#989898"
+                    app:duration="1"
+                    app:stroke_width="5dp"
+                    android:contentDescription="@string/condition_none"
+                    android:checked="true"
+                    android:layout_height="fill_parent"/>
+
+                <net.igenius.customcheckbox.CustomCheckBox
+                    android:id="@+id/badcondition"
+                    android:layout_width="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    app:color_checked="#FF0000"
+                    app:color_unchecked="#FF0000"
+                    app:duration="100"
+                    android:contentDescription="@string/condition_bad"
+                    android:layout_height="fill_parent"/>
+
+                <net.igenius.customcheckbox.CustomCheckBox
+                    android:id="@+id/notsogoodcondition"
+                    android:layout_width="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    app:color_checked="#FF8000"
+                    app:color_unchecked="#FF8000"
+                    app:duration="100"
+                    android:contentDescription="@string/condition_notsogood"
+                    android:layout_height="fill_parent"/>
+
+                <net.igenius.customcheckbox.CustomCheckBox
+                    android:id="@+id/goodcondition"
+                    android:layout_width="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    app:color_checked="#2CA77B"
+                    app:color_unchecked="#2CA77B"
+                    app:duration="100"
+                    android:contentDescription="@string/condition_good"
+                    android:layout_height="fill_parent"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/addissue_condition_text"
+                android:layout_width="fill_parent"
+                android:layout_height="20dp"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:paddingTop="10dp"
+                  android:orientation="horizontal">
+        <TextView
+            android:id="@+id/addissue_purchasedate"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="4dp"
+            android:text="@string/purchase_date" />
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      xmlns:tools="http://schemas.android.com/tools"
+                      android:layout_width="0dp"
+                      android:layout_height="180dp"
+                      android:layout_weight="2"
+                      android:gravity="start|top"
+                      android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/purchase_list"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="26dp"
+                tools:listitem="@layout/row_purchase"/>
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/addpurchase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/plus"
+                android:scaleType="fitXY"
+                app:fab_size="mini"
+                app:fab_colorNormal="#84cfc6"
+                app:fab_colorPressed="#84cfc6"
+                app:fab_colorRipple="@android:color/white"/>
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>

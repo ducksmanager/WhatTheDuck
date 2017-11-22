@@ -12,6 +12,7 @@ public class Issue implements Serializable {
     private final String issueNumber;
     public enum IssueCondition {BAD_CONDITION, NOTSOGOOD_CONDITION, GOOD_CONDITION, NO_CONDITION}
     private IssueCondition issueCondition;
+    private Integer purchaseId;
 
     public Issue(String issuenumber, String issueCondition) {
         super();
@@ -88,4 +89,11 @@ public class Issue implements Serializable {
         return issueConditionToIssueConditionStr(issueCondition);
     }
 
+    public Integer getPurchaseId() {
+        return purchaseId;
+    }
+
+    public void setPurchaseId(Integer purchaseId) {
+        this.purchaseId = purchaseId;
+    }
 }

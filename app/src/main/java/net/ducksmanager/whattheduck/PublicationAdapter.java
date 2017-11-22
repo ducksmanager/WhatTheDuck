@@ -43,4 +43,9 @@ public class PublicationAdapter extends ItemAdapter<PublicationAdapter.Publicati
     protected String getText(Publication i) {
         return i.getPublicationTitle();
     }
+
+    @Override
+    protected String getComparatorText(Publication i) {
+        return getText(i);
+    }
 }

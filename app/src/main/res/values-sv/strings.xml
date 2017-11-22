@@ -35,7 +35,7 @@
     <string name="my_collection">Min samling</string>
     <string name="network_error">Nätverksfel</string>
     <string name="network_error__no_connection">Godkänn</string>
-    <string name="no_result">Ingen utgåva i denna lista.</string>
+    <string name="no_issue">Ingen utgåva i denna lista.</string>
     <string name="ok">OK</string>
     <string name="password">Lösenord</string>
     <string name="password_confirm">Upprepa lösenord</string>

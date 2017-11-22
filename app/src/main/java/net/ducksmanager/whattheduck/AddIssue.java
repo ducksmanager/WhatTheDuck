@@ -5,24 +5,42 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
+import net.ducksmanager.util.MultipleCustomCheckboxes;
 import net.ducksmanager.util.SimpleCallback;
+import net.igenius.customcheckbox.CustomCheckBox;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 import java.lang.ref.WeakReference;
 
 public class AddIssue extends RetrieveTask {
 
-    private static WeakReference<Activity> originActivityRef;
+    public static WeakReference<Activity> originActivityRef;
     private static String shortCountryAndPublication;
     private static Issue selectedIssue;
+    public static View dialogView;
+    static MultipleCustomCheckboxes purchaseDateCheckboxes;
+    private static MultipleCustomCheckboxes conditionCheckboxes;
+    static ArrayList<PurchaseAdapter.Purchase> purchases;
+
+    private static String selectedCondition = null;
+    private static Integer selectedPurchaseId = null;
 
     private AddIssue(WeakReference<Activity> originActivityRef, String shortCountryAndPublication, Issue selectedIssue) {
         super(
             "&ajouter_numero"
             +"&pays_magazine="+shortCountryAndPublication
             +"&numero="+selectedIssue.getIssueNumber()
+            +"&id_acquisition="+selectedIssue.getPurchaseId()
             +"&etat="+selectedIssue.getIssueConditionStr(),
                 R.id.progressBarLoading
         );
@@ -83,35 +101,48 @@ public class AddIssue extends RetrieveTask {
         }
     }
 
+    static void toggleAddPurchaseButton(Boolean toggle) {
+        dialogView.findViewById(R.id.addpurchase).setEnabled(toggle);
+    }
+
+    static void updatePurchases() {
+        ListView listView = dialogView.findViewById(R.id.purchase_list);
+        PurchaseAdapter adapter = (PurchaseAdapter) listView.getAdapter();
+
+        adapter.setItems(purchases);
+        adapter.updateFilteredList("");
+        adapter.notifyDataSetChanged();
+        listView.setSelectionAfterHeaderView();
+    }
+
     static public void showAddIssueDialog(final WeakReference<Activity> activityRef, final Issue selectedIssue) {
         final Context appContext = WhatTheDuck.wtd.getApplicationContext();
-
         final CharSequence[] items = {appContext.getString(R.string.condition_bad), appContext.getString(R.string.condition_notsogood), appContext.getString(R.string.condition_good)};
+
+        purchases = WhatTheDuck.userCollection.getPurchaseListWithEmptyItem();
+
+        LayoutInflater inflater = activityRef.get().getLayoutInflater();
+        dialogView = inflater.inflate(R.layout.addissue, null);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(activityRef.get());
         builder
-            .setTitle(appContext.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()))
-            .setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int item) {}
-            })
+            .setView(dialogView)
             .setCancelable(true)
             .setPositiveButton(appContext.getString(R.string.ok), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-                int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
-                if (selectedPosition == -1) {
-                    WhatTheDuck.wtd.info(activityRef, R.string.input_error__select_condition);
-                    return;
-                }
-                String condition = items[selectedPosition].toString();
-                String DMcondition;
-                if (condition.equals(appContext.getString(R.string.condition_bad)))
-                    DMcondition = Issue.BAD_CONDITION;
-                else if (condition.equals(appContext.getString(R.string.condition_notsogood)))
-                    DMcondition = Issue.NOTSOGOOD_CONDITION;
-                else
-                    DMcondition = Issue.GOOD_CONDITION;
-                selectedIssue.setIssueCondition(Issue.issueConditionStrToIssueCondition(DMcondition));
-                new AddIssue(activityRef, WhatTheDuck.getSelectedPublication(), selectedIssue).execute();
+                    dialog.dismiss();
+                    String DMcondition;
+                    if (selectedCondition.equals(appContext.getString(R.string.condition_none)))
+                        DMcondition = Issue.NO_CONDITION;
+                    else if (selectedCondition.equals(appContext.getString(R.string.condition_bad)))
+                        DMcondition = Issue.BAD_CONDITION;
+                    else if (selectedCondition.equals(appContext.getString(R.string.condition_notsogood)))
+                        DMcondition = Issue.NOTSOGOOD_CONDITION;
+                    else
+                        DMcondition = Issue.GOOD_CONDITION;
+                    selectedIssue.setIssueCondition(Issue.issueConditionStrToIssueCondition(DMcondition));
+                    selectedIssue.setPurchaseId(selectedPurchaseId == null ? -2 : selectedPurchaseId);
+                    new AddIssue(activityRef, WhatTheDuck.getSelectedPublication(), selectedIssue).execute();
                 }
             })
             .setNegativeButton(appContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -119,7 +150,67 @@ public class AddIssue extends RetrieveTask {
                     dialog.cancel();
                 }
             });
-        builder.create().show();
-    }
 
+        ((TextView) dialogView.findViewById(R.id.addissue_title)).setText(appContext.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()));
+
+        conditionCheckboxes = new MultipleCustomCheckboxes(
+            dialogView,
+            R.id.condition_selector,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectedCondition = view.getContentDescription().toString();
+                    ((TextView) dialogView.findViewById(R.id.addissue_condition_text)).setText(selectedCondition);
+                }
+            }
+
+        );
+        conditionCheckboxes.initClickEvents();
+        conditionCheckboxes.checkInitialCheckbox(new MultipleCustomCheckboxes.CheckboxFilter() {
+            @Override
+            public boolean isMatched(CustomCheckBox checkbox) {
+                return checkbox.getId() == R.id.nocondition;
+            }
+        });
+
+        purchaseDateCheckboxes = new MultipleCustomCheckboxes(
+            dialogView,
+            R.id.purchase_list,
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CharSequence contentDescription = view.getContentDescription();
+                    if (contentDescription == null) {
+                        selectedPurchaseId = null;
+                    }
+                    else {
+                        selectedPurchaseId = Integer.parseInt(contentDescription.toString());
+                    }
+                }
+            }
+        );
+
+        ListView lv = dialogView.findViewById(R.id.purchase_list);
+
+        lv.setAdapter(new PurchaseAdapter(activityRef.get(), purchases));
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ((CustomCheckBox)view.findViewById(R.id.purchasecheck)).setChecked(true);
+            }
+        });
+
+        dialogView.findViewById(R.id.addpurchase).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleAddPurchaseButton(false);
+
+                purchases.add(0, new PurchaseAdapter.Purchase(null, new Date(), "", true));
+                updatePurchases();
+            }
+        });
+
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
 }

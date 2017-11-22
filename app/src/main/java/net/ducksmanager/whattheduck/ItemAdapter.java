@@ -15,15 +15,24 @@ import net.ducksmanager.util.NaturalOrderComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
 
-    private final ArrayList<Item> items;
+    ArrayList<Item> items;
     private ArrayList<Item> filteredItems;
 
-    ItemAdapter(List list, ArrayList<Item> items) {
-        super(list, R.layout.row, items);
+    ItemAdapter(Context context, ArrayList<Item> items) {
+        super(context, R.layout.row, items);
+        this.items = items;
+        Collections.sort(this.items, getComparator());
+
+        this.filteredItems = new ArrayList<>(items);
+    }
+
+    ItemAdapter(Context context, int resource, ArrayList<Item> items) {
+        super(context, resource, R.id.itemtitle, items);
         this.items = items;
         Collections.sort(this.items, getComparator());
 
@@ -37,13 +46,21 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
                 filteredItems.add(item);
     }
 
-    private NaturalOrderComparator<Item> getComparator() {
+    protected Comparator<Item> getComparator() {
         return new NaturalOrderComparator<Item>() {
             @Override
             public int compare(Item i1, Item i2) {
-                return super.compareObject(getText(i1), getText(i2));
+                return super.compareObject(getComparatorText(i1), getComparatorText(i2));
             }
         };
+    }
+
+    protected int getResourceToInflate() {
+        return R.layout.row;
+    }
+
+    protected TextView getTitleTextView(View mainView) {
+        return mainView.findViewById(R.id.itemtitle);
     }
 
     @Override
@@ -52,14 +69,12 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         View v = convertView;
         if (v == null) {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.row, parent, false);
+            v = vi.inflate(getResourceToInflate(), parent, null);
         }
         Item i = getItem(position);
         if (i != null) {
-            TextView itemTitle = v.findViewById(R.id.itemtitle);
-            itemTitle.setText(getText(i));
-
-            itemTitle.setTypeface(null, isHighlighted(i) ? Typeface.BOLD : Typeface.NORMAL);
+            getTitleTextView(v).setText(getText(i));
+            getTitleTextView(v).setTypeface(null, isHighlighted(i) ? Typeface.BOLD : Typeface.NORMAL);
 
             ImageView prefixImage = v.findViewById(R.id.prefiximage);
             if (prefixImage != null) {
@@ -88,6 +103,8 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
     protected abstract boolean isHighlighted(Item i);
 
     protected abstract Integer getImageResource(Item i, Activity activity);
+
+    protected abstract String getComparatorText(Item i);
 
     protected abstract String getText(Item i);
 

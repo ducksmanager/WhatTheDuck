@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:text="@string/no_result"
+        android:text="@string/no_issue"
         android:layout_below="@id/filter"
         android:visibility="invisible"/>
 

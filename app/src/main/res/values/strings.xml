@@ -9,11 +9,14 @@
     <string name="add_cover_tooltip">New! Add an issue by photographing its cover.</string>
     <string name="all_countries">All countries</string>
     <string name="cancel">Cancel</string>
+    <string name="condition">Condition</string>
     <string name="condition_bad">Bad condition</string>
     <string name="condition_good">Good condition</string>
+    <string name="condition_none">Unspecified condition</string>
     <string name="condition_notsogood">Not-so-good condition</string>
     <string name="confirmation_message__issue_inserted">The issue has been added to your collection</string>
     <string name="cover_suggestion">Cover suggestion</string>
+    <string name="create">Create</string>
     <string name="email_address">E-mail</string>
     <string name="error">Error</string>
     <string name="error__malformed_url">The URL is malformed</string>
@@ -28,6 +31,7 @@
     <string name="internal_error__crypting_failed">The encryption of your credentials failed</string>
     <string name="internal_error__issue_insertion_failed">Adding the issue in your collection failed</string>
     <string name="internal_error__malformed_list">The issue list is malformed</string>
+    <string name="internal_error__purchase_creation_failed">The creation of the purchase date failed</string>
     <string name="itemtitle">Item</string>
     <string name="issue_already_possessed">You already have this issue in your collection</string>
     <string name="link_to_ducksmanager_website">What The Duck is the mobile app of DucksManager. Click here to access the DucksManager website.</string>
@@ -36,10 +40,13 @@
     <string name="my_collection">My collection</string>
     <string name="network_error">Network error</string>
     <string name="network_error__no_connection">Network issue: please check your Internet connection</string>
-    <string name="no_result">No issue in this list.</string>
+    <string name="no_issue">No issue in this list.</string>
+    <string name="no_purchase_date">No purchase date</string>
     <string name="ok">OK</string>
     <string name="password">Password</string>
     <string name="password_confirm">Password confirmation</string>
+    <string name="purchase_date">Purchase date</string>
+    <string name="purchase_name">Purchase name</string>
     <string name="referenced_issues">Referenced issue numbers</string>
     <string name="remember_credentials">Remember my credentials</string>
     <string name="result">Result</string>
