@@ -16,8 +16,6 @@ import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.lang.ref.WeakReference;
 
-import java.lang.ref.WeakReference;
-
 public class IssueList extends List<Issue> {
     
     @Override
@@ -90,10 +88,15 @@ public class IssueList extends List<Issue> {
                 WhatTheDuck.wtd.info(new WeakReference<Activity>(this), R.string.input_error__issue_already_possessed);
             }
             else {
-                new GetPurchaseList(IssueList.this) {
+                new GetPurchaseList() {
                     @Override
                     protected void afterDataHandling() {
                         AddIssue.showAddIssueDialog(new WeakReference<Activity>(IssueList.this), selectedIssue);
+                    }
+
+                    @Override
+                    protected WeakReference<Activity> getOriginActivity() {
+                        return new WeakReference<Activity>(IssueList.this);
                     }
                 }.execute();
             }

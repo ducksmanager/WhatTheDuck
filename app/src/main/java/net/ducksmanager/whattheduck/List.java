@@ -129,9 +129,9 @@ public abstract class List<Item> extends ListActivity{
 
     protected abstract void show();
 
-    void show(ItemAdapter itemAdapter) {
+    void show(ItemAdapter<Item> itemAdapter) {
         this.itemAdapter = itemAdapter;
-        this.items = (ArrayList<Item>) itemAdapter.getItems();
+        this.items = itemAdapter.getItems();
 
         if (items.size() == 0) {
             TextView emptyListText = this.findViewById(R.id.emptyList);

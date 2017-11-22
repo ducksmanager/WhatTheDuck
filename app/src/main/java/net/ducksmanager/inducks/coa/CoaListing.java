@@ -34,7 +34,7 @@ public abstract class CoaListing extends RetrieveTask {
     CoaListing(Activity activity, ListType type, String countryShortName, String publicationShortName, SimpleCallback callback) {
         super(urlSuffixes.get(type), R.id.progressBarLoading);
         ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("list/coa/" + type.name().toLowerCase(Locale.FRANCE));
-        this.activityRef = new WeakReference<Activity>(activity);
+        this.activityRef = new WeakReference<>(activity);
         this.callback = callback;
         CoaListing.countryShortName = countryShortName;
         CoaListing.publicationShortName = publicationShortName;

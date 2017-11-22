@@ -3,23 +3,25 @@ package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
 
+import java.lang.ref.WeakReference;
+
 public abstract class CreatePurchase extends RetrieveTask {
 
-    private static Activity originActivity;
+    private static WeakReference<Activity> originActivityRef;
 
-    CreatePurchase(Activity il, String purchaseDateStr, String purchaseName) {
+    CreatePurchase(WeakReference<Activity> originActivityRef, String purchaseDateStr, String purchaseName) {
         super(
             "&ajouter_achat"
                 +"&date_achat="+purchaseDateStr
                 +"&description_achat="+purchaseName,
             R.id.progressBarLoading
         );
-        originActivity = il;
+        CreatePurchase.originActivityRef = originActivityRef;
     }
 
     @Override
     protected void onPreExecute() {
-        WhatTheDuck.wtd.toggleProgressbarLoading(originActivity, progressBarId, true);
+        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, progressBarId, true);
         ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addpurchase/start");
     }
 
@@ -27,10 +29,10 @@ public abstract class CreatePurchase extends RetrieveTask {
     protected void onPostExecute(String response) {
         ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addpurchase/finish");
         if (!response.equals("OK")) {
-            WhatTheDuck.wtd.alert(originActivity, R.string.internal_error, R.string.internal_error__purchase_creation_failed, "");
+            WhatTheDuck.wtd.alert(originActivityRef, R.string.internal_error, R.string.internal_error__purchase_creation_failed, "");
         }
 
-        WhatTheDuck.wtd.toggleProgressbarLoading(originActivity, progressBarId, false);
+        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, progressBarId, false);
         afterDataHandling();
     }
 

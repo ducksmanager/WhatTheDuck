@@ -24,12 +24,12 @@ import java.lang.ref.WeakReference;
 
 public class AddIssue extends RetrieveTask {
 
-    public static WeakReference<Activity> originActivityRef;
+    static WeakReference<Activity> originActivityRef;
     private static String shortCountryAndPublication;
     private static Issue selectedIssue;
-    public static View dialogView;
+
+    static WeakReference<View> dialogViewRef;
     static MultipleCustomCheckboxes purchaseDateCheckboxes;
-    private static MultipleCustomCheckboxes conditionCheckboxes;
     static ArrayList<PurchaseAdapter.Purchase> purchases;
 
     private static String selectedCondition = null;
@@ -102,11 +102,11 @@ public class AddIssue extends RetrieveTask {
     }
 
     static void toggleAddPurchaseButton(Boolean toggle) {
-        dialogView.findViewById(R.id.addpurchase).setEnabled(toggle);
+        dialogViewRef.get().findViewById(R.id.addpurchase).setEnabled(toggle);
     }
 
     static void updatePurchases() {
-        ListView listView = dialogView.findViewById(R.id.purchase_list);
+        ListView listView = dialogViewRef.get().findViewById(R.id.purchase_list);
         PurchaseAdapter adapter = (PurchaseAdapter) listView.getAdapter();
 
         adapter.setItems(purchases);
@@ -117,12 +117,12 @@ public class AddIssue extends RetrieveTask {
 
     static public void showAddIssueDialog(final WeakReference<Activity> activityRef, final Issue selectedIssue) {
         final Context appContext = WhatTheDuck.wtd.getApplicationContext();
-        final CharSequence[] items = {appContext.getString(R.string.condition_bad), appContext.getString(R.string.condition_notsogood), appContext.getString(R.string.condition_good)};
 
         purchases = WhatTheDuck.userCollection.getPurchaseListWithEmptyItem();
 
         LayoutInflater inflater = activityRef.get().getLayoutInflater();
-        dialogView = inflater.inflate(R.layout.addissue, null);
+        View dialogView = inflater.inflate(R.layout.addissue, null);
+        dialogViewRef = new WeakReference<>(dialogView);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activityRef.get());
         builder
@@ -153,14 +153,14 @@ public class AddIssue extends RetrieveTask {
 
         ((TextView) dialogView.findViewById(R.id.addissue_title)).setText(appContext.getString(R.string.insert_issue__confirm, selectedIssue.getIssueNumber()));
 
-        conditionCheckboxes = new MultipleCustomCheckboxes(
-            dialogView,
+        MultipleCustomCheckboxes conditionCheckboxes = new MultipleCustomCheckboxes(
+            dialogViewRef,
             R.id.condition_selector,
             new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     selectedCondition = view.getContentDescription().toString();
-                    ((TextView) dialogView.findViewById(R.id.addissue_condition_text)).setText(selectedCondition);
+                    ((TextView) dialogViewRef.get().findViewById(R.id.addissue_condition_text)).setText(selectedCondition);
                 }
             }
 
@@ -174,7 +174,7 @@ public class AddIssue extends RetrieveTask {
         });
 
         purchaseDateCheckboxes = new MultipleCustomCheckboxes(
-            dialogView,
+            dialogViewRef,
             R.id.purchase_list,
             new View.OnClickListener() {
                 @Override

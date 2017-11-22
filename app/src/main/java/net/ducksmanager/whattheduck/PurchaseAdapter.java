@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import net.igenius.customcheckbox.CustomCheckBox;
 
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,13 +35,13 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         final String purchaseName;
         Boolean isNewPurchase = Boolean.FALSE;
 
-        public Purchase(Integer id, Date purchaseDate, String purchaseName) {
+        Purchase(Integer id, Date purchaseDate, String purchaseName) {
             this.id = id;
             this.purchaseDate = purchaseDate;
             this.purchaseName = purchaseName;
         }
 
-        public Purchase(Integer id, Date purchaseDate, String purchaseName, Boolean isNewPurchase) {
+        Purchase(Integer id, Date purchaseDate, String purchaseName, Boolean isNewPurchase) {
             this(id,purchaseDate,purchaseName);
             this.isNewPurchase = isNewPurchase;
         }
@@ -49,21 +50,21 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
             return id;
         }
 
-        public Date getPurchaseDate() {
+        Date getPurchaseDate() {
             return purchaseDate;
         }
 
-        public String getPurchaseName() {
+        String getPurchaseName() {
             return purchaseName;
         }
 
-        public Boolean getIsNewPurchase() {
+        Boolean getIsNewPurchase() {
             return isNewPurchase;
         }
     }
 
 
-    public PurchaseAdapter(Activity activity, ArrayList<Purchase> items) {
+    PurchaseAdapter(Activity activity, ArrayList<Purchase> items) {
         super(activity, R.layout.row_purchase, items);
     }
 
@@ -107,7 +108,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
                     myCalendar.set(Calendar.YEAR, year);
                     myCalendar.set(Calendar.MONTH, monthOfYear);
                     myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    ((EditText)AddIssue.dialogView.findViewById(R.id.purchasedatenew))
+                    ((EditText)AddIssue.dialogViewRef.get().findViewById(R.id.purchasedatenew))
                         .setText(dateFormat.format(myCalendar.getTime()));
                 }
 
@@ -124,7 +125,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
             purchaseTitleNew.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                    AddIssue.dialogView.findViewById(R.id.itemtitlenew).getBackground().setColorFilter(null);
+                    AddIssue.dialogViewRef.get().findViewById(R.id.itemtitlenew).getBackground().setColorFilter(null);
                     return false;
                 }
             });
@@ -134,22 +135,27 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
                 public void onClick(View floatingButtonView) {
                     floatingButtonView.setEnabled(true);
 
-                    EditText purchaseDateNew = AddIssue.dialogView.findViewById(R.id.purchasedatenew);
-                    EditText purchaseTitleNew = AddIssue.dialogView.findViewById(R.id.itemtitlenew);
+                    EditText purchaseDateNew = AddIssue.dialogViewRef.get().findViewById(R.id.purchasedatenew);
+                    EditText purchaseTitleNew = AddIssue.dialogViewRef.get().findViewById(R.id.itemtitlenew);
                     if (purchaseTitleNew.getText().toString().equals("")) {
                         purchaseTitleNew.getBackground().setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_IN);
                         return;
                     }
 
-                    new CreatePurchase(AddIssue.originActivity, purchaseDateNew.getText().toString(), purchaseTitleNew.getText().toString()) {
+                    new CreatePurchase(AddIssue.originActivityRef, purchaseDateNew.getText().toString(), purchaseTitleNew.getText().toString()) {
                         @Override
                         protected void afterDataHandling() {
-                            new GetPurchaseList(AddIssue.originActivity) {
+                            new GetPurchaseList() {
                                 @Override
                                 protected void afterDataHandling() {
                                     AddIssue.toggleAddPurchaseButton(true);
                                     AddIssue.purchases = WhatTheDuck.userCollection.getPurchaseListWithEmptyItem();
                                     AddIssue.updatePurchases();
+                                }
+
+                                @Override
+                                protected WeakReference<Activity> getOriginActivity() {
+                                    return AddIssue.originActivityRef;
                                 }
                             }.execute();
                         }

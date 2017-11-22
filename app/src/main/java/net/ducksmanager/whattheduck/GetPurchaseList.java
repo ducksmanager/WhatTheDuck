@@ -6,24 +6,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.util.ArrayList;
 
 public abstract class GetPurchaseList extends RetrieveTask {
-
-    private static Activity originActivity;
-
-    GetPurchaseList(Activity il) {
-        super(
-            "&get_achats=true",
-            R.id.progressBarLoading
-        );
-        GetPurchaseList.originActivity = il;
+    GetPurchaseList() {
+        super("&get_achats=true", R.id.progressBarLoading);
     }
 
     @Override
     protected void onPreExecute() {
-        WhatTheDuck.wtd.toggleProgressbarLoading(GetPurchaseList.originActivity, progressBarId, true);
+        WhatTheDuck.wtd.toggleProgressbarLoading(this.getOriginActivity(), progressBarId, true);
         ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("getpurchases/start");
     }
 
@@ -63,10 +57,12 @@ public abstract class GetPurchaseList extends RetrieveTask {
             e.printStackTrace();
         }
 
-        WhatTheDuck.wtd.toggleProgressbarLoading(GetPurchaseList.originActivity, progressBarId, false);
+        WhatTheDuck.wtd.toggleProgressbarLoading(this.getOriginActivity(), progressBarId, false);
 
         afterDataHandling();
     }
 
     protected abstract void afterDataHandling();
+
+    protected abstract WeakReference<Activity> getOriginActivity();
 }

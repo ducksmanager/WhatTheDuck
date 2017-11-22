@@ -6,12 +6,13 @@ import android.view.ViewGroup;
 import net.ducksmanager.whattheduck.R;
 import net.igenius.customcheckbox.CustomCheckBox;
 
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
 
 public class MultipleCustomCheckboxes {
 
-    public CustomCheckBox.OnCheckedChangeListener onCheckedListener = new CustomCheckBox.OnCheckedChangeListener() {
+    public final CustomCheckBox.OnCheckedChangeListener onCheckedListener = new CustomCheckBox.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CustomCheckBox checkBox, boolean isChecked) {
             if (isChecked) {
@@ -38,13 +39,13 @@ public class MultipleCustomCheckboxes {
         boolean isMatched(CustomCheckBox checkbox);
     }
 
-    private View container;
-    private int checkboxContainerId;
+    private final WeakReference<View> container;
+    private final int checkboxContainerId;
     private final View.OnClickListener customOnClick;
 
-    private Set<CustomCheckBox> checkboxList = new HashSet<>();
+    private final Set<CustomCheckBox> checkboxList = new HashSet<>();
 
-    public MultipleCustomCheckboxes(View container, int checkboxContainerId, View.OnClickListener customOnClick) {
+    public MultipleCustomCheckboxes(WeakReference<View> container, int checkboxContainerId, View.OnClickListener customOnClick) {
         this.container = container;
         this.checkboxContainerId = checkboxContainerId;
         this.customOnClick = customOnClick;
@@ -77,7 +78,7 @@ public class MultipleCustomCheckboxes {
     }
 
     public void initClickEvents() {
-        this.storeDescendantsOfType((ViewGroup) container.findViewById(checkboxContainerId), CustomCheckBox.class);
+        this.storeDescendantsOfType((ViewGroup) container.get().findViewById(checkboxContainerId), CustomCheckBox.class);
 
         for (CustomCheckBox checkBox : checkboxList) {
             checkBox.setTag(R.id.direct_uncheck, null);

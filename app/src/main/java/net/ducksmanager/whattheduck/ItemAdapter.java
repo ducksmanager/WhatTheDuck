@@ -46,7 +46,7 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
                 filteredItems.add(item);
     }
 
-    protected Comparator<Item> getComparator() {
+    Comparator<Item> getComparator() {
         return new NaturalOrderComparator<Item>() {
             @Override
             public int compare(Item i1, Item i2) {
@@ -55,11 +55,11 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         };
     }
 
-    protected int getResourceToInflate() {
+    int getResourceToInflate() {
         return R.layout.row;
     }
 
-    protected TextView getTitleTextView(View mainView) {
+    TextView getTitleTextView(View mainView) {
         return mainView.findViewById(R.id.itemtitle);
     }
 
@@ -69,7 +69,7 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         View v = convertView;
         if (v == null) {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(getResourceToInflate(), parent, null);
+            v = vi.inflate(getResourceToInflate(), null);
         }
         Item i = getItem(position);
         if (i != null) {

@@ -143,10 +143,6 @@ public class WhatTheDuck extends Activity {
         Toast.makeText(activity.get(), titleId, Toast.LENGTH_SHORT).show();
     }
 
-    public static void info(int titleId) {
-        Toast.makeText(WhatTheDuck.wtd, titleId, Toast.LENGTH_SHORT).show();
-    }
-    
     public void alert(String message) {
         alert(new WeakReference<Activity>(this), message);
     }
