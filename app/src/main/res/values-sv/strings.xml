@@ -50,4 +50,11 @@
     <string name="welcomeMessage">Bocka av valet \"Endast min samling\" för att visar berörda utgåvor, och klicka sedan på en utgåva för att lägga till den i din samling</string>
     <string name="welcomeTitle">Välkommen till What The Duck!</string>
     <string name="issue_already_possessed">Du har redan den här utgåvan i din samling</string>
+    <string name="condition">Skick</string>
+    <string name="condition_none">Ospecificerat skick</string>
+    <string name="create">Skapa</string>
+    <string name="internal_error__purchase_creation_failed">Skapandet av inköpsdatum misslyckades</string>
+    <string name="no_purchase_date">Inget inköpsdatum</string>
+    <string name="purchase_date">Inköpsdatum</string>
+    <string name="purchase_name">Inköpsnamn</string>
 </resources>

@@ -57,4 +57,11 @@
     <string name="issue_already_possessed">Vous possédez déjà ce numéro dans votre collection</string>
     <string name="result">Résultat</string>
     <string name="add_cover_no_results">Aucun résultat pour votre photo, veuillez réessayer.</string>
+    <string name="condition">Etat</string>
+    <string name="condition_none">Etat non spécifié</string>
+    <string name="create">Créer</string>
+    <string name="internal_error__purchase_creation_failed">La création de la date d\'achat a échoué</string>
+    <string name="no_purchase_date">Pas de date d\'achat</string>
+    <string name="purchase_date">Date d\'achat</string>
+    <string name="purchase_name">Description</string>
 </resources>
