@@ -1,3 +1,7 @@
+Version 1.6.0
+
+    Add possibility to specify a purchase date when adding issues
+
 Version 1.5.6
 
     Add analytics
