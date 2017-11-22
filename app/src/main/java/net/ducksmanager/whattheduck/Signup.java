@@ -35,7 +35,7 @@ public class Signup extends Activity {
                 String password2 = WhatTheDuck.toSHA1(((EditText) Signup.this.findViewById(R.id.password_confirmation)).getText().toString());
                 String email = ((EditText) Signup.this.findViewById(R.id.email_address)).getText().toString();
 
-                new ConnectAndRetrieveList("&action=signup&mdp_user2="+password2+"&email="+email).execute();
+                new ConnectAndRetrieveList(Signup.this, "&action=signup&mdp_user2="+password2+"&email="+email).execute();
             }
         });
         
@@ -49,10 +49,13 @@ public class Signup extends Activity {
     }
 
 
-    public class ConnectAndRetrieveList extends RetrieveTask {
+    public static class ConnectAndRetrieveList extends RetrieveTask {
 
-        public ConnectAndRetrieveList(String urlSuffix) {
+        private final WeakReference<Activity> originActivityRef;
+
+        public ConnectAndRetrieveList(Activity originActivity, String urlSuffix) {
             super(urlSuffix, null);
+            this.originActivityRef = new WeakReference<>(originActivity);
         }
 
         @Override
@@ -64,16 +67,17 @@ public class Signup extends Activity {
                     response = new String(response.getBytes("ISO8859-1"), "UTF-8");
 
                     if (response.equals("OK")) {
-                        Intent i = new Intent(Signup.this, WhatTheDuck.class);
+                        Activity originActivity = originActivityRef.get();
+                        Intent i = new Intent(originActivity, WhatTheDuck.class);
                         WhatTheDuck.wtd.startActivity(i);
                         ((EditText) WhatTheDuck.wtd.findViewById(R.id.username)).setText(WhatTheDuck.getUsername());
                         ((EditText) WhatTheDuck.wtd.findViewById(R.id.password)).setText(WhatTheDuck.getPassword());
-                        WhatTheDuck.wtd.info(R.string.signup__confirm);
+                        WhatTheDuck.wtd.info(originActivityRef, R.string.signup__confirm);
                     } else {
-                        WhatTheDuck.wtd.alert(new WeakReference<Activity>(Signup.this), response);
+                        WhatTheDuck.wtd.alert(originActivityRef, response);
                     }
                 } catch (UnsupportedEncodingException e) {
-                    WhatTheDuck.wtd.alert(new WeakReference<Activity>(Signup.this), getString(R.string.internal_error));
+                    WhatTheDuck.wtd.alert(originActivityRef, R.string.internal_error);
                 }
             }
         }

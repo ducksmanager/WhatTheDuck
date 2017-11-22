@@ -19,6 +19,7 @@ import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 
 class CoverFlowAdapter extends BaseAdapter {
 
-    private final HashMap<String,Bitmap> imageCache = new HashMap<>();
+    private static final HashMap<String,Bitmap> imageCache = new HashMap<>();
 
     private ArrayList<IssueWithFullUrl> mData = new ArrayList<>(0);
     private final Context mContext;
@@ -89,27 +90,28 @@ class CoverFlowAdapter extends BaseAdapter {
         ProgressBar progressBar;
     }
 
-    private class DownloadImagesTask extends AsyncTask<ImageView, Void, Bitmap> {
+    private static class DownloadImagesTask extends AsyncTask<ImageView, Void, Bitmap> {
 
-        ProgressBar progressBar = null;
-        ImageView imageView = null;
+        WeakReference<ProgressBar> progressBarRef = null;
+        WeakReference<ImageView> imageViewRef = null;
 
         DownloadImagesTask(ProgressBar progressBar) {
-            this.progressBar = progressBar;
+            this.progressBarRef = new WeakReference<>(progressBar);
         }
 
         @Override
         protected Bitmap doInBackground(ImageView... imageViews) {
-            this.imageView = imageViews[0];
+            this.imageViewRef = new WeakReference<>(imageViews[0]);
             //noinspection WrongThread
-            return downloadImage((String)imageView.getTag());
+            return downloadImage((String) imageViewRef.get().getTag());
         }
 
         @Override
         protected void onPostExecute(Bitmap result) {
+            ImageView imageView = imageViewRef.get();
             imageView.setVisibility(View.VISIBLE);
             imageView.setImageBitmap(result);
-            progressBar.setVisibility(View.GONE);
+            progressBarRef.get().setVisibility(View.GONE);
         }
 
         private Bitmap downloadImage(String url) {
