@@ -40,7 +40,7 @@ import java.util.Locale;
 import java.util.Properties;
 
 public class WhatTheDuck extends Activity {
-    private static final String SERVER_PAGE="WhatTheDuck2.php";
+    private static final String SERVER_PAGE="WhatTheDuck.php";
     private static final String DUCKSMANAGER_URL="http://www.ducksmanager.net";
 
     @VisibleForTesting
