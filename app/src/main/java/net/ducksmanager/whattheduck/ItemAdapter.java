@@ -52,7 +52,7 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         View v = convertView;
         if (v == null) {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.row, null);
+            v = vi.inflate(R.layout.row, parent, false);
         }
         Item i = getItem(position);
         if (i != null) {

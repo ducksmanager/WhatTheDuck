@@ -62,7 +62,7 @@ class CoverFlowAdapter extends BaseAdapter {
 
         if (rowView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            rowView = inflater.inflate(R.layout.item_coverflow, null);
+            rowView = inflater.inflate(R.layout.item_coverflow, parent, false);
 
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.text = rowView.findViewById(R.id.label);
