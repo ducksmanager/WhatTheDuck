@@ -27,6 +27,9 @@ import android.widget.Toast;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import net.ducksmanager.retrievetasks.ConnectAndRetrieveList;
+import net.ducksmanager.retrievetasks.Signup;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -64,6 +67,7 @@ public class WhatTheDuck extends Activity {
 
     private static String selectedCountry = null;
     private static String selectedPublication = null;
+    private static String selectedIssue = null;
 
 
     /** Called when the activity is first created. */
@@ -404,6 +408,14 @@ public class WhatTheDuck extends Activity {
 
     public static void setSelectedPublication(String selectedPublication) {
         WhatTheDuck.selectedPublication = selectedPublication;
+    }
+
+    public static String getSelectedIssue() {
+        return WhatTheDuck.selectedIssue;
+    }
+
+    public static void setSelectedIssue(String selectedIssue) {
+        WhatTheDuck.selectedIssue = selectedIssue;
     }
 
     @Override

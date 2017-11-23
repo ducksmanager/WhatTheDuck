@@ -40,14 +40,12 @@ public class MultipleCustomCheckboxes {
     }
 
     private final WeakReference<View> container;
-    private final int checkboxContainerId;
     private final View.OnClickListener customOnClick;
 
     private final Set<CustomCheckBox> checkboxList = new HashSet<>();
 
-    public MultipleCustomCheckboxes(WeakReference<View> container, int checkboxContainerId, View.OnClickListener customOnClick) {
+    public MultipleCustomCheckboxes(WeakReference<View> container, View.OnClickListener customOnClick) {
         this.container = container;
-        this.checkboxContainerId = checkboxContainerId;
         this.customOnClick = customOnClick;
     }
 
@@ -78,7 +76,7 @@ public class MultipleCustomCheckboxes {
     }
 
     public void initClickEvents() {
-        this.storeDescendantsOfType((ViewGroup) container.get().findViewById(checkboxContainerId), CustomCheckBox.class);
+        this.storeDescendantsOfType((ViewGroup) container.get(), CustomCheckBox.class);
 
         for (CustomCheckBox checkBox : checkboxList) {
             checkBox.setTag(R.id.direct_uncheck, null);

@@ -24,11 +24,13 @@
         <activity android:name="net.ducksmanager.whattheduck.CountryList" />
         <activity android:name="net.ducksmanager.whattheduck.PublicationList" />
         <activity android:name="net.ducksmanager.whattheduck.IssueList" />
-        <activity android:name="net.ducksmanager.whattheduck.Signup" />
         <activity android:name="net.ducksmanager.util.CoverFlowActivity"
                   android:screenOrientation="portrait"
                   android:configChanges="orientation|keyboardHidden">
         </activity>
+        <activity android:name="net.ducksmanager.whattheduck.AddIssue"
+                  android:theme="@style/MyDialogTheme"
+                  android:excludeFromRecents="true"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

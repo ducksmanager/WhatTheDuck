@@ -17,7 +17,7 @@ import java.lang.ref.WeakReference;
 
 public class AddIssue extends RetrieveTask {
 
-    static WeakReference<Activity> originActivityRef;
+    private static WeakReference<Activity> originActivityRef;
     private static String shortCountryAndPublication;
     private static Issue selectedIssue;
 

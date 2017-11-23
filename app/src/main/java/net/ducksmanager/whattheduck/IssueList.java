@@ -82,17 +82,20 @@ public class IssueList extends List<Issue> {
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
+    protected void onListItemClick(ListView l, View v, int position, final long id) {
         if (type.equals(CollectionType.COA.toString())) {
             final Issue selectedIssue = (Issue) this.getListView().getItemAtPosition(((Long) id).intValue());
             if (WhatTheDuck.userCollection.getIssue(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), selectedIssue.getIssueNumber()) != null) {
                 WhatTheDuck.wtd.info(new WeakReference<Activity>(this), R.string.input_error__issue_already_possessed);
             }
             else {
+                WhatTheDuck.setSelectedIssue(selectedIssue.getIssueNumber());
+
                 new GetPurchaseList() {
                     @Override
                     protected void afterDataHandling() {
-                        AddIssue.showAddIssueDialog(new WeakReference<Activity>(IssueList.this), selectedIssue);
+                        Intent i = new Intent(IssueList.this, AddIssue.class);
+                        startActivity(i);
                     }
 
                     @Override

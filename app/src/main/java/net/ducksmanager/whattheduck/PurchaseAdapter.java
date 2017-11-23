@@ -2,11 +2,13 @@ package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -72,7 +74,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull final ViewGroup parent) {
         View v = super.getView(position, convertView, parent);
 
         CustomCheckBox purchaseCheck = v.findViewById(R.id.purchasecheck);
@@ -110,14 +112,14 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
                     myCalendar.set(Calendar.YEAR, year);
                     myCalendar.set(Calendar.MONTH, monthOfYear);
                     myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    ((EditText)AddIssue.dialogViewRef.get().findViewById(R.id.purchasedatenew))
-                        .setText(dateFormat.format(myCalendar.getTime()));
+                    ((EditText)parent.findViewById(R.id.purchasedatenew)).setText(dateFormat.format(myCalendar.getTime()));
                 }
 
             };
             purchaseDateNew.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    hideKeyboard(v);
                     new DatePickerDialog(PurchaseAdapter.this.getContext(), date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -127,37 +129,37 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
             purchaseTitleNew.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                    AddIssue.dialogViewRef.get().findViewById(R.id.itemtitlenew).getBackground().setColorFilter(null);
+                    parent.findViewById(R.id.itemtitlenew).getBackground().setColorFilter(null);
                     return false;
                 }
             });
 
             purchaseCreate.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View floatingButtonView) {
-                    floatingButtonView.setEnabled(true);
-
-                    EditText purchaseDateNew = AddIssue.dialogViewRef.get().findViewById(R.id.purchasedatenew);
-                    EditText purchaseTitleNew = AddIssue.dialogViewRef.get().findViewById(R.id.itemtitlenew);
+                public void onClick(final View floatingButtonView) {
+                    EditText purchaseDateNew = AddIssue.instance.findViewById(R.id.purchasedatenew);
+                    EditText purchaseTitleNew = AddIssue.instance.findViewById(R.id.itemtitlenew);
                     if (purchaseTitleNew.getText().toString().equals("")) {
                         purchaseTitleNew.getBackground().setColorFilter(getContext().getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_IN);
                         return;
                     }
 
-                    new CreatePurchase(AddIssue.originActivityRef, purchaseDateNew.getText().toString(), purchaseTitleNew.getText().toString()) {
+                    hideKeyboard(floatingButtonView);
+
+                    new CreatePurchase(new WeakReference<Activity>(AddIssue.instance), purchaseDateNew.getText().toString(), purchaseTitleNew.getText().toString()) {
                         @Override
                         protected void afterDataHandling() {
                             new GetPurchaseList() {
                                 @Override
                                 protected void afterDataHandling() {
-                                    AddIssue.toggleAddPurchaseButton(true);
+                                    AddIssue.instance.toggleAddPurchaseButton(true);
                                     AddIssue.purchases = WhatTheDuck.userCollection.getPurchaseListWithEmptyItem();
-                                    AddIssue.updatePurchases();
+                                    AddIssue.instance.updatePurchases();
                                 }
 
                                 @Override
                                 protected WeakReference<Activity> getOriginActivity() {
-                                    return AddIssue.originActivityRef;
+                                    return new WeakReference<Activity>(AddIssue.instance);
                                 }
                             }.execute();
                         }
@@ -170,9 +172,11 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
                 public void onClick(View floatingButtonView) {
                     floatingButtonView.setEnabled(true);
 
+                    hideKeyboard(floatingButtonView);
+
                     AddIssue.purchases.remove(0);
-                    AddIssue.toggleAddPurchaseButton(true);
-                    AddIssue.updatePurchases();
+                    AddIssue.instance.toggleAddPurchaseButton(true);
+                    AddIssue.instance.updatePurchases();
                 }
             });
 
@@ -189,6 +193,11 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
             }
         }
         return v;
+    }
+
+    private static void hideKeyboard(View floatingButtonView) {
+        InputMethodManager imm = (InputMethodManager) AddIssue.instance.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(floatingButtonView.getWindowToken(), 0);
     }
 
     void setItems(ArrayList<Purchase> items) {

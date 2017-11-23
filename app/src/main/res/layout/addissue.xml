@@ -1,145 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="fill_parent"
-              android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/addissue_title"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:textStyle="bold"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:text="@string/input_error__select_condition"
-        android:textAlignment="center"
-        android:textAppearance="?android:textAppearanceLargeInverse"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"/>
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal">
-        <TextView
-            android:id="@+id/addissue_condition"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:text="@string/condition" />
+            android:layout_marginTop="10dp"
+            android:id="@+id/condition_section"
+            android:layout_above="@id/purchasesection"
+            android:orientation="horizontal">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                      android:layout_width="0dp"
-                      android:layout_weight="2"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical"
-                      android:gravity="center">
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                          android:id="@+id/condition_selector"
-                          android:layout_width="fill_parent"
-                          android:layout_height="20dp"
-                          android:orientation="horizontal">
-                <net.igenius.customcheckbox.CustomCheckBox
-                    android:id="@+id/nocondition"
-                    android:layout_width="20dp"
-                    app:color_checked="#989898"
-                    app:color_unchecked="#989898"
-                    app:duration="1"
-                    app:stroke_width="5dp"
-                    android:contentDescription="@string/condition_none"
-                    android:checked="true"
-                    android:layout_height="fill_parent"/>
-
-                <net.igenius.customcheckbox.CustomCheckBox
-                    android:id="@+id/badcondition"
-                    android:layout_width="20dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    app:color_checked="#FF0000"
-                    app:color_unchecked="#FF0000"
-                    app:duration="100"
-                    android:contentDescription="@string/condition_bad"
-                    android:layout_height="fill_parent"/>
-
-                <net.igenius.customcheckbox.CustomCheckBox
-                    android:id="@+id/notsogoodcondition"
-                    android:layout_width="20dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    app:color_checked="#FF8000"
-                    app:color_unchecked="#FF8000"
-                    app:duration="100"
-                    android:contentDescription="@string/condition_notsogood"
-                    android:layout_height="fill_parent"/>
-
-                <net.igenius.customcheckbox.CustomCheckBox
-                    android:id="@+id/goodcondition"
-                    android:layout_width="20dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    app:color_checked="#2CA77B"
-                    app:color_unchecked="#2CA77B"
-                    app:duration="100"
-                    android:contentDescription="@string/condition_good"
-                    android:layout_height="fill_parent"/>
-            </LinearLayout>
             <TextView
-                android:id="@+id/addissue_condition_text"
-                android:layout_width="fill_parent"
-                android:layout_height="20dp"
-                android:textSize="12sp" />
+                android:id="@+id/addissue_condition"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1"
+                android:text="@string/condition"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/condition_selector"
+                    android:layout_width="fill_parent"
+                    android:layout_height="20dp"
+                    android:orientation="horizontal">
+
+                    <net.igenius.customcheckbox.CustomCheckBox
+                        android:id="@+id/nocondition"
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:checked="true"
+                        android:contentDescription="@string/condition_none"
+                        app:color_checked="#989898"
+                        app:color_unchecked="#989898"
+                        app:duration="1"
+                        app:stroke_width="5dp"/>
+
+                    <net.igenius.customcheckbox.CustomCheckBox
+                        android:id="@+id/badcondition"
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
+                        android:contentDescription="@string/condition_bad"
+                        app:color_checked="#FF0000"
+                        app:color_unchecked="#FF0000"
+                        app:duration="100"/>
+
+                    <net.igenius.customcheckbox.CustomCheckBox
+                        android:id="@+id/notsogoodcondition"
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
+                        android:contentDescription="@string/condition_notsogood"
+                        app:color_checked="#FF8000"
+                        app:color_unchecked="#FF8000"
+                        app:duration="100"/>
+
+                    <net.igenius.customcheckbox.CustomCheckBox
+                        android:id="@+id/goodcondition"
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
+                        android:contentDescription="@string/condition_good"
+                        app:color_checked="#2CA77B"
+                        app:color_unchecked="#2CA77B"
+                        app:duration="100"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/addissue_condition_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="20dp"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/purchasesection"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/addissue_purchasedate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:text="@string/purchase_date"/>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="start|top"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/purchase_list"
+                    android:layout_width="match_parent"
+                    android:divider="#989898"
+                    android:dividerHeight="0.5dp"
+                    android:layout_height="fill_parent"
+                    android:layout_marginBottom="26dp"
+                    tools:listitem="@layout/row_purchase"/>
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/addpurchase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/plus"
+                    app:fab_colorNormal="#84cfc6"
+                    app:fab_colorPressed="#84cfc6"
+                    app:fab_colorRipple="@android:color/white"
+                    app:fab_size="mini"/>
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:paddingTop="10dp"
-                  android:orientation="horizontal">
-        <TextView
-            android:id="@+id/addissue_purchasedate"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <Button
+            android:id="@+id/addissue_cancel"
             android:layout_width="0dp"
+            android:layout_height="25dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="4dp"
-            android:text="@string/purchase_date" />
+            android:background="@android:color/transparent"
+            android:text="@string/cancel"
+            android:textColor="@android:color/white"/>
 
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                      xmlns:tools="http://schemas.android.com/tools"
-                      android:layout_width="0dp"
-                      android:layout_height="180dp"
-                      android:layout_weight="2"
-                      android:gravity="start|top"
-                      android:orientation="vertical">
-
-            <ListView
-                android:id="@+id/purchase_list"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="26dp"
-                tools:listitem="@layout/row_purchase"/>
-
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/addpurchase"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginEnd="5dp"
-                android:src="@drawable/plus"
-                android:scaleType="fitXY"
-                app:fab_size="mini"
-                app:fab_colorNormal="#84cfc6"
-                app:fab_colorPressed="#84cfc6"
-                app:fab_colorRipple="@android:color/white"/>
-        </FrameLayout>
+        <Button
+            android:id="@+id/addissue_ok"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:text="@string/create"
+            android:textColor="#84cfc6"/>
     </LinearLayout>
 </LinearLayout>

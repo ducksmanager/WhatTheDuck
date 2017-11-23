@@ -1,6 +1,7 @@
 package net.ducksmanager.util;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,6 @@ import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
@@ -104,7 +104,10 @@ public class CoverFlowActivity extends Activity {
                 Issue newIssue = new Issue(current.getIssueNumber(), (Issue.IssueCondition) null);
                 WhatTheDuck.setSelectedCountry (current.getCountryCode());
                 WhatTheDuck.setSelectedPublication (current.getPublicationCode());
-                AddIssue.showAddIssueDialog(new WeakReference<Activity>(CoverFlowActivity.this), newIssue);
+                WhatTheDuck.setSelectedIssue(newIssue.getIssueNumber());
+
+                Intent i = new Intent(CoverFlowActivity.this, AddIssue.class);
+                startActivity(i);
             }
             else {
                 Toast.makeText(
