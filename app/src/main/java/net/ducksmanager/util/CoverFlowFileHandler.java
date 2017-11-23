@@ -10,7 +10,7 @@ import android.support.v4.content.FileProvider;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import net.ducksmanager.whattheduck.CoverSearch;
+import net.ducksmanager.retrievetasks.CoverSearch;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 

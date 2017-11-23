@@ -1,4 +1,4 @@
-package net.ducksmanager.whattheduck;
+package net.ducksmanager.retrievetasks;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,11 @@ import android.view.View;
 import com.koushikdutta.async.future.FutureCallback;
 
 import net.ducksmanager.util.CoverFlowActivity;
+import net.ducksmanager.whattheduck.IssueWithFullUrl;
+import net.ducksmanager.whattheduck.R;
+import net.ducksmanager.whattheduck.RetrieveTask;
+import net.ducksmanager.whattheduck.WhatTheDuck;
+import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.json.JSONException;
 import org.json.JSONObject;

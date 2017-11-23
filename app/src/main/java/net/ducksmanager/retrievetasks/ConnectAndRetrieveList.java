@@ -1,4 +1,4 @@
-package net.ducksmanager.whattheduck;
+package net.ducksmanager.retrievetasks;
 
 
 import android.content.Intent;
@@ -9,6 +9,13 @@ import android.widget.ProgressBar;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
+import net.ducksmanager.whattheduck.Collection;
+import net.ducksmanager.whattheduck.CountryList;
+import net.ducksmanager.whattheduck.Issue;
+import net.ducksmanager.whattheduck.R;
+import net.ducksmanager.whattheduck.RetrieveTask;
+import net.ducksmanager.whattheduck.WhatTheDuck;
+import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.json.JSONArray;
 import org.json.JSONException;

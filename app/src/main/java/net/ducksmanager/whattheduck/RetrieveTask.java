@@ -58,7 +58,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         RetrieveTask.progressBarId = progressBarId;
     }
 
-    RetrieveTask(String urlSuffix, Integer progressBarId, boolean legacyServer, FutureCallback futureCallback, String fileName, File file) {
+    protected RetrieveTask(String urlSuffix, Integer progressBarId, boolean legacyServer, FutureCallback futureCallback, String fileName, File file) {
         this.urlSuffix = urlSuffix;
         RetrieveTask.progressBarId = progressBarId;
         this.legacyServer = legacyServer;
@@ -118,7 +118,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         }
     }
 
-    boolean hasFailed() {
+    protected boolean hasFailed() {
         return this.thrownException != null;
     }
 }

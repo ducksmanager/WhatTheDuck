@@ -1,6 +1,12 @@
-package net.ducksmanager.whattheduck;
+package net.ducksmanager.retrievetasks;
 
 import android.app.Activity;
+
+import net.ducksmanager.whattheduck.PurchaseAdapter;
+import net.ducksmanager.whattheduck.R;
+import net.ducksmanager.whattheduck.RetrieveTask;
+import net.ducksmanager.whattheduck.WhatTheDuck;
+import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,7 +17,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 public abstract class GetPurchaseList extends RetrieveTask {
-    GetPurchaseList() {
+    protected GetPurchaseList() {
         super("&get_achats=true", R.id.progressBarLoading);
     }
 

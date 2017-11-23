@@ -1,4 +1,4 @@
-package net.ducksmanager.whattheduck;
+package net.ducksmanager.retrievetasks;
 
 
 import android.app.Activity;
@@ -7,6 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import net.ducksmanager.whattheduck.R;
+import net.ducksmanager.whattheduck.RetrieveTask;
+import net.ducksmanager.whattheduck.WhatTheDuck;
+import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;

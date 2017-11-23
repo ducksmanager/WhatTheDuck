@@ -12,9 +12,9 @@ import java.util.Set;
 
 public class Collection implements Serializable {
     private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<>();
-    private ArrayList<PurchaseAdapter.Purchase> purchaseList;
+    private ArrayList<PurchaseAdapter.Purchase> purchaseList = new ArrayList<>();
 
-    void setPurchaseList(ArrayList<PurchaseAdapter.Purchase> purchaseList) {
+    public void setPurchaseList(ArrayList<PurchaseAdapter.Purchase> purchaseList) {
         this.purchaseList = purchaseList;
     }
 

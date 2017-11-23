@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
+import net.ducksmanager.retrievetasks.CoverSearch;
 import net.ducksmanager.util.CoverFlowFileHandler;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 

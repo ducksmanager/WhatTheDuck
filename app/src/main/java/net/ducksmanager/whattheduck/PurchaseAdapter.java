@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.ducksmanager.retrievetasks.CreatePurchase;
+import net.ducksmanager.retrievetasks.GetPurchaseList;
 import net.igenius.customcheckbox.CustomCheckBox;
 
 import java.lang.ref.WeakReference;
@@ -27,7 +29,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
     private final Calendar myCalendar = Calendar.getInstance();
 
-    static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     public static class Purchase {
         Integer id = null;
@@ -35,7 +37,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         final String purchaseName;
         Boolean isNewPurchase = Boolean.FALSE;
 
-        Purchase(Integer id, Date purchaseDate, String purchaseName) {
+        public Purchase(Integer id, Date purchaseDate, String purchaseName) {
             this.id = id;
             this.purchaseDate = purchaseDate;
             this.purchaseName = purchaseName;

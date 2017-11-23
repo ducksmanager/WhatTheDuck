@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.IssueListing;
+import net.ducksmanager.retrievetasks.GetPurchaseList;
 import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 

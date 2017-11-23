@@ -1,7 +1,12 @@
-package net.ducksmanager.whattheduck;
+package net.ducksmanager.retrievetasks;
 
 
 import android.app.Activity;
+
+import net.ducksmanager.whattheduck.R;
+import net.ducksmanager.whattheduck.RetrieveTask;
+import net.ducksmanager.whattheduck.WhatTheDuck;
+import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import java.lang.ref.WeakReference;
 
@@ -9,7 +14,7 @@ public abstract class CreatePurchase extends RetrieveTask {
 
     private static WeakReference<Activity> originActivityRef;
 
-    CreatePurchase(WeakReference<Activity> originActivityRef, String purchaseDateStr, String purchaseName) {
+    protected CreatePurchase(WeakReference<Activity> originActivityRef, String purchaseDateStr, String purchaseName) {
         super(
             "&ajouter_achat"
                 +"&date_achat="+purchaseDateStr

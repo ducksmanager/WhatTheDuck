@@ -4,29 +4,22 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import net.ducksmanager.inducks.coa.CountryListing;
-import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.util.MultipleCustomCheckboxes;
-import net.ducksmanager.util.SimpleCallback;
 import net.igenius.customcheckbox.CustomCheckBox;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
 
-import java.lang.ref.WeakReference;
-
-public class AddIssue extends RetrieveTask {
+public class AddIssue {
 
     static WeakReference<Activity> originActivityRef;
-    private static String shortCountryAndPublication;
-    private static Issue selectedIssue;
 
     static WeakReference<View> dialogViewRef;
     static MultipleCustomCheckboxes purchaseDateCheckboxes;
@@ -34,72 +27,6 @@ public class AddIssue extends RetrieveTask {
 
     private static String selectedCondition = null;
     private static Integer selectedPurchaseId = null;
-
-    private AddIssue(WeakReference<Activity> originActivityRef, String shortCountryAndPublication, Issue selectedIssue) {
-        super(
-            "&ajouter_numero"
-            +"&pays_magazine="+shortCountryAndPublication
-            +"&numero="+selectedIssue.getIssueNumber()
-            +"&id_acquisition="+selectedIssue.getPurchaseId()
-            +"&etat="+selectedIssue.getIssueConditionStr(),
-                R.id.progressBarLoading
-        );
-        AddIssue.originActivityRef = originActivityRef;
-        AddIssue.shortCountryAndPublication = shortCountryAndPublication;
-        AddIssue.selectedIssue = selectedIssue;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, progressBarId, true);
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addissue/start");
-    }
-
-    @Override
-    protected void onPostExecute(String response) {
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addissue/finish");
-        if (response.equals("OK")) {
-            WhatTheDuck.wtd.info(originActivityRef, R.string.confirmation_message__issue_inserted);
-            WhatTheDuck.userCollection.addIssue(shortCountryAndPublication, selectedIssue);
-
-            updateNamesAndGoToIssueList();
-        }
-        else {
-            WhatTheDuck.wtd.alert(R.string.internal_error, R.string.internal_error__issue_insertion_failed);
-        }
-
-        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, progressBarId, false);
-    }
-
-    static private void updateNamesAndGoToIssueList() {
-        Activity callbackActivity = originActivityRef.get();
-
-        String country=shortCountryAndPublication.split("/")[0];
-        if (PublicationListing.hasFullList(country)) {
-            callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
-        }
-        else {
-            new PublicationListing(callbackActivity, country, new SimpleCallback() {
-                @Override
-                public void onDownloadFinished(WeakReference<Activity> activityRef) {
-                    Activity callbackActivity = originActivityRef.get();
-
-                    if (CountryListing.hasFullList) {
-                        callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
-                    }
-                    else {
-                        new CountryListing(callbackActivity, new SimpleCallback() {
-                            @Override
-                            public void onDownloadFinished(WeakReference<Activity> activityRef) {
-                                Activity callbackActivity = originActivityRef.get();
-                                callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
-                            }
-                        }).execute();
-                    }
-                }
-            }).execute();
-        }
-    }
 
     static void toggleAddPurchaseButton(Boolean toggle) {
         dialogViewRef.get().findViewById(R.id.addpurchase).setEnabled(toggle);
@@ -117,6 +44,7 @@ public class AddIssue extends RetrieveTask {
 
     static public void showAddIssueDialog(final WeakReference<Activity> activityRef, final Issue selectedIssue) {
         final Context appContext = WhatTheDuck.wtd.getApplicationContext();
+        originActivityRef = activityRef;
 
         purchases = WhatTheDuck.userCollection.getPurchaseListWithEmptyItem();
 
@@ -142,7 +70,7 @@ public class AddIssue extends RetrieveTask {
                         DMcondition = Issue.GOOD_CONDITION;
                     selectedIssue.setIssueCondition(Issue.issueConditionStrToIssueCondition(DMcondition));
                     selectedIssue.setPurchaseId(selectedPurchaseId == null ? -2 : selectedPurchaseId);
-                    new AddIssue(activityRef, WhatTheDuck.getSelectedPublication(), selectedIssue).execute();
+                    new net.ducksmanager.retrievetasks.AddIssue(activityRef, WhatTheDuck.getSelectedPublication(), selectedIssue).execute();
                 }
             })
             .setNegativeButton(appContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
