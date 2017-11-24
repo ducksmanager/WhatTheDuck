@@ -50,6 +50,11 @@ public class CountryAdapter extends ItemAdapter<CountryAdapter.Country> {
     }
 
     @Override
+    protected String getSuffixText(Country i, Activity activity) {
+        return null;
+    }
+
+    @Override
     protected String getText(Country i) {
         return i.getFullName();
     }

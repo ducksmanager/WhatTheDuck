@@ -33,6 +33,15 @@ public class IssueAdapter extends ItemAdapter<Issue> {
     }
 
     @Override
+    protected String getSuffixText(Issue i, Activity activity) {
+        if (i.getPurchase() != null) {
+            return PurchaseAdapter.dateFormat.format(i.getPurchase().getPurchaseDate());
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     protected String getText(Issue i) {
         return i.getIssueNumber();
     }

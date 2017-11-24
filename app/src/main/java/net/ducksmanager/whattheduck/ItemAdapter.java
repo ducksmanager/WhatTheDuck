@@ -97,6 +97,17 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
                     suffixImage.setImageResource(imageResource);
                 }
             }
+
+            TextView suffixText = v.findViewById(R.id.suffixtext);
+            if (suffixText != null) {
+                String text = getSuffixText(i, (Activity) this.getContext());
+                if (text == null) {
+                    suffixText.setVisibility(View.GONE);
+                } else {
+                    suffixText.setVisibility(View.VISIBLE);
+                    suffixText.setText(text);
+                }
+            }
         }
         return v;
     }
@@ -116,6 +127,8 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
     protected abstract Integer getPrefixImageResource(Item i, Activity activity);
 
     protected abstract Integer getSuffixImageResource(Item i, Activity activity);
+
+    protected abstract String getSuffixText(Item i, Activity activity);
 
     protected abstract String getComparatorText(Item i);
 

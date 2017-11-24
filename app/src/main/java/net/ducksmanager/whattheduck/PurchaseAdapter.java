@@ -223,6 +223,11 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
     }
 
     @Override
+    protected String getSuffixText(Purchase i, Activity activity) {
+        return null;
+    }
+
+    @Override
     protected String getText(Purchase i) {
         return i == null
             ? ""

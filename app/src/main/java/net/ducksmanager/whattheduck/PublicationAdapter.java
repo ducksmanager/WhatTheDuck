@@ -46,6 +46,11 @@ public class PublicationAdapter extends ItemAdapter<PublicationAdapter.Publicati
     }
 
     @Override
+    protected String getSuffixText(Publication i, Activity activity) {
+        return null;
+    }
+
+    @Override
     protected String getText(Publication i) {
         return i.getPublicationTitle();
     }
