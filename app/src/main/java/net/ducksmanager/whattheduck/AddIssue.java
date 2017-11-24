@@ -19,7 +19,6 @@ import java.util.Date;
 public class AddIssue extends Activity {
 
     static AddIssue instance;
-    static MultipleCustomCheckboxes purchaseDateCheckboxes;
     static ArrayList<PurchaseAdapter.Purchase> purchases;
 
     private static String selectedCondition = null;
@@ -58,7 +57,7 @@ public class AddIssue extends Activity {
 
         ListView lv = this.findViewById(R.id.purchase_list);
 
-        purchaseDateCheckboxes = new MultipleCustomCheckboxes(
+        final MultipleCustomCheckboxes purchaseDateCheckboxes = new MultipleCustomCheckboxes(
             new WeakReference<>((View)lv),
             new View.OnClickListener() {
                 @Override
@@ -73,8 +72,19 @@ public class AddIssue extends Activity {
                 }
             }
         );
-
         lv.setAdapter(new PurchaseAdapter(this, purchases));
+        lv.post(new Runnable() {
+            @Override
+            public void run() {
+                purchaseDateCheckboxes.initClickEvents();
+                purchaseDateCheckboxes.checkInitialCheckbox(new MultipleCustomCheckboxes.CheckboxFilter() {
+                    @Override
+                    public boolean isMatched(CustomCheckBox checkbox) {
+                        return checkbox.getContentDescription() == null;
+                    }
+                });
+            }
+        });
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -77,13 +77,11 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
     public View getView(int position, View convertView, @NonNull final ViewGroup parent) {
         View v = super.getView(position, convertView, parent);
 
-        CustomCheckBox purchaseCheck = v.findViewById(R.id.purchasecheck);
-        purchaseCheck.setOnCheckedChangeListener(AddIssue.purchaseDateCheckboxes.onCheckedListener);
-
         Purchase purchase = getItem(position);
         Boolean isNoPurchase = purchase == null;
         Boolean isNewPurchase = purchase != null && purchase.getIsNewPurchase();
 
+        CustomCheckBox purchaseCheck = v.findViewById(R.id.purchasecheck);
         TextView purchaseDate = v.findViewById(R.id.purchasedate);
         TextView purchaseTitle = getTitleTextView(v);
         TextView noPurchaseTitle = v.findViewById(R.id.nopurchase);
