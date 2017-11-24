@@ -12,6 +12,7 @@ import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.whattheduck.Collection;
 import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.Issue;
+import net.ducksmanager.whattheduck.PurchaseAdapter;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
@@ -22,6 +23,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Iterator;
 
 public class ConnectAndRetrieveList extends RetrieveTask {
@@ -93,9 +96,26 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                             String countryAndPublication = issueIterator.next();
                             JSONArray publicationIssues = issues.getJSONArray(countryAndPublication);
                             for (int i = 0; i < publicationIssues.length(); i++) {
-                                String issueNumber = publicationIssues.getJSONObject(i).getString("Numero");
-                                String issueCondition = publicationIssues.getJSONObject(i).getString("Etat");
-                                WhatTheDuck.userCollection.addIssue(countryAndPublication, new Issue(issueNumber, issueCondition));
+                                JSONObject issueObject = publicationIssues.getJSONObject(i);
+                                String issueNumber = issueObject.getString("Numero");
+                                String issueCondition = issueObject.getString("Etat");
+
+                                PurchaseAdapter.Purchase purchase;
+                                if (issueObject.isNull("Acquisition")) {
+                                    purchase = null;
+                                }
+                                else {
+                                    JSONObject purchaseObject = issueObject.getJSONObject("Acquisition");
+                                    Integer purchaseId = purchaseObject.getInt("ID_Acquisition");
+                                    Date purchaseDate = PurchaseAdapter.dateFormat.parse(purchaseObject.getString("Date_Acquisition"));
+                                    String purchaseName = purchaseObject.getString("Description_Acquisition");
+                                    purchase = new PurchaseAdapter.Purchase(purchaseId, purchaseDate, purchaseName);
+                                }
+
+                                WhatTheDuck.userCollection.addIssue(
+                                    countryAndPublication,
+                                    new Issue(issueNumber, issueCondition, purchase)
+                                );
                             }
                         }
 
@@ -119,6 +139,9 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                 JSONArray issues = object.getJSONArray("numeros");
                 if (issues.length() > 0)
                     throw e;
+            } catch (ParseException e) {
+                WhatTheDuck.wtd.alert(R.string.internal_error,
+                    R.string.internal_error__malformed_list, " : " + e.getMessage());
             } finally {
                 wtdActivity.toggleProgressbarLoading(progressBarId, false);
             }

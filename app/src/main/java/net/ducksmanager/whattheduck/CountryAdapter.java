@@ -34,7 +34,7 @@ public class CountryAdapter extends ItemAdapter<CountryAdapter.Country> {
     }
 
     @Override
-    protected Integer getImageResource(Country i, Activity a) {
+    protected Integer getPrefixImageResource(Country i, Activity a) {
         String uri = "@drawable/flags_" + i.getShortName();
         int imageResource = a.getResources().getIdentifier(uri, null, a.getPackageName());
 
@@ -42,6 +42,11 @@ public class CountryAdapter extends ItemAdapter<CountryAdapter.Country> {
             imageResource = R.drawable.flags_unknown;
         }
         return imageResource;
+    }
+
+    @Override
+    protected Integer getSuffixImageResource(Country i, Activity activity) {
+        return null;
     }
 
     @Override

@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class GetPurchaseList extends RetrieveTask {
     protected GetPurchaseList() {
@@ -42,22 +42,26 @@ public abstract class GetPurchaseList extends RetrieveTask {
 
             JSONObject object = new JSONObject(response);
             if (object.has("achats")) {
-                ArrayList<PurchaseAdapter.Purchase> purchases = new ArrayList<>();
+                HashMap<Integer, PurchaseAdapter.Purchase> purchases = new HashMap<>();
 
                 JSONArray purchaseObjects = object.getJSONArray("achats");
                 for (int i = 0; i < purchaseObjects.length(); i++) {
                     JSONObject purchaseObject = (JSONObject) purchaseObjects.get(i);
                     try {
-                        purchases.add(new PurchaseAdapter.Purchase(
-                            Integer.parseInt((String) purchaseObject.get("ID_Acquisition")),
-                            PurchaseAdapter.dateFormat.parse((String)purchaseObject.get("Date")),
-                            (String) purchaseObject.get("Description")
-                        ));
+                        Integer purchaseId = Integer.parseInt((String) purchaseObject.get("ID_Acquisition"));
+                        purchases.put(
+                            purchaseId,
+                            new PurchaseAdapter.Purchase(
+                                purchaseId,
+                                PurchaseAdapter.dateFormat.parse((String)purchaseObject.get("Date")),
+                                (String) purchaseObject.get("Description")
+                            )
+                        );
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 }
-                WhatTheDuck.userCollection.setPurchaseList(purchases);
+                WhatTheDuck.userCollection.setPurchases(purchases);
             }
         } catch (JSONException e) {
             e.printStackTrace();

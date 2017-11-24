@@ -213,7 +213,12 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
     }
 
     @Override
-    protected Integer getImageResource(Purchase i, Activity activity) {
+    protected Integer getPrefixImageResource(Purchase i, Activity activity) {
+        return null;
+    }
+
+    @Override
+    protected Integer getSuffixImageResource(Purchase i, Activity activity) {
         return null;
     }
 

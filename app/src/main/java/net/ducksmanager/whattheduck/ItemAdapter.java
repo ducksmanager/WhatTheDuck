@@ -78,12 +78,23 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
 
             ImageView prefixImage = v.findViewById(R.id.prefiximage);
             if (prefixImage != null) {
-                Integer imageResource = getImageResource(i, (Activity) this.getContext());
+                Integer imageResource = getPrefixImageResource(i, (Activity) this.getContext());
                 if (imageResource == null) {
                     prefixImage.setVisibility(View.GONE);
                 } else {
                     prefixImage.setVisibility(View.VISIBLE);
                     prefixImage.setImageResource(imageResource);
+                }
+            }
+
+            ImageView suffixImage = v.findViewById(R.id.suffiximage);
+            if (suffixImage != null) {
+                Integer imageResource = getSuffixImageResource(i, (Activity) this.getContext());
+                if (imageResource == null) {
+                    suffixImage.setVisibility(View.GONE);
+                } else {
+                    suffixImage.setVisibility(View.VISIBLE);
+                    suffixImage.setImageResource(imageResource);
                 }
             }
         }
@@ -102,7 +113,9 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
 
     protected abstract boolean isHighlighted(Item i);
 
-    protected abstract Integer getImageResource(Item i, Activity activity);
+    protected abstract Integer getPrefixImageResource(Item i, Activity activity);
+
+    protected abstract Integer getSuffixImageResource(Item i, Activity activity);
 
     protected abstract String getComparatorText(Item i);
 

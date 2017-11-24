@@ -15,11 +15,20 @@ public class IssueAdapter extends ItemAdapter<Issue> {
     }
 
     @Override
-    protected Integer getImageResource(Issue i, Activity activity) {
+    protected Integer getPrefixImageResource(Issue i, Activity activity) {
         if (i.getIssueCondition() != null) {
             return Issue.issueConditionToResourceId(i.getIssueCondition());
         } else {
             return android.R.color.transparent;
+        }
+    }
+
+    @Override
+    protected Integer getSuffixImageResource(Issue i, Activity activity) {
+        if (i.getPurchase() != null) {
+            return R.drawable.ic_clock;
+        } else {
+            return null;
         }
     }
 

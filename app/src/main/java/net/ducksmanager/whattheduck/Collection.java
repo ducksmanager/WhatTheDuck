@@ -12,18 +12,19 @@ import java.util.Set;
 
 public class Collection implements Serializable {
     private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<>();
-    private ArrayList<PurchaseAdapter.Purchase> purchaseList = new ArrayList<>();
+    private HashMap<Integer, PurchaseAdapter.Purchase> purchases = new HashMap<>();
 
-    public void setPurchaseList(ArrayList<PurchaseAdapter.Purchase> purchaseList) {
-        this.purchaseList = purchaseList;
+    public void setPurchases(HashMap<Integer, PurchaseAdapter.Purchase> purchases) {
+        this.purchases = purchases;
     }
 
-    private ArrayList<PurchaseAdapter.Purchase> getPurchaseList() {
-        return purchaseList;
+    private HashMap<Integer, PurchaseAdapter.Purchase> getPurchases() {
+        return purchases;
     }
 
     ArrayList<PurchaseAdapter.Purchase> getPurchaseListWithEmptyItem() {
-        ArrayList<PurchaseAdapter.Purchase> purchaseListWithEmptyItem = (ArrayList<PurchaseAdapter.Purchase>) getPurchaseList().clone();
+        ArrayList<PurchaseAdapter.Purchase> purchaseListWithEmptyItem =
+            new ArrayList<>(getPurchases().values());
         purchaseListWithEmptyItem.add(null);
         return purchaseListWithEmptyItem;
     }
@@ -83,11 +84,13 @@ public class Collection implements Serializable {
             if (list != null) {
                 for (Issue issue : list) {
                     IssueCondition condition = null;
+                    PurchaseAdapter.Purchase purchase = null;
                     Issue existingIssue = WhatTheDuck.userCollection.getIssue(shortCountryName, shortPublicationName, issue.getIssueNumber());
                     if (existingIssue != null) {
                         condition = existingIssue.getIssueCondition();
+                        purchase = existingIssue.getPurchase();
                     }
-                    finalList.add(new Issue(issue.getIssueNumber(), condition));
+                    finalList.add(new Issue(issue.getIssueNumber(), condition, purchase));
                 }
             }
         }
@@ -114,5 +117,12 @@ public class Collection implements Serializable {
                 return i;
         }
         return null;
+    }
+
+    public PurchaseAdapter.Purchase getPurchase(Integer purchaseId) {
+        if (purchaseId == null) {
+            return null;
+        }
+        return purchases.get(purchaseId);
     }
 }

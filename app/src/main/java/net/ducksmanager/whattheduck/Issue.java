@@ -10,9 +10,10 @@ public class Issue implements Serializable {
     public static final String NO_CONDITION="indefini";
 
     private final String issueNumber;
+
     public enum IssueCondition {BAD_CONDITION, NOTSOGOOD_CONDITION, GOOD_CONDITION, NO_CONDITION}
     private IssueCondition issueCondition;
-    private Integer purchaseId;
+    private PurchaseAdapter.Purchase purchase;
 
     public Issue(String issuenumber, String issueCondition) {
         super();
@@ -20,10 +21,24 @@ public class Issue implements Serializable {
         this.issueCondition=issueConditionStrToIssueCondition(issueCondition);
     }
 
+    public Issue(String issuenumber, String issueCondition, PurchaseAdapter.Purchase purchase) {
+        super();
+        this.issueNumber = issuenumber;
+        this.issueCondition=issueConditionStrToIssueCondition(issueCondition);
+        this.purchase = purchase;
+    }
+
     public Issue(String issuenumber, IssueCondition issueCondition) {
         super();
         this.issueNumber = issuenumber;
         this.issueCondition = issueCondition;
+    }
+
+    public Issue(String issuenumber, IssueCondition issueCondition, PurchaseAdapter.Purchase purchase) {
+        super();
+        this.issueNumber = issuenumber;
+        this.issueCondition = issueCondition;
+        this.purchase = purchase;
     }
 
     public String getIssueNumber() {
@@ -89,11 +104,11 @@ public class Issue implements Serializable {
         return issueConditionToIssueConditionStr(issueCondition);
     }
 
-    public Integer getPurchaseId() {
-        return purchaseId;
+    public PurchaseAdapter.Purchase getPurchase() {
+        return purchase;
     }
 
-    public void setPurchaseId(Integer purchaseId) {
-        this.purchaseId = purchaseId;
+    public void setPurchase(PurchaseAdapter.Purchase purchase) {
+        this.purchase = purchase;
     }
 }

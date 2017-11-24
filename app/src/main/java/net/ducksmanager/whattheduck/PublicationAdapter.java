@@ -35,7 +35,13 @@ public class PublicationAdapter extends ItemAdapter<PublicationAdapter.Publicati
     }
 
     @Override
-    protected Integer getImageResource(Publication i, Activity activity) {
+    protected Integer getPrefixImageResource(Publication i, Activity activity) {
+        return null;
+    }
+
+
+    @Override
+    protected Integer getSuffixImageResource(Publication i, Activity activity) {
         return null;
     }
 

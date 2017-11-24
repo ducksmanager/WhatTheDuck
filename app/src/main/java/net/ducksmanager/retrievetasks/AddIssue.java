@@ -26,7 +26,7 @@ public class AddIssue extends RetrieveTask {
             "&ajouter_numero"
             +"&pays_magazine="+shortCountryAndPublication
             +"&numero="+selectedIssue.getIssueNumber()
-            +"&id_acquisition="+selectedIssue.getPurchaseId()
+            +"&id_acquisition="+selectedIssue.getPurchase().getId()
             +"&etat="+selectedIssue.getIssueConditionStr(),
                 R.id.progressBarLoading
         );

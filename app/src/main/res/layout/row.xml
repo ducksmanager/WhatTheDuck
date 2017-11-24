@@ -24,4 +24,14 @@
             android:layout_height="match_parent"
             android:text="@string/itemtitle" />
     </LinearLayout>
+    <ImageView
+        android:id="@+id/suffiximage"
+        android:layout_width="20dp"
+        android:layout_height="fill_parent"
+        android:layout_marginRight="4dp"
+        android:layout_marginEnd="4dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_clock"
+        android:scaleType="fitCenter"
+        android:contentDescription="@+id/suffiximage_description" />
 </LinearLayout>

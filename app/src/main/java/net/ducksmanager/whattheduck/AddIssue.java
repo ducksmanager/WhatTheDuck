@@ -106,12 +106,15 @@ public class AddIssue extends Activity {
                     DMcondition = Issue.NOTSOGOOD_CONDITION;
                 else
                     DMcondition = Issue.GOOD_CONDITION;
-                Issue selectedIssue = new Issue(WhatTheDuck.getSelectedIssue(), DMcondition);
-                selectedIssue.setPurchaseId(selectedPurchaseId == null ? -2 : selectedPurchaseId);
 
                 new net.ducksmanager.retrievetasks.AddIssue(
                     new WeakReference<Activity>(AddIssue.this),
-                    WhatTheDuck.getSelectedPublication(), selectedIssue
+                    WhatTheDuck.getSelectedPublication(),
+                    new Issue(
+                        WhatTheDuck.getSelectedIssue(),
+                        DMcondition,
+                        WhatTheDuck.userCollection.getPurchase(selectedPurchaseId)
+                    )
                 ).execute();
             }
         });
