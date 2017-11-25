@@ -13,7 +13,7 @@ public class Issue implements Serializable {
 
     public enum IssueCondition {BAD_CONDITION, NOTSOGOOD_CONDITION, GOOD_CONDITION, NO_CONDITION}
     private IssueCondition issueCondition;
-    private PurchaseAdapter.Purchase purchase;
+    private PurchaseWithDate purchase;
 
     public Issue(String issuenumber, String issueCondition) {
         super();
@@ -21,7 +21,7 @@ public class Issue implements Serializable {
         this.issueCondition=issueConditionStrToIssueCondition(issueCondition);
     }
 
-    public Issue(String issuenumber, String issueCondition, PurchaseAdapter.Purchase purchase) {
+    public Issue(String issuenumber, String issueCondition, PurchaseWithDate purchase) {
         super();
         this.issueNumber = issuenumber;
         this.issueCondition=issueConditionStrToIssueCondition(issueCondition);
@@ -34,7 +34,7 @@ public class Issue implements Serializable {
         this.issueCondition = issueCondition;
     }
 
-    public Issue(String issuenumber, IssueCondition issueCondition, PurchaseAdapter.Purchase purchase) {
+    public Issue(String issuenumber, IssueCondition issueCondition, PurchaseWithDate purchase) {
         super();
         this.issueNumber = issuenumber;
         this.issueCondition = issueCondition;
@@ -104,11 +104,11 @@ public class Issue implements Serializable {
         return issueConditionToIssueConditionStr(issueCondition);
     }
 
-    public PurchaseAdapter.Purchase getPurchase() {
+    public PurchaseWithDate getPurchase() {
         return purchase;
     }
 
-    public void setPurchase(PurchaseAdapter.Purchase purchase) {
+    public void setPurchase(PurchaseWithDate purchase) {
         this.purchase = purchase;
     }
 }

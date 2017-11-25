@@ -2,7 +2,9 @@ package net.ducksmanager.retrievetasks;
 
 import android.app.Activity;
 
+import net.ducksmanager.whattheduck.Purchase;
 import net.ducksmanager.whattheduck.PurchaseAdapter;
+import net.ducksmanager.whattheduck.PurchaseWithDate;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
@@ -42,7 +44,7 @@ public abstract class GetPurchaseList extends RetrieveTask {
 
             JSONObject object = new JSONObject(response);
             if (object.has("achats")) {
-                HashMap<Integer, PurchaseAdapter.Purchase> purchases = new HashMap<>();
+                HashMap<Integer, Purchase> purchases = new HashMap<>();
 
                 JSONArray purchaseObjects = object.getJSONArray("achats");
                 for (int i = 0; i < purchaseObjects.length(); i++) {
@@ -51,7 +53,7 @@ public abstract class GetPurchaseList extends RetrieveTask {
                         Integer purchaseId = Integer.parseInt((String) purchaseObject.get("ID_Acquisition"));
                         purchases.put(
                             purchaseId,
-                            new PurchaseAdapter.Purchase(
+                            new PurchaseWithDate(
                                 purchaseId,
                                 PurchaseAdapter.dateFormat.parse((String)purchaseObject.get("Date")),
                                 (String) purchaseObject.get("Description")

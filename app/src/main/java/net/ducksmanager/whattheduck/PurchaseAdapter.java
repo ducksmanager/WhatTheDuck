@@ -25,51 +25,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
-public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
+public class PurchaseAdapter extends ItemAdapter<Purchase> {
 
     private final Calendar myCalendar = Calendar.getInstance();
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-    public static class Purchase {
-        Integer id = null;
-        final Date purchaseDate;
-        final String purchaseName;
-        Boolean isNewPurchase = Boolean.FALSE;
-
-        public Purchase(Integer id, Date purchaseDate, String purchaseName) {
-            this.id = id;
-            this.purchaseDate = purchaseDate;
-            this.purchaseName = purchaseName;
-        }
-
-        Purchase(Integer id, Date purchaseDate, String purchaseName, Boolean isNewPurchase) {
-            this(id,purchaseDate,purchaseName);
-            this.isNewPurchase = isNewPurchase;
-        }
-
-        public Integer getId() {
-            return id;
-        }
-
-        Date getPurchaseDate() {
-            return purchaseDate;
-        }
-
-        String getPurchaseName() {
-            return purchaseName;
-        }
-
-        Boolean getIsNewPurchase() {
-            return isNewPurchase;
-        }
-    }
-
-
-    PurchaseAdapter(Activity activity, ArrayList<Purchase> items) {
-        super(activity, R.layout.row_purchase, items);
+    PurchaseAdapter(Activity activity, HashMap<String,Purchase> items) {
+        super(activity, R.layout.row_purchase, new ArrayList<>(items.values()));
     }
 
     @NonNull
@@ -78,8 +44,11 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         View v = super.getView(position, convertView, parent);
 
         Purchase purchase = getItem(position);
-        Boolean isNoPurchase = purchase == null;
-        Boolean isNewPurchase = purchase != null && purchase.getIsNewPurchase();
+        if (purchase == null) {
+            return v;
+        }
+        Boolean isNoPurchase = purchase.isNoPurchase();
+        Boolean isNewPurchase = purchase.isNewPurchase();
 
         CustomCheckBox purchaseCheck = v.findViewById(R.id.purchasecheck);
         TextView purchaseDate = v.findViewById(R.id.purchasedate);
@@ -101,7 +70,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         if (isNewPurchase) {
             v.setMinimumHeight(80);
             purchaseDateNew.requestFocus();
-            purchaseDateNew.setText(dateFormat.format(purchase.getPurchaseDate()));
+            purchaseDateNew.setText(dateFormat.format(new Date()));
             purchaseDateNew.setKeyListener(null);
             final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -151,8 +120,8 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
                                 @Override
                                 protected void afterDataHandling() {
                                     AddIssue.instance.toggleAddPurchaseButton(true);
-                                    AddIssue.purchases = WhatTheDuck.userCollection.getPurchaseListWithEmptyItem();
-                                    AddIssue.instance.showPurchases();
+                                    AddIssue.purchases = WhatTheDuck.userCollection.getPurchasesWithEmptyItem();
+                                    AddIssue.instance.showPurchases(false);
                                 }
 
                                 @Override
@@ -168,26 +137,28 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
             purchaseCreateCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View floatingButtonView) {
-                    floatingButtonView.setEnabled(true);
-
                     hideKeyboard(floatingButtonView);
 
-                    AddIssue.purchases.remove(0);
+                    for (Purchase purchase : new ArrayList<>(AddIssue.purchases.values())) {
+                        if (purchase.isNewPurchase()) {
+                            AddIssue.purchases.remove(purchase.toString());
+                        }
+                    }
                     AddIssue.instance.toggleAddPurchaseButton(true);
-                    AddIssue.instance.showPurchases();
+                    AddIssue.instance.showPurchases(false);
                 }
             });
-
-            purchaseTitleNew.setText(purchase.getPurchaseName());
         }
         else {
             v.setMinimumHeight(40);
-            if (isNoPurchase) {
-                purchaseCheck.setContentDescription(null);
-            }
-            else {
-                purchaseCheck.setContentDescription("" + purchase.getId());
-                purchaseDate.setText(dateFormat.format(purchase.getPurchaseDate()));
+            purchaseCheck.setContentDescription(purchase.toString());
+
+            purchaseCheck.setTag(R.id.check_by_user, Boolean.FALSE);
+            purchaseCheck.setChecked(purchase.toString().equals(AddIssue.selectedPurchaseHash));
+            purchaseCheck.setTag(R.id.check_by_user, null);
+
+            if (!isNoPurchase) {
+                purchaseDate.setText(dateFormat.format(((PurchaseWithDate)purchase).getPurchaseDate()));
             }
         }
         return v;
@@ -196,10 +167,6 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
     private static void hideKeyboard(View floatingButtonView) {
         InputMethodManager imm = (InputMethodManager) AddIssue.instance.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(floatingButtonView.getWindowToken(), 0);
-    }
-
-    void setItems(ArrayList<Purchase> items) {
-        this.items = items;
     }
 
     @Override
@@ -228,10 +195,8 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
     }
 
     @Override
-    protected String getText(Purchase i) {
-        return i == null
-            ? ""
-            : i.getPurchaseName();
+    protected String getText(Purchase p) {
+        return p instanceof PurchaseWithDate ? ((PurchaseWithDate)p).getPurchaseName() : "";
     }
 
     protected Comparator<Purchase> getComparator() {
@@ -245,6 +210,10 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
     @Override
     protected String getComparatorText(Purchase i) {
-        return i == null ? "^" : i.getId() == null ? "_" : dateFormat.format(i.getPurchaseDate());
+        return i.isNewPurchase()
+            ? "_"
+            : i.isNoPurchase()
+                ? "^"
+                : dateFormat.format(((PurchaseWithDate) i).getPurchaseDate());
     }
 }

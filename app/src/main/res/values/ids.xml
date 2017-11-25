@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="direct_uncheck" type="id"/>
+    <item name="check_by_user" type="id"/>
 </resources>

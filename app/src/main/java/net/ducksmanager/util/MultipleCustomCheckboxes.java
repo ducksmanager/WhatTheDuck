@@ -15,21 +15,27 @@ public class MultipleCustomCheckboxes {
     public final CustomCheckBox.OnCheckedChangeListener onCheckedListener = new CustomCheckBox.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CustomCheckBox checkBox, boolean isChecked) {
-            if (isChecked) {
-                MultipleCustomCheckboxes.this.initClickEvents();
-                for (CustomCheckBox otherCheckbox : checkboxList) {
-                    if (!checkBox.equals(otherCheckbox)) {
-                        otherCheckbox.setTag(R.id.direct_uncheck, Boolean.FALSE);
-                        otherCheckbox.setChecked(false);
+            if (checkBox.getTag(R.id.check_by_user) != null) {
+                checkBox.setTag(R.id.check_by_user, null);
+            }
+            else {
+                if (isChecked) {
+                    MultipleCustomCheckboxes.this.initClickEvents();
+                    for (CustomCheckBox otherCheckbox : checkboxList) {
+                        if (!checkBox.equals(otherCheckbox)) {
+                            otherCheckbox.setTag(R.id.direct_uncheck, Boolean.FALSE);
+                            otherCheckbox.setChecked(false);
+                        }
                     }
-                }
-                customOnClick.onClick(checkBox);
-            } else {
-                if (checkBox.getTag(R.id.direct_uncheck) != null
-                    && checkBox.getTag(R.id.direct_uncheck).equals(Boolean.FALSE)) {
-                    checkBox.setTag(R.id.direct_uncheck, null);
+                    customOnChecked.onClick(checkBox);
                 } else {
-                    checkBox.setChecked(true);
+                    if (checkBox.getTag(R.id.direct_uncheck) != null
+                        && checkBox.getTag(R.id.direct_uncheck).equals(Boolean.FALSE)) {
+                        checkBox.setTag(R.id.direct_uncheck, null);
+                    } else {
+                        customOnUnchecked.onClick(checkBox);
+                        checkBox.setChecked(true);
+                    }
                 }
             }
         }
@@ -40,13 +46,15 @@ public class MultipleCustomCheckboxes {
     }
 
     private final WeakReference<View> container;
-    private final View.OnClickListener customOnClick;
+    private final View.OnClickListener customOnChecked;
+    private final View.OnClickListener customOnUnchecked;
 
     private final Set<CustomCheckBox> checkboxList = new HashSet<>();
 
-    public MultipleCustomCheckboxes(WeakReference<View> container, View.OnClickListener customOnClick) {
+    public MultipleCustomCheckboxes(WeakReference<View> container, View.OnClickListener customOnChecked, View.OnClickListener customOnUnchecked) {
         this.container = container;
-        this.customOnClick = customOnClick;
+        this.customOnChecked = customOnChecked;
+        this.customOnUnchecked = customOnUnchecked;
     }
 
     private void storeDescendantsOfType(ViewGroup v, Class type) {

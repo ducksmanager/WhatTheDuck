@@ -12,21 +12,26 @@ import java.util.Set;
 
 public class Collection implements Serializable {
     private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<>();
-    private HashMap<Integer, PurchaseAdapter.Purchase> purchases = new HashMap<>();
+    private HashMap<Integer, Purchase> purchases = new HashMap<>();
 
-    public void setPurchases(HashMap<Integer, PurchaseAdapter.Purchase> purchases) {
+    public void setPurchases(HashMap<Integer, Purchase> purchases) {
         this.purchases = purchases;
     }
 
-    private HashMap<Integer, PurchaseAdapter.Purchase> getPurchases() {
+    private HashMap<Integer, Purchase> getPurchases() {
         return purchases;
     }
 
-    ArrayList<PurchaseAdapter.Purchase> getPurchaseListWithEmptyItem() {
-        ArrayList<PurchaseAdapter.Purchase> purchaseListWithEmptyItem =
-            new ArrayList<>(getPurchases().values());
-        purchaseListWithEmptyItem.add(null);
-        return purchaseListWithEmptyItem;
+    HashMap<String,Purchase> getPurchasesWithEmptyItem() {
+        HashMap<String,Purchase> purchasesWithEmptyItem = new HashMap<>();
+
+        java.util.List<Purchase> values = new ArrayList<>(getPurchases().values());
+        values.add(new SpecialPurchase(true, false));
+        for (Purchase p : values) {
+            purchasesWithEmptyItem.put(p.toString(), p);
+        }
+
+        return purchasesWithEmptyItem;
     }
 
     public enum CollectionType {COA,USER}
@@ -84,7 +89,7 @@ public class Collection implements Serializable {
             if (list != null) {
                 for (Issue issue : list) {
                     IssueCondition condition = null;
-                    PurchaseAdapter.Purchase purchase = null;
+                    PurchaseWithDate purchase = null;
                     Issue existingIssue = WhatTheDuck.userCollection.getIssue(shortCountryName, shortPublicationName, issue.getIssueNumber());
                     if (existingIssue != null) {
                         condition = existingIssue.getIssueCondition();
@@ -102,7 +107,6 @@ public class Collection implements Serializable {
             && issues.get(countryShortName).size() > 0;
     }
 
-
     public boolean hasPublication (String shortCountryName, String shortPublicationName) {
         return hasCountry(shortCountryName)
             && issues.get(shortCountryName).get(shortPublicationName) != null
@@ -117,12 +121,5 @@ public class Collection implements Serializable {
                 return i;
         }
         return null;
-    }
-
-    public PurchaseAdapter.Purchase getPurchase(Integer purchaseId) {
-        if (purchaseId == null) {
-            return null;
-        }
-        return purchases.get(purchaseId);
     }
 }

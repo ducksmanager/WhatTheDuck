@@ -13,16 +13,15 @@ import net.ducksmanager.util.MultipleCustomCheckboxes;
 import net.igenius.customcheckbox.CustomCheckBox;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 
 public class AddIssue extends Activity {
 
     static AddIssue instance;
-    static ArrayList<PurchaseAdapter.Purchase> purchases;
+    static HashMap<String,Purchase> purchases;
 
     private static String selectedCondition = null;
-    private static Integer selectedPurchaseId = null;
+    static String selectedPurchaseHash = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,7 +29,7 @@ public class AddIssue extends Activity {
         instance = this;
 
         setContentView(R.layout.addissue);
-        purchases = WhatTheDuck.userCollection.getPurchaseListWithEmptyItem();
+        purchases = WhatTheDuck.userCollection.getPurchasesWithEmptyItem();
 
         show();
     }
@@ -44,6 +43,13 @@ public class AddIssue extends Activity {
                     selectedCondition = view.getContentDescription().toString();
                     ((TextView) AddIssue.this.findViewById(R.id.addissue_condition_text)).setText(selectedCondition);
                 }
+            },
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectedCondition = null;
+                    ((TextView) AddIssue.this.findViewById(R.id.addissue_condition_text)).setText("");
+                }
             }
 
         );
@@ -55,7 +61,7 @@ public class AddIssue extends Activity {
             }
         });
 
-        showPurchases();
+        showPurchases(true);
 
         this.findViewById(R.id.addissue_ok).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,13 +77,17 @@ public class AddIssue extends Activity {
                 else
                     DMcondition = Issue.GOOD_CONDITION;
 
+                Purchase selectedPurchase= purchases.get(selectedPurchaseHash);
+
                 new net.ducksmanager.retrievetasks.AddIssue(
                     new WeakReference<Activity>(AddIssue.this),
                     WhatTheDuck.getSelectedPublication(),
                     new Issue(
                         WhatTheDuck.getSelectedIssue(),
                         DMcondition,
-                        WhatTheDuck.userCollection.getPurchase(selectedPurchaseId)
+                        selectedPurchase instanceof PurchaseWithDate
+                            ? (PurchaseWithDate) selectedPurchase
+                            : null
                     )
                 ).execute();
             }
@@ -95,8 +105,9 @@ public class AddIssue extends Activity {
             public void onClick(View view) {
                 toggleAddPurchaseButton(false);
 
-                purchases.add(0, new PurchaseAdapter.Purchase(null, new Date(), "", true));
-                showPurchases();
+                SpecialPurchase newPurchase = new SpecialPurchase(false, true);
+                purchases.put(newPurchase.toString(), newPurchase);
+                showPurchases(false);
             }
         });
 
@@ -107,21 +118,21 @@ public class AddIssue extends Activity {
         instance.findViewById(R.id.addpurchase).setEnabled(toggle);
     }
 
-    void showPurchases() {
-        ListView lv = this.findViewById(R.id.purchase_list);
+    void showPurchases(final Boolean checkNoPurchaseItem) {
+        final ListView lv = this.findViewById(R.id.purchase_list);
 
         final MultipleCustomCheckboxes purchaseDateCheckboxes = new MultipleCustomCheckboxes(
             new WeakReference<>((View)lv),
             new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    CharSequence contentDescription = view.getContentDescription();
-                    if (contentDescription == null) {
-                        selectedPurchaseId = null;
-                    }
-                    else {
-                        selectedPurchaseId = Integer.parseInt(contentDescription.toString());
-                    }
+                    selectedPurchaseHash = view.getContentDescription().toString();
+                }
+            },
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectedPurchaseHash = null;
                 }
             }
         );
@@ -130,12 +141,14 @@ public class AddIssue extends Activity {
             @Override
             public void run() {
                 purchaseDateCheckboxes.initClickEvents();
-                purchaseDateCheckboxes.checkInitialCheckbox(new MultipleCustomCheckboxes.CheckboxFilter() {
-                    @Override
-                    public boolean isMatched(CustomCheckBox checkbox) {
-                        return checkbox.getContentDescription() == null;
-                    }
-                });
+                if (checkNoPurchaseItem) {
+                    purchaseDateCheckboxes.checkInitialCheckbox(new MultipleCustomCheckboxes.CheckboxFilter() {
+                        @Override
+                        public boolean isMatched(CustomCheckBox checkbox) {
+                            return checkbox.getContentDescription().toString().contains(SpecialPurchase.class.getSimpleName());
+                        }
+                    });
+                }
             }
         });
 
