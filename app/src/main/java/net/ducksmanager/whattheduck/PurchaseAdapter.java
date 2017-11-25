@@ -152,7 +152,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
                                 protected void afterDataHandling() {
                                     AddIssue.instance.toggleAddPurchaseButton(true);
                                     AddIssue.purchases = WhatTheDuck.userCollection.getPurchaseListWithEmptyItem();
-                                    AddIssue.instance.updatePurchases();
+                                    AddIssue.instance.showPurchases();
                                 }
 
                                 @Override
@@ -174,7 +174,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
                     AddIssue.purchases.remove(0);
                     AddIssue.instance.toggleAddPurchaseButton(true);
-                    AddIssue.instance.updatePurchases();
+                    AddIssue.instance.showPurchases();
                 }
             });
 
@@ -245,6 +245,6 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
     @Override
     protected String getComparatorText(Purchase i) {
-        return i == null ? "_" : dateFormat.format(i.getPurchaseDate());
+        return i == null ? "^" : i.getId() == null ? "_" : dateFormat.format(i.getPurchaseDate());
     }
 }
