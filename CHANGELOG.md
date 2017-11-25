@@ -1,3 +1,7 @@
+Version 1.6.1
+
+    Show purchase dates in the issue list
+
 Version 1.6.0
 
     Add possibility to specify a purchase date when adding issues
