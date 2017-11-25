@@ -55,43 +55,7 @@ public class AddIssue extends Activity {
             }
         });
 
-        ListView lv = this.findViewById(R.id.purchase_list);
-
-        final MultipleCustomCheckboxes purchaseDateCheckboxes = new MultipleCustomCheckboxes(
-            new WeakReference<>((View)lv),
-            new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    CharSequence contentDescription = view.getContentDescription();
-                    if (contentDescription == null) {
-                        selectedPurchaseId = null;
-                    }
-                    else {
-                        selectedPurchaseId = Integer.parseInt(contentDescription.toString());
-                    }
-                }
-            }
-        );
-        lv.setAdapter(new PurchaseAdapter(this, purchases));
-        lv.post(new Runnable() {
-            @Override
-            public void run() {
-                purchaseDateCheckboxes.initClickEvents();
-                purchaseDateCheckboxes.checkInitialCheckbox(new MultipleCustomCheckboxes.CheckboxFilter() {
-                    @Override
-                    public boolean isMatched(CustomCheckBox checkbox) {
-                        return checkbox.getContentDescription() == null;
-                    }
-                });
-            }
-        });
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ((CustomCheckBox)view.findViewById(R.id.purchasecheck)).setChecked(true);
-            }
-        });
+        showPurchases();
 
         this.findViewById(R.id.addissue_ok).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +96,7 @@ public class AddIssue extends Activity {
                 toggleAddPurchaseButton(false);
 
                 purchases.add(0, new PurchaseAdapter.Purchase(null, new Date(), "", true));
-                updatePurchases();
+                showPurchases();
             }
         });
 
@@ -143,13 +107,43 @@ public class AddIssue extends Activity {
         instance.findViewById(R.id.addpurchase).setEnabled(toggle);
     }
 
-    void updatePurchases() {
-        ListView listView = this.findViewById(R.id.purchase_list);
-        PurchaseAdapter adapter = (PurchaseAdapter) listView.getAdapter();
+    void showPurchases() {
+        ListView lv = this.findViewById(R.id.purchase_list);
 
-        adapter.setItems(purchases);
-        adapter.updateFilteredList("");
-        adapter.notifyDataSetChanged();
-        listView.setSelectionAfterHeaderView();
+        final MultipleCustomCheckboxes purchaseDateCheckboxes = new MultipleCustomCheckboxes(
+            new WeakReference<>((View)lv),
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CharSequence contentDescription = view.getContentDescription();
+                    if (contentDescription == null) {
+                        selectedPurchaseId = null;
+                    }
+                    else {
+                        selectedPurchaseId = Integer.parseInt(contentDescription.toString());
+                    }
+                }
+            }
+        );
+        lv.setAdapter(new PurchaseAdapter(this, purchases));
+        lv.post(new Runnable() {
+            @Override
+            public void run() {
+                purchaseDateCheckboxes.initClickEvents();
+                purchaseDateCheckboxes.checkInitialCheckbox(new MultipleCustomCheckboxes.CheckboxFilter() {
+                    @Override
+                    public boolean isMatched(CustomCheckBox checkbox) {
+                        return checkbox.getContentDescription() == null;
+                    }
+                });
+            }
+        });
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ((CustomCheckBox)view.findViewById(R.id.purchasecheck)).setChecked(true);
+            }
+        });
     }
 }
