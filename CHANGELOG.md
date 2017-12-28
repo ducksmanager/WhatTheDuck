@@ -1,3 +1,7 @@
+Version 1.6.2
+
+    Fix empty list of purchase dates after clicking on a cover following a cover search
+
 Version 1.6.1
 
     Show purchase dates in the issue list
