@@ -37,14 +37,14 @@ public class Collection implements Serializable {
     public enum CollectionType {COA,USER}
 
     public void addCountry(String country) {
-        issues.put(country, new HashMap<String,ArrayList<Issue>>());
+        issues.put(country, new HashMap<>());
     }
 
     public void addPublication(String country, String publication) {
         if (issues.get(country) == null)
             this.addCountry(country);
         if (issues.get(country).get(publication) == null) {
-            issues.get(country).put(publication, new ArrayList<Issue>());
+            issues.get(country).put(publication, new ArrayList<>());
         }
     }
 

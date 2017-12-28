@@ -49,10 +49,6 @@ public class Issue implements Serializable {
         return issueCondition;
     }
 
-    public void setIssueCondition(IssueCondition issueCondition) {
-        this.issueCondition = issueCondition;
-    }
-
     public static IssueCondition issueConditionStrToIssueCondition(String issueConditionStr) {
         if (issueConditionStr == null || issueConditionStr.equals(NO_CONDITION))
             return IssueCondition.NO_CONDITION;
@@ -108,7 +104,4 @@ public class Issue implements Serializable {
         return purchase;
     }
 
-    public void setPurchase(PurchaseWithDate purchase) {
-        this.purchase = purchase;
-    }
 }

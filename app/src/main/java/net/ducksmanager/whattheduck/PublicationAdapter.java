@@ -41,12 +41,12 @@ public class PublicationAdapter extends ItemAdapter<PublicationAdapter.Publicati
 
 
     @Override
-    protected Integer getSuffixImageResource(Publication i, Activity activity) {
+    protected Integer getSuffixImageResource(Publication i) {
         return null;
     }
 
     @Override
-    protected String getSuffixText(Publication i, Activity activity) {
+    protected String getSuffixText(Publication i) {
         return null;
     }
 

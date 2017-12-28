@@ -1,6 +1,7 @@
 package net.ducksmanager.retrievetasks;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import net.ducksmanager.whattheduck.Purchase;
 import net.ducksmanager.whattheduck.PurchaseAdapter;
@@ -21,6 +22,21 @@ import java.util.HashMap;
 public abstract class GetPurchaseList extends RetrieveTask {
     protected GetPurchaseList() {
         super("&get_achats=true", R.id.progressBarLoading);
+    }
+
+    public static void initAndShowAddIssue(Activity originActivity) {
+        new GetPurchaseList() {
+            @Override
+            protected void afterDataHandling() {
+                Intent i = new Intent(originActivity, net.ducksmanager.whattheduck.AddIssue.class);
+                originActivity.startActivity(i);
+            }
+
+            @Override
+            protected WeakReference<Activity> getOriginActivity() {
+                return new WeakReference<>(originActivity);
+            }
+        }.execute();
     }
 
     @Override

@@ -89,7 +89,7 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
 
             ImageView suffixImage = v.findViewById(R.id.suffiximage);
             if (suffixImage != null) {
-                Integer imageResource = getSuffixImageResource(i, (Activity) this.getContext());
+                Integer imageResource = getSuffixImageResource(i);
                 if (imageResource == null) {
                     suffixImage.setVisibility(View.GONE);
                 } else {
@@ -100,7 +100,7 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
 
             TextView suffixText = v.findViewById(R.id.suffixtext);
             if (suffixText != null) {
-                String text = getSuffixText(i, (Activity) this.getContext());
+                String text = getSuffixText(i);
                 if (text == null) {
                     suffixText.setVisibility(View.GONE);
                 } else {
@@ -126,9 +126,9 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
 
     protected abstract Integer getPrefixImageResource(Item i, Activity activity);
 
-    protected abstract Integer getSuffixImageResource(Item i, Activity activity);
+    protected abstract Integer getSuffixImageResource(Item i);
 
-    protected abstract String getSuffixText(Item i, Activity activity);
+    protected abstract String getSuffixText(Item i);
 
     protected abstract String getComparatorText(Item i);
 

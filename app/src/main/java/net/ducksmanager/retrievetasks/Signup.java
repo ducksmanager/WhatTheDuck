@@ -4,7 +4,6 @@ package net.ducksmanager.retrievetasks;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -32,24 +31,20 @@ public class Signup extends Activity {
         ((EditText) Signup.this.findViewById(R.id.password_signup)).setText(WhatTheDuck.getPassword());
 
         Button endSignupButton = findViewById(R.id.end_signup);
-        endSignupButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                WhatTheDuck.setUsername(((EditText) Signup.this.findViewById(R.id.username_signup)).getText().toString());
-                WhatTheDuck.setPassword(((EditText) Signup.this.findViewById(R.id.password_signup)).getText().toString());
+        endSignupButton.setOnClickListener(view -> {
+            WhatTheDuck.setUsername(((EditText) Signup.this.findViewById(R.id.username_signup)).getText().toString());
+            WhatTheDuck.setPassword(((EditText) Signup.this.findViewById(R.id.password_signup)).getText().toString());
 
-                String password2 = WhatTheDuck.toSHA1(((EditText) Signup.this.findViewById(R.id.password_confirmation)).getText().toString());
-                String email = ((EditText) Signup.this.findViewById(R.id.email_address)).getText().toString();
+            String password2 = WhatTheDuck.toSHA1(((EditText) Signup.this.findViewById(R.id.password_confirmation)).getText().toString());
+            String email = ((EditText) Signup.this.findViewById(R.id.email_address)).getText().toString();
 
-                new ConnectAndRetrieveList(Signup.this, "&action=signup&mdp_user2="+password2+"&email="+email).execute();
-            }
+            new ConnectAndRetrieveList(Signup.this, "&action=signup&mdp_user2="+password2+"&email="+email).execute();
         });
         
         Button cancelSignupButton = findViewById(R.id.cancel_signup);
-        cancelSignupButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent i = new Intent(Signup.this, WhatTheDuck.class);
-                Signup.this.startActivity(i);
-            }
+        cancelSignupButton.setOnClickListener(view -> {
+            Intent i = new Intent(Signup.this, WhatTheDuck.class);
+            Signup.this.startActivity(i);
         });
     }
 

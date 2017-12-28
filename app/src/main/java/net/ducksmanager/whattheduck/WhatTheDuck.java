@@ -108,31 +108,25 @@ public class WhatTheDuck extends Activity {
         });
 
         Button signupButton = findViewById(R.id.end_signup);
-        signupButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                WhatTheDuck.setUsername(((EditText) WhatTheDuck.this.findViewById(R.id.username)).getText().toString());
-                WhatTheDuck.setPassword(((EditText) WhatTheDuck.this.findViewById(R.id.password)).getText().toString());
-                Intent i = new Intent(wtd, Signup.class);
-                i.putExtra("type", Collection.CollectionType.USER.toString());
-                wtd.startActivity(i);
-            }
+        signupButton.setOnClickListener(view -> {
+            WhatTheDuck.setUsername(((EditText) WhatTheDuck.this.findViewById(R.id.username)).getText().toString());
+            WhatTheDuck.setPassword(((EditText) WhatTheDuck.this.findViewById(R.id.password)).getText().toString());
+            Intent i = new Intent(wtd, Signup.class);
+            i.putExtra("type", Collection.CollectionType.USER.toString());
+            wtd.startActivity(i);
         });
 
         Button loginButton = findViewById(R.id.login);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                hideKeyboard(view);
-                new ConnectAndRetrieveList(true).execute();
-            }
+        loginButton.setOnClickListener(view -> {
+            hideKeyboard(view);
+            new ConnectAndRetrieveList(true).execute();
         });
 
         TextView linkToDM = findViewById(R.id.linkToDM);
-        linkToDM.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                hideKeyboard(view);
-                final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(DUCKSMANAGER_URL));
-                WhatTheDuck.this.startActivity(intent);
-            }
+        linkToDM.setOnClickListener(view -> {
+            hideKeyboard(view);
+            final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(DUCKSMANAGER_URL));
+            WhatTheDuck.this.startActivity(intent);
         });
     }
 
@@ -148,11 +142,11 @@ public class WhatTheDuck extends Activity {
     }
 
     public void alert(String message) {
-        alert(new WeakReference<Activity>(this), message);
+        alert(new WeakReference<>(this), message);
     }
 
     public void alert(int messageId) {
-        alert(new WeakReference<Activity>(this), getString(messageId));
+        alert(new WeakReference<>(this), getString(messageId));
     }
     
     public void alert(WeakReference<Activity> activity, String message) {
@@ -171,19 +165,17 @@ public class WhatTheDuck extends Activity {
         builder.setTitle(getString(titleId));
         builder.setMessage(getString(messageId)+extraMessage);
 
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-                builder.create().show();
-            }
-        });
+        this.runOnUiThread(() ->
+            builder.create().show()
+        );
     }
     
     public void alert(int titleId, int messageId, String extraMessage) {
-        alert(new WeakReference<Activity>(this), titleId, messageId, extraMessage);
+        alert(new WeakReference<>(this), titleId, messageId, extraMessage);
     }
     
     public void alert(int titleId, int messageId) {
-        alert(new WeakReference<Activity>(this), titleId, messageId, "");
+        alert(new WeakReference<>(this), titleId, messageId, "");
     }
 
     private static void loadUserSettings() {
@@ -366,7 +358,7 @@ public class WhatTheDuck extends Activity {
     }
 
     public void toggleProgressbarLoading(int progressBarId, boolean toggle) {
-        toggleProgressbarLoading(new WeakReference<Activity>(WhatTheDuck.wtd), progressBarId, toggle);
+        toggleProgressbarLoading(new WeakReference<>(WhatTheDuck.wtd), progressBarId, toggle);
     }
 
     private boolean isOnline() {

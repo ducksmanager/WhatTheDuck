@@ -74,13 +74,11 @@ class WtdTest extends AndroidJUnitRunner {
         }
     }
 
-    private static Activity getActivityInstance() {
+    static Activity getActivityInstance() {
         final Activity[] currentActivity = new Activity[1];
-        getInstrumentation().runOnMainSync(new Runnable() {
-            public void run() {
-                Collection<Activity> resumedActivities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
-                currentActivity[0] = resumedActivities.iterator().next();
-            }
+        getInstrumentation().runOnMainSync(() -> {
+            Collection<Activity> resumedActivities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
+            currentActivity[0] = resumedActivities.iterator().next();
         });
 
         return currentActivity[0];

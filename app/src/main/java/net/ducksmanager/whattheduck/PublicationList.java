@@ -1,15 +1,11 @@
 package net.ducksmanager.whattheduck;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
 import net.ducksmanager.inducks.coa.PublicationListing;
-import net.ducksmanager.util.SimpleCallback;
-
-import java.lang.ref.WeakReference;
 
 public class PublicationList extends List {
     
@@ -25,12 +21,9 @@ public class PublicationList extends List {
             this.show();
         }
         else {
-            new PublicationListing(this, selectedCountry, new SimpleCallback() {
-                @Override
-                public void onDownloadFinished(WeakReference<Activity> activity) {
-                    ((List)activity.get()).show();
-                }
-            }).execute();
+            new PublicationListing(this, selectedCountry, activity ->
+                ((List)activity.get()).show()
+            ).execute();
         }
 
         setNavigationCountry(selectedCountry);

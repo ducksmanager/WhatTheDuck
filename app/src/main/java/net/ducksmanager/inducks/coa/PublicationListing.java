@@ -32,7 +32,7 @@ public class PublicationListing extends CoaListing {
 
     private static void addPublication(String countryShortName, String shortName, String fullName) {
         if (publicationNames.get(countryShortName) == null)
-            publicationNames.put(countryShortName, new HashMap<String, String>());
+            publicationNames.put(countryShortName, new HashMap<>());
         publicationNames.get(countryShortName).put(shortName, fullName);
     }
 

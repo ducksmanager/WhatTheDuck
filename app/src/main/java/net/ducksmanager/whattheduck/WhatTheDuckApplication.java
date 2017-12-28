@@ -59,7 +59,6 @@ public class WhatTheDuckApplication extends Application {
         }
         String piwikUrl = config.getProperty(CONFIG_KEY_PIWIK_URL);
         mPiwikTracker = Piwik.getInstance(this).newTracker(new TrackerConfig(piwikUrl, 2, "WhatTheDuck"));
-        TrackHelper.track().screen("/path").dimension(1, "TestValue").with(mPiwikTracker);
         return mPiwikTracker;
     }
 

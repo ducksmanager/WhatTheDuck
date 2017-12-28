@@ -1,18 +1,13 @@
 package net.ducksmanager.whattheduck;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
-import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
-
-import java.lang.ref.WeakReference;
 
 public class CountryList extends List {
     @Override
@@ -23,12 +18,7 @@ public class CountryList extends List {
             AlertDialog.Builder builder = new AlertDialog.Builder(CountryList.this);
             builder.setTitle(getString(R.string.welcomeTitle));
             builder.setMessage(getString(R.string.welcomeMessage));
-            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-                }
-            });
+            builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss());
             WhatTheDuck.setShowWelcomeMessage(false);
             WhatTheDuck.saveSettings(null);
             builder.create().show();
@@ -40,12 +30,8 @@ public class CountryList extends List {
             show();
         }
         else {
-            new CountryListing(this, new SimpleCallback() {
-                @Override
-                public void onDownloadFinished(WeakReference<Activity> activity) {
-                    ((List)activity.get()).show();
-                }
-            }).execute();
+            new CountryListing(this, activity ->
+                ((List)activity.get()).show()).execute();
         }
 
         this.findViewById(R.id.navigation).setVisibility(View.GONE);

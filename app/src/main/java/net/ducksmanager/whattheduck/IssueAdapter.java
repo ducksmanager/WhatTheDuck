@@ -24,7 +24,7 @@ public class IssueAdapter extends ItemAdapter<Issue> {
     }
 
     @Override
-    protected Integer getSuffixImageResource(Issue i, Activity activity) {
+    protected Integer getSuffixImageResource(Issue i) {
         if (i.getPurchase() != null) {
             return R.drawable.ic_clock;
         } else {
@@ -33,7 +33,7 @@ public class IssueAdapter extends ItemAdapter<Issue> {
     }
 
     @Override
-    protected String getSuffixText(Issue i, Activity activity) {
+    protected String getSuffixText(Issue i) {
         if (i.getPurchase() != null) {
             return PurchaseAdapter.dateFormat.format(i.getPurchase().getPurchaseDate());
         } else {

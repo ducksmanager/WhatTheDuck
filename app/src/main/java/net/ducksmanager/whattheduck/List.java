@@ -1,7 +1,6 @@
 package net.ducksmanager.whattheduck;
 
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
@@ -51,45 +50,33 @@ public abstract class List<Item> extends ListActivity{
 
         setContentView(R.layout.wtd_list);
 
-        this.findViewById(R.id.navigationAllCountries).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToView(CountryList.class);
-            }
-        });
+        this.findViewById(R.id.navigationAllCountries).setOnClickListener(view ->
+            goToView(CountryList.class)
+        );
 
-        this.findViewById(R.id.navigationCountry).findViewById(R.id.selected).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToView(PublicationList.class);
-            }
-        });
+        this.findViewById(R.id.navigationCountry).findViewById(R.id.selected).setOnClickListener(view ->
+            goToView(PublicationList.class)
+        );
 
         Switch onlyInCollectionSwitch = this.findViewById(R.id.onlyInCollectionSwitch);
         onlyInCollectionSwitch.setChecked(type.equals(CollectionType.USER.toString()));
 
-        onlyInCollectionSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            Switch onlyInCollectionSwitch = (Switch) view;
-            List.this.goToAlternativeView(
-                onlyInCollectionSwitch.isChecked()
-                    ? CollectionType.USER.toString()
-                    : CollectionType.COA.toString()
-            );
-            }
+        onlyInCollectionSwitch.setOnClickListener(view -> {
+        Switch onlyInCollectionSwitch1 = (Switch) view;
+        List.this.goToAlternativeView(
+            onlyInCollectionSwitch1.isChecked()
+                ? CollectionType.USER.toString()
+                : CollectionType.COA.toString()
+        );
         });
 
         if (type.equals(CollectionType.USER.toString())) {
             RelativeLayout addToCollection = this.findViewById(R.id.addToCollectionWrapper);
 
             addToCollection.setVisibility(View.VISIBLE);
-            addToCollection.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    takeCoverPicture();
-                }
-            });
+            addToCollection.setOnClickListener(view ->
+                takeCoverPicture()
+            );
 
             if (WhatTheDuck.getShowCoverTooltip()) {
                 new SimpleTooltip.Builder(this)
@@ -180,7 +167,7 @@ public abstract class List<Item> extends ListActivity{
             CoverFlowFileHandler.current.resizeUntilFileSize(this, new CoverFlowFileHandler.TransformationCallback() {
                 @Override
                 public void onComplete(File fileToUpload) {
-                    new CoverSearch(new WeakReference<Activity>(List.this), fileToUpload).execute();
+                    new CoverSearch(new WeakReference<>(List.this), fileToUpload).execute();
                 }
 
                 @Override

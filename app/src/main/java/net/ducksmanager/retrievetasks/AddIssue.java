@@ -5,7 +5,6 @@ import android.content.Intent;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
-import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.Issue;
 import net.ducksmanager.whattheduck.IssueList;
 import net.ducksmanager.whattheduck.R;
@@ -65,23 +64,14 @@ public class AddIssue extends RetrieveTask {
             callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
         }
         else {
-            new PublicationListing(callbackActivity, country, new SimpleCallback() {
-                @Override
-                public void onDownloadFinished(WeakReference<Activity> activityRef) {
-                    Activity callbackActivity = originActivityRef.get();
-
-                    if (CountryListing.hasFullList) {
-                        callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
-                    }
-                    else {
-                        new CountryListing(callbackActivity, new SimpleCallback() {
-                            @Override
-                            public void onDownloadFinished(WeakReference<Activity> activityRef) {
-                                Activity callbackActivity = originActivityRef.get();
-                                callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
-                            }
-                        }).execute();
-                    }
+            new PublicationListing(callbackActivity, country, activityRef -> {
+                if (CountryListing.hasFullList) {
+                    callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
+                }
+                else {
+                    new CountryListing(callbackActivity, activityRef1 ->
+                        callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class))
+                    ).execute();
                 }
             }).execute();
         }

@@ -45,12 +45,12 @@ public class CountryAdapter extends ItemAdapter<CountryAdapter.Country> {
     }
 
     @Override
-    protected Integer getSuffixImageResource(Country i, Activity activity) {
+    protected Integer getSuffixImageResource(Country i) {
         return null;
     }
 
     @Override
-    protected String getSuffixText(Country i, Activity activity) {
+    protected String getSuffixText(Country i) {
         return null;
     }
 

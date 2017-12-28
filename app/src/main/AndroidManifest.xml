@@ -21,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="net.ducksmanager.retrievetasks.Signup"/>
         <activity android:name="net.ducksmanager.whattheduck.CountryList" />
         <activity android:name="net.ducksmanager.whattheduck.PublicationList" />
         <activity android:name="net.ducksmanager.whattheduck.IssueList" />

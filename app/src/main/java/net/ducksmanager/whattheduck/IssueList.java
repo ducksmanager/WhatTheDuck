@@ -1,6 +1,5 @@
 package net.ducksmanager.whattheduck;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.IssueListing;
 import net.ducksmanager.retrievetasks.GetPurchaseList;
-import net.ducksmanager.util.SimpleCallback;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.lang.ref.WeakReference;
@@ -30,12 +28,9 @@ public class IssueList extends List<Issue> {
             this.show();
         }
         else {
-            new IssueListing(this, selectedCountry, selectedPublication, new SimpleCallback() {
-                @Override
-                public void onDownloadFinished(WeakReference<Activity> activity) {
-                    ((List)activity.get()).show();
-                }
-            }).execute();
+            new IssueListing(this, selectedCountry, selectedPublication, activity ->
+                ((List)activity.get()).show()
+            ).execute();
         }
 
         setNavigationCountry(selectedCountry);
@@ -86,23 +81,11 @@ public class IssueList extends List<Issue> {
         if (type.equals(CollectionType.COA.toString())) {
             final Issue selectedIssue = (Issue) this.getListView().getItemAtPosition(((Long) id).intValue());
             if (WhatTheDuck.userCollection.getIssue(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), selectedIssue.getIssueNumber()) != null) {
-                WhatTheDuck.wtd.info(new WeakReference<Activity>(this), R.string.input_error__issue_already_possessed);
+                WhatTheDuck.wtd.info(new WeakReference<>(this), R.string.input_error__issue_already_possessed);
             }
             else {
                 WhatTheDuck.setSelectedIssue(selectedIssue.getIssueNumber());
-
-                new GetPurchaseList() {
-                    @Override
-                    protected void afterDataHandling() {
-                        Intent i = new Intent(IssueList.this, AddIssue.class);
-                        startActivity(i);
-                    }
-
-                    @Override
-                    protected WeakReference<Activity> getOriginActivity() {
-                        return new WeakReference<Activity>(IssueList.this);
-                    }
-                }.execute();
+                GetPurchaseList.initAndShowAddIssue(IssueList.this);
             }
         }
         super.onListItemClick(l, v, position, id);
