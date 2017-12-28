@@ -18,8 +18,10 @@ public class WhatTheDuckApplication extends Application {
 
     private static final String CONFIG = "config.properties";
     public static final String CONFIG_KEY_API_ENDPOINT_URL = "api_endpoint_url";
+    public static final String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
+
     private static final String CONFIG_KEY_PIWIK_URL = "piwik_url";
-    static final String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
+    private static final Integer CONFIG_PIWIK_USER_DIMENSION = 1;
 
     private Tracker mPiwikTracker;
 
@@ -57,14 +59,23 @@ public class WhatTheDuckApplication extends Application {
         }
         String piwikUrl = config.getProperty(CONFIG_KEY_PIWIK_URL);
         mPiwikTracker = Piwik.getInstance(this).newTracker(new TrackerConfig(piwikUrl, 2, "WhatTheDuck"));
+        TrackHelper.track().screen("/path").dimension(1, "TestValue").with(mPiwikTracker);
         return mPiwikTracker;
     }
 
     public void trackActivity(Activity activity) {
-        TrackHelper.track()
+        TrackHelper t = TrackHelper.track();
+
+        String username = WhatTheDuck.getUsername();
+        if (username != null) {
+            t.dimension(CONFIG_PIWIK_USER_DIMENSION, username);
+        }
+
+        t
             .screen(activity.getClass().getSimpleName())
             .title(activity.getTitle().toString())
             .with(getTracker());
+
     }
 
     public void trackEvent(String name) {
