@@ -1,9 +1,11 @@
 import android.app.Activity;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnitRunner;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.test.runner.lifecycle.Stage;
 
+import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
@@ -14,10 +16,14 @@ import java.util.Collection;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.clearText;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Checks.checkNotNull;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -36,6 +42,17 @@ class WtdTest extends AndroidJUnitRunner {
     public static void initDownloadHelper() {
         RetrieveTask.downloadHandler = new DownloadHandlerMock();
         WhatTheDuck.setPassword(null);
+    }
+
+    static void login(String user, String password) {
+        onView(withId(R.id.username))
+            .perform(clearText())
+            .perform(typeText(user), closeSoftKeyboard());
+
+        onView(withId(R.id.password))
+            .perform(clearText())
+            .perform(typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.login)).perform(ViewActions.click());
     }
 
     void assertToastShown(int textId) {
@@ -57,7 +74,7 @@ class WtdTest extends AndroidJUnitRunner {
         }
     }
 
-    static Activity getActivityInstance() {
+    private static Activity getActivityInstance() {
         final Activity[] currentActivity = new Activity[1];
         getInstrumentation().runOnMainSync(new Runnable() {
             public void run() {
