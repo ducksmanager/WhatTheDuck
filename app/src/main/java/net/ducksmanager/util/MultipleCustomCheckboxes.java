@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class MultipleCustomCheckboxes {
 
-    public final CustomCheckBox.OnCheckedChangeListener onCheckedListener = new CustomCheckBox.OnCheckedChangeListener() {
+    private final CustomCheckBox.OnCheckedChangeListener onCheckedListener = new CustomCheckBox.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CustomCheckBox checkBox, boolean isChecked) {
             if (checkBox.getTag(R.id.check_by_user) != null) {

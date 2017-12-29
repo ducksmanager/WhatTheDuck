@@ -12,7 +12,7 @@ public class Issue implements Serializable {
     private final String issueNumber;
 
     public enum IssueCondition {BAD_CONDITION, NOTSOGOOD_CONDITION, GOOD_CONDITION, NO_CONDITION}
-    private IssueCondition issueCondition;
+    private final IssueCondition issueCondition;
     private PurchaseWithDate purchase;
 
     public Issue(String issuenumber, String issueCondition) {
@@ -49,7 +49,7 @@ public class Issue implements Serializable {
         return issueCondition;
     }
 
-    public static IssueCondition issueConditionStrToIssueCondition(String issueConditionStr) {
+    private static IssueCondition issueConditionStrToIssueCondition(String issueConditionStr) {
         if (issueConditionStr == null || issueConditionStr.equals(NO_CONDITION))
             return IssueCondition.NO_CONDITION;
         else if (issueConditionStr.equals(BAD_CONDITION))

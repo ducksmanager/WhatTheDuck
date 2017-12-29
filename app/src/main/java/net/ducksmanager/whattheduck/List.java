@@ -35,9 +35,9 @@ public abstract class List<Item> extends ListActivity{
     private static final int LOGOUT = 1;
 
     String type;
-    Boolean requiresDataDownload = false;
-    ArrayList<Item> items;
-    ItemAdapter itemAdapter;
+    private Boolean requiresDataDownload = false;
+    private ArrayList<Item> items;
+    private ItemAdapter itemAdapter;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -238,7 +238,7 @@ public abstract class List<Item> extends ListActivity{
             : WhatTheDuck.coaCollection;
     }
 
-    void setNavigation(String selectedCountry, String selectedPublication) {
+    private void setNavigation(String selectedCountry, String selectedPublication) {
         final View generealNavigationView = this.findViewById(R.id.navigation);
         final View countryNavigationView = this.findViewById(R.id.navigationCountry);
         final View publicationNavigationView = this.findViewById(R.id.navigationPublication);
@@ -274,7 +274,7 @@ public abstract class List<Item> extends ListActivity{
         }
     }
 
-    public void notifyCompleteList() {
+    void notifyCompleteList() {
         this.requiresDataDownload = false;
         this.show();
     }
