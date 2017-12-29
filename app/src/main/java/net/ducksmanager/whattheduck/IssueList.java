@@ -12,7 +12,19 @@ import net.ducksmanager.whattheduck.Collection.CollectionType;
 import java.lang.ref.WeakReference;
 
 public class IssueList extends List<Issue> {
-    
+
+    @Override
+    protected boolean needsToDownloadFullList() {
+        return ! IssueListing.hasFullList(WhatTheDuck.getSelectedPublication());
+    }
+
+    @Override
+    protected void downloadFullList() {
+        new IssueListing(this, WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), activity ->
+            ((List)activity.get()).notifyCompleteList()
+        ).execute();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,17 +32,10 @@ public class IssueList extends List<Issue> {
         final String selectedCountry = WhatTheDuck.getSelectedCountry();
         final String selectedPublication = WhatTheDuck.getSelectedPublication();
 
-        if (IssueListing.hasFullList(selectedPublication)) {
-            this.show();
-        }
-        else {
-            new IssueListing(this, selectedCountry, selectedPublication, activity ->
-                ((List)activity.get()).show()
-            ).execute();
-        }
-
         setNavigationCountry(selectedCountry);
         setNavigationPublication(selectedCountry, selectedPublication);
+
+        show();
     }
 
     protected void show() {

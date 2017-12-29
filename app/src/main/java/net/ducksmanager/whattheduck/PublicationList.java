@@ -8,7 +8,19 @@ import android.widget.ListView;
 import net.ducksmanager.inducks.coa.PublicationListing;
 
 public class PublicationList extends List {
-    
+
+    @Override
+    protected boolean needsToDownloadFullList() {
+        return ! PublicationListing.hasFullList(WhatTheDuck.getSelectedCountry());
+    }
+
+    @Override
+    protected void downloadFullList() {
+        new PublicationListing(this, WhatTheDuck.getSelectedCountry(), activity ->
+            ((List)activity.get()).notifyCompleteList()
+        ).execute();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         WhatTheDuck.setSelectedPublication(null);
@@ -16,18 +28,10 @@ public class PublicationList extends List {
         super.onCreate(savedInstanceState);
 
         final String selectedCountry = WhatTheDuck.getSelectedCountry();
-
-        if (PublicationListing.hasFullList(selectedCountry)) {
-            this.show();
-        }
-        else {
-            new PublicationListing(this, selectedCountry, activity ->
-                ((List)activity.get()).show()
-            ).execute();
-        }
-
         setNavigationCountry(selectedCountry);
         setNavigationPublication(selectedCountry, null);
+
+        show();
     }
 
     @Override

@@ -10,6 +10,19 @@ import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 public class CountryList extends List {
+
+    @Override
+    protected boolean needsToDownloadFullList() {
+        return type.equals(CollectionType.COA.toString()) && !CountryListing.hasFullList;
+    }
+
+    @Override
+    protected void downloadFullList() {
+        new CountryListing(this, activity ->
+            ((List)activity.get()).notifyCompleteList()
+        ).execute();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,19 +36,10 @@ public class CountryList extends List {
             WhatTheDuck.saveSettings(null);
             builder.create().show();
         }
-        
-        if (
-            (type.equals(CollectionType.USER.toString()))
-         || (type.equals(CollectionType.COA.toString()) && CountryListing.hasFullList)) {
-            show();
-        }
-        else {
-            new CountryListing(this, activity ->
-                ((List)activity.get()).show()
-            ).execute();
-        }
 
         this.findViewById(R.id.navigation).setVisibility(View.GONE);
+
+        show();
     }
 
     protected void show() {

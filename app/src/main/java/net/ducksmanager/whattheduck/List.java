@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -34,10 +35,14 @@ public abstract class List<Item> extends ListActivity{
     private static final int LOGOUT = 1;
 
     String type;
+    Boolean requiresDataDownload = false;
     ArrayList<Item> items;
     ItemAdapter itemAdapter;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    protected abstract boolean needsToDownloadFullList();
+    protected abstract void downloadFullList();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +79,11 @@ public abstract class List<Item> extends ListActivity{
 
     private void loadList() {
         ((WhatTheDuckApplication) getApplication()).trackActivity(this);
+
+        if (needsToDownloadFullList()) {
+            this.requiresDataDownload = true;
+            downloadFullList();
+        }
 
         RelativeLayout addToCollection = this.findViewById(R.id.addToCollectionWrapper);
         addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
@@ -124,10 +134,21 @@ public abstract class List<Item> extends ListActivity{
 
     void show(ItemAdapter<Item> itemAdapter) {
         this.itemAdapter = itemAdapter;
-        this.items = itemAdapter.getItems();
 
+        ProgressBar loadingProgressBar = this.findViewById(R.id.progressBarLoading);
         TextView emptyListText = this.findViewById(R.id.emptyList);
-        emptyListText.setVisibility(items.size() == 0 ? TextView.VISIBLE : TextView.INVISIBLE);
+
+        if (this.requiresDataDownload) {
+            this.items = new ArrayList<>();
+            emptyListText.setVisibility(TextView.INVISIBLE);
+            loadingProgressBar.setVisibility(TextView.VISIBLE);
+        }
+        else {
+            this.items = itemAdapter.getItems();
+
+            emptyListText.setVisibility(items.size() == 0 ? TextView.VISIBLE : TextView.INVISIBLE);
+            loadingProgressBar.setVisibility(TextView.INVISIBLE);
+        }
 
         setListAdapter(this.itemAdapter);
 
@@ -252,5 +273,10 @@ public abstract class List<Item> extends ListActivity{
             TextView currentPublicationText = publicationNavigationView.findViewById(R.id.selected);
             currentPublicationText.setText(publicationFullName);
         }
+    }
+
+    public void notifyCompleteList() {
+        this.requiresDataDownload = false;
+        this.show();
     }
 }
