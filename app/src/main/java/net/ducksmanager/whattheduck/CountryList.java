@@ -31,7 +31,8 @@ public class CountryList extends List {
         }
         else {
             new CountryListing(this, activity ->
-                ((List)activity.get()).show()).execute();
+                ((List)activity.get()).show()
+            ).execute();
         }
 
         this.findViewById(R.id.navigation).setVisibility(View.GONE);

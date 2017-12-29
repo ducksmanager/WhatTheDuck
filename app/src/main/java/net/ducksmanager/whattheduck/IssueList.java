@@ -2,12 +2,8 @@ package net.ducksmanager.whattheduck;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import net.ducksmanager.inducks.coa.IssueListing;
 import net.ducksmanager.retrievetasks.GetPurchaseList;
@@ -38,34 +34,11 @@ public class IssueList extends List<Issue> {
     }
 
     protected void show() {
-        items = getCollection().getIssueList(
-            WhatTheDuck.getSelectedCountry(),
-            WhatTheDuck.getSelectedPublication()
-        );
-
-        if (items.size() == 0) {
-            TextView emptyListText = this.findViewById(R.id.emptyList);
-            emptyListText.setVisibility(TextView.VISIBLE);
-        }
-
-        this.itemAdapter = new IssueAdapter(this, items);
-        setListAdapter(this.itemAdapter);
-
-        EditText filterEditText = this.findViewById(R.id.filter);
-        if (items.size() > 20) {
-            filterEditText.setVisibility(EditText.VISIBLE);
-
-            filterEditText.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) { }
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    IssueList.this.itemAdapter.updateFilteredList(s.toString());
-                    setListAdapter(IssueList.this.itemAdapter);
-                }
-            });
-        }
-        else {
-            filterEditText.setVisibility(EditText.GONE);
+        if (WhatTheDuck.getSelectedCountry() != null && WhatTheDuck.getSelectedPublication() != null) {
+            super.show(new IssueAdapter(this, getCollection().getIssueList(
+                WhatTheDuck.getSelectedCountry(),
+                WhatTheDuck.getSelectedPublication()
+            )));
         }
     }
     
