@@ -41,7 +41,6 @@ public abstract class List<Item> extends ListActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((WhatTheDuckApplication) getApplication()).trackActivity(this);
 
         Bundle extras = getIntent().getExtras();
         type = extras != null && extras.getString("type") != null
@@ -62,18 +61,24 @@ public abstract class List<Item> extends ListActivity{
         onlyInCollectionSwitch.setChecked(type.equals(CollectionType.USER.toString()));
 
         onlyInCollectionSwitch.setOnClickListener(view -> {
-        Switch onlyInCollectionSwitch1 = (Switch) view;
-        List.this.goToAlternativeView(
-            onlyInCollectionSwitch1.isChecked()
-                ? CollectionType.USER.toString()
-                : CollectionType.COA.toString()
-        );
+            Switch onlyInCollectionSwitch1 = (Switch) view;
+            List.this.goToAlternativeView(
+                onlyInCollectionSwitch1.isChecked()
+                    ? CollectionType.USER.toString()
+                    : CollectionType.COA.toString()
+            );
         });
 
-        if (type.equals(CollectionType.USER.toString())) {
-            RelativeLayout addToCollection = this.findViewById(R.id.addToCollectionWrapper);
+        loadList();
+    }
 
-            addToCollection.setVisibility(View.VISIBLE);
+    private void loadList() {
+        ((WhatTheDuckApplication) getApplication()).trackActivity(this);
+
+        RelativeLayout addToCollection = this.findViewById(R.id.addToCollectionWrapper);
+        addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
+
+        if (type.equals(CollectionType.USER.toString())) {
             addToCollection.setOnClickListener(view ->
                 takeCoverPicture()
             );
@@ -110,9 +115,9 @@ public abstract class List<Item> extends ListActivity{
     }
 
     private void goToAlternativeView(String collectionType) {
-        Intent i = new Intent(WhatTheDuck.wtd, this.getClass());
-        i.putExtra("type", collectionType);
-        startActivity(i);
+        type = collectionType;
+        loadList();
+        show();
     }
 
     protected abstract void show();
@@ -121,10 +126,8 @@ public abstract class List<Item> extends ListActivity{
         this.itemAdapter = itemAdapter;
         this.items = itemAdapter.getItems();
 
-        if (items.size() == 0) {
-            TextView emptyListText = this.findViewById(R.id.emptyList);
-            emptyListText.setVisibility(TextView.VISIBLE);
-        }
+        TextView emptyListText = this.findViewById(R.id.emptyList);
+        emptyListText.setVisibility(items.size() == 0 ? TextView.VISIBLE : TextView.INVISIBLE);
 
         setListAdapter(this.itemAdapter);
 
