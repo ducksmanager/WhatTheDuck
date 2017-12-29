@@ -135,6 +135,8 @@ public abstract class List<Item> extends ListActivity{
     void show(ItemAdapter<Item> itemAdapter) {
         this.itemAdapter = itemAdapter;
 
+        setNavigation(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication());
+
         ProgressBar loadingProgressBar = this.findViewById(R.id.progressBarLoading);
         TextView emptyListText = this.findViewById(R.id.emptyList);
 
@@ -236,38 +238,35 @@ public abstract class List<Item> extends ListActivity{
             : WhatTheDuck.coaCollection;
     }
 
-    void setNavigationCountry(String selectedCountry) {
-        final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
+    void setNavigation(String selectedCountry, String selectedPublication) {
+        final View generealNavigationView = this.findViewById(R.id.navigation);
+        final View countryNavigationView = this.findViewById(R.id.navigationCountry);
+        final View publicationNavigationView = this.findViewById(R.id.navigationPublication);
 
-        View countryNavigationView = this.findViewById(R.id.navigationCountry);
+        generealNavigationView.setVisibility(selectedCountry == null ? View.GONE : View.VISIBLE);
+        publicationNavigationView.setVisibility(selectedPublication == null ? View.INVISIBLE : View.VISIBLE);
 
-        String uri = "@drawable/flags_" + selectedCountry;
-        int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+        if (selectedCountry != null) {
+            final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
 
-        if (imageResource == 0) {
-            imageResource = R.drawable.flags_unknown;
+            String uri = "@drawable/flags_" + selectedCountry;
+            int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+
+            if (imageResource == 0) {
+                imageResource = R.drawable.flags_unknown;
+            }
+
+            ImageView currentCountryFlag = countryNavigationView.findViewById(R.id.selectedBadgeImage);
+            currentCountryFlag.setImageResource(imageResource);
+
+            TextView currentCountryText = countryNavigationView.findViewById(R.id.selected);
+            currentCountryText.setText(countryFullName);
         }
 
-        ImageView currentCountryFlag = countryNavigationView.findViewById(R.id.selectedBadgeImage);
-        currentCountryFlag.setVisibility(View.VISIBLE);
-        currentCountryFlag.setImageResource(imageResource);
+        if (selectedPublication != null) {
+            final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
 
-        TextView currentCountryText = countryNavigationView.findViewById(R.id.selected);
-        currentCountryText.setText(countryFullName);
-    }
-
-    void setNavigationPublication(String selectedCountry, String selectedPublication) {
-        final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
-
-        View publicationNavigationView = this.findViewById(R.id.navigationPublication);
-        TextView currentPublicationBadgeText = publicationNavigationView.findViewById(R.id.selectedBadge);
-
-        if (selectedPublication == null) {
-            publicationNavigationView.setVisibility(View.INVISIBLE);
-        }
-        else {
-            publicationNavigationView.setVisibility(View.VISIBLE);
-
+            TextView currentPublicationBadgeText = publicationNavigationView.findViewById(R.id.selectedBadge);
             currentPublicationBadgeText.setText(selectedPublication.split("/")[1]);
 
             TextView currentPublicationText = publicationNavigationView.findViewById(R.id.selected);

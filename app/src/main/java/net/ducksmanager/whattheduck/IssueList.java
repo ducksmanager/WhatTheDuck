@@ -29,12 +29,6 @@ public class IssueList extends List<Issue> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final String selectedCountry = WhatTheDuck.getSelectedCountry();
-        final String selectedPublication = WhatTheDuck.getSelectedPublication();
-
-        setNavigationCountry(selectedCountry);
-        setNavigationPublication(selectedCountry, selectedPublication);
-
         show();
     }
 

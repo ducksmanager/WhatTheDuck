@@ -37,8 +37,8 @@ public class CountryList extends List {
             builder.create().show();
         }
 
-        this.findViewById(R.id.navigation).setVisibility(View.GONE);
-
+        WhatTheDuck.setSelectedCountry(null);
+        WhatTheDuck.setSelectedPublication(null);
         show();
     }
 

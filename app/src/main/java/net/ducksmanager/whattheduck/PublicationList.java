@@ -23,14 +23,9 @@ public class PublicationList extends List {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        WhatTheDuck.setSelectedPublication(null);
-
         super.onCreate(savedInstanceState);
 
-        final String selectedCountry = WhatTheDuck.getSelectedCountry();
-        setNavigationCountry(selectedCountry);
-        setNavigationPublication(selectedCountry, null);
-
+        WhatTheDuck.setSelectedPublication(null);
         show();
     }
 
