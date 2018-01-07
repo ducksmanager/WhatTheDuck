@@ -166,7 +166,7 @@
             android:layout_height="25dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:text="@string/create"
+            android:text="@string/ok"
             android:textColor="#84cfc6"/>
     </LinearLayout>
 </LinearLayout>
