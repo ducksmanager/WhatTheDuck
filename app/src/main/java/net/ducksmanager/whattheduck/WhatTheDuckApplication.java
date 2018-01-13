@@ -19,6 +19,7 @@ public class WhatTheDuckApplication extends Application {
     private static final String CONFIG = "config.properties";
     public static final String CONFIG_KEY_API_ENDPOINT_URL = "api_endpoint_url";
     public static final String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
+    public static final String CONFIG_KEY_EDGES_URL = "edges_url";
 
     private static final String CONFIG_KEY_PIWIK_URL = "piwik_url";
     private static final Integer CONFIG_PIWIK_USER_DIMENSION = 1;

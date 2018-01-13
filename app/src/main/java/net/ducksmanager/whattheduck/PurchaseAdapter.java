@@ -33,7 +33,7 @@ public class PurchaseAdapter extends ItemAdapter<Purchase> {
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     PurchaseAdapter(Activity activity, HashMap<String,Purchase> items) {
-        super(activity, R.layout.row_purchase, new ArrayList<>(items.values()));
+        super(activity, R.layout.row_purchase, R.id.itemtitle, new ArrayList<>(items.values()));
     }
 
     @NonNull
@@ -148,11 +148,6 @@ public class PurchaseAdapter extends ItemAdapter<Purchase> {
     private static void hideKeyboard(View floatingButtonView) {
         InputMethodManager imm = (InputMethodManager) AddIssue.instance.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(floatingButtonView.getWindowToken(), 0);
-    }
-
-    @Override
-    protected int getResourceToInflate() {
-        return R.layout.row_purchase;
     }
 
     @Override

@@ -20,23 +20,25 @@ import java.util.Locale;
 
 abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
 
+    protected int resourceToInflate;
     private ArrayList<Item> items;
     private ArrayList<Item> filteredItems;
 
-    ItemAdapter(Context context, ArrayList<Item> items) {
-        super(context, R.layout.row, items);
-        this.items = items;
-        Collections.sort(this.items, getComparator());
-
-        this.filteredItems = new ArrayList<>(items);
+    ItemAdapter(Context context, int resource, ArrayList<Item> items) {
+        super(context, resource, items);
+        initItems(resource, items);
     }
 
-    ItemAdapter(Context context, int resource, ArrayList<Item> items) {
-        super(context, resource, R.id.itemtitle, items);
+    ItemAdapter(Context context, int resource, int textResource, ArrayList<Item> items) {
+        super(context, resource, textResource, items);
+        initItems(resource, items);
+    }
+
+    private void initItems(int resourceToInflate, ArrayList<Item> items) {
+        this.resourceToInflate = resourceToInflate;
         this.items = items;
         Collections.sort(this.items, getComparator());
-
-        this.filteredItems = new ArrayList<>(items);
+        this.filteredItems = new ArrayList<>(this.items);
     }
 
     void updateFilteredList(String textFilter) {
@@ -55,10 +57,6 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         };
     }
 
-    int getResourceToInflate() {
-        return R.layout.row;
-    }
-
     TextView getTitleTextView(View mainView) {
         return mainView.findViewById(R.id.itemtitle);
     }
@@ -69,7 +67,7 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         View v = convertView;
         if (v == null) {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(getResourceToInflate(), null);
+            v = vi.inflate(resourceToInflate, null);
         }
         Item i = getItem(position);
         if (i != null) {
