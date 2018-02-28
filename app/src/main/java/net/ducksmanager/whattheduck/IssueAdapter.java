@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -22,29 +23,21 @@ public class IssueAdapter extends ItemAdapter<Issue> {
 
     @Override
     protected Integer getPrefixImageResource(Issue i, Activity activity) {
-        if (i.getIssueCondition() != null) {
-            return Issue.issueConditionToResourceId(i.getIssueCondition());
-        } else {
-            return android.R.color.transparent;
-        }
+        return null;
     }
 
     @Override
     protected Integer getSuffixImageResource(Issue i) {
-        if (i.getPurchase() != null) {
-            return R.drawable.ic_clock;
-        } else {
-            return null;
-        }
+        return null;
     }
 
     @Override
     protected String getSuffixText(Issue i) {
-        if (i.getPurchase() != null) {
-            return PurchaseAdapter.dateFormat.format(i.getPurchase().getPurchaseDate());
-        } else {
-            return null;
-        }
+        return null;
+    }
+
+    TextView getTitleTextView(View mainView) {
+        return null;
     }
 
     @Override
@@ -56,7 +49,7 @@ public class IssueAdapter extends ItemAdapter<Issue> {
             Issue i = getItem(position);
 
             String url = WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL)
-                + "/"
+                + "/edges/"
                 + WhatTheDuck.getSelectedCountry()
                 + "/gen/"
                 + WhatTheDuck.getSelectedPublication()
@@ -64,11 +57,35 @@ public class IssueAdapter extends ItemAdapter<Issue> {
                     .replaceAll(" ", "")
                 + "." + i.getIssueNumber() + ".png";
 
+
+//            Picasso.with(IssueAdapter.this.getContext()).load(url).into(new Target() {
+//                @Override
+//                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                    int width = bitmap.getWidth();
+//                    int height = bitmap.getHeight();
+//                    edgeView.setLayoutParams(new LinearLayout.LayoutParams(width,height));
+//                    ((ImageView)edgeView).setImageBitmap(bitmap);
+//                }
+//
+//                @Override
+//                public void onBitmapFailed(Drawable errorDrawable) {
+//
+//                }
+//
+//                @Override
+//                public void onPrepareLoad(Drawable placeHolderDrawable) {
+//
+//                }
+//            });
+
+            View edgeView = v.findViewById(R.id.itemedge);
             Picasso
                 .with(getContext())
                 .load(url)
                 .rotate(90f)
-                .into((ImageView) v.findViewById(R.id.itemedge));
+                .into((ImageView) edgeView);
+
+//            edgeView.setLayoutParams(new LinearLayout.LayoutParams(250,edgeView.getLayoutParams().height));
         }
 
         return v;

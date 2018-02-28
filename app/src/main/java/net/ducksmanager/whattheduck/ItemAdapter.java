@@ -72,8 +72,11 @@ abstract class ItemAdapter<Item> extends ArrayAdapter<Item> {
         }
         Item i = getItem(position);
         if (i != null) {
-            getTitleTextView(v).setText(getText(i));
-            getTitleTextView(v).setTypeface(null, isHighlighted(i) ? Typeface.BOLD : Typeface.NORMAL);
+            TextView titleTextView = getTitleTextView(v);
+            if (titleTextView != null) {
+                titleTextView.setText(getText(i));
+                titleTextView.setTypeface(null, isHighlighted(i) ? Typeface.BOLD : Typeface.NORMAL);
+            }
 
             ImageView prefixImage = v.findViewById(R.id.prefiximage);
             if (prefixImage != null) {
