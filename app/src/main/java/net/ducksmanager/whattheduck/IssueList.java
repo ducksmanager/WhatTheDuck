@@ -38,6 +38,7 @@ public class IssueList extends List<Issue> {
                 WhatTheDuck.getSelectedCountry(),
                 WhatTheDuck.getSelectedPublication()
             )));
+            getListView().setDivider(null);
         }
     }
     

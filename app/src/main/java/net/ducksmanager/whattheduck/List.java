@@ -172,8 +172,6 @@ public abstract class List<Item> extends ListActivity{
             getListView().setTextFilterEnabled(false);
             filterEditText.setVisibility(EditText.GONE);
         }
-
-        getListView().setDivider(null);
     }
 
     private void takeCoverPicture() {
