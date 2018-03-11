@@ -4,11 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.widget.ListView;
+import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import net.ducksmanager.util.MultipleCustomCheckboxes;
-import net.igenius.customcheckbox.CustomCheckBox;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -99,24 +98,21 @@ public class AddIssue extends Activity {
     }
 
     void showPurchases(final Boolean checkNoPurchaseItem) {
-        final ListView lv = this.findViewById(R.id.purchase_list);
+        final RecyclerView rv = this.findViewById(R.id.purchase_list);
 
         final MultipleCustomCheckboxes purchaseDateCheckboxes = new MultipleCustomCheckboxes(
-            new WeakReference<>(lv),
+            new WeakReference<>(rv),
             view ->
                 selectedPurchaseHash = view.getContentDescription().toString(),
             view ->
                 selectedPurchaseHash = null
         );
-        lv.setAdapter(new PurchaseAdapter(this, purchases));
-        lv.post(() -> {
+        rv.setAdapter(new PurchaseAdapter(this, purchases));
+        rv.post(() -> {
             purchaseDateCheckboxes.initClickEvents();
             if (checkNoPurchaseItem) {
                 purchaseDateCheckboxes.checkInitialCheckbox(checkbox -> checkbox.getContentDescription().toString().contains(SpecialPurchase.class.getSimpleName()));
             }
         });
-
-        lv.setOnItemClickListener((adapterView, view, i, l) ->
-            ((CustomCheckBox)view.findViewById(R.id.purchasecheck)).setChecked(true));
     }
 }

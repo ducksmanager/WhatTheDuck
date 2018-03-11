@@ -2,8 +2,8 @@ package net.ducksmanager.whattheduck;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ListView;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 
 import net.ducksmanager.inducks.coa.PublicationListing;
 
@@ -32,25 +32,19 @@ public class PublicationList extends List {
     @Override
     public void onBackPressed() {
         Intent i = new Intent(WhatTheDuck.wtd, CountryList.class);
-        i.putExtra("type", type);
         startActivity(i);
+    }
+
+    @NonNull
+    LinearLayoutManager getLayoutManager() {
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        return llm;
     }
         
     protected void show() {
         if (WhatTheDuck.getSelectedCountry() != null) {
             super.show(new PublicationAdapter(this, getCollection().getPublicationList(WhatTheDuck.getSelectedCountry())));
         }
-    }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        PublicationAdapter.Publication selectedPublication = (PublicationAdapter.Publication) this.getListView().getItemAtPosition(((Long) id).intValue());
-        WhatTheDuck.setSelectedPublication (selectedPublication.getPublicationCode());
-
-        Intent i = new Intent(this, IssueList.class);
-        i.putExtra("type", this.type);
-        startActivity(i);
     }
 }

@@ -45,11 +45,11 @@
         android:layout_below="@id/onlyInCollectionSwitch">
     </EditText>
 
-    <ListView
-        android:id="@+id/android:list"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/itemList"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/row"
+        tools:listitem="@layout/row_edge"
         android:layout_below="@id/filter" />
 
     <TextView

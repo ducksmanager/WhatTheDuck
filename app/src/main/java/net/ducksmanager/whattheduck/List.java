@@ -1,11 +1,14 @@
 package net.ducksmanager.whattheduck;
 
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -31,12 +34,11 @@ import java.util.ArrayList;
 
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
-public abstract class List<Item> extends ListActivity{
+public abstract class List<Item> extends Activity {
     private static final int LOGOUT = 1;
 
-    String type;
+    protected static String type = CollectionType.USER.toString();
     private Boolean requiresDataDownload = false;
-    private ArrayList<Item> items;
     private ItemAdapter itemAdapter;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -47,35 +49,44 @@ public abstract class List<Item> extends ListActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle extras = getIntent().getExtras();
-        type = extras != null && extras.getString("type") != null
-                    ? extras.getString("type")
-                    : CollectionType.USER.toString();
-
         setContentView(R.layout.wtd_list);
 
-        this.findViewById(R.id.navigationAllCountries).setOnClickListener(view ->
-            goToView(CountryList.class)
-        );
+        RecyclerView recyclerView = this.findViewById(R.id.itemList);
+        recyclerView.setLayoutManager(getLayoutManager());
 
-        this.findViewById(R.id.navigationCountry).findViewById(R.id.selected).setOnClickListener(view ->
-            goToView(PublicationList.class)
-        );
+        View navigationAllCountries = this.findViewById(R.id.navigationAllCountries);
+        if (navigationAllCountries != null) {
+            navigationAllCountries.setOnClickListener(view ->
+                goToView(CountryList.class)
+            );
+        }
+
+        View navigationCurrentCountry = this.findViewById(R.id.navigationCountry);
+        if (navigationCurrentCountry != null) {
+            navigationCurrentCountry.findViewById(R.id.selected).setOnClickListener(view ->
+                goToView(PublicationList.class)
+            );
+        }
 
         Switch onlyInCollectionSwitch = this.findViewById(R.id.onlyInCollectionSwitch);
-        onlyInCollectionSwitch.setChecked(type.equals(CollectionType.USER.toString()));
+        if (onlyInCollectionSwitch != null) {
+            onlyInCollectionSwitch.setChecked(type.equals(CollectionType.USER.toString()));
 
-        onlyInCollectionSwitch.setOnClickListener(view -> {
-            Switch onlyInCollectionSwitch1 = (Switch) view;
-            List.this.goToAlternativeView(
-                onlyInCollectionSwitch1.isChecked()
-                    ? CollectionType.USER.toString()
-                    : CollectionType.COA.toString()
-            );
-        });
+            onlyInCollectionSwitch.setOnClickListener(view -> {
+                Switch onlyInCollectionSwitch1 = (Switch) view;
+                List.this.goToAlternativeView(
+                    onlyInCollectionSwitch1.isChecked()
+                        ? CollectionType.USER.toString()
+                        : CollectionType.COA.toString()
+                );
+            });
+        }
 
         loadList();
     }
+
+    @NonNull
+    abstract LinearLayoutManager getLayoutManager();
 
     private void loadList() {
         ((WhatTheDuckApplication) getApplication()).trackActivity(this);
@@ -86,27 +97,29 @@ public abstract class List<Item> extends ListActivity{
         }
 
         RelativeLayout addToCollection = this.findViewById(R.id.addToCollectionWrapper);
-        addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
+        if (addToCollection != null) {
+            addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
 
-        if (type.equals(CollectionType.USER.toString())) {
-            addToCollection.setOnClickListener(view ->
-                takeCoverPicture()
-            );
+            if (type.equals(CollectionType.USER.toString())) {
+                addToCollection.setOnClickListener(view ->
+                    takeCoverPicture()
+                );
 
-            if (WhatTheDuck.getShowCoverTooltip()) {
-                new SimpleTooltip.Builder(this)
-                    .anchorView(addToCollection)
-                    .text(R.string.add_cover_tooltip)
-                    .gravity(Gravity.TOP)
-                    .animated(true)
-                    .margin(5.0f)
-                    .transparentOverlay(true)
-                    .build()
-                    .show();
+                if (WhatTheDuck.getShowCoverTooltip()) {
+                    new SimpleTooltip.Builder(this)
+                        .anchorView(addToCollection)
+                        .text(R.string.add_cover_tooltip)
+                        .gravity(Gravity.TOP)
+                        .animated(true)
+                        .margin(5.0f)
+                        .transparentOverlay(true)
+                        .build()
+                        .show();
+                }
+
+                WhatTheDuck.setShowCoverTooltip(false);
+                WhatTheDuck.saveSettings(null);
             }
-
-            WhatTheDuck.setShowCoverTooltip(false);
-            WhatTheDuck.saveSettings(null);
         }
 
         setTitle(
@@ -119,7 +132,6 @@ public abstract class List<Item> extends ListActivity{
     private void goToView(Class<?> cls) {
         if (!List.this.getClass().equals(cls)) {
             Intent i = new Intent(WhatTheDuck.wtd, cls);
-            i.putExtra("type", type);
             startActivity(i);
         }
     }
@@ -140,37 +152,46 @@ public abstract class List<Item> extends ListActivity{
         ProgressBar loadingProgressBar = this.findViewById(R.id.progressBarLoading);
         TextView emptyListText = this.findViewById(R.id.emptyList);
 
+        ArrayList<Item> items;
         if (this.requiresDataDownload) {
-            this.items = new ArrayList<>();
-            emptyListText.setVisibility(TextView.INVISIBLE);
-            loadingProgressBar.setVisibility(TextView.VISIBLE);
+            items = new ArrayList<>();
+            if (emptyListText != null) {
+                emptyListText.setVisibility(TextView.INVISIBLE);
+            }
+            if (loadingProgressBar != null) {
+                loadingProgressBar.setVisibility(TextView.VISIBLE);
+            }
         }
         else {
-            this.items = itemAdapter.getItems();
+            items = itemAdapter.getItems();
 
-            emptyListText.setVisibility(items.size() == 0 ? TextView.VISIBLE : TextView.INVISIBLE);
-            loadingProgressBar.setVisibility(TextView.INVISIBLE);
+            if (emptyListText != null) {
+                emptyListText.setVisibility(items.size() == 0 ? TextView.VISIBLE : TextView.INVISIBLE);
+            }
+            if (loadingProgressBar != null) {
+                loadingProgressBar.setVisibility(TextView.INVISIBLE);
+            }
         }
 
-        setListAdapter(this.itemAdapter);
+        RecyclerView recyclerView = findViewById(R.id.itemList);
+        recyclerView.setAdapter(this.itemAdapter);
 
         EditText filterEditText = this.findViewById(R.id.filter);
-        if (items.size() > 20) {
-            getListView().setTextFilterEnabled(true);
-            filterEditText.setVisibility(EditText.VISIBLE);
+        if (filterEditText != null) {
+            if (items.size() > 20) {
+                filterEditText.setVisibility(EditText.VISIBLE);
 
-            filterEditText.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) { }
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    List.this.itemAdapter.updateFilteredList(s.toString());
-                    List.this.itemAdapter.notifyDataSetInvalidated();
-                }
-            });
-        }
-        else {
-            getListView().setTextFilterEnabled(false);
-            filterEditText.setVisibility(EditText.GONE);
+                filterEditText.addTextChangedListener(new TextWatcher() {
+                    public void afterTextChanged(Editable s) { }
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        List.this.itemAdapter.updateFilteredList(s.toString());
+                    }
+                });
+            }
+            else {
+                filterEditText.setVisibility(EditText.GONE);
+            }
         }
     }
 
@@ -239,38 +260,40 @@ public abstract class List<Item> extends ListActivity{
     }
 
     private void setNavigation(String selectedCountry, String selectedPublication) {
-        final View generealNavigationView = this.findViewById(R.id.navigation);
+        final View generalNavigationView = this.findViewById(R.id.navigation);
         final View countryNavigationView = this.findViewById(R.id.navigationCountry);
         final View publicationNavigationView = this.findViewById(R.id.navigationPublication);
 
-        generealNavigationView.setVisibility(selectedCountry == null ? View.GONE : View.VISIBLE);
-        publicationNavigationView.setVisibility(selectedPublication == null ? View.INVISIBLE : View.VISIBLE);
+        if (generalNavigationView != null) {
+            generalNavigationView.setVisibility(selectedCountry == null ? View.GONE : View.VISIBLE);
+            publicationNavigationView.setVisibility(selectedPublication == null ? View.INVISIBLE : View.VISIBLE);
 
-        if (selectedCountry != null) {
-            final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
+            if (selectedCountry != null) {
+                final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
 
-            String uri = "@drawable/flags_" + selectedCountry;
-            int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+                String uri = "@drawable/flags_" + selectedCountry;
+                int imageResource = getResources().getIdentifier(uri, null, getPackageName());
 
-            if (imageResource == 0) {
-                imageResource = R.drawable.flags_unknown;
+                if (imageResource == 0) {
+                    imageResource = R.drawable.flags_unknown;
+                }
+
+                ImageView currentCountryFlag = countryNavigationView.findViewById(R.id.selectedBadgeImage);
+                currentCountryFlag.setImageResource(imageResource);
+
+                TextView currentCountryText = countryNavigationView.findViewById(R.id.selected);
+                currentCountryText.setText(countryFullName);
             }
 
-            ImageView currentCountryFlag = countryNavigationView.findViewById(R.id.selectedBadgeImage);
-            currentCountryFlag.setImageResource(imageResource);
+            if (selectedPublication != null) {
+                final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
 
-            TextView currentCountryText = countryNavigationView.findViewById(R.id.selected);
-            currentCountryText.setText(countryFullName);
-        }
+                TextView currentPublicationBadgeText = publicationNavigationView.findViewById(R.id.selectedBadge);
+                currentPublicationBadgeText.setText(selectedPublication.split("/")[1]);
 
-        if (selectedPublication != null) {
-            final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
-
-            TextView currentPublicationBadgeText = publicationNavigationView.findViewById(R.id.selectedBadge);
-            currentPublicationBadgeText.setText(selectedPublication.split("/")[1]);
-
-            TextView currentPublicationText = publicationNavigationView.findViewById(R.id.selected);
-            currentPublicationText.setText(publicationFullName);
+                TextView currentPublicationText = publicationNavigationView.findViewById(R.id.selected);
+                currentPublicationText.setText(publicationFullName);
+            }
         }
     }
 

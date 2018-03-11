@@ -2,16 +2,14 @@ package net.ducksmanager.whattheduck;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ListView;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 
 import net.ducksmanager.inducks.coa.IssueListing;
-import net.ducksmanager.retrievetasks.GetPurchaseList;
-import net.ducksmanager.whattheduck.Collection.CollectionType;
-
-import java.lang.ref.WeakReference;
 
 public class IssueList extends List<Issue> {
+
+    private boolean isLandscape;
 
     @Override
     protected boolean needsToDownloadFullList() {
@@ -28,39 +26,33 @@ public class IssueList extends List<Issue> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        this.isLandscape = getResources().getConfiguration().orientation == 2;
         show();
+    }
+
+    @NonNull
+    LinearLayoutManager getLayoutManager() {
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(isLandscape ? LinearLayoutManager.HORIZONTAL : LinearLayoutManager.VERTICAL);
+        return llm;
     }
 
     protected void show() {
         if (WhatTheDuck.getSelectedCountry() != null && WhatTheDuck.getSelectedPublication() != null) {
-            super.show(new IssueAdapter(this, getCollection().getIssueList(
-                WhatTheDuck.getSelectedCountry(),
-                WhatTheDuck.getSelectedPublication()
-            )));
-            getListView().setDivider(null);
+            super.show(new IssueAdapter(
+                this,
+                getCollection().getIssueList(
+                    WhatTheDuck.getSelectedCountry(),
+                    WhatTheDuck.getSelectedPublication()
+                ),
+                isLandscape
+            ));
         }
     }
     
     @Override
     public void onBackPressed() {
         Intent i = new Intent(WhatTheDuck.wtd, PublicationList.class);
-        i.putExtra("type", type);
         startActivity(i);
-    }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, final long id) {
-        if (type.equals(CollectionType.COA.toString())) {
-            final Issue selectedIssue = (Issue) this.getListView().getItemAtPosition(((Long) id).intValue());
-            if (WhatTheDuck.userCollection.getIssue(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), selectedIssue.getIssueNumber()) != null) {
-                WhatTheDuck.wtd.info(new WeakReference<>(this), R.string.input_error__issue_already_possessed);
-            }
-            else {
-                WhatTheDuck.setSelectedIssue(selectedIssue.getIssueNumber());
-                GetPurchaseList.initAndShowAddIssue(IssueList.this);
-            }
-        }
-        super.onListItemClick(l, v, position, id);
     }
 }

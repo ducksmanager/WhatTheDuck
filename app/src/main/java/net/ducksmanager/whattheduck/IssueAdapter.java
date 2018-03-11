@@ -1,24 +1,85 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import net.ducksmanager.retrievetasks.GetPurchaseList;
 
 import java.util.ArrayList;
 
 public class IssueAdapter extends ItemAdapter<Issue> {
-    public IssueAdapter(List list, ArrayList<Issue> items) {
-        super(list, R.layout.row_edge, items);
+
+    private final boolean isLandscape;
+
+    IssueAdapter(Activity activity, ArrayList<Issue> items, Boolean isLandscape) {
+        super(activity, R.layout.row_edge, items);
+        this.isLandscape = isLandscape;
+    }
+
+    @Override
+    protected ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
+    }
+
+    @Override
+    protected View.OnClickListener getOnClickListener() {
+        return view -> {
+            int position = ((RecyclerView) view.getParent()).getChildLayoutPosition(view);
+            if (List.type.equals(Collection.CollectionType.COA.toString())) {
+                final Issue selectedIssue = IssueAdapter.this.getItem(position);
+                if (WhatTheDuck.userCollection.getIssue(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), selectedIssue.getIssueNumber()) != null) {
+//                    WhatTheDuck.wtd.info(new WeakReference<IssueAdapter.this>(context), R.string.input_error__issue_already_possessed);
+                } else {
+                    WhatTheDuck.setSelectedIssue(selectedIssue.getIssueNumber());
+                    GetPurchaseList.initAndShowAddIssue(new IssueList());
+                }
+            }
+        };
+    }
+
+    class ViewHolder extends ItemAdapter.ViewHolder {
+        ImageView edgeView;
+
+        ViewHolder(View v) {
+            super(v);
+            edgeView = v.findViewById(R.id.itemedge);
+        }
+    }
+
+
+    @Override
+    public void onBindViewHolder(ItemAdapter.ViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+
+        IssueAdapter.ViewHolder issueHolder = (IssueAdapter.ViewHolder) holder;
+        Issue i = getItem(position);
+
+        Boolean isLandscapeView = true; //TODO
+
+        String url = WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL)
+            + "/edges/"
+            + WhatTheDuck.getSelectedCountry()
+            + "/gen/"
+            + WhatTheDuck.getSelectedPublication()
+            .replaceFirst("[^/]+/", "")
+            .replaceAll(" ", "")
+            + "." + i.getIssueNumber() + ".png";
+
+        ImageView edgeView = issueHolder.edgeView.findViewById(R.id.itemedge);
+        Picasso
+            .with(context)
+            .load(url)
+            .rotate(isLandscape ? 0 : 90f)
+            .into(edgeView);
     }
 
     @Override
     protected boolean isHighlighted(Issue i) {
-        return i.getIssueCondition() != null;
+        return false;
     }
 
     @Override
@@ -34,61 +95,6 @@ public class IssueAdapter extends ItemAdapter<Issue> {
     @Override
     protected String getSuffixText(Issue i) {
         return null;
-    }
-
-    TextView getTitleTextView(View mainView) {
-        return null;
-    }
-
-    @Override
-    @NonNull
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        View v = super.getView(position, convertView, parent);
-
-        if (resourceToInflate != R.layout.row) {
-            Issue i = getItem(position);
-
-            String url = WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL)
-                + "/edges/"
-                + WhatTheDuck.getSelectedCountry()
-                + "/gen/"
-                + WhatTheDuck.getSelectedPublication()
-                    .replaceFirst("[^/]+/", "")
-                    .replaceAll(" ", "")
-                + "." + i.getIssueNumber() + ".png";
-
-
-//            Picasso.with(IssueAdapter.this.getContext()).load(url).into(new Target() {
-//                @Override
-//                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                    int width = bitmap.getWidth();
-//                    int height = bitmap.getHeight();
-//                    edgeView.setLayoutParams(new LinearLayout.LayoutParams(width,height));
-//                    ((ImageView)edgeView).setImageBitmap(bitmap);
-//                }
-//
-//                @Override
-//                public void onBitmapFailed(Drawable errorDrawable) {
-//
-//                }
-//
-//                @Override
-//                public void onPrepareLoad(Drawable placeHolderDrawable) {
-//
-//                }
-//            });
-
-            View edgeView = v.findViewById(R.id.itemedge);
-            Picasso
-                .with(getContext())
-                .load(url)
-                .rotate(90f)
-                .into((ImageView) edgeView);
-
-//            edgeView.setLayoutParams(new LinearLayout.LayoutParams(250,edgeView.getLayoutParams().height));
-        }
-
-        return v;
     }
 
     @Override

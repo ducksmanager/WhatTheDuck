@@ -1,10 +1,9 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ListView;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
@@ -42,18 +41,14 @@ public class CountryList extends List {
         show();
     }
 
-    protected void show() {
-        super.show(new CountryAdapter(this, getCollection().getCountryList()));
+    @NonNull
+    LinearLayoutManager getLayoutManager() {
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        return llm;
     }
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        CountryAdapter.Country selectedCountry = (CountryAdapter.Country) this.getListView().getItemAtPosition(((Long)id).intValue());
-        WhatTheDuck.setSelectedCountry (selectedCountry.getShortName());
-
-        Intent i = new Intent(this, PublicationList.class);
-        i.putExtra("type", this.type);
-        startActivity(i);
+    protected void show() {
+        super.show(new CountryAdapter(this, getCollection().getCountryList()));
     }
 }
