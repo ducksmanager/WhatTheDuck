@@ -1,4 +1,8 @@
-Version 1.6.2
+Version 1.6.4
+
+    Use an AppBar instead of an ActionBar
+
+Version 1.6.3
 
     Improve performance when loading lists
 
