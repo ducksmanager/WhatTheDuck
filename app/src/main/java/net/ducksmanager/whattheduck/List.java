@@ -1,19 +1,19 @@
 package net.ducksmanager.whattheduck;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
-public abstract class List<Item> extends Activity {
+public abstract class List<Item> extends AppCompatActivity {
     private static final int LOGOUT = 1;
 
     protected static String type = CollectionType.USER.toString();
@@ -81,6 +81,9 @@ public abstract class List<Item> extends Activity {
                 );
             });
         }
+
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
         loadList();
     }
@@ -226,31 +229,13 @@ public abstract class List<Item> extends Activity {
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         menu.add(0, LOGOUT, 1, R.string.logout_menu);
 
         return true;
-    }
-
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        Intent i = null;
-        switch(item.getItemId()) {
-            case LOGOUT:
-                WhatTheDuck.userCollection = new Collection();
-                WhatTheDuck.coaCollection = new Collection();
-                WhatTheDuck.setUsername(null);
-                WhatTheDuck.setPassword(null);
-                WhatTheDuck.saveSettings(false);
-                i = new Intent(WhatTheDuck.wtd, WhatTheDuck.class);
-
-                break;
-        }
-        startActivity(i);
-
-        return super.onMenuItemSelected(featureId, item);
     }
 
     Collection getCollection() {

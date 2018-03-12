@@ -8,10 +8,19 @@
                 android:orientation="vertical"
                 android:focusableInTouchMode="true"
                 android:id="@+id/list">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        popupTheme="@style/ThemeOverlay.AppCompat"/>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:id="@+id/navigation"
+        android:layout_below="@+id/my_toolbar"
         android:layout_height="wrap_content">
         <include
             android:id="@+id/navigationAllCountries"
