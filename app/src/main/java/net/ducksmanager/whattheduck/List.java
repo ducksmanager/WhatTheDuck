@@ -65,6 +65,10 @@ public abstract class List<Item> extends AppCompatActivity {
             goToView(PublicationList.class)
         );
 
+        this.findViewById(R.id.navigationCountry).findViewById(R.id.selectedBadgeImage).setOnClickListener(view ->
+            goToView(PublicationList.class)
+        );
+
         Switch onlyInCollectionSwitch = this.findViewById(R.id.onlyInCollectionSwitch);
         onlyInCollectionSwitch.setChecked(type.equals(CollectionType.USER.toString()));
 
