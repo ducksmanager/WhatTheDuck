@@ -31,7 +31,7 @@
     <string name="itemtitle">Utgåvans nummer</string>
     <string name="link_to_ducksmanager_website">What The Duck är mobilappen av DucksManager. Klicka här för gå till DucksManagers hemsida.</string>
     <string name="login">Login</string>
-    <string name="logout_menu">Logga ut</string>
+    <string name="logout">Logga ut</string>
     <string name="my_collection">Min samling</string>
     <string name="network_error">Nätverksfel</string>
     <string name="network_error__no_connection">Godkänn</string>

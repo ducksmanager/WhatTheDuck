@@ -2,8 +2,7 @@ package net.ducksmanager.whattheduck;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ListView;
+import android.widget.AdapterView;
 
 import net.ducksmanager.inducks.coa.IssueListing;
 import net.ducksmanager.retrievetasks.GetPurchaseList;
@@ -40,26 +39,27 @@ public class IssueList extends List<Issue> {
             )));
         }
     }
-    
+
+    @Override
+    protected AdapterView.OnItemClickListener getOnItemClickListener() {
+        return (adapterView, view, position, l) -> {
+            if (type.equals(CollectionType.COA.toString())) {
+                final Issue selectedIssue = (Issue) IssueList.this.lv.getItemAtPosition((int) l);
+                if (WhatTheDuck.userCollection.getIssue(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), selectedIssue.getIssueNumber()) != null) {
+                    WhatTheDuck.wtd.info(new WeakReference<>(IssueList.this), R.string.input_error__issue_already_possessed);
+                }
+                else {
+                    WhatTheDuck.setSelectedIssue(selectedIssue.getIssueNumber());
+                    GetPurchaseList.initAndShowAddIssue(IssueList.this);
+                }
+            }
+        };
+    }
+
     @Override
     public void onBackPressed() {
         Intent i = new Intent(WhatTheDuck.wtd, PublicationList.class);
         i.putExtra("type", type);
         startActivity(i);
-    }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, final long id) {
-        if (type.equals(CollectionType.COA.toString())) {
-            final Issue selectedIssue = (Issue) this.getListView().getItemAtPosition(((Long) id).intValue());
-            if (WhatTheDuck.userCollection.getIssue(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), selectedIssue.getIssueNumber()) != null) {
-                WhatTheDuck.wtd.info(new WeakReference<>(this), R.string.input_error__issue_already_possessed);
-            }
-            else {
-                WhatTheDuck.setSelectedIssue(selectedIssue.getIssueNumber());
-                GetPurchaseList.initAndShowAddIssue(IssueList.this);
-            }
-        }
-        super.onListItemClick(l, v, position, id);
     }
 }

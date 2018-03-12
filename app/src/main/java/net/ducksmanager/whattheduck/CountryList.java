@@ -3,8 +3,7 @@ package net.ducksmanager.whattheduck;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ListView;
+import android.widget.AdapterView;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
@@ -47,13 +46,14 @@ public class CountryList extends List {
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        CountryAdapter.Country selectedCountry = (CountryAdapter.Country) this.getListView().getItemAtPosition(((Long)id).intValue());
-        WhatTheDuck.setSelectedCountry (selectedCountry.getShortName());
+    protected AdapterView.OnItemClickListener getOnItemClickListener() {
+        return (adapterView, view, position, l) -> {
+            CountryAdapter.Country selectedCountry = (CountryAdapter.Country) CountryList.this.lv.getItemAtPosition((int) l);
+            WhatTheDuck.setSelectedCountry(selectedCountry.getShortName());
 
-        Intent i = new Intent(this, PublicationList.class);
-        i.putExtra("type", this.type);
-        startActivity(i);
+            Intent i = new Intent(this, PublicationList.class);
+            i.putExtra("type", this.type);
+            startActivity(i);
+        };
     }
 }

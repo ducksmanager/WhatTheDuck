@@ -1,19 +1,23 @@
 package net.ducksmanager.whattheduck;
 
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -31,8 +35,10 @@ import java.util.ArrayList;
 
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
-public abstract class List<Item> extends ListActivity{
+public abstract class List<Item> extends AppCompatActivity {
     private static final int LOGOUT = 1;
+
+    protected ListView lv;
 
     String type;
     private Boolean requiresDataDownload = false;
@@ -73,6 +79,9 @@ public abstract class List<Item> extends ListActivity{
                     : CollectionType.COA.toString()
             );
         });
+
+        Toolbar myToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
 
         loadList();
     }
@@ -152,12 +161,15 @@ public abstract class List<Item> extends ListActivity{
             loadingProgressBar.setVisibility(TextView.INVISIBLE);
         }
 
-        setListAdapter(this.itemAdapter);
+        lv = this.findViewById(R.id.itemList);
+        lv.setAdapter(this.itemAdapter);
+        lv.setOnItemClickListener(getOnItemClickListener());
 
         EditText filterEditText = this.findViewById(R.id.filter);
         if (items.size() > 20) {
-            getListView().setTextFilterEnabled(true);
+            lv.setTextFilterEnabled(true);
             filterEditText.setVisibility(EditText.VISIBLE);
+            filterEditText.setText("");
 
             filterEditText.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) { }
@@ -169,10 +181,12 @@ public abstract class List<Item> extends ListActivity{
             });
         }
         else {
-            getListView().setTextFilterEnabled(false);
+            lv.setTextFilterEnabled(false);
             filterEditText.setVisibility(EditText.GONE);
         }
     }
+
+    protected abstract AdapterView.OnItemClickListener getOnItemClickListener();
 
     private void takeCoverPicture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -205,19 +219,19 @@ public abstract class List<Item> extends ListActivity{
         }
     }
 
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        menu.add(0, LOGOUT, 1, R.string.logout_menu);
-
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
         return true;
     }
 
+
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         Intent i = null;
-        switch(item.getItemId()) {
-            case LOGOUT:
+
+        switch (item.getItemId()) {
+            case R.id.action_logout:
                 WhatTheDuck.userCollection = new Collection();
                 WhatTheDuck.coaCollection = new Collection();
                 WhatTheDuck.setUsername(null);
@@ -227,9 +241,13 @@ public abstract class List<Item> extends ListActivity{
 
                 break;
         }
-        startActivity(i);
-
-        return super.onMenuItemSelected(featureId, item);
+        if (i == null) {
+            return super.onOptionsItemSelected(item);
+        }
+        else {
+            startActivity(i);
+            return true;
+        }
     }
 
     Collection getCollection() {
@@ -239,11 +257,11 @@ public abstract class List<Item> extends ListActivity{
     }
 
     private void setNavigation(String selectedCountry, String selectedPublication) {
-        final View generealNavigationView = this.findViewById(R.id.navigation);
+        final View generalNavigationView = this.findViewById(R.id.navigation);
         final View countryNavigationView = this.findViewById(R.id.navigationCountry);
         final View publicationNavigationView = this.findViewById(R.id.navigationPublication);
 
-        generealNavigationView.setVisibility(selectedCountry == null ? View.GONE : View.VISIBLE);
+        generalNavigationView.setVisibility(selectedCountry == null ? View.GONE : View.VISIBLE);
         publicationNavigationView.setVisibility(selectedPublication == null ? View.INVISIBLE : View.VISIBLE);
 
         if (selectedCountry != null) {
