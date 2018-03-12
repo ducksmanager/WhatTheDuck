@@ -9,16 +9,15 @@ public class Issue implements Serializable {
     public static final String GOOD_CONDITION="bon";
     public static final String NO_CONDITION="indefini";
 
-    private final String issueNumber;
-
     public enum IssueCondition {BAD_CONDITION, NOTSOGOOD_CONDITION, GOOD_CONDITION, NO_CONDITION}
-    private final IssueCondition issueCondition;
+
+    private final String issueNumber;
+    private IssueCondition issueCondition = issueConditionStrToIssueCondition(Issue.NO_CONDITION);
     private PurchaseWithDate purchase;
 
-    public Issue(String issuenumber, String issueCondition) {
+    public Issue(String issuenumber) {
         super();
         this.issueNumber = issuenumber;
-        this.issueCondition=issueConditionStrToIssueCondition(issueCondition);
     }
 
     public Issue(String issuenumber, String issueCondition, PurchaseWithDate purchase) {

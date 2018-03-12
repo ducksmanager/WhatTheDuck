@@ -3,7 +3,7 @@ package net.ducksmanager.whattheduck;
 import java.util.Date;
 
 public class PurchaseWithDate extends Purchase {
-    private Integer id;
+    private final Integer id;
     private final Date purchaseDate;
     private final String purchaseName;
 

@@ -6,7 +6,7 @@ import android.widget.AdapterView;
 
 import net.ducksmanager.inducks.coa.PublicationListing;
 
-public class PublicationList extends List {
+public class PublicationList extends List<PublicationAdapter.Publication> {
 
     @Override
     protected boolean needsToDownloadFullList() {

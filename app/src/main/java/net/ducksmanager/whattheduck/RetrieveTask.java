@@ -118,7 +118,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         }
     }
 
-    protected boolean hasFailed() {
-        return this.thrownException != null;
+    protected boolean hasSucceeded() {
+        return this.thrownException == null;
     }
 }

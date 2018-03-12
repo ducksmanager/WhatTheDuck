@@ -36,13 +36,10 @@ import java.util.ArrayList;
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
 public abstract class List<Item> extends AppCompatActivity {
-    private static final int LOGOUT = 1;
-
-    protected ListView lv;
+    ListView lv;
 
     String type;
     private Boolean requiresDataDownload = false;
-    private ArrayList<Item> items;
     private ItemAdapter itemAdapter;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -149,13 +146,14 @@ public abstract class List<Item> extends AppCompatActivity {
         ProgressBar loadingProgressBar = this.findViewById(R.id.progressBarLoading);
         TextView emptyListText = this.findViewById(R.id.emptyList);
 
+        ArrayList<Item> items;
         if (this.requiresDataDownload) {
-            this.items = new ArrayList<>();
+            items = new ArrayList<>();
             emptyListText.setVisibility(TextView.INVISIBLE);
             loadingProgressBar.setVisibility(TextView.VISIBLE);
         }
         else {
-            this.items = itemAdapter.getItems();
+            items = itemAdapter.getItems();
 
             emptyListText.setVisibility(items.size() == 0 ? TextView.VISIBLE : TextView.INVISIBLE);
             loadingProgressBar.setVisibility(TextView.INVISIBLE);

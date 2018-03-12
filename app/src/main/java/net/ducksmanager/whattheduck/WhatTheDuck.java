@@ -294,7 +294,7 @@ public class WhatTheDuck extends Activity {
     }
 
     public void retrieveOrFailDmServer(String urlSuffix, FutureCallback<String> futureCallback, String fileName, File file) throws Exception {
-        if (!isOnline()) {
+        if (isOffline()) {
             throw new Exception(""+R.string.network_error);
         }
 
@@ -313,7 +313,7 @@ public class WhatTheDuck extends Activity {
     }
 
     public String retrieveOrFail(RetrieveTask.DownloadHandler downloadHandler, String urlSuffix) throws Exception {
-        if (!isOnline()) {
+        if (isOffline()) {
             throw new Exception(""+R.string.network_error);
         }
 
@@ -361,10 +361,10 @@ public class WhatTheDuck extends Activity {
         toggleProgressbarLoading(new WeakReference<>(WhatTheDuck.wtd), progressBarId, toggle);
     }
 
-    private boolean isOnline() {
+    private boolean isOffline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnected();
+        return netInfo == null || !netInfo.isConnected();
     }
 
     public String getApplicationVersion() throws NameNotFoundException {

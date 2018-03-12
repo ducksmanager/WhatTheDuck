@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
-public class CountryList extends List {
+public class CountryList extends List<CountryAdapter.Country> {
 
     @Override
     protected boolean needsToDownloadFullList() {
