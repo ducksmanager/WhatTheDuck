@@ -49,7 +49,7 @@ public class WhatTheDuck extends Activity {
     @VisibleForTesting
     public static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
 
-    private static final String USER_SETTINGS = "settings.properties";
+    public static String USER_SETTINGS = "settings.properties";
 
     private static String serverURL;
 

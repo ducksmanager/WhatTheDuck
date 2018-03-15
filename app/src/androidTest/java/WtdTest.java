@@ -41,7 +41,7 @@ class WtdTest extends AndroidJUnitRunner {
     @BeforeClass
     public static void initDownloadHelper() {
         RetrieveTask.downloadHandler = new DownloadHandlerMock();
-        WhatTheDuck.setPassword(null);
+        WhatTheDuck.USER_SETTINGS = "settings_test.properties";
     }
 
     static void login(String user, String password) {
