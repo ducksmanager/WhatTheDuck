@@ -33,6 +33,7 @@ public class CoverFlowActivity extends Activity {
     private TextView mTitleText;
     
     private IssueWithFullUrl current = null;
+    public static String currentCoverUrl = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +102,7 @@ public class CoverFlowActivity extends Activity {
             @Override
             public void onScrolledToPosition(int position) {
                 current = mData.get(position);
+                currentCoverUrl = current.getFullUrl();
                 
                 String uri = "@drawable/flags_" + current.getCountryCode();
                 int imageResource = getResources().getIdentifier(uri, null, getPackageName());

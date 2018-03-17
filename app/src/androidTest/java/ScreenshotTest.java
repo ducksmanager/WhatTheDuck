@@ -1,9 +1,17 @@
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.provider.MediaStore;
+import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.filters.LargeTest;
+import android.widget.ImageView;
 
+import net.ducksmanager.util.CoverFlowActivity;
+import net.ducksmanager.util.CoverFlowFileHandler;
 import net.ducksmanager.whattheduck.CountryAdapter;
 import net.ducksmanager.whattheduck.IssueList;
 import net.ducksmanager.whattheduck.PublicationAdapter;
@@ -14,6 +22,7 @@ import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -24,6 +33,9 @@ import java.util.Locale;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
@@ -31,8 +43,6 @@ import static org.hamcrest.Matchers.instanceOf;
 @RunWith(Parameterized.class)
 @LargeTest
 public class ScreenshotTest extends WtdTest {
-    private static final String CONFIG_KEY_DEMO_PASSWORD = "demo_password";
-
     @Parameterized.Parameters
     public static Iterable<Object[]> data() {
         return Arrays.asList(new Locale[][]{
@@ -42,6 +52,7 @@ public class ScreenshotTest extends WtdTest {
         });
     }
 
+    private static final String CONFIG_KEY_DEMO_PASSWORD = "demo_password";
     private final Locale locale;
 
     public ScreenshotTest(Locale locale) {
@@ -52,7 +63,7 @@ public class ScreenshotTest extends WtdTest {
         return WhatTheDuckApplication.config.getProperty(CONFIG_KEY_DEMO_PASSWORD);
     }
 
-    private String getScreenshotPath(Locale locale) {
+    private String getScreenshotPath() {
         return ScreenshotTestRule.SCREENSHOTS_PATH_SHOWCASE + "/" + locale.getLanguage();
     }
 
@@ -64,10 +75,14 @@ public class ScreenshotTest extends WtdTest {
         resources.updateConfiguration(configuration, resources.getDisplayMetrics());
     }
 
-    @Test
-    public void testPublicationList() {
+    @Before
+    public void switchLocaleAndLogin() {
         switchLocale();
         login("demo", getDemoPassword());
+    }
+
+    @Test
+    public void testPublicationList() {
         onView(withId(R.id.onlyInCollectionSwitch)).perform(click());
 
         onData(allOf(instanceOf(CountryAdapter.Country.class), countryWithCode("gr")))
@@ -76,13 +91,11 @@ public class ScreenshotTest extends WtdTest {
 
         assertCurrentActivityIsInstanceOf(PublicationList.class, true);
 
-        ScreenshotTestRule.takeScreenshot("Publication list", getActivityInstance(), getScreenshotPath(locale));
+        ScreenshotTestRule.takeScreenshot("Publication list", getActivityInstance(), getScreenshotPath());
     }
 
     @Test
     public void testIssueList() {
-        login("demo", getDemoPassword());
-
         onData(allOf(instanceOf(CountryAdapter.Country.class), countryWithCode("fr")))
             .inAdapterView(withId(R.id.itemList))
             .perform(click());
@@ -92,10 +105,43 @@ public class ScreenshotTest extends WtdTest {
             .perform(click());
 
         assertCurrentActivityIsInstanceOf(IssueList.class, true);
-        ScreenshotTestRule.takeScreenshot("Issue list", getActivityInstance(), ScreenshotTestRule.SCREENSHOTS_PATH_SHOWCASE);
+        ScreenshotTestRule.takeScreenshot("Issue list", getActivityInstance(), getScreenshotPath());
     }
 
-    public static Matcher<Object> countryWithCode(String expectedCode) {
+    @Test
+    public void testCoverFlowResults() {
+        onData(allOf(instanceOf(CountryAdapter.Country.class), countryWithCode("fr")))
+            .inAdapterView(withId(R.id.itemList))
+            .perform(click());
+
+        onData(allOf(instanceOf(PublicationAdapter.Publication.class), publicationWithCode("fr/MP")))
+            .inAdapterView(withId(R.id.itemList))
+            .perform(click());
+        assertCurrentActivityIsInstanceOf(IssueList.class, true);
+
+        CoverFlowFileHandler.mockedResource = R.drawable.wtd;
+        Intent resultData = new Intent();
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+
+        Matcher<Intent> expectedIntent = hasAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intents.init();
+        intending(expectedIntent).respondWith(result);
+
+        onView(withId(R.id.addToCollectionButton)).perform(click());
+
+        intended(expectedIntent);
+        Intents.release();
+
+        ScreenshotTestRule.takeScreenshot("Cover search result", getActivityInstance(), getScreenshotPath());
+
+        onView(allOf(withId(R.id.image), coverCurrentlyVisible()))
+            .perform(click());
+
+        ScreenshotTestRule.takeScreenshot("Cover search result - add issue", getActivityInstance(), getScreenshotPath());
+
+    }
+
+    private static Matcher<Object> countryWithCode(String expectedCode) {
         return new BoundedMatcher<Object, CountryAdapter.Country>(CountryAdapter.Country.class) {
             @Override
             public boolean matchesSafely(final CountryAdapter.Country item) {
@@ -109,7 +155,7 @@ public class ScreenshotTest extends WtdTest {
         };
     }
 
-    public static Matcher<Object> publicationWithCode(String expectedCode) {
+    private static Matcher<Object> publicationWithCode(String expectedCode) {
         return new BoundedMatcher<Object, PublicationAdapter.Publication>(PublicationAdapter.Publication.class) {
             @Override
             public boolean matchesSafely(final PublicationAdapter.Publication item) {
@@ -119,6 +165,20 @@ public class ScreenshotTest extends WtdTest {
             @Override
             public void describeTo(final Description description) {
                 description.appendText("Publication with code ");
+            }
+        };
+    }
+
+    private static Matcher<Object> coverCurrentlyVisible() {
+        return new BoundedMatcher<Object, ImageView>(ImageView.class) {
+            @Override
+            public boolean matchesSafely(final ImageView item) {
+                return CoverFlowActivity.currentCoverUrl.equals(item.getTag());
+            }
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("Currently visible cover");
             }
         };
     }
