@@ -39,9 +39,12 @@ class WtdTest extends AndroidJUnitRunner {
     public final ActivityTestRule<WhatTheDuck> whatTheDuckActivityRule = new ActivityTestRule<>(WhatTheDuck.class);
 
     @BeforeClass
-    public static void initDownloadHelper() {
-        RetrieveTask.downloadHandler = new DownloadHandlerMock();
+    public static void overrideUserSettingsPath() {
         WhatTheDuck.USER_SETTINGS = "settings_test.properties";
+    }
+
+    static void initDownloadHelper() {
+        RetrieveTask.downloadHandler = new DownloadHandlerMock();
     }
 
     static void login(String user, String password) {

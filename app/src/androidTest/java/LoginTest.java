@@ -6,12 +6,18 @@ import junit.framework.Assert;
 import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.R;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class LoginTest extends WtdTest {
+
+    @BeforeClass
+    public static void initDownloadHelper() {
+        WtdTest.initDownloadHelper();
+    }
 
     @Test
     public void testMockEnabled() {

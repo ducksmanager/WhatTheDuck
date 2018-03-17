@@ -34,7 +34,7 @@ class ScreenshotTestRule implements MethodRule {
         };
     }
 
-    private static void takeScreenshot(String name, Activity activity)
+    static void takeScreenshot(String name, Activity activity)
     {
         View scrView = activity.getWindow().getDecorView().getRootView();
         scrView.setDrawingCacheEnabled(true);
