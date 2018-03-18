@@ -1,12 +1,18 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class IssueAdapter extends ItemAdapter<Issue> {
     public IssueAdapter(List list, ArrayList<Issue> items) {
-        super(list, items);
+        super(list, R.layout.row_edge, items);
     }
 
     @Override
@@ -39,6 +45,33 @@ public class IssueAdapter extends ItemAdapter<Issue> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        View v = super.getView(position, convertView, parent);
+
+        if (resourceToInflate != R.layout.row) {
+            Issue i = getItem(position);
+
+            String url = WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL)
+                + "/"
+                + WhatTheDuck.getSelectedCountry()
+                + "/gen/"
+                + WhatTheDuck.getSelectedPublication()
+                    .replaceFirst("[^/]+/", "")
+                    .replaceAll(" ", "")
+                + "." + i.getIssueNumber() + ".png";
+
+            Picasso
+                .with(getContext())
+                .load(url)
+                .rotate(90f)
+                .into((ImageView) v.findViewById(R.id.itemedge));
+        }
+
+        return v;
     }
 
     @Override

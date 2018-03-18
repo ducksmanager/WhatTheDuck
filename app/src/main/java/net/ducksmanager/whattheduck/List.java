@@ -186,6 +186,8 @@ public abstract class List<Item> extends AppCompatActivity {
             lv.setTextFilterEnabled(false);
             filterEditText.setVisibility(EditText.GONE);
         }
+
+        getListView().setDivider(null);
     }
 
     protected abstract AdapterView.OnItemClickListener getOnItemClickListener();
