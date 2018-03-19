@@ -13,7 +13,6 @@ import net.ducksmanager.whattheduck.Collection;
 import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.Issue;
 import net.ducksmanager.whattheduck.PurchaseAdapter;
-import net.ducksmanager.whattheduck.PurchaseWithDate;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
@@ -101,7 +100,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                                 String issueNumber = issueObject.getString("Numero");
                                 String issueCondition = issueObject.getString("Etat");
 
-                                PurchaseWithDate purchase;
+                                PurchaseAdapter.PurchaseWithDate purchase;
                                 if (issueObject.isNull("Acquisition")) {
                                     purchase = null;
                                 }
@@ -110,7 +109,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                                     Integer purchaseId = purchaseObject.getInt("ID_Acquisition");
                                     Date purchaseDate = PurchaseAdapter.dateFormat.parse(purchaseObject.getString("Date_Acquisition"));
                                     String purchaseName = purchaseObject.getString("Description_Acquisition");
-                                    purchase = new PurchaseWithDate(purchaseId, purchaseDate, purchaseName);
+                                    purchase = new PurchaseAdapter.PurchaseWithDate(purchaseId, purchaseDate, purchaseName);
                                 }
 
                                 WhatTheDuck.userCollection.addIssue(

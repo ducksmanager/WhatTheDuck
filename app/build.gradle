@@ -45,6 +45,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:27.1.0'
     compile 'com.android.support:design:27.1.0'
+    compile 'com.android.support:recyclerview-v7:27.1.0'
     compile 'com.github.moondroid.coverflow:library:1.0'
     compile 'com.koushikdutta.ion:ion:2.2.1'
     compile 'com.github.douglasjunior:android-simple-tooltip:0.2.1'

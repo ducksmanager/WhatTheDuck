@@ -1,6 +1,9 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import java.util.ArrayList;
 
@@ -25,8 +28,31 @@ public class PublicationAdapter extends ItemAdapter<PublicationAdapter.Publicati
     }
 
 
-    public PublicationAdapter(List list, ArrayList<Publication> items) {
+    PublicationAdapter(List list, ArrayList<Publication> items) {
         super(list, R.layout.row, items);
+    }
+
+    @Override
+    protected ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
+    }
+
+    class ViewHolder extends ItemAdapter.ViewHolder {
+        ViewHolder(View v) {
+            super(v);
+        }
+    }
+
+    @Override
+    protected View.OnClickListener getOnClickListener() {
+        return view -> {
+            int position = ((RecyclerView)view.getParent()).getChildLayoutPosition(view);
+            PublicationAdapter.Publication selectedPublication = PublicationAdapter.this.getItem(position);
+            WhatTheDuck.setSelectedPublication (selectedPublication.getPublicationCode());
+
+            Intent i = new Intent(originActivity, IssueList.class);
+            originActivity.startActivity(i);
+        };
     }
 
     @Override

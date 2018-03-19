@@ -2,15 +2,14 @@ package net.ducksmanager.whattheduck;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.AdapterView;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 
 import net.ducksmanager.inducks.coa.IssueListing;
-import net.ducksmanager.retrievetasks.GetPurchaseList;
-import net.ducksmanager.whattheduck.Collection.CollectionType;
-
-import java.lang.ref.WeakReference;
 
 public class IssueList extends List<Issue> {
+
+    private boolean isLandscape;
 
     @Override
     protected boolean needsToDownloadFullList() {
@@ -27,34 +26,31 @@ public class IssueList extends List<Issue> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        this.isLandscape = getResources().getConfiguration().orientation == 2;
         show();
     }
 
-    protected void show() {
-        if (WhatTheDuck.getSelectedCountry() != null && WhatTheDuck.getSelectedPublication() != null) {
-            super.show(new IssueAdapter(this, getCollection().getIssueList(
-                WhatTheDuck.getSelectedCountry(),
-                WhatTheDuck.getSelectedPublication()
-            )));
-            getListView().setDivider(null);
-        }
+    @NonNull
+    LinearLayoutManager getLayoutManager() {
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(isLandscape ? LinearLayoutManager.HORIZONTAL : LinearLayoutManager.VERTICAL);
+        return llm;
     }
 
     @Override
-    protected AdapterView.OnItemClickListener getOnItemClickListener() {
-        return (adapterView, view, position, l) -> {
-            if (type.equals(CollectionType.COA.toString())) {
-                final Issue selectedIssue = (Issue) IssueList.this.lv.getItemAtPosition((int) l);
-                if (WhatTheDuck.userCollection.getIssue(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), selectedIssue.getIssueNumber()) != null) {
-                    WhatTheDuck.wtd.info(new WeakReference<>(IssueList.this), R.string.input_error__issue_already_possessed);
-                }
-                else {
-                    WhatTheDuck.setSelectedIssue(selectedIssue.getIssueNumber());
-                    GetPurchaseList.initAndShowAddIssue(IssueList.this);
-                }
-            }
-        };
+    protected boolean shouldShow() {
+        return WhatTheDuck.getSelectedCountry() != null && WhatTheDuck.getSelectedPublication() != null;
+    }
+
+    @Override
+    protected ItemAdapter getItemAdapter() {
+        return new IssueAdapter(
+            this,
+            getCollection().getIssueList(
+                WhatTheDuck.getSelectedCountry(),
+                WhatTheDuck.getSelectedPublication()
+            ),
+            isLandscape);
     }
 
     @Override

@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,10 +17,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -36,11 +37,8 @@ import java.util.ArrayList;
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
 public abstract class List<Item> extends AppCompatActivity {
-    ListView lv;
-
-    String type;
+    protected static String type = CollectionType.USER.toString();
     private Boolean requiresDataDownload = false;
-    private ItemAdapter itemAdapter;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -50,41 +48,50 @@ public abstract class List<Item> extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle extras = getIntent().getExtras();
-        type = extras != null && extras.getString("type") != null
-                    ? extras.getString("type")
-                    : CollectionType.USER.toString();
-
         setContentView(R.layout.wtd_list);
 
-        this.findViewById(R.id.navigationAllCountries).setOnClickListener(view ->
-            goToView(CountryList.class)
-        );
+        RecyclerView recyclerView = this.findViewById(R.id.itemList);
+        recyclerView.setLayoutManager(getLayoutManager());
 
-        this.findViewById(R.id.navigationCountry).findViewById(R.id.selected).setOnClickListener(view ->
-            goToView(PublicationList.class)
-        );
+        View navigationAllCountries = this.findViewById(R.id.navigationAllCountries);
+        if (navigationAllCountries != null) {
+            navigationAllCountries.setOnClickListener(view ->
+                goToView(CountryList.class)
+            );
+        }
 
-        this.findViewById(R.id.navigationCountry).findViewById(R.id.selectedBadgeImage).setOnClickListener(view ->
-            goToView(PublicationList.class)
-        );
+        View navigationCurrentCountry = this.findViewById(R.id.navigationCountry);
+        if (navigationCurrentCountry != null) {
+            navigationCurrentCountry.findViewById(R.id.selected).setOnClickListener(view ->
+                goToView(PublicationList.class)
+            );
+        }
 
         Switch onlyInCollectionSwitch = this.findViewById(R.id.onlyInCollectionSwitch);
-        onlyInCollectionSwitch.setChecked(type.equals(CollectionType.USER.toString()));
+        if (onlyInCollectionSwitch != null) {
+            onlyInCollectionSwitch.setChecked(type.equals(CollectionType.USER.toString()));
 
-        onlyInCollectionSwitch.setOnClickListener(view -> {
-            Switch onlyInCollectionSwitch1 = (Switch) view;
-            List.this.goToAlternativeView(
-                onlyInCollectionSwitch1.isChecked()
-                    ? CollectionType.USER.toString()
-                    : CollectionType.COA.toString()
-            );
-        });
+            onlyInCollectionSwitch.setOnClickListener(view -> {
+                Switch onlyInCollectionSwitch1 = (Switch) view;
+                List.this.goToAlternativeView(
+                    onlyInCollectionSwitch1.isChecked()
+                        ? CollectionType.USER.toString()
+                        : CollectionType.COA.toString()
+                );
+            });
+        }
 
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
         loadList();
+    }
+
+    @NonNull
+    LinearLayoutManager getLayoutManager() {
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        return llm;
     }
 
     private void loadList() {
@@ -96,27 +103,29 @@ public abstract class List<Item> extends AppCompatActivity {
         }
 
         RelativeLayout addToCollection = this.findViewById(R.id.addToCollectionWrapper);
-        addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
+        if (addToCollection != null) {
+            addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
 
-        if (type.equals(CollectionType.USER.toString())) {
-            addToCollection.setOnClickListener(view ->
-                takeCoverPicture()
-            );
+            if (type.equals(CollectionType.USER.toString())) {
+                addToCollection.setOnClickListener(view ->
+                    takeCoverPicture()
+                );
 
-            if (WhatTheDuck.getShowCoverTooltip()) {
-                new SimpleTooltip.Builder(this)
-                    .anchorView(addToCollection)
-                    .text(R.string.add_cover_tooltip)
-                    .gravity(Gravity.TOP)
-                    .animated(true)
-                    .margin(5.0f)
-                    .transparentOverlay(true)
-                    .build()
-                    .show();
+                if (WhatTheDuck.getShowCoverTooltip()) {
+                    new SimpleTooltip.Builder(this)
+                        .anchorView(addToCollection)
+                        .text(R.string.add_cover_tooltip)
+                        .gravity(Gravity.TOP)
+                        .animated(true)
+                        .margin(5.0f)
+                        .transparentOverlay(true)
+                        .build()
+                        .show();
+                }
+
+                WhatTheDuck.setShowCoverTooltip(false);
+                WhatTheDuck.saveSettings(null);
             }
-
-            WhatTheDuck.setShowCoverTooltip(false);
-            WhatTheDuck.saveSettings(null);
         }
 
         setTitle(
@@ -140,11 +149,15 @@ public abstract class List<Item> extends AppCompatActivity {
         show();
     }
 
-    protected abstract void show();
+    protected abstract boolean shouldShow();
 
-    void show(ItemAdapter<Item> itemAdapter) {
-        this.itemAdapter = itemAdapter;
+    protected abstract ItemAdapter getItemAdapter();
 
+    void show() {
+        if (!shouldShow()) {
+            return;
+        }
+        ItemAdapter itemAdapter = getItemAdapter();
         setNavigation(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication());
 
         ProgressBar loadingProgressBar = this.findViewById(R.id.progressBarLoading);
@@ -153,42 +166,45 @@ public abstract class List<Item> extends AppCompatActivity {
         ArrayList<Item> items;
         if (this.requiresDataDownload) {
             items = new ArrayList<>();
-            emptyListText.setVisibility(TextView.INVISIBLE);
-            loadingProgressBar.setVisibility(TextView.VISIBLE);
+            if (emptyListText != null) {
+                emptyListText.setVisibility(TextView.INVISIBLE);
+            }
+            if (emptyListText != null) {
+                loadingProgressBar.setVisibility(TextView.VISIBLE);
+            }
         }
         else {
             items = itemAdapter.getItems();
 
-            emptyListText.setVisibility(items.size() == 0 ? TextView.VISIBLE : TextView.INVISIBLE);
-            loadingProgressBar.setVisibility(TextView.INVISIBLE);
+            if (emptyListText != null) {
+                emptyListText.setVisibility(items.size() == 0 ? TextView.VISIBLE : TextView.INVISIBLE);
+            }
+            if (loadingProgressBar != null) {
+                loadingProgressBar.setVisibility(TextView.INVISIBLE);
+            }
         }
 
-        lv = this.findViewById(R.id.itemList);
-        lv.setAdapter(this.itemAdapter);
-        lv.setOnItemClickListener(getOnItemClickListener());
+        RecyclerView recyclerView = findViewById(R.id.itemList);
+        recyclerView.setAdapter(itemAdapter);
 
         EditText filterEditText = this.findViewById(R.id.filter);
-        if (items.size() > 20) {
-            lv.setTextFilterEnabled(true);
-            filterEditText.setVisibility(EditText.VISIBLE);
-            filterEditText.setText("");
+        if (filterEditText != null) {
+            if (items.size() > 20) {
+                filterEditText.setVisibility(EditText.VISIBLE);
+                filterEditText.setText("");
 
-            filterEditText.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) { }
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    List.this.itemAdapter.updateFilteredList(s.toString());
-                    List.this.itemAdapter.notifyDataSetInvalidated();
-                }
-            });
-        }
-        else {
-            lv.setTextFilterEnabled(false);
-            filterEditText.setVisibility(EditText.GONE);
+                filterEditText.addTextChangedListener(new TextWatcher() {
+                    public void afterTextChanged(Editable s) {}
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        itemAdapter.updateFilteredList(s.toString());
+                    }
+                });
+            } else {
+                filterEditText.setVisibility(EditText.GONE);
+            }
         }
     }
-
-    protected abstract AdapterView.OnItemClickListener getOnItemClickListener();
 
     private void takeCoverPicture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -263,34 +279,36 @@ public abstract class List<Item> extends AppCompatActivity {
         final View countryNavigationView = this.findViewById(R.id.navigationCountry);
         final View publicationNavigationView = this.findViewById(R.id.navigationPublication);
 
-        generalNavigationView.setVisibility(selectedCountry == null ? View.GONE : View.VISIBLE);
-        publicationNavigationView.setVisibility(selectedPublication == null ? View.INVISIBLE : View.VISIBLE);
+        if (generalNavigationView != null) {
+            generalNavigationView.setVisibility(selectedCountry == null ? View.GONE : View.VISIBLE);
+            publicationNavigationView.setVisibility(selectedPublication == null ? View.INVISIBLE : View.VISIBLE);
 
-        if (selectedCountry != null) {
-            final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
+            if (selectedCountry != null) {
+                final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
 
-            String uri = "@drawable/flags_" + selectedCountry;
-            int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+                String uri = "@drawable/flags_" + selectedCountry;
+                int imageResource = getResources().getIdentifier(uri, null, getPackageName());
 
-            if (imageResource == 0) {
-                imageResource = R.drawable.flags_unknown;
+                if (imageResource == 0) {
+                    imageResource = R.drawable.flags_unknown;
+                }
+
+                ImageView currentCountryFlag = countryNavigationView.findViewById(R.id.selectedBadgeImage);
+                currentCountryFlag.setImageResource(imageResource);
+
+                TextView currentCountryText = countryNavigationView.findViewById(R.id.selected);
+                currentCountryText.setText(countryFullName);
             }
 
-            ImageView currentCountryFlag = countryNavigationView.findViewById(R.id.selectedBadgeImage);
-            currentCountryFlag.setImageResource(imageResource);
+            if (selectedPublication != null) {
+                final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
 
-            TextView currentCountryText = countryNavigationView.findViewById(R.id.selected);
-            currentCountryText.setText(countryFullName);
-        }
+                TextView currentPublicationBadgeText = publicationNavigationView.findViewById(R.id.selectedBadge);
+                currentPublicationBadgeText.setText(selectedPublication.split("/")[1]);
 
-        if (selectedPublication != null) {
-            final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
-
-            TextView currentPublicationBadgeText = publicationNavigationView.findViewById(R.id.selectedBadge);
-            currentPublicationBadgeText.setText(selectedPublication.split("/")[1]);
-
-            TextView currentPublicationText = publicationNavigationView.findViewById(R.id.selected);
-            currentPublicationText.setText(publicationFullName);
+                TextView currentPublicationText = publicationNavigationView.findViewById(R.id.selected);
+                currentPublicationText.setText(publicationFullName);
+            }
         }
     }
 

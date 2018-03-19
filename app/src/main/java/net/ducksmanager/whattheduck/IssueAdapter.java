@@ -1,19 +1,85 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import net.ducksmanager.retrievetasks.GetPurchaseList;
+
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class IssueAdapter extends ItemAdapter<Issue> {
-    public IssueAdapter(List list, ArrayList<Issue> items) {
-        super(list, R.layout.row_edge, items);
+
+    private final boolean isLandscape;
+
+    IssueAdapter(Activity activity, ArrayList<Issue> items, Boolean isLandscape) {
+        super(activity, isLandscape ? R.layout.row_edge : R.layout.row, items);
+        this.isLandscape = isLandscape;
+    }
+
+    @Override
+    protected ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
+    }
+
+    @Override
+    protected View.OnClickListener getOnClickListener() {
+        return view -> {
+            int position = ((RecyclerView) view.getParent()).getChildLayoutPosition(view);
+            if (List.type.equals(Collection.CollectionType.COA.toString())) {
+                final Issue selectedIssue = IssueAdapter.this.getItem(position);
+                if (WhatTheDuck.userCollection.getIssue(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), selectedIssue.getIssueNumber()) != null) {
+                    WhatTheDuck.wtd.info(new WeakReference<>(IssueAdapter.this.getOriginActivity()), R.string.input_error__issue_already_possessed);
+                } else {
+                    WhatTheDuck.setSelectedIssue(selectedIssue.getIssueNumber());
+                    GetPurchaseList.initAndShowAddIssue(IssueAdapter.this.getOriginActivity());
+                }
+            }
+        };
+    }
+
+    class ViewHolder extends ItemAdapter.ViewHolder {
+        ImageView edgeView;
+
+        ViewHolder(View v) {
+            super(v);
+            if (IssueAdapter.this.resourceToInflate == R.layout.row) {
+                edgeView = v.findViewById(R.id.itemedge);
+            }
+        }
+    }
+
+
+    @Override
+    public void onBindViewHolder(ItemAdapter.ViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+        IssueAdapter.ViewHolder issueHolder = (IssueAdapter.ViewHolder) holder;
+
+        if (issueHolder.edgeView != null) {
+            Issue i = getItem(position);
+
+            Boolean isLandscapeView = true; //TODO
+
+            String url = WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL)
+                + "/edges/"
+                + WhatTheDuck.getSelectedCountry()
+                + "/gen/"
+                + WhatTheDuck.getSelectedPublication()
+                .replaceFirst("[^/]+/", "")
+                .replaceAll(" ", "")
+                + "." + i.getIssueNumber() + ".png";
+
+            ImageView edgeView = issueHolder.edgeView.findViewById(R.id.itemedge);
+            Picasso
+                .with(originActivity)
+                .load(url)
+                .rotate(isLandscape ? 0 : 90f)
+                .into(edgeView);
+        }
     }
 
     @Override
@@ -23,72 +89,29 @@ public class IssueAdapter extends ItemAdapter<Issue> {
 
     @Override
     protected Integer getPrefixImageResource(Issue i, Activity activity) {
-        return null;
+        if (this.resourceToInflate == R.layout.row && i.getIssueCondition() != null) {
+            return Issue.issueConditionToResourceId(i.getIssueCondition());
+        } else {
+            return android.R.color.transparent;
+        }
     }
 
     @Override
     protected Integer getSuffixImageResource(Issue i) {
-        return null;
+        if (this.resourceToInflate == R.layout.row && i.getPurchase() != null) {
+            return R.drawable.ic_clock;
+        } else {
+            return null;
+        }
     }
 
     @Override
     protected String getSuffixText(Issue i) {
-        return null;
-    }
-
-    TextView getTitleTextView(View mainView) {
-        return null;
-    }
-
-    @Override
-    @NonNull
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        View v = super.getView(position, convertView, parent);
-
-        if (resourceToInflate != R.layout.row) {
-            Issue i = getItem(position);
-
-            String url = WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL)
-                + "/edges/"
-                + WhatTheDuck.getSelectedCountry()
-                + "/gen/"
-                + WhatTheDuck.getSelectedPublication()
-                    .replaceFirst("[^/]+/", "")
-                    .replaceAll(" ", "")
-                + "." + i.getIssueNumber() + ".png";
-
-
-//            Picasso.with(IssueAdapter.this.getContext()).load(url).into(new Target() {
-//                @Override
-//                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                    int width = bitmap.getWidth();
-//                    int height = bitmap.getHeight();
-//                    edgeView.setLayoutParams(new LinearLayout.LayoutParams(width,height));
-//                    ((ImageView)edgeView).setImageBitmap(bitmap);
-//                }
-//
-//                @Override
-//                public void onBitmapFailed(Drawable errorDrawable) {
-//
-//                }
-//
-//                @Override
-//                public void onPrepareLoad(Drawable placeHolderDrawable) {
-//
-//                }
-//            });
-
-            View edgeView = v.findViewById(R.id.itemedge);
-            Picasso
-                .with(getContext())
-                .load(url)
-                .rotate(90f)
-                .into((ImageView) edgeView);
-
-//            edgeView.setLayoutParams(new LinearLayout.LayoutParams(250,edgeView.getLayoutParams().height));
+        if (this.resourceToInflate == R.layout.row && i.getPurchase() != null) {
+            return PurchaseAdapter.dateFormat.format(i.getPurchase().getPurchaseDate());
+        } else {
+            return null;
         }
-
-        return v;
     }
 
     @Override

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:focusableInTouchMode="true"
+                android:id="@+id/landscapeList">
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="Back"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/itemList"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/row_edge" >
+
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>
