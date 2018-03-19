@@ -1,22 +1,21 @@
 package net.ducksmanager.whattheduck;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.widget.ListView;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import net.ducksmanager.util.MultipleCustomCheckboxes;
-import net.igenius.customcheckbox.CustomCheckBox;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
-public class AddIssue extends Activity {
+public class AddIssue extends AppCompatActivity {
 
     static AddIssue instance;
-    static HashMap<String,Purchase> purchases;
+    static HashMap<String,PurchaseAdapter.Purchase> purchases;
 
     private static String selectedCondition = null;
     static String selectedPurchaseHash = null;
@@ -27,12 +26,12 @@ public class AddIssue extends Activity {
         instance = this;
 
         setContentView(R.layout.addissue);
-        purchases = WhatTheDuck.userCollection.getPurchasesWithEmptyItem();
 
+        purchases = WhatTheDuck.userCollection.getPurchasesWithEmptyItem();
         show();
     }
 
-    private void show() {
+    protected void show() {
         MultipleCustomCheckboxes conditionCheckboxes = new MultipleCustomCheckboxes(
             new WeakReference<>(this.findViewById(R.id.condition_selector)),
             view -> {
@@ -64,7 +63,7 @@ public class AddIssue extends Activity {
             else
                 DMcondition = Issue.GOOD_CONDITION;
 
-            Purchase selectedPurchase= purchases.get(selectedPurchaseHash);
+            PurchaseAdapter.Purchase selectedPurchase= purchases.get(selectedPurchaseHash);
 
             new net.ducksmanager.retrievetasks.AddIssue(
                 new WeakReference<>(AddIssue.this),
@@ -72,8 +71,8 @@ public class AddIssue extends Activity {
                 new Issue(
                     WhatTheDuck.getSelectedIssue(),
                     DMcondition,
-                    selectedPurchase instanceof PurchaseWithDate
-                        ? (PurchaseWithDate) selectedPurchase
+                    selectedPurchase instanceof PurchaseAdapter.PurchaseWithDate
+                        ? (PurchaseAdapter.PurchaseWithDate) selectedPurchase
                         : null
                 )
             ).execute();
@@ -86,7 +85,7 @@ public class AddIssue extends Activity {
         this.findViewById(R.id.addpurchase).setOnClickListener(view -> {
             toggleAddPurchaseButton(false);
 
-            SpecialPurchase newPurchase = new SpecialPurchase(false, true);
+            PurchaseAdapter.SpecialPurchase newPurchase = new PurchaseAdapter.SpecialPurchase(false, true);
             purchases.put(newPurchase.toString(), newPurchase);
             showPurchases(false);
         });
@@ -99,24 +98,21 @@ public class AddIssue extends Activity {
     }
 
     void showPurchases(final Boolean checkNoPurchaseItem) {
-        final ListView lv = this.findViewById(R.id.purchase_list);
+        final RecyclerView rv = this.findViewById(R.id.purchase_list);
+        rv.setAdapter(new PurchaseAdapter(this, purchases));
 
         final MultipleCustomCheckboxes purchaseDateCheckboxes = new MultipleCustomCheckboxes(
-            new WeakReference<>(lv),
+            new WeakReference<>(rv),
             view ->
                 selectedPurchaseHash = view.getContentDescription().toString(),
             view ->
                 selectedPurchaseHash = null
         );
-        lv.setAdapter(new PurchaseAdapter(this, purchases));
-        lv.post(() -> {
+        rv.post(() -> {
             purchaseDateCheckboxes.initClickEvents();
             if (checkNoPurchaseItem) {
-                purchaseDateCheckboxes.checkInitialCheckbox(checkbox -> checkbox.getContentDescription().toString().contains(SpecialPurchase.class.getSimpleName()));
+                purchaseDateCheckboxes.checkInitialCheckbox(checkbox -> checkbox.getContentDescription().toString().contains(PurchaseAdapter.SpecialPurchase.class.getSimpleName()));
             }
         });
-
-        lv.setOnItemClickListener((adapterView, view, i, l) ->
-            ((CustomCheckBox)view.findViewById(R.id.purchasecheck)).setChecked(true));
     }
 }

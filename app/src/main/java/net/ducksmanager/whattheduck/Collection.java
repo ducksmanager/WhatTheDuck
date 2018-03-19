@@ -12,22 +12,22 @@ import java.util.Set;
 
 public class Collection implements Serializable {
     private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<>();
-    private HashMap<Integer, Purchase> purchases = new HashMap<>();
+    private HashMap<Integer, PurchaseAdapter.Purchase> purchases = new HashMap<>();
 
-    public void setPurchases(HashMap<Integer, Purchase> purchases) {
+    public void setPurchases(HashMap<Integer, PurchaseAdapter.Purchase> purchases) {
         this.purchases = purchases;
     }
 
-    private HashMap<Integer, Purchase> getPurchases() {
+    private HashMap<Integer, PurchaseAdapter.Purchase> getPurchases() {
         return purchases;
     }
 
-    HashMap<String,Purchase> getPurchasesWithEmptyItem() {
-        HashMap<String,Purchase> purchasesWithEmptyItem = new HashMap<>();
+    HashMap<String,PurchaseAdapter.Purchase> getPurchasesWithEmptyItem() {
+        HashMap<String,PurchaseAdapter.Purchase> purchasesWithEmptyItem = new HashMap<>();
 
-        java.util.List<Purchase> values = new ArrayList<>(getPurchases().values());
-        values.add(new SpecialPurchase(true, false));
-        for (Purchase p : values) {
+        java.util.List<PurchaseAdapter.Purchase> values = new ArrayList<>(getPurchases().values());
+        values.add(new PurchaseAdapter.SpecialPurchase(true, false));
+        for (PurchaseAdapter.Purchase p : values) {
             purchasesWithEmptyItem.put(p.toString(), p);
         }
 
@@ -89,7 +89,7 @@ public class Collection implements Serializable {
             if (list != null) {
                 for (Issue issue : list) {
                     IssueCondition condition = null;
-                    PurchaseWithDate purchase = null;
+                    PurchaseAdapter.PurchaseWithDate purchase = null;
                     Issue existingIssue = WhatTheDuck.userCollection.getIssue(shortCountryName, shortPublicationName, issue.getIssueNumber());
                     if (existingIssue != null) {
                         condition = existingIssue.getIssueCondition();

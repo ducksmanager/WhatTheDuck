@@ -13,14 +13,14 @@ public class Issue implements Serializable {
 
     private final String issueNumber;
     private IssueCondition issueCondition = issueConditionStrToIssueCondition(Issue.NO_CONDITION);
-    private PurchaseWithDate purchase;
+    private PurchaseAdapter.PurchaseWithDate purchase;
 
     public Issue(String issuenumber) {
         super();
         this.issueNumber = issuenumber;
     }
 
-    public Issue(String issuenumber, String issueCondition, PurchaseWithDate purchase) {
+    public Issue(String issuenumber, String issueCondition, PurchaseAdapter.PurchaseWithDate purchase) {
         super();
         this.issueNumber = issuenumber;
         this.issueCondition=issueConditionStrToIssueCondition(issueCondition);
@@ -33,7 +33,7 @@ public class Issue implements Serializable {
         this.issueCondition = issueCondition;
     }
 
-    public Issue(String issuenumber, IssueCondition issueCondition, PurchaseWithDate purchase) {
+    public Issue(String issuenumber, IssueCondition issueCondition, PurchaseAdapter.PurchaseWithDate purchase) {
         super();
         this.issueNumber = issuenumber;
         this.issueCondition = issueCondition;
@@ -99,7 +99,7 @@ public class Issue implements Serializable {
         return issueConditionToIssueConditionStr(issueCondition);
     }
 
-    public PurchaseWithDate getPurchase() {
+    public PurchaseAdapter.PurchaseWithDate getPurchase() {
         return purchase;
     }
 

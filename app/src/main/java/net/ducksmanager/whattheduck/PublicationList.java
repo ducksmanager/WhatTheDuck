@@ -2,7 +2,6 @@ package net.ducksmanager.whattheduck;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.AdapterView;
 
 import net.ducksmanager.inducks.coa.PublicationListing;
 
@@ -29,27 +28,24 @@ public class PublicationList extends List<PublicationAdapter.Publication> {
     }
 
     @Override
+    protected boolean userHasItemsInCollectionForCurrent() {
+        return WhatTheDuck.userCollection.hasCountry(WhatTheDuck.getSelectedCountry());
+    }
+
+    @Override
     public void onBackPressed() {
         Intent i = new Intent(WhatTheDuck.wtd, CountryList.class);
         i.putExtra("type", type);
         startActivity(i);
     }
-        
-    protected void show() {
-        if (WhatTheDuck.getSelectedCountry() != null) {
-            super.show(new PublicationAdapter(this, getCollection().getPublicationList(WhatTheDuck.getSelectedCountry())));
-        }
+
+    @Override
+    protected boolean shouldShow() {
+        return WhatTheDuck.getSelectedCountry() != null;
     }
 
     @Override
-    protected AdapterView.OnItemClickListener getOnItemClickListener() {
-        return (adapterView, view, position, l) -> {
-            PublicationAdapter.Publication selectedPublication = (PublicationAdapter.Publication) PublicationList.this.lv.getItemAtPosition((int) l);
-            WhatTheDuck.setSelectedPublication(selectedPublication.getPublicationCode());
-
-            Intent i = new Intent(this, IssueList.class);
-            i.putExtra("type", this.type);
-            startActivity(i);
-        };
+    protected ItemAdapter getItemAdapter() {
+        return new PublicationAdapter(this, getCollection().getPublicationList(WhatTheDuck.getSelectedCountry()));
     }
 }

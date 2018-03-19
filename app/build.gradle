@@ -44,6 +44,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.github.moondroid.coverflow:library:1.0'
     implementation 'com.koushikdutta.ion:ion:2.2.1'
     implementation 'com.github.douglasjunior:android-simple-tooltip:0.2.1'

@@ -7,14 +7,14 @@ import android.provider.MediaStore;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.filters.LargeTest;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
 import net.ducksmanager.util.CoverFlowActivity;
 import net.ducksmanager.util.CoverFlowFileHandler;
-import net.ducksmanager.whattheduck.CountryAdapter;
 import net.ducksmanager.whattheduck.IssueList;
-import net.ducksmanager.whattheduck.PublicationAdapter;
+import net.ducksmanager.whattheduck.ItemAdapter;
 import net.ducksmanager.whattheduck.PublicationList;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
@@ -30,15 +30,15 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Locale;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnHolderItem;
+import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToHolder;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.instanceOf;
 
 @RunWith(Parameterized.class)
 @LargeTest
@@ -86,9 +86,8 @@ public class ScreenshotTest extends WtdTest {
         onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
             .perform(click());
 
-        onData(allOf(instanceOf(CountryAdapter.Country.class), countryWithCode("fr")))
-            .inAdapterView(withId(R.id.itemList))
-            .perform(click());
+        Matcher<RecyclerView.ViewHolder> countryMatcher = getItemMatcher("fr");
+        onView((withId(R.id.itemList))).perform(scrollToHolder(countryMatcher), actionOnHolderItem(countryMatcher, click()));
 
         assertCurrentActivityIsInstanceOf(PublicationList.class, true);
 
@@ -97,13 +96,11 @@ public class ScreenshotTest extends WtdTest {
 
     @Test
     public void testIssueList() {
-        onData(allOf(instanceOf(CountryAdapter.Country.class), countryWithCode("fr")))
-            .inAdapterView(withId(R.id.itemList))
-            .perform(click());
+        Matcher<RecyclerView.ViewHolder> countryMatcher = getItemMatcher("fr");
+        onView((withId(R.id.itemList))).perform(scrollToHolder(countryMatcher), actionOnHolderItem(countryMatcher, click()));
 
-        onData(allOf(instanceOf(PublicationAdapter.Publication.class), publicationWithCode("fr/DDD")))
-            .inAdapterView(withId(R.id.itemList))
-            .perform(click());
+        Matcher<RecyclerView.ViewHolder> publicationMatcher = getItemMatcher("fr/DDD");
+        onView((withId(R.id.itemList))).perform(scrollToHolder(publicationMatcher), actionOnHolderItem(publicationMatcher, click()));
 
         assertCurrentActivityIsInstanceOf(IssueList.class, true);
         ScreenshotTestRule.takeScreenshot("Issue list", getActivityInstance(), getScreenshotPath());
@@ -134,30 +131,16 @@ public class ScreenshotTest extends WtdTest {
 
     }
 
-    private static Matcher<Object> countryWithCode(String expectedCode) {
-        return new BoundedMatcher<Object, CountryAdapter.Country>(CountryAdapter.Country.class) {
+    private static Matcher<RecyclerView.ViewHolder> getItemMatcher(final String identifier) {
+        return new BoundedMatcher<RecyclerView.ViewHolder, ItemAdapter.ViewHolder>(ItemAdapter.ViewHolder.class) {
             @Override
-            public boolean matchesSafely(final CountryAdapter.Country item) {
-                return expectedCode.equals(item.getShortName());
+            protected boolean matchesSafely(ItemAdapter.ViewHolder item) {
+                return item.titleTextView.getTag().equals(identifier);
             }
 
             @Override
-            public void describeTo(final Description description) {
-                description.appendText("Country with code ");
-            }
-        };
-    }
-
-    private static Matcher<Object> publicationWithCode(String expectedCode) {
-        return new BoundedMatcher<Object, PublicationAdapter.Publication>(PublicationAdapter.Publication.class) {
-            @Override
-            public boolean matchesSafely(final PublicationAdapter.Publication item) {
-                return expectedCode.equals(item.getPublicationCode());
-            }
-
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("Publication with code ");
+            public void describeTo(Description description) {
+                description.appendText("view holder with ID: " + identifier);
             }
         };
     }
