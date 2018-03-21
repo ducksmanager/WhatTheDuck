@@ -1,11 +1,15 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import net.ducksmanager.retrievetasks.GetPurchaseList;
 
@@ -16,8 +20,8 @@ public class IssueAdapter extends ItemAdapter<Issue> {
 
     private final boolean isLandscape;
 
-    IssueAdapter(Activity activity, ArrayList<Issue> items, Boolean isLandscape) {
-        super(activity, isLandscape ? R.layout.row_edge : R.layout.row, items);
+    IssueAdapter(Activity activity, ArrayList<Issue> items, Boolean isEdgeView, boolean isLandscape) {
+        super(activity, isEdgeView ? R.layout.row_edge : R.layout.row, items);
         this.isLandscape = isLandscape;
     }
 
@@ -43,13 +47,11 @@ public class IssueAdapter extends ItemAdapter<Issue> {
     }
 
     class ViewHolder extends ItemAdapter.ViewHolder {
-        ImageView edgeView;
+        final ImageView edgeView;
 
         ViewHolder(View v) {
             super(v);
-            if (IssueAdapter.this.resourceToInflate == R.layout.row) {
-                edgeView = v.findViewById(R.id.itemedge);
-            }
+            edgeView = IssueAdapter.this.resourceToInflate == R.layout.row_edge ? v.findViewById(R.id.itemedge) : null;
         }
     }
 
@@ -57,28 +59,47 @@ public class IssueAdapter extends ItemAdapter<Issue> {
     @Override
     public void onBindViewHolder(ItemAdapter.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        IssueAdapter.ViewHolder issueHolder = (IssueAdapter.ViewHolder) holder;
+        final IssueAdapter.ViewHolder issueHolder = (IssueAdapter.ViewHolder) holder;
 
         if (issueHolder.edgeView != null) {
             Issue i = getItem(position);
 
-            Boolean isLandscapeView = true; //TODO
-
-            String url = WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL)
+            final String url = WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL)
                 + "/edges/"
                 + WhatTheDuck.getSelectedCountry()
                 + "/gen/"
                 + WhatTheDuck.getSelectedPublication()
-                .replaceFirst("[^/]+/", "")
-                .replaceAll(" ", "")
-                + "." + i.getIssueNumber() + ".png";
+                    .replaceFirst("[^/]+/", "")
+                    .replaceAll(" ", "")
+                + "." + i.getIssueNumber().replaceAll(" ", "") + ".png";
 
-            ImageView edgeView = issueHolder.edgeView.findViewById(R.id.itemedge);
-            Picasso
-                .with(originActivity)
+            final Target target = new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    int width = bitmap.getWidth();
+                    int height = bitmap.getHeight();
+                    issueHolder.edgeView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+                    issueHolder.edgeView.setImageBitmap(bitmap);
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+                    System.err.println("Failed to load " + url);
+                    issueHolder.edgeView.setLayoutParams(new LinearLayout.LayoutParams(32, 32));
+                    issueHolder.edgeView.setImageResource(R.drawable.ico_delete_asset);
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    issueHolder.edgeView.setLayoutParams(new LinearLayout.LayoutParams(32, 32));
+                    issueHolder.edgeView.setImageResource(R.drawable.ic_clock);
+                }
+            };
+
+            Picasso.with(IssueAdapter.this.getOriginActivity())
                 .load(url)
                 .rotate(isLandscape ? 0 : 90f)
-                .into(edgeView);
+                .into(target);
         }
     }
 

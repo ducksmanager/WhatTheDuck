@@ -21,7 +21,7 @@ abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter.ViewHo
     int resourceToInflate;
     private final ArrayList<Item> items;
     private ArrayList<Item> filteredItems;
-    ViewHolder viewHolder;
+    private ViewHolder viewHolder;
     Activity originActivity;
     View v;
 
