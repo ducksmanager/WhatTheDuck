@@ -76,6 +76,12 @@ public abstract class NaturalOrderComparator<Item> implements Comparator<Item>
 
    protected int compareObject(Object o1, Object o2)
    {
+       if (o2 == null) {
+           return 1;
+       }
+       if (o1 == null) {
+           return -1;
+       }
        String a = o1.toString();
        String b = o2.toString();
 

@@ -24,7 +24,7 @@ public class AddIssueTest extends WtdTest {
 
     @BeforeClass
     public static void initDownloadHelper() {
-        WtdTest.initDownloadHelper();
+        WtdTest.initMockServers();
     }
 
     @Before

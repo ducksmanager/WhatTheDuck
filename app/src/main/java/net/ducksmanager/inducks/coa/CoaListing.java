@@ -3,7 +3,8 @@ package net.ducksmanager.inducks.coa;
 
 import android.app.Activity;
 
-import net.ducksmanager.util.SimpleCallback;
+import com.koushikdutta.async.future.FutureCallback;
+
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
@@ -12,43 +13,43 @@ import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 import org.json.JSONException;
 
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
 import java.util.Locale;
 
-public abstract class CoaListing extends RetrieveTask {
-    WeakReference<Activity> activityRef;
-    SimpleCallback callback;
+public abstract class CoaListing {
+    private WeakReference<Activity> activityRef;
+    private final FutureCallback afterProcessCallback;
+
     public enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST}
 
-    private static final HashMap<ListType, String> urlSuffixes = new HashMap<>();
-    static {
-        urlSuffixes.put(ListType.COUNTRY_LIST, "&coa=true&liste_pays=true");
-        urlSuffixes.put(ListType.PUBLICATION_LIST, "&coa=true&liste_magazines=true");
-        urlSuffixes.put(ListType.ISSUE_LIST, "&coa=true&liste_numeros=true");
-    }
-
-    static String countryShortName;
-    static String publicationShortName;
-
-
-    CoaListing(Activity activity, ListType type, String countryShortName, String publicationShortName, SimpleCallback callback) {
-        super(urlSuffixes.get(type), R.id.progressBarLoading);
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("list/coa/" + type.name().toLowerCase(Locale.FRANCE));
+    CoaListing(Activity activity, ListType type, FutureCallback afterProcessCallback) {
         this.activityRef = new WeakReference<>(activity);
-        this.callback = callback;
-        CoaListing.countryShortName = countryShortName;
-        CoaListing.publicationShortName = publicationShortName;
+        this.afterProcessCallback = afterProcessCallback;
+
+        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("list/coa/" + type.name().toLowerCase(Locale.FRANCE));
     }
 
-    @Override
-    protected void onPreExecute() {
-        WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, progressBarId, true);
-    }
+    protected abstract String getUrlSuffix();
 
-    @Override
-    protected void onPostExecute(String response) {
-        super.onPostExecute(response);
-        WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, progressBarId, false);
+    protected abstract void processData(String result);
+
+    public void fetch() {
+        try {
+            WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, R.id.progressBarLoading, true);
+            WhatTheDuck.wtd.retrieveOrFailDmServer(getUrlSuffix(), (e, result) -> {
+                WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, R.id.progressBarLoading, false);
+                if (e != null) {
+                    RetrieveTask.handleResultException(e);
+                }
+                else {
+                    processData(result);
+                    if (afterProcessCallback != null) {
+                        afterProcessCallback.onCompleted(e, result);
+                    }
+                }
+            }, null, null);
+        } catch (Exception e) {
+            RetrieveTask.handleResultException(e);
+        }
     }
 
     void handleJSONException(JSONException e) {

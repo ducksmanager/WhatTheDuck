@@ -64,16 +64,15 @@ public class AddIssue extends RetrieveTask {
             callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
         }
         else {
-            new PublicationListing(callbackActivity, country, activityRef -> {
+            new PublicationListing(callbackActivity, country, (e, result) -> {
                 if (CountryListing.hasFullList) {
                     callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
-                }
-                else {
-                    new CountryListing(callbackActivity, activityRef1 ->
+                } else {
+                    new CountryListing(callbackActivity, (e2, result2) ->
                         callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class))
-                    ).execute();
+                    ).fetch();
                 }
-            }).execute();
+            }).fetch();
         }
     }
 }

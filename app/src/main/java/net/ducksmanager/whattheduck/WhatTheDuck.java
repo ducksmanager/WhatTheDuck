@@ -42,9 +42,11 @@ import java.util.Formatter;
 import java.util.Locale;
 import java.util.Properties;
 
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_DM_URL;
+
 public class WhatTheDuck extends Activity {
     private static final String SERVER_PAGE="WhatTheDuck.php";
-    private static final String DUCKSMANAGER_URL="http://www.ducksmanager.net";
 
     @VisibleForTesting
     public static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
@@ -125,9 +127,13 @@ public class WhatTheDuck extends Activity {
         TextView linkToDM = findViewById(R.id.linkToDM);
         linkToDM.setOnClickListener(view -> {
             hideKeyboard(view);
-            final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(DUCKSMANAGER_URL));
+            final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(getDmUrl()));
             WhatTheDuck.this.startActivity(intent);
         });
+    }
+
+    private String getDmUrl() {
+        return WhatTheDuckApplication.config.getProperty(CONFIG_KEY_DM_URL);
     }
 
     private void hideKeyboard(View view) {
@@ -304,10 +310,12 @@ public class WhatTheDuck extends Activity {
             setEncryptedPassword(byteArray2Hex(md.digest()));
         }
 
+        urlSuffix = urlSuffix.replaceAll("\\{locale\\}", getApplicationContext().getResources().getConfiguration().locale.getLanguage());
+
         Ion.with(this.findViewById(android.R.id.content).getContext())
-            .load(WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix)
+            .load(WhatTheDuckApplication.config.getProperty(CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix)
             .setHeader("x-dm-version", WhatTheDuck.wtd.getApplicationVersion())
-            .setMultipartFile(fileName, file)
+//            .setMultipartFile(fileName, file)
             .asString()
             .setCallback(futureCallback);
     }
@@ -324,7 +332,7 @@ public class WhatTheDuck extends Activity {
         }
 
         if (serverURL == null) {
-            serverURL = downloadHandler.getPage(DUCKSMANAGER_URL+"/"+DUCKSMANAGER_PAGE_WITH_REMOTE_URL);
+            serverURL = downloadHandler.getPage(getDmUrl()+"/"+DUCKSMANAGER_PAGE_WITH_REMOTE_URL);
         }
 
         String response = downloadHandler.getPage(serverURL+"/"+SERVER_PAGE

@@ -62,9 +62,9 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         this.urlSuffix = urlSuffix;
         RetrieveTask.progressBarId = progressBarId;
         this.legacyServer = legacyServer;
+        this.futureCallback = futureCallback;
         this.fileName = fileName;
         this.file = file;
-        this.futureCallback = futureCallback;
     }
 
     @Override
@@ -89,36 +89,40 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
     @Override
     protected void onPostExecute(String response) {
         if (this.thrownException != null) {
-            WhatTheDuck.wtd.initUI();
-            if (progressBarId != null) {
-                WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, false);
-            }
-
-            if (this.thrownException instanceof SecurityException) {
-                WhatTheDuck.wtd.alert(
-                        R.string.input_error,
-                        R.string.input_error__invalid_credentials, "");
-                WhatTheDuck.setUsername("");
-                WhatTheDuck.setPassword("");
-            }
-            else if (this.thrownException instanceof PackageManager.NameNotFoundException) {
-                this.thrownException.printStackTrace();
-            }
-            else {
-                if (this.thrownException.getMessage() != null
-                 && this.thrownException.getMessage().equals(R.string.network_error+"")) {
-                    WhatTheDuck.wtd.alert(
-                            R.string.network_error,
-                            R.string.network_error__no_connection);
-                }
-                else {
-                    WhatTheDuck.wtd.alert(this.thrownException.getMessage());
-                }
-            }
+            handleResultException(this.thrownException);
         }
     }
 
     protected boolean hasSucceeded() {
         return this.thrownException == null;
+    }
+
+    public static void handleResultException(Exception e) {
+        WhatTheDuck.wtd.initUI();
+        if (progressBarId != null) {
+            WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, false);
+        }
+
+        if (e instanceof SecurityException) {
+            WhatTheDuck.wtd.alert(
+                R.string.input_error,
+                R.string.input_error__invalid_credentials, "");
+            WhatTheDuck.setUsername("");
+            WhatTheDuck.setPassword("");
+        }
+        else if (e instanceof PackageManager.NameNotFoundException) {
+            e.printStackTrace();
+        }
+        else {
+            if (e.getMessage() != null
+                && e.getMessage().equals(R.string.network_error+"")) {
+                WhatTheDuck.wtd.alert(
+                    R.string.network_error,
+                    R.string.network_error__no_connection);
+            }
+            else {
+                WhatTheDuck.wtd.alert(e.getMessage());
+            }
+        }
     }
 }

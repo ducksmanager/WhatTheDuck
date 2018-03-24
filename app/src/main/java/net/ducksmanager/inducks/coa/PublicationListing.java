@@ -2,7 +2,8 @@ package net.ducksmanager.inducks.coa;
 
 import android.app.Activity;
 
-import net.ducksmanager.util.SimpleCallback;
+import com.koushikdutta.async.future.FutureCallback;
+
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import org.json.JSONException;
@@ -17,9 +18,11 @@ public class PublicationListing extends CoaListing {
     private static final HashMap<String,HashMap<String,String>> publicationNames= new HashMap<>();
     private static final HashSet<String> fullListCountries = new HashSet<>();
 
-    public PublicationListing(Activity list, String countryShortName, SimpleCallback callback) {
-        super(list, ListType.PUBLICATION_LIST, countryShortName, null, callback);
-        this.urlSuffix+="&pays="+countryShortName;
+    private String countryShortName;
+
+    public PublicationListing(Activity list, String countryShortName, FutureCallback callback) {
+        super(list, ListType.PUBLICATION_LIST, callback);
+        this.countryShortName = countryShortName;
     }
 
     public static String getPublicationFullName (String shortCountryName, String shortPublicationName) {
@@ -41,8 +44,12 @@ public class PublicationListing extends CoaListing {
     }
 
     @Override
-    protected void onPostExecute(String response) {
-        super.onPostExecute(response);
+    protected String getUrlSuffix() {
+        return "/coa/list/publications/" + countryShortName;
+    }
+
+    @Override
+    protected void processData(String response) {
         if (response != null) {
             try {
                 addFullPublications(countryShortName, new JSONObject(response));
@@ -51,8 +58,6 @@ public class PublicationListing extends CoaListing {
                 handleJSONException(e);
             }
         }
-
-        callback.onDownloadFinished(activityRef);
     }
 
     private static void addFullPublications(String countryShortName, JSONObject object) throws JSONException {
@@ -61,13 +66,15 @@ public class PublicationListing extends CoaListing {
     }
 
     @SuppressWarnings("unchecked")
-    public static void addPublications(JSONObject object) throws JSONException {
-        JSONObject publicationName = object.getJSONObject("static").getJSONObject("magazines");
+    public static void addPublications(JSONObject publicationNames) throws JSONException {
+        if (publicationNames.has("static")) { // Legacy JSON structure
+            publicationNames = publicationNames.getJSONObject("static").getJSONObject("magazines");
+        }
         @SuppressWarnings("unchecked")
-        Iterator<String> publicationIterator = publicationName.keys();
+        Iterator<String> publicationIterator = publicationNames.keys();
         while (publicationIterator.hasNext()) {
             String publicationShortName = publicationIterator.next();
-            String publicationFullName = publicationName.getString(publicationShortName);
+            String publicationFullName = publicationNames.getString(publicationShortName);
             String countryShortName=publicationShortName.split("/")[0];
 
             addPublication(countryShortName, publicationShortName, publicationFullName);
