@@ -1,0 +1,34 @@
+{
+  "numeros": {
+    "es\/BCB": [
+      {
+        "Numero": "1",
+        "Etat": "bon"
+      },
+      {
+        "Numero": "3",
+        "Etat": "mauvais"
+      }
+    ],
+    "fr\/DDD": [
+      {
+        "Numero": "2",
+        "Etat": "moyen"
+      },
+      {
+        "Numero": "4",
+        "Etat": "moyen"
+      }
+    ]
+  },
+  "static": {
+    "magazines": {
+      "es\/BBB": "Biblioteca Carl Barks",
+      "fr\/DDD": "La dynastie Donald Duck - Intégrale Carl Barks"
+    },
+    "pays": {
+      "es": "Spain",
+      "fr": "France"
+    }
+  }
+}

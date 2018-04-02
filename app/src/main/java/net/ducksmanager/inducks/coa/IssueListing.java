@@ -40,7 +40,7 @@ public class IssueListing extends CoaListing {
         if (response != null) {
             try {
                 JSONArray issues = null;
-                try {
+                try {  // Legacy JSON structure
                     JSONObject object = new JSONObject(response);
                     issues = object.getJSONObject("static").getJSONArray("numeros");
                 }

@@ -5,6 +5,8 @@ import android.support.test.runner.AndroidJUnitRunner;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.test.runner.lifecycle.Stage;
 
+import com.orhanobut.mockwebserverplus.MockWebServerPlus;
+
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
@@ -12,12 +14,7 @@ import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 
-import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
-
-import okhttp3.mockwebserver.Dispatcher;
-import okhttp3.mockwebserver.MockWebServer;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -36,7 +33,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 
 class WtdTest extends AndroidJUnitRunner {
-    static HashMap<String, MockWebServer> mockServers = new HashMap<>();
+    static MockWebServerPlus mockServer;
 
     @Rule
     public ScreenshotTestRule screenshotTestRule = new ScreenshotTestRule();
@@ -49,31 +46,17 @@ class WtdTest extends AndroidJUnitRunner {
         WhatTheDuck.USER_SETTINGS = "settings_test.properties";
     }
 
-    static void initMockServers() {
-        HashMap<String, Dispatcher> dmDispatcher = new HashMap<>();
-        dmDispatcher.put(WhatTheDuckApplication.CONFIG_KEY_DM_URL, DownloadHandlerMock.dispatcherForDm);
-
-        HashMap<String, Dispatcher> dmServerDispatcher = new HashMap<>();
-        dmServerDispatcher.put(WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL, DownloadHandlerMock.dispatcherForDmServer);
-
-        HashMap<String, HashMap<String, Dispatcher>> mockServerDispatchers = new HashMap<>();
-        mockServerDispatchers.put("dm", dmDispatcher);
-        mockServerDispatchers.put("dm-server", dmServerDispatcher);
-
-        for (String dispatcherName : mockServerDispatchers.keySet()) {
-            MockWebServer mockServer = new MockWebServer();
-            try {
-                mockServer.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            for (String configKey : mockServerDispatchers.get(dispatcherName).keySet()) {
-                WhatTheDuckApplication.config.setProperty(configKey, mockServer.url("/").url().toString());
-                mockServer.setDispatcher(mockServerDispatchers.get(dispatcherName).get(configKey));
-            }
-
-            mockServers.put(dispatcherName, mockServer);
-        }
+    static void initMockServer() {
+        mockServer = new MockWebServerPlus();
+        mockServer.setDispatcher(DownloadHandlerMock.dispatcherForDm);
+        WhatTheDuckApplication.config.setProperty(
+            WhatTheDuckApplication.CONFIG_KEY_DM_URL,
+            mockServer.url("/")
+        );
+        WhatTheDuckApplication.config.setProperty(
+            WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL,
+            mockServer.url("/")
+        );
     }
 
     static void login(String user, String password) {

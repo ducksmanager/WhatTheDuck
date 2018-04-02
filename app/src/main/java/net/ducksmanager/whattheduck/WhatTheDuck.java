@@ -71,8 +71,6 @@ public class WhatTheDuck extends Activity {
     private static String selectedPublication = null;
     private static String selectedIssue = null;
 
-
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         wtd=this;
