@@ -12,14 +12,27 @@ import okhttp3.mockwebserver.RecordedRequest;
 public class DownloadHandlerMock {
     public static final String TEST_USER = "demotestuser";
     public static final String TEST_PASS = "demotestpass";
-    static Dispatcher dispatcherForDm = new Dispatcher() {
+    static Dispatcher dispatcher = new Dispatcher() {
 
         @Override
         public MockResponse dispatch(RecordedRequest request) {
             System.out.println("Mocking " + request.getRequestUrl());
-            if (request.getRequestUrl().url().toString().endsWith(WhatTheDuck.DUCKSMANAGER_PAGE_WITH_REMOTE_URL)) {
-                return new MockResponse().setBody(WtdTest.mockServer.url(""));
+            if (request.getRequestUrl().url().toString().contains("/dm/")) {
+                return dispatchForDm(request);
             }
+            else {
+                return dispatchForDmServer(request);
+            }
+        }
+
+        private MockResponse dispatchForDm(RecordedRequest request) {
+            if (request.getRequestUrl().url().toString().endsWith(WhatTheDuck.DUCKSMANAGER_PAGE_WITH_REMOTE_URL)) {
+                return new MockResponse().setBody(WtdTest.mockServer.url("/dm-server/"));
+            }
+            return new MockResponse().setStatus("404");
+        }
+
+        private MockResponse dispatchForDmServer(RecordedRequest request) {
             UrlQuerySanitizer sanitizer = new UrlQuerySanitizer(request.getRequestUrl().url().toString());
             String username = sanitizer.getValue("pseudo_user");
             if (username == null) {
@@ -29,18 +42,16 @@ public class DownloadHandlerMock {
                 if (request.getRequestUrl().pathSegments().contains("issues")) {
                     return new MockResponse().setBody(Fixture.parseFrom("dm-server/issues").body);
                 }
+                return new MockResponse().setStatus("500");
             }
-            else {
-                switch (username) {
-                    case TEST_USER:
-                        if (sanitizer.getValue("mdp_user").equals(WhatTheDuck.toSHA1(TEST_PASS))) {
-                            return new MockResponse().setBody(Fixture.parseFrom("dm/collection").body);
-                        }
+            switch (username) {
+                case TEST_USER:
+                    if (sanitizer.getValue("mdp_user").equals(WhatTheDuck.toSHA1(TEST_PASS))) {
+                        return new MockResponse().setBody(Fixture.parseFrom("dm/collection").body);
+                    }
                     break;
-                }
-                return new MockResponse().setBody("0");
             }
-            return new MockResponse().setStatus("500");
+            return new MockResponse().setBody("0");
         }
     };
 }

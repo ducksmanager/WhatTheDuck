@@ -48,14 +48,14 @@ class WtdTest extends AndroidJUnitRunner {
 
     static void initMockServer() {
         mockServer = new MockWebServerPlus();
-        mockServer.setDispatcher(DownloadHandlerMock.dispatcherForDm);
+        mockServer.setDispatcher(DownloadHandlerMock.dispatcher);
         WhatTheDuckApplication.config.setProperty(
             WhatTheDuckApplication.CONFIG_KEY_DM_URL,
-            mockServer.url("/")
+            mockServer.url("/dm/")
         );
         WhatTheDuckApplication.config.setProperty(
             WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL,
-            mockServer.url("/")
+            mockServer.url("/dm-server/")
         );
     }
 
