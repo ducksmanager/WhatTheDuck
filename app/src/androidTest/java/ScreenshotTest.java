@@ -85,7 +85,7 @@ public class ScreenshotTest extends WtdTest {
     public void testPublicationList() {
         onView(withId(R.id.onlyInCollectionSwitch)).perform(click());
 
-        onData(allOf(instanceOf(CountryAdapter.Country.class), countryWithCode("gr")))
+        onData(allOf(instanceOf(CountryAdapter.Country.class), countryWithCode("fr")))
             .inAdapterView(withId(R.id.itemList))
             .perform(click());
 
