@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.builder.Builders;
 
 import net.ducksmanager.retrievetasks.ConnectAndRetrieveList;
 import net.ducksmanager.retrievetasks.Signup;
@@ -299,7 +300,7 @@ public class WhatTheDuck extends Activity {
 
     public void retrieveOrFailDmServer(String urlSuffix, FutureCallback<String> futureCallback, String fileName, File file) throws Exception {
         if (isOffline()) {
-            throw new Exception(""+R.string.network_error);
+            throw new Exception(getString(R.string.network_error));
         }
 
         if (getEncryptedPassword() == null) {
@@ -310,12 +311,15 @@ public class WhatTheDuck extends Activity {
 
         urlSuffix = urlSuffix.replaceAll("\\{locale\\}", getApplicationContext().getResources().getConfiguration().locale.getLanguage());
 
-        Ion.with(this.findViewById(android.R.id.content).getContext())
+        Builders.Any.B call = Ion.with(this.findViewById(android.R.id.content).getContext())
             .load(WhatTheDuckApplication.config.getProperty(CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix)
-            .setHeader("x-dm-version", WhatTheDuck.wtd.getApplicationVersion())
-//            .setMultipartFile(fileName, file)
-            .asString()
-            .setCallback(futureCallback);
+            .setHeader("x-dm-version", WhatTheDuck.wtd.getApplicationVersion());
+
+        if (file != null) {
+            call.setMultipartFile(fileName, file);
+        }
+
+        call.asString().setCallback(futureCallback);
     }
 
     public String retrieveOrFail(RetrieveTask.DownloadHandler downloadHandler, String urlSuffix) throws Exception {
