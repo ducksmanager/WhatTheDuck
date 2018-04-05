@@ -2,7 +2,8 @@ package net.ducksmanager.inducks.coa;
 
 import android.app.Activity;
 
-import net.ducksmanager.util.SimpleCallback;
+import com.koushikdutta.async.future.FutureCallback;
+
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import org.json.JSONException;
@@ -16,8 +17,8 @@ public class CountryListing extends CoaListing {
     private static HashMap<String,String> countryNames= new HashMap<>();
     public static boolean hasFullList = false;
 
-    public CountryListing(Activity activity, SimpleCallback callback) {
-        super(activity, ListType.COUNTRY_LIST, null, null, callback);
+    public CountryListing(Activity activity, FutureCallback callback) {
+        super(activity, ListType.COUNTRY_LIST, callback);
     }
 
     public static String getCountryFullName (String shortCountryName) {
@@ -33,8 +34,12 @@ public class CountryListing extends CoaListing {
     }
 
     @Override
-    protected void onPostExecute(String response) {
-        super.onPostExecute(response);
+    protected String getUrlSuffix() {
+        return "/coa/list/countries/{locale}";
+    }
+
+    @Override
+    protected void processData(String response) {
         if (response != null) {
             try {
                 resetCountries();
@@ -44,14 +49,15 @@ public class CountryListing extends CoaListing {
                 handleJSONException(e);
             }
         }
-
-        callback.onDownloadFinished(activityRef);
     }
 
     @SuppressWarnings("unchecked")
-    public static void addCountries(JSONObject object) throws JSONException {
+    public static void addCountries(JSONObject countryNames) throws JSONException {
         if (!hasFullList) {
-            JSONObject countryNames = object.getJSONObject("static").getJSONObject("pays");
+            if (countryNames.has("static")) { // Legacy JSON structure
+                countryNames = countryNames.getJSONObject("static").getJSONObject("pays");
+            }
+
             Iterator<String> countryIterator = countryNames.keys();
             while (countryIterator.hasNext()) {
                 String shortName = countryIterator.next();

@@ -1,8 +1,6 @@
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
-import junit.framework.Assert;
-
 import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.R;
 
@@ -16,13 +14,7 @@ public class LoginTest extends WtdTest {
 
     @BeforeClass
     public static void initDownloadHelper() {
-        WtdTest.initDownloadHelper();
-    }
-
-    @Test
-    public void testMockEnabled() {
-        String result = new DownloadHandlerMock().getPage("WhatTheDuck_server.php");
-        Assert.assertEquals(result, "http://dm-server-mock");
+        initMockServer();
     }
 
     @Test

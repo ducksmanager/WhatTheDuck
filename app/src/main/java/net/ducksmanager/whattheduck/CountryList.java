@@ -17,9 +17,9 @@ public class CountryList extends List<CountryAdapter.Country> {
 
     @Override
     protected void downloadFullList() {
-        new CountryListing(this, activity ->
-            ((List)activity.get()).notifyCompleteList()
-        ).execute();
+        new CountryListing(this, (e, result) ->
+            CountryList.this.notifyCompleteList()
+        ).fetch();
     }
 
     @Override

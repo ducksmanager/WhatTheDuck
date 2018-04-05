@@ -5,9 +5,11 @@ import android.support.test.runner.AndroidJUnitRunner;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.test.runner.lifecycle.Stage;
 
+import com.orhanobut.mockwebserverplus.MockWebServerPlus;
+
 import net.ducksmanager.whattheduck.R;
-import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
+import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -31,6 +33,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 
 class WtdTest extends AndroidJUnitRunner {
+    static MockWebServerPlus mockServer;
 
     @Rule
     public ScreenshotTestRule screenshotTestRule = new ScreenshotTestRule();
@@ -43,8 +46,17 @@ class WtdTest extends AndroidJUnitRunner {
         WhatTheDuck.USER_SETTINGS = "settings_test.properties";
     }
 
-    static void initDownloadHelper() {
-        RetrieveTask.downloadHandler = new DownloadHandlerMock();
+    static void initMockServer() {
+        mockServer = new MockWebServerPlus();
+        mockServer.setDispatcher(DownloadHandlerMock.dispatcher);
+        WhatTheDuckApplication.config.setProperty(
+            WhatTheDuckApplication.CONFIG_KEY_DM_URL,
+            mockServer.url("/dm/")
+        );
+        WhatTheDuckApplication.config.setProperty(
+            WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL,
+            mockServer.url("/dm-server/")
+        );
     }
 
     static void login(String user, String password) {

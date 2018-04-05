@@ -19,9 +19,9 @@ public class IssueList extends List<Issue> {
 
     @Override
     protected void downloadFullList() {
-        new IssueListing(this, WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), activity ->
-            ((List)activity.get()).notifyCompleteList()
-        ).execute();
+        new IssueListing(this, WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), (e, result) ->
+            IssueList.this.notifyCompleteList()
+        ).fetch();
     }
 
     @Override

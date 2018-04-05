@@ -15,9 +15,9 @@ public class PublicationList extends List<PublicationAdapter.Publication> {
 
     @Override
     protected void downloadFullList() {
-        new PublicationListing(this, WhatTheDuck.getSelectedCountry(), activity ->
-            ((List)activity.get()).notifyCompleteList()
-        ).execute();
+        new PublicationListing(this, WhatTheDuck.getSelectedCountry(), (e, result) ->
+            PublicationList.this.notifyCompleteList()
+        ).fetch();
     }
 
     @Override

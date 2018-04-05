@@ -2,7 +2,8 @@ package net.ducksmanager.inducks.coa;
 
 import android.app.Activity;
 
-import net.ducksmanager.util.SimpleCallback;
+import com.koushikdutta.async.future.FutureCallback;
+
 import net.ducksmanager.whattheduck.Issue;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
@@ -16,9 +17,13 @@ public class IssueListing extends CoaListing {
 
     private static final HashSet<String> fullListPublications = new HashSet<>();
 
-    public IssueListing(Activity activity, String countryShortName, String publicationShortName, SimpleCallback callback) {
-        super(activity, ListType.ISSUE_LIST, countryShortName, publicationShortName, callback);
-        this.urlSuffix+="&pays="+countryShortName+"&magazine="+publicationShortName;
+    private String countryShortName;
+    private String publicationCode;
+
+    public IssueListing(Activity activity, String countryShortName, String publicationCode, FutureCallback callback) {
+        super(activity, ListType.ISSUE_LIST, callback);
+        this.countryShortName = countryShortName;
+        this.publicationCode = publicationCode;
     }
 
     public static boolean hasFullList(String publicationName) {
@@ -26,23 +31,33 @@ public class IssueListing extends CoaListing {
     }
 
     @Override
-    protected void onPostExecute(String response) {
-        super.onPostExecute(response);
+    protected String getUrlSuffix() {
+        return "/coa/list/issues/" + publicationCode;
+    }
+
+    @Override
+    protected void processData(String response) {
         if (response != null) {
             try {
-                JSONObject object = new JSONObject(response);
-                JSONArray issues = object.getJSONObject("static").getJSONArray("numeros");
-                for (int i = 0; i < issues.length(); i++) {
-                    String issue = (String) issues.get(i);
-                    WhatTheDuck.coaCollection.addIssue(CoaListing.countryShortName, CoaListing.publicationShortName, new Issue(issue));
+                JSONArray issues = null;
+                try {  // Legacy JSON structure
+                    JSONObject object = new JSONObject(response);
+                    issues = object.getJSONObject("static").getJSONArray("numeros");
                 }
-                fullListPublications.add(CoaListing.publicationShortName);
+                catch (JSONException e) {
+                    issues = new JSONArray(response);
+                }
+                finally {
+                    for (int i = 0; i < issues.length(); i++) {
+                        String issue = (String) issues.get(i);
+                        WhatTheDuck.coaCollection.addIssue(countryShortName, publicationCode, new Issue(issue));
+                    }
+                    fullListPublications.add(publicationCode);
+                }
             }
             catch (JSONException e) {
                 handleJSONException(e);
             }
         }
-
-        callback.onDownloadFinished(activityRef);
     }
 }

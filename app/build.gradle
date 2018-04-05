@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '26.0.3'
+    buildToolsVersion '27.0.3'
 
     useLibrary  'org.apache.http.legacy'
 
@@ -62,4 +62,8 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-contrib:3.0.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.1'
-}
+    androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.10.0'
+    androidTestCompile('com.orhanobut:mockwebserverplus:1.0.0') {
+        exclude module: 'snakeyaml'
+    }
+    androidTestCompile 'pl.droidsonroids.yaml:snakeyaml:1.18-android'}
