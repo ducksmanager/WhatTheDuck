@@ -4,6 +4,8 @@ import com.orhanobut.mockwebserverplus.Fixture;
 
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
+import java.util.Arrays;
+
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -17,11 +19,11 @@ public class DownloadHandlerMock {
         @Override
         public MockResponse dispatch(RecordedRequest request) {
             System.out.println("Mocking " + request.getRequestUrl());
-            if (request.getRequestUrl().url().toString().contains("/dm/")) {
-                return dispatchForDm(request);
+            if (request.getRequestUrl().url().toString().contains("/dm-server/")) {
+                return dispatchForDmServer(request);
             }
             else {
-                return dispatchForDmServer(request);
+                return dispatchForDm(request);
             }
         }
 
@@ -41,6 +43,9 @@ public class DownloadHandlerMock {
                 }
                 if (request.getRequestUrl().pathSegments().contains("issues")) {
                     return new MockResponse().setBody(Fixture.parseFrom("dm-server/issues").body);
+                }
+                if (request.getRequestUrl().pathSegments().containsAll(Arrays.asList("cover-id", "search"))) {
+                    return new MockResponse().setBody(Fixture.parseFrom("dm-server/cover-search").body);
                 }
                 return new MockResponse().setStatus("500");
             }
