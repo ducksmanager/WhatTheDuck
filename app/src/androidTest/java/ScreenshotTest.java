@@ -18,11 +18,11 @@ import net.ducksmanager.whattheduck.PublicationAdapter;
 import net.ducksmanager.whattheduck.PublicationList;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
-import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -52,15 +52,15 @@ public class ScreenshotTest extends WtdTest {
         });
     }
 
-    private static final String CONFIG_KEY_DEMO_PASSWORD = "demo_password";
+    @BeforeClass
+    public static void initDownloadHelper() {
+        initMockServer();
+    }
+
     private final Locale locale;
 
     public ScreenshotTest(Locale locale) {
         this.locale = locale;
-    }
-
-    private String getDemoPassword() {
-        return WhatTheDuckApplication.config.getProperty(CONFIG_KEY_DEMO_PASSWORD);
     }
 
     private String getScreenshotPath() {
@@ -78,7 +78,7 @@ public class ScreenshotTest extends WtdTest {
     @Before
     public void switchLocaleAndLogin() {
         switchLocale();
-        login("demo", getDemoPassword());
+        login(DownloadHandlerMock.TEST_USER, DownloadHandlerMock.TEST_PASS);
     }
 
     @Test
@@ -110,15 +110,6 @@ public class ScreenshotTest extends WtdTest {
 
     @Test
     public void testCoverFlowResults() {
-        onData(allOf(instanceOf(CountryAdapter.Country.class), countryWithCode("fr")))
-            .inAdapterView(withId(R.id.itemList))
-            .perform(click());
-
-        onData(allOf(instanceOf(PublicationAdapter.Publication.class), publicationWithCode("fr/MP")))
-            .inAdapterView(withId(R.id.itemList))
-            .perform(click());
-        assertCurrentActivityIsInstanceOf(IssueList.class, true);
-
         CoverFlowFileHandler.mockedResource = R.drawable.wtd;
         Intent resultData = new Intent();
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
