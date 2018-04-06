@@ -5,5 +5,6 @@
 /app/libs/
 /build/
 /local.properties
+/app/src/androidTest/resources/fixtures/covers/
 /app/src/main/assets/config.properties
 /screenshots
