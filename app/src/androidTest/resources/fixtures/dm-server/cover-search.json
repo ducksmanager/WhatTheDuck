@@ -5,7 +5,7 @@
       "publicationcode": "de\/LTB",
       "publicationtitle": "Lustiges Taschenbuch",
       "issuenumber": "1",
-      "coverid": 19646
+      "coverid": 19647
     },
     "fr\/MPNT 735": {
       "countrycode": "fr",
@@ -20,37 +20,11 @@
       "publicationtitle": "Mickey Parade (ancienne s\u00e9rie)",
       "issuenumber": "735",
       "coverid": 51697
-    },
-    "gr\/MM   72": {
-      "countrycode": "gr",
-      "publicationcode": "gr\/MM",
-      "publicationtitle": "\u039c\u03af\u03ba\u03c5 \u039c\u03ac\u03bf\u03c5\u03c2",
-      "issuenumber": "72",
-      "coverid": 58781
-    },
-    "it\/CD   35": {
-      "countrycode": "it",
-      "publicationcode": "it\/CD",
-      "publicationtitle": "I Classici di Walt Disney (seconda serie)",
-      "issuenumber": "35",
-      "coverid": 65547
-    },
-    "it\/CWD  22": {
-      "countrycode": "it",
-      "publicationcode": "it\/CWD",
-      "publicationtitle": "I Classici di Walt Disney (prima serie)",
-      "issuenumber": "22",
-      "coverid": 66334
     }
   },
   "imageIds": [
-    51698,
-    120272,
-    58781,
-    51393,
     19647,
-    65548,
-    65547,
+    51393,
     51697
   ]
 }

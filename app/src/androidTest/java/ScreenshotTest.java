@@ -1,5 +1,4 @@
 import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -8,6 +7,7 @@ import android.provider.MediaStore;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.filters.LargeTest;
+import android.view.View;
 import android.widget.ImageView;
 
 import net.ducksmanager.util.CoverFlowActivity;
@@ -100,7 +100,7 @@ public class ScreenshotTest extends WtdTest {
             .inAdapterView(withId(R.id.itemList))
             .perform(click());
 
-        onData(allOf(instanceOf(PublicationAdapter.Publication.class), publicationWithCode("fr/MP")))
+        onData(allOf(instanceOf(PublicationAdapter.Publication.class), publicationWithCode("fr/DDD")))
             .inAdapterView(withId(R.id.itemList))
             .perform(click());
 
@@ -112,7 +112,7 @@ public class ScreenshotTest extends WtdTest {
     public void testCoverFlowResults() {
         CoverFlowFileHandler.mockedResource = R.drawable.wtd;
         Intent resultData = new Intent();
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+        ActivityResult result = new ActivityResult(Activity.RESULT_OK, resultData);
 
         Matcher<Intent> expectedIntent = hasAction(MediaStore.ACTION_IMAGE_CAPTURE);
         Intents.init();
@@ -164,7 +164,7 @@ public class ScreenshotTest extends WtdTest {
         return new BoundedMatcher<Object, ImageView>(ImageView.class) {
             @Override
             public boolean matchesSafely(final ImageView item) {
-                return CoverFlowActivity.currentCoverUrl.equals(item.getTag());
+                return CoverFlowActivity.currentCoverUrl.equals(item.getTag()) && item.getVisibility() == View.VISIBLE;
             }
 
             @Override
