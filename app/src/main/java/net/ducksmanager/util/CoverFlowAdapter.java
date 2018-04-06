@@ -51,7 +51,6 @@ class CoverFlowAdapter extends BaseAdapter {
         mContext = context;
         picasso = new Picasso.Builder(mContext)
             .downloader(new OkHttp3Downloader(httpClient))
-            .listener((picasso, uri, exception) -> exception.printStackTrace())
             .build();
     }
 
@@ -77,38 +76,33 @@ class CoverFlowAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder viewHolder;
-
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item_coverflow, parent, false);
 
-            viewHolder = new ViewHolder();
+            ViewHolder viewHolder = new ViewHolder();
             viewHolder.text = convertView.findViewById(R.id.label);
             viewHolder.image = convertView.findViewById(R.id.image);
             viewHolder.progressBar = convertView.findViewById(R.id.progressBarImageDownload);
 
+            picasso.load(mData.get(position).getFullUrl()).into(viewHolder.image, new Callback() {
+                @Override
+                public void onSuccess() {
+                    viewHolder.image.setVisibility(View.VISIBLE);
+                    viewHolder.progressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onError() {
+                    viewHolder.image.setVisibility(View.VISIBLE);
+                    viewHolder.progressBar.setVisibility(View.GONE);
+                }
+            });
             convertView.setTag(viewHolder);
         }
-        else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
 
-        picasso.load(mData.get(position).getFullUrl()).into(viewHolder.image, new Callback() {
-            @Override
-            public void onSuccess() {
-                viewHolder.image.setVisibility(View.VISIBLE);
-                viewHolder.progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onError() {
-                viewHolder.image.setVisibility(View.VISIBLE);
-                viewHolder.progressBar.setVisibility(View.GONE);
-            }
-        });
-
-        viewHolder.text.setText(mData.get(position).getIssueNumber());
+        ViewHolder holder = (ViewHolder) convertView.getTag();
+        holder.text.setText(mData.get(position).getIssueNumber());
 
         return convertView;
     }
