@@ -5,8 +5,6 @@ import android.support.test.runner.AndroidJUnitRunner;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.test.runner.lifecycle.Stage;
 
-import com.orhanobut.mockwebserverplus.MockWebServerPlus;
-
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
@@ -15,6 +13,8 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 
 import java.util.Collection;
+
+import okhttp3.mockwebserver.MockWebServer;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -33,7 +33,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 
 class WtdTest extends AndroidJUnitRunner {
-    static MockWebServerPlus mockServer;
+    static MockWebServer mockServer;
 
     @Rule
     public ScreenshotTestRule screenshotTestRule = new ScreenshotTestRule();
@@ -47,15 +47,15 @@ class WtdTest extends AndroidJUnitRunner {
     }
 
     static void initMockServer() {
-        mockServer = new MockWebServerPlus();
+        mockServer = new MockWebServer();
         mockServer.setDispatcher(DownloadHandlerMock.dispatcher);
         WhatTheDuckApplication.config.setProperty(
             WhatTheDuckApplication.CONFIG_KEY_DM_URL,
-            mockServer.url("/dm/")
+            mockServer.url("/dm/").toString()
         );
         WhatTheDuckApplication.config.setProperty(
             WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL,
-            mockServer.url("/dm-server/")
+            mockServer.url("/dm-server/").toString()
         );
     }
 
