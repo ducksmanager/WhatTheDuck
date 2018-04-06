@@ -49,6 +49,7 @@ dependencies {
     compile 'com.koushikdutta.ion:ion:2.2.1'
     compile 'com.github.douglasjunior:android-simple-tooltip:0.2.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
     compile 'com.jakewharton.timber:timber:4.6.1'
     compile 'org.piwik.sdk:piwik-sdk:3.0.0'
     compile 'net.igenius:customcheckbox:1.3'

@@ -2,9 +2,7 @@ package net.ducksmanager.util;
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,27 +11,47 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.jakewharton.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
 import net.ducksmanager.whattheduck.IssueWithFullUrl;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 class CoverFlowAdapter extends BaseAdapter {
 
-    private static final HashMap<String,Bitmap> imageCache = new HashMap<>();
-
     private ArrayList<IssueWithFullUrl> mData = new ArrayList<>(0);
     private final Context mContext;
+    private final Picasso picasso;
+
+    private static OkHttpClient httpClient = new OkHttpClient.Builder()
+        .addInterceptor(chain -> {
+            Request newRequest;
+            String dmVersion = null;
+            try {
+                dmVersion = WhatTheDuck.wtd.getApplicationVersion();
+            } catch (PackageManager.NameNotFoundException e) {
+                dmVersion = "?";
+            } finally {
+                newRequest = chain.request().newBuilder()
+                    .addHeader("X-Dm-Version", dmVersion).build();
+            }
+            return chain.proceed(newRequest);
+        })
+        .build();
+
 
     CoverFlowAdapter(Context context) {
         mContext = context;
+        picasso = new Picasso.Builder(mContext)
+            .downloader(new OkHttp3Downloader(httpClient))
+            .build();
     }
 
     void setData(ArrayList<IssueWithFullUrl> data) {
@@ -58,29 +76,35 @@ class CoverFlowAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View rowView = convertView;
-
-        if (rowView == null) {
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            rowView = inflater.inflate(R.layout.item_coverflow, parent, false);
+            convertView = inflater.inflate(R.layout.item_coverflow, parent, false);
 
             ViewHolder viewHolder = new ViewHolder();
-            viewHolder.text = rowView.findViewById(R.id.label);
-            viewHolder.image = rowView.findViewById(R.id.image);
-            viewHolder.image.setTag(mData.get(position).getFullUrl());
-            viewHolder.progressBar = rowView.findViewById(R.id.progressBarImageDownload);
+            viewHolder.text = convertView.findViewById(R.id.label);
+            viewHolder.image = convertView.findViewById(R.id.image);
+            viewHolder.progressBar = convertView.findViewById(R.id.progressBarImageDownload);
 
-            DownloadImagesTask task = new DownloadImagesTask(viewHolder.progressBar);
-            task.execute(viewHolder.image);
+            picasso.load(mData.get(position).getFullUrl()).into(viewHolder.image, new Callback() {
+                @Override
+                public void onSuccess() {
+                    viewHolder.image.setVisibility(View.VISIBLE);
+                    viewHolder.progressBar.setVisibility(View.GONE);
+                }
 
-            rowView.setTag(viewHolder);
+                @Override
+                public void onError() {
+                    viewHolder.image.setVisibility(View.VISIBLE);
+                    viewHolder.progressBar.setVisibility(View.GONE);
+                }
+            });
+            convertView.setTag(viewHolder);
         }
 
-        ViewHolder holder = (ViewHolder) rowView.getTag();
-
+        ViewHolder holder = (ViewHolder) convertView.getTag();
         holder.text.setText(mData.get(position).getIssueNumber());
 
-        return rowView;
+        return convertView;
     }
 
 
@@ -88,62 +112,6 @@ class CoverFlowAdapter extends BaseAdapter {
         TextView text;
         ImageView image;
         ProgressBar progressBar;
-    }
-
-    private static class DownloadImagesTask extends AsyncTask<ImageView, Void, Bitmap> {
-
-        WeakReference<ProgressBar> progressBarRef = null;
-        WeakReference<ImageView> imageViewRef = null;
-
-        DownloadImagesTask(ProgressBar progressBar) {
-            this.progressBarRef = new WeakReference<>(progressBar);
-        }
-
-        @Override
-        protected Bitmap doInBackground(ImageView... imageViews) {
-            this.imageViewRef = new WeakReference<>(imageViews[0]);
-            //noinspection WrongThread
-            return downloadImage((String) imageViewRef.get().getTag());
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            ImageView imageView = imageViewRef.get();
-            imageView.setVisibility(View.VISIBLE);
-            imageView.setImageBitmap(result);
-            progressBarRef.get().setVisibility(View.GONE);
-        }
-
-        private Bitmap downloadImage(String url) {
-            if (imageCache.containsKey(url)) {
-                return imageCache.get(url);
-            }
-
-            Bitmap bmp;
-            try{
-                URL ulrn = new URL(url);
-                HttpURLConnection con = (HttpURLConnection)ulrn.openConnection();
-                con.setRequestProperty("X-Dm-Version", WhatTheDuck.wtd.getApplicationVersion());
-
-                InputStream is = con.getInputStream();
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                byte[] tmpBuffer = new byte[256];
-                int n;
-                while ((n = is.read(tmpBuffer)) >= 0) {
-                    bos.write(tmpBuffer, 0, n);
-                }
-
-                bmp = BitmapFactory.decodeByteArray(bos.toByteArray(), 0, bos.toByteArray().length);
-                if (null != bmp) {
-                    imageCache.put(url, bmp);
-                    return bmp;
-                }
-
-            } catch(Exception e){
-                System.err.println(e.getMessage());
-            }
-            return null;
-        }
     }
 }
 
