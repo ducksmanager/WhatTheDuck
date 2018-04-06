@@ -32,11 +32,13 @@ public class CoverFlowActivity extends Activity {
     private TextView mIssueConditionText;
     private TextView mTitleText;
     
-    private IssueWithFullUrl current = null;
+    public static IssueWithFullUrl currentSuggestion = null;
+    public static String currentCoverUrl = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         ((WhatTheDuckApplication) getApplication()).trackActivity(this);
 
         setContentView(R.layout.activity_coverflow);
@@ -79,11 +81,11 @@ public class CoverFlowActivity extends Activity {
         mCoverFlow.setAdapter(mAdapter);
 
         mCoverFlow.setOnItemClickListener((parent, view, position, id) -> {
-            Issue existingIssue = WhatTheDuck.userCollection.getIssue(current.getCountryCode(), current.getPublicationCode(), current.getIssueNumber());
+            Issue existingIssue = WhatTheDuck.userCollection.getIssue(currentSuggestion.getCountryCode(), currentSuggestion.getPublicationCode(), currentSuggestion.getIssueNumber());
             if (existingIssue == null) {
-                Issue newIssue = new Issue(current.getIssueNumber(), (Issue.IssueCondition) null);
-                WhatTheDuck.setSelectedCountry (current.getCountryCode());
-                WhatTheDuck.setSelectedPublication (current.getPublicationCode());
+                Issue newIssue = new Issue(currentSuggestion.getIssueNumber(), null);
+                WhatTheDuck.setSelectedCountry (currentSuggestion.getCountryCode());
+                WhatTheDuck.setSelectedPublication (currentSuggestion.getPublicationCode());
                 WhatTheDuck.setSelectedIssue(newIssue.getIssueNumber());
 
                 GetPurchaseList.initAndShowAddIssue(CoverFlowActivity.this);
@@ -100,9 +102,10 @@ public class CoverFlowActivity extends Activity {
         mCoverFlow.setOnScrollPositionListener(new FeatureCoverFlow.OnScrollPositionListener() {
             @Override
             public void onScrolledToPosition(int position) {
-                current = mData.get(position);
-                
-                String uri = "@drawable/flags_" + current.getCountryCode();
+                currentSuggestion = mData.get(position);
+                currentCoverUrl = currentSuggestion.getFullUrl();
+
+                String uri = "@drawable/flags_" + currentSuggestion.getCountryCode();
                 int imageResource = getResources().getIdentifier(uri, null, getPackageName());
 
                 if (imageResource == 0) {
@@ -113,7 +116,7 @@ public class CoverFlowActivity extends Activity {
 
                 mIssueConditionText.setVisibility(View.VISIBLE);
 
-                Issue existingIssue = WhatTheDuck.userCollection.getIssue(current.getCountryCode(), current.getPublicationCode(), current.getIssueNumber());
+                Issue existingIssue = WhatTheDuck.userCollection.getIssue(currentSuggestion.getCountryCode(), currentSuggestion.getPublicationCode(), currentSuggestion.getIssueNumber());
                 if (existingIssue != null) {
                     Issue.IssueCondition condition = existingIssue.getIssueCondition();
                     mIssueCondition.setVisibility(View.VISIBLE);
