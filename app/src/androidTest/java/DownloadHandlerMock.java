@@ -4,6 +4,8 @@ import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
@@ -39,18 +41,18 @@ public class DownloadHandlerMock {
             UrlQuerySanitizer sanitizer = new UrlQuerySanitizer(request.getPath());
             String username = sanitizer.getValue("pseudo_user");
             if (username == null) {
-                String[] parts = request.getPath().split("/");
-                if (request.getPath().contains("publications")) {
+                List<String> parts = Arrays.asList(request.getPath().split("/"));
+                if (parts.contains("publications")) {
                     return new MockResponse().setBody(getJsonFixture("dm-server/publications"));
                 }
-                if (request.getPath().contains("issues")) {
+                if (parts.contains("issues")) {
                     return new MockResponse().setBody(getJsonFixture("dm-server/issues"));
                 }
-                if (request.getPath().contains("cover-id/search")) {
+                if (parts.containsAll(Arrays.asList("cover-id", "search"))) {
                     return new MockResponse().setBody(getJsonFixture("dm-server/cover-search"));
                 }
-                if (request.getPath().contains("cover-id/download")) {
-                    return new MockResponse().setBody(getImageFixture("covers/" + parts[parts.length-1]));
+                if (parts.containsAll(Arrays.asList("cover-id", "download"))) {
+                    return new MockResponse().setBody(getImageFixture("covers/" + parts.get(parts.size()-1)));
                 }
 
                 return new MockResponse().setStatus("500");
