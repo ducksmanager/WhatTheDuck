@@ -15,6 +15,7 @@ import java.io.OutputStream;
 class ScreenshotTestRule implements MethodRule {
 
     private static final String SCREENSHOTS_PATH = "test-screenshots";
+    static final String SCREENSHOTS_PATH_SHOWCASE = "test-screenshots/showcase";
 
     public Statement apply(final Statement statement, final FrameworkMethod frameworkMethod, final Object o) {
         return new Statement() {
@@ -29,12 +30,12 @@ class ScreenshotTestRule implements MethodRule {
             }
 
             void captureScreenshot(String fileName) {
-                takeScreenshot(fileName, WtdTest.getActivityInstance());
+                takeScreenshot(fileName, WtdTest.getActivityInstance(), SCREENSHOTS_PATH);
             }
         };
     }
 
-    static void takeScreenshot(String name, Activity activity)
+    static void takeScreenshot(String name, Activity activity, String path)
     {
         View scrView = activity.getWindow().getDecorView().getRootView();
         scrView.setDrawingCacheEnabled(true);
@@ -42,7 +43,7 @@ class ScreenshotTestRule implements MethodRule {
         scrView.setDrawingCacheEnabled(false);
 
         OutputStream out = null;
-        File imagePath = new File(activity.getFilesDir(), SCREENSHOTS_PATH);
+        File imagePath = new File(activity.getFilesDir(), path);
         imagePath.mkdirs();
         File imageFile = new File(imagePath, name + ".png");
 

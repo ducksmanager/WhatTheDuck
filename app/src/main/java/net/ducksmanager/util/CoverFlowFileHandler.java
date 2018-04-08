@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.support.v4.content.FileProvider;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
 
 import net.ducksmanager.retrievetasks.CoverSearch;
@@ -23,6 +24,8 @@ public class CoverFlowFileHandler {
     private static final long MAX_COVER_FILESIZE = 2048 * 1024;
 
     public static CoverFlowFileHandler current;
+
+    public static Integer mockedResource = null;
 
     public interface TransformationCallback {
         void onComplete(File outputFile);
@@ -87,14 +90,17 @@ public class CoverFlowFileHandler {
     public void resizeUntilFileSize(final Activity activity, final TransformationCallback callback) {
         this.callback = callback;
 
-        long fileSize = uploadFile.length();
-
-        if (fileSize < CoverFlowFileHandler.MAX_COVER_FILESIZE) {
-            callback.onComplete(uploadFile);
+        RequestCreator picassoInstance;
+        if (mockedResource != null) {
+            picassoInstance = Picasso.with(activity).load(mockedResource);
         }
         else {
             Picasso.with(activity).invalidate(uploadFile);
-            Picasso.with(activity).load(uploadFile).resize(1600, 1600).centerInside().into(target);
+            picassoInstance = Picasso.with(activity).load(uploadFile);
+            if (uploadFile.length() > CoverFlowFileHandler.MAX_COVER_FILESIZE) {
+                picassoInstance = picassoInstance.resize(1600, 1600).centerInside();
+            }
         }
+        picassoInstance.into(target);
     }
 }
