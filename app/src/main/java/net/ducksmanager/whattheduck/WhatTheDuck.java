@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.koushikdutta.ion.builder.Builders;
+import com.koushikdutta.ion.builder.Builders.Any.B;
 
 import net.ducksmanager.retrievetasks.ConnectAndRetrieveList;
 import net.ducksmanager.retrievetasks.Signup;
@@ -311,7 +311,7 @@ public class WhatTheDuck extends Activity {
 
         urlSuffix = urlSuffix.replaceAll("\\{locale\\}", getApplicationContext().getResources().getConfiguration().locale.getLanguage());
 
-        Builders.Any.B call = Ion.with(this.findViewById(android.R.id.content).getContext())
+        B call = Ion.with(this.findViewById(android.R.id.content).getContext())
             .load(WhatTheDuckApplication.config.getProperty(CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix)
             .setHeader("x-dm-version", WhatTheDuck.wtd.getApplicationVersion());
 
