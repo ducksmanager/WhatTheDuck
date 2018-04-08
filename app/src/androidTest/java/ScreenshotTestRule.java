@@ -12,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
+
 class ScreenshotTestRule implements MethodRule {
 
     private static final String SCREENSHOTS_PATH = "test-screenshots";
@@ -38,31 +40,42 @@ class ScreenshotTestRule implements MethodRule {
     static void takeScreenshot(String name, Activity activity, String path)
     {
         View scrView = activity.getWindow().getDecorView().getRootView();
-        scrView.setDrawingCacheEnabled(true);
-        Bitmap bitmap = Bitmap.createBitmap(scrView.getDrawingCache());
-        scrView.setDrawingCacheEnabled(false);
 
-        OutputStream out = null;
-        File imagePath = new File(activity.getFilesDir(), path);
-        imagePath.mkdirs();
-        File imageFile = new File(imagePath, name + ".png");
+        new Thread() {
+            public void run() {
+                try {
+                    runOnUiThread(() -> {
+                        scrView.setDrawingCacheEnabled(true);
+                        Bitmap bitmap = Bitmap.createBitmap(scrView.getDrawingCache());
+                        scrView.setDrawingCacheEnabled(false);
 
-        try {
-            out = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.flush();
-        } catch (FileNotFoundException e) {
-            System.err.println(e.getMessage());
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
+                        OutputStream out = null;
+                        File imagePath = new File(activity.getFilesDir(), path);
+                        imagePath.mkdirs();
+                        File imageFile = new File(imagePath, name + ".png");
+
+                        try {
+                            out = new FileOutputStream(imageFile);
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+                            out.flush();
+                        } catch (FileNotFoundException e) {
+                            System.err.println(e.getMessage());
+                        } catch (IOException e) {
+                            System.err.println(e.getMessage());
+                        } finally {
+                            try {
+                                if (out != null) {
+                                    out.close();
+                                }
+                            } catch (Exception e) {
+                                System.err.println(e.getMessage());
+                            }
+                        }
+                    });
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
                 }
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
             }
-        }
+        }.run();
     }
 }
