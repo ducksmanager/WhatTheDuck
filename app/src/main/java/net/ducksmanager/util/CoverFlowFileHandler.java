@@ -93,6 +93,7 @@ public class CoverFlowFileHandler {
             callback.onComplete(uploadFile);
         }
         else {
+            Picasso.with(activity).invalidate(uploadFile);
             Picasso.with(activity).load(uploadFile).resize(1600, 1600).centerInside().into(target);
         }
     }
