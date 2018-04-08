@@ -3,6 +3,7 @@ Version 1.6.5
     Retrieve COA lists from the DM server instead of the DM gateway
     Fix first cover photographed is always used for cover search
     Init taking automatic screenshots during tests
+    Fix test image included in release build
 
 Version 1.6.4
 
