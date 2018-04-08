@@ -25,7 +25,7 @@ public class CoverFlowFileHandler {
 
     public static CoverFlowFileHandler current;
 
-    public static Integer mockedResource = null;
+    public static String mockedResource = null;
 
     public interface TransformationCallback {
         void onComplete(File outputFile);

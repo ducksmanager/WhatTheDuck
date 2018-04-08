@@ -110,7 +110,8 @@ public class ScreenshotTest extends WtdTest {
 
     @Test
     public void testCoverFlowResults() {
-        CoverFlowFileHandler.mockedResource = R.drawable.wtd;
+        CoverFlowFileHandler.mockedResource = mockServer.url("/internal/photos/2648").toString();
+
         Intent resultData = new Intent();
         ActivityResult result = new ActivityResult(Activity.RESULT_OK, resultData);
 

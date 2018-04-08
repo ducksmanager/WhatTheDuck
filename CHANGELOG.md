@@ -1,3 +1,9 @@
+Version 1.6.5
+
+    Retrieve COA lists from the DM server instead of the DM gateway
+    Fix first cover photographed is always used for cover search
+    Init taking automatic screenshots during tests
+
 Version 1.6.4
 
     Use an AppBar instead of an ActionBar

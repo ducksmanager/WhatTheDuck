@@ -22,12 +22,24 @@ public class DownloadHandlerMock {
         @Override
         public MockResponse dispatch(RecordedRequest request) {
             System.out.println("Mocking " + request.getPath());
-            if (request.getPath().contains("/dm-server/")) {
+            if (request.getPath().contains("/internal/")) {
+                return dispatchForInternal(request);
+            }
+            else if (request.getPath().contains("/dm-server/")) {
                 return dispatchForDmServer(request);
             }
             else {
                 return dispatchForDm(request);
             }
+        }
+
+        // Mocks that are internal to tests (photo mocks for instannce)
+        private MockResponse dispatchForInternal(RecordedRequest request) {
+            List<String> parts = Arrays.asList(request.getPath().split("/"));
+            if (parts.contains("photos")) {
+                return new MockResponse().setBody(getImageFixture("covers/" + parts.get(parts.size()-1)));
+            }
+            return new MockResponse().setStatus("404");
         }
 
         private MockResponse dispatchForDm(RecordedRequest request) {
@@ -96,7 +108,7 @@ public class DownloadHandlerMock {
         return inputStream;
     }
 
-    static String convertStreamToString(java.io.InputStream is) {
+    private static String convertStreamToString(java.io.InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
