@@ -39,7 +39,7 @@
     <string name="ok">OK</string>
     <string name="password">Lösenord</string>
     <string name="password_confirm">Upprepa lösenord</string>
-    <string name="referenced_issues">Berörda utgåvor</string>
+    <string name="select_issue">Berörda utgåvor</string>
     <string name="remember_credentials">Kom ihåg mig</string>
     <string name="result">Resultat</string>
     <string name="show_my_collection_content_only">Endast min samling</string>

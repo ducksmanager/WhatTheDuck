@@ -34,14 +34,6 @@
             layout="@layout/wtd_list_navigation_publication" />
     </LinearLayout>
 
-    <Switch
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/show_my_collection_content_only"
-        android:id="@+id/onlyInCollectionSwitch"
-        android:layout_below="@+id/navigation" />
-
     <EditText
         android:id="@+id/filter"
         android:layout_width="match_parent"
@@ -52,7 +44,7 @@
         android:visibility="gone"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/onlyInCollectionSwitch">
+        android:layout_below="@id/navigation">
     </EditText>
 
     <ListView
@@ -104,7 +96,7 @@
             fab:fab_colorNormal="@android:color/holo_green_dark"
             fab:fab_colorPressed="@android:color/holo_green_dark"
             fab:fab_colorRipple="@android:color/white"
-            fab:fab_label="By issue selection" />
+            fab:fab_label="@string/by_issue_selection" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/addToCollectionByPhotoButton"
@@ -115,7 +107,7 @@
             fab:fab_colorNormal="@android:color/holo_green_dark"
             fab:fab_colorPressed="@android:color/holo_green_dark"
             fab:fab_colorRipple="@android:color/white"
-            fab:fab_label="By cover photo" />
+            fab:fab_label="@string/by_cover_photo" />
     </com.github.clans.fab.FloatingActionMenu>
 
 </RelativeLayout>

@@ -5,7 +5,7 @@
     <string name="remember_credentials">Se souvenir de mes identifiants</string>
     <string name="no_issue">Aucun numéro.</string>
     <string name="my_collection">Ma collection</string>
-    <string name="referenced_issues">Numéros référencés</string>
+    <string name="select_issue">Numéros référencés</string>
     <string name="logout">Déconnexion</string>
     <string name="itemtitle">Numéro</string>
     <string name="insert_issue__confirm">Ajout du numéro %1$s</string>

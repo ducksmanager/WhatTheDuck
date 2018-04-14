@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -19,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -71,20 +71,8 @@ public abstract class List<Item> extends AppCompatActivity {
             goToView(PublicationList.class)
         );
 
-        Switch onlyInCollectionSwitch = this.findViewById(R.id.onlyInCollectionSwitch);
-        onlyInCollectionSwitch.setChecked(type.equals(CollectionType.USER.toString()));
-
-        onlyInCollectionSwitch.setOnClickListener(view -> {
-            Switch onlyInCollectionSwitch1 = (Switch) view;
-            List.this.goToAlternativeView(
-                onlyInCollectionSwitch1.isChecked()
-                    ? CollectionType.USER.toString()
-                    : CollectionType.COA.toString()
-            );
-        });
-
-        Toolbar myToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         loadList();
     }
@@ -109,6 +97,11 @@ public abstract class List<Item> extends AppCompatActivity {
                 takeCoverPicture()
             );
 
+            FloatingActionButton addToCollectionBySelectionButton = this.findViewById(R.id.addToCollectionBySelectionButton);
+            addToCollectionBySelectionButton.setOnClickListener(view ->
+                List.this.goToAlternativeView(CollectionType.COA.toString())
+            );
+
             if (WhatTheDuck.getShowCoverTooltip()) {
                 new SimpleTooltip.Builder(this)
                     .anchorView(addToCollection)
@@ -125,10 +118,25 @@ public abstract class List<Item> extends AppCompatActivity {
             WhatTheDuck.saveSettings(null);
         }
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            if (type.equals(CollectionType.USER.toString())) {
+                actionBar.setDisplayHomeAsUpEnabled(false);
+            }
+            else {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                ((Toolbar) findViewById(R.id.toolbar)).setNavigationOnClickListener(v -> {
+                    Intent i = new Intent(WhatTheDuck.wtd, CountryList.class);
+                    i.putExtra("type", CollectionType.USER.toString());
+                    startActivity(i);
+                });
+            }
+        }
+
         setTitle(
             type.equals(CollectionType.USER.toString())
                     ? getString(R.string.my_collection)
-                    : getString(R.string.referenced_issues)
+                    : getString(R.string.select_issue)
         );
     }
 

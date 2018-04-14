@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">What The Duck</string>
     <string name="add_cover">Click on the cover\nto add it to your collection</string>
     <string name="add_cover_error_file_too_big">The picture is too big, please try again.</string>
     <string name="add_cover_icon_camera">Camera</string>
@@ -8,6 +7,9 @@
     <string name="add_cover_no_results">No cover matches your photo, please try again.</string>
     <string name="add_cover_tooltip">New! Add an issue by photographing its cover.</string>
     <string name="all_countries">All countries</string>
+    <string name="app_name">What The Duck</string>
+    <string name="by_cover_photo">By cover photo</string>
+    <string name="by_issue_selection">By issue selection</string>
     <string name="cancel">Cancel</string>
     <string name="condition">Condition</string>
     <string name="condition_bad">Bad condition</string>
@@ -32,8 +34,8 @@
     <string name="internal_error__issue_insertion_failed">Adding the issue in your collection failed</string>
     <string name="internal_error__malformed_list">The issue list is malformed</string>
     <string name="internal_error__purchase_creation_failed">The creation of the purchase date failed</string>
-    <string name="itemtitle">Item</string>
     <string name="issue_already_possessed">You already have this issue in your collection</string>
+    <string name="itemtitle">Item</string>
     <string name="link_to_ducksmanager_website">What The Duck is the mobile app of DucksManager. Click here to access the DucksManager website.</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
@@ -47,9 +49,9 @@
     <string name="password_confirm">Password confirmation</string>
     <string name="purchase_date">Purchase date</string>
     <string name="purchase_name">Purchase name</string>
-    <string name="referenced_issues">Referenced issue numbers</string>
     <string name="remember_credentials">Remember my credentials</string>
     <string name="result">Result</string>
+    <string name="select_issue">Select an issue</string>
     <string name="show_my_collection_content_only">Content of my collection only</string>
     <string name="signup">Signup</string>
     <string name="signup__confirm">You have signed up to DucksManager successfully, please login.</string>
