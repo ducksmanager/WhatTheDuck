@@ -1,17 +1,19 @@
 import android.app.Activity;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnitRunner;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.test.runner.lifecycle.Stage;
 import android.view.View;
 
+import com.github.clans.fab.FloatingActionButton;
+
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -29,7 +31,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Checks.checkNotNull;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertFalse;
@@ -104,24 +105,17 @@ class WtdTest extends AndroidJUnitRunner {
         return currentActivity[0];
     }
 
-    /**
-     * Perform action of waiting for a specific time.
-     */
-    static ViewAction waitFor(final long millis) {
-        return new ViewAction() {
+    static Matcher<Object> forceFloatingActionButtonsVisible() {
+        return new BoundedMatcher<Object, FloatingActionButton>(FloatingActionButton.class) {
             @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
+            public boolean matchesSafely(final FloatingActionButton item) {
+                item.setVisibility(View.VISIBLE);
+                return true;
             }
 
             @Override
-            public String getDescription() {
-                return "Wait for " + millis + " milliseconds.";
-            }
-
-            @Override
-            public void perform(UiController uiController, final View view) {
-                uiController.loopMainThreadForAtLeast(millis);
+            public void describeTo(final Description description) {
+                description.appendText("Force floating action buttons to be visible");
             }
         };
     }

@@ -14,8 +14,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 
 @RunWith(AndroidJUnit4.class)
@@ -41,8 +43,9 @@ public class AddIssueTest extends WtdTest {
         onView(withText(containsString("dynastie"))).perform(ViewActions.click());
 
         assertCurrentActivityIsInstanceOf(IssueList.class, true);
-        onView(withId(R.id.onlyInCollectionSwitch)).perform(ViewActions.click());
-        onView(withText(containsString("1"))).perform(ViewActions.click());
+        onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
+            .perform(click());
+        onView(withText("1")).perform(ViewActions.click());
 
         assertCurrentActivityIsInstanceOf(AddIssue.class, true);
 

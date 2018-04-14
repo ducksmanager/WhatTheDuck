@@ -10,8 +10,6 @@ import android.support.test.filters.LargeTest;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.github.clans.fab.FloatingActionButton;
-
 import net.ducksmanager.util.CoverFlowActivity;
 import net.ducksmanager.util.CoverFlowFileHandler;
 import net.ducksmanager.whattheduck.CountryAdapter;
@@ -85,7 +83,8 @@ public class ScreenshotTest extends WtdTest {
 
     @Test
     public void testPublicationList() {
-        onView(withId(R.id.onlyInCollectionSwitch)).perform(click());
+        onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
+            .perform(click());
 
         onData(allOf(instanceOf(CountryAdapter.Country.class), countryWithCode("fr")))
             .inAdapterView(withId(R.id.itemList))
@@ -173,21 +172,6 @@ public class ScreenshotTest extends WtdTest {
             @Override
             public void describeTo(final Description description) {
                 description.appendText("Currently visible cover");
-            }
-        };
-    }
-
-    private static Matcher<Object> forceFloatingActionButtonsVisible() {
-        return new BoundedMatcher<Object, FloatingActionButton>(FloatingActionButton.class) {
-            @Override
-            public boolean matchesSafely(final FloatingActionButton item) {
-                item.setVisibility(View.VISIBLE);
-                return item.getVisibility() == View.VISIBLE;
-            }
-
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("Force floating action buttons to be visible");
             }
         };
     }
