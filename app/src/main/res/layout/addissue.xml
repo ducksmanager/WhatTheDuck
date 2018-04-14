@@ -139,8 +139,8 @@
                     android:layout_marginRight="5dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/plus"
-                    app:fab_colorNormal="#84cfc6"
-                    app:fab_colorPressed="#84cfc6"
+                    app:fab_colorNormal="@color/fab_color"
+                    app:fab_colorPressed="@color/fab_color"
                     app:fab_colorRipple="@android:color/white"
                     app:fab_size="mini"/>
             </FrameLayout>

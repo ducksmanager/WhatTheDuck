@@ -19,9 +19,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
@@ -95,11 +97,15 @@ public abstract class List<Item> extends AppCompatActivity {
             downloadFullList();
         }
 
-        RelativeLayout addToCollection = this.findViewById(R.id.addToCollectionWrapper);
+        FloatingActionMenu addToCollection = this.findViewById(R.id.addToCollectionWrapper);
+        addToCollection.setMenuButtonColorNormalResId(R.color.fab_color);
+        addToCollection.setMenuButtonColorPressedResId(R.color.fab_color);
+
         addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
 
         if (type.equals(CollectionType.USER.toString())) {
-            addToCollection.setOnClickListener(view ->
+            FloatingActionButton addToCollectionByPhotoButton = this.findViewById(R.id.addToCollectionByPhotoButton);
+            addToCollectionByPhotoButton.setOnClickListener(view ->
                 takeCoverPicture()
             );
 

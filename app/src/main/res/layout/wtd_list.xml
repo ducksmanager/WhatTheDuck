@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:focusableInTouchMode="true"
@@ -81,41 +82,40 @@
         android:layout_centerHorizontal="false"
         android:visibility="gone"/>
 
-    <RelativeLayout
+    <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/addToCollectionWrapper"
-        android:layout_width="40dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true"
         android:layout_centerHorizontal="false"
-        android:visibility="gone">
+        android:src="@drawable/plus"
+        fab:fab_colorRipple="@android:color/white"
+        fab:fab_size="mini"
+        fab:fab_label="Menu item 1">
 
-        <ImageButton
-            android:id="@+id/addToCollectionButton"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentRight="false"
-            android:background="@drawable/roundedbutton"
-            android:contentDescription="@string/add_cover_icon_camera"
-            android:clickable="false"
-            android:src="@android:drawable/ic_menu_camera"/>
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/addToCollectionBySelectionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_view_headline"
+            fab:fab_size="mini"
+            fab:fab_colorNormal="@android:color/holo_green_dark"
+            fab:fab_colorPressed="@android:color/holo_green_dark"
+            fab:fab_colorRipple="@android:color/white"
+            fab:fab_label="By issue selection" />
 
-        <ImageButton
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/roundedbutton"
-            android:contentDescription="@string/add_cover_icon_plus"
-            android:clickable="false"
-            android:src="@android:drawable/ic_input_add"/>
-    </RelativeLayout>
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/addToCollectionByPhotoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_camera"
+            fab:fab_size="mini"
+            fab:fab_colorNormal="@android:color/holo_green_dark"
+            fab:fab_colorPressed="@android:color/holo_green_dark"
+            fab:fab_colorRipple="@android:color/white"
+            fab:fab_label="By cover photo" />
+    </com.github.clans.fab.FloatingActionMenu>
 
 </RelativeLayout>
