@@ -1,0 +1,24 @@
+{
+  "achats": [
+    {
+      "ID_Acquisition": "1003",
+      "Date": "2011-12-08",
+      "Description": "Virgin Bordeaux"
+    },
+    {
+      "ID_Acquisition": "1001",
+      "Date": "2011-11-01",
+      "Description": "Bouquinerie La Rochelle"
+    },
+    {
+      "ID_Acquisition": "1002",
+      "Date": "2011-10-25",
+      "Description": "Bouquinerie Madrid"
+    },
+    {
+      "ID_Acquisition": "1000",
+      "Date": "2011-10-15",
+      "Description": "Bouquinerie Bordeaux"
+    }
+  ]
+}

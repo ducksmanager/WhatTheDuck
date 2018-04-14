@@ -33,7 +33,7 @@ public class DownloadHandlerMock {
             }
         }
 
-        // Mocks that are internal to tests (photo mocks for instannce)
+        // Mocks that are internal to tests (photo mocks for instance)
         private MockResponse dispatchForInternal(RecordedRequest request) {
             List<String> parts = Arrays.asList(request.getPath().split("/"));
             if (parts.contains("photos")) {
@@ -71,6 +71,9 @@ public class DownloadHandlerMock {
             }
             switch (username) {
                 case TEST_USER:
+                    if (sanitizer.hasParameter("get_achats")) {
+                        return new MockResponse().setBody(getJsonFixture("dm/purchases"));
+                    }
                     if (sanitizer.getValue("mdp_user").equals(WhatTheDuck.toSHA1(TEST_PASS))) {
                         return new MockResponse().setBody(getJsonFixture("dm/collection"));
                     }
