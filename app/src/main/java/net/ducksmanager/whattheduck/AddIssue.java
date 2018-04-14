@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
@@ -100,6 +101,7 @@ public class AddIssue extends AppCompatActivity {
     void showPurchases(final Boolean checkNoPurchaseItem) {
         final RecyclerView rv = this.findViewById(R.id.purchase_list);
         rv.setAdapter(new PurchaseAdapter(this, purchases));
+        rv.setLayoutManager(new LinearLayoutManager(this));
 
         final MultipleCustomCheckboxes purchaseDateCheckboxes = new MultipleCustomCheckboxes(
             new WeakReference<>(rv),
