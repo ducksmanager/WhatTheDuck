@@ -112,9 +112,8 @@ public class WhatTheDuck extends Activity {
         signupButton.setOnClickListener(view -> {
             WhatTheDuck.setUsername(((EditText) WhatTheDuck.this.findViewById(R.id.username)).getText().toString());
             WhatTheDuck.setPassword(((EditText) WhatTheDuck.this.findViewById(R.id.password)).getText().toString());
-            Intent i = new Intent(wtd, Signup.class);
-            i.putExtra("type", Collection.CollectionType.USER.toString());
-            wtd.startActivity(i);
+
+            wtd.startActivity(new Intent(wtd, Signup.class));
         });
 
         Button loginButton = findViewById(R.id.login);

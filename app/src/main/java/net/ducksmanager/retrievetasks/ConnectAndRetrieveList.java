@@ -130,9 +130,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                     }
 
                     List.type = Collection.CollectionType.USER.toString();
-                    Intent i = new Intent(wtdActivity, CountryList.class);
-                    i.putExtra("type", Collection.CollectionType.USER.toString());
-                    wtdActivity.startActivity(i);
+                    wtdActivity.startActivity(new Intent(wtdActivity, CountryList.class));
                 } else {
                     throw new JSONException("");
                 }

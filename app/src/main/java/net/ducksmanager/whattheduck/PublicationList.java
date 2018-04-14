@@ -34,9 +34,7 @@ public class PublicationList extends List<PublicationAdapter.Publication> {
 
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(WhatTheDuck.wtd, CountryList.class);
-        i.putExtra("type", type);
-        startActivity(i);
+        startActivity(new Intent(WhatTheDuck.wtd, CountryList.class));
     }
 
     @Override

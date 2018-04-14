@@ -48,8 +48,6 @@ public class IssueList extends List<Issue> {
 
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(WhatTheDuck.wtd, PublicationList.class);
-        i.putExtra("type", type);
-        startActivity(i);
+        startActivity(new Intent(WhatTheDuck.wtd, PublicationList.class));
     }
 }

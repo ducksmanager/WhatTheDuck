@@ -147,9 +147,7 @@ public abstract class List<Item> extends AppCompatActivity {
 
     private void goToView(Class<?> cls) {
         if (!List.this.getClass().equals(cls)) {
-            Intent i = new Intent(WhatTheDuck.wtd, cls);
-            i.putExtra("type", type);
-            startActivity(i);
+            startActivity(new Intent(WhatTheDuck.wtd, cls));
         }
     }
 
