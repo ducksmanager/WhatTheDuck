@@ -2,7 +2,6 @@ package net.ducksmanager.whattheduck;
 
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.support.annotation.VisibleForTesting;
 
 import com.koushikdutta.async.future.FutureCallback;
 
@@ -49,10 +48,6 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         }
     }
 
-    @VisibleForTesting
-    private static DownloadHandler downloadHandler = null;
-
-
     protected RetrieveTask(String urlSuffix, Integer progressBarId) {
         this.urlSuffix = urlSuffix;
         RetrieveTask.progressBarId = progressBarId;
@@ -71,10 +66,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
     protected String doInBackground(Object[] objects) {
         try {
             if (legacyServer) {
-                if (downloadHandler == null) {
-                    downloadHandler = new DefaultDownloadHandler();
-                }
-                return WhatTheDuck.wtd.retrieveOrFail(downloadHandler, this.urlSuffix);
+                return WhatTheDuck.wtd.retrieveOrFail(new DefaultDownloadHandler(), this.urlSuffix);
             }
             else {
                 WhatTheDuck.wtd.retrieveOrFailDmServer(this.urlSuffix, this.futureCallback, this.fileName, this.file);
