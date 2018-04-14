@@ -32,7 +32,7 @@ public class AddIssue extends AppCompatActivity {
         show();
     }
 
-    protected void show() {
+    private void show() {
         MultipleCustomCheckboxes conditionCheckboxes = new MultipleCustomCheckboxes(
             new WeakReference<>(this.findViewById(R.id.condition_selector)),
             view -> {

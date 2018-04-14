@@ -44,7 +44,8 @@
         android:visibility="gone"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/navigation">
+        android:layout_below="@id/navigation"
+        android:inputType="textNoSuggestions">
     </EditText>
 
     <android.support.v7.widget.RecyclerView

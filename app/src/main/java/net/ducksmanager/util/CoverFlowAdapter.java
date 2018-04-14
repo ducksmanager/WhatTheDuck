@@ -94,7 +94,7 @@ class CoverFlowAdapter extends BaseAdapter {
 
     private static class DownloadImagesTask extends AsyncTask<ImageView, Void, Bitmap> {
 
-        WeakReference<ProgressBar> progressBarRef = null;
+        WeakReference<ProgressBar> progressBarRef;
         WeakReference<ImageView> imageViewRef = null;
 
         DownloadImagesTask(ProgressBar progressBar) {

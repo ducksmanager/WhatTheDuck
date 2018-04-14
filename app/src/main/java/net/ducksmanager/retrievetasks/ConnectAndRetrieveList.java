@@ -73,7 +73,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
     protected void onPostExecute(String response) {
         ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("retrievecollection/finish");
         super.onPostExecute(response);
-        if (!super.hasSucceeded()) {
+        if (super.hasFailed()) {
             return;
         }
 

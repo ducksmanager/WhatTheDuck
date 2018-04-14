@@ -19,11 +19,11 @@ import java.util.Locale;
 
 public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
-    int resourceToInflate;
+    final int resourceToInflate;
     private final ArrayList<Item> items;
     private ArrayList<Item> filteredItems;
-    ItemAdapter.ViewHolder viewHolder;
-    Activity originActivity;
+    private ItemAdapter.ViewHolder viewHolder;
+    final Activity originActivity;
     View v;
 
     ItemAdapter(Activity activity, int resource, ArrayList<Item> items) {
@@ -40,7 +40,7 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
 
     @NonNull
     @Override
-    public ItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         v = LayoutInflater.from(originActivity).inflate(resourceToInflate, parent,false);
         v.setOnClickListener(getOnClickListener());
         viewHolder = getViewHolder(v);
@@ -56,10 +56,10 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
     }
 
     public abstract class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView titleTextView;
-        ImageView prefixImage;
-        ImageView suffixImage;
-        TextView suffixText;
+        public final TextView titleTextView;
+        final ImageView prefixImage;
+        final ImageView suffixImage;
+        final TextView suffixText;
 
         ViewHolder(View v){
             super(v);

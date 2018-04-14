@@ -16,7 +16,7 @@ import java.lang.ref.WeakReference;
 import java.util.Locale;
 
 public abstract class CoaListing {
-    private WeakReference<Activity> activityRef;
+    private final WeakReference<Activity> activityRef;
     private final FutureCallback afterProcessCallback;
 
     public enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST}
@@ -43,7 +43,7 @@ public abstract class CoaListing {
                 else {
                     processData(result);
                     if (afterProcessCallback != null) {
-                        afterProcessCallback.onCompleted(e, result);
+                        afterProcessCallback.onCompleted(null, result);
                     }
                 }
             }, null, null);

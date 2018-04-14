@@ -47,7 +47,7 @@ public abstract class GetPurchaseList extends RetrieveTask {
     protected void onPostExecute(String response) {
         ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("getpurchases/finish");
         super.onPostExecute(response);
-        if (!super.hasSucceeded()) {
+        if (super.hasFailed()) {
             return;
         }
 

@@ -1,7 +1,6 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -40,12 +39,6 @@ public class IssueAdapter extends ItemAdapter<Issue> {
         ViewHolder(View v) {
             super(v);
         }
-    }
-
-
-    @Override
-    public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
     }
 
     @Override

@@ -32,7 +32,7 @@ public class CoverFlowActivity extends Activity {
     private TextView mIssueConditionText;
     private TextView mTitleText;
     
-    public static IssueWithFullUrl currentSuggestion = null;
+    private static IssueWithFullUrl currentSuggestion = null;
     public static String currentCoverUrl = null;
 
     @Override

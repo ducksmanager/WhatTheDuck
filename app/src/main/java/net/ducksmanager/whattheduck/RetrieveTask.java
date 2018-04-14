@@ -16,7 +16,7 @@ import java.net.URL;
 public class RetrieveTask extends AsyncTask<Object, Object, String> {
 
     private boolean legacyServer = true;
-    protected String urlSuffix;
+    private final String urlSuffix;
     protected static Integer progressBarId;
 
     private Exception thrownException;
@@ -50,10 +50,10 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
     }
 
     @VisibleForTesting
-    public static DownloadHandler downloadHandler = null;
+    private static DownloadHandler downloadHandler = null;
 
 
-    public RetrieveTask(String urlSuffix, Integer progressBarId) {
+    protected RetrieveTask(String urlSuffix, Integer progressBarId) {
         this.urlSuffix = urlSuffix;
         RetrieveTask.progressBarId = progressBarId;
     }
@@ -93,8 +93,8 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         }
     }
 
-    protected boolean hasSucceeded() {
-        return this.thrownException == null;
+    protected boolean hasFailed() {
+        return this.thrownException != null;
     }
 
     public static void handleResultException(Exception e) {

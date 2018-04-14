@@ -92,15 +92,15 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
     }
 
     class ViewHolder extends ItemAdapter.ViewHolder implements View.OnClickListener {
-        CustomCheckBox purchaseCheck;
-        TextView purchaseDate;
-        TextView purchaseTitle;
-        TextView noPurchaseTitle;
-        LinearLayout newPurchaseSection;
-        EditText purchaseDateNew;
-        EditText purchaseTitleNew;
-        Button purchaseCreate;
-        Button purchaseCreateCancel;
+        final CustomCheckBox purchaseCheck;
+        final TextView purchaseDate;
+        final TextView purchaseTitle;
+        final TextView noPurchaseTitle;
+        final LinearLayout newPurchaseSection;
+        final EditText purchaseDateNew;
+        final EditText purchaseTitleNew;
+        final Button purchaseCreate;
+        final Button purchaseCreateCancel;
 
         ViewHolder(View v) {
             super(v);

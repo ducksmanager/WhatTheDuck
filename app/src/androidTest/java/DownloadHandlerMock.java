@@ -14,10 +14,10 @@ import okio.Buffer;
 import okio.Okio;
 
 
-public class DownloadHandlerMock {
+class DownloadHandlerMock {
     public static final String TEST_USER = "demotestuser";
     public static final String TEST_PASS = "demotestpass";
-    static Dispatcher dispatcher = new Dispatcher() {
+    static final Dispatcher dispatcher = new Dispatcher() {
 
         @Override
         public MockResponse dispatch(RecordedRequest request) {

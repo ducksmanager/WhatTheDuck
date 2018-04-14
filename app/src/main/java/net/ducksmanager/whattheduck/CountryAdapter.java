@@ -49,7 +49,7 @@ public class CountryAdapter extends ItemAdapter<CountryAdapter.Country> {
         };
     }
 
-    public class ViewHolder extends ItemAdapter.ViewHolder {
+    protected class ViewHolder extends ItemAdapter.ViewHolder {
         ViewHolder(View v) {
             super(v);
         }

@@ -18,7 +18,7 @@ public class PublicationListing extends CoaListing {
     private static final HashMap<String,HashMap<String,String>> publicationNames= new HashMap<>();
     private static final HashSet<String> fullListCountries = new HashSet<>();
 
-    private String countryShortName;
+    private final String countryShortName;
 
     public PublicationListing(Activity list, String countryShortName, FutureCallback callback) {
         super(list, ListType.PUBLICATION_LIST, callback);

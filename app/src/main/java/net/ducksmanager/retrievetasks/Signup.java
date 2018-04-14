@@ -49,11 +49,11 @@ public class Signup extends Activity {
     }
 
 
-    public static class ConnectAndRetrieveList extends RetrieveTask {
+    protected static class ConnectAndRetrieveList extends RetrieveTask {
 
         private final WeakReference<Activity> originActivityRef;
 
-        public ConnectAndRetrieveList(Activity originActivity, String urlSuffix) {
+        ConnectAndRetrieveList(Activity originActivity, String urlSuffix) {
             super(urlSuffix, null);
             this.originActivityRef = new WeakReference<>(originActivity);
         }

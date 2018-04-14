@@ -17,8 +17,8 @@ public class IssueListing extends CoaListing {
 
     private static final HashSet<String> fullListPublications = new HashSet<>();
 
-    private String countryShortName;
-    private String publicationCode;
+    private final String countryShortName;
+    private final String publicationCode;
 
     public IssueListing(Activity activity, String countryShortName, String publicationCode, FutureCallback callback) {
         super(activity, ListType.ISSUE_LIST, callback);
