@@ -19,6 +19,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 
 import java.util.Collection;
+import java.util.Locale;
 
 import okhttp3.mockwebserver.MockWebServer;
 
@@ -39,6 +40,31 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 
 class WtdTest extends AndroidJUnitRunner {
+    abstract static class LocaleWithDefaultPublication {
+        Locale locale;
+
+        LocaleWithDefaultPublication(String country, String language) {
+            this.locale = new Locale(language, country);
+        }
+
+        String getDefaultCountry() {
+            return locale.getCountry();
+        }
+
+        Locale getLocale() {
+            return locale;
+        }
+
+        abstract String getDefaultPublication();
+    }
+
+    static LocaleWithDefaultPublication currentLocale;
+    static {
+        currentLocale = new LocaleWithDefaultPublication("us", "en") {
+            String getDefaultPublication() { return "us/WDC"; }
+        };
+    }
+
     static MockWebServer mockServer;
 
     @Rule

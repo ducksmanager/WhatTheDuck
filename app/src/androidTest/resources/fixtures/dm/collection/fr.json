@@ -1,0 +1,58 @@
+{
+  "numeros": {
+    "es\/BCB": [
+      {
+        "Numero": "1",
+        "Etat": "bon"
+      },
+      {
+        "Numero": "3",
+        "Etat": "mauvais"
+      }
+    ],
+    "fr\/DDD": [
+      {
+        "Numero": "10",
+        "Etat": "bon"
+      },
+      {
+        "Numero": "15",
+        "Etat": "mauvais"
+      }
+    ],
+    "se\/KAP": [
+      {
+        "Numero": "10",
+        "Etat": "bon"
+      },
+      {
+        "Numero": "15",
+        "Etat": "mauvais"
+      }
+    ],
+    "us\/WDC": [
+      {
+        "Numero": "10",
+        "Etat": "bon"
+      },
+      {
+        "Numero": "15",
+        "Etat": "mauvais"
+      }
+    ]
+  },
+  "static": {
+    "magazines": {
+      "es\/BBB": "Biblioteca Carl Barks",
+      "fr\/DDD": "La dynastie Donald Duck - Intégrale Carl Barks",
+      "se\/KAP": "Kalle Ankas Pocket",
+      "us\/WDC": "Walt Disney's Comics and Stories"
+    },
+    "pays": {
+      "es": "Espagne",
+      "fr": "France",
+      "se": "Suède",
+      "us": "\u00c9tats-Unis"
+    }
+  }
+}

@@ -54,11 +54,14 @@ class DownloadHandlerMock {
             String username = sanitizer.getValue("pseudo_user");
             if (username == null) {
                 List<String> parts = Arrays.asList(request.getPath().split("/"));
+                if (parts.contains("countries")) {
+                    return new MockResponse().setBody(getLocalizedJsonFixture("dm-server/countries"));
+                }
                 if (parts.contains("publications")) {
-                    return new MockResponse().setBody(getJsonFixture("dm-server/publications"));
+                    return new MockResponse().setBody(getLocalizedJsonFixture("dm-server/publications"));
                 }
                 if (parts.contains("issues")) {
-                    return new MockResponse().setBody(getJsonFixture("dm-server/issues"));
+                    return new MockResponse().setBody(getLocalizedJsonFixture("dm-server/issues"));
                 }
                 if (parts.containsAll(Arrays.asList("cover-id", "search"))) {
                     return new MockResponse().setBody(getJsonFixture("dm-server/cover-search"));
@@ -75,7 +78,7 @@ class DownloadHandlerMock {
                         return new MockResponse().setBody(getJsonFixture("dm/purchases"));
                     }
                     if (sanitizer.getValue("mdp_user").equals(WhatTheDuck.toSHA1(TEST_PASS))) {
-                        return new MockResponse().setBody(getJsonFixture("dm/collection"));
+                        return new MockResponse().setBody(getLocalizedJsonFixture("dm/collection"));
                     }
                     break;
             }
@@ -88,6 +91,10 @@ class DownloadHandlerMock {
 
         InputStream inputStream = openPathAsStream(path);
         return convertStreamToString(inputStream);
+    }
+
+    private static String getLocalizedJsonFixture(String name) {
+        return getJsonFixture(name + "/" + WtdTest.currentLocale.getLocale().getLanguage());
     }
 
     private static Buffer getImageFixture(String name) {

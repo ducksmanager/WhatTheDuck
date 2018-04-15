@@ -28,7 +28,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
-import java.util.Locale;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -45,10 +44,16 @@ import static org.hamcrest.Matchers.allOf;
 public class ScreenshotTest extends WtdTest {
     @Parameterized.Parameters
     public static Iterable<Object[]> data() {
-        return Arrays.asList(new Locale[][]{
-            {new Locale("sv", "se")},
-            {new Locale("en", "us")},
-            {new Locale("fr", "fr")}
+        return Arrays.asList(new LocaleWithDefaultPublication[][]{
+            {new LocaleWithDefaultPublication("se", "sv") {
+                String getDefaultPublication() { return "se/KAP"; }
+            }},
+            {new LocaleWithDefaultPublication("us", "en") {
+                String getDefaultPublication() { return "us/WDC"; }
+            }},
+            {new LocaleWithDefaultPublication("fr", "fr") {
+                String getDefaultPublication() { return "fr/DDD"; }
+            }}
         });
     }
 
@@ -57,21 +62,19 @@ public class ScreenshotTest extends WtdTest {
         initMockServer();
     }
 
-    private final Locale locale;
-
-    public ScreenshotTest(Locale locale) {
-        this.locale = locale;
+    public ScreenshotTest(LocaleWithDefaultPublication currentLocale) {
+        WtdTest.currentLocale = currentLocale;
     }
 
     private String getScreenshotPath() {
-        return ScreenshotTestRule.SCREENSHOTS_PATH_SHOWCASE + "/" + locale.getLanguage();
+        return ScreenshotTestRule.SCREENSHOTS_PATH_SHOWCASE + "/" + currentLocale.getLocale().getLanguage();
     }
 
     private void switchLocale() {
         Context context = WhatTheDuck.wtd.getApplicationContext();
         Resources resources = context.getResources();
         Configuration configuration = resources.getConfiguration();
-        configuration.setLocale(locale);
+        configuration.setLocale(currentLocale.getLocale());
         resources.updateConfiguration(configuration, resources.getDisplayMetrics());
     }
 
@@ -86,7 +89,7 @@ public class ScreenshotTest extends WtdTest {
         onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
             .perform(click());
 
-        Matcher<RecyclerView.ViewHolder> countryMatcher = getItemMatcher("fr");
+        Matcher<RecyclerView.ViewHolder> countryMatcher = getItemMatcher(currentLocale.getDefaultCountry().toLowerCase());
         onView((withId(R.id.itemList))).perform(scrollToHolder(countryMatcher), actionOnHolderItem(countryMatcher, click()));
 
         assertCurrentActivityIsInstanceOf(PublicationList.class, true);
@@ -96,10 +99,10 @@ public class ScreenshotTest extends WtdTest {
 
     @Test
     public void testIssueList() {
-        Matcher<RecyclerView.ViewHolder> countryMatcher = getItemMatcher("fr");
+        Matcher<RecyclerView.ViewHolder> countryMatcher = getItemMatcher(currentLocale.getDefaultCountry().toLowerCase());
         onView((withId(R.id.itemList))).perform(scrollToHolder(countryMatcher), actionOnHolderItem(countryMatcher, click()));
 
-        Matcher<RecyclerView.ViewHolder> publicationMatcher = getItemMatcher("fr/DDD");
+        Matcher<RecyclerView.ViewHolder> publicationMatcher = getItemMatcher(currentLocale.getDefaultPublication());
         onView((withId(R.id.itemList))).perform(scrollToHolder(publicationMatcher), actionOnHolderItem(publicationMatcher, click()));
 
         assertCurrentActivityIsInstanceOf(IssueList.class, true);
