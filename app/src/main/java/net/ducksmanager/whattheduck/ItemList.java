@@ -34,7 +34,6 @@ import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
@@ -167,9 +166,9 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         ProgressBar loadingProgressBar = this.findViewById(R.id.progressBarLoading);
         TextView emptyListText = this.findViewById(R.id.emptyList);
 
-        java.util.List<Item> items;
+        java.util.List<Item> items = itemAdapter.getItems();
         if (this.requiresDataDownload) {
-            items = new ArrayList<>();
+            itemAdapter.resetItems();
             if (emptyListText != null) {
                 emptyListText.setVisibility(TextView.INVISIBLE);
             }
@@ -178,8 +177,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             }
         }
         else {
-            items = itemAdapter.getItems();
-
             if (emptyListText != null) {
                 emptyListText.setVisibility(items.size() == 0 ? TextView.VISIBLE : TextView.INVISIBLE);
             }

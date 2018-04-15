@@ -151,6 +151,11 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
         return items;
     }
 
+    void resetItems() {
+        items = new ArrayList<>();
+        filteredItems = new ArrayList<>();
+    }
+
     @Override
     public int getItemCount() {
         return filteredItems.size();
