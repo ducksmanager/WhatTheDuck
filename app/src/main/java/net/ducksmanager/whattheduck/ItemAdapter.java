@@ -10,23 +10,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import net.ducksmanager.util.NaturalOrderComparator;
+import net.greypanther.natsort.SimpleNaturalComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
     final int resourceToInflate;
-    private final ArrayList<Item> items;
+    private List<Item> items;
     private ArrayList<Item> filteredItems;
     private ItemAdapter.ViewHolder viewHolder;
     final Activity originActivity;
     View v;
 
-    ItemAdapter(Activity activity, int resource, ArrayList<Item> items) {
+    ItemAdapter(Activity activity, int resource, List<Item> items) {
         this.originActivity = activity;
         this.items = items;
         this.resourceToInflate = resource;
@@ -82,12 +83,11 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
     }
 
     Comparator<Item> getComparator() {
-        return new NaturalOrderComparator<Item>() {
-            @Override
-            public int compare(Item i1, Item i2) {
-                return super.compareObject(getComparatorText(i1), getComparatorText(i2));
-            }
-        };
+        return (i1, i2) ->
+            SimpleNaturalComparator.getInstance().compare(
+                ItemAdapter.this.getComparatorText(i1),
+                ItemAdapter.this.getComparatorText(i2)
+            );
     }
 
     @Override
@@ -144,7 +144,7 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
 
     protected abstract String getText(Item i);
 
-    ArrayList<Item> getItems() {
+    List<Item> getItems() {
         return items;
     }
 

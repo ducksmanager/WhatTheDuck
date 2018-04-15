@@ -159,19 +159,19 @@ public abstract class List<Item> extends AppCompatActivity {
 
     protected abstract boolean shouldShow();
 
-    protected abstract ItemAdapter getItemAdapter();
+    protected abstract ItemAdapter<Item> getItemAdapter();
 
     void show() {
         if (!shouldShow()) {
             return;
         }
-        ItemAdapter itemAdapter = getItemAdapter();
+        ItemAdapter<Item> itemAdapter = getItemAdapter();
         setNavigation(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication());
 
         ProgressBar loadingProgressBar = this.findViewById(R.id.progressBarLoading);
         TextView emptyListText = this.findViewById(R.id.emptyList);
 
-        ArrayList<Item> items;
+        java.util.List<Item> items;
         if (this.requiresDataDownload) {
             items = new ArrayList<>();
             if (emptyListText != null) {
