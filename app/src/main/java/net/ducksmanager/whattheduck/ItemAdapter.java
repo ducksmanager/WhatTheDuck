@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import net.greypanther.natsort.SimpleNaturalComparator;
+import net.greypanther.natsort.CaseInsensitiveSimpleNaturalComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,11 +83,14 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
     }
 
     Comparator<Item> getComparator() {
-        return (i1, i2) ->
-            SimpleNaturalComparator.getInstance().compare(
-                ItemAdapter.this.getComparatorText(i1),
-                ItemAdapter.this.getComparatorText(i2)
+        return (i1, i2) -> {
+            String text1 = ItemAdapter.this.getComparatorText(i1);
+            String text2 = ItemAdapter.this.getComparatorText(i2);
+            return text1 == null ? -1 : text2 == null ? 1 : CaseInsensitiveSimpleNaturalComparator.getInstance().compare(
+                text1,
+                text2
             );
+        };
     }
 
     @Override
