@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">What The Duck</string>
     <string name="add_cover">Klicka på framsidan för att lägga till den i samlingen</string>
     <string name="add_cover_error_file_too_big">Bilden är för stor, försök igen.</string>
     <string name="add_cover_icon_camera">Kamera</string>
     <string name="add_cover_icon_plus">Plus</string>
     <string name="add_cover_no_results">Ingen framsida matchar din bild, försök igen.</string>
-    <string name="add_cover_tooltip">Ny! Lägg till en utgåva genom att fota framsidan.</string>
+    <string name="add_cover_tooltip">Lägg till en utgåva genom att fota framsidan.</string>
     <string name="all_countries">Alla länder</string>
+    <string name="app_name">What The Duck</string>
     <string name="cancel">Ta bort</string>
+    <string name="condition">Skick</string>
     <string name="condition_bad">Dåligt skick</string>
     <string name="condition_good">Bra skick</string>
+    <string name="condition_none">Ospecificerat skick</string>
     <string name="condition_notsogood">Genomsnittligt skick</string>
     <string name="confirmation_message__issue_inserted">Utgåvan har lagts till i din samling</string>
     <string name="cover_suggestion">Framsideförslag</string>
+    <string name="create">Skapa</string>
     <string name="email_address">E-mail</string>
     <string name="error">Fel</string>
     <string name="error__malformed_url">URLen är felaktig</string>
@@ -28,6 +31,8 @@
     <string name="internal_error__crypting_failed">Krypteringen av din information misslyckades</string>
     <string name="internal_error__issue_insertion_failed">Adderingen av utgåvan i din samling misslyckades</string>
     <string name="internal_error__malformed_list">Utgåvolistan är felaktig</string>
+    <string name="internal_error__purchase_creation_failed">Skapandet av inköpsdatum misslyckades</string>
+    <string name="issue_already_possessed">Du har redan den här utgåvan i din samling</string>
     <string name="itemtitle">Utgåvans nummer</string>
     <string name="link_to_ducksmanager_website">What The Duck är mobilappen av DucksManager. Klicka här för gå till DucksManagers hemsida.</string>
     <string name="login">Login</string>
@@ -36,12 +41,15 @@
     <string name="network_error">Nätverksfel</string>
     <string name="network_error__no_connection">Godkänn</string>
     <string name="no_issue">Ingen utgåva i denna lista.</string>
+    <string name="no_purchase_date">Inget inköpsdatum</string>
     <string name="ok">OK</string>
     <string name="password">Lösenord</string>
     <string name="password_confirm">Upprepa lösenord</string>
-    <string name="select_issue">Berörda utgåvor</string>
+    <string name="purchase_date">Inköpsdatum</string>
+    <string name="purchase_name">Inköpsnamn</string>
     <string name="remember_credentials">Kom ihåg mig</string>
     <string name="result">Resultat</string>
+    <string name="select_issue">Berörda utgåvor</string>
     <string name="show_my_collection_content_only">Endast min samling</string>
     <string name="signup">Registrera</string>
     <string name="signup__confirm">Du har registrerat dig på DucksManager, vänligen logga in.</string>
@@ -49,12 +57,4 @@
     <string name="username">Användarnamn</string>
     <string name="welcomeMessage">Bocka av valet \"Endast min samling\" för att visar berörda utgåvor, och klicka sedan på en utgåva för att lägga till den i din samling</string>
     <string name="welcomeTitle">Välkommen till What The Duck!</string>
-    <string name="issue_already_possessed">Du har redan den här utgåvan i din samling</string>
-    <string name="condition">Skick</string>
-    <string name="condition_none">Ospecificerat skick</string>
-    <string name="create">Skapa</string>
-    <string name="internal_error__purchase_creation_failed">Skapandet av inköpsdatum misslyckades</string>
-    <string name="no_purchase_date">Inget inköpsdatum</string>
-    <string name="purchase_date">Inköpsdatum</string>
-    <string name="purchase_name">Inköpsnamn</string>
 </resources>

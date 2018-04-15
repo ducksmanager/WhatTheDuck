@@ -97,9 +97,10 @@ public abstract class ItemList<Item> extends AppCompatActivity {
                 );
 
                 FloatingActionButton addToCollectionBySelectionButton = this.findViewById(R.id.addToCollectionBySelectionButton);
-                addToCollectionBySelectionButton.setOnClickListener(view ->
-                    ItemList.this.goToAlternativeView(CollectionType.COA.toString())
-                );
+                addToCollectionBySelectionButton.setOnClickListener(view -> {
+                    addToCollection.setVisibility(View.GONE);
+                    ItemList.this.goToAlternativeView(CollectionType.COA.toString());
+                });
 
                 if (WhatTheDuck.getShowCoverTooltip()) {
                     new SimpleTooltip.Builder(this)

@@ -5,7 +5,7 @@
     <string name="add_cover_icon_camera">Camera</string>
     <string name="add_cover_icon_plus">Plus</string>
     <string name="add_cover_no_results">No cover matches your photo, please try again.</string>
-    <string name="add_cover_tooltip">New! Add an issue by photographing its cover.</string>
+    <string name="add_cover_tooltip">Add an issue by photographing its cover.</string>
     <string name="all_countries">All countries</string>
     <string name="app_name">What The Duck</string>
     <string name="by_cover_photo">By cover photo</string>
