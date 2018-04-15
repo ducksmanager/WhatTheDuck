@@ -38,7 +38,7 @@ import java.util.ArrayList;
 
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
-public abstract class List<Item> extends AppCompatActivity {
+public abstract class ItemList<Item> extends AppCompatActivity {
     public static String type = CollectionType.USER.toString();
     private Boolean requiresDataDownload = false;
 
@@ -88,6 +88,7 @@ public abstract class List<Item> extends AppCompatActivity {
             addToCollection.setMenuButtonColorNormalResId(R.color.fab_color);
             addToCollection.setMenuButtonColorPressedResId(R.color.fab_color);
             addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
+            addToCollection.close(false);
 
             if (type.equals(CollectionType.USER.toString())) {
                 FloatingActionButton addToCollectionByPhotoButton = this.findViewById(R.id.addToCollectionByPhotoButton);
@@ -97,7 +98,7 @@ public abstract class List<Item> extends AppCompatActivity {
 
                 FloatingActionButton addToCollectionBySelectionButton = this.findViewById(R.id.addToCollectionBySelectionButton);
                 addToCollectionBySelectionButton.setOnClickListener(view ->
-                    List.this.goToAlternativeView(CollectionType.COA.toString())
+                    ItemList.this.goToAlternativeView(CollectionType.COA.toString())
                 );
 
                 if (WhatTheDuck.getShowCoverTooltip()) {
@@ -125,13 +126,7 @@ public abstract class List<Item> extends AppCompatActivity {
             else {
                 actionBar.setDisplayHomeAsUpEnabled(true);
                 ((Toolbar) findViewById(R.id.toolbar)).setNavigationOnClickListener(v -> {
-                    if (userHasItemsInCollectionForCurrent()) {
-                        goToAlternativeView(CollectionType.USER.toString());
-                    }
-                    else {
-                        type = CollectionType.USER.toString();
-                        startActivity(new Intent(WhatTheDuck.wtd, CountryList.class));
-                    }
+                    onBackFromAddIssueActivity();
                 });
             }
         }
@@ -146,12 +141,12 @@ public abstract class List<Item> extends AppCompatActivity {
     protected abstract boolean userHasItemsInCollectionForCurrent();
 
     private void goToView(Class<?> cls) {
-        if (!List.this.getClass().equals(cls)) {
+        if (!ItemList.this.getClass().equals(cls)) {
             startActivity(new Intent(WhatTheDuck.wtd, cls));
         }
     }
 
-    private void goToAlternativeView(String collectionType) {
+    void goToAlternativeView(String collectionType) {
         type = collectionType;
         loadList();
         show();
@@ -177,7 +172,7 @@ public abstract class List<Item> extends AppCompatActivity {
             if (emptyListText != null) {
                 emptyListText.setVisibility(TextView.INVISIBLE);
             }
-            if (emptyListText != null) {
+            if (loadingProgressBar != null) {
                 loadingProgressBar.setVisibility(TextView.VISIBLE);
             }
         }
@@ -224,7 +219,7 @@ public abstract class List<Item> extends AppCompatActivity {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             CoverFlowFileHandler.current = new CoverFlowFileHandler();
-            Uri photoURI = CoverFlowFileHandler.current.createEmptyFileForCamera(List.this);
+            Uri photoURI = CoverFlowFileHandler.current.createEmptyFileForCamera(ItemList.this);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
@@ -239,13 +234,13 @@ public abstract class List<Item> extends AppCompatActivity {
             CoverFlowFileHandler.current.resizeUntilFileSize(this, new CoverFlowFileHandler.TransformationCallback() {
                 @Override
                 public void onComplete(File fileToUpload) {
-                    new CoverSearch(new WeakReference<>(List.this), fileToUpload).execute();
+                    new CoverSearch(new WeakReference<>(ItemList.this), fileToUpload).execute();
                 }
 
                 @Override
                 public void onFail() {
-                    List.this.findViewById(R.id.addToCollectionWrapper).setVisibility(View.VISIBLE);
-                    List.this.findViewById(R.id.progressBarLoading).setVisibility(View.GONE);
+                    ItemList.this.findViewById(R.id.addToCollectionWrapper).setVisibility(View.VISIBLE);
+                    ItemList.this.findViewById(R.id.progressBarLoading).setVisibility(View.GONE);
                 }
             });
         }
@@ -329,5 +324,15 @@ public abstract class List<Item> extends AppCompatActivity {
     void notifyCompleteList() {
         this.requiresDataDownload = false;
         this.show();
+    }
+
+    protected void onBackFromAddIssueActivity() {
+        if (userHasItemsInCollectionForCurrent()) {
+            goToAlternativeView(CollectionType.USER.toString());
+        }
+        else {
+            type = CollectionType.USER.toString();
+            startActivity(new Intent(WhatTheDuck.wtd, CountryList.class));
+        }
     }
 }

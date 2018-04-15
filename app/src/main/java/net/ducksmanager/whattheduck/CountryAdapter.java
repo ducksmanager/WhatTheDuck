@@ -27,8 +27,8 @@ public class CountryAdapter extends ItemAdapter<CountryAdapter.Country> {
         }
     }
 
-    CountryAdapter(List list, ArrayList<Country> items) {
-        super(list, R.layout.row, items);
+    CountryAdapter(ItemList itemList, ArrayList<Country> items) {
+        super(itemList, R.layout.row, items);
     }
 
 

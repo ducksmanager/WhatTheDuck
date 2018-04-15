@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import net.ducksmanager.inducks.coa.PublicationListing;
 
-public class PublicationList extends List<PublicationAdapter.Publication> {
+public class PublicationList extends ItemList<PublicationAdapter.Publication> {
 
     @Override
     protected boolean needsToDownloadFullList() {
@@ -33,17 +33,22 @@ public class PublicationList extends List<PublicationAdapter.Publication> {
     }
 
     @Override
-    public void onBackPressed() {
-        startActivity(new Intent(WhatTheDuck.wtd, CountryList.class));
-    }
-
-    @Override
     protected boolean shouldShow() {
         return WhatTheDuck.getSelectedCountry() != null;
     }
 
     @Override
-    protected ItemAdapter getItemAdapter() {
+    protected ItemAdapter<PublicationAdapter.Publication> getItemAdapter() {
         return new PublicationAdapter(this, getCollection().getPublicationList(WhatTheDuck.getSelectedCountry()));
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (type.equals(Collection.CollectionType.COA.toString())) {
+            onBackFromAddIssueActivity();
+        }
+        else {
+            startActivity(new Intent(WhatTheDuck.wtd, CountryList.class));
+        }
     }
 }

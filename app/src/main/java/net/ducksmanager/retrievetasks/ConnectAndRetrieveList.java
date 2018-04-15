@@ -12,7 +12,7 @@ import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.whattheduck.Collection;
 import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.Issue;
-import net.ducksmanager.whattheduck.List;
+import net.ducksmanager.whattheduck.ItemList;
 import net.ducksmanager.whattheduck.PurchaseAdapter;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
@@ -129,7 +129,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                         CountryListing.hasFullList = false;
                     }
 
-                    List.type = Collection.CollectionType.USER.toString();
+                    ItemList.type = Collection.CollectionType.USER.toString();
                     wtdActivity.startActivity(new Intent(wtdActivity, CountryList.class));
                 } else {
                     throw new JSONException("");

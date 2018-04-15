@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import net.ducksmanager.inducks.coa.IssueListing;
 
-public class IssueList extends List<Issue> {
+public class IssueList extends ItemList<Issue> {
 
     @Override
     protected boolean needsToDownloadFullList() {
@@ -31,7 +31,7 @@ public class IssueList extends List<Issue> {
     }
 
     @Override
-    protected ItemAdapter getItemAdapter() {
+    protected ItemAdapter<Issue> getItemAdapter() {
         return new IssueAdapter(
             this,
             getCollection().getIssueList(
@@ -48,6 +48,11 @@ public class IssueList extends List<Issue> {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(WhatTheDuck.wtd, PublicationList.class));
+        if (type.equals(Collection.CollectionType.COA.toString())) {
+            onBackFromAddIssueActivity();
+        }
+        else {
+            startActivity(new Intent(WhatTheDuck.wtd, PublicationList.class));
+        }
     }
 }

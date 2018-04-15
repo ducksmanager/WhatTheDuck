@@ -6,7 +6,7 @@ import android.os.Bundle;
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
-public class CountryList extends List<CountryAdapter.Country> {
+public class CountryList extends ItemList<CountryAdapter.Country> {
 
     @Override
     protected boolean needsToDownloadFullList() {
@@ -50,7 +50,14 @@ public class CountryList extends List<CountryAdapter.Country> {
     }
 
     @Override
-    protected ItemAdapter getItemAdapter() {
+    protected ItemAdapter<CountryAdapter.Country> getItemAdapter() {
         return new CountryAdapter(this, getCollection().getCountryList());
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (type.equals(CollectionType.COA.toString())) {
+            onBackFromAddIssueActivity();
+        }
     }
 }

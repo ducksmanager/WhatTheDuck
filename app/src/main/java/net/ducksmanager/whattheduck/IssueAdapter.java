@@ -10,8 +10,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class IssueAdapter extends ItemAdapter<Issue> {
-    IssueAdapter(Activity activity, ArrayList<Issue> items) {
-        super(activity, R.layout.row, items);
+    IssueAdapter(ItemList itemList, ArrayList<Issue> items) {
+        super(itemList, R.layout.row, items);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class IssueAdapter extends ItemAdapter<Issue> {
     protected View.OnClickListener getOnClickListener() {
         return view -> {
             int position = ((RecyclerView) view.getParent()).getChildLayoutPosition(view);
-            if (List.type.equals(Collection.CollectionType.COA.toString())) {
+            if (ItemList.type.equals(Collection.CollectionType.COA.toString())) {
                 final Issue selectedIssue = IssueAdapter.this.getItem(position);
                 if (WhatTheDuck.userCollection.getIssue(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), selectedIssue.getIssueNumber()) != null) {
                     WhatTheDuck.wtd.info(new WeakReference<>(IssueAdapter.this.getOriginActivity()), R.string.input_error__issue_already_possessed);

@@ -27,9 +27,8 @@ public class PublicationAdapter extends ItemAdapter<PublicationAdapter.Publicati
         }
     }
 
-
-    PublicationAdapter(List list, ArrayList<Publication> items) {
-        super(list, R.layout.row, items);
+    PublicationAdapter(ItemList itemList, ArrayList<Publication> items) {
+        super(itemList, R.layout.row, items);
     }
 
     @Override

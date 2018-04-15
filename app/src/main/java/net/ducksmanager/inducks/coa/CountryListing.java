@@ -64,7 +64,7 @@ public class CountryListing extends CoaListing {
                 String fullName = countryNames.getString(shortName);
 
                 addCountry(shortName, fullName);
-                if (!fullName.equals("Dummy") && !WhatTheDuck.coaCollection.hasCountry(shortName)) {
+                if (!shortName.equals("zz") && !WhatTheDuck.coaCollection.hasCountry(shortName)) {
                     WhatTheDuck.coaCollection.addCountry(shortName);
                 }
             }
