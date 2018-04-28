@@ -424,7 +424,7 @@ public class WhatTheDuck extends Activity {
         builder.setTitle(originActivity.getString(R.string.about));
         try {
             String versionNumber = originActivity.getPackageManager().getPackageInfo(originActivity.getPackageName(), 0).versionName;
-            builder.setMessage(originActivity.getString(R.string.version) + " " + versionNumber);
+            builder.setMessage(originActivity.getString(R.string.version) + " " + versionNumber + "\n\n" + originActivity.getString(R.string.rate_app));
             builder.create().show();
         } catch (NameNotFoundException ignored) {
         }

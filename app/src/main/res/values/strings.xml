@@ -3,8 +3,6 @@
     <string name="about">About What The Duck</string>
     <string name="add_cover">Click on the cover\nto add it to your collection</string>
     <string name="add_cover_error_file_too_big">The picture is too big, please try again.</string>
-    <string name="add_cover_icon_camera">Camera</string>
-    <string name="add_cover_icon_plus">Plus</string>
     <string name="add_cover_no_results">No cover matches your photo, please try again.</string>
     <string name="add_cover_tooltip">Add an issue by photographing its cover.</string>
     <string name="all_countries">All countries</string>
@@ -28,7 +26,6 @@
     <string name="input_error__empty_credentials">You need to enter your credentials to continue</string>
     <string name="input_error__invalid_credentials">Invalid credentials</string>
     <string name="input_error__issue_already_possessed">You already have this issue in your collection</string>
-    <string name="input_error__select_condition">Please select the condition of the issue</string>
     <string name="insert_issue__confirm">Adding issue %1$s</string>
     <string name="internal_error">Internal error</string>
     <string name="internal_error__crypting_failed">The encryption of your credentials failed</string>
@@ -50,10 +47,10 @@
     <string name="password_confirm">Password confirmation</string>
     <string name="purchase_date">Purchase date</string>
     <string name="purchase_name">Purchase name</string>
+    <string name="rate_app">Remember to rate What The Duck on the Play Store :-)</string>
     <string name="remember_credentials">Remember my credentials</string>
     <string name="result">Result</string>
     <string name="select_issue">Select an issue</string>
-    <string name="show_my_collection_content_only">Content of my collection only</string>
     <string name="signup">Signup</string>
     <string name="signup__confirm">You have signed up to DucksManager successfully, please login.</string>
     <string name="signup_end">Finish signup</string>

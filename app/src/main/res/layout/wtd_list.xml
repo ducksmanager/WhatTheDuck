@@ -8,7 +8,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:focusableInTouchMode="true"
-                android:id="@+id/list">
+    >
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -85,8 +85,7 @@
         android:layout_centerHorizontal="false"
         android:src="@drawable/plus"
         fab:fab_colorRipple="@android:color/white"
-        fab:fab_size="mini"
-        fab:fab_label="Menu item 1">
+        fab:fab_size="mini">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/addToCollectionBySelectionButton"

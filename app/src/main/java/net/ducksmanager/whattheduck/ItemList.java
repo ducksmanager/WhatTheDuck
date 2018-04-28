@@ -84,8 +84,8 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
         FloatingActionMenu addToCollection = this.findViewById(R.id.addToCollectionWrapper);
         if (addToCollection != null) {
-            addToCollection.setMenuButtonColorNormalResId(R.color.fab_color);
-            addToCollection.setMenuButtonColorPressedResId(R.color.fab_color);
+            addToCollection.setMenuButtonColorNormalResId(R.color.holo_green_dark);
+            addToCollection.setMenuButtonColorPressedResId(R.color.holo_green_dark);
             addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
             addToCollection.close(false);
 

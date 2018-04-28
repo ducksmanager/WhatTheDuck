@@ -15,12 +15,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:id="@+id/condition_section"
             android:layout_above="@id/purchasesection"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/addissue_condition"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
@@ -54,7 +52,6 @@
                         app:stroke_width="5dp"/>
 
                     <net.igenius.customcheckbox.CustomCheckBox
-                        android:id="@+id/badcondition"
                         android:layout_width="20dp"
                         android:layout_height="fill_parent"
                         android:layout_marginLeft="5dp"
@@ -65,7 +62,6 @@
                         app:duration="100"/>
 
                     <net.igenius.customcheckbox.CustomCheckBox
-                        android:id="@+id/notsogoodcondition"
                         android:layout_width="20dp"
                         android:layout_height="fill_parent"
                         android:layout_marginLeft="5dp"
@@ -76,7 +72,6 @@
                         app:duration="100"/>
 
                     <net.igenius.customcheckbox.CustomCheckBox
-                        android:id="@+id/goodcondition"
                         android:layout_width="20dp"
                         android:layout_height="fill_parent"
                         android:layout_marginLeft="5dp"
@@ -104,7 +99,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/addissue_purchasedate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
