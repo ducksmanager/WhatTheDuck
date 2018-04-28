@@ -1,3 +1,7 @@
+Version 1.7.0
+    Use RecyclerView for all lists
+    Use a sub-menu in the "+" floating button to add issues by selection instead of the "Only in collection <-> Referenced issues" switch
+
 Version 1.6.5
 
     Retrieve COA lists from the DM server instead of the DM gateway
