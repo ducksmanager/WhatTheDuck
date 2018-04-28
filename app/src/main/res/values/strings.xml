@@ -50,7 +50,7 @@
     <string name="rate_app">Remember to rate What The Duck on the Play Store :-)</string>
     <string name="remember_credentials">Remember my credentials</string>
     <string name="result">Result</string>
-    <string name="select_issue">Select an issue</string>
+    <string name="add_issue">Add an issue</string>
     <string name="signup">Signup</string>
     <string name="signup__confirm">You have signed up to DucksManager successfully, please login.</string>
     <string name="signup_end">Finish signup</string>

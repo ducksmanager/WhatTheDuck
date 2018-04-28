@@ -134,7 +134,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         setTitle(
             type.equals(CollectionType.USER.toString())
                     ? getString(R.string.my_collection)
-                    : getString(R.string.select_issue)
+                    : getString(R.string.add_issue)
         );
     }
 

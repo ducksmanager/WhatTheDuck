@@ -5,6 +5,7 @@
     <string name="add_cover_error_file_too_big">Bilden är för stor, försök igen.</string>
     <string name="add_cover_no_results">Ingen framsida matchar din bild, försök igen.</string>
     <string name="add_cover_tooltip">Lägg till en utgåva genom att fota framsidan.</string>
+    <string name="add_issue">Lägg till utgåva</string>
     <string name="all_countries">Alla länder</string>
     <string name="app_name">What The Duck</string>
     <string name="by_cover_photo">Från bild</string>
@@ -50,7 +51,6 @@
     <string name="rate_app">Kom ihåg att betygsätta What The Duck på Play Store :-)</string>
     <string name="remember_credentials">Kom ihåg mig</string>
     <string name="result">Resultat</string>
-    <string name="select_issue">Berörda utgåvor</string>
     <string name="signup">Registrera</string>
     <string name="signup__confirm">Du har registrerat dig på DucksManager, vänligen logga in.</string>
     <string name="signup_end">Godkänn</string>

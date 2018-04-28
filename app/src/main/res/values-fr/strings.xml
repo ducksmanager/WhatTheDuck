@@ -49,7 +49,7 @@
     <string name="rate_app">Notez What The Duck sur le Play Store :-)</string>
     <string name="remember_credentials">Se souvenir de mes identifiants</string>
     <string name="result">Résultat</string>
-    <string name="select_issue">Numéros référencés</string>
+    <string name="add_issue">Ajout de numéro</string>
     <string name="signup">Inscription</string>
     <string name="signup__confirm">L\'inscription à DucksManager est terminée, \nvous pouvez maintenant vous connecter.</string>
     <string name="signup_end">Terminer l\'inscription</string>
