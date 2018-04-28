@@ -83,9 +83,9 @@ public abstract class GetPurchaseList extends RetrieveTask {
             e.printStackTrace();
         }
 
-        WhatTheDuck.wtd.toggleProgressbarLoading(this.getOriginActivity(), progressBarId, false);
-
         afterDataHandling();
+
+        WhatTheDuck.wtd.toggleProgressbarLoading(this.getOriginActivity(), progressBarId, false);
     }
 
     protected abstract void afterDataHandling();
