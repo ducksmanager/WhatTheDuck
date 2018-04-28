@@ -31,11 +31,13 @@ import java.util.Arrays;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnHolderItem;
 import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToHolder;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 
@@ -94,7 +96,7 @@ public class ScreenshotTest extends WtdTest {
 
         assertCurrentActivityIsInstanceOf(PublicationList.class, true);
 
-        ScreenshotTestRule.takeScreenshot("Publication list", getActivityInstance(), getScreenshotPath());
+        ScreenshotTestRule.takeScreenshot("Select issue - Publication list", getActivityInstance(), getScreenshotPath());
     }
 
     @Test
@@ -105,8 +107,11 @@ public class ScreenshotTest extends WtdTest {
         Matcher<RecyclerView.ViewHolder> publicationMatcher = getItemMatcher(currentLocale.getDefaultPublication());
         onView((withId(R.id.itemList))).perform(scrollToHolder(publicationMatcher), actionOnHolderItem(publicationMatcher, click()));
 
+        onView(allOf(withId(R.id.addToCollectionByPhotoButton), forceFloatingActionButtonsVisible())).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible())).check(matches(isDisplayed()));
+
         assertCurrentActivityIsInstanceOf(IssueList.class, true);
-        ScreenshotTestRule.takeScreenshot("Issue list", getActivityInstance(), getScreenshotPath());
+        ScreenshotTestRule.takeScreenshot("Collection - Issue list", getActivityInstance(), getScreenshotPath());
     }
 
     @Test
