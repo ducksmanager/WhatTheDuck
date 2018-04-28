@@ -1,4 +1,5 @@
 Version 1.7.0
+
     Use RecyclerView for all lists
     Use a sub-menu in the "+" floating button to add issues by selection instead of the "Only in collection <-> Referenced issues" switch
 
