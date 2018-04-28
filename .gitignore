@@ -3,9 +3,10 @@
 /.idea/
 /app/build/
 /app/libs/
+/app/release/
 /build/
 /local.properties
 /app/src/androidTest/resources/fixtures/covers/
 /app/src/main/assets/config.properties
 /screenshots
-/showcase2
+/showcase
