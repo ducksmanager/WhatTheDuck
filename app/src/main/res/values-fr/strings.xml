@@ -1,4 +1,5 @@
 <resources>
+    <string name="about">A propos de What The Duck</string>
     <string name="add_cover">Cliquez sur la couverture\npour ajouter le numéro à la collection</string>
     <string name="add_cover_error_file_too_big">L\'image est trop grande, veuillez réessayer.</string>
     <string name="add_cover_icon_camera">App. photo</string>
@@ -54,6 +55,9 @@
     <string name="signup__confirm">L\'inscription à DucksManager est terminée, \nvous pouvez maintenant vous connecter.</string>
     <string name="signup_end">Terminer l\'inscription</string>
     <string name="username">Nom d\'utilisateur DucksManager</string>
+    <string name="version">What The Duck version</string>
     <string name="welcomeMessage">Décochez l\'option \"Contenu de ma collection seulement\" pour faire apparaitre tous les numéros référencés, puis tapotez sur l\'un d\'entre eux pour l\'ajouter à votre collection</string>
     <string name="welcomeTitle">Bienvenue sur What The Duck !</string>
+    <string name="by_cover_photo">Depuis une photo de couverture</string>
+    <string name="by_issue_selection">Par sélection de numéro</string>
 </resources>

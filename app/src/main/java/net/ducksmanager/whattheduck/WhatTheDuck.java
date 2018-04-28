@@ -419,6 +419,17 @@ public class WhatTheDuck extends Activity {
         WhatTheDuck.selectedIssue = selectedIssue;
     }
 
+    public static void showAbout(Activity originActivity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(originActivity);
+        builder.setTitle(originActivity.getString(R.string.about));
+        try {
+            String versionNumber = originActivity.getPackageManager().getPackageInfo(originActivity.getPackageName(), 0).versionName;
+            builder.setMessage(originActivity.getString(R.string.version) + " " + versionNumber);
+            builder.create().show();
+        } catch (NameNotFoundException ignored) {
+        }
+    }
+
     @Override
     public void onBackPressed() {
     }

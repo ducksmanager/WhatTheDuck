@@ -246,10 +246,9 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.menu_user, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -265,6 +264,9 @@ public abstract class ItemList<Item> extends AppCompatActivity {
                 i = new Intent(WhatTheDuck.wtd, WhatTheDuck.class);
 
                 break;
+            case R.id.action_about:
+                WhatTheDuck.showAbout(this);
+
         }
         if (i == null) {
             return super.onOptionsItemSelected(item);

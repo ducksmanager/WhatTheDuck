@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="about">About What The Duck</string>
     <string name="add_cover">Click on the cover\nto add it to your collection</string>
     <string name="add_cover_error_file_too_big">The picture is too big, please try again.</string>
     <string name="add_cover_icon_camera">Camera</string>
@@ -57,6 +58,7 @@
     <string name="signup__confirm">You have signed up to DucksManager successfully, please login.</string>
     <string name="signup_end">Finish signup</string>
     <string name="username">Username</string>
+    <string name="version">What The Duck version</string>
     <string name="welcomeMessage">Untick the option \"Content of my collection only\" to show all the referenced issues, then tap on an issue number to add it to your collection</string>
     <string name="welcomeTitle">Welcome on What The Duck!</string>
 </resources>
