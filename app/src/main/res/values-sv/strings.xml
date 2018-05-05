@@ -4,7 +4,6 @@
     <string name="add_cover">Klicka på framsidan för att lägga till den i samlingen</string>
     <string name="add_cover_error_file_too_big">Bilden är för stor, försök igen.</string>
     <string name="add_cover_no_results">Ingen framsida matchar din bild, försök igen.</string>
-    <string name="add_cover_tooltip">Lägg till en utgåva genom att fota framsidan.</string>
     <string name="add_issue">Lägg till utgåva</string>
     <string name="all_countries">Alla länder</string>
     <string name="app_name">What The Duck</string>

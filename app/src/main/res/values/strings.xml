@@ -4,7 +4,6 @@
     <string name="add_cover">Click on the cover\nto add it to your collection</string>
     <string name="add_cover_error_file_too_big">The picture is too big, please try again.</string>
     <string name="add_cover_no_results">No cover matches your photo, please try again.</string>
-    <string name="add_cover_tooltip">Add an issue by photographing its cover.</string>
     <string name="all_countries">All countries</string>
     <string name="app_name">What The Duck</string>
     <string name="by_cover_photo">By cover photo</string>

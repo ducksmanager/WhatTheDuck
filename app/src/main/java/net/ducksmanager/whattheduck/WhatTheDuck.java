@@ -61,7 +61,6 @@ public class WhatTheDuck extends Activity {
     private static Boolean rememberCredentials = null;
     private static String encryptedPassword = null;
     private static Boolean showWelcomeMessage = true;
-    private static Boolean showCoverTooltip = true;
 
     public static WhatTheDuck wtd;
 
@@ -191,7 +190,6 @@ public class WhatTheDuck extends Activity {
             setUsername((String)props.get("username"));
             setEncryptedPassword((String)props.get("password"));
             setShowWelcomeMessage(props.get("showWelcomeMessage") == null || props.get("showWelcomeMessage").equals("true"));
-            setShowCoverTooltip(props.get("showCoverTooltip") == null || props.get("showCoverTooltip").equals("true"));
             setRememberCredentials(true);
             inputStream.close();
         } catch (IOException e) {
@@ -221,8 +219,6 @@ public class WhatTheDuck extends Activity {
         }
 
         props.put("showWelcomeMessage", getShowWelcomeMessage().toString());
-        props.put("showCoverTooltip", getShowCoverTooltip().toString());
-
         FileOutputStream outputStream;
         try {
             outputStream = wtd.openFileOutput(USER_SETTINGS, MODE_PRIVATE);
@@ -277,14 +273,6 @@ public class WhatTheDuck extends Activity {
 
     public static void setShowWelcomeMessage(Boolean showWelcomeMessage) {
         WhatTheDuck.showWelcomeMessage = showWelcomeMessage;
-    }
-
-    public static Boolean getShowCoverTooltip() {
-        return showCoverTooltip;
-    }
-
-    public static void setShowCoverTooltip(Boolean showCoverTooltip) {
-        WhatTheDuck.showCoverTooltip = showCoverTooltip;
     }
 
     private static String byteArray2Hex(byte[] hash) {

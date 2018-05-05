@@ -13,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,8 +33,6 @@ import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
-
-import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
 public abstract class ItemList<Item> extends AppCompatActivity {
     public static String type = CollectionType.USER.toString();
@@ -101,19 +98,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
                     ItemList.this.goToAlternativeView(CollectionType.COA.toString());
                 });
 
-                if (WhatTheDuck.getShowCoverTooltip()) {
-                    new SimpleTooltip.Builder(this)
-                        .anchorView(addToCollection)
-                        .text(R.string.add_cover_tooltip)
-                        .gravity(Gravity.TOP)
-                        .animated(true)
-                        .margin(5.0f)
-                        .transparentOverlay(true)
-                        .build()
-                        .show();
-                }
-
-                WhatTheDuck.setShowCoverTooltip(false);
                 WhatTheDuck.saveSettings(null);
             }
         }
