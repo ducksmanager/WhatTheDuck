@@ -5,6 +5,7 @@ import net.ducksmanager.whattheduck.WhatTheDuck;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.mockwebserver.Dispatcher;
@@ -17,6 +18,12 @@ import okio.Okio;
 class DownloadHandlerMock {
     public static final String TEST_USER = "demotestuser";
     public static final String TEST_PASS = "demotestpass";
+
+    private static HashMap<String, Boolean> state = new HashMap<>();
+    static {
+        state.put("hasNewPurchase", false);
+    }
+
     static final Dispatcher dispatcher = new Dispatcher() {
 
         @Override
@@ -74,8 +81,12 @@ class DownloadHandlerMock {
             }
             switch (username) {
                 case TEST_USER:
+                    if (sanitizer.hasParameter("ajouter_achat")) {
+                        state.put("hasNewPurchase", true);
+                        return new MockResponse().setBody("OK");
+                    }
                     if (sanitizer.hasParameter("get_achats")) {
-                        return new MockResponse().setBody(getJsonFixture("dm/purchases"));
+                        return new MockResponse().setBody(getJsonFixture(state.get("hasNewPurchase") ? "dm/purchasesWithNew" : "dm/purchases"));
                     }
                     if (sanitizer.getValue("mdp_user").equals(WhatTheDuck.toSHA1(TEST_PASS))) {
                         return new MockResponse().setBody(getLocalizedJsonFixture("dm/collection"));

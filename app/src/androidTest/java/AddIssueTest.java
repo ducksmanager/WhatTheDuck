@@ -15,7 +15,10 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -48,6 +51,14 @@ public class AddIssueTest extends WtdTest {
         onView(withText("1")).perform(ViewActions.click());
 
         assertCurrentActivityIsInstanceOf(AddIssue.class, true);
+
+        onView(withId(R.id.addpurchase)).perform(click());
+
+        onView(withId(R.id.purchasetitlenew)).perform(typeText("Stockholm loppis"), closeSoftKeyboard());
+        onView(withId(R.id.createpurchase)).perform(click());
+
+        onView(allOf(withText("Stockholm loppis"), withParent(withId(R.id.purchase_list))));
+
 
     }
 }
