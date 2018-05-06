@@ -8,17 +8,19 @@ import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
+import java.net.URLEncoder;
 
 public abstract class CreatePurchase extends RetrieveTask {
 
     private static WeakReference<Activity> originActivityRef;
 
-    protected CreatePurchase(WeakReference<Activity> originActivityRef, String purchaseDateStr, String purchaseName) {
+    protected CreatePurchase(WeakReference<Activity> originActivityRef, String purchaseDateStr, String purchaseName) throws UnsupportedEncodingException {
         super(
             "&ajouter_achat"
                 +"&date_achat="+purchaseDateStr
-                +"&description_achat="+purchaseName,
+                +"&description_achat="+ URLEncoder.encode(purchaseName, "UTF-8"),
             R.id.progressBarLoading
         );
         CreatePurchase.originActivityRef = originActivityRef;

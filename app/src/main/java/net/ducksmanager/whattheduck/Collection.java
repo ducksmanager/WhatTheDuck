@@ -26,7 +26,7 @@ public class Collection implements Serializable {
         HashMap<String,PurchaseAdapter.Purchase> purchasesWithEmptyItem = new HashMap<>();
 
         java.util.List<PurchaseAdapter.Purchase> values = new ArrayList<>(getPurchases().values());
-        values.add(new PurchaseAdapter.SpecialPurchase(true, false));
+        values.add(new PurchaseAdapter.SpecialPurchase(true));
         for (PurchaseAdapter.Purchase p : values) {
             purchasesWithEmptyItem.put(p.toString(), p);
         }

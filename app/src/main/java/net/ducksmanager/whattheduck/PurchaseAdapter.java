@@ -1,26 +1,14 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.content.Context;
-import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import net.ducksmanager.retrievetasks.CreatePurchase;
-import net.ducksmanager.retrievetasks.GetPurchaseList;
 import net.igenius.customcheckbox.CustomCheckBox;
 
-import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,20 +18,15 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
     public abstract static class Purchase {
         Boolean noPurchase;
-        Boolean newPurchase;
 
         Boolean isNoPurchase() {
             return noPurchase;
         }
-        Boolean isNewPurchase() {
-            return newPurchase;
-        }
     }
 
     static class SpecialPurchase extends Purchase {
-        SpecialPurchase(Boolean noPurchase, Boolean newPurchase) {
+        SpecialPurchase(Boolean noPurchase) {
             this.noPurchase=noPurchase;
-            this.newPurchase=newPurchase;
         }
     }
 
@@ -57,7 +40,6 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
             this.purchaseDate = purchaseDate;
             this.purchaseName = purchaseName;
             this.noPurchase = Boolean.FALSE;
-            this.newPurchase = Boolean.FALSE;
         }
 
         public Integer getId() {
@@ -72,8 +54,6 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
             return purchaseName;
         }
     }
-
-    private final Calendar myCalendar = Calendar.getInstance();
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
@@ -96,11 +76,6 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         final TextView purchaseDate;
         final TextView purchaseTitle;
         final TextView noPurchaseTitle;
-        final LinearLayout newPurchaseSection;
-        final EditText purchaseDateNew;
-        final EditText purchaseTitleNew;
-        final Button purchaseCreate;
-        final Button purchaseCreateCancel;
 
         ViewHolder(View v) {
             super(v);
@@ -109,12 +84,6 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
             purchaseDate = v.findViewById(R.id.purchasedate);
             purchaseTitle = getTitleTextView(v);
             noPurchaseTitle = v.findViewById(R.id.nopurchase);
-
-            newPurchaseSection = v.findViewById(R.id.newpurchase);
-            purchaseDateNew = v.findViewById(R.id.purchasedatenew);
-            purchaseTitleNew = v.findViewById(R.id.itemtitlenew);
-            purchaseCreate = v.findViewById(R.id.createpurchase);
-            purchaseCreateCancel = v.findViewById(R.id.createpurchasecancel);
         }
 
         @Override
@@ -132,96 +101,23 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
         Purchase purchase = getItem(position);
         if (purchase != null) {
             Boolean isNoPurchase = purchase.isNoPurchase();
-            Boolean isNewPurchase = purchase.isNewPurchase();
 
-            purchaseHolder.purchaseDate.setVisibility(!isNoPurchase && !isNewPurchase ? View.VISIBLE : View.GONE);
-            purchaseHolder.purchaseTitle.setVisibility(!isNoPurchase && !isNewPurchase ? View.VISIBLE : View.GONE);
-            purchaseHolder.purchaseCheck.setVisibility(isNewPurchase ? View.GONE : View.VISIBLE);
+            purchaseHolder.purchaseDate.setVisibility(!isNoPurchase ? View.VISIBLE : View.GONE);
+            purchaseHolder.purchaseTitle.setVisibility(!isNoPurchase ? View.VISIBLE : View.GONE);
+            purchaseHolder.purchaseCheck.setVisibility(View.VISIBLE);
             purchaseHolder.noPurchaseTitle.setVisibility(isNoPurchase ? View.VISIBLE : View.GONE);
-            purchaseHolder.newPurchaseSection.setVisibility(isNewPurchase ? View.VISIBLE : View.GONE);
 
-            if (isNewPurchase) {
-                v.setMinimumHeight(80);
-                purchaseHolder.purchaseDateNew.requestFocus();
-                purchaseHolder.purchaseDateNew.setText(dateFormat.format(new Date()));
-                purchaseHolder.purchaseDateNew.setKeyListener(null);
-                final DatePickerDialog.OnDateSetListener date = (datePicker, year, monthOfYear, dayOfMonth) -> {
-                    myCalendar.set(Calendar.YEAR, year);
-                    myCalendar.set(Calendar.MONTH, monthOfYear);
-                    myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    ((EditText) ((ViewGroup)v.getParent()).findViewById(R.id.purchasedatenew)).setText(dateFormat.format(myCalendar.getTime()));
-                };
-                purchaseHolder.purchaseDateNew.setOnClickListener(v1 -> {
-                    hideKeyboard(v1);
-                    new DatePickerDialog(originActivity, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                });
+            v.setMinimumHeight(40);
+            purchaseHolder.purchaseCheck.setContentDescription(purchase.toString());
 
-                purchaseHolder.purchaseTitleNew.setOnKeyListener((view, i, keyEvent) -> {
-                    ((ViewGroup)v.getParent()).findViewById(R.id.itemtitlenew).getBackground().setColorFilter(null);
-                    return false;
-                });
+            purchaseHolder.purchaseCheck.setTag(R.id.check_by_user, Boolean.FALSE);
+            purchaseHolder.purchaseCheck.setChecked(purchase.toString().equals(AddIssue.selectedPurchaseHash));
+            purchaseHolder.purchaseCheck.setTag(R.id.check_by_user, null);
 
-                purchaseHolder.purchaseCreate.setOnClickListener(floatingButtonView -> {
-                    EditText purchaseDateNew1 = AddIssue.instance.findViewById(R.id.purchasedatenew);
-                    EditText purchaseTitleNew1 = AddIssue.instance.findViewById(R.id.itemtitlenew);
-                    if (purchaseTitleNew1.getText().toString().equals("")) {
-                        purchaseTitleNew1.getBackground().setColorFilter(originActivity.getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_IN);
-                        return;
-                    }
-
-                    hideKeyboard(floatingButtonView);
-
-                    new CreatePurchase(new WeakReference<>(AddIssue.instance), purchaseDateNew1.getText().toString(), purchaseTitleNew1.getText().toString()) {
-                        @Override
-                        protected void afterDataHandling() {
-                            new GetPurchaseList() {
-                                @Override
-                                protected void afterDataHandling() {
-                                    AddIssue.instance.toggleAddPurchaseButton(true);
-                                    AddIssue.purchases = WhatTheDuck.userCollection.getPurchasesWithEmptyItem();
-                                    AddIssue.instance.showPurchases(false);
-                                }
-
-                                @Override
-                                protected WeakReference<Activity> getOriginActivity() {
-                                    return new WeakReference<>(AddIssue.instance);
-                                }
-                            }.execute();
-                        }
-                    }.execute();
-                });
-
-                purchaseHolder.purchaseCreateCancel.setOnClickListener(floatingButtonView -> {
-                    hideKeyboard(floatingButtonView);
-
-                    for (Purchase purchase1 : new ArrayList<>(AddIssue.purchases.values())) {
-                        if (purchase1.isNewPurchase()) {
-                            AddIssue.purchases.remove(purchase1.toString());
-                        }
-                    }
-                    AddIssue.instance.toggleAddPurchaseButton(true);
-                    AddIssue.instance.showPurchases(false);
-                });
-            } else {
-                v.setMinimumHeight(40);
-                purchaseHolder.purchaseCheck.setContentDescription(purchase.toString());
-
-                purchaseHolder.purchaseCheck.setTag(R.id.check_by_user, Boolean.FALSE);
-                purchaseHolder.purchaseCheck.setChecked(purchase.toString().equals(AddIssue.selectedPurchaseHash));
-                purchaseHolder.purchaseCheck.setTag(R.id.check_by_user, null);
-
-                if (!isNoPurchase) {
-                    purchaseHolder.purchaseDate.setText(dateFormat.format(((PurchaseWithDate) purchase).getPurchaseDate()));
-                }
+            if (!isNoPurchase) {
+                purchaseHolder.purchaseDate.setText(dateFormat.format(((PurchaseWithDate) purchase).getPurchaseDate()));
             }
         }
-    }
-
-    private static void hideKeyboard(View floatingButtonView) {
-        InputMethodManager imm = (InputMethodManager) AddIssue.instance.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(floatingButtonView.getWindowToken(), 0);
     }
 
     @Override
@@ -257,18 +153,14 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
     @Override
     protected String getComparatorText(Purchase i) {
-        return i.isNewPurchase()
-            ? "_"
-            : i.isNoPurchase()
+        return i.isNoPurchase()
             ? "^"
             : dateFormat.format(((PurchaseWithDate) i).getPurchaseDate());
     }
 
     @Override
     protected String getIdentifier(Purchase i) {
-        return i.isNewPurchase()
-            ? "new"
-            : i.isNoPurchase()
+        return i.isNoPurchase()
             ? "no"
             : String.valueOf(((PurchaseWithDate) i).getId());
     }
