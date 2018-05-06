@@ -1,3 +1,9 @@
+Version 1.7.1
+
+    Remove "Add issue by cover" tooltip
+    Fix half-hidden fields when creating a new purchase date
+    Fix purchase creation not working when the description contains special characters or spaces
+
 Version 1.7.0
 
     Use RecyclerView for all lists
