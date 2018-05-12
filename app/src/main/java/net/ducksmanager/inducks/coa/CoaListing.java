@@ -8,7 +8,6 @@ import com.koushikdutta.async.future.FutureCallback;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
-import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.json.JSONException;
 
@@ -25,7 +24,7 @@ public abstract class CoaListing {
         this.activityRef = new WeakReference<>(activity);
         this.afterProcessCallback = afterProcessCallback;
 
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("list/coa/" + type.name().toLowerCase(Locale.FRANCE));
+        WhatTheDuck.trackEvent("list/coa/" + type.name().toLowerCase(Locale.FRANCE));
     }
 
     protected abstract String getUrlSuffix();

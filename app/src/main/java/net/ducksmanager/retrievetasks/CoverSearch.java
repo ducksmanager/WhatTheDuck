@@ -21,6 +21,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
+
 public class CoverSearch extends RetrieveTask {
 
     public static WeakReference<Activity> originActivityRef;
@@ -95,13 +97,13 @@ public class CoverSearch extends RetrieveTask {
     protected void onPreExecute() {
         super.onPreExecute();
         System.out.println("Starting cover search : " + System.currentTimeMillis());
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("coversearch/start");
+        trackEvent("coversearch/start");
     }
 
     @Override
     protected void onPostExecute(String response) {
         super.onPostExecute(response);
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("coversearch/finish");
+        trackEvent("coversearch/finish");
         System.out.println("Ending cover search : " + System.currentTimeMillis());
     }
 }

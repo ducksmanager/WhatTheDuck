@@ -7,7 +7,6 @@ import net.ducksmanager.whattheduck.PurchaseAdapter;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
-import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +15,8 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.util.HashMap;
+
+import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
 public abstract class GetPurchaseList extends RetrieveTask {
     protected GetPurchaseList() {
@@ -40,12 +41,12 @@ public abstract class GetPurchaseList extends RetrieveTask {
     @Override
     protected void onPreExecute() {
         WhatTheDuck.wtd.toggleProgressbarLoading(this.getOriginActivity(), progressBarId, true);
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("getpurchases/start");
+        trackEvent("getpurchases/start");
     }
 
     @Override
     protected void onPostExecute(String response) {
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("getpurchases/finish");
+        trackEvent("getpurchases/finish");
         super.onPostExecute(response);
         if (super.hasFailed()) {
             return;

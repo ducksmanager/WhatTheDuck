@@ -421,4 +421,10 @@ public class WhatTheDuck extends Activity {
     @Override
     public void onBackPressed() {
     }
+
+    public static void trackEvent(String text) {
+        if (wtd != null) {
+            ((WhatTheDuckApplication) wtd.getApplication()).trackEvent(text);
+        }
+    }
 }

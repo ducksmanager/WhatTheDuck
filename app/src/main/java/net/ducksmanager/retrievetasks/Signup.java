@@ -15,6 +15,8 @@ import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 
+import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
+
 public class Signup extends Activity {
 
     /** Called when the activity is first created. */
@@ -61,7 +63,7 @@ public class Signup extends Activity {
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-            ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("signup/finish");
+            trackEvent("signup/finish");
             if (response != null) {
                 try {
                     response = new String(response.getBytes("ISO8859-1"), "UTF-8");

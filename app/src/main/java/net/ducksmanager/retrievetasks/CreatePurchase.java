@@ -6,11 +6,12 @@ import android.app.Activity;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
-import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.net.URLEncoder;
+
+import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
 public abstract class CreatePurchase extends RetrieveTask {
 
@@ -29,12 +30,12 @@ public abstract class CreatePurchase extends RetrieveTask {
     @Override
     protected void onPreExecute() {
         WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, progressBarId, true);
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addpurchase/start");
+        trackEvent("addpurchase/start");
     }
 
     @Override
     protected void onPostExecute(String response) {
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addpurchase/finish");
+        trackEvent("addpurchase/finish");
         if (!response.equals("OK")) {
             WhatTheDuck.wtd.alert(originActivityRef, R.string.internal_error, R.string.internal_error__purchase_creation_failed, "");
         }

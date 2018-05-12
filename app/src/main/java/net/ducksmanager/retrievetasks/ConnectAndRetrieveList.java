@@ -17,7 +17,6 @@ import net.ducksmanager.whattheduck.PurchaseAdapter;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
-import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +26,8 @@ import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Iterator;
+
+import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
 public class ConnectAndRetrieveList extends RetrieveTask {
 
@@ -44,7 +45,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
         WhatTheDuck.userCollection = new Collection();
         WhatTheDuck wtdActivity = wtdActivityRef.get();
 
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("retrievecollection/start");
+        trackEvent("retrievecollection/start");
 
         if (this.fromUI) {
             if (WhatTheDuck.getUsername() == null
@@ -71,7 +72,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
 
     @Override
     protected void onPostExecute(String response) {
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("retrievecollection/finish");
+        trackEvent("retrievecollection/finish");
         super.onPostExecute(response);
         if (super.hasFailed()) {
             return;

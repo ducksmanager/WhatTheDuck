@@ -10,9 +10,10 @@ import net.ducksmanager.whattheduck.IssueList;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
-import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import java.lang.ref.WeakReference;
+
+import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
 public class AddIssue extends RetrieveTask {
 
@@ -37,12 +38,12 @@ public class AddIssue extends RetrieveTask {
     @Override
     protected void onPreExecute() {
         WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, progressBarId, true);
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addissue/start");
+        trackEvent("addissue/start");
     }
 
     @Override
     protected void onPostExecute(String response) {
-        ((WhatTheDuckApplication) WhatTheDuck.wtd.getApplication()).trackEvent("addissue/finish");
+        trackEvent("addissue/finish");
         if (response.equals("OK")) {
             WhatTheDuck.wtd.info(originActivityRef, R.string.confirmation_message__issue_inserted);
             WhatTheDuck.userCollection.addIssue(shortCountryAndPublication, selectedIssue);
