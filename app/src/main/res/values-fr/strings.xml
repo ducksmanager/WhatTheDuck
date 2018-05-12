@@ -54,6 +54,6 @@
     <string name="signup_end">Terminer l\'inscription</string>
     <string name="username">Nom d\'utilisateur DucksManager</string>
     <string name="version">What The Duck version</string>
-    <string name="welcomeMessage">Décochez l\'option \"Contenu de ma collection seulement\" pour faire apparaitre tous les numéros référencés, puis tapotez sur l\'un d\'entre eux pour l\'ajouter à votre collection</string>
+    <string name="welcomeMessage">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur "+" pour ajouter un numéro.</string>
     <string name="welcomeTitle">Bienvenue sur What The Duck !</string>
 </resources>

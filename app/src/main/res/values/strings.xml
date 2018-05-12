@@ -55,6 +55,6 @@
     <string name="signup_end">Finish signup</string>
     <string name="username">Username</string>
     <string name="version">What The Duck version</string>
-    <string name="welcomeMessage">Untick the option \"Content of my collection only\" to show all the referenced issues, then tap on an issue number to add it to your collection</string>
+    <string name="welcomeMessage">Your DucksManager collection is displayed when you open What The Duck. Tap on a country to view the publications that you possess, or tap on \"+\" to add an issue to your collection.</string>
     <string name="welcomeTitle">Welcome on What The Duck!</string>
 </resources>
