@@ -36,7 +36,6 @@ public abstract class CoaListing {
         try {
             WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, R.id.progressBarLoading, true);
             WhatTheDuck.wtd.retrieveOrFailDmServer(getUrlSuffix(), (e, result) -> {
-                WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, R.id.progressBarLoading, false);
                 if (e != null) {
                     RetrieveTask.handleResultException(e);
                 }
@@ -45,6 +44,7 @@ public abstract class CoaListing {
                     if (afterProcessCallback != null) {
                         afterProcessCallback.onCompleted(null, result);
                     }
+                    WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, R.id.progressBarLoading, false);
                 }
             }, null, null);
         } catch (Exception e) {
