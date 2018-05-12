@@ -2,6 +2,7 @@ package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 
 import org.piwik.sdk.Piwik;
@@ -22,7 +23,8 @@ public class WhatTheDuckApplication extends Application {
     public static final String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
 
     private static final String CONFIG_KEY_PIWIK_URL = "piwik_url";
-    private static final Integer CONFIG_PIWIK_USER_DIMENSION = 1;
+    private static final Integer CONFIG_PIWIK_DIMENSION_USER = 1;
+    private static final Integer CONFIG_PIWIK_DIMENSION_VERSION = 2;
 
     private Tracker mPiwikTracker;
 
@@ -68,7 +70,12 @@ public class WhatTheDuckApplication extends Application {
 
         String username = WhatTheDuck.getUsername();
         if (username != null) {
-            t.dimension(CONFIG_PIWIK_USER_DIMENSION, username);
+            t.dimension(CONFIG_PIWIK_DIMENSION_USER, username);
+            try {
+                t.dimension(CONFIG_PIWIK_DIMENSION_VERSION, activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName);
+            } catch (PackageManager.NameNotFoundException e) {
+                t.dimension(CONFIG_PIWIK_DIMENSION_VERSION, "Unknown");
+            }
         }
 
         t

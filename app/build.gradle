@@ -50,7 +50,7 @@ dependencies {
     implementation 'com.github.douglasjunior:android-simple-tooltip:0.2.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.jakewharton.timber:timber:4.7.0'
-    implementation 'org.piwik.sdk:piwik-sdk:3.0.0'
+    implementation 'org.piwik.sdk:piwik-sdk:3.0.2'
     implementation 'net.igenius:customcheckbox:1.3'
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'net.grey-panther:natural-comparator:1.1'
