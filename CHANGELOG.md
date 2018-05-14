@@ -1,3 +1,9 @@
+Version 1.7.2
+
+    Fix filters not working
+    Show progress bars in the middle of the screen
+    Fix rare crash when tracking user events after the application context was lost
+
 Version 1.7.1
 
     Remove "Add issue by cover" tooltip
