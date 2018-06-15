@@ -11,10 +11,11 @@ Duplicate [app/src/main/assets/config.properties.sample](app/src/main/assets/con
 * Login with a user's DucksManager credentials
 * Browse through the user's collection
 * List the existing issues for a publication, with those possessed by the user being marked
-* Add an existing issue to the user's collection
+* Add an existing issue to the user's collection, either by selecting it or by taking a picture of its cover
+
 * ... And more features are planned.
 
 
 ## Architecture overview
 
-What The Duck connects to a server owned by DucksManager (hereunder being known as "the COA database") to retrieve both the user's collection and the numbers of the issues he doesn't have.
+What The Duck connects to a server owned by DucksManager to retrieve both the user's collection and the list of issues that he doesn't possess.
