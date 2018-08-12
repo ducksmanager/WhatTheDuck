@@ -42,6 +42,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
     protected abstract boolean needsToDownloadFullList();
     protected abstract void downloadFullList();
+    protected abstract boolean hasDividers();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +72,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         loadList();
     }
 
-    private void loadList() {
+    protected void loadList() {
         ((WhatTheDuckApplication) getApplication()).trackActivity(this);
 
         if (needsToDownloadFullList()) {
@@ -191,11 +192,16 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             }
         }
 
-        DividerItemDecoration dividerDecoration = new DividerItemDecoration(
-            recyclerView.getContext(),
-            new LinearLayoutManager(this).getOrientation()
-        );
-        recyclerView.addItemDecoration(dividerDecoration);
+        while (recyclerView.getItemDecorationCount() > 0) {
+            recyclerView.removeItemDecorationAt(0);
+        }
+        if (hasDividers()) {
+            DividerItemDecoration dividerDecoration = new DividerItemDecoration(
+                recyclerView.getContext(),
+                new LinearLayoutManager(this).getOrientation()
+            );
+            recyclerView.addItemDecoration(dividerDecoration);
+        }
     }
 
     private void takeCoverPicture() {

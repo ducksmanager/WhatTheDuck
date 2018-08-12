@@ -50,6 +50,11 @@ public class CountryList extends ItemList<CountryAdapter.Country> {
     }
 
     @Override
+    protected boolean hasDividers() {
+        return true;
+    }
+
+    @Override
     protected ItemAdapter<CountryAdapter.Country> getItemAdapter() {
         return new CountryAdapter(this, getCollection().getCountryList());
     }

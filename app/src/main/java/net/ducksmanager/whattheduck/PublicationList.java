@@ -38,6 +38,11 @@ public class PublicationList extends ItemList<PublicationAdapter.Publication> {
     }
 
     @Override
+    protected boolean hasDividers() {
+        return true;
+    }
+
+    @Override
     protected ItemAdapter<PublicationAdapter.Publication> getItemAdapter() {
         return new PublicationAdapter(this, getCollection().getPublicationList(WhatTheDuck.getSelectedCountry()));
     }

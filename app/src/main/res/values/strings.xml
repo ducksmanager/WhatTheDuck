@@ -57,4 +57,6 @@
     <string name="version">What The Duck version</string>
     <string name="welcomeMessage">Your DucksManager collection is displayed when you open What The Duck. Tap on a country to view the publications that you possess, or tap on \"+\" to add an issue to your collection.</string>
     <string name="welcomeTitle">Welcome on What The Duck!</string>
+    <string name="list_view">List</string>
+    <string name="edge_view">Edges</string>
 </resources>
