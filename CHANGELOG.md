@@ -1,3 +1,7 @@
+Version 1.7.3
+
+    Fix issue leading to the list of issues not showing properly
+
 Version 1.7.2
 
     Fix filters not working
