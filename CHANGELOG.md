@@ -1,3 +1,7 @@
+Version 1.7.4
+
+    Fix resizing cover photos before uploading them
+
 Version 1.7.3
 
     Fix issue leading to the list of issues not showing properly
