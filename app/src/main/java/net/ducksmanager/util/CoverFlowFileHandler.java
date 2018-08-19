@@ -10,6 +10,7 @@ import android.support.v4.content.FileProvider;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
+import com.squareup.picasso.Transformation;
 
 import net.ducksmanager.retrievetasks.CoverSearch;
 import net.ducksmanager.whattheduck.R;
@@ -21,7 +22,7 @@ import java.io.IOException;
 
 public class CoverFlowFileHandler {
 
-    private static final long MAX_COVER_FILESIZE = 2048 * 1024;
+    private static final int MAX_COVER_DIMENSION = 1000;
 
     public static CoverFlowFileHandler current;
 
@@ -90,17 +91,45 @@ public class CoverFlowFileHandler {
     public void resizeUntilFileSize(final Activity activity, final TransformationCallback callback) {
         this.callback = callback;
 
-        RequestCreator picassoInstance;
+        RequestCreator instance;
+        Transformation resizeTransformation = new Transformation() {
+
+            @Override
+            public Bitmap transform(Bitmap source) {
+                Bitmap result = null;
+                int height = source.getHeight();
+                int width = source.getWidth();
+                if (height > MAX_COVER_DIMENSION || width > MAX_COVER_DIMENSION) {
+                    if (height > width) {
+                        result = Bitmap.createScaledBitmap(source, width / (height/MAX_COVER_DIMENSION), MAX_COVER_DIMENSION, false);
+                    } else {
+                        result = Bitmap.createScaledBitmap(source, MAX_COVER_DIMENSION, height / (width/MAX_COVER_DIMENSION),false);
+                    }
+                }
+
+                if (result == null) {
+                    return source;
+                }
+                else {
+                    source.recycle();
+                    return result;
+                }
+            }
+
+            @Override
+            public String key() {
+                return "resizing to maximum accepted dimensions";
+            }
+        };
+
         if (mockedResource != null) {
-            picassoInstance = Picasso.with(activity).load(mockedResource);
+            instance = Picasso.with(activity).load(mockedResource);
         }
         else {
             Picasso.with(activity).invalidate(uploadFile);
-            picassoInstance = Picasso.with(activity).load(uploadFile);
-            if (uploadFile.length() > CoverFlowFileHandler.MAX_COVER_FILESIZE) {
-                picassoInstance = picassoInstance.resize(1600, 1600).centerInside();
-            }
+            instance = Picasso.with(activity).load(uploadFile);
         }
-        picassoInstance.into(target);
+
+        instance.transform(resizeTransformation).into(target);
     }
 }
