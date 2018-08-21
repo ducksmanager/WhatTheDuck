@@ -110,7 +110,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:contentDescription="@string/edge_view"
-                android:src="@drawable/ic_view_headline"/>
+                android:src="@drawable/ic_view_edge"/>
         </LinearLayout>
     </RelativeLayout>
 
