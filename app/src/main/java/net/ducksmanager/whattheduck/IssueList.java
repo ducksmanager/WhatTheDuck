@@ -1,5 +1,6 @@
 package net.ducksmanager.whattheduck;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -64,8 +65,32 @@ public class IssueList extends ItemList<Issue> {
         else {
             switchViewWrapper.setVisibility(View.VISIBLE);
             switchView.setOnClickListener(view -> {
-                loadList();
-                show();
+                if (switchView.isChecked()) {
+                    if (WhatTheDuck.showDataConsumptionMessage && WhatTheDuck.isMobileConnection()) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(IssueList.this);
+                        builder.setTitle(getString(R.string.bookcaseViewTitle));
+                        builder.setMessage(getString(R.string.bookcaseViewMessage));
+                        builder.setNegativeButton(R.string.cancel, (dialogInterface, which) -> {
+                            switchView.toggle();
+                            dialogInterface.dismiss();
+                        });
+                        builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                            WhatTheDuck.showDataConsumptionMessage = false;
+                            dialogInterface.dismiss();
+                            loadList();
+                            show();
+                        });
+                        builder.create().show();
+                    }
+                    else {
+                        loadList();
+                        show();
+                    }
+                }
+                else {
+                    loadList();
+                    show();
+                }
             });
         }
 

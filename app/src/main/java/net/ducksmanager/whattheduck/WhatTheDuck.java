@@ -61,6 +61,7 @@ public class WhatTheDuck extends Activity {
     private static Boolean rememberCredentials = null;
     private static String encryptedPassword = null;
     private static Boolean showWelcomeMessage = true;
+    static Boolean showDataConsumptionMessage = true;
 
     public static WhatTheDuck wtd;
 
@@ -405,6 +406,15 @@ public class WhatTheDuck extends Activity {
 
     public static void setSelectedIssue(String selectedIssue) {
         WhatTheDuck.selectedIssue = selectedIssue;
+    }
+
+    public static boolean isMobileConnection() {
+        ConnectivityManager cm = (ConnectivityManager)WhatTheDuck.wtd.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) {
+            return false;
+        }
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE;
     }
 
     public static void showAbout(Activity originActivity) {
