@@ -17,7 +17,6 @@ public class IssueEdgeAdapter extends ItemAdapter<Issue> {
         super(itemList, R.layout.row_edge, items);
     }
 
-
     @Override
     protected ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
@@ -102,6 +101,6 @@ public class IssueEdgeAdapter extends ItemAdapter<Issue> {
 
     @Override
     protected String getComparatorText(Issue i) {
-        return null;
+        return i.getIssueNumber();
     }
 }
