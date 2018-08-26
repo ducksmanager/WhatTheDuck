@@ -1,6 +1,7 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,13 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class IssueEdgeAdapter extends ItemAdapter<Issue> {
+    private final int orientation;
     private int windowWidth;
+    private int windowHeight;
 
-    IssueEdgeAdapter(ItemList itemList, ArrayList<Issue> items) {
+    IssueEdgeAdapter(ItemList itemList, ArrayList<Issue> items, int orientation) {
         super(itemList, R.layout.row_edge, items);
+        this.orientation = orientation;
     }
 
     @Override
@@ -40,6 +44,7 @@ public class IssueEdgeAdapter extends ItemAdapter<Issue> {
     @Override
     public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         windowWidth = originActivity.getWindow().getDecorView().getWidth();
+        windowHeight = originActivity.getWindow().getDecorView().getHeight();
         return super.onCreateViewHolder(parent, viewType);
     }
 
@@ -63,8 +68,8 @@ public class IssueEdgeAdapter extends ItemAdapter<Issue> {
             Picasso
                 .with(((ViewHolder) holder).itemView.getContext())
                 .load(url)
-                .resize(0, windowWidth)
-                .rotate(90f)
+                .resize(0, orientation == Configuration.ORIENTATION_LANDSCAPE ? windowHeight : windowWidth)
+                .rotate(orientation == Configuration.ORIENTATION_LANDSCAPE ? 0 : 90f)
                 .into(itemHolder.edgeImage);
         }
     }

@@ -49,9 +49,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
         setContentView(R.layout.wtd_list);
 
-        RecyclerView recyclerView = this.findViewById(R.id.itemList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         View navigationAllCountries = this.findViewById(R.id.navigationAllCountries);
         if (navigationAllCountries != null) {
             navigationAllCountries.setOnClickListener(view ->

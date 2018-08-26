@@ -2,7 +2,10 @@ package net.ducksmanager.whattheduck;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Switch;
 
@@ -16,8 +19,7 @@ public class IssueList extends ItemList<Issue> {
         EDGE_VIEW,
     }
 
-    ViewType viewType = ViewType.LIST_VIEW;
-
+    static ViewType viewType = ViewType.LIST_VIEW;
 
     @Override
     protected boolean needsToDownloadFullList() {
@@ -54,16 +56,11 @@ public class IssueList extends ItemList<Issue> {
 
         if (type.equals(Collection.CollectionType.COA.toString())) {
             viewType = ViewType.LIST_VIEW;
-        }
-        else {
-            viewType = switchView.isChecked() ? ViewType.EDGE_VIEW : ViewType.LIST_VIEW;
-        }
-
-        if (type.equals(Collection.CollectionType.COA.toString())) {
             switchViewWrapper.setVisibility(View.GONE);
         }
         else {
             switchViewWrapper.setVisibility(View.VISIBLE);
+            switchView.setChecked(viewType.equals(ViewType.EDGE_VIEW));
             switchView.setOnClickListener(view -> {
                 if (switchView.isChecked()) {
                     if (WhatTheDuck.showDataConsumptionMessage && WhatTheDuck.isMobileConnection()) {
@@ -77,19 +74,16 @@ public class IssueList extends ItemList<Issue> {
                         builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                             WhatTheDuck.showDataConsumptionMessage = false;
                             dialogInterface.dismiss();
-                            loadList();
-                            show();
+                            switchBetweenViews();
                         });
                         builder.create().show();
                     }
                     else {
-                        loadList();
-                        show();
+                        switchBetweenViews();
                     }
                 }
                 else {
-                    loadList();
-                    show();
+                    switchBetweenViews();
                 }
             });
         }
@@ -98,9 +92,27 @@ public class IssueList extends ItemList<Issue> {
             WhatTheDuck.getSelectedCountry(),
             WhatTheDuck.getSelectedPublication()
         );
-        return viewType.equals(ViewType.EDGE_VIEW)
-            ? new IssueEdgeAdapter(this, issueList)
-            : new IssueAdapter(this, issueList);
+
+        if (viewType.equals(ViewType.EDGE_VIEW)) {
+            int deviceOrientation = getResources().getConfiguration().orientation;
+            int listOrientation = (deviceOrientation == Configuration.ORIENTATION_LANDSCAPE)
+                ? LinearLayoutManager.HORIZONTAL
+                : LinearLayoutManager.VERTICAL;
+
+            RecyclerView recyclerView = this.findViewById(R.id.itemList);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this, listOrientation, false));
+
+            return new IssueEdgeAdapter(this, issueList, deviceOrientation);
+        }
+        else {
+            return new IssueAdapter(this, issueList);
+        }
+    }
+
+    private void switchBetweenViews() {
+        viewType = ((Switch)this.findViewById(R.id.switchView)).isChecked() ? ViewType.EDGE_VIEW : ViewType.LIST_VIEW;
+        loadList();
+        show();
     }
 
     @Override
