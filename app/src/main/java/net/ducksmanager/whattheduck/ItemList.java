@@ -109,9 +109,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             }
             else {
                 actionBar.setDisplayHomeAsUpEnabled(true);
-                ((Toolbar) findViewById(R.id.toolbar)).setNavigationOnClickListener(v -> {
-                    onBackFromAddIssueActivity();
-                });
+                ((Toolbar) findViewById(R.id.toolbar)).setNavigationOnClickListener(v -> onBackFromAddIssueActivity());
             }
         }
 
