@@ -3,14 +3,15 @@ dirname=showcase
 test_app_name=net.ducksmanager.whattheduck.test
 remote_app_dir=/data/local/tmp/${test_app_name}
 remote_screenshot_dir=/data/data/net.ducksmanager.whattheduck/files/test-screenshots/${dirname}
+shellAsApp="adb shell run-as net.ducksmanager.whattheduck"
 
+$shellAsApp rm -r ${remote_screenshot_dir}
 adb shell am force-stop ${test_app_name} && \
-adb shell rm -r ${remote_screenshot_dir} && \
 ./gradlew :app:assembleDebugAndroidTest && \
 adb push app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk ${remote_app_dir} && \
 adb shell pm install -t -r ${remote_app_dir} && \
 \
-adb shell am instrument -w -r -e debug false -e class ScreenshotTest ${test_app_name}/android.support.test.runner.AndroidJUnitRunner && \
+adb shell am instrument -w -r -e debug false -e class ListTest ${test_app_name}/android.support.test.runner.AndroidJUnitRunner && \
 adb pull ${remote_screenshot_dir} `pwd` && (
     for locale in fr en sv; do
         convert \
