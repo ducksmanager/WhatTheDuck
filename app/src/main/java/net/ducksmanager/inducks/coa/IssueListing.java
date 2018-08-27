@@ -36,27 +36,22 @@ public class IssueListing extends CoaListing {
     }
 
     @Override
-    protected void processData(String response) {
+    protected void processData(String response) throws JSONException {
         if (response != null) {
-            try {
-                JSONArray issues = null;
-                try {  // Legacy JSON structure
-                    JSONObject object = new JSONObject(response);
-                    issues = object.getJSONObject("static").getJSONArray("numeros");
-                }
-                catch (JSONException e) {
-                    issues = new JSONArray(response);
-                }
-                finally {
-                    for (int i = 0; i < issues.length(); i++) {
-                        String issue = (String) issues.get(i);
-                        WhatTheDuck.coaCollection.addIssue(countryShortName, publicationCode, new Issue(issue));
-                    }
-                    fullListPublications.add(publicationCode);
-                }
+            JSONArray issues = null;
+            try {  // Legacy JSON structure
+                JSONObject object = new JSONObject(response);
+                issues = object.getJSONObject("static").getJSONArray("numeros");
             }
             catch (JSONException e) {
-                handleJSONException(e);
+                issues = new JSONArray(response);
+            }
+            finally {
+                for (int i = 0; i < issues.length(); i++) {
+                    String issue = (String) issues.get(i);
+                    WhatTheDuck.coaCollection.addIssue(countryShortName, publicationCode, new Issue(issue));
+                }
+                fullListPublications.add(publicationCode);
             }
         }
     }

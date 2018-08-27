@@ -53,11 +53,8 @@ public class Signup extends Activity {
 
     protected static class ConnectAndRetrieveList extends RetrieveTask {
 
-        private final WeakReference<Activity> originActivityRef;
-
         ConnectAndRetrieveList(Activity originActivity, String urlSuffix) {
-            super(urlSuffix, null);
-            this.originActivityRef = new WeakReference<>(originActivity);
+            super(urlSuffix, new WeakReference<>(originActivity));
         }
 
         @Override

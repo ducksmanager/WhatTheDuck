@@ -49,14 +49,9 @@ public class PublicationListing extends CoaListing {
     }
 
     @Override
-    protected void processData(String response) {
+    protected void processData(String response) throws JSONException {
         if (response != null) {
-            try {
-                addFullPublications(countryShortName, new JSONObject(response));
-            }
-            catch (JSONException e) {
-                handleJSONException(e);
-            }
+            addFullPublications(countryShortName, new JSONObject(response));
         }
     }
 

@@ -5,7 +5,6 @@ import android.app.Activity;
 
 import com.koushikdutta.async.future.FutureCallback;
 
-import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
@@ -15,7 +14,7 @@ import java.lang.ref.WeakReference;
 import java.util.Locale;
 
 public abstract class CoaListing {
-    private final WeakReference<Activity> activityRef;
+    protected final WeakReference<Activity> activityRef;
     private final FutureCallback afterProcessCallback;
 
     public enum ListType {COUNTRY_LIST, PUBLICATION_LIST, ISSUE_LIST}
@@ -29,31 +28,30 @@ public abstract class CoaListing {
 
     protected abstract String getUrlSuffix();
 
-    protected abstract void processData(String result);
+    protected abstract void processData(String result) throws JSONException;
 
     public void fetch() {
         try {
-            WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, R.id.progressBarLoading, true);
+            WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, true);
             WhatTheDuck.wtd.retrieveOrFailDmServer(getUrlSuffix(), (e, result) -> {
                 if (e != null) {
-                    RetrieveTask.handleResultException(e);
+                    RetrieveTask.handleResultExceptionOnActivity(e, activityRef);
                 }
                 else {
-                    processData(result);
+                    try {
+                        processData(result);
+                    }
+                    catch(JSONException jsonException) {
+                        RetrieveTask.handleResultExceptionOnActivity(jsonException, activityRef);
+                    }
                     if (afterProcessCallback != null) {
                         afterProcessCallback.onCompleted(null, result);
                     }
-                    WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, R.id.progressBarLoading, false);
+                    WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, false);
                 }
             }, null, null);
         } catch (Exception e) {
-            RetrieveTask.handleResultException(e);
+            RetrieveTask.handleResultExceptionOnActivity(e, activityRef);
         }
-    }
-
-    void handleJSONException(JSONException e) {
-        WhatTheDuck.wtd.alert(activityRef,
-                R.string.internal_error,
-                R.string.internal_error__malformed_list," : " + e.getMessage());
     }
 }

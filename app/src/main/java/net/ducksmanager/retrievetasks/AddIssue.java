@@ -28,8 +28,7 @@ public class AddIssue extends RetrieveTask {
             +"&numero="+selectedIssue.getIssueNumber()
             +"&id_acquisition="+(selectedIssue.getPurchase() == null ? "-2" : selectedIssue.getPurchase().getId())
             +"&etat="+selectedIssue.getIssueConditionStr(),
-                R.id.progressBarLoading
-        );
+            originActivityRef);
         AddIssue.originActivityRef = originActivityRef;
         AddIssue.shortCountryAndPublication = shortCountryAndPublication;
         AddIssue.selectedIssue = selectedIssue;
@@ -37,7 +36,7 @@ public class AddIssue extends RetrieveTask {
 
     @Override
     protected void onPreExecute() {
-        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, progressBarId, true);
+        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, true);
         trackEvent("addissue/start");
     }
 
@@ -54,7 +53,7 @@ public class AddIssue extends RetrieveTask {
             WhatTheDuck.wtd.alert(R.string.internal_error, R.string.internal_error__issue_insertion_failed);
         }
 
-        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, progressBarId, false);
+        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, false);
     }
 
     static private void updateNamesAndGoToIssueList() {
