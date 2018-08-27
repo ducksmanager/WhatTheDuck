@@ -12,6 +12,10 @@ import org.junit.runner.RunWith;
 @LargeTest
 public class LoginTest extends WtdTest {
 
+    public LoginTest() {
+        super();
+    }
+
     @BeforeClass
     public static void initDownloadHelper() {
         initMockServer();

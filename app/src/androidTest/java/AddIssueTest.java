@@ -27,6 +27,10 @@ import static org.hamcrest.Matchers.containsString;
 @LargeTest
 public class AddIssueTest extends WtdTest {
 
+    public AddIssueTest() {
+        super();
+    }
+
     @BeforeClass
     public static void initDownloadHelper() {
         WtdTest.initMockServer();

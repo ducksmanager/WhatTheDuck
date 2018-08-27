@@ -1,4 +1,7 @@
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
@@ -18,6 +21,7 @@ import org.hamcrest.Matcher;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -40,6 +44,21 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 
 class WtdTest extends AndroidJUnitRunner {
+
+    static Iterable<Object[]> parameterData() {
+        return Arrays.asList(new LocaleWithDefaultPublication[][]{
+            {new LocaleWithDefaultPublication("se", "sv") {
+                String getDefaultPublication() { return "se/KAP"; }
+            }},
+            {new LocaleWithDefaultPublication("us", "en") {
+                String getDefaultPublication() { return "us/WDC"; }
+            }},
+            {new LocaleWithDefaultPublication("fr", "fr") {
+                String getDefaultPublication() { return "fr/DDD"; }
+            }}
+        });
+    }
+
     abstract static class LocaleWithDefaultPublication {
         Locale locale;
 
@@ -67,6 +86,10 @@ class WtdTest extends AndroidJUnitRunner {
 
     static MockWebServer mockServer;
 
+    String getScreenshotPath() {
+        return ScreenshotTestRule.SCREENSHOTS_PATH_SHOWCASE + "/" + currentLocale.getLocale().getLanguage();
+    }
+
     @Rule
     public ScreenshotTestRule screenshotTestRule = new ScreenshotTestRule();
 
@@ -76,6 +99,27 @@ class WtdTest extends AndroidJUnitRunner {
     @BeforeClass
     public static void overrideUserSettingsPath() {
         WhatTheDuck.USER_SETTINGS = "settings_test.properties";
+    }
+
+    @BeforeClass
+    public static void initDownloadHelper() {
+        initMockServer();
+    }
+
+    void switchLocale() {
+        if (currentLocale != null) {
+            Context context = WhatTheDuck.wtd.getApplicationContext();
+            Resources resources = context.getResources();
+            Configuration configuration = resources.getConfiguration();
+            configuration.setLocale(currentLocale.getLocale());
+            resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+        }
+    }
+
+    WtdTest() { }
+
+    WtdTest(LocaleWithDefaultPublication currentLocale) {
+        WtdTest.currentLocale = currentLocale;
     }
 
     static void initMockServer() {

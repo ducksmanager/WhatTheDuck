@@ -22,6 +22,10 @@ import static org.hamcrest.Matchers.allOf;
 @LargeTest
 public class FilterTest extends WtdTest {
 
+    public FilterTest() {
+        super();
+    }
+
     @BeforeClass
     public static void initDownloadHelper() {
         WtdTest.initMockServer();
