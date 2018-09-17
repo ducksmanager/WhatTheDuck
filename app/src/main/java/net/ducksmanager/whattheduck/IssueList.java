@@ -102,7 +102,7 @@ public class IssueList extends ItemList<Issue> {
             RecyclerView recyclerView = this.findViewById(R.id.itemList);
             recyclerView.setLayoutManager(new LinearLayoutManager(this, listOrientation, false));
 
-            return new IssueEdgeAdapter(this, issueList, deviceOrientation);
+            return new IssueEdgeAdapter(this, issueList, recyclerView, deviceOrientation);
         }
         else {
             return new IssueAdapter(this, issueList);

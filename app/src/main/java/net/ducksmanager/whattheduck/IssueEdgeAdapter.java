@@ -3,6 +3,7 @@ package net.ducksmanager.whattheduck;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,12 +14,13 @@ import java.util.ArrayList;
 
 public class IssueEdgeAdapter extends ItemAdapter<Issue> {
     private final int orientation;
-    private int windowWidth;
-    private int windowHeight;
+    private final RecyclerView recyclerView;
+    private Integer expectedEdgeHeight;
 
-    IssueEdgeAdapter(ItemList itemList, ArrayList<Issue> items, int orientation) {
+    IssueEdgeAdapter(ItemList itemList, ArrayList<Issue> items, RecyclerView recyclerView, int orientation) {
         super(itemList, R.layout.row_edge, items);
         this.orientation = orientation;
+        this.recyclerView = recyclerView;
     }
 
     @Override
@@ -43,8 +45,6 @@ public class IssueEdgeAdapter extends ItemAdapter<Issue> {
     @NonNull
     @Override
     public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        windowWidth = originActivity.getWindow().getDecorView().getWidth();
-        windowHeight = originActivity.getWindow().getDecorView().getHeight();
         return super.onCreateViewHolder(parent, viewType);
     }
 
@@ -56,22 +56,29 @@ public class IssueEdgeAdapter extends ItemAdapter<Issue> {
 
         Issue i = getItem(position);
         if (i != null) {
-            String url = WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL)
-                + "/edges/"
-                + WhatTheDuck.getSelectedCountry()
-                + "/gen/"
-                + WhatTheDuck.getSelectedPublication()
-                .replaceFirst("[^/]+/", "")
-                .replaceAll(" ", "")
-                + "." + i.getIssueNumber() + ".png";
+            if (expectedEdgeHeight == null) {
+                expectedEdgeHeight = orientation == Configuration.ORIENTATION_LANDSCAPE ? recyclerView.getHeight() : recyclerView.getWidth();
+            }
 
             Picasso
                 .with(((ViewHolder) holder).itemView.getContext())
-                .load(url)
-                .resize(0, orientation == Configuration.ORIENTATION_LANDSCAPE ? windowHeight : windowWidth)
+                .load(getEdgeUrl(i))
+                .resize(0, expectedEdgeHeight)
                 .rotate(orientation == Configuration.ORIENTATION_LANDSCAPE ? 0 : 90f)
                 .into(itemHolder.edgeImage);
         }
+    }
+
+    @NonNull
+    private String getEdgeUrl(Issue i) {
+        return WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL)
+            + "/edges/"
+            + WhatTheDuck.getSelectedCountry()
+            + "/gen/"
+            + WhatTheDuck.getSelectedPublication()
+            .replaceFirst("[^/]+/", "")
+            .replaceAll(" ", "")
+            + "." + i.getIssueNumber().replaceAll(" ", "") + ".png";
     }
 
     @Override
