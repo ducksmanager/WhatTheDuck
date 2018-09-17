@@ -1,3 +1,7 @@
+Version 1.7.5
+
+    Improve error handling
+
 Version 1.7.4
 
     Fix resizing cover photos before uploading them
