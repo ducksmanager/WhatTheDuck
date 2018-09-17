@@ -9,7 +9,7 @@
     android:background="?android:attr/selectableItemBackground"
     android:layout_height="50dp">
     <TextView
-        android:id="@+id/selected"
+        android:id="@+id/selectedText"
         android:textAlignment="center"
         android:text="@string/all_countries"
         android:layout_width="match_parent"

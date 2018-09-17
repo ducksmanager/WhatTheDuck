@@ -13,6 +13,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
         <LinearLayout
+            android:id="@+id/selected"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:paddingLeft="5dp"
@@ -28,7 +29,7 @@
                 android:layout_height="20dp"
                 android:textSize="14sp"/>
             <TextView
-                android:id="@+id/selected"
+                android:id="@+id/selectedText"
                 android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
