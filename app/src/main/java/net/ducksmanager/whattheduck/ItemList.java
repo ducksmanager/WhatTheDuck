@@ -280,7 +280,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
                 ImageView currentCountryFlag = countryNavigationView.findViewById(R.id.selectedBadgeImage);
                 currentCountryFlag.setImageResource(imageResource);
 
-                TextView currentCountryText = countryNavigationView.findViewById(R.id.selected);
+                TextView currentCountryText = countryNavigationView.findViewById(R.id.selectedText);
                 currentCountryText.setText(countryFullName);
             }
 
@@ -290,7 +290,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
                 TextView currentPublicationBadgeText = publicationNavigationView.findViewById(R.id.selectedBadge);
                 currentPublicationBadgeText.setText(selectedPublication.split("/")[1]);
 
-                TextView currentPublicationText = publicationNavigationView.findViewById(R.id.selected);
+                TextView currentPublicationText = publicationNavigationView.findViewById(R.id.selectedText);
                 currentPublicationText.setText(publicationFullName);
             }
         }
