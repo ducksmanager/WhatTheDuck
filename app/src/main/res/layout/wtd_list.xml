@@ -52,6 +52,7 @@
         android:id="@+id/itemList"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
         android:orientation="vertical"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         tools:listitem="@layout/row"
@@ -80,8 +81,10 @@
         android:id="@+id/switchViewWrapper"
         android:layout_width="140dp"
         android:layout_height="48dp"
+        android:background="?android:colorBackground"
         android:layout_alignParentBottom="true"
-        android:paddingBottom="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:layout_centerHorizontal="true"
         android:visibility="gone">
 
