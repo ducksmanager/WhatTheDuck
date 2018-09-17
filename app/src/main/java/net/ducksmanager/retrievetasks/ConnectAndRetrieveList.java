@@ -31,19 +31,17 @@ import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
 public class ConnectAndRetrieveList extends RetrieveTask {
 
-    private final WeakReference<WhatTheDuck> wtdActivityRef;
     private final Boolean fromUI;
 
     public ConnectAndRetrieveList(Boolean fromUI) {
-        super("", R.id.progressBarConnection);
-        wtdActivityRef = new WeakReference<>(WhatTheDuck.wtd);
+        super("", new WeakReference<>(WhatTheDuck.wtd));
         this.fromUI = fromUI;
     }
 
     @Override
     protected void onPreExecute() {
         WhatTheDuck.userCollection = new Collection();
-        WhatTheDuck wtdActivity = wtdActivityRef.get();
+        WhatTheDuck wtdActivity = (WhatTheDuck) originActivityRef.get();
 
         trackEvent("retrievecollection/start");
 
@@ -61,13 +59,13 @@ public class ConnectAndRetrieveList extends RetrieveTask {
         if (TextUtils.isEmpty(WhatTheDuck.getUsername()) || (TextUtils.isEmpty(WhatTheDuck.getPassword()) && TextUtils.isEmpty(WhatTheDuck.getEncryptedPassword()))) {
             WhatTheDuck.wtd.alert(R.string.input_error,
                 R.string.input_error__empty_credentials);
-            ProgressBar mProgressBar = wtdActivity.findViewById(R.id.progressBarConnection);
+            ProgressBar mProgressBar = wtdActivity.findViewById(R.id.progressBar);
             mProgressBar.setVisibility(ProgressBar.INVISIBLE);
             cancel(true);
             return;
         }
 
-        WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, true);
+        WhatTheDuck.wtd.toggleProgressbarLoading(true);
     }
 
     @Override
@@ -78,7 +76,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
             return;
         }
 
-        WhatTheDuck wtdActivity = wtdActivityRef.get();
+        WhatTheDuck wtdActivity = (WhatTheDuck) originActivityRef.get();
 
         try {
             if (response == null) {
@@ -144,7 +142,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                 WhatTheDuck.wtd.alert(R.string.internal_error,
                     R.string.internal_error__malformed_list, " : " + e.getMessage());
             } finally {
-                wtdActivity.toggleProgressbarLoading(progressBarId, false);
+                wtdActivity.toggleProgressbarLoading(false);
             }
         } catch (JSONException e) {
             WhatTheDuck.wtd.alert(R.string.internal_error,

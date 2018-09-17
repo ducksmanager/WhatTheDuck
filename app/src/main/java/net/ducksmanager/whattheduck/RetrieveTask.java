@@ -1,14 +1,18 @@
 package net.ducksmanager.whattheduck;
 
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 
 import com.koushikdutta.async.future.FutureCallback;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -16,7 +20,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
 
     private boolean legacyServer = true;
     private final String urlSuffix;
-    protected static Integer progressBarId;
+    protected WeakReference<Activity> originActivityRef;
 
     private Exception thrownException;
     private String fileName;
@@ -48,14 +52,13 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         }
     }
 
-    protected RetrieveTask(String urlSuffix, Integer progressBarId) {
+    protected RetrieveTask(String urlSuffix, WeakReference<Activity> originActivityRef) {
         this.urlSuffix = urlSuffix;
-        RetrieveTask.progressBarId = progressBarId;
+        this.originActivityRef = originActivityRef;
     }
 
-    protected RetrieveTask(String urlSuffix, Integer progressBarId, boolean legacyServer, FutureCallback futureCallback, String fileName, File file) {
+    protected RetrieveTask(String urlSuffix, boolean legacyServer, FutureCallback futureCallback, String fileName, File file) {
         this.urlSuffix = urlSuffix;
-        RetrieveTask.progressBarId = progressBarId;
         this.legacyServer = legacyServer;
         this.futureCallback = futureCallback;
         this.fileName = fileName;
@@ -89,11 +92,9 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         return this.thrownException != null;
     }
 
-    public static void handleResultException(Exception e) {
+    public static void handleResultExceptionOnActivity(Exception e, WeakReference<Activity> activityRef) {
         WhatTheDuck.wtd.initUI();
-        if (progressBarId != null) {
-            WhatTheDuck.wtd.toggleProgressbarLoading(progressBarId, false);
-        }
+        WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, false);
 
         if (e instanceof SecurityException) {
             WhatTheDuck.wtd.alert(
@@ -105,6 +106,11 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         else if (e instanceof PackageManager.NameNotFoundException) {
             e.printStackTrace();
         }
+        else if (e instanceof JSONException) {
+            WhatTheDuck.wtd.alert(activityRef,
+                R.string.internal_error,
+                R.string.internal_error__malformed_list," : " + e.getMessage());
+        }
         else {
             if (e.getMessage() != null
                 && e.getMessage().equals(R.string.network_error+"")) {
@@ -113,8 +119,12 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
                     R.string.network_error__no_connection);
             }
             else {
-                WhatTheDuck.wtd.alert(e.getMessage());
+                WhatTheDuck.wtd.alert(activityRef, e.getMessage());
             }
         }
+    }
+
+    private void handleResultException(Exception e) {
+        handleResultExceptionOnActivity(e, originActivityRef);
     }
 }

@@ -341,8 +341,8 @@ public class WhatTheDuck extends Activity {
             return response;
     }
 
-    public void toggleProgressbarLoading(WeakReference<Activity> activity, int progressBarId, boolean toggle) {
-        ProgressBar progressBar = activity.get().findViewById(progressBarId);
+    public void toggleProgressbarLoading(WeakReference<Activity> activityRef, boolean toggle) {
+        ProgressBar progressBar = activityRef.get().findViewById(R.id.progressBar);
 
         if (progressBar != null) {
             if (toggle) {
@@ -355,8 +355,8 @@ public class WhatTheDuck extends Activity {
         }
     }
 
-    public void toggleProgressbarLoading(int progressBarId, boolean toggle) {
-        toggleProgressbarLoading(new WeakReference<>(WhatTheDuck.wtd), progressBarId, toggle);
+    public void toggleProgressbarLoading(boolean toggle) {
+        toggleProgressbarLoading(new WeakReference<>(WhatTheDuck.wtd), toggle);
     }
 
     private boolean isOffline() {

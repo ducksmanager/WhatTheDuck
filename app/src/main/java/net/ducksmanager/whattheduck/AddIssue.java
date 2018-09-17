@@ -151,7 +151,7 @@ public class AddIssue extends AppCompatActivity {
                 new CreatePurchase(new WeakReference<>(this), purchaseDateNew.getText().toString(), purchaseTitleNew.getText().toString()) {
                     @Override
                     protected void afterDataHandling() {
-                        new GetPurchaseList() {
+                        new GetPurchaseList(originActivityRef) {
                             @Override
                             protected void afterDataHandling() {
                                 AddIssue.purchases = WhatTheDuck.userCollection.getPurchasesWithEmptyItem();

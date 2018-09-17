@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 
 import net.ducksmanager.whattheduck.PurchaseAdapter;
-import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
@@ -19,12 +18,12 @@ import java.util.HashMap;
 import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
 public abstract class GetPurchaseList extends RetrieveTask {
-    protected GetPurchaseList() {
-        super("&get_achats=true", R.id.progressBarLoading);
+    protected GetPurchaseList(WeakReference<Activity> originActivityRef) {
+        super("&get_achats=true", originActivityRef);
     }
 
     public static void initAndShowAddIssue(Activity originActivity) {
-        new GetPurchaseList() {
+        new GetPurchaseList(new WeakReference<>(originActivity)) {
             @Override
             protected void afterDataHandling() {
                 Intent i = new Intent(originActivity, net.ducksmanager.whattheduck.AddIssue.class);
@@ -40,7 +39,7 @@ public abstract class GetPurchaseList extends RetrieveTask {
 
     @Override
     protected void onPreExecute() {
-        WhatTheDuck.wtd.toggleProgressbarLoading(this.getOriginActivity(), progressBarId, true);
+        WhatTheDuck.wtd.toggleProgressbarLoading(this.getOriginActivity(), true);
         trackEvent("getpurchases/start");
     }
 
@@ -86,7 +85,7 @@ public abstract class GetPurchaseList extends RetrieveTask {
 
         afterDataHandling();
 
-        WhatTheDuck.wtd.toggleProgressbarLoading(this.getOriginActivity(), progressBarId, false);
+        WhatTheDuck.wtd.toggleProgressbarLoading(this.getOriginActivity(), false);
     }
 
     protected abstract void afterDataHandling();

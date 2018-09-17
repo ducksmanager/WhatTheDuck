@@ -15,21 +15,20 @@ import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
 public abstract class CreatePurchase extends RetrieveTask {
 
-    private static WeakReference<Activity> originActivityRef;
+    protected static WeakReference<Activity> originActivityRef;
 
     protected CreatePurchase(WeakReference<Activity> originActivityRef, String purchaseDateStr, String purchaseName) throws UnsupportedEncodingException {
         super(
             "&ajouter_achat"
                 +"&date_achat="+purchaseDateStr
                 +"&description_achat="+ URLEncoder.encode(purchaseName, "UTF-8"),
-            R.id.progressBarLoading
-        );
+            originActivityRef);
         CreatePurchase.originActivityRef = originActivityRef;
     }
 
     @Override
     protected void onPreExecute() {
-        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, progressBarId, true);
+        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, true);
         trackEvent("addpurchase/start");
     }
 
@@ -40,7 +39,7 @@ public abstract class CreatePurchase extends RetrieveTask {
             WhatTheDuck.wtd.alert(originActivityRef, R.string.internal_error, R.string.internal_error__purchase_creation_failed, "");
         }
 
-        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, progressBarId, false);
+        WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, false);
         afterDataHandling();
     }
 

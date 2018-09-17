@@ -36,7 +36,7 @@ public class CoverSearch extends RetrieveTask {
             Activity originActivity = originActivityRef.get();
 
             originActivity.findViewById(R.id.addToCollectionWrapper).setVisibility(View.VISIBLE);
-            originActivity.findViewById(R.id.progressBarLoading).setVisibility(View.GONE);
+            originActivity.findViewById(R.id.progressBar).setVisibility(View.GONE);
             if (e != null)
                 throw e;
 
@@ -89,7 +89,7 @@ public class CoverSearch extends RetrieveTask {
     };
 
     public CoverSearch(WeakReference<Activity> originActivityRef, File coverPicture) {
-        super("/cover-id/search", R.id.progressBarConnection, false, futureCallback, uploadFileName, coverPicture);
+        super("/cover-id/search", false, futureCallback, uploadFileName, coverPicture);
         CoverSearch.originActivityRef = originActivityRef;
     }
 

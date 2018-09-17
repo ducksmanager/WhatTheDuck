@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -143,7 +142,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         ItemAdapter<Item> itemAdapter = getItemAdapter();
         setNavigation(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication());
 
-        ProgressBar loadingProgressBar = this.findViewById(R.id.progressBarLoading);
         TextView emptyListText = this.findViewById(R.id.emptyList);
 
         java.util.List<Item> items = itemAdapter.getItems();
@@ -152,16 +150,10 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             if (emptyListText != null) {
                 emptyListText.setVisibility(TextView.INVISIBLE);
             }
-            if (loadingProgressBar != null) {
-                loadingProgressBar.setVisibility(TextView.VISIBLE);
-            }
         }
         else {
             if (emptyListText != null) {
                 emptyListText.setVisibility(items.size() == 0 ? TextView.VISIBLE : TextView.INVISIBLE);
-            }
-            if (loadingProgressBar != null) {
-                loadingProgressBar.setVisibility(TextView.INVISIBLE);
             }
         }
 
@@ -213,7 +205,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             this.findViewById(R.id.addToCollectionWrapper).setVisibility(View.GONE);
-            this.findViewById(R.id.progressBarLoading).setVisibility(View.VISIBLE);
+            this.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
 
             CoverFlowFileHandler.current.resizeUntilFileSize(this, new CoverFlowFileHandler.TransformationCallback() {
                 @Override
@@ -224,7 +216,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
                 @Override
                 public void onFail() {
                     ItemList.this.findViewById(R.id.addToCollectionWrapper).setVisibility(View.VISIBLE);
-                    ItemList.this.findViewById(R.id.progressBarLoading).setVisibility(View.GONE);
+                    ItemList.this.findViewById(R.id.progressBar).setVisibility(View.GONE);
                 }
             });
         }

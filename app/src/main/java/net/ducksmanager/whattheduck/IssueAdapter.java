@@ -28,7 +28,7 @@ public class IssueAdapter extends ItemAdapter<Issue> {
                 if (WhatTheDuck.userCollection.getIssue(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), selectedIssue.getIssueNumber()) != null) {
                     WhatTheDuck.wtd.info(new WeakReference<>(IssueAdapter.this.getOriginActivity()), R.string.input_error__issue_already_possessed);
                 } else {
-                    WhatTheDuck.wtd.toggleProgressbarLoading(new WeakReference<>(IssueAdapter.this.getOriginActivity()), R.id.progressBarLoading, true);
+                    WhatTheDuck.wtd.toggleProgressbarLoading(new WeakReference<>(IssueAdapter.this.getOriginActivity()), true);
                     WhatTheDuck.setSelectedIssue(selectedIssue.getIssueNumber());
                     GetPurchaseList.initAndShowAddIssue(IssueAdapter.this.getOriginActivity());
                 }
