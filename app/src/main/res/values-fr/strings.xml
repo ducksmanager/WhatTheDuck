@@ -3,8 +3,11 @@
     <string name="add_cover">Cliquez sur la couverture\npour ajouter le numéro à la collection</string>
     <string name="add_cover_error_file_too_big">L\'image est trop grande, veuillez réessayer.</string>
     <string name="add_cover_no_results">Aucun résultat pour votre photo, veuillez réessayer.</string>
+    <string name="add_issue">Ajout de numéro</string>
     <string name="all_countries">Tous les pays</string>
     <string name="app_name">What The Duck</string>
+    <string name="bookcaseViewMessage">L\'affichage de la bibliothèque en utilisant les données mobiles peut entraîner une consommation importante de données mobiles. Voulez-vous tout de même afficher la vue Bibliothèque ?</string>
+    <string name="bookcaseViewTitle">Vue Bibliothèque</string>
     <string name="by_cover_photo">Depuis une photo de couverture</string>
     <string name="by_issue_selection">Par sélection de numéro</string>
     <string name="cancel">Annuler</string>
@@ -16,6 +19,7 @@
     <string name="confirmation_message__issue_inserted">Le numéro a été ajouté à votre collection</string>
     <string name="cover_suggestion">Suggestion de couverture</string>
     <string name="create">Créer</string>
+    <string name="edge_view">Bibliothèque</string>
     <string name="email_address">Adresse e-mail</string>
     <string name="error">Erreur</string>
     <string name="error__malformed_url">L\'adresse Web est mal formée</string>
@@ -33,6 +37,7 @@
     <string name="issue_already_possessed">Vous possédez déjà ce numéro dans votre collection</string>
     <string name="itemtitle">Numéro</string>
     <string name="link_to_ducksmanager_website">What The Duck est l\'application mobile de DucksManager. Cliquez ici pour accéder au site Web de DucksManager.</string>
+    <string name="list_view">Liste</string>
     <string name="login">Connexion</string>
     <string name="logout">Déconnexion</string>
     <string name="my_collection">Ma collection</string>
@@ -48,7 +53,6 @@
     <string name="rate_app">Notez What The Duck sur le Play Store :-)</string>
     <string name="remember_credentials">Se souvenir de mes identifiants</string>
     <string name="result">Résultat</string>
-    <string name="add_issue">Ajout de numéro</string>
     <string name="signup">Inscription</string>
     <string name="signup__confirm">L\'inscription à DucksManager est terminée, \nvous pouvez maintenant vous connecter.</string>
     <string name="signup_end">Terminer l\'inscription</string>
