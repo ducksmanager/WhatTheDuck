@@ -21,6 +21,11 @@ public class IssueList extends ItemList<Issue> {
 
     static ViewType viewType = ViewType.LIST_VIEW;
 
+    private boolean isLandscapeEdgeView() {
+        int deviceOrientation = getResources().getConfiguration().orientation;
+        return viewType.equals(ViewType.EDGE_VIEW) && deviceOrientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
+
     @Override
     protected boolean needsToDownloadFullList() {
         return ! IssueListing.hasFullList(WhatTheDuck.getSelectedPublication());
@@ -47,6 +52,16 @@ public class IssueList extends ItemList<Issue> {
     @Override
     protected boolean shouldShow() {
         return WhatTheDuck.getSelectedCountry() != null && WhatTheDuck.getSelectedPublication() != null;
+    }
+
+    @Override
+    protected boolean shouldShowNavigation() {
+        return !isLandscapeEdgeView();
+    }
+
+    @Override
+    protected boolean shouldShowToolbar() {
+        return !isLandscapeEdgeView();
     }
 
     @Override

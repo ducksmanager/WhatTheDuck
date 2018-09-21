@@ -50,6 +50,16 @@ public class CountryList extends ItemList<CountryAdapter.Country> {
     }
 
     @Override
+    protected boolean shouldShowNavigation() {
+        return true;
+    }
+
+    @Override
+    protected boolean shouldShowToolbar() {
+        return true;
+    }
+
+    @Override
     protected boolean hasDividers() {
         return true;
     }

@@ -62,9 +62,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             );
         }
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         loadList();
     }
 
@@ -133,28 +130,45 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
     protected abstract boolean shouldShow();
 
+    protected abstract boolean shouldShowNavigation();
+
+    protected abstract boolean shouldShowToolbar();
+
     protected abstract ItemAdapter<Item> getItemAdapter();
 
     void show() {
         if (!shouldShow()) {
             return;
         }
+
+        if (shouldShowToolbar()) {
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+        }
+        else {
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().hide();
+            }
+        }
+
+        if (shouldShowNavigation()) {
+            setNavigation(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication());
+        }
+        else {
+            hideNavigation();
+        }
+
         ItemAdapter<Item> itemAdapter = getItemAdapter();
-        setNavigation(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication());
 
         TextView emptyListText = this.findViewById(R.id.emptyList);
 
         java.util.List<Item> items = itemAdapter.getItems();
         if (this.requiresDataDownload) {
             itemAdapter.resetItems();
-            if (emptyListText != null) {
-                emptyListText.setVisibility(TextView.INVISIBLE);
-            }
         }
-        else {
-            if (emptyListText != null) {
-                emptyListText.setVisibility(items.size() == 0 ? TextView.VISIBLE : TextView.INVISIBLE);
-            }
+
+        if (emptyListText != null) {
+            emptyListText.setVisibility(this.requiresDataDownload || items.size() > 0 ? TextView.INVISIBLE : TextView.VISIBLE);
         }
 
         RecyclerView recyclerView = findViewById(R.id.itemList);
@@ -259,6 +273,10 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         return type == null || type.equals(CollectionType.USER.toString())
             ? WhatTheDuck.userCollection
             : WhatTheDuck.coaCollection;
+    }
+
+    private void hideNavigation() {
+        this.findViewById(R.id.navigation).setVisibility(View.GONE);
     }
 
     private void setNavigation(String selectedCountry, String selectedPublication) {

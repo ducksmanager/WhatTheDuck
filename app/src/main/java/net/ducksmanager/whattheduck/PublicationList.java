@@ -38,6 +38,16 @@ public class PublicationList extends ItemList<PublicationAdapter.Publication> {
     }
 
     @Override
+    protected boolean shouldShowNavigation() {
+        return true;
+    }
+
+    @Override
+    protected boolean shouldShowToolbar() {
+        return true;
+    }
+
+    @Override
     protected boolean hasDividers() {
         return true;
     }
