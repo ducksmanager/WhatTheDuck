@@ -57,4 +57,8 @@
     <string name="version">What The Duck version</string>
     <string name="welcomeMessage">Bocka av valet \"Endast min samling\" för att visar berörda utgåvor, och klicka sedan på en utgåva för att lägga till den i din samling</string>
     <string name="welcomeTitle">Välkommen till What The Duck!</string>
+    <string name="bookcaseViewTitle">Bokhyllevy</string>
+    <string name="bookcaseViewMessage">Att visa bokhyllevyn på ett mobilt nätverk kan leda till höga kostnader. Vill du fortfarande visa den?</string>
+    <string name="list_view">Lista</string>
+    <string name="edge_view">Bokhylla</string>
 </resources>
