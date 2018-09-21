@@ -93,18 +93,20 @@ public class IssueList extends ItemList<Issue> {
             WhatTheDuck.getSelectedPublication()
         );
 
+        RecyclerView recyclerView = this.findViewById(R.id.itemList);
+
         if (viewType.equals(ViewType.EDGE_VIEW)) {
             int deviceOrientation = getResources().getConfiguration().orientation;
-            int listOrientation = (deviceOrientation == Configuration.ORIENTATION_LANDSCAPE)
+            int listOrientation = deviceOrientation == Configuration.ORIENTATION_LANDSCAPE
                 ? LinearLayoutManager.HORIZONTAL
                 : LinearLayoutManager.VERTICAL;
 
-            RecyclerView recyclerView = this.findViewById(R.id.itemList);
             recyclerView.setLayoutManager(new LinearLayoutManager(this, listOrientation, false));
 
             return new IssueEdgeAdapter(this, issueList, recyclerView, deviceOrientation);
         }
         else {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
             return new IssueAdapter(this, issueList);
         }
     }

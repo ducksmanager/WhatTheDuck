@@ -52,7 +52,7 @@ public class ListTest extends WtdTest {
             .perform(click());
 
         Matcher<RecyclerView.ViewHolder> countryMatcher = getItemMatcher(currentLocale.getDefaultCountry().toLowerCase());
-        onView((withId(R.id.itemList))).perform(scrollToHolder(countryMatcher), actionOnHolderItem(countryMatcher, click()));
+        onView(withId(R.id.itemList)).perform(scrollToHolder(countryMatcher), actionOnHolderItem(countryMatcher, click()));
 
         assertCurrentActivityIsInstanceOf(PublicationList.class, true);
 
@@ -62,10 +62,10 @@ public class ListTest extends WtdTest {
     @Test
     public void testIssueList() {
         Matcher<RecyclerView.ViewHolder> countryMatcher = getItemMatcher(currentLocale.getDefaultCountry().toLowerCase());
-        onView((withId(R.id.itemList))).perform(scrollToHolder(countryMatcher), actionOnHolderItem(countryMatcher, click()));
+        onView(withId(R.id.itemList)).perform(scrollToHolder(countryMatcher), actionOnHolderItem(countryMatcher, click()));
 
         Matcher<RecyclerView.ViewHolder> publicationMatcher = getItemMatcher(currentLocale.getDefaultPublication());
-        onView((withId(R.id.itemList))).perform(scrollToHolder(publicationMatcher), actionOnHolderItem(publicationMatcher, click()));
+        onView(withId(R.id.itemList)).perform(scrollToHolder(publicationMatcher), actionOnHolderItem(publicationMatcher, click()));
 
         onView(allOf(withId(R.id.addToCollectionByPhotoButton), forceFloatingActionButtonsVisible())).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible())).check(matches(isDisplayed()));

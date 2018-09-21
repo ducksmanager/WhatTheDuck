@@ -56,7 +56,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
             }
         }
 
-        if (TextUtils.isEmpty(WhatTheDuck.getUsername()) || (TextUtils.isEmpty(WhatTheDuck.getPassword()) && TextUtils.isEmpty(WhatTheDuck.getEncryptedPassword()))) {
+        if (TextUtils.isEmpty(WhatTheDuck.getUsername()) || TextUtils.isEmpty(WhatTheDuck.getPassword()) && TextUtils.isEmpty(WhatTheDuck.getEncryptedPassword())) {
             WhatTheDuck.wtd.alert(R.string.input_error,
                 R.string.input_error__empty_credentials);
             ProgressBar mProgressBar = wtdActivity.findViewById(R.id.progressBar);
