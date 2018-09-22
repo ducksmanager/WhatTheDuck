@@ -19,7 +19,7 @@ public class IssueList extends ItemList<Issue> {
         EDGE_VIEW,
     }
 
-    static ViewType viewType = ViewType.LIST_VIEW;
+    private static ViewType viewType = ViewType.LIST_VIEW;
 
     private boolean isLandscapeEdgeView() {
         int deviceOrientation = getResources().getConfiguration().orientation;
@@ -117,6 +117,7 @@ public class IssueList extends ItemList<Issue> {
                 : LinearLayoutManager.VERTICAL;
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this, listOrientation, false));
+            recyclerView.setTag(R.id.edges_to_load, issueList);
 
             return new IssueEdgeAdapter(this, issueList, recyclerView, deviceOrientation);
         }

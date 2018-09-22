@@ -17,6 +17,7 @@
     <string name="condition_none">Etat non spécifié</string>
     <string name="condition_notsogood">Etat moyen</string>
     <string name="confirmation_message__issue_inserted">Le numéro a été ajouté à votre collection</string>
+    <string name="country">Pays</string>
     <string name="cover_suggestion">Suggestion de couverture</string>
     <string name="create">Créer</string>
     <string name="edge_view">Bibliothèque</string>

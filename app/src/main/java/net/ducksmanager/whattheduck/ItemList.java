@@ -65,7 +65,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         loadList();
     }
 
-    protected void loadList() {
+    void loadList() {
         ((WhatTheDuckApplication) getApplication()).trackActivity(this);
 
         if (needsToDownloadFullList()) {
@@ -322,7 +322,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         this.show();
     }
 
-    protected void onBackFromAddIssueActivity() {
+    void onBackFromAddIssueActivity() {
         if (userHasItemsInCollectionForCurrent()) {
             goToAlternativeView(CollectionType.USER.toString());
         }

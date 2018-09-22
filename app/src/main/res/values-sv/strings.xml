@@ -16,6 +16,7 @@
     <string name="condition_none">Ospecificerat skick</string>
     <string name="condition_notsogood">Genomsnittligt skick</string>
     <string name="confirmation_message__issue_inserted">Utgåvan har lagts till i din samling</string>
+    <string name="country">Land</string>
     <string name="cover_suggestion">Framsideförslag</string>
     <string name="create">Skapa</string>
     <string name="email_address">E-mail</string>

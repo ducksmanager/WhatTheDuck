@@ -29,14 +29,14 @@ import java.util.Locale;
 
 public class AddIssue extends AppCompatActivity {
 
-    static HashMap<String,PurchaseAdapter.Purchase> purchases;
+    private static HashMap<String,PurchaseAdapter.Purchase> purchases;
 
     private static String selectedCondition = null;
     static String selectedPurchaseHash = null;
 
 
     private final Calendar myCalendar = Calendar.getInstance();
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,11 +107,11 @@ public class AddIssue extends AppCompatActivity {
         setTitle(getString(R.string.insert_issue__confirm, WhatTheDuck.getSelectedIssue()));
     }
 
-    void toggleAddPurchaseButton(Boolean toggle) {
+    private void toggleAddPurchaseButton(Boolean toggle) {
         findViewById(R.id.addpurchase).setEnabled(toggle);
     }
     
-    void showNewPurchase() {
+    private void showNewPurchase() {
         View newPurchaseSection = findViewById(R.id.newpurchase);
         EditText purchaseDateNew = findViewById(R.id.purchasedatenew);
         EditText purchaseTitleNew = findViewById(R.id.purchasetitlenew);
@@ -190,7 +190,7 @@ public class AddIssue extends AppCompatActivity {
         }
     }
 
-    void showPurchases(final Boolean checkNoPurchaseItem) {
+    private void showPurchases(final Boolean checkNoPurchaseItem) {
         final RecyclerView rv = findViewById(R.id.purchase_list);
         rv.setAdapter(new PurchaseAdapter(this, purchases));
         rv.setLayoutManager(new LinearLayoutManager(this));

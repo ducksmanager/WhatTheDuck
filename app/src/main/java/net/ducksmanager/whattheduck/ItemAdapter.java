@@ -23,7 +23,6 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
     final int resourceToInflate;
     private List<Item> items;
     private ArrayList<Item> filteredItems;
-    private ItemAdapter.ViewHolder viewHolder;
     final Activity originActivity;
     View v;
 
@@ -44,8 +43,7 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
     public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         v = LayoutInflater.from(originActivity).inflate(resourceToInflate, parent,false);
         v.setOnClickListener(getOnClickListener());
-        viewHolder = getViewHolder(v);
-        return viewHolder;
+        return getViewHolder(v);
     }
 
     protected abstract View.OnClickListener getOnClickListener();

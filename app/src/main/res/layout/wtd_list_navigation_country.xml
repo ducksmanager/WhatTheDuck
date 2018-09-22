@@ -23,7 +23,8 @@
             <ImageView
                 android:id="@+id/selectedBadgeImage"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"/>
+                android:layout_height="25dp"
+                android:contentDescription="@string/country"/>
             <TextView
                 android:id="@+id/selectedText"
                 android:layout_width="wrap_content"
