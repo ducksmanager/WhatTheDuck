@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -33,19 +32,13 @@ public class IssueEdgeAdapter extends ItemAdapter<Issue> {
         return null;
     }
 
-    class ViewHolder extends ItemAdapter.ViewHolder {
+    public class ViewHolder extends ItemAdapter.ViewHolder {
         final ImageView edgeImage;
 
         ViewHolder(View v) {
             super(v);
             edgeImage = v.findViewById(R.id.edgeimage);
         }
-    }
-
-    @NonNull
-    @Override
-    public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return super.onCreateViewHolder(parent, viewType);
     }
 
     @Override
@@ -71,14 +64,14 @@ public class IssueEdgeAdapter extends ItemAdapter<Issue> {
 
     @NonNull
     private String getEdgeUrl(Issue i) {
-        return WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL)
-            + "/edges/"
-            + WhatTheDuck.getSelectedCountry()
-            + "/gen/"
-            + WhatTheDuck.getSelectedPublication()
-            .replaceFirst("[^/]+/", "")
-            .replaceAll(" ", "")
-            + "." + i.getIssueNumber().replaceAll(" ", "") + ".png";
+        return String.format(
+            "%s/edges/%s/gen/%s.%s.png",
+            WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL),
+            WhatTheDuck.getSelectedCountry(),
+            WhatTheDuck.getSelectedPublication()
+                .replaceFirst("[^/]+/", "")
+                .replaceAll(" ", ""),
+            i.getIssueNumber().replaceAll(" ", ""));
     }
 
     @Override

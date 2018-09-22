@@ -60,7 +60,7 @@ class WtdTest extends AndroidJUnitRunner {
     }
 
     abstract static class LocaleWithDefaultPublication {
-        Locale locale;
+        final Locale locale;
 
         LocaleWithDefaultPublication(String country, String language) {
             this.locale = new Locale(language, country);
@@ -132,6 +132,10 @@ class WtdTest extends AndroidJUnitRunner {
         WhatTheDuckApplication.config.setProperty(
             WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL,
             mockServer.url("/dm-server/").toString()
+        );
+        WhatTheDuckApplication.config.setProperty(
+            WhatTheDuckApplication.CONFIG_KEY_EDGES_URL,
+            mockServer.url("/edges/").toString()
         );
     }
 

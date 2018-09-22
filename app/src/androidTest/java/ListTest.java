@@ -21,6 +21,7 @@ import static android.support.test.espresso.contrib.RecyclerViewActions.actionOn
 import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToHolder;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
 @RunWith(Parameterized.class)
@@ -51,9 +52,7 @@ public class ListTest extends WtdTest {
         onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
             .perform(click());
 
-        Matcher<RecyclerView.ViewHolder> countryMatcher = getItemMatcher(currentLocale.getDefaultCountry().toLowerCase());
-        onView(withId(R.id.itemList)).perform(scrollToHolder(countryMatcher), actionOnHolderItem(countryMatcher, click()));
-
+        goToPublicationListView(currentLocale.getDefaultCountry());
         assertCurrentActivityIsInstanceOf(PublicationList.class, true);
 
         ScreenshotTestRule.takeScreenshot("Select issue - Publication list", getActivityInstance(), getScreenshotPath());
@@ -61,17 +60,48 @@ public class ListTest extends WtdTest {
 
     @Test
     public void testIssueList() {
-        Matcher<RecyclerView.ViewHolder> countryMatcher = getItemMatcher(currentLocale.getDefaultCountry().toLowerCase());
-        onView(withId(R.id.itemList)).perform(scrollToHolder(countryMatcher), actionOnHolderItem(countryMatcher, click()));
+        goToPublicationListView(currentLocale.getDefaultCountry());
+        goToIssueListView(currentLocale.getDefaultPublication());
 
-        Matcher<RecyclerView.ViewHolder> publicationMatcher = getItemMatcher(currentLocale.getDefaultPublication());
-        onView(withId(R.id.itemList)).perform(scrollToHolder(publicationMatcher), actionOnHolderItem(publicationMatcher, click()));
+        assertCurrentActivityIsInstanceOf(IssueList.class, true);
 
         onView(allOf(withId(R.id.addToCollectionByPhotoButton), forceFloatingActionButtonsVisible())).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible())).check(matches(isDisplayed()));
 
-        assertCurrentActivityIsInstanceOf(IssueList.class, true);
         ScreenshotTestRule.takeScreenshot("Collection - Issue list", getActivityInstance(), getScreenshotPath());
+    }
+
+    @Test
+    public void testIssueListEdgeView() {
+        goToPublicationListView(currentLocale.getDefaultCountry());
+        goToIssueListView(currentLocale.getDefaultPublication());
+
+        onView(withId(R.id.switchView)).perform(click());
+
+        onView(withText(R.string.bookcaseViewTitle))
+            .check(matches(isDisplayed()));
+
+        onView(withText(R.string.ok)).perform(click());
+
+        assertCurrentActivityIsInstanceOf(IssueList.class, true);
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ScreenshotTestRule.takeScreenshot("Collection - Issue list (edge view)", getActivityInstance(), getScreenshotPath());
+    }
+
+    private void goToPublicationListView(String countryCode) {
+        Matcher<RecyclerView.ViewHolder> countryMatcher = getItemMatcher(countryCode.toLowerCase());
+        onView(withId(R.id.itemList)).perform(scrollToHolder(countryMatcher), actionOnHolderItem(countryMatcher, click()));
+    }
+
+    private void goToIssueListView(String publicationCode) {
+        Matcher<RecyclerView.ViewHolder> publicationMatcher = getItemMatcher(publicationCode);
+        onView(withId(R.id.itemList)).perform(scrollToHolder(publicationMatcher), actionOnHolderItem(publicationMatcher, click()));
     }
 
     private static Matcher<RecyclerView.ViewHolder> getItemMatcher(final String identifier) {

@@ -48,7 +48,7 @@ public class CoverSearchTest extends WtdTest {
 
     @Test
     public void testCoverFlowResults() {
-        CoverFlowFileHandler.mockedResource = mockServer.url("/internal/photos/2648").toString();
+        CoverFlowFileHandler.mockedResource = mockServer.url("/internal/covers/2648").toString();
 
         Intent resultData = new Intent();
         ActivityResult result = new ActivityResult(Activity.RESULT_OK, resultData);
@@ -61,6 +61,12 @@ public class CoverSearchTest extends WtdTest {
 
         intended(expectedIntent);
         Intents.release();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         ScreenshotTestRule.takeScreenshot("Cover search result", getActivityInstance(), getScreenshotPath());
 

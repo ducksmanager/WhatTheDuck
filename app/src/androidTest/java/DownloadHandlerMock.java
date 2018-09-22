@@ -1,4 +1,5 @@
 import android.net.UrlQuerySanitizer;
+import android.text.TextUtils;
 
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
@@ -19,7 +20,7 @@ class DownloadHandlerMock {
     public static final String TEST_USER = "demotestuser";
     public static final String TEST_PASS = "demotestpass";
 
-    private static HashMap<String, Boolean> state = new HashMap<>();
+    static final HashMap<String, Boolean> state = new HashMap<>();
     static {
         state.put("hasNewPurchase", false);
     }
@@ -35,6 +36,9 @@ class DownloadHandlerMock {
             else if (request.getPath().contains("/dm-server/")) {
                 return dispatchForDmServer(request);
             }
+            else if (request.getPath().contains("/edges/")) {
+                return dispatchForEdges(request);
+            }
             else {
                 return dispatchForDm(request);
             }
@@ -43,7 +47,7 @@ class DownloadHandlerMock {
         // Mocks that are internal to tests (photo mocks for instance)
         private MockResponse dispatchForInternal(RecordedRequest request) {
             List<String> parts = Arrays.asList(request.getPath().split("/"));
-            if (parts.contains("photos")) {
+            if (parts.contains("covers")) {
                 return new MockResponse().setBody(getImageFixture("covers/" + parts.get(parts.size()-1)));
             }
             return new MockResponse().setStatus("404");
@@ -54,6 +58,12 @@ class DownloadHandlerMock {
                 return new MockResponse().setBody(WtdTest.mockServer.url("/dm-server/").toString());
             }
             return new MockResponse().setStatus("404");
+        }
+        private MockResponse dispatchForEdges(RecordedRequest request) {
+            List<String> parts = Arrays.asList(request.getPath().split("/"));
+            return new MockResponse().setBody(getImageFixture(
+                "edges/" + TextUtils.join("/", parts.subList(4, parts.size())),
+                null));
         }
 
         private MockResponse dispatchForDmServer(RecordedRequest request) {
@@ -108,14 +118,18 @@ class DownloadHandlerMock {
         return getJsonFixture(name + "/" + WtdTest.currentLocale.getLocale().getLanguage());
     }
 
-    private static Buffer getImageFixture(String name) {
+    private static Buffer getImageFixture(String name, String extension) {
         Buffer buffer = new Buffer();
         try {
-            buffer.writeAll(Okio.source(openPathAsStream("fixtures/" + name + ".jpg")));
+            buffer.writeAll(Okio.source(openPathAsStream(String.format("fixtures/%s%s", name, extension == null ? "" : "." + extension))));
         } catch (IOException e) {
             e.printStackTrace();
         }
         return buffer;
+    }
+
+    private static Buffer getImageFixture(String name) {
+        return getImageFixture(name, "jpg");
     }
 
     private static InputStream openPathAsStream(String path) {
