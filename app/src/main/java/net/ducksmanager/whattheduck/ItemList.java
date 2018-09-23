@@ -33,6 +33,8 @@ import net.ducksmanager.whattheduck.Collection.CollectionType;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
+import static android.view.View.GONE;
+
 public abstract class ItemList<Item> extends AppCompatActivity {
     public static String type = CollectionType.USER.toString();
     private static final int MIN_ITEM_NUMBER_FOR_FILTER = 20;
@@ -118,14 +120,13 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             return;
         }
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if (shouldShowToolbar()) {
-            Toolbar toolbar = findViewById(R.id.toolbar);
+            toolbar.setVisibility(View.VISIBLE);
             setSupportActionBar(toolbar);
         }
         else {
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().hide();
-            }
+            toolbar.setVisibility(GONE);
         }
 
         if (shouldShowNavigation()) {
@@ -140,7 +141,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             if (addToCollection != null) {
                 addToCollection.setMenuButtonColorNormalResId(R.color.holo_green_dark);
                 addToCollection.setMenuButtonColorPressedResId(R.color.holo_green_dark);
-                addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
+                addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : GONE);
                 addToCollection.close(false);
 
                 if (type.equals(CollectionType.USER.toString())) {
@@ -151,7 +152,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
                     FloatingActionButton addToCollectionBySelectionButton = this.findViewById(R.id.addToCollectionBySelectionButton);
                     addToCollectionBySelectionButton.setOnClickListener(view -> {
-                        addToCollection.setVisibility(View.GONE);
+                        addToCollection.setVisibility(GONE);
                         ItemList.this.goToAlternativeView(CollectionType.COA.toString());
                     });
 
@@ -160,7 +161,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             }
         }
         else {
-            addToCollection.setVisibility(View.GONE);
+            addToCollection.setVisibility(GONE);
         }
 
         ItemAdapter<Item> itemAdapter = getItemAdapter();
@@ -192,7 +193,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
                     }
                 });
             } else {
-                filterEditText.setVisibility(EditText.GONE);
+                filterEditText.setVisibility(GONE);
             }
         }
 
@@ -221,7 +222,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            this.findViewById(R.id.addToCollectionWrapper).setVisibility(View.GONE);
+            this.findViewById(R.id.addToCollectionWrapper).setVisibility(GONE);
             this.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
 
             CoverFlowFileHandler.current.resizeUntilFileSize(this, new CoverFlowFileHandler.TransformationCallback() {
@@ -233,7 +234,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
                 @Override
                 public void onFail() {
                     ItemList.this.findViewById(R.id.addToCollectionWrapper).setVisibility(View.VISIBLE);
-                    ItemList.this.findViewById(R.id.progressBar).setVisibility(View.GONE);
+                    ItemList.this.findViewById(R.id.progressBar).setVisibility(GONE);
                 }
             });
         }
@@ -279,7 +280,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
     }
 
     private void hideNavigation() {
-        this.findViewById(R.id.navigation).setVisibility(View.GONE);
+        this.findViewById(R.id.navigation).setVisibility(GONE);
     }
 
     private void setNavigation(String selectedCountry, String selectedPublication) {
@@ -288,7 +289,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         final View publicationNavigationView = this.findViewById(R.id.navigationPublication);
 
         if (generalNavigationView != null) {
-            generalNavigationView.setVisibility(selectedCountry == null ? View.GONE : View.VISIBLE);
+            generalNavigationView.setVisibility(selectedCountry == null ? GONE : View.VISIBLE);
             publicationNavigationView.setVisibility(selectedPublication == null ? View.INVISIBLE : View.VISIBLE);
 
             if (selectedCountry != null) {
