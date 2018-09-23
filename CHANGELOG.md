@@ -1,3 +1,7 @@
+Version 1.8.0
+
+    Add bookcase view on issue lists
+
 Version 1.7.5
 
     Improve error handling
