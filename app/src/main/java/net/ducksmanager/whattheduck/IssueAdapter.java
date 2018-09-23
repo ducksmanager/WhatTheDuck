@@ -3,6 +3,7 @@ package net.ducksmanager.whattheduck;
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import net.ducksmanager.retrievetasks.GetPurchaseList;
 
@@ -26,7 +27,7 @@ public class IssueAdapter extends ItemAdapter<Issue> {
             if (ItemList.type.equals(Collection.CollectionType.COA.toString())) {
                 final Issue selectedIssue = IssueAdapter.this.getItem(position);
                 if (WhatTheDuck.userCollection.getIssue(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), selectedIssue.getIssueNumber()) != null) {
-                    WhatTheDuck.wtd.info(new WeakReference<>(IssueAdapter.this.getOriginActivity()), R.string.input_error__issue_already_possessed);
+                    WhatTheDuck.wtd.info(new WeakReference<>(IssueAdapter.this.getOriginActivity()), R.string.input_error__issue_already_possessed, Toast.LENGTH_SHORT);
                 } else {
                     WhatTheDuck.wtd.toggleProgressbarLoading(new WeakReference<>(IssueAdapter.this.getOriginActivity()), true);
                     WhatTheDuck.setSelectedIssue(selectedIssue.getIssueNumber());

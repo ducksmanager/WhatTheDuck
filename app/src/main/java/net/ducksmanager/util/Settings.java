@@ -27,6 +27,7 @@ public class Settings {
 
     public static final String MESSAGE_KEY_WELCOME = "welcome_message";
     public static final String MESSAGE_KEY_DATA_CONSUMPTION = "data_consumption";
+    public static final String MESSAGE_KEY_WELCOME_BOOKCASE_VIEW_LANDSCAPE = "welcome_bookcase_view";
 
     public static void loadUserSettings() {
         Properties props=new Properties();
@@ -79,7 +80,7 @@ public class Settings {
         Settings.username = username;
     }
 
-    public static Boolean getRememberCredentials() {
+    private static Boolean getRememberCredentials() {
         return rememberCredentials;
     }
 

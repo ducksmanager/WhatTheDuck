@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.R;
@@ -82,7 +83,7 @@ public class Signup extends Activity {
                         usernameField.setText(Settings.getUsername());
                         passwordField.setText(Settings.getPassword());
 
-                        WhatTheDuck.wtd.info(originActivityRef, R.string.signup__confirm);
+                        WhatTheDuck.wtd.info(originActivityRef, R.string.signup__confirm, Toast.LENGTH_SHORT);
                     } else {
                         WhatTheDuck.wtd.alert(originActivityRef, response);
                     }

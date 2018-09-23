@@ -9,11 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import net.ducksmanager.inducks.coa.IssueListing;
 import net.ducksmanager.util.DraggableRelativeLayout;
 import net.ducksmanager.util.Settings;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class IssueList extends ItemList<Issue> {
@@ -121,6 +123,12 @@ public class IssueList extends ItemList<Issue> {
             int listOrientation = deviceOrientation == Configuration.ORIENTATION_LANDSCAPE
                 ? LinearLayoutManager.HORIZONTAL
                 : LinearLayoutManager.VERTICAL;
+
+            if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW_LANDSCAPE)
+             && listOrientation == LinearLayoutManager.VERTICAL) {
+                WhatTheDuck.wtd.info(new WeakReference<>(this), R.string.welcomeBookcaseViewPortrait, Toast.LENGTH_LONG);
+                Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW_LANDSCAPE);
+            }
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this, listOrientation, false));
 

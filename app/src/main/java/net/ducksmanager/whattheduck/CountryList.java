@@ -4,8 +4,11 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 
 import net.ducksmanager.inducks.coa.CountryListing;
+import net.ducksmanager.util.ReleaseNotes;
 import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
+
+import java.lang.ref.WeakReference;
 
 public class CountryList extends ItemList<CountryAdapter.Country> {
 
@@ -29,11 +32,18 @@ public class CountryList extends ItemList<CountryAdapter.Country> {
             AlertDialog.Builder builder = new AlertDialog.Builder(CountryList.this);
             builder.setTitle(getString(R.string.welcomeTitle));
             builder.setMessage(getString(R.string.welcomeMessage));
-            builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss());
+            builder.setPositiveButton(R.string.ok, (dialogInterface, which) -> {
+                ReleaseNotes.current.showOnVersionUpdate(new WeakReference<>(CountryList.this));
+                dialogInterface.dismiss();
+            });
             Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME);
             Settings.saveSettings();
             builder.create().show();
         }
+        else {
+            ReleaseNotes.current.showOnVersionUpdate(new WeakReference<>(this));
+        }
+
 
         WhatTheDuck.setSelectedCountry(null);
         WhatTheDuck.setSelectedPublication(null);

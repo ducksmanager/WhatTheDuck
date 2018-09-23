@@ -2,6 +2,7 @@ package net.ducksmanager.retrievetasks;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.widget.Toast;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
@@ -44,7 +45,7 @@ public class AddIssue extends RetrieveTask {
     protected void onPostExecute(String response) {
         trackEvent("addissue/finish");
         if (response.equals("OK")) {
-            WhatTheDuck.wtd.info(originActivityRef, R.string.confirmation_message__issue_inserted);
+            WhatTheDuck.wtd.info(originActivityRef, R.string.confirmation_message__issue_inserted, Toast.LENGTH_SHORT);
             WhatTheDuck.userCollection.addIssue(shortCountryAndPublication, selectedIssue);
 
             updateNamesAndGoToIssueList();

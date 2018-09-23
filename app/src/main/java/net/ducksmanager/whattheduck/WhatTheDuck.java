@@ -127,8 +127,8 @@ public class WhatTheDuck extends Activity {
         }
     }
 
-    public void info(WeakReference<Activity> activity, int titleId) {
-        Toast.makeText(activity.get(), titleId, Toast.LENGTH_SHORT).show();
+    public void info(WeakReference<Activity> activity, int titleId, int duration) {
+        Toast.makeText(activity.get(), titleId, duration).show();
     }
 
     public void alert(int messageId) {

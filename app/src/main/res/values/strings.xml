@@ -45,6 +45,8 @@
     <string name="my_collection">My collection</string>
     <string name="network_error">Network error</string>
     <string name="network_error__no_connection">Network issue: please check your Internet connection</string>
+    <string name="newFeature">New features in the WhatTheDuck app</string>
+    <string name="newFeatures18Text">You can now see your issue lists as they are on the bookcase !\n\nWhen in a issue list view, tap on the bookcase icon to switch to the bookcase view.</string>
     <string name="no_issue">No issue in this list.</string>
     <string name="no_purchase_date">No purchase date</string>
     <string name="ok">OK</string>
@@ -60,6 +62,7 @@
     <string name="signup_end">Finish signup</string>
     <string name="username">Username</string>
     <string name="version">What The Duck version</string>
+    <string name="welcomeBookcaseViewPortrait">Welcome to the bookcase view! Rotate your screen to landscape for the best effect ;-)</string>
     <string name="welcomeMessage">Your DucksManager collection is displayed when you open What The Duck. Tap on a country to view the publications that you possess, or tap on \"+\" to add an issue to your collection.</string>
     <string name="welcomeTitle">Welcome on What The Duck!</string>
 </resources>
