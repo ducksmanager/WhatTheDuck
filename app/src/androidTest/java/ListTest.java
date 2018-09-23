@@ -2,10 +2,12 @@ import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.filters.LargeTest;
 import android.support.v7.widget.RecyclerView;
 
+import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.IssueList;
 import net.ducksmanager.whattheduck.ItemAdapter;
 import net.ducksmanager.whattheduck.PublicationList;
 import net.ducksmanager.whattheduck.R;
+import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -39,6 +41,9 @@ public class ListTest extends WtdTest {
     @Before
     public void switchLocaleAndLogin() {
         switchLocale();
+        WhatTheDuck.wtd.deleteFile(Settings.USER_SETTINGS);
+        Settings.loadUserSettings(); // Reset settings
+        Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME);
         login(DownloadHandlerMock.TEST_USER, DownloadHandlerMock.TEST_PASS);
     }
 

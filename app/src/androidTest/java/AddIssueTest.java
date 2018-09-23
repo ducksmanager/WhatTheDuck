@@ -52,7 +52,7 @@ public class AddIssueTest extends WtdTest {
         assertCurrentActivityIsInstanceOf(IssueList.class, true);
         onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
             .perform(click());
-        onView(withText("1")).perform(ViewActions.click());
+        onView(withText("6")).perform(ViewActions.click());
 
         assertCurrentActivityIsInstanceOf(AddIssue.class, true);
 

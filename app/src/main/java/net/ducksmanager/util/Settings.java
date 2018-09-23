@@ -21,9 +21,9 @@ public class Settings {
     public static String USER_SETTINGS = "settings.properties";
     public static String username = null;
     public static String password = null;
-    private static Boolean rememberCredentials = null;
+    private static Boolean rememberCredentials = false;
     public static String encryptedPassword = null;
-    private static Set<String> messagesAlreadyShown;
+    private static Set<String> messagesAlreadyShown = new HashSet<>();
 
     public static final String MESSAGE_KEY_WELCOME = "welcome_message";
     public static final String MESSAGE_KEY_DATA_CONSUMPTION = "data_consumption";
@@ -40,7 +40,8 @@ public class Settings {
             setRememberCredentials(true);
             inputStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("No user settings found");
+            messagesAlreadyShown = new HashSet<>();
         }
     }
 
