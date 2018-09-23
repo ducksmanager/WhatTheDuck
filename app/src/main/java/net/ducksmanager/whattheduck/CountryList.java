@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 
 import net.ducksmanager.inducks.coa.CountryListing;
+import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 public class CountryList extends ItemList<CountryAdapter.Country> {
@@ -24,13 +25,13 @@ public class CountryList extends ItemList<CountryAdapter.Country> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (WhatTheDuck.getShowWelcomeMessage()) {
+        if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_WELCOME)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(CountryList.this);
             builder.setTitle(getString(R.string.welcomeTitle));
             builder.setMessage(getString(R.string.welcomeMessage));
             builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss());
-            WhatTheDuck.setShowWelcomeMessage(false);
-            WhatTheDuck.saveSettings(null);
+            Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME);
+            Settings.saveSettings();
             builder.create().show();
         }
 

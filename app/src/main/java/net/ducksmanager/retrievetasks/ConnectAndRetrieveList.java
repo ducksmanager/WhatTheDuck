@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 
 import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
+import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.Collection;
 import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.Issue;
@@ -46,17 +47,17 @@ public class ConnectAndRetrieveList extends RetrieveTask {
         trackEvent("retrievecollection/start");
 
         if (this.fromUI) {
-            if (WhatTheDuck.getUsername() == null
-                || !WhatTheDuck.getUsername().equals(((EditText) wtdActivity.findViewById(R.id.username)).getText().toString())
-                || WhatTheDuck.getEncryptedPassword() == null) {
+            if (Settings.getUsername() == null
+                || !Settings.getUsername().equals(((EditText) wtdActivity.findViewById(R.id.username)).getText().toString())
+                || Settings.getEncryptedPassword() == null) {
 
-                WhatTheDuck.setUsername(((EditText) wtdActivity.findViewById(R.id.username)).getText().toString());
-                WhatTheDuck.setPassword(((EditText) wtdActivity.findViewById(R.id.password)).getText().toString());
-                WhatTheDuck.setRememberCredentials(((CheckBox) wtdActivity.findViewById(R.id.checkBoxRememberCredentials)).isChecked());
+                Settings.setUsername(((EditText) wtdActivity.findViewById(R.id.username)).getText().toString());
+                Settings.setPassword(((EditText) wtdActivity.findViewById(R.id.password)).getText().toString());
+                Settings.setRememberCredentials(((CheckBox) wtdActivity.findViewById(R.id.checkBoxRememberCredentials)).isChecked());
             }
         }
 
-        if (TextUtils.isEmpty(WhatTheDuck.getUsername()) || TextUtils.isEmpty(WhatTheDuck.getPassword()) && TextUtils.isEmpty(WhatTheDuck.getEncryptedPassword())) {
+        if (TextUtils.isEmpty(Settings.getUsername()) || TextUtils.isEmpty(Settings.getPassword()) && TextUtils.isEmpty(Settings.getEncryptedPassword())) {
             WhatTheDuck.wtd.alert(R.string.input_error,
                 R.string.input_error__empty_credentials);
             ProgressBar mProgressBar = wtdActivity.findViewById(R.id.progressBar);
@@ -83,7 +84,7 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                 return;
             }
 
-            WhatTheDuck.saveSettings(WhatTheDuck.getRememberCredentials());
+            Settings.saveSettings();
 
             JSONObject object = new JSONObject(response);
             try {

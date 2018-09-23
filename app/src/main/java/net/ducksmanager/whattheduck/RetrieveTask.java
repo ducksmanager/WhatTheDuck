@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 
 import com.koushikdutta.async.future.FutureCallback;
 
+import net.ducksmanager.util.Settings;
+
 import org.json.JSONException;
 
 import java.io.BufferedReader;
@@ -100,8 +102,8 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
             WhatTheDuck.wtd.alert(
                 R.string.input_error,
                 R.string.input_error__invalid_credentials, "");
-            WhatTheDuck.setUsername("");
-            WhatTheDuck.setPassword("");
+            Settings.setUsername("");
+            Settings.setPassword("");
         }
         else if (e instanceof PackageManager.NameNotFoundException) {
             e.printStackTrace();

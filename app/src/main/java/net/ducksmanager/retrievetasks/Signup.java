@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
+import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
@@ -29,21 +30,27 @@ public class Signup extends Activity {
         
         setTitle(R.string.app_name);
 
-        ((EditText) Signup.this.findViewById(R.id.username_signup)).setText(WhatTheDuck.getUsername());
-        ((EditText) Signup.this.findViewById(R.id.password_signup)).setText(WhatTheDuck.getPassword());
+        EditText usernameField = findViewById(R.id.username_signup);
+        EditText passwordField = findViewById(R.id.password_signup);
+        EditText passwordConfirmationField = findViewById(R.id.password_confirmation);
+        EditText emailField = findViewById(R.id.email_address);
 
         Button endSignupButton = findViewById(R.id.end_signup);
-        endSignupButton.setOnClickListener(view -> {
-            WhatTheDuck.setUsername(((EditText) Signup.this.findViewById(R.id.username_signup)).getText().toString());
-            WhatTheDuck.setPassword(((EditText) Signup.this.findViewById(R.id.password_signup)).getText().toString());
+        Button cancelSignupButton = findViewById(R.id.cancel_signup);
 
-            String password2 = WhatTheDuck.toSHA1(((EditText) Signup.this.findViewById(R.id.password_confirmation)).getText().toString());
-            String email = ((EditText) Signup.this.findViewById(R.id.email_address)).getText().toString();
+        usernameField.setText(Settings.getUsername());
+        passwordField.setText(Settings.getPassword());
+
+        endSignupButton.setOnClickListener(view -> {
+            Settings.setUsername(usernameField.getText().toString());
+            Settings.setPassword(passwordField.getText().toString());
+
+            String password2 = Settings.toSHA1(passwordConfirmationField.getText().toString());
+            String email = emailField.getText().toString();
 
             new ConnectAndRetrieveList(Signup.this, "&action=signup&mdp_user2="+password2+"&email="+email).execute();
         });
         
-        Button cancelSignupButton = findViewById(R.id.cancel_signup);
         cancelSignupButton.setOnClickListener(view -> {
             Intent i = new Intent(Signup.this, WhatTheDuck.class);
             Signup.this.startActivity(i);
@@ -69,8 +76,12 @@ public class Signup extends Activity {
                         Activity originActivity = originActivityRef.get();
                         Intent i = new Intent(originActivity, WhatTheDuck.class);
                         WhatTheDuck.wtd.startActivity(i);
-                        ((EditText) WhatTheDuck.wtd.findViewById(R.id.username)).setText(WhatTheDuck.getUsername());
-                        ((EditText) WhatTheDuck.wtd.findViewById(R.id.password)).setText(WhatTheDuck.getPassword());
+
+                        EditText usernameField = WhatTheDuck.wtd.findViewById(R.id.username);
+                        EditText passwordField = WhatTheDuck.wtd.findViewById(R.id.password);
+                        usernameField.setText(Settings.getUsername());
+                        passwordField.setText(Settings.getPassword());
+
                         WhatTheDuck.wtd.info(originActivityRef, R.string.signup__confirm);
                     } else {
                         WhatTheDuck.wtd.alert(originActivityRef, response);

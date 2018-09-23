@@ -28,6 +28,7 @@ import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.retrievetasks.CoverSearch;
 import net.ducksmanager.util.CoverFlowFileHandler;
+import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.io.File;
@@ -156,7 +157,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
                         ItemList.this.goToAlternativeView(CollectionType.COA.toString());
                     });
 
-                    WhatTheDuck.saveSettings(null);
+                    Settings.saveSettings();
                 }
             }
         }
@@ -254,9 +255,9 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             case R.id.action_logout:
                 WhatTheDuck.userCollection = new Collection();
                 WhatTheDuck.coaCollection = new Collection();
-                WhatTheDuck.setUsername(null);
-                WhatTheDuck.setPassword(null);
-                WhatTheDuck.saveSettings(false);
+                Settings.setUsername(null);
+                Settings.setPassword(null);
+                Settings.saveSettings();
                 i = new Intent(WhatTheDuck.wtd, WhatTheDuck.class);
 
                 break;

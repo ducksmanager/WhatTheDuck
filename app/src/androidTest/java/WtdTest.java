@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.github.clans.fab.FloatingActionButton;
 
+import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
@@ -98,7 +99,7 @@ class WtdTest extends AndroidJUnitRunner {
 
     @BeforeClass
     public static void overrideUserSettingsPath() {
-        WhatTheDuck.USER_SETTINGS = "settings_test.properties";
+        Settings.USER_SETTINGS = "settings_test.properties";
     }
 
     @BeforeClass

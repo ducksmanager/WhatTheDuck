@@ -12,10 +12,12 @@ import android.widget.Switch;
 
 import net.ducksmanager.inducks.coa.IssueListing;
 import net.ducksmanager.util.DraggableRelativeLayout;
+import net.ducksmanager.util.Settings;
 
 import java.util.ArrayList;
 
 public class IssueList extends ItemList<Issue> {
+
     enum ViewType {
         LIST_VIEW,
         EDGE_VIEW,
@@ -82,7 +84,7 @@ public class IssueList extends ItemList<Issue> {
             switchView.setChecked(viewType.equals(ViewType.EDGE_VIEW));
             switchView.setOnClickListener(view -> {
                 if (switchView.isChecked()) {
-                    if (WhatTheDuck.showDataConsumptionMessage && WhatTheDuck.isMobileConnection()) {
+                    if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_DATA_CONSUMPTION) && WhatTheDuck.isMobileConnection()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(IssueList.this);
                         builder.setTitle(getString(R.string.bookcaseViewTitle));
                         builder.setMessage(getString(R.string.bookcaseViewMessage));
@@ -91,7 +93,7 @@ public class IssueList extends ItemList<Issue> {
                             dialogInterface.dismiss();
                         });
                         builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-                            WhatTheDuck.showDataConsumptionMessage = false;
+                            Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_DATA_CONSUMPTION);
                             dialogInterface.dismiss();
                             switchBetweenViews();
                         });

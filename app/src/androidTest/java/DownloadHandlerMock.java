@@ -1,6 +1,7 @@
 import android.net.UrlQuerySanitizer;
 import android.text.TextUtils;
 
+import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import java.io.IOException;
@@ -98,7 +99,7 @@ class DownloadHandlerMock {
                     if (sanitizer.hasParameter("get_achats")) {
                         return new MockResponse().setBody(getJsonFixture(state.get("hasNewPurchase") ? "dm/purchasesWithNew" : "dm/purchases"));
                     }
-                    if (sanitizer.getValue("mdp_user").equals(WhatTheDuck.toSHA1(TEST_PASS))) {
+                    if (sanitizer.getValue("mdp_user").equals(Settings.toSHA1(TEST_PASS))) {
                         return new MockResponse().setBody(getLocalizedJsonFixture("dm/collection"));
                     }
                     break;

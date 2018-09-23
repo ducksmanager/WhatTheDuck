@@ -5,6 +5,8 @@ import android.app.Application;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 
+import net.ducksmanager.util.Settings;
+
 import org.piwik.sdk.Piwik;
 import org.piwik.sdk.Tracker;
 import org.piwik.sdk.TrackerConfig;
@@ -69,7 +71,7 @@ public class WhatTheDuckApplication extends Application {
     public void trackActivity(Activity activity) {
         TrackHelper t = TrackHelper.track();
 
-        String username = WhatTheDuck.getUsername();
+        String username = Settings.getUsername();
         if (username != null) {
             t.dimension(CONFIG_PIWIK_DIMENSION_USER, username);
             try {

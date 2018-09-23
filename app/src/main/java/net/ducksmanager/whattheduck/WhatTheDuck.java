@@ -30,18 +30,13 @@ import com.koushikdutta.ion.builder.Builders.Any.B;
 
 import net.ducksmanager.retrievetasks.ConnectAndRetrieveList;
 import net.ducksmanager.retrievetasks.Signup;
+import net.ducksmanager.util.Settings;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Formatter;
 import java.util.Locale;
-import java.util.Properties;
 
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_DM_URL;
@@ -52,16 +47,7 @@ public class WhatTheDuck extends Activity {
     @VisibleForTesting
     public static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
 
-    public static String USER_SETTINGS = "settings.properties";
-
     private static String serverURL;
-
-    private static String username = null;
-    private static String password = null;
-    private static Boolean rememberCredentials = null;
-    private static String encryptedPassword = null;
-    private static Boolean showWelcomeMessage = true;
-    static Boolean showDataConsumptionMessage = true;
 
     public static WhatTheDuck wtd;
 
@@ -78,9 +64,9 @@ public class WhatTheDuck extends Activity {
         super.onCreate(savedInstanceState);
         ((WhatTheDuckApplication) getApplication()).trackActivity(this);
 
-        loadUserSettings();
+        Settings.loadUserSettings();
 
-        String encryptedPassword = getEncryptedPassword();
+        String encryptedPassword = Settings.getEncryptedPassword();
 
         if (encryptedPassword != null) {
             new ConnectAndRetrieveList(false).execute();
@@ -92,10 +78,10 @@ public class WhatTheDuck extends Activity {
 
     public void initUI() {
         setContentView(R.layout.whattheduck);
-        ((CheckBox) findViewById(R.id.checkBoxRememberCredentials)).setChecked(username != null);
+        ((CheckBox) findViewById(R.id.checkBoxRememberCredentials)).setChecked(Settings.username != null);
 
         EditText usernameEditText = findViewById(R.id.username);
-        usernameEditText.setText(username);
+        usernameEditText.setText(Settings.username);
         usernameEditText.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
@@ -110,8 +96,8 @@ public class WhatTheDuck extends Activity {
 
         Button signupButton = findViewById(R.id.end_signup);
         signupButton.setOnClickListener(view -> {
-            WhatTheDuck.setUsername(((EditText) WhatTheDuck.this.findViewById(R.id.username)).getText().toString());
-            WhatTheDuck.setPassword(((EditText) WhatTheDuck.this.findViewById(R.id.password)).getText().toString());
+            Settings.setUsername(((EditText) WhatTheDuck.this.findViewById(R.id.username)).getText().toString());
+            Settings.setPassword(((EditText) WhatTheDuck.this.findViewById(R.id.password)).getText().toString());
 
             wtd.startActivity(new Intent(wtd, Signup.class));
         });
@@ -178,119 +164,15 @@ public class WhatTheDuck extends Activity {
         alert(new WeakReference<>(this), titleId, messageId, "");
     }
 
-    private static void loadUserSettings() {
-        Properties props=new Properties();
-        InputStream inputStream;
-        try {
-            inputStream = wtd.openFileInput(USER_SETTINGS);
-            props.load(inputStream);
-            setUsername((String)props.get("username"));
-            setEncryptedPassword((String)props.get("password"));
-            setShowWelcomeMessage(props.get("showWelcomeMessage") == null || props.get("showWelcomeMessage").equals("true"));
-            setRememberCredentials(true);
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void saveSettings(Boolean withCredentials) {
-        Properties props=new Properties();
-
-        InputStream inputStream;
-        try {
-            inputStream = wtd.openFileInput(USER_SETTINGS);
-            props.load(inputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (withCredentials != null) {
-            if (withCredentials.equals(Boolean.TRUE)) {
-                props.put("username", getUsername());
-                props.put("password", getEncryptedPassword());
-            } else {
-                props.remove("username");
-                props.remove("password");
-            }
-        }
-
-        props.put("showWelcomeMessage", getShowWelcomeMessage().toString());
-        FileOutputStream outputStream;
-        try {
-            outputStream = wtd.openFileOutput(USER_SETTINGS, MODE_PRIVATE);
-            props.store(outputStream, "");
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static String getUsername() {
-        return username;
-    }
-
-    public static void setUsername(String username) {
-        WhatTheDuck.username = username;
-    }
-
-    public static Boolean getRememberCredentials() {
-        return rememberCredentials;
-    }
-
-    public static void setRememberCredentials(Boolean rememberCredentials) {
-        WhatTheDuck.rememberCredentials = rememberCredentials;
-    }
-
-    public static String getPassword() {
-        return password;
-    }
-
-    public static void setPassword(String password) {
-        WhatTheDuck.password = password;
-        if (password == null) {
-            setEncryptedPassword(null);
-        }
-        else {
-            setEncryptedPassword(toSHA1(password));
-        }
-    }
-
-    public static String getEncryptedPassword() {
-        return encryptedPassword;
-    }
-
-    private static void setEncryptedPassword(String encryptedPassword) {
-        WhatTheDuck.encryptedPassword = encryptedPassword;
-    }
-
-    public static Boolean getShowWelcomeMessage() {
-        return showWelcomeMessage;
-    }
-
-    public static void setShowWelcomeMessage(Boolean showWelcomeMessage) {
-        WhatTheDuck.showWelcomeMessage = showWelcomeMessage;
-    }
-
-    private static String byteArray2Hex(byte[] hash) {
-        Formatter formatter = new Formatter();
-        for (byte b : hash) {
-            formatter.format("%02x", b);
-        }
-        String hex = formatter.toString();
-        formatter.close();
-        return hex;
-    }
-
     public void retrieveOrFailDmServer(String urlSuffix, FutureCallback<String> futureCallback, String fileName, File file) throws Exception {
         if (isOffline()) {
             throw new Exception(getString(R.string.network_error));
         }
 
-        if (getEncryptedPassword() == null) {
+        if (Settings.getEncryptedPassword() == null) {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update(getPassword().getBytes());
-            setEncryptedPassword(byteArray2Hex(md.digest()));
+            md.update(Settings.getPassword().getBytes());
+            Settings.setEncryptedPassword(Settings.byteArray2Hex(md.digest()));
         }
 
         urlSuffix = urlSuffix.replaceAll("\\{locale\\}", getApplicationContext().getResources().getConfiguration().locale.getLanguage());
@@ -311,10 +193,10 @@ public class WhatTheDuck extends Activity {
             throw new Exception(""+R.string.network_error);
         }
 
-        if (getEncryptedPassword() == null) {
+        if (Settings.getEncryptedPassword() == null) {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update(getPassword().getBytes());
-            setEncryptedPassword(byteArray2Hex(md.digest()));
+            md.update(Settings.getPassword().getBytes());
+            Settings.setEncryptedPassword(Settings.byteArray2Hex(md.digest()));
         }
 
         if (serverURL == null) {
@@ -322,8 +204,8 @@ public class WhatTheDuck extends Activity {
         }
 
         String response = downloadHandler.getPage(serverURL+"/"+SERVER_PAGE
-                                      + "?pseudo_user="+URLEncoder.encode(username, "UTF-8")
-                                      + "&mdp_user="+encryptedPassword
+                                      + "?pseudo_user="+URLEncoder.encode(Settings.username, "UTF-8")
+                                      + "&mdp_user="+ Settings.encryptedPassword
                                       + "&mdp="+ WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_SECURITY_PASSWORD)
                                       + "&version="+getApplicationVersion()
                                       + "&language="+ Locale.getDefault().getLanguage()
@@ -365,19 +247,6 @@ public class WhatTheDuck extends Activity {
         PackageManager manager = this.getPackageManager();
         PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
         return info.versionName;
-    }
-
-    public static String toSHA1(String text) {
-        try {
-                MessageDigest md = MessageDigest.getInstance("SHA-1");
-                md.update(text.getBytes());
-                return byteArray2Hex(md.digest());
-        }
-        catch (NoSuchAlgorithmException e) {
-                WhatTheDuck.wtd.alert(R.string.internal_error,
-                                   R.string.internal_error__crypting_failed);
-                return "";
-        }
     }
 
     public static String getSelectedCountry() {
