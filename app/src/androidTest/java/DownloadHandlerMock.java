@@ -21,7 +21,7 @@ class DownloadHandlerMock {
     public static final String TEST_USER = "demotestuser";
     public static final String TEST_PASS = "demotestpass";
 
-    static final HashMap<String, Boolean> state = new HashMap<>();
+    static final HashMap<String, Object> state = new HashMap<>();
     static {
         state.put("hasNewPurchase", false);
     }
@@ -97,7 +97,7 @@ class DownloadHandlerMock {
                         return new MockResponse().setBody("OK");
                     }
                     if (sanitizer.hasParameter("get_achats")) {
-                        return new MockResponse().setBody(getJsonFixture(state.get("hasNewPurchase") ? "dm/purchasesWithNew" : "dm/purchases"));
+                        return new MockResponse().setBody(getJsonFixture((Boolean) state.get("hasNewPurchase") ? "dm/purchasesWithNew" : "dm/purchases"));
                     }
                     if (sanitizer.getValue("mdp_user").equals(Settings.toSHA1(TEST_PASS))) {
                         return new MockResponse().setBody(getLocalizedJsonFixture("dm/collection"));

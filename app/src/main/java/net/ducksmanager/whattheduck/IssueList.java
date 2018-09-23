@@ -20,12 +20,12 @@ import java.util.ArrayList;
 
 public class IssueList extends ItemList<Issue> {
 
-    enum ViewType {
+    public enum ViewType {
         LIST_VIEW,
         EDGE_VIEW,
     }
 
-    private static ViewType viewType = ViewType.LIST_VIEW;
+    public static ViewType viewType = ViewType.LIST_VIEW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

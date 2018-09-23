@@ -13,12 +13,14 @@ import android.view.View;
 import com.github.clans.fab.FloatingActionButton;
 
 import net.ducksmanager.util.Settings;
+import net.ducksmanager.whattheduck.IssueList;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 
@@ -105,6 +107,11 @@ class WtdTest extends AndroidJUnitRunner {
     @BeforeClass
     public static void initDownloadHelper() {
         initMockServer();
+    }
+
+    @Before
+    public void resetListType() {
+        IssueList.viewType = IssueList.ViewType.LIST_VIEW;
     }
 
     void switchLocale() {
