@@ -60,6 +60,11 @@ public class CountryList extends ItemList<CountryAdapter.Country> {
     }
 
     @Override
+    protected boolean shouldShowAddToCollectionButton() {
+        return true;
+    }
+
+    @Override
     protected boolean hasDividers() {
         return true;
     }

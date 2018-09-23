@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import net.ducksmanager.inducks.coa.IssueListing;
+import net.ducksmanager.util.DraggableRelativeLayout;
 
 import java.util.ArrayList;
 
@@ -21,9 +23,10 @@ public class IssueList extends ItemList<Issue> {
 
     private static ViewType viewType = ViewType.LIST_VIEW;
 
-    private boolean isLandscapeEdgeView() {
-        int deviceOrientation = getResources().getConfiguration().orientation;
-        return viewType.equals(ViewType.EDGE_VIEW) && deviceOrientation == Configuration.ORIENTATION_LANDSCAPE;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        show();
     }
 
     @Override
@@ -44,12 +47,6 @@ public class IssueList extends ItemList<Issue> {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        show();
-    }
-
-    @Override
     protected boolean shouldShow() {
         return WhatTheDuck.getSelectedCountry() != null && WhatTheDuck.getSelectedPublication() != null;
     }
@@ -65,8 +62,15 @@ public class IssueList extends ItemList<Issue> {
     }
 
     @Override
+    protected boolean shouldShowAddToCollectionButton() {
+        return !isLandscapeEdgeView();
+    }
+
+    @Override
     protected ItemAdapter<Issue> getItemAdapter() {
-        View switchViewWrapper = this.findViewById(R.id.switchViewWrapper);
+        RelativeLayout switchViewWrapper = this.findViewById(R.id.switchViewWrapper);
+        DraggableRelativeLayout.makeDraggable(switchViewWrapper);
+
         Switch switchView = switchViewWrapper.findViewById(R.id.switchView);
 
         if (type.equals(Collection.CollectionType.COA.toString())) {
@@ -117,7 +121,6 @@ public class IssueList extends ItemList<Issue> {
                 : LinearLayoutManager.VERTICAL;
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this, listOrientation, false));
-            recyclerView.setTag(R.id.edges_to_load, issueList);
 
             return new IssueEdgeAdapter(this, issueList, recyclerView, deviceOrientation);
         }
@@ -125,6 +128,11 @@ public class IssueList extends ItemList<Issue> {
             recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
             return new IssueAdapter(this, issueList);
         }
+    }
+
+    private boolean isLandscapeEdgeView() {
+        int deviceOrientation = getResources().getConfiguration().orientation;
+        return viewType.equals(ViewType.EDGE_VIEW) && deviceOrientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     private void switchBetweenViews() {

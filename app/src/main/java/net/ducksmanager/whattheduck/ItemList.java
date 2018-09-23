@@ -35,13 +35,23 @@ import java.lang.ref.WeakReference;
 
 public abstract class ItemList<Item> extends AppCompatActivity {
     public static String type = CollectionType.USER.toString();
-    private Boolean requiresDataDownload = false;
-
+    private static final int MIN_ITEM_NUMBER_FOR_FILTER = 20;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private Boolean requiresDataDownload = false;
 
     protected abstract boolean needsToDownloadFullList();
     protected abstract void downloadFullList();
     protected abstract boolean hasDividers();
+
+    protected abstract boolean userHasItemsInCollectionForCurrent();
+
+    protected abstract boolean shouldShow();
+    protected abstract boolean shouldShowNavigation();
+    protected abstract boolean shouldShowToolbar();
+    protected abstract boolean shouldShowAddToCollectionButton();
+
+    protected abstract ItemAdapter<Item> getItemAdapter();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,29 +83,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             downloadFullList();
         }
 
-        FloatingActionMenu addToCollection = this.findViewById(R.id.addToCollectionWrapper);
-        if (addToCollection != null) {
-            addToCollection.setMenuButtonColorNormalResId(R.color.holo_green_dark);
-            addToCollection.setMenuButtonColorPressedResId(R.color.holo_green_dark);
-            addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
-            addToCollection.close(false);
-
-            if (type.equals(CollectionType.USER.toString())) {
-                FloatingActionButton addToCollectionByPhotoButton = this.findViewById(R.id.addToCollectionByPhotoButton);
-                addToCollectionByPhotoButton.setOnClickListener(view ->
-                    takeCoverPicture()
-                );
-
-                FloatingActionButton addToCollectionBySelectionButton = this.findViewById(R.id.addToCollectionBySelectionButton);
-                addToCollectionBySelectionButton.setOnClickListener(view -> {
-                    addToCollection.setVisibility(View.GONE);
-                    ItemList.this.goToAlternativeView(CollectionType.COA.toString());
-                });
-
-                WhatTheDuck.saveSettings(null);
-            }
-        }
-
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             if (type.equals(CollectionType.USER.toString())) {
@@ -114,8 +101,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         );
     }
 
-    protected abstract boolean userHasItemsInCollectionForCurrent();
-
     private void goToView(Class<?> cls) {
         if (!ItemList.this.getClass().equals(cls)) {
             startActivity(new Intent(WhatTheDuck.wtd, cls));
@@ -127,14 +112,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         loadList();
         show();
     }
-
-    protected abstract boolean shouldShow();
-
-    protected abstract boolean shouldShowNavigation();
-
-    protected abstract boolean shouldShowToolbar();
-
-    protected abstract ItemAdapter<Item> getItemAdapter();
 
     void show() {
         if (!shouldShow()) {
@@ -158,15 +135,41 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             hideNavigation();
         }
 
+        FloatingActionMenu addToCollection = this.findViewById(R.id.addToCollectionWrapper);
+        if (shouldShowAddToCollectionButton()) {
+            if (addToCollection != null) {
+                addToCollection.setMenuButtonColorNormalResId(R.color.holo_green_dark);
+                addToCollection.setMenuButtonColorPressedResId(R.color.holo_green_dark);
+                addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : View.GONE);
+                addToCollection.close(false);
+
+                if (type.equals(CollectionType.USER.toString())) {
+                    FloatingActionButton addToCollectionByPhotoButton = this.findViewById(R.id.addToCollectionByPhotoButton);
+                    addToCollectionByPhotoButton.setOnClickListener(view ->
+                        takeCoverPicture()
+                    );
+
+                    FloatingActionButton addToCollectionBySelectionButton = this.findViewById(R.id.addToCollectionBySelectionButton);
+                    addToCollectionBySelectionButton.setOnClickListener(view -> {
+                        addToCollection.setVisibility(View.GONE);
+                        ItemList.this.goToAlternativeView(CollectionType.COA.toString());
+                    });
+
+                    WhatTheDuck.saveSettings(null);
+                }
+            }
+        }
+        else {
+            addToCollection.setVisibility(View.GONE);
+        }
+
         ItemAdapter<Item> itemAdapter = getItemAdapter();
-
-        TextView emptyListText = this.findViewById(R.id.emptyList);
-
-        java.util.List<Item> items = itemAdapter.getItems();
         if (this.requiresDataDownload) {
             itemAdapter.resetItems();
         }
 
+        java.util.List<Item> items = itemAdapter.getItems();
+        TextView emptyListText = this.findViewById(R.id.emptyList);
         if (emptyListText != null) {
             emptyListText.setVisibility(this.requiresDataDownload || items.size() > 0 ? TextView.INVISIBLE : TextView.VISIBLE);
         }
@@ -176,7 +179,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
         EditText filterEditText = this.findViewById(R.id.filter);
         if (filterEditText != null) {
-            if (items.size() > 20) {
+            if (items.size() > MIN_ITEM_NUMBER_FOR_FILTER) {
                 filterEditText.setVisibility(EditText.VISIBLE);
                 filterEditText.setText("");
 

@@ -48,6 +48,11 @@ public class PublicationList extends ItemList<PublicationAdapter.Publication> {
     }
 
     @Override
+    protected boolean shouldShowAddToCollectionButton() {
+        return true;
+    }
+
+    @Override
     protected boolean hasDividers() {
         return true;
     }
