@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import net.ducksmanager.util.CoverFlowActivity;
 import net.ducksmanager.util.CoverFlowFileHandler;
+import net.ducksmanager.util.ReleaseNotes;
+import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.R;
 
 import org.hamcrest.Description;
@@ -39,6 +41,7 @@ public class CoverSearchTest extends WtdTest {
     @Before
     public void switchLocaleAndLogin() {
         switchLocale();
+        overwriteSettingsAndHideMessages(Settings.MESSAGE_KEY_WELCOME, ReleaseNotes.current.getMessageId());
         login(DownloadHandlerMock.TEST_USER, DownloadHandlerMock.TEST_PASS);
     }
 

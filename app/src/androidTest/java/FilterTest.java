@@ -1,6 +1,8 @@
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
+import net.ducksmanager.util.ReleaseNotes;
+import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.R;
 
@@ -33,6 +35,7 @@ public class FilterTest extends WtdTest {
 
     @Before
     public void login() {
+        overwriteSettingsAndHideMessages(Settings.MESSAGE_KEY_WELCOME, ReleaseNotes.current.getMessageId());
         login(DownloadHandlerMock.TEST_USER, DownloadHandlerMock.TEST_PASS);
     }
 

@@ -2,12 +2,12 @@ import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.filters.LargeTest;
 import android.support.v7.widget.RecyclerView;
 
+import net.ducksmanager.util.ReleaseNotes;
 import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.IssueList;
 import net.ducksmanager.whattheduck.ItemAdapter;
 import net.ducksmanager.whattheduck.PublicationList;
 import net.ducksmanager.whattheduck.R;
-import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -23,7 +23,6 @@ import static android.support.test.espresso.contrib.RecyclerViewActions.actionOn
 import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToHolder;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
 @RunWith(Parameterized.class)
@@ -41,9 +40,12 @@ public class ListTest extends WtdTest {
     @Before
     public void switchLocaleAndLogin() {
         switchLocale();
-        WhatTheDuck.wtd.deleteFile(Settings.USER_SETTINGS);
-        Settings.loadUserSettings(); // Reset settings
-        Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME);
+        overwriteSettingsAndHideMessages(
+            Settings.MESSAGE_KEY_WELCOME,
+            Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW,
+            Settings.MESSAGE_KEY_DATA_CONSUMPTION,
+            ReleaseNotes.current.getMessageId()
+        );
         login(DownloadHandlerMock.TEST_USER, DownloadHandlerMock.TEST_PASS);
     }
 
@@ -78,15 +80,10 @@ public class ListTest extends WtdTest {
 
     @Test
     public void testIssueListEdgeView() {
-        goToPublicationListView(currentLocale.getDefaultCountry());
-        goToIssueListView(currentLocale.getDefaultPublication());
+        goToPublicationListView("fr");
+        goToIssueListView("fr/DDD");
 
         onView(withId(R.id.switchView)).perform(click());
-
-        onView(withText(R.string.bookcaseViewTitle))
-            .check(matches(isDisplayed()));
-
-        onView(withText(R.string.ok)).perform(click());
 
         assertCurrentActivityIsInstanceOf(IssueList.class, true);
 
@@ -96,7 +93,7 @@ public class ListTest extends WtdTest {
             e.printStackTrace();
         }
 
-        ScreenshotTestRule.takeScreenshot("Collection - Issue list (edge view)", getActivityInstance(), getScreenshotPath());
+        ScreenshotTestRule.takeScreenshot("Collection - Issue list - edge view", getActivityInstance(), getScreenshotPath());
     }
 
     private void goToPublicationListView(String countryCode) {

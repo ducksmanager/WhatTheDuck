@@ -117,6 +117,14 @@ class WtdTest extends AndroidJUnitRunner {
         }
     }
 
+    void overwriteSettingsAndHideMessages(String... alreadyShownMessageKeys) {
+        WhatTheDuck.wtd.deleteFile(Settings.USER_SETTINGS);
+        Settings.loadUserSettings(); // Reset settings
+        for (String alreadyShownMessageKey : alreadyShownMessageKeys) {
+            Settings.addToMessagesAlreadyShown(alreadyShownMessageKey);
+        }
+    }
+
     WtdTest() { }
 
     WtdTest(LocaleWithDefaultPublication currentLocale) {

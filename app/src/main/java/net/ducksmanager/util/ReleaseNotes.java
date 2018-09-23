@@ -30,7 +30,7 @@ public class ReleaseNotes {
 
     public void showOnVersionUpdate(WeakReference<Activity> originActivityRef) {
         Activity originActivity = originActivityRef.get();
-        if (Settings.shouldShowMessage(getMessageId())) {
+        if (shouldShowMessage()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(originActivity);
             LayoutInflater factory = LayoutInflater.from(originActivity);
             final View view = factory.inflate(R.layout.release_notes, null);
@@ -39,7 +39,7 @@ public class ReleaseNotes {
             builder.setTitle(originActivity.getString(R.string.newFeature));
 
             builder.setNeutralButton(R.string.ok, (dialogInterface, i) -> {
-                Settings.addToMessagesAlreadyShown(getMessageId());
+                addToMessagesAlreadyShown();
                 dialogInterface.dismiss();
             });
 
@@ -56,7 +56,15 @@ public class ReleaseNotes {
         }
     }
 
-    private String getMessageId() {
+    private boolean shouldShowMessage() {
+        return Settings.shouldShowMessage(getMessageId());
+    }
+
+    private void addToMessagesAlreadyShown() {
+        Settings.addToMessagesAlreadyShown(getMessageId());
+    }
+
+    public String getMessageId() {
         return "release_notes_" + majorVersion;
     }
 }

@@ -124,10 +124,10 @@ public class IssueList extends ItemList<Issue> {
                 ? LinearLayoutManager.HORIZONTAL
                 : LinearLayoutManager.VERTICAL;
 
-            if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW_LANDSCAPE)
+            if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW)
              && listOrientation == LinearLayoutManager.VERTICAL) {
                 WhatTheDuck.wtd.info(new WeakReference<>(this), R.string.welcomeBookcaseViewPortrait, Toast.LENGTH_LONG);
-                Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW_LANDSCAPE);
+                Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW);
             }
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this, listOrientation, false));
@@ -146,6 +146,7 @@ public class IssueList extends ItemList<Issue> {
     }
 
     private void switchBetweenViews() {
+        WhatTheDuck.trackEvent("issuelist/switchview");
         viewType = ((Switch)this.findViewById(R.id.switchView)).isChecked() ? ViewType.EDGE_VIEW : ViewType.LIST_VIEW;
         loadList();
         show();

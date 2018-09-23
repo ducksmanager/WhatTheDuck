@@ -4,6 +4,7 @@ import android.support.test.runner.AndroidJUnit4;
 import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.R;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +20,11 @@ public class LoginTest extends WtdTest {
     @BeforeClass
     public static void initDownloadHelper() {
         initMockServer();
+    }
+
+    @Before
+    public void overwriteSettings() {
+        super.overwriteSettingsAndHideMessages();
     }
 
     @Test
