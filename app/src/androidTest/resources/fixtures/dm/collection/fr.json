@@ -10,6 +10,12 @@
         "Etat": "mauvais"
       }
     ],
+    "fr\/MP": [
+      {
+        "Numero": "200",
+        "Etat": "bon"
+      }
+    ],
     "fr\/DDD": [
       {
         "Numero": "1",
@@ -56,6 +62,7 @@
   "static": {
     "magazines": {
       "es\/BBB": "Biblioteca Carl Barks",
+      "fr\/MP": "Mickey Parade / Mickey Parade Géant",
       "fr\/DDD": "La dynastie Donald Duck - Intégrale Carl Barks",
       "se\/KAP": "Kalle Ankas Pocket",
       "us\/WDC": "Walt Disney's Comics and Stories"
