@@ -33,7 +33,19 @@ adb pull /sdcard/$showcasedir `pwd` && (
         blurPicture \
             "$showcasedir/$locale/Cover search result.png" \
             "$showcasedir/$locale/Cover search result_blurred.png" \
-            "120,375 350,375 350,610 120,610" && \
+            "560,860 700,860 700,970 560,970" && \
+        blurPicture \
+            "$showcasedir/$locale/Cover search result_blurred.png" \
+            "$showcasedir/$locale/Cover search result_blurred.png" \
+            "400,870 520,870 520,970 400,970" && \
+        blurPicture \
+            "$showcasedir/$locale/Cover search result_blurred.png" \
+            "$showcasedir/$locale/Cover search result_blurred.png" \
+            "0,900 50,900 50,950 0,950" && \
+        blurPicture \
+            "$showcasedir/$locale/Cover search result_blurred.png" \
+            "$showcasedir/$locale/Cover search result_blurred.png" \
+            "1040,900 1078,900 1078,950 1040,950" && \
         rm "$showcasedir/$locale/Cover search result.png" && \
         blurPicture \
             "$showcasedir/$locale/Collection - Issue list - edge view.png" \
