@@ -62,4 +62,6 @@
     <string name="welcomeMessage">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur "+" pour ajouter un numéro.</string>
     <string name="welcomeTitle">Bienvenue sur What The Duck !</string>
     <string name="welcomeBookcaseViewPortrait">Bienvenue dans votre bibliothèque ! Orientez votre écran en mode paysage pour le meilleur effet ;-)</string>
+    <string name="newFeature">Nouveautés de WhatTheDuck</string>
+    <string name="newFeatures18Text">Vous pouvez maintenant voir votre bibliothèque depuis l\'application ! Lorsque vous consultez une liste de numéros, appuyez sur l\'icône \"bibliothèque\" pour passer à la vue bibliothèque.</string>
 </resources>
