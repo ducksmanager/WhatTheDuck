@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import net.ducksmanager.inducks.coa.PublicationListing;
 
+import java.util.List;
+
 public class PublicationList extends ItemList<PublicationAdapter.Publication> {
 
     @Override
@@ -50,6 +52,11 @@ public class PublicationList extends ItemList<PublicationAdapter.Publication> {
     @Override
     protected boolean shouldShowAddToCollectionButton() {
         return true;
+    }
+
+    @Override
+    protected boolean shouldShowFilter(List<PublicationAdapter.Publication> publications) {
+        return publications.size() > MIN_ITEM_NUMBER_FOR_FILTER;
     }
 
     @Override

@@ -9,6 +9,7 @@ import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class CountryList extends ItemList<CountryAdapter.Country> {
 
@@ -73,6 +74,11 @@ public class CountryList extends ItemList<CountryAdapter.Country> {
     @Override
     protected boolean shouldShowAddToCollectionButton() {
         return true;
+    }
+
+    @Override
+    protected boolean shouldShowFilter(List<CountryAdapter.Country> countries) {
+        return countries.size() > MIN_ITEM_NUMBER_FOR_FILTER;
     }
 
     @Override

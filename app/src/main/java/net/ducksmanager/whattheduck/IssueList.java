@@ -17,6 +17,7 @@ import net.ducksmanager.util.Settings;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
 
 public class IssueList extends ItemList<Issue> {
 
@@ -68,6 +69,11 @@ public class IssueList extends ItemList<Issue> {
     @Override
     protected boolean shouldShowAddToCollectionButton() {
         return !isLandscapeEdgeView();
+    }
+
+    @Override
+    protected boolean shouldShowFilter(List<Issue> issues) {
+        return issues.size() > MIN_ITEM_NUMBER_FOR_FILTER && viewType.equals(ViewType.LIST_VIEW);
     }
 
     @Override

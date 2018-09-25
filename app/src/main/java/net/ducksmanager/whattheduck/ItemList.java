@@ -11,8 +11,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,12 +31,13 @@ import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import static android.view.View.GONE;
 
 public abstract class ItemList<Item> extends AppCompatActivity {
     public static String type = CollectionType.USER.toString();
-    private static final int MIN_ITEM_NUMBER_FOR_FILTER = 20;
+    protected static final int MIN_ITEM_NUMBER_FOR_FILTER = 20;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private Boolean requiresDataDownload = false;
@@ -53,6 +52,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
     protected abstract boolean shouldShowNavigation();
     protected abstract boolean shouldShowToolbar();
     protected abstract boolean shouldShowAddToCollectionButton();
+    protected abstract boolean shouldShowFilter(List<Item> items);
 
     protected abstract ItemAdapter<Item> getItemAdapter();
 
@@ -180,22 +180,11 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         recyclerView.setAdapter(itemAdapter);
 
         EditText filterEditText = this.findViewById(R.id.filter);
-        if (filterEditText != null) {
-            if (items.size() > MIN_ITEM_NUMBER_FOR_FILTER) {
-                filterEditText.setVisibility(EditText.VISIBLE);
-                filterEditText.setText("");
-
-                filterEditText.addTextChangedListener(new TextWatcher() {
-                    public void afterTextChanged(Editable s) {}
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        itemAdapter.updateFilteredList(s.toString());
-                        itemAdapter.notifyDataSetChanged();
-                    }
-                });
-            } else {
-                filterEditText.setVisibility(GONE);
-            }
+        if (shouldShowFilter(items)) {
+            itemAdapter.addOrReplaceFilterOnChangeListener(filterEditText);
+        }
+        else {
+            filterEditText.setVisibility(GONE);
         }
 
         while (recyclerView.getItemDecorationCount() > 0) {

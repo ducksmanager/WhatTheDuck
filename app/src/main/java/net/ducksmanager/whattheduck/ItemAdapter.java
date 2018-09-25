@@ -7,9 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.ducksmanager.util.FilterTextOnChangeListener;
 import net.greypanther.natsort.CaseInsensitiveSimpleNaturalComparator;
 
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
     private ArrayList<Item> filteredItems;
     final Activity originActivity;
     View v;
+
+    private static FilterTextOnChangeListener filterTextOnChangeListener;
 
     ItemAdapter(Activity activity, int resource, List<Item> items) {
         this.originActivity = activity;
@@ -54,6 +58,17 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
         return originActivity;
     }
 
+    public void addOrReplaceFilterOnChangeListener(EditText filterEditText) {
+        if (filterTextOnChangeListener != null) {
+            filterEditText.removeTextChangedListener(filterTextOnChangeListener);
+        }
+        filterTextOnChangeListener = new FilterTextOnChangeListener(this);
+
+        filterEditText.addTextChangedListener(filterTextOnChangeListener);
+        filterEditText.setVisibility(EditText.VISIBLE);
+        filterEditText.setText("");
+    }
+
     public abstract class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView titleTextView;
         final ImageView prefixImage;
@@ -73,11 +88,12 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
         }
     }
 
-    void updateFilteredList(String textFilter) {
+    public void updateFilteredList(String textFilter) {
         filteredItems = new ArrayList<>();
-        for (Item item : items)
-            if (getText(item).toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase()))
+        for (Item item : items) {
+            if (textFilter.equals("") || getText(item).toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase()))
                 filteredItems.add(item);
+        }
     }
 
     Comparator<Item> getComparator() {
