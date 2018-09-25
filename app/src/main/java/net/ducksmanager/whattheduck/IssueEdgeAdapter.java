@@ -71,7 +71,7 @@ public class IssueEdgeAdapter extends ItemAdapter<Issue> {
             WhatTheDuck.getSelectedPublication()
                 .replaceFirst("[^/]+/", "")
                 .replaceAll(" ", ""),
-            i.getIssueNumber().replaceAll(" ", ""));
+            i.getCleanIssueNumber());
     }
 
     @Override

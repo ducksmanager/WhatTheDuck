@@ -44,6 +44,10 @@ public class Issue implements Serializable {
         return issueNumber;
     }
 
+    String getCleanIssueNumber() {
+        return getIssueNumber().replaceAll(" ", "");
+    }
+
     public IssueCondition getIssueCondition() {
         return issueCondition;
     }

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 public class Collection implements Serializable {
-    private final HashMap<String,HashMap<String,ArrayList<Issue>>> issues = new HashMap<>();
+    private final HashMap<String,HashMap<String,HashMap<String, Issue>>> issues = new HashMap<>();
     private HashMap<Integer, PurchaseAdapter.Purchase> purchases = new HashMap<>();
 
     public void setPurchases(HashMap<Integer, PurchaseAdapter.Purchase> purchases) {
@@ -44,7 +44,7 @@ public class Collection implements Serializable {
         if (issues.get(country) == null)
             this.addCountry(country);
         if (issues.get(country).get(publication) == null) {
-            issues.get(country).put(publication, new ArrayList<>());
+            issues.get(country).put(publication, new HashMap<>());
         }
     }
 
@@ -58,7 +58,7 @@ public class Collection implements Serializable {
             this.addCountry(country);
         if (issues.get(country).get(publication) == null)
             this.addPublication(country, publication);
-        issues.get(country).get(publication).add(issue);
+        issues.get(country).get(publication).put(issue.getIssueNumber(), issue);
     }
 
     public ArrayList<CountryAdapter.Country> getCountryList() {
@@ -72,7 +72,7 @@ public class Collection implements Serializable {
 
     public ArrayList<PublicationAdapter.Publication> getPublicationList(String shortCountryName) {
         ArrayList<PublicationAdapter.Publication> publicationList = new ArrayList<>();
-        HashMap<String, ArrayList<Issue>> publicationMap = issues.get(shortCountryName);
+        HashMap<String, HashMap<String, Issue>> publicationMap = issues.get(shortCountryName);
         if (publicationMap != null) {
             for (String shortPublicationName : publicationMap.keySet()) {
                 publicationList.add(new PublicationAdapter.Publication(shortPublicationName, PublicationListing.getPublicationFullName(shortCountryName, shortPublicationName)));
@@ -83,11 +83,11 @@ public class Collection implements Serializable {
 
     public ArrayList<Issue> getIssueList(String shortCountryName, String shortPublicationName) {
         ArrayList<Issue> finalList = new ArrayList<>();
-        HashMap<String, ArrayList<Issue>> publicationMap = issues.get(shortCountryName);
+        HashMap<String, HashMap<String, Issue>> publicationMap = issues.get(shortCountryName);
         if (publicationMap != null) {
-            ArrayList<Issue> list = publicationMap.get(shortPublicationName);
+            HashMap<String, Issue> list = publicationMap.get(shortPublicationName);
             if (list != null) {
-                for (Issue issue : list) {
+                for (Issue issue : list.values()) {
                     IssueCondition condition = null;
                     PurchaseAdapter.PurchaseWithDate purchase = null;
                     Issue existingIssue = WhatTheDuck.userCollection.getIssue(shortCountryName, shortPublicationName, issue.getIssueNumber());
@@ -116,10 +116,6 @@ public class Collection implements Serializable {
     public Issue getIssue(String shortCountryName, String shortPublicationName, String issueNumber) {
         if (!hasPublication(shortCountryName, shortPublicationName))
             return null;
-        for (Issue i : issues.get(shortCountryName).get(shortPublicationName)) {
-            if (i.getIssueNumber().replaceAll("[ ]+", " ").equals(issueNumber.replaceAll("[ ]+", " ")))
-                return i;
-        }
-        return null;
+        return issues.get(shortCountryName).get(shortPublicationName).get(issueNumber);
     }
 }
