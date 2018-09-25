@@ -1,3 +1,7 @@
+Version 1.8.2
+
+    Improve performance on list views
+
 Version 1.8.1
 
     Add bookcase view on issue lists
