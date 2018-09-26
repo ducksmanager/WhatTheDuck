@@ -15,7 +15,12 @@ Duplicate [app/src/main/assets/config.properties.sample](app/src/main/assets/con
 
 * ... And more features are planned.
 
-
 ## Architecture overview
 
 What The Duck connects to a server owned by DucksManager to retrieve both the user's collection and the list of issues that he doesn't possess.
+
+## Thanks
+
+[![BrowserStack](https://i1.wp.com/www.diogonunes.com/blog/wp-content/uploads/2016/07/browserstack-logo.png?w=250)](https://www.browserstack.com)
+
+Thanks to the [**BrowserStack**](https://www.browserstack.com) team for offering free accounts to open-source projects!
