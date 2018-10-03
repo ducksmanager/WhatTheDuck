@@ -30,6 +30,7 @@
     <string name="insert_issue__confirm">Lägg till utgåva %1$s</string>
     <string name="internal_error">Internt fel</string>
     <string name="internal_error__crypting_failed">Krypteringen av din information misslyckades</string>
+    <string name="internal_error__empty_list">Tom lista</string>
     <string name="internal_error__issue_insertion_failed">Adderingen av utgåvan i din samling misslyckades</string>
     <string name="internal_error__malformed_list">Utgåvolistan är felaktig</string>
     <string name="internal_error__purchase_creation_failed">Skapandet av inköpsdatum misslyckades</string>
