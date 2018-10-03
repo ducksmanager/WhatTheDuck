@@ -1,3 +1,7 @@
+Version 1.8.3
+
+    Improve error handling when retrieving the user's collection
+
 Version 1.8.2
 
     Improve performance on list views
