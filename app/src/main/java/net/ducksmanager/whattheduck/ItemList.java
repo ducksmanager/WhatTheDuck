@@ -37,7 +37,7 @@ import static android.view.View.GONE;
 
 public abstract class ItemList<Item> extends AppCompatActivity {
     public static String type = CollectionType.USER.toString();
-    protected static final int MIN_ITEM_NUMBER_FOR_FILTER = 20;
+    static final int MIN_ITEM_NUMBER_FOR_FILTER = 20;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private Boolean requiresDataDownload = false;

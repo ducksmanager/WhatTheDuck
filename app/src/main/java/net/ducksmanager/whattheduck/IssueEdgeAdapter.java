@@ -32,7 +32,7 @@ public class IssueEdgeAdapter extends ItemAdapter<Issue> {
         return null;
     }
 
-    public class ViewHolder extends ItemAdapter.ViewHolder {
+    protected class ViewHolder extends ItemAdapter.ViewHolder {
         final ImageView edgeImage;
 
         ViewHolder(View v) {

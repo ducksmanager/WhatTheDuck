@@ -20,7 +20,7 @@ import java.util.Set;
 public class Settings {
     public static String USER_SETTINGS = "settings.properties";
     public static String username = null;
-    public static String password = null;
+    private static String password = null;
     private static Boolean rememberCredentials = false;
     public static String encryptedPassword = null;
     private static Set<String> messagesAlreadyShown = new HashSet<>();

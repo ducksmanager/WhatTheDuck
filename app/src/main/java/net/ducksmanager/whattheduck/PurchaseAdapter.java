@@ -25,8 +25,8 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
     }
 
     static class SpecialPurchase extends Purchase {
-        SpecialPurchase(Boolean noPurchase) {
-            this.noPurchase=noPurchase;
+        SpecialPurchase() {
+            this.noPurchase= true;
         }
     }
 
