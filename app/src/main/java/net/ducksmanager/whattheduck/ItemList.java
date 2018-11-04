@@ -29,6 +29,9 @@ import net.ducksmanager.util.CoverFlowFileHandler;
 import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
 
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfKeyPoint;
+
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -217,7 +220,12 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
             CoverFlowFileHandler.current.resizeUntilFileSize(this, new CoverFlowFileHandler.TransformationCallback() {
                 @Override
-                public void onComplete(File fileToUpload) {
+                public void onCompleteDescriptors(MatOfKeyPoint keypoints, Mat descriptors) {
+                    new CoverSearch(new WeakReference<>(ItemList.this), keypoints, descriptors).execute();
+                }
+
+                @Override
+                public void onCompleteRawImage(File fileToUpload) {
                     new CoverSearch(new WeakReference<>(ItemList.this), fileToUpload).execute();
                 }
 

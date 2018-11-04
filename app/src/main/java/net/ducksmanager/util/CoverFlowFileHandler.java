@@ -16,6 +16,11 @@ import net.ducksmanager.retrievetasks.CoverSearch;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
+import org.opencv.android.Utils;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfKeyPoint;
+import org.opencv.features2d.ORB;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,7 +34,9 @@ public class CoverFlowFileHandler {
     public static String mockedResource = null;
 
     public interface TransformationCallback {
-        void onComplete(File outputFile);
+        void onCompleteDescriptors(MatOfKeyPoint keypoints, Mat descriptors);
+
+        void onCompleteRawImage(File outputFile);
 
         void onFail();
     }
@@ -39,15 +46,32 @@ public class CoverFlowFileHandler {
     private final Target target = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            try {
-                FileOutputStream ostream = new FileOutputStream(uploadFile);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
-                ostream.flush();
-                ostream.close();
+            if (WhatTheDuck.isOpenCvLoaded) {
+                Mat img = new Mat();
+                Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                Utils.bitmapToMat(bmp32, img);
+                ORB orb;
+                if (!img.empty()) {
+                    orb = ORB.create(2000, 1.02f, 100);
+                    MatOfKeyPoint keypoints = new MatOfKeyPoint();
+                    Mat descriptors = new Mat();
+                    orb.detectAndCompute(img, new Mat(), keypoints, descriptors);
 
-                callback.onComplete(uploadFile);
-            } catch (IOException e) {
-                WhatTheDuck.wtd.alert(CoverSearch.originActivityRef, R.string.internal_error);
+                    callback.onCompleteDescriptors(keypoints, descriptors);
+                }
+            }
+            // Fallback : send raw image
+            else {
+                try {
+                    FileOutputStream ostream = new FileOutputStream(uploadFile);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
+                    ostream.flush();
+                    ostream.close();
+
+                    callback.onCompleteRawImage(uploadFile);
+                } catch (IOException e) {
+                    WhatTheDuck.wtd.alert(CoverSearch.originActivityRef, R.string.internal_error);
+                }
             }
         }
 

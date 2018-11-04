@@ -32,11 +32,15 @@ import net.ducksmanager.retrievetasks.ConnectAndRetrieveList;
 import net.ducksmanager.retrievetasks.Signup;
 import net.ducksmanager.util.Settings;
 
+import org.opencv.android.OpenCVLoader;
+
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_DM_URL;
@@ -57,6 +61,16 @@ public class WhatTheDuck extends Activity {
     private static String selectedCountry = null;
     private static String selectedPublication = null;
     private static String selectedIssue = null;
+    public static boolean isOpenCvLoaded = false;
+
+    static {
+        if (!OpenCVLoader.initDebug()) {
+            Timber.tag("OpenCV").e("  OpenCVLoader.initDebug(), not working.");
+        } else {
+            Timber.tag("OpenCV").i("  OpenCVLoader.initDebug(), working.");
+            isOpenCvLoaded = true;
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
