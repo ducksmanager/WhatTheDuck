@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference;
 
 public class ReleaseNotes {
 
-    public static ReleaseNotes current;
+    public static final ReleaseNotes current;
     static {
         current = new ReleaseNotes("1.8", R.string.newFeatures18Text, R.drawable.bookcase_view_switch);
     }

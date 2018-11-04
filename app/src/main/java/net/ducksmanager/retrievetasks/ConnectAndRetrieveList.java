@@ -80,8 +80,8 @@ public class ConnectAndRetrieveList extends RetrieveTask {
         WhatTheDuck wtdActivity = (WhatTheDuck) originActivityRef.get();
 
         try {
-            if (response == null) {
-                return;
+            if (response == null || response.isEmpty()) {
+                throw new JSONException("Empty list");
             }
 
             Settings.saveSettings();
@@ -137,17 +137,17 @@ public class ConnectAndRetrieveList extends RetrieveTask {
             }
             catch (JSONException e) {
                 JSONArray issues = object.getJSONArray("numeros");
-                if (issues.length() > 0)
+                if (issues.length() > 0)  {
                     throw e;
+                }
             } catch (ParseException e) {
-                WhatTheDuck.wtd.alert(R.string.internal_error,
-                    R.string.internal_error__malformed_list, " : " + e.getMessage());
-            } finally {
-                wtdActivity.toggleProgressbarLoading(false);
+                throw new JSONException(e.getMessage());
             }
         } catch (JSONException e) {
             WhatTheDuck.wtd.alert(R.string.internal_error,
                     R.string.internal_error__malformed_list, " : " + e.getMessage());
+        } finally {
+            wtdActivity.toggleProgressbarLoading(false);
         }
     }
 }

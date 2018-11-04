@@ -32,6 +32,7 @@
     <string name="insert_issue__confirm">Ajout du numéro %1$s</string>
     <string name="internal_error">Erreur interne</string>
     <string name="internal_error__crypting_failed">L\'encryptage de vos identifiants a échoué</string>
+    <string name="internal_error__empty_list">Liste vide</string>
     <string name="internal_error__issue_insertion_failed">L\'insertion du numéro dans votre collection a échoué</string>
     <string name="internal_error__malformed_list">La liste des numéros est mal formée</string>
     <string name="internal_error__purchase_creation_failed">La création de la date d\'achat a échoué</string>

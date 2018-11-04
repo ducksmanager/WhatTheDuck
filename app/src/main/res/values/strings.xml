@@ -33,6 +33,7 @@
     <string name="insert_issue__confirm">Adding issue %1$s</string>
     <string name="internal_error">Internal error</string>
     <string name="internal_error__crypting_failed">The encryption of your credentials failed</string>
+    <string name="internal_error__empty_list">Empty list</string>
     <string name="internal_error__issue_insertion_failed">Adding the issue in your collection failed</string>
     <string name="internal_error__malformed_list">The issue list is malformed</string>
     <string name="internal_error__purchase_creation_failed">The creation of the purchase date failed</string>
