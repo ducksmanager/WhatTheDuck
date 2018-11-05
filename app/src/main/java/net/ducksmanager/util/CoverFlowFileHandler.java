@@ -16,10 +16,8 @@ import net.ducksmanager.retrievetasks.CoverSearch;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
-import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
-import org.opencv.features2d.ORB;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,31 +45,22 @@ public class CoverFlowFileHandler {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
             if (WhatTheDuck.isOpenCvLoaded) {
-                Mat img = new Mat();
-                Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-                Utils.bitmapToMat(bmp32, img);
-                ORB orb;
-                if (!img.empty()) {
-                    orb = ORB.create(2000, 1.02f, 100);
-                    MatOfKeyPoint keypoints = new MatOfKeyPoint();
-                    Mat descriptors = new Mat();
-                    orb.detectAndCompute(img, new Mat(), keypoints, descriptors);
-
-                    callback.onCompleteDescriptors(keypoints, descriptors);
+                OpenCvTask openCvTask = new OpenCvTask(bitmap);
+                if (openCvTask.generateKeyPointsAndDescriptors()) {
+                    callback.onCompleteDescriptors(openCvTask.getKeyPoints(), openCvTask.getDescriptors());
+                    return;
                 }
             }
             // Fallback : send raw image
-            else {
-                try {
-                    FileOutputStream ostream = new FileOutputStream(uploadFile);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
-                    ostream.flush();
-                    ostream.close();
+            try {
+                FileOutputStream ostream = new FileOutputStream(uploadFile);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
+                ostream.flush();
+                ostream.close();
 
-                    callback.onCompleteRawImage(uploadFile);
-                } catch (IOException e) {
-                    WhatTheDuck.wtd.alert(CoverSearch.originActivityRef, R.string.internal_error);
-                }
+                callback.onCompleteRawImage(uploadFile);
+            } catch (IOException e) {
+                WhatTheDuck.wtd.alert(CoverSearch.originActivityRef, R.string.internal_error);
             }
         }
 
