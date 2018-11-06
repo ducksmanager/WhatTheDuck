@@ -4,6 +4,9 @@ import android.text.TextUtils;
 import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -82,8 +85,21 @@ class DownloadHandlerMock {
                     return new MockResponse().setBody(getLocalizedJsonFixture("dm-server/issues"));
                 }
                 if (parts.containsAll(Arrays.asList("cover-id", "search"))) {
-                    String body = request.getBody().readUtf8();
-                    return new MockResponse().setBody(getJsonFixture("dm-server/cover-search"));
+                    if (request.getBody().size() == 0) { // Raw image
+                        return new MockResponse().setBody(getJsonFixture("dm-server/cover-search"));
+                    }
+                    else {
+                        try {
+                            JSONObject params = new JSONObject(request.getBody().readUtf8());
+                            JSONObject keyPoints = new JSONObject(params.getString("keypoints"));
+                            JSONObject firstKeyPoint = (JSONObject) keyPoints.get("0");
+                            if ((Integer) firstKeyPoint.get("x") == 93) {
+                                return new MockResponse().setBody(getJsonFixture("dm-server/cover-search"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
                 if (parts.containsAll(Arrays.asList("cover-id", "download"))) {
                     return new MockResponse().setBody(getImageFixture("covers/" + parts.get(parts.size()-1)));

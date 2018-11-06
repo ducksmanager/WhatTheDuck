@@ -94,10 +94,10 @@ public class OpenCvBitmap {
                 keyPointObject.put("x", keyPoint.pt.x);
                 keyPointObject.put("y", keyPoint.pt.y);
                 keyPointObject.put("angle", keyPoint.angle);
-                keyPointObject.put("class_id", keyPoint.class_id);
-                keyPointObject.put("octave", keyPoint.octave);
-                keyPointObject.put("response", keyPoint.response);
-                keyPointObject.put("size", keyPoint.size);
+//                keyPointObject.put("class_id", keyPoint.class_id); // -1
+//                keyPointObject.put("octave", keyPoint.octave); // unused
+//                keyPointObject.put("response", keyPoint.response); // unused
+//                keyPointObject.put("size", keyPoint.size); // unused
             } catch (JSONException e) {
                 e.printStackTrace();
             }
