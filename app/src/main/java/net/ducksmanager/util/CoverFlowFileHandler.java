@@ -16,9 +16,6 @@ import net.ducksmanager.retrievetasks.CoverSearch;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfKeyPoint;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,7 +29,7 @@ public class CoverFlowFileHandler {
     public static String mockedResource = null;
 
     public interface TransformationCallback {
-        void onCompleteDescriptors(MatOfKeyPoint keypoints, Mat descriptors);
+        void onCompleteDescriptors(OpenCvBitmap openCvBitmap);
 
         void onCompleteRawImage(File outputFile);
 
@@ -45,9 +42,9 @@ public class CoverFlowFileHandler {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
             if (WhatTheDuck.isOpenCvLoaded) {
-                OpenCvTask openCvTask = new OpenCvTask(bitmap);
-                if (openCvTask.generateKeyPointsAndDescriptors()) {
-                    callback.onCompleteDescriptors(openCvTask.getKeyPoints(), openCvTask.getDescriptors());
+                OpenCvBitmap openCvBitmap = new OpenCvBitmap(bitmap);
+                if (openCvBitmap.generateKeyPointsAndDescriptors()) {
+                    callback.onCompleteDescriptors(openCvBitmap);
                     return;
                 }
             }

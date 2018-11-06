@@ -7,6 +7,7 @@ import android.view.View;
 import com.koushikdutta.async.future.FutureCallback;
 
 import net.ducksmanager.util.CoverFlowActivity;
+import net.ducksmanager.util.OpenCvBitmap;
 import net.ducksmanager.whattheduck.IssueWithFullUrl;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
@@ -15,8 +16,6 @@ import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfKeyPoint;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -91,13 +90,20 @@ public class CoverSearch extends RetrieveTask {
     };
 
     public CoverSearch(WeakReference<Activity> originActivityRef, File coverPicture) {
-        super("/cover-id/search", false, futureCallback, uploadFileName, coverPicture);
+        super("/cover-id/search", false, futureCallback, uploadFileName, new JSONObject(), coverPicture);
         CoverSearch.originActivityRef = originActivityRef;
     }
 
-    public CoverSearch(WeakReference<Activity> originActivityRef, MatOfKeyPoint keypoints, Mat descriptors) {
-        super("/cover-id/search", originActivityRef);
-        // TODO call search service
+    public CoverSearch(WeakReference<Activity> originActivityRef, OpenCvBitmap openCvBitmap) {
+        super("/cover-id/search/byKeyPoints", false, futureCallback, uploadFileName, new JSONObject() {{
+            try {
+                put("keypoints", openCvBitmap.getKeyPointsAsJson());
+                put("descriptors", openCvBitmap.getDescriptorsAsJson());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }}, null);
+        CoverSearch.originActivityRef = originActivityRef;
     }
 
     @Override

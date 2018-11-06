@@ -9,6 +9,7 @@ import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
@@ -49,7 +50,7 @@ public abstract class CoaListing {
                     }
                     WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, false);
                 }
-            }, null, null);
+            }, null, new JSONObject(), null);
         } catch (Exception e) {
             RetrieveTask.handleResultExceptionOnActivity(e, activityRef);
         }

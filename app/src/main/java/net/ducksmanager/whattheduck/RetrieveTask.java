@@ -9,6 +9,7 @@ import com.koushikdutta.async.future.FutureCallback;
 import net.ducksmanager.util.Settings;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,6 +29,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
     private String fileName;
     private File file;
     private FutureCallback futureCallback;
+    private JSONObject params;
 
     public interface DownloadHandler {
         String getPage(String url);
@@ -59,11 +61,12 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         this.originActivityRef = originActivityRef;
     }
 
-    protected RetrieveTask(String urlSuffix, boolean legacyServer, FutureCallback futureCallback, String fileName, File file) {
+    protected RetrieveTask(String urlSuffix, boolean legacyServer, FutureCallback futureCallback, String fileName, JSONObject params, File file) {
         this.urlSuffix = urlSuffix;
         this.legacyServer = legacyServer;
         this.futureCallback = futureCallback;
         this.fileName = fileName;
+        this.params = params;
         this.file = file;
     }
 
@@ -74,7 +77,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
                 return WhatTheDuck.wtd.retrieveOrFail(new DefaultDownloadHandler(), this.urlSuffix);
             }
             else {
-                WhatTheDuck.wtd.retrieveOrFailDmServer(this.urlSuffix, this.futureCallback, this.fileName, this.file);
+                WhatTheDuck.wtd.retrieveOrFailDmServer(this.urlSuffix, this.futureCallback, this.fileName, this.params, this.file);
             }
 
         } catch (Exception e) {

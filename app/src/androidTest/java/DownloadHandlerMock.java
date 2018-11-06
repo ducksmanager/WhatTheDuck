@@ -82,6 +82,7 @@ class DownloadHandlerMock {
                     return new MockResponse().setBody(getLocalizedJsonFixture("dm-server/issues"));
                 }
                 if (parts.containsAll(Arrays.asList("cover-id", "search"))) {
+                    String body = request.getBody().readUtf8();
                     return new MockResponse().setBody(getJsonFixture("dm-server/cover-search"));
                 }
                 if (parts.containsAll(Arrays.asList("cover-id", "download"))) {

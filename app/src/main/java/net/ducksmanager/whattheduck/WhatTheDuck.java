@@ -24,6 +24,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.builder.Builders.Any.B;
@@ -32,6 +34,7 @@ import net.ducksmanager.retrievetasks.ConnectAndRetrieveList;
 import net.ducksmanager.retrievetasks.Signup;
 import net.ducksmanager.util.Settings;
 
+import org.json.JSONObject;
 import org.opencv.android.OpenCVLoader;
 
 import java.io.File;
@@ -178,7 +181,7 @@ public class WhatTheDuck extends Activity {
         alert(new WeakReference<>(this), titleId, messageId, "");
     }
 
-    public void retrieveOrFailDmServer(String urlSuffix, FutureCallback<String> futureCallback, String fileName, File file) throws Exception {
+    public void retrieveOrFailDmServer(String urlSuffix, FutureCallback<String> futureCallback, String fileName, JSONObject params, File file) throws Exception {
         if (isOffline()) {
             throw new Exception(getString(R.string.network_error));
         }
@@ -197,6 +200,12 @@ public class WhatTheDuck extends Activity {
 
         if (file != null) {
             call.setMultipartFile(fileName, file);
+        }
+
+        if (params.length() > 0) {
+            JsonParser jsonParser = new JsonParser();
+            JsonObject gsonObject = (JsonObject)jsonParser.parse(params.toString());
+            call.setJsonObjectBody(gsonObject);
         }
 
         call.asString().setCallback(futureCallback);

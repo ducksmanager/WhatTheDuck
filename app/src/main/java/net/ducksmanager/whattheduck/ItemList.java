@@ -26,11 +26,9 @@ import net.ducksmanager.inducks.coa.CountryListing;
 import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.retrievetasks.CoverSearch;
 import net.ducksmanager.util.CoverFlowFileHandler;
+import net.ducksmanager.util.OpenCvBitmap;
 import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.Collection.CollectionType;
-
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfKeyPoint;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -219,9 +217,10 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             this.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
 
             CoverFlowFileHandler.current.resizeUntilFileSize(this, new CoverFlowFileHandler.TransformationCallback() {
+
                 @Override
-                public void onCompleteDescriptors(MatOfKeyPoint keypoints, Mat descriptors) {
-                    new CoverSearch(new WeakReference<>(ItemList.this), keypoints, descriptors).execute();
+                public void onCompleteDescriptors(OpenCvBitmap openCvBitmap) {
+                    new CoverSearch(new WeakReference<>(ItemList.this), openCvBitmap).execute();
                 }
 
                 @Override
