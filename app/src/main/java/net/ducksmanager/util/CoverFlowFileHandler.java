@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.v4.content.FileProvider;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -19,6 +18,8 @@ import net.ducksmanager.whattheduck.WhatTheDuck;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import androidx.core.content.FileProvider;
 
 public class CoverFlowFileHandler {
 

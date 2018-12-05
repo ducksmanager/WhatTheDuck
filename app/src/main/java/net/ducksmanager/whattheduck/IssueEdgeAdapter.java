@@ -2,14 +2,15 @@ package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
 import android.content.res.Configuration;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class IssueEdgeAdapter extends ItemAdapter<Issue> {
     private final int orientation;

@@ -1,6 +1,3 @@
-import android.support.test.filters.LargeTest;
-import android.support.test.runner.AndroidJUnit4;
-
 import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.R;
 
@@ -8,6 +5,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import androidx.test.filters.LargeTest;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest

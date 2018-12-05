@@ -2,10 +2,11 @@ package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import java.util.ArrayList;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CountryAdapter extends ItemAdapter<CountryAdapter.Country> {
 

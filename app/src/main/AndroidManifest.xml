@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.ducksmanager.whattheduck">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="net.ducksmanager.whattheduck">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
                      android:maxSdkVersion="18" />
@@ -13,7 +14,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:supportsRtl="true"
-        android:fullBackupContent="@xml/backup_descriptor">
+        android:fullBackupContent="@xml/backup_descriptor"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name="net.ducksmanager.whattheduck.WhatTheDuck">
             <intent-filter>
@@ -34,7 +36,7 @@
                   android:excludeFromRecents="true"/>
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="net.ducksmanager.whattheduck.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

@@ -1,9 +1,6 @@
 import android.app.Activity;
 import android.content.Intent;
 import android.provider.MediaStore;
-import android.support.test.espresso.intent.Intents;
-import android.support.test.espresso.matcher.BoundedMatcher;
-import android.support.test.filters.LargeTest;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -20,12 +17,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.Intents.intending;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.BoundedMatcher;
+import androidx.test.filters.LargeTest;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.Intents.intending;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 
 
