@@ -12,7 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
+import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 
 class ScreenshotTestRule implements MethodRule {
 

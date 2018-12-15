@@ -12,7 +12,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.VisibleForTesting;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -42,6 +41,8 @@ import java.lang.ref.WeakReference;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.Locale;
+
+import androidx.annotation.VisibleForTesting;
 
 import timber.log.Timber;
 

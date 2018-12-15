@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -18,6 +16,9 @@ import net.ducksmanager.util.Settings;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class IssueList extends ItemList<Issue> {
 
@@ -127,11 +128,11 @@ public class IssueList extends ItemList<Issue> {
         if (viewType.equals(ViewType.EDGE_VIEW)) {
             int deviceOrientation = getResources().getConfiguration().orientation;
             int listOrientation = deviceOrientation == Configuration.ORIENTATION_LANDSCAPE
-                ? LinearLayoutManager.HORIZONTAL
-                : LinearLayoutManager.VERTICAL;
+                ? RecyclerView.HORIZONTAL
+                : RecyclerView.VERTICAL;
 
             if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW)
-             && listOrientation == LinearLayoutManager.VERTICAL) {
+             && listOrientation == RecyclerView.VERTICAL) {
                 WhatTheDuck.wtd.info(new WeakReference<>(this), R.string.welcomeBookcaseViewPortrait, Toast.LENGTH_LONG);
                 Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW);
             }
@@ -141,7 +142,7 @@ public class IssueList extends ItemList<Issue> {
             return new IssueEdgeAdapter(this, issueList, recyclerView, deviceOrientation);
         }
         else {
-            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
             return new IssueAdapter(this, issueList);
         }
     }

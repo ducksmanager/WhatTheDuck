@@ -1,7 +1,6 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
@@ -9,6 +8,8 @@ import net.ducksmanager.retrievetasks.GetPurchaseList;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class IssueAdapter extends ItemAdapter<Issue> {
     IssueAdapter(ItemList itemList, ArrayList<Issue> items) {

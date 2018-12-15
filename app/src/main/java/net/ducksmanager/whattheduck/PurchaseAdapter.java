@@ -1,7 +1,6 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,6 +12,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
 
 public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
