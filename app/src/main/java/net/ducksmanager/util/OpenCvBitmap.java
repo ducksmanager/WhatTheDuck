@@ -52,7 +52,11 @@ public class OpenCvBitmap {
                 obj.put("rows", descriptors.rows());
                 obj.put("cols", descriptors.cols());
                 obj.put("type", descriptors.type());
-                obj.put("data", new String(Base64.encode(data, Base64.DEFAULT)));
+                obj.put("dims", descriptors.dims());
+
+                byte[] descriptorsData = new byte[cols * rows * elemSize];
+                descriptors.get(0, 0, descriptorsData);
+                obj.put("data", new String(Base64.encode(descriptorsData, Base64.NO_WRAP)));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
