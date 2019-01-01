@@ -38,7 +38,7 @@ public class IssueListing extends CoaListing {
     @Override
     protected void processData(String response) throws JSONException {
         if (response != null) {
-            JSONArray issues = null;
+            JSONArray issues = new JSONArray();
             try {  // Legacy JSON structure
                 JSONObject object = new JSONObject(response);
                 issues = object.getJSONObject("static").getJSONArray("numeros");

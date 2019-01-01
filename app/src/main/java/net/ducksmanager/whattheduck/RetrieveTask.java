@@ -111,7 +111,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         else if (e instanceof JSONException) {
             WhatTheDuck.wtd.alert(activityRef,
                 R.string.internal_error,
-                R.string.internal_error__malformed_list," : " + e.getMessage());
+                R.string.internal_error__malformed_list, "");
         }
         else {
             if (e.getMessage() != null

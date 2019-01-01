@@ -45,7 +45,7 @@
     <string name="my_collection">Ma collection</string>
     <string name="network_error">Erreur réseau</string>
     <string name="network_error__no_connection">Problème de réseau : vérifiez votre connexion Internet</string>
-    <string name="no_issue">Aucun numéro.</string>
+    <string name="no_item">Aucun numéro.</string>
     <string name="no_purchase_date">Pas de date d\'achat</string>
     <string name="ok">OK</string>
     <string name="password">Mot de passe</string>

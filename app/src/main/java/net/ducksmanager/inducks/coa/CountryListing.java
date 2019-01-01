@@ -41,8 +41,9 @@ public class CountryListing extends CoaListing {
     @Override
     protected void processData(String response) throws JSONException {
         if (response != null) {
+            JSONObject responseObject = new JSONObject(response);
             resetCountries();
-            addCountriesFullList(new JSONObject(response));
+            addCountriesFullList(responseObject);
         }
     }
 

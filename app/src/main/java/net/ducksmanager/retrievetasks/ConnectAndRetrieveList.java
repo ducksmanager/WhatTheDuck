@@ -77,7 +77,9 @@ public class ConnectAndRetrieveList extends RetrieveTask {
             return;
         }
 
+        Boolean isSuccess = false;
         WhatTheDuck wtdActivity = (WhatTheDuck) originActivityRef.get();
+        CountryListing.hasFullList = false;
 
         try {
             if (response == null || response.isEmpty()) {
@@ -120,14 +122,10 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                             }
                         }
 
-                        CountryListing.hasFullList = false;
-
                         CountryListing.addCountries(object);
                         PublicationListing.addPublications(object);
                     }
-                    else { // Empty list
-                        CountryListing.hasFullList = false;
-                    }
+                    isSuccess = true;
 
                     ItemList.type = Collection.CollectionType.USER.toString();
                     wtdActivity.startActivity(new Intent(wtdActivity, CountryList.class));
@@ -144,10 +142,12 @@ public class ConnectAndRetrieveList extends RetrieveTask {
                 throw new JSONException(e.getMessage());
             }
         } catch (JSONException e) {
-            WhatTheDuck.wtd.alert(R.string.internal_error,
-                    R.string.internal_error__malformed_list, " : " + e.getMessage());
+            WhatTheDuck.wtd.alert(R.string.internal_error, R.string.internal_error__malformed_list);
         } finally {
             wtdActivity.toggleProgressbarLoading(false);
+            if (!isSuccess) {
+                wtdActivity.initUI();
+            }
         }
     }
 }

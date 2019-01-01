@@ -35,7 +35,7 @@
     <string name="internal_error__crypting_failed">The encryption of your credentials failed</string>
     <string name="internal_error__empty_list">Empty list</string>
     <string name="internal_error__issue_insertion_failed">Adding the issue in your collection failed</string>
-    <string name="internal_error__malformed_list">The issue list is malformed</string>
+    <string name="internal_error__malformed_list">The list is malformed, please try again later</string>
     <string name="internal_error__purchase_creation_failed">The creation of the purchase date failed</string>
     <string name="issue_already_possessed">You already have this issue in your collection</string>
     <string name="itemtitle">Item</string>
@@ -48,7 +48,7 @@
     <string name="network_error__no_connection">Network issue: please check your Internet connection</string>
     <string name="newFeature">New features in the WhatTheDuck app</string>
     <string name="newFeatures18Text">You can now see your bookcase on WhatTheDuck!\n\nWhen in an issue list, tap on the bookcase icon to switch to the bookcase view.</string>
-    <string name="no_issue">No issue in this list.</string>
+    <string name="no_item">No issue in this list.</string>
     <string name="no_purchase_date">No purchase date</string>
     <string name="ok">OK</string>
     <string name="password">Password</string>
