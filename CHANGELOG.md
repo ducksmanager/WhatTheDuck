@@ -1,3 +1,7 @@
+Version 1.8.4
+
+    Android Support library => AndroidX
+
 Version 1.8.3
 
     Improve error handling when retrieving the user's collection
