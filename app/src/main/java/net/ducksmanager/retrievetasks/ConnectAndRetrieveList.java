@@ -3,6 +3,7 @@ package net.ducksmanager.retrievetasks;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -58,10 +59,10 @@ public class ConnectAndRetrieveList extends RetrieveTask {
         }
 
         if (TextUtils.isEmpty(Settings.getUsername()) || TextUtils.isEmpty(Settings.getPassword()) && TextUtils.isEmpty(Settings.getEncryptedPassword())) {
-            WhatTheDuck.wtd.alert(R.string.input_error,
-                R.string.input_error__empty_credentials);
+            WhatTheDuck.wtd.alert(R.string.input_error, R.string.input_error__empty_credentials);
             ProgressBar mProgressBar = wtdActivity.findViewById(R.id.progressBar);
             mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+            wtdActivity.findViewById(R.id.login_form).setVisibility(View.VISIBLE);
             cancel(true);
             return;
         }

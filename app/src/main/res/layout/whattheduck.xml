@@ -1,66 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-			  android:orientation="vertical" >
-
-	<EditText
-		android:id="@+id/username"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:hint="@string/username"
-		android:inputType="text">
-
-	    <requestFocus />
-	</EditText>
-
-	<EditText
-	    android:id="@+id/password"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:hint="@string/password"
-	    android:inputType="textPassword" />
-
-	<CheckBox
-	    android:id="@+id/checkBoxRememberCredentials"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:checked="true"
-	    android:text="@string/remember_credentials" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:orientation="vertical">
 
 	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" >
+		android:id="@+id/login_form"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:visibility="gone">
 
-	    <Button
-	        android:id="@+id/login"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
-	        android:text="@string/login" />
+		<EditText
+			android:id="@+id/username"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="@string/username"
+			android:inputType="text">
 
-	    <Button
-	        android:id="@+id/end_signup"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
-	        android:text="@string/signup" />
+			<requestFocus/>
+		</EditText>
 
+		<EditText
+			android:id="@+id/password"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="@string/password"
+			android:inputType="textPassword"/>
+
+		<CheckBox
+			android:id="@+id/checkBoxRememberCredentials"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:checked="true"
+			android:text="@string/remember_credentials"/>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<Button
+				android:id="@+id/login"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="@string/login"/>
+
+			<Button
+				android:id="@+id/end_signup"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="@string/signup"/>
+
+		</LinearLayout>
+
+		<TextView
+			android:id="@+id/linkToDM"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="20dp"
+			android:text="@string/link_to_ducksmanager_website"/>
 	</LinearLayout>
 
 	<ProgressBar
-	    android:id="@+id/progressBar"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_gravity="center"
-	    android:indeterminate="true"
-	    android:visibility="gone" />
+		android:id="@+id/progressBar"
+		android:layout_width="40dp"
+		android:layout_height="48dp"
+		android:layout_centerInParent="true"
+		android:layout_gravity="center"
+		android:indeterminate="true"
+		android:visibility="gone"/>
 
-	<TextView
-	    android:id="@+id/linkToDM"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginTop="20dp"
-	    android:text="@string/link_to_ducksmanager_website" />
-
-</LinearLayout>
+</RelativeLayout>

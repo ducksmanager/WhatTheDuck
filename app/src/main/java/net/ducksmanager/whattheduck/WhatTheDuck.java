@@ -65,6 +65,7 @@ public class WhatTheDuck extends Activity {
 
         String encryptedPassword = Settings.getEncryptedPassword();
 
+        setContentView(R.layout.whattheduck);
         if (encryptedPassword != null) {
             new ConnectAndRetrieveList(false).execute();
         }
@@ -74,7 +75,7 @@ public class WhatTheDuck extends Activity {
     }
 
     public void initUI() {
-        setContentView(R.layout.whattheduck);
+        findViewById(R.id.login_form).setVisibility(View.VISIBLE);
         ((CheckBox) findViewById(R.id.checkBoxRememberCredentials)).setChecked(Settings.username != null);
 
         EditText usernameEditText = findViewById(R.id.username);
