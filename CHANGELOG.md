@@ -1,3 +1,8 @@
+Version 1.8.5
+
+    Access the WTD server directly
+    Minor improvements
+
 Version 1.8.4
 
     Android Support library => AndroidX
