@@ -43,12 +43,8 @@ import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_DM_URL;
 
 public class WhatTheDuck extends Activity {
-    private static final String SERVER_PAGE="WhatTheDuck.php";
-
     @VisibleForTesting
-    public static final String DUCKSMANAGER_PAGE_WITH_REMOTE_URL="WhatTheDuck_server.php";
-
-    private static String serverURL;
+    public static final String WTD_PAGE_PATH = "remote/WhatTheDuck.php";
 
     public static WhatTheDuck wtd;
 
@@ -200,11 +196,7 @@ public class WhatTheDuck extends Activity {
             Settings.setEncryptedPassword(Settings.byteArray2Hex(md.digest()));
         }
 
-        if (serverURL == null) {
-            serverURL = downloadHandler.getPage(getDmUrl()+"/"+DUCKSMANAGER_PAGE_WITH_REMOTE_URL);
-        }
-
-        String response = downloadHandler.getPage(serverURL+"/"+SERVER_PAGE
+        String response = downloadHandler.getPage(getDmUrl()+"/"+ WTD_PAGE_PATH
                                       + "?pseudo_user="+URLEncoder.encode(Settings.username, "UTF-8")
                                       + "&mdp_user="+ Settings.encryptedPassword
                                       + "&mdp="+ WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_SECURITY_PASSWORD)

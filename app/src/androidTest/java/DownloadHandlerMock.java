@@ -2,7 +2,6 @@ import android.net.UrlQuerySanitizer;
 import android.text.TextUtils;
 
 import net.ducksmanager.util.Settings;
-import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,15 +33,13 @@ class DownloadHandlerMock {
             if (request.getPath().contains("/internal/")) {
                 return dispatchForInternal(request);
             }
-            else if (request.getPath().contains("/dm-server/")) {
+            else if (request.getPath().contains("/dm/") || request.getPath().contains("/dm-server/")) {
                 return dispatchForDmServer(request);
             }
             else if (request.getPath().contains("/edges/")) {
                 return dispatchForEdges(request);
             }
-            else {
-                return dispatchForDm(request);
-            }
+            return null;
         }
 
         // Mocks that are internal to tests (photo mocks for instance)
@@ -50,13 +47,6 @@ class DownloadHandlerMock {
             List<String> parts = Arrays.asList(request.getPath().split("/"));
             if (parts.contains("covers")) {
                 return new MockResponse().setBody(getImageFixture("covers/" + parts.get(parts.size()-1)));
-            }
-            return new MockResponse().setStatus("404");
-        }
-
-        private MockResponse dispatchForDm(RecordedRequest request) {
-            if (request.getPath().endsWith(WhatTheDuck.DUCKSMANAGER_PAGE_WITH_REMOTE_URL)) {
-                return new MockResponse().setBody(WtdTest.mockServer.url("/dm-server/").toString());
             }
             return new MockResponse().setStatus("404");
         }
