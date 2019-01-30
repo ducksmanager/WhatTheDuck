@@ -1,3 +1,7 @@
+Version 1.8.6
+
+    Fix network issue on Android Pie
+
 Version 1.8.5
 
     Access the WTD server directly
