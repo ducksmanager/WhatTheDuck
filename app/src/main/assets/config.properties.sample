@@ -1,5 +1,5 @@
 security_password=mypassword
 dm_url=https://dm.net
 api_endpoint_url=http://myserver/dm-server
-piwik_url=http://myserver/piwik
+matomo_url=http://myserver/matomo
 edges_url=https://edges.ducksmanager.net

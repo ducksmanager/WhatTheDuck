@@ -7,10 +7,10 @@ import android.content.res.AssetManager;
 
 import net.ducksmanager.util.Settings;
 
-import org.piwik.sdk.Piwik;
-import org.piwik.sdk.Tracker;
-import org.piwik.sdk.TrackerConfig;
-import org.piwik.sdk.extra.TrackHelper;
+import org.matomo.sdk.Matomo;
+import org.matomo.sdk.Tracker;
+import org.matomo.sdk.TrackerBuilder;
+import org.matomo.sdk.extra.TrackHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,11 +25,11 @@ public class WhatTheDuckApplication extends Application {
     public static final String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
     public static final String CONFIG_KEY_EDGES_URL = "edges_url";
 
-    private static final String CONFIG_KEY_PIWIK_URL = "piwik_url";
-    private static final Integer CONFIG_PIWIK_DIMENSION_USER = 1;
-    private static final Integer CONFIG_PIWIK_DIMENSION_VERSION = 2;
+    private static final String CONFIG_KEY_MATOMO_URL = "matomo_url";
+    private static final Integer CONFIG_MATOMO_DIMENSION_USER = 1;
+    private static final Integer CONFIG_MATOMO_DIMENSION_VERSION = 2;
 
-    private Tracker mPiwikTracker;
+    private Tracker matomoTracker;
 
     public void onCreate() {
         super.onCreate();
@@ -60,12 +60,12 @@ public class WhatTheDuckApplication extends Application {
     }
 
     private synchronized Tracker getTracker() {
-        if (mPiwikTracker != null) {
-            return mPiwikTracker;
+        if (matomoTracker != null) {
+            return matomoTracker;
         }
-        String piwikUrl = config.getProperty(CONFIG_KEY_PIWIK_URL);
-        mPiwikTracker = Piwik.getInstance(this).newTracker(new TrackerConfig(piwikUrl, 2, "WhatTheDuck"));
-        return mPiwikTracker;
+        String matomoUrl = config.getProperty(CONFIG_KEY_MATOMO_URL);
+        matomoTracker = new TrackerBuilder(matomoUrl, 2, "WhatTheDuck").build(Matomo.getInstance(this));
+        return matomoTracker;
     }
 
     public void trackActivity(Activity activity) {
@@ -73,11 +73,11 @@ public class WhatTheDuckApplication extends Application {
 
         String username = Settings.getUsername();
         if (username != null) {
-            t.dimension(CONFIG_PIWIK_DIMENSION_USER, username);
+            t.dimension(CONFIG_MATOMO_DIMENSION_USER, username);
             try {
-                t.dimension(CONFIG_PIWIK_DIMENSION_VERSION, activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName);
+                t.dimension(CONFIG_MATOMO_DIMENSION_VERSION, activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName);
             } catch (PackageManager.NameNotFoundException e) {
-                t.dimension(CONFIG_PIWIK_DIMENSION_VERSION, "Unknown");
+                t.dimension(CONFIG_MATOMO_DIMENSION_VERSION, "Unknown");
             }
         }
 
