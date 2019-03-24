@@ -22,12 +22,12 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
     public static boolean hasFullList = false;
 
     @Override
-    protected boolean hasFullList() {
+    protected boolean hasList() {
         return hasFullList;
     }
 
     @Override
-    protected void downloadFullList() {
+    protected void downloadList() {
         String locale = getApplicationContext().getResources().getConfiguration().locale.getLanguage();
         this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
         DmServer.api.getCountries(locale).enqueue(new DmServer.Callback<HashMap<String, String>>(this.findViewById(R.id.progressBar)) {

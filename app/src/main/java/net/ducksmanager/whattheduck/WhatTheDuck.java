@@ -30,7 +30,7 @@ import com.koushikdutta.ion.builder.Builders.Any.B;
 
 import net.ducksmanager.apigateway.DmServer;
 import net.ducksmanager.persistence.AppDatabase;
-import net.ducksmanager.persistence.models.dm.IssueSimple;
+import net.ducksmanager.persistence.models.dm.Issue;
 import net.ducksmanager.retrievetasks.Signup;
 import net.ducksmanager.util.Settings;
 
@@ -145,8 +145,8 @@ public class WhatTheDuck extends Activity {
         else {
             toggleProgressbarLoading(true);
             trackEvent("retrievecollection/start");
-            DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<IssueSimple>>(this.findViewById(R.id.progressBar)) {
-                public void onSuccessfulResponse(Response<List<IssueSimple>> response) {
+            DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<Issue>>(this.findViewById(R.id.progressBar)) {
+                public void onSuccessfulResponse(Response<List<Issue>> response) {
                     trackEvent("retrievecollection/finish");
                     appDB.issueDao().insertList(response.body());
 

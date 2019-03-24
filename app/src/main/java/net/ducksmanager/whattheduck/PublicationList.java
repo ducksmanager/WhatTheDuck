@@ -17,12 +17,12 @@ import retrofit2.Response;
 public class PublicationList extends ItemList<InducksPublicationWithPossession> {
 
     @Override
-    protected boolean hasFullList() {
+    protected boolean hasList() {
         return false; // FIXME
     }
 
     @Override
-    protected void downloadFullList() {
+    protected void downloadList() {
         this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
         DmServer.api.getPublications(WhatTheDuck.getSelectedCountry()).enqueue(new DmServer.Callback<HashMap<String, String>>(this.findViewById(R.id.progressBar)) {
             @Override

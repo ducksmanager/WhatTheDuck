@@ -40,12 +40,12 @@ public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
     }
 
     @Override
-    protected boolean hasFullList() {
+    protected boolean hasList() {
         return false; // FIXME
     }
 
     @Override
-    protected void downloadFullList() {
+    protected void downloadList() {
         this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
         DmServer.api.getIssues(WhatTheDuck.getSelectedPublication()).enqueue(new DmServer.Callback<List<String>>(this.findViewById(R.id.progressBar)) {
             @Override

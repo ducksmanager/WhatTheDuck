@@ -1,39 +1,40 @@
 package net.ducksmanager.whattheduck;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import net.ducksmanager.retrievetasks.CreatePurchase;
-import net.ducksmanager.retrievetasks.GetPurchaseList;
+import net.ducksmanager.apigateway.DmServer;
+import net.ducksmanager.persistence.models.dm.Purchase;
 import net.ducksmanager.util.MultipleCustomCheckboxes;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import retrofit2.Response;
 
 public class AddIssue extends AppCompatActivity {
 
-    private static HashMap<String,PurchaseAdapter.Purchase> purchases;
+    private HashMap<Integer, Purchase> data;
 
     private static String selectedCondition = null;
-    static String selectedPurchaseHash = null;
-
+    static Integer selectedPurchaseId = null;
 
     private final Calendar myCalendar = Calendar.getInstance();
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -43,9 +44,28 @@ public class AddIssue extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.addissue);
+        downloadPurchaseList();
+    }
 
-        purchases = WhatTheDuck.userCollection.getPurchasesWithEmptyItem();
-        show();
+    protected void downloadPurchaseList() {
+        this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
+        DmServer.api.getUserPurchases().enqueue(new DmServer.Callback<List<Purchase>>(this.findViewById(R.id.progressBar)) {
+            @Override
+            public void onSuccessfulResponse(Response<List<Purchase>> response) {
+                WhatTheDuck.appDB.purchaseDao().insertList(response.body());
+                setData();
+            }
+        });
+    }
+
+    private void setData() {
+        WhatTheDuck.appDB.purchaseDao().findAll().observe(this, purchases -> {
+            this.data = new HashMap<>();
+            for (Purchase purchase : purchases) {
+                this.data.put(purchase.getId(), purchase);
+            }
+            this.show();
+        });
     }
 
     private void show() {
@@ -80,7 +100,7 @@ public class AddIssue extends AppCompatActivity {
             else
                 dmCondition = Issue.GOOD_CONDITION;
 
-            PurchaseAdapter.Purchase selectedPurchase= purchases.get(selectedPurchaseHash);
+            Purchase selectedPurchase = data.get(selectedPurchaseId);
 
             new net.ducksmanager.retrievetasks.AddIssue(
                 new WeakReference<>(AddIssue.this),
@@ -147,31 +167,15 @@ public class AddIssue extends AppCompatActivity {
 
             hideKeyboard(floatingButtonView);
 
-            try {
-                new CreatePurchase(new WeakReference<>(this), purchaseDateNew.getText().toString(), purchaseTitleNew.getText().toString()) {
-                    @Override
-                    protected void afterDataHandling() {
-                        new GetPurchaseList(originActivityRef) {
-                            @Override
-                            protected void afterDataHandling() {
-                                AddIssue.purchases = WhatTheDuck.userCollection.getPurchasesWithEmptyItem();
-                                AddIssue.this.toggleAddPurchaseButton(true);
-                                AddIssue.this.showPurchases(false);
-                                hideKeyboard(floatingButtonView);
-                                newPurchaseSection.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            protected WeakReference<Activity> getOriginActivity() {
-                                return new WeakReference<>(AddIssue.this);
-                            }
-                        }.execute();
-                    }
-                }.execute();
-            }
-            catch(UnsupportedEncodingException e) {
-                WhatTheDuck.wtd.alert(new WeakReference<>(AddIssue.this), R.string.internal_error, R.string.internal_error__purchase_creation_failed, "");
-            }
+            DmServer.api.createUserPurchase(new Purchase(purchaseDateNew.getText().toString(), purchaseTitleNew.getText().toString())).enqueue(new DmServer.Callback<String>(this.findViewById(R.id.progressBar)) {
+                @Override
+                public void onSuccessfulResponse(Response<String> response) {
+                    downloadPurchaseList();
+                    AddIssue.this.toggleAddPurchaseButton(true);
+                    AddIssue.this.showPurchases(false);
+                    newPurchaseSection.setVisibility(View.GONE);
+                }
+            });
 
         });
 
@@ -192,13 +196,13 @@ public class AddIssue extends AppCompatActivity {
 
     private void showPurchases(final Boolean checkNoPurchaseItem) {
         final RecyclerView rv = findViewById(R.id.purchase_list);
-        rv.setAdapter(new PurchaseAdapter(this, purchases));
+        rv.setAdapter(new PurchaseAdapter(this, data));
         rv.setLayoutManager(new LinearLayoutManager(this));
 
         final MultipleCustomCheckboxes purchaseDateCheckboxes = new MultipleCustomCheckboxes(
             new WeakReference<>(rv),
-            view -> selectedPurchaseHash = view.getContentDescription().toString(),
-            view -> selectedPurchaseHash = null
+            view -> selectedPurchaseId = Integer.parseInt(view.getContentDescription().toString()),
+            view -> selectedPurchaseId = null
         );
         rv.post(() -> {
             purchaseDateCheckboxes.initClickEvents();

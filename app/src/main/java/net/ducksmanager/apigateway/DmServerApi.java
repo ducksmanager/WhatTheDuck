@@ -1,12 +1,15 @@
 package net.ducksmanager.apigateway;
 
-import net.ducksmanager.persistence.models.dm.IssueSimple;
+import net.ducksmanager.persistence.models.dm.Issue;
+import net.ducksmanager.persistence.models.dm.Purchase;
 
 import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface DmServerApi {
@@ -20,5 +23,11 @@ public interface DmServerApi {
     Call<List<String>> getIssues(@Path("publicationCode") String publicationCode);
 
     @GET("/collection/issues")
-    Call<List<IssueSimple>> getUserIssues();
+    Call<List<Issue>> getUserIssues();
+
+    @GET("/collection/purchases")
+    Call<List<Purchase>> getUserPurchases();
+
+    @POST("/collection/purchases")
+    Call<String> createUserPurchase(@Body Purchase $purchase);
 }

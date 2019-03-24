@@ -44,8 +44,8 @@ public abstract class ItemList<Item> extends AppCompatActivity {
     private Boolean requiresDataDownload = false;
     protected List<Item> data = new ArrayList<>();
 
-    protected abstract boolean hasFullList();
-    protected abstract void downloadFullList();
+    protected abstract boolean hasList();
+    protected abstract void downloadList();
     protected abstract boolean hasDividers();
 
     protected abstract boolean isPossessedByUser();
@@ -84,9 +84,9 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
     void loadList() {
         ((WhatTheDuckApplication) getApplication()).trackActivity(this);
-        if (!hasFullList()) {
+        if (!hasList()) {
             this.requiresDataDownload = true;
-            downloadFullList();
+            downloadList();
         }
         else {
             setData();
@@ -311,10 +311,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
     protected void storeItemList(List<Item> items) {
         this.data = items;
-        this.notifyCompleteList();
-    }
-
-    void notifyCompleteList() {
         this.requiresDataDownload = false;
         this.show();
     }

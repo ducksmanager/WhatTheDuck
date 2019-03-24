@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.TextView;
 
+import net.ducksmanager.persistence.models.dm.Purchase;
 import net.igenius.customcheckbox.CustomCheckBox;
 
 import java.text.SimpleDateFormat;
@@ -15,15 +16,7 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 
-public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
-
-    public abstract static class Purchase {
-        Boolean noPurchase;
-
-        Boolean isNoPurchase() {
-            return noPurchase;
-        }
-    }
+public class PurchaseAdapter extends ItemAdapter<Purchase> {
 
     static class SpecialPurchase extends Purchase {
         SpecialPurchase() {
@@ -58,8 +51,8 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-    PurchaseAdapter(Activity activity, HashMap<String,Purchase> items) {
-        super(activity, R.layout.row_purchase, new ArrayList<>(items.values()));
+    PurchaseAdapter(Activity activity, HashMap<Integer, Purchase> items) {
+        super(activity, R.layout.row_purchase, new ArrayList<>(items.values())));
     }
 
     @Override
@@ -117,7 +110,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
             purchaseHolder.purchaseCheck.setContentDescription(purchase.toString());
 
             purchaseHolder.purchaseCheck.setTag(R.id.check_by_user, Boolean.FALSE);
-            purchaseHolder.purchaseCheck.setChecked(purchase.toString().equals(AddIssue.selectedPurchaseHash));
+            purchaseHolder.purchaseCheck.setChecked(purchase.toString().equals(AddIssue.selectedPurchaseId));
             purchaseHolder.purchaseCheck.setTag(R.id.check_by_user, null);
 
             if (!isNoPurchase) {
@@ -132,17 +125,17 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
     }
 
     @Override
-    protected Integer getPrefixImageResource(Purchase i, Activity activity) {
+    protected Integer getPrefixImageResource(Purchase p, Activity activity) {
         return null;
     }
 
     @Override
-    protected Integer getSuffixImageResource(Purchase i) {
+    protected Integer getSuffixImageResource(Purchase p) {
         return null;
     }
 
     @Override
-    protected String getSuffixText(Purchase i) {
+    protected String getSuffixText(Purchase p) {
         return null;
     }
 
@@ -158,16 +151,16 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
     }
 
     @Override
-    protected String getComparatorText(Purchase i) {
-        return i.isNoPurchase()
+    protected String getComparatorText(Purchase p) {
+        return p.isNoPurchase()
             ? "^"
-            : dateFormat.format(((PurchaseWithDate) i).getPurchaseDate());
+            : dateFormat.format(((PurchaseWithDate) p).getPurchaseDate());
     }
 
     @Override
-    protected String getIdentifier(Purchase i) {
-        return i.isNoPurchase()
+    protected String getIdentifier(Purchase p) {
+        return p.isNoPurchase()
             ? "no"
-            : String.valueOf(((PurchaseWithDate) i).getId());
+            : String.valueOf(((PurchaseWithDate) p).getId());
     }
 }

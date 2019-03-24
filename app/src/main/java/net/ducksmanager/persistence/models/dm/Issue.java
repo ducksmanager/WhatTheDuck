@@ -7,7 +7,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "issues")
-public class IssueSimple {
+public class Issue {
     @Expose
     @PrimaryKey
     private Integer id;

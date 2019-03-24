@@ -1,7 +1,7 @@
 package net.ducksmanager.persistence.models.composite;
 
 import net.ducksmanager.persistence.models.coa.InducksIssue;
-import net.ducksmanager.persistence.models.dm.IssueSimple;
+import net.ducksmanager.persistence.models.dm.Issue;
 import net.ducksmanager.whattheduck.R;
 
 import androidx.room.Embedded;
@@ -16,9 +16,9 @@ public class InducksIssueWithUserIssueDetails {
     private InducksIssue issue;
 
     @Embedded
-    private IssueSimple userIssue;
+    private Issue userIssue;
 
-    public InducksIssueWithUserIssueDetails(InducksIssue issue, IssueSimple userIssue) {
+    public InducksIssueWithUserIssueDetails(InducksIssue issue, Issue userIssue) {
         this.issue = issue;
         this.userIssue = userIssue;
     }
@@ -39,7 +39,7 @@ public class InducksIssueWithUserIssueDetails {
         return issue;
     }
 
-    public IssueSimple getUserIssue() {
+    public Issue getUserIssue() {
         return userIssue;
     }
 
