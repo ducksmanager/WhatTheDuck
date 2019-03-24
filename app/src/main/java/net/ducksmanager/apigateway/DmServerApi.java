@@ -1,5 +1,6 @@
 package net.ducksmanager.apigateway;
 
+import net.ducksmanager.persistence.models.composite.IssueListToUpdate;
 import net.ducksmanager.persistence.models.dm.Issue;
 import net.ducksmanager.persistence.models.dm.Purchase;
 
@@ -29,5 +30,8 @@ public interface DmServerApi {
     Call<List<Purchase>> getUserPurchases();
 
     @POST("/collection/purchases")
-    Call<String> createUserPurchase(@Body Purchase $purchase);
+    Call<String> createUserPurchase(@Body Purchase purchase);
+
+    @POST("/collection/issues")
+    Call<String> createUserIssues(@Body IssueListToUpdate issueListToUpdate);
 }

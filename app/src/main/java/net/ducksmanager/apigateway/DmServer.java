@@ -60,10 +60,13 @@ public class DmServer {
 
     public abstract static class Callback<T> implements retrofit2.Callback<T> {
 
-        private ProgressBar progressBar = null;
+        private ProgressBar progressBar;
 
         protected Callback(ProgressBar progressBar) {
             this.progressBar = progressBar;
+        }
+
+        protected Callback() {
         }
 
         public abstract void onSuccessfulResponse(Response<T> response);

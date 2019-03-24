@@ -1,6 +1,5 @@
 package net.ducksmanager.persistence.dao;
 
-import net.ducksmanager.persistence.models.coa.InducksPublication;
 import net.ducksmanager.persistence.models.dm.Purchase;
 
 import java.util.List;

@@ -1,6 +1,7 @@
 package net.ducksmanager.util;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,7 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.ducksmanager.retrievetasks.GetPurchaseList;
+import net.ducksmanager.whattheduck.AddIssue;
 import net.ducksmanager.whattheduck.Issue;
 import net.ducksmanager.whattheduck.IssueWithFullUrl;
 import net.ducksmanager.whattheduck.R;
@@ -88,7 +89,7 @@ public class CoverFlowActivity extends Activity {
                 WhatTheDuck.setSelectedPublication (currentSuggestion.getPublicationCode());
                 WhatTheDuck.setSelectedIssue(newIssue.getIssueNumber());
 
-                GetPurchaseList.initAndShowAddIssue(CoverFlowActivity.this);
+                CoverFlowActivity.this.startActivity(new Intent(CoverFlowActivity.this, AddIssue.class));
             }
             else {
                 Toast.makeText(

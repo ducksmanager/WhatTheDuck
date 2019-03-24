@@ -143,18 +143,22 @@ public class WhatTheDuck extends Activity {
             this.findViewById(R.id.login_form).setVisibility(View.VISIBLE);
         }
         else {
-            toggleProgressbarLoading(true);
-            trackEvent("retrievecollection/start");
-            DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<Issue>>(this.findViewById(R.id.progressBar)) {
-                public void onSuccessfulResponse(Response<List<Issue>> response) {
-                    trackEvent("retrievecollection/finish");
-                    appDB.issueDao().insertList(response.body());
-
-                    ItemList.type = WhatTheDuck.CollectionType.USER.toString();
-                    WhatTheDuck.this.startActivity(new Intent(WhatTheDuck.this, CountryList.class));
-                }
-            });
+            fetchCollection(new WeakReference<>(this), CountryList.class);
         }
+    }
+
+    public static void fetchCollection(WeakReference<Activity> activityRef, Class targetClass) {
+        activityRef.get().findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
+        trackEvent("retrievecollection/start");
+        DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<Issue>>(activityRef.get().findViewById(R.id.progressBar)) {
+            public void onSuccessfulResponse(Response<List<Issue>> response) {
+                trackEvent("retrievecollection/finish");
+                appDB.issueDao().insertList(response.body());
+
+                ItemList.type = WhatTheDuck.CollectionType.USER.toString();
+                activityRef.get().startActivity(new Intent(activityRef.get(), targetClass));
+            }
+        });
     }
 
     private String getDmUrl() {

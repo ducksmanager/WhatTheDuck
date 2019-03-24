@@ -1,11 +1,11 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Toast;
 
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails;
-import net.ducksmanager.retrievetasks.GetPurchaseList;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -33,7 +33,9 @@ public class IssueAdapter extends ItemAdapter<InducksIssueWithUserIssueDetails> 
                 } else {
                     WhatTheDuck.wtd.toggleProgressbarLoading(new WeakReference<>(IssueAdapter.this.getOriginActivity()), true);
                     WhatTheDuck.setSelectedIssue(selectedIssue.getIssue().getIssueNumber());
-                    GetPurchaseList.initAndShowAddIssue(IssueAdapter.this.getOriginActivity());
+
+                    Intent i = new Intent(originActivity, net.ducksmanager.whattheduck.AddIssue.class);
+                    originActivity.startActivity(i);
                 }
             }
         };

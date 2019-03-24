@@ -10,14 +10,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.ducksmanager.apigateway.DmServer;
+import net.ducksmanager.persistence.models.composite.IssueListToUpdate;
 import net.ducksmanager.persistence.models.dm.Purchase;
 import net.ducksmanager.util.MultipleCustomCheckboxes;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +31,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Response;
+
+import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
 public class AddIssue extends AppCompatActivity {
 
@@ -102,17 +107,25 @@ public class AddIssue extends AppCompatActivity {
 
             Purchase selectedPurchase = data.get(selectedPurchaseId);
 
-            new net.ducksmanager.retrievetasks.AddIssue(
-                new WeakReference<>(AddIssue.this),
+            IssueListToUpdate issueListToUpdate = new IssueListToUpdate(
                 WhatTheDuck.getSelectedPublication(),
-                new Issue(
-                    WhatTheDuck.getSelectedIssue(),
-                    dmCondition,
-                    selectedPurchase instanceof PurchaseAdapter.PurchaseWithDate
-                        ? (PurchaseAdapter.PurchaseWithDate) selectedPurchase
-                        : null
-                )
-            ).execute();
+                Collections.singletonList(WhatTheDuck.getSelectedIssue()),
+                dmCondition,
+                selectedPurchase == null ? null : selectedPurchase.getId()
+            );
+
+            this.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+
+            trackEvent("addissue/start");
+            DmServer.api.createUserIssues(issueListToUpdate).enqueue(new DmServer.Callback<String>() {
+                @Override
+                public void onSuccessfulResponse(Response<String> response) {
+                    trackEvent("addissue/finish");
+
+                    WhatTheDuck.wtd.info(new WeakReference<>(AddIssue.this), R.string.confirmation_message__issue_inserted, Toast.LENGTH_SHORT);
+                    WhatTheDuck.fetchCollection(new WeakReference<>(AddIssue.this), IssueList.class);
+                }
+            });
         });
 
         findViewById(R.id.addissue_cancel).setOnClickListener(view ->
