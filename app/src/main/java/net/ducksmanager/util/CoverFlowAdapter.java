@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import net.ducksmanager.whattheduck.IssueWithFullUrl;
+import net.ducksmanager.persistence.models.composite.IssueWithFullUrl;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 

@@ -16,7 +16,10 @@ import android.widget.TextView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
-import net.ducksmanager.retrievetasks.CoverSearch;
+import net.ducksmanager.apigateway.DmServer;
+import net.ducksmanager.persistence.models.composite.CoverSearchResults;
+import net.ducksmanager.persistence.models.composite.IssueWithFullUrl;
+import net.ducksmanager.util.CoverFlowActivity;
 import net.ducksmanager.util.CoverFlowFileHandler;
 import net.ducksmanager.util.Settings;
 
@@ -31,10 +34,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Response;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
 public abstract class ItemList<Item> extends AppCompatActivity {
     public static String type = WhatTheDuck.CollectionType.USER.toString();
@@ -213,13 +222,55 @@ public abstract class ItemList<Item> extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            this.findViewById(R.id.addToCollectionWrapper).setVisibility(GONE);
+            this.findViewById(R.id.addToCollectionWrapper).setVisibility(View.VISIBLE);
             this.findViewById(R.id.progressBar).setVisibility(VISIBLE);
 
             CoverFlowFileHandler.current.resizeUntilFileSize(this, new CoverFlowFileHandler.TransformationCallback() {
                 @Override
-                public void onComplete(File fileToUpload) {
-                    new CoverSearch(new WeakReference<>(ItemList.this), fileToUpload).execute();
+                public void onComplete(File file) {
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
+                    MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("wtd_jpg", file.getName(), requestBody);
+                    RequestBody fileName = RequestBody.create(MediaType.parse("text/plain"), file.getName());
+
+                    System.out.println("Starting cover search : " + System.currentTimeMillis());
+                    trackEvent("coversearch/start");
+                    DmServer.api.searchFromCover(fileToUpload, fileName).enqueue(new DmServer.Callback<CoverSearchResults>(ItemList.this.findViewById(R.id.progressBar)) {
+                        @Override
+                        public void onSuccessfulResponse(Response<CoverSearchResults> response) {
+                            trackEvent("coversearch/finish");
+                            System.out.println("Ending cover search : " + System.currentTimeMillis());
+
+                            if (response.body().getIssues() != null) {
+                                for (IssueWithFullUrl issue : response.body().getIssues()) {
+                                    issue.setFullUrl(
+                                            WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL) + "/cover-id/download/" + issue.getCoverId()
+                                    );
+                                }
+                                ItemList.this.startActivity(new Intent(ItemList.this, CoverFlowActivity.class));
+                            }
+                            else {
+                                if (response.body().getType() != null) {
+                                    switch(response.body().getType()) {
+                                        case "SEARCH_RESULTS":
+                                            WhatTheDuck.wtd.alert(new WeakReference<>(ItemList.this), R.string.add_cover_no_results);
+                                            break;
+                                        default:
+                                            WhatTheDuck.wtd.alert(new WeakReference<>(ItemList.this), response.body().getType());
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call call, Throwable t) {
+                            if (t.getMessage().contains("exceeds your upload")) {
+                                WhatTheDuck.wtd.alert(new WeakReference<>(ItemList.this), R.string.add_cover_error_file_too_big);
+                            }
+                            else {
+                                WhatTheDuck.wtd.alert(new WeakReference<>(ItemList.this), R.string.internal_error);
+                            }
+                        }
+                    });
                 }
 
                 @Override

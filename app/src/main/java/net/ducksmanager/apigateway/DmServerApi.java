@@ -1,5 +1,6 @@
 package net.ducksmanager.apigateway;
 
+import net.ducksmanager.persistence.models.composite.CoverSearchResults;
 import net.ducksmanager.persistence.models.composite.IssueListToUpdate;
 import net.ducksmanager.persistence.models.dm.Issue;
 import net.ducksmanager.persistence.models.dm.Purchase;
@@ -7,10 +8,14 @@ import net.ducksmanager.persistence.models.dm.Purchase;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface DmServerApi {
@@ -34,4 +39,8 @@ public interface DmServerApi {
 
     @POST("/collection/issues")
     Call<String> createUserIssues(@Body IssueListToUpdate issueListToUpdate);
+
+    @Multipart
+    @POST("/cover-id/search")
+    Call<CoverSearchResults> searchFromCover(@Part MultipartBody.Part file, @Part("wtd_jpg") RequestBody fileName);
 }

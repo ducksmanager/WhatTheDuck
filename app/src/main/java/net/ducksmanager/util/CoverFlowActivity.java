@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import net.ducksmanager.whattheduck.AddIssue;
 import net.ducksmanager.whattheduck.Issue;
-import net.ducksmanager.whattheduck.IssueWithFullUrl;
+import net.ducksmanager.persistence.models.composite.IssueWithFullUrl;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
@@ -45,7 +45,7 @@ public class CoverFlowActivity extends Activity {
         setContentView(R.layout.activity_coverflow);
 
         Bundle extras = getIntent().getExtras();
-        mData = (ArrayList<IssueWithFullUrl>) extras.get("resultCollection");
+        mData = (ArrayList<IssueWithFullUrl>) extras.get("resultCollection"); // FIXME fetch from DB instead
 
         mResultNumber = findViewById(R.id.resultNumber);
         mResultNumber.setFactory(() -> {

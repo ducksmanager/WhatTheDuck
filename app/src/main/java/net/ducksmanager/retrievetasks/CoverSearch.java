@@ -7,7 +7,7 @@ import android.view.View;
 import com.koushikdutta.async.future.FutureCallback;
 
 import net.ducksmanager.util.CoverFlowActivity;
-import net.ducksmanager.whattheduck.IssueWithFullUrl;
+import net.ducksmanager.persistence.models.composite.IssueWithFullUrl;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
