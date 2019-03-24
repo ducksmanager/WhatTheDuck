@@ -46,18 +46,18 @@ public class PublicationList extends ItemList<InducksPublicationWithPossession> 
     }
 
     @Override
-    protected boolean userHasItemsInCollectionForCurrent() {
-        return WhatTheDuck.userCollection.hasCountry(WhatTheDuck.getSelectedCountry());
+    protected boolean isPossessedByUser() {
+        for (InducksPublicationWithPossession i: data) {
+            if (i.getPossessed()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     protected void setData() {
-        WhatTheDuck.appDB.inducksPublicationDao().findByCountry(WhatTheDuck.getSelectedCountry()).observe(this, this::storePublicationList);
-    }
-
-    private void storePublicationList(List<InducksPublicationWithPossession> inducksPublications) {
-        this.data = inducksPublications;
-        this.notifyCompleteList();
+        WhatTheDuck.appDB.inducksPublicationDao().findByCountry(WhatTheDuck.getSelectedCountry()).observe(this, this::storeItemList);
     }
 
     @Override

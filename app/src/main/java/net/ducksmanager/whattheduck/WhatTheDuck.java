@@ -55,7 +55,6 @@ public class WhatTheDuck extends Activity {
     public static WhatTheDuck wtd;
 
     public static Collection userCollection = new Collection();
-    public static Collection coaCollection = new Collection();
     public static AppDatabase appDB;
 
     private static String selectedCountry = null;

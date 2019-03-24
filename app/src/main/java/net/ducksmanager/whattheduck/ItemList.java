@@ -48,7 +48,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
     protected abstract void downloadFullList();
     protected abstract boolean hasDividers();
 
-    protected abstract boolean userHasItemsInCollectionForCurrent();
+    protected abstract boolean isPossessedByUser();
     protected abstract void setData();
 
     protected abstract boolean shouldShow();
@@ -309,13 +309,18 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         currentPublicationText.setText(publicationFullName);
     }
 
+    protected void storeItemList(List<Item> items) {
+        this.data = items;
+        this.notifyCompleteList();
+    }
+
     void notifyCompleteList() {
         this.requiresDataDownload = false;
         this.show();
     }
 
     void onBackFromAddIssueActivity() {
-        if (userHasItemsInCollectionForCurrent()) {
+        if (isPossessedByUser()) {
             goToAlternativeView();
         }
         else {

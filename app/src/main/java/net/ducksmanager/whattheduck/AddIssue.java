@@ -197,10 +197,8 @@ public class AddIssue extends AppCompatActivity {
 
         final MultipleCustomCheckboxes purchaseDateCheckboxes = new MultipleCustomCheckboxes(
             new WeakReference<>(rv),
-            view ->
-                selectedPurchaseHash = view.getContentDescription().toString(),
-            view ->
-                selectedPurchaseHash = null
+            view -> selectedPurchaseHash = view.getContentDescription().toString(),
+            view -> selectedPurchaseHash = null
         );
         rv.post(() -> {
             purchaseDateCheckboxes.initClickEvents();

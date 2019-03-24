@@ -71,7 +71,7 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
     }
 
     @Override
-    protected boolean userHasItemsInCollectionForCurrent() {
+    protected boolean isPossessedByUser() {
         return true;
     }
 
@@ -116,12 +116,7 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
     }
 
     protected void setData() {
-        WhatTheDuck.appDB.inducksCountryDao().findAll().observe(CountryList.this, this::storeCountryList);
-    }
-
-    private void storeCountryList(List<InducksCountryNameWithPossession> inducksCountryNames) {
-        this.data = inducksCountryNames;
-        this.notifyCompleteList();
+        WhatTheDuck.appDB.inducksCountryDao().findAll().observe(CountryList.this, this::storeItemList);
     }
 
     @Override

@@ -173,18 +173,18 @@ public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
     }
 
     @Override
-    protected boolean userHasItemsInCollectionForCurrent() {
-        return WhatTheDuck.userCollection.hasPublication(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication());
+    protected boolean isPossessedByUser() {
+        for (InducksIssueWithUserIssueDetails i: data) {
+            if (i.getUserIssue() != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     protected void setData() {
-        WhatTheDuck.appDB.inducksIssueDao().findByPublicationCode(WhatTheDuck.getSelectedPublication()).observe(this, this::storeIssueList);
-    }
-
-    private void storeIssueList(List<InducksIssueWithUserIssueDetails> inducksIssues) {
-        this.data = inducksIssues;
-        this.notifyCompleteList();
+        WhatTheDuck.appDB.inducksIssueDao().findByPublicationCode(WhatTheDuck.getSelectedPublication()).observe(this, this::storeItemList);
     }
 
     @Override
