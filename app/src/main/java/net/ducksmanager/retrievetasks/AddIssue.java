@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.widget.Toast;
 
-import net.ducksmanager.inducks.coa.CountryListing;
-import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.whattheduck.Issue;
 import net.ducksmanager.whattheduck.IssueList;
 import net.ducksmanager.whattheduck.R;
@@ -48,32 +46,12 @@ public class AddIssue extends RetrieveTask {
             WhatTheDuck.wtd.info(originActivityRef, R.string.confirmation_message__issue_inserted, Toast.LENGTH_SHORT);
             WhatTheDuck.userCollection.addIssue(shortCountryAndPublication, selectedIssue);
 
-            updateNamesAndGoToIssueList();
+            originActivityRef.get().startActivity(new Intent(originActivityRef.get(), IssueList.class));
         }
         else {
             WhatTheDuck.wtd.alert(R.string.internal_error, R.string.internal_error__issue_insertion_failed);
         }
 
         WhatTheDuck.wtd.toggleProgressbarLoading(originActivityRef, false);
-    }
-
-    static private void updateNamesAndGoToIssueList() {
-        Activity callbackActivity = originActivityRef.get();
-
-        String country=shortCountryAndPublication.split("/")[0];
-        if (PublicationListing.hasFullList(country)) {
-            callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
-        }
-        else {
-            new PublicationListing(callbackActivity, country, (e, result) -> {
-                if (CountryListing.hasFullList) {
-                    callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class));
-                } else {
-                    new CountryListing(callbackActivity, (e2, result2) ->
-                        callbackActivity.startActivity(new Intent(callbackActivity, IssueList.class))
-                    ).fetch();
-                }
-            }).fetch();
-        }
     }
 }

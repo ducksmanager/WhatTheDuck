@@ -1,14 +1,9 @@
 package net.ducksmanager.whattheduck;
 
 
-import net.ducksmanager.inducks.coa.CountryListing;
-import net.ducksmanager.inducks.coa.PublicationListing;
-import net.ducksmanager.whattheduck.Issue.IssueCondition;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class Collection implements Serializable {
     private final HashMap<String,HashMap<String,HashMap<String, Issue>>> issues = new HashMap<>();
@@ -34,8 +29,6 @@ public class Collection implements Serializable {
         return purchasesWithEmptyItem;
     }
 
-    public enum CollectionType {COA,USER}
-
     public void addCountry(String country) {
         issues.put(country, new HashMap<>());
     }
@@ -59,47 +52,6 @@ public class Collection implements Serializable {
         if (issues.get(country).get(publication) == null)
             this.addPublication(country, publication);
         issues.get(country).get(publication).put(issue.getIssueNumber(), issue);
-    }
-
-    public ArrayList<CountryAdapter.Country> getCountryList() {
-        ArrayList<CountryAdapter.Country> countryList = new ArrayList<>();
-        Set<String> countrySet = issues.keySet();
-        for (String shortCountryName : countrySet) {
-            countryList.add(new CountryAdapter.Country(shortCountryName, CountryListing.getCountryFullName(shortCountryName)));
-        }
-        return countryList;
-    }
-
-    public ArrayList<PublicationAdapter.Publication> getPublicationList(String shortCountryName) {
-        ArrayList<PublicationAdapter.Publication> publicationList = new ArrayList<>();
-        HashMap<String, HashMap<String, Issue>> publicationMap = issues.get(shortCountryName);
-        if (publicationMap != null) {
-            for (String shortPublicationName : publicationMap.keySet()) {
-                publicationList.add(new PublicationAdapter.Publication(shortPublicationName, PublicationListing.getPublicationFullName(shortCountryName, shortPublicationName)));
-            }
-        }
-        return publicationList;
-    }
-
-    public ArrayList<Issue> getIssueList(String shortCountryName, String shortPublicationName) {
-        ArrayList<Issue> finalList = new ArrayList<>();
-        HashMap<String, HashMap<String, Issue>> publicationMap = issues.get(shortCountryName);
-        if (publicationMap != null) {
-            HashMap<String, Issue> list = publicationMap.get(shortPublicationName);
-            if (list != null) {
-                for (Issue issue : list.values()) {
-                    IssueCondition condition = null;
-                    PurchaseAdapter.PurchaseWithDate purchase = null;
-                    Issue existingIssue = WhatTheDuck.userCollection.getIssue(shortCountryName, shortPublicationName, issue.getIssueNumber());
-                    if (existingIssue != null) {
-                        condition = existingIssue.getIssueCondition();
-                        purchase = existingIssue.getPurchase();
-                    }
-                    finalList.add(new Issue(issue.getIssueNumber(), condition, purchase));
-                }
-            }
-        }
-        return finalList;
     }
 
     public boolean hasCountry (String countryShortName) {

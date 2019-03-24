@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -27,7 +28,9 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.builder.Builders.Any.B;
 
-import net.ducksmanager.retrievetasks.ConnectAndRetrieveList;
+import net.ducksmanager.apigateway.DmServer;
+import net.ducksmanager.persistence.AppDatabase;
+import net.ducksmanager.persistence.models.dm.IssueSimple;
 import net.ducksmanager.retrievetasks.Signup;
 import net.ducksmanager.util.Settings;
 
@@ -35,9 +38,12 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
+import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.VisibleForTesting;
+import androidx.room.Room;
+import retrofit2.Response;
 
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_DM_URL;
@@ -50,31 +56,39 @@ public class WhatTheDuck extends Activity {
 
     public static Collection userCollection = new Collection();
     public static Collection coaCollection = new Collection();
+    public static AppDatabase appDB;
 
     private static String selectedCountry = null;
     private static String selectedPublication = null;
     private static String selectedIssue = null;
 
+    public enum CollectionType {COA,USER}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         wtd=this;
-        super.onCreate(savedInstanceState);
         ((WhatTheDuckApplication) getApplication()).trackActivity(this);
+
+        super.onCreate(savedInstanceState);
 
         Settings.loadUserSettings();
 
         String encryptedPassword = Settings.getEncryptedPassword();
+        DmServer.initApi();
+        appDB = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "appDB")
+            .allowMainThreadQueries()
+            .build();
 
         setContentView(R.layout.whattheduck);
         if (encryptedPassword != null) {
-            new ConnectAndRetrieveList(false).execute();
+            connectAndFetchCollection();
         }
         else {
-            initUI();
+            showLoginForm();
         }
     }
 
-    public void initUI() {
+    public void showLoginForm() {
         findViewById(R.id.login_form).setVisibility(View.VISIBLE);
         ((CheckBox) findViewById(R.id.checkBoxRememberCredentials)).setChecked(Settings.username != null);
 
@@ -103,7 +117,15 @@ public class WhatTheDuck extends Activity {
         Button loginButton = findViewById(R.id.login);
         loginButton.setOnClickListener(view -> {
             hideKeyboard(view);
-            new ConnectAndRetrieveList(true).execute();
+            if (Settings.getUsername() == null
+                || !Settings.getUsername().equals(((EditText) this.findViewById(R.id.username)).getText().toString())
+                || Settings.getEncryptedPassword() == null) {
+
+                Settings.setUsername(((EditText) this.findViewById(R.id.username)).getText().toString());
+                Settings.setPassword(((EditText) this.findViewById(R.id.password)).getText().toString());
+                Settings.setRememberCredentials(((CheckBox) this.findViewById(R.id.checkBoxRememberCredentials)).isChecked());
+            }
+            connectAndFetchCollection();
         });
 
         TextView linkToDM = findViewById(R.id.linkToDM);
@@ -112,6 +134,28 @@ public class WhatTheDuck extends Activity {
             final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(getDmUrl()));
             WhatTheDuck.this.startActivity(intent);
         });
+    }
+
+    void connectAndFetchCollection() {
+        if (TextUtils.isEmpty(Settings.getUsername()) || TextUtils.isEmpty(Settings.getPassword()) && TextUtils.isEmpty(Settings.getEncryptedPassword())) {
+            WhatTheDuck.wtd.alert(R.string.input_error, R.string.input_error__empty_credentials);
+            ProgressBar mProgressBar = this.findViewById(R.id.progressBar);
+            mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+            this.findViewById(R.id.login_form).setVisibility(View.VISIBLE);
+        }
+        else {
+            toggleProgressbarLoading(true);
+            trackEvent("retrievecollection/start");
+            DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<IssueSimple>>(this.findViewById(R.id.progressBar)) {
+                public void onSuccessfulResponse(Response<List<IssueSimple>> response) {
+                    trackEvent("retrievecollection/finish");
+                    appDB.issueDao().insertList(response.body());
+
+                    ItemList.type = WhatTheDuck.CollectionType.USER.toString();
+                    WhatTheDuck.this.startActivity(new Intent(WhatTheDuck.this, CountryList.class));
+                }
+            });
+        }
     }
 
     private String getDmUrl() {
@@ -237,9 +281,14 @@ public class WhatTheDuck extends Activity {
         return netInfo == null || !netInfo.isConnected();
     }
 
-    public String getApplicationVersion() throws NameNotFoundException {
+    public String getApplicationVersion() {
         PackageManager manager = this.getPackageManager();
-        PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+        PackageInfo info;
+        try {
+            info = manager.getPackageInfo(this.getPackageName(), 0);
+        } catch (NameNotFoundException e) {
+            return "Unknown";
+        }
         return info.versionName;
     }
 

@@ -2,23 +2,39 @@ package net.ducksmanager.whattheduck;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ProgressBar;
 
-import net.ducksmanager.inducks.coa.PublicationListing;
+import net.ducksmanager.apigateway.DmServer;
+import net.ducksmanager.persistence.models.coa.InducksPublication;
+import net.ducksmanager.persistence.models.composite.InducksPublicationWithPossession;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class PublicationList extends ItemList<PublicationAdapter.Publication> {
+import retrofit2.Response;
+
+public class PublicationList extends ItemList<InducksPublicationWithPossession> {
 
     @Override
-    protected boolean needsToDownloadFullList() {
-        return ! PublicationListing.hasFullList(WhatTheDuck.getSelectedCountry());
+    protected boolean hasFullList() {
+        return false; // FIXME
     }
 
     @Override
     protected void downloadFullList() {
-        new PublicationListing(this, WhatTheDuck.getSelectedCountry(), (e, result) ->
-            PublicationList.this.notifyCompleteList()
-        ).fetch();
+        this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
+        DmServer.api.getPublications(WhatTheDuck.getSelectedCountry()).enqueue(new DmServer.Callback<HashMap<String, String>>(this.findViewById(R.id.progressBar)) {
+            @Override
+            public void onSuccessfulResponse(Response<HashMap<String, String>> response) {
+                List<InducksPublication> publications = new ArrayList<>();
+                for(String publicationCode : response.body().keySet()) {
+                    publications.add(new InducksPublication(publicationCode, response.body().get(publicationCode)));
+                }
+                WhatTheDuck.appDB.inducksPublicationDao().insertList(publications);
+                setData();
+            }
+        });
     }
 
     @Override
@@ -35,13 +51,28 @@ public class PublicationList extends ItemList<PublicationAdapter.Publication> {
     }
 
     @Override
+    protected void setData() {
+        WhatTheDuck.appDB.inducksPublicationDao().findByCountry(WhatTheDuck.getSelectedCountry()).observe(this, this::storePublicationList);
+    }
+
+    private void storePublicationList(List<InducksPublicationWithPossession> inducksPublications) {
+        this.data = inducksPublications;
+        this.notifyCompleteList();
+    }
+
+    @Override
     protected boolean shouldShow() {
         return WhatTheDuck.getSelectedCountry() != null;
     }
 
     @Override
-    protected boolean shouldShowNavigation() {
+    protected boolean shouldShowNavigationCountry() {
         return true;
+    }
+
+    @Override
+    protected boolean shouldShowNavigationPublication() {
+        return false;
     }
 
     @Override
@@ -55,7 +86,7 @@ public class PublicationList extends ItemList<PublicationAdapter.Publication> {
     }
 
     @Override
-    protected boolean shouldShowFilter(List<PublicationAdapter.Publication> publications) {
+    protected boolean shouldShowFilter(List<InducksPublicationWithPossession> publications) {
         return publications.size() > MIN_ITEM_NUMBER_FOR_FILTER;
     }
 
@@ -65,13 +96,13 @@ public class PublicationList extends ItemList<PublicationAdapter.Publication> {
     }
 
     @Override
-    protected ItemAdapter<PublicationAdapter.Publication> getItemAdapter() {
-        return new PublicationAdapter(this, getCollection().getPublicationList(WhatTheDuck.getSelectedCountry()));
+    protected ItemAdapter<InducksPublicationWithPossession> getItemAdapter() {
+        return new PublicationAdapter(this, data);
     }
 
     @Override
     public void onBackPressed() {
-        if (type.equals(Collection.CollectionType.COA.toString())) {
+        if (type.equals(WhatTheDuck.CollectionType.COA.toString())) {
             onBackFromAddIssueActivity();
         }
         else {

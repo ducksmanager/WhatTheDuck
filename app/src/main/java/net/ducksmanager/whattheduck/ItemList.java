@@ -16,15 +16,13 @@ import android.widget.TextView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
-import net.ducksmanager.inducks.coa.CountryListing;
-import net.ducksmanager.inducks.coa.PublicationListing;
 import net.ducksmanager.retrievetasks.CoverSearch;
 import net.ducksmanager.util.CoverFlowFileHandler;
 import net.ducksmanager.util.Settings;
-import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.ActionBar;
@@ -35,22 +33,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 
 public abstract class ItemList<Item> extends AppCompatActivity {
-    public static String type = CollectionType.USER.toString();
+    public static String type = WhatTheDuck.CollectionType.USER.toString();
     static final int MIN_ITEM_NUMBER_FOR_FILTER = 20;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private Boolean requiresDataDownload = false;
+    protected List<Item> data = new ArrayList<>();
 
-    protected abstract boolean needsToDownloadFullList();
+    protected abstract boolean hasFullList();
     protected abstract void downloadFullList();
     protected abstract boolean hasDividers();
 
     protected abstract boolean userHasItemsInCollectionForCurrent();
+    protected abstract void setData();
 
     protected abstract boolean shouldShow();
-    protected abstract boolean shouldShowNavigation();
+    protected abstract boolean shouldShowNavigationCountry();
+    protected abstract boolean shouldShowNavigationPublication();
     protected abstract boolean shouldShowToolbar();
     protected abstract boolean shouldShowAddToCollectionButton();
     protected abstract boolean shouldShowFilter(List<Item> items);
@@ -81,28 +84,13 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
     void loadList() {
         ((WhatTheDuckApplication) getApplication()).trackActivity(this);
-
-        if (needsToDownloadFullList()) {
+        if (!hasFullList()) {
             this.requiresDataDownload = true;
             downloadFullList();
         }
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            if (type.equals(CollectionType.USER.toString())) {
-                actionBar.setDisplayHomeAsUpEnabled(false);
-            }
-            else {
-                actionBar.setDisplayHomeAsUpEnabled(true);
-                ((Toolbar) findViewById(R.id.toolbar)).setNavigationOnClickListener(v -> onBackFromAddIssueActivity());
-            }
+        else {
+            setData();
         }
-
-        setTitle(
-            type.equals(CollectionType.USER.toString())
-                    ? getString(R.string.my_collection)
-                    : getString(R.string.add_issue)
-        );
     }
 
     private void goToView(Class<?> cls) {
@@ -111,8 +99,8 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         }
     }
 
-    void goToAlternativeView(String collectionType) {
-        type = collectionType;
+    void goToAlternativeView() {
+        type = (type.equals(WhatTheDuck.CollectionType.USER.toString()) ? WhatTheDuck.CollectionType.COA.toString() : WhatTheDuck.CollectionType.USER.toString());
         loadList();
         show();
     }
@@ -122,31 +110,43 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             return;
         }
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            if (type.equals(WhatTheDuck.CollectionType.USER.toString())) {
+                actionBar.setDisplayHomeAsUpEnabled(false);
+            }
+            else {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                ((Toolbar) findViewById(R.id.toolbar)).setNavigationOnClickListener(v -> onBackFromAddIssueActivity());
+            }
+        }
+
+        setTitle(
+            type.equals(WhatTheDuck.CollectionType.USER.toString())
+                ? getString(R.string.my_collection)
+                : getString(R.string.add_issue)
+        );
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (shouldShowToolbar()) {
-            toolbar.setVisibility(View.VISIBLE);
+            toolbar.setVisibility(VISIBLE);
             setSupportActionBar(toolbar);
         }
         else {
             toolbar.setVisibility(GONE);
         }
 
-        if (shouldShowNavigation()) {
-            setNavigation(WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication());
-        }
-        else {
-            hideNavigation();
-        }
+        showNavigation();
 
         FloatingActionMenu addToCollection = this.findViewById(R.id.addToCollectionWrapper);
         if (shouldShowAddToCollectionButton()) {
             if (addToCollection != null) {
                 addToCollection.setMenuButtonColorNormalResId(R.color.holo_green_dark);
                 addToCollection.setMenuButtonColorPressedResId(R.color.holo_green_dark);
-                addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? View.VISIBLE : GONE);
+                addToCollection.setVisibility(type.equals(WhatTheDuck.CollectionType.USER.toString()) ? VISIBLE : GONE);
                 addToCollection.close(false);
 
-                if (type.equals(CollectionType.USER.toString())) {
+                if (type.equals(WhatTheDuck.CollectionType.USER.toString())) {
                     FloatingActionButton addToCollectionByPhotoButton = this.findViewById(R.id.addToCollectionByPhotoButton);
                     addToCollectionByPhotoButton.setOnClickListener(view ->
                         takeCoverPicture()
@@ -155,7 +155,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
                     FloatingActionButton addToCollectionBySelectionButton = this.findViewById(R.id.addToCollectionBySelectionButton);
                     addToCollectionBySelectionButton.setOnClickListener(view -> {
                         addToCollection.setVisibility(GONE);
-                        ItemList.this.goToAlternativeView(CollectionType.COA.toString());
+                        ItemList.this.goToAlternativeView();
                     });
 
                     Settings.saveSettings();
@@ -174,7 +174,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         java.util.List<Item> items = itemAdapter.getItems();
         TextView emptyListText = this.findViewById(R.id.emptyList);
         if (emptyListText != null) {
-            emptyListText.setVisibility(this.requiresDataDownload || items.size() > 0 ? TextView.INVISIBLE : TextView.VISIBLE);
+            emptyListText.setVisibility(this.requiresDataDownload || items.size() > 0 ? INVISIBLE : VISIBLE);
         }
 
         RecyclerView recyclerView = findViewById(R.id.itemList);
@@ -214,7 +214,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             this.findViewById(R.id.addToCollectionWrapper).setVisibility(GONE);
-            this.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+            this.findViewById(R.id.progressBar).setVisibility(VISIBLE);
 
             CoverFlowFileHandler.current.resizeUntilFileSize(this, new CoverFlowFileHandler.TransformationCallback() {
                 @Override
@@ -224,7 +224,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
                 @Override
                 public void onFail() {
-                    ItemList.this.findViewById(R.id.addToCollectionWrapper).setVisibility(View.VISIBLE);
+                    ItemList.this.findViewById(R.id.addToCollectionWrapper).setVisibility(VISIBLE);
                     ItemList.this.findViewById(R.id.progressBar).setVisibility(GONE);
                 }
             });
@@ -243,8 +243,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.action_logout:
-                WhatTheDuck.userCollection = new Collection();
-                WhatTheDuck.coaCollection = new Collection();
                 Settings.setUsername(null);
                 Settings.setPassword(null);
                 Settings.saveSettings();
@@ -264,52 +262,51 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         }
     }
 
-    Collection getCollection() {
-        return type == null || type.equals(CollectionType.USER.toString())
-            ? WhatTheDuck.userCollection
-            : WhatTheDuck.coaCollection;
+    private void showNavigation() {
+        if (shouldShowNavigationCountry()) {
+            WhatTheDuck.appDB.inducksCountryDao().findByCountryCode(WhatTheDuck.getSelectedCountry())
+                .observe(this, inducksCountryName ->
+                    setNavigationCountry(inducksCountryName.getCountryCode(), inducksCountryName.getCountryName())
+                );
+        }
+        else {
+            this.findViewById(R.id.navigationCountry).setVisibility(INVISIBLE);
+        }
+        if (shouldShowNavigationPublication()) {
+            WhatTheDuck.appDB.inducksPublicationDao().findByPublicationCode(WhatTheDuck.getSelectedPublication())
+                .observe(this, inducksPublication ->
+                    setNavigationPublication(inducksPublication.getPublicationCode(), inducksPublication.getTitle())
+                );
+        }
+        else {
+            this.findViewById(R.id.navigationPublication).setVisibility(INVISIBLE);
+        }
     }
 
-    private void hideNavigation() {
-        this.findViewById(R.id.navigation).setVisibility(GONE);
-    }
-
-    private void setNavigation(String selectedCountry, String selectedPublication) {
-        final View generalNavigationView = this.findViewById(R.id.navigation);
+    private void setNavigationCountry(String selectedCountry, String countryFullName) {
         final View countryNavigationView = this.findViewById(R.id.navigationCountry);
+        String uri = "@drawable/flags_" + selectedCountry;
+        int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+
+        if (imageResource == 0) {
+            imageResource = R.drawable.flags_unknown;
+        }
+
+        ImageView currentCountryFlag = countryNavigationView.findViewById(R.id.selectedBadgeImage);
+        currentCountryFlag.setImageResource(imageResource);
+
+        TextView currentCountryText = countryNavigationView.findViewById(R.id.selectedText);
+        currentCountryText.setText(countryFullName);
+    }
+
+    private void setNavigationPublication(String selectedPublication, String publicationFullName) {
         final View publicationNavigationView = this.findViewById(R.id.navigationPublication);
 
-        if (generalNavigationView != null) {
-            generalNavigationView.setVisibility(selectedCountry == null ? GONE : View.VISIBLE);
-            publicationNavigationView.setVisibility(selectedPublication == null ? View.INVISIBLE : View.VISIBLE);
+        TextView currentPublicationBadgeText = publicationNavigationView.findViewById(R.id.selectedBadge);
+        currentPublicationBadgeText.setText(selectedPublication.split("/")[1]);
 
-            if (selectedCountry != null) {
-                final String countryFullName = CountryListing.getCountryFullName(selectedCountry);
-
-                String uri = "@drawable/flags_" + selectedCountry;
-                int imageResource = getResources().getIdentifier(uri, null, getPackageName());
-
-                if (imageResource == 0) {
-                    imageResource = R.drawable.flags_unknown;
-                }
-
-                ImageView currentCountryFlag = countryNavigationView.findViewById(R.id.selectedBadgeImage);
-                currentCountryFlag.setImageResource(imageResource);
-
-                TextView currentCountryText = countryNavigationView.findViewById(R.id.selectedText);
-                currentCountryText.setText(countryFullName);
-            }
-
-            if (selectedPublication != null) {
-                final String publicationFullName = PublicationListing.getPublicationFullName(selectedCountry, selectedPublication);
-
-                TextView currentPublicationBadgeText = publicationNavigationView.findViewById(R.id.selectedBadge);
-                currentPublicationBadgeText.setText(selectedPublication.split("/")[1]);
-
-                TextView currentPublicationText = publicationNavigationView.findViewById(R.id.selectedText);
-                currentPublicationText.setText(publicationFullName);
-            }
-        }
+        TextView currentPublicationText = publicationNavigationView.findViewById(R.id.selectedText);
+        currentPublicationText.setText(publicationFullName);
     }
 
     void notifyCompleteList() {
@@ -319,10 +316,10 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
     void onBackFromAddIssueActivity() {
         if (userHasItemsInCollectionForCurrent()) {
-            goToAlternativeView(CollectionType.USER.toString());
+            goToAlternativeView();
         }
         else {
-            type = CollectionType.USER.toString();
+            type = WhatTheDuck.CollectionType.USER.toString();
             startActivity(new Intent(WhatTheDuck.wtd, CountryList.class));
         }
     }

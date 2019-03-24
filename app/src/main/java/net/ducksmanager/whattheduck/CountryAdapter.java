@@ -4,34 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
-import java.util.ArrayList;
+import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession;
+
+import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CountryAdapter extends ItemAdapter<CountryAdapter.Country> {
+public class CountryAdapter extends ItemAdapter<InducksCountryNameWithPossession> {
 
-    static class Country {
-        final String shortName;
-        final String fullName;
-
-        Country(String shortName, String fullName) {
-            this.shortName = shortName;
-            this.fullName = fullName;
-        }
-
-        String getShortName() {
-            return shortName;
-        }
-
-        String getFullName() {
-            return fullName;
-        }
-    }
-
-    CountryAdapter(ItemList itemList, ArrayList<Country> items) {
+    CountryAdapter(ItemList itemList, List<InducksCountryNameWithPossession> items) {
         super(itemList, R.layout.row, items);
     }
-
 
     @Override
     protected ViewHolder getViewHolder(View v) {
@@ -39,11 +22,16 @@ public class CountryAdapter extends ItemAdapter<CountryAdapter.Country> {
     }
 
     @Override
+    protected boolean isPossessed(InducksCountryNameWithPossession inducksCountryNameWithPossession) {
+        return inducksCountryNameWithPossession.getPossessed();
+    }
+
+    @Override
     protected View.OnClickListener getOnClickListener() {
         return view -> {
             int position = ((RecyclerView)view.getParent()).getChildLayoutPosition(view);
-            Country selectedCountry = CountryAdapter.this.getItem(position);
-            WhatTheDuck.setSelectedCountry (selectedCountry.getShortName());
+            InducksCountryNameWithPossession selectedCountry = CountryAdapter.this.getItem(position);
+            WhatTheDuck.setSelectedCountry (selectedCountry.getCountry().getCountryCode());
 
             Intent i = new Intent(originActivity, PublicationList.class);
             originActivity.startActivity(i);
@@ -57,13 +45,8 @@ public class CountryAdapter extends ItemAdapter<CountryAdapter.Country> {
     }
 
     @Override
-    protected boolean isHighlighted(Country i) {
-        return WhatTheDuck.userCollection.hasCountry(i.getShortName());
-    }
-
-    @Override
-    protected Integer getPrefixImageResource(Country i, Activity a) {
-        String uri = "@drawable/flags_" + i.getShortName();
+    protected Integer getPrefixImageResource(InducksCountryNameWithPossession i, Activity a) {
+        String uri = "@drawable/flags_" + i.getCountry().getCountryCode();
         int imageResource = a.getResources().getIdentifier(uri, null, a.getPackageName());
 
         if (imageResource == 0) {
@@ -73,27 +56,27 @@ public class CountryAdapter extends ItemAdapter<CountryAdapter.Country> {
     }
 
     @Override
-    protected Integer getSuffixImageResource(Country i) {
+    protected Integer getSuffixImageResource(InducksCountryNameWithPossession i) {
         return null;
     }
 
     @Override
-    protected String getSuffixText(Country i) {
+    protected String getSuffixText(InducksCountryNameWithPossession i) {
         return null;
     }
 
     @Override
-    protected String getText(Country i) {
-        return i.getFullName();
+    protected String getText(InducksCountryNameWithPossession i) {
+        return i.getCountry().getCountryName();
     }
 
     @Override
-    protected String getIdentifier(Country i) {
-        return i.getShortName();
+    protected String getIdentifier(InducksCountryNameWithPossession i) {
+        return i.getCountry().getCountryCode();
     }
 
     @Override
-    protected String getComparatorText(Country i) {
+    protected String getComparatorText(InducksCountryNameWithPossession i) {
         return getText(i);
     }
 }

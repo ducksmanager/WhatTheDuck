@@ -31,6 +31,8 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
 
     private static FilterTextOnChangeListener filterTextOnChangeListener;
 
+    protected abstract boolean isPossessed(Item item);
+
     ItemAdapter(Activity activity, int resource, List<Item> items) {
         this.originActivity = activity;
         this.items = items;
@@ -92,8 +94,10 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
     public void updateFilteredList(String textFilter) {
         filteredItems = new ArrayList<>();
         for (Item item : items) {
-            if (textFilter.equals("") || getText(item).toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase()))
+            if (!(ItemList.type.equals(WhatTheDuck.CollectionType.USER.toString()) && !isPossessed(item))
+                && (textFilter.equals("") || getText(item).toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase())))  {
                 filteredItems.add(item);
+            }
         }
     }
 
@@ -148,8 +152,6 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
         }
     }
 
-    protected abstract boolean isHighlighted(Item i);
-
     protected abstract Integer getPrefixImageResource(Item i, Activity activity);
 
     protected abstract Integer getSuffixImageResource(Item i);
@@ -161,6 +163,10 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
     protected abstract String getIdentifier(Item i);
 
     protected abstract String getText(Item i);
+
+    protected boolean isHighlighted(Item i) {
+        return isPossessed(i);
+    }
 
     List<Item> getItems() {
         return items;
@@ -179,5 +185,4 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
     Item getItem(int position) {
         return filteredItems.get(position);
     }
-
 }

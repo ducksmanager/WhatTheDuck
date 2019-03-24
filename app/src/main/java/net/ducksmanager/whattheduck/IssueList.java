@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import net.ducksmanager.inducks.coa.IssueListing;
+import net.ducksmanager.apigateway.DmServer;
+import net.ducksmanager.persistence.models.coa.InducksIssue;
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails;
 import net.ducksmanager.util.DraggableRelativeLayout;
 import net.ducksmanager.util.Settings;
 
@@ -19,8 +22,9 @@ import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import retrofit2.Response;
 
-public class IssueList extends ItemList<Issue> {
+public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
 
     public enum ViewType {
         LIST_VIEW,
@@ -36,15 +40,24 @@ public class IssueList extends ItemList<Issue> {
     }
 
     @Override
-    protected boolean needsToDownloadFullList() {
-        return ! IssueListing.hasFullList(WhatTheDuck.getSelectedPublication());
+    protected boolean hasFullList() {
+        return false; // FIXME
     }
 
     @Override
     protected void downloadFullList() {
-        new IssueListing(this, WhatTheDuck.getSelectedCountry(), WhatTheDuck.getSelectedPublication(), (e, result) ->
-            IssueList.this.notifyCompleteList()
-        ).fetch();
+        this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
+        DmServer.api.getIssues(WhatTheDuck.getSelectedPublication()).enqueue(new DmServer.Callback<List<String>>(this.findViewById(R.id.progressBar)) {
+            @Override
+            public void onSuccessfulResponse(Response<List<String>> response) {
+                List<InducksIssue> issues = new ArrayList<>();
+                for(String issueNumber : response.body()) {
+                    issues.add(new InducksIssue(WhatTheDuck.getSelectedPublication(), issueNumber));
+                }
+                WhatTheDuck.appDB.inducksIssueDao().insertList(issues);
+                setData();
+            }
+        });
     }
 
     @Override
@@ -58,7 +71,12 @@ public class IssueList extends ItemList<Issue> {
     }
 
     @Override
-    protected boolean shouldShowNavigation() {
+    protected boolean shouldShowNavigationCountry() {
+        return !isLandscapeEdgeView();
+    }
+
+    @Override
+    protected boolean shouldShowNavigationPublication() {
         return !isLandscapeEdgeView();
     }
 
@@ -73,18 +91,18 @@ public class IssueList extends ItemList<Issue> {
     }
 
     @Override
-    protected boolean shouldShowFilter(List<Issue> issues) {
+    protected boolean shouldShowFilter(List<InducksIssueWithUserIssueDetails> issues) {
         return issues.size() > MIN_ITEM_NUMBER_FOR_FILTER && viewType.equals(ViewType.LIST_VIEW);
     }
 
     @Override
-    protected ItemAdapter<Issue> getItemAdapter() {
+    protected ItemAdapter<InducksIssueWithUserIssueDetails> getItemAdapter() {
         RelativeLayout switchViewWrapper = this.findViewById(R.id.switchViewWrapper);
         DraggableRelativeLayout.makeDraggable(switchViewWrapper);
 
         Switch switchView = switchViewWrapper.findViewById(R.id.switchView);
 
-        if (type.equals(Collection.CollectionType.COA.toString())) {
+        if (type.equals(WhatTheDuck.CollectionType.COA.toString())) {
             viewType = ViewType.LIST_VIEW;
             switchViewWrapper.setVisibility(View.GONE);
         }
@@ -118,11 +136,6 @@ public class IssueList extends ItemList<Issue> {
             });
         }
 
-        ArrayList<Issue> issueList = getCollection().getIssueList(
-            WhatTheDuck.getSelectedCountry(),
-            WhatTheDuck.getSelectedPublication()
-        );
-
         RecyclerView recyclerView = this.findViewById(R.id.itemList);
 
         if (viewType.equals(ViewType.EDGE_VIEW)) {
@@ -139,11 +152,11 @@ public class IssueList extends ItemList<Issue> {
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this, listOrientation, false));
 
-            return new IssueEdgeAdapter(this, issueList, recyclerView, deviceOrientation);
+            return new IssueEdgeAdapter(this, data, recyclerView, deviceOrientation);
         }
         else {
             recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-            return new IssueAdapter(this, issueList);
+            return new IssueAdapter(this, data);
         }
     }
 
@@ -165,8 +178,18 @@ public class IssueList extends ItemList<Issue> {
     }
 
     @Override
+    protected void setData() {
+        WhatTheDuck.appDB.inducksIssueDao().findByPublicationCode(WhatTheDuck.getSelectedPublication()).observe(this, this::storeIssueList);
+    }
+
+    private void storeIssueList(List<InducksIssueWithUserIssueDetails> inducksIssues) {
+        this.data = inducksIssues;
+        this.notifyCompleteList();
+    }
+
+    @Override
     public void onBackPressed() {
-        if (type.equals(Collection.CollectionType.COA.toString())) {
+        if (type.equals(WhatTheDuck.CollectionType.COA.toString())) {
             onBackFromAddIssueActivity();
         }
         else {

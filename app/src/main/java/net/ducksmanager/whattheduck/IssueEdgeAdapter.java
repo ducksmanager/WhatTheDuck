@@ -7,17 +7,19 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class IssueEdgeAdapter extends ItemAdapter<Issue> {
+public class IssueEdgeAdapter extends ItemAdapter<InducksIssueWithUserIssueDetails> {
     private final int orientation;
     private final RecyclerView recyclerView;
     private Integer expectedEdgeHeight;
 
-    IssueEdgeAdapter(ItemList itemList, ArrayList<Issue> items, RecyclerView recyclerView, int orientation) {
+    IssueEdgeAdapter(ItemList itemList, List<InducksIssueWithUserIssueDetails> items, RecyclerView recyclerView, int orientation) {
         super(itemList, R.layout.row_edge, items);
         this.orientation = orientation;
         this.recyclerView = recyclerView;
@@ -48,7 +50,7 @@ public class IssueEdgeAdapter extends ItemAdapter<Issue> {
 
         ViewHolder itemHolder = (ViewHolder) holder;
 
-        Issue i = getItem(position);
+        InducksIssueWithUserIssueDetails i = getItem(position);
         if (i != null) {
             if (expectedEdgeHeight == null) {
                 expectedEdgeHeight = orientation == Configuration.ORIENTATION_LANDSCAPE ? recyclerView.getHeight() : recyclerView.getWidth();
@@ -64,7 +66,7 @@ public class IssueEdgeAdapter extends ItemAdapter<Issue> {
     }
 
     @NonNull
-    private String getEdgeUrl(Issue i) {
+    private String getEdgeUrl(InducksIssueWithUserIssueDetails i) {
         return String.format(
             "%s/edges/%s/gen/%s.%s.png",
             WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL),
@@ -72,41 +74,41 @@ public class IssueEdgeAdapter extends ItemAdapter<Issue> {
             WhatTheDuck.getSelectedPublication()
                 .replaceFirst("[^/]+/", "")
                 .replaceAll(" ", ""),
-            i.getCleanIssueNumber());
+            i.getIssue().getIssueNumber().replaceAll(" ", ""));
     }
 
     @Override
-    protected boolean isHighlighted(Issue i) {
-        return false;
+    protected boolean isPossessed(InducksIssueWithUserIssueDetails i) {
+        return i.getUserIssue() != null;
     }
 
     @Override
-    protected Integer getPrefixImageResource(Issue i, Activity activity) {
+    protected Integer getPrefixImageResource(InducksIssueWithUserIssueDetails i, Activity activity) {
         return null;
     }
 
     @Override
-    protected Integer getSuffixImageResource(Issue i) {
+    protected Integer getSuffixImageResource(InducksIssueWithUserIssueDetails i) {
         return null;
     }
 
     @Override
-    protected String getSuffixText(Issue i) {
+    protected String getSuffixText(InducksIssueWithUserIssueDetails i) {
         return null;
     }
 
     @Override
-    protected String getIdentifier(Issue i) {
+    protected String getIdentifier(InducksIssueWithUserIssueDetails i) {
         return null;
     }
 
     @Override
-    protected String getText(Issue i) {
+    protected String getText(InducksIssueWithUserIssueDetails i) {
         return null;
     }
 
     @Override
-    protected String getComparatorText(Issue i) {
-        return i.getIssueNumber();
+    protected String getComparatorText(InducksIssueWithUserIssueDetails i) {
+        return i.getIssue().getIssueNumber();
     }
 }

@@ -2,27 +2,46 @@ package net.ducksmanager.whattheduck;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.widget.ProgressBar;
 
-import net.ducksmanager.inducks.coa.CountryListing;
+import net.ducksmanager.apigateway.DmServer;
+import net.ducksmanager.persistence.models.coa.InducksCountryName;
+import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession;
 import net.ducksmanager.util.ReleaseNotes;
 import net.ducksmanager.util.Settings;
-import net.ducksmanager.whattheduck.Collection.CollectionType;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class CountryList extends ItemList<CountryAdapter.Country> {
+import retrofit2.Response;
+
+public class CountryList extends ItemList<InducksCountryNameWithPossession> {
+
+    public static boolean hasFullList = false;
 
     @Override
-    protected boolean needsToDownloadFullList() {
-        return type.equals(CollectionType.COA.toString()) && !CountryListing.hasFullList;
+    protected boolean hasFullList() {
+        return hasFullList;
     }
 
     @Override
     protected void downloadFullList() {
-        new CountryListing(this, (e, result) ->
-            CountryList.this.notifyCompleteList()
-        ).fetch();
+        String locale = getApplicationContext().getResources().getConfiguration().locale.getLanguage();
+        this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
+        DmServer.api.getCountries(locale).enqueue(new DmServer.Callback<HashMap<String, String>>(this.findViewById(R.id.progressBar)) {
+            @Override
+            public void onSuccessfulResponse(Response<HashMap<String, String>> response) {
+                List<InducksCountryName> countries = new ArrayList<>();
+                for(String countryCode : response.body().keySet()) {
+                    countries.add(new InducksCountryName(countryCode, response.body().get(countryCode)));
+                }
+                WhatTheDuck.appDB.inducksCountryDao().insertList(countries);
+                hasFullList = true;
+                setData();
+            }
+        });
     }
 
     @Override
@@ -62,8 +81,13 @@ public class CountryList extends ItemList<CountryAdapter.Country> {
     }
 
     @Override
-    protected boolean shouldShowNavigation() {
-        return true;
+    protected boolean shouldShowNavigationCountry() {
+        return false;
+    }
+
+    @Override
+    protected boolean shouldShowNavigationPublication() {
+        return false;
     }
 
     @Override
@@ -77,7 +101,7 @@ public class CountryList extends ItemList<CountryAdapter.Country> {
     }
 
     @Override
-    protected boolean shouldShowFilter(List<CountryAdapter.Country> countries) {
+    protected boolean shouldShowFilter(List<InducksCountryNameWithPossession> countries) {
         return countries.size() > MIN_ITEM_NUMBER_FOR_FILTER;
     }
 
@@ -87,13 +111,22 @@ public class CountryList extends ItemList<CountryAdapter.Country> {
     }
 
     @Override
-    protected ItemAdapter<CountryAdapter.Country> getItemAdapter() {
-        return new CountryAdapter(this, getCollection().getCountryList());
+    protected ItemAdapter<InducksCountryNameWithPossession> getItemAdapter() {
+        return new CountryAdapter(this, data);
+    }
+
+    protected void setData() {
+        WhatTheDuck.appDB.inducksCountryDao().findAll().observe(CountryList.this, this::storeCountryList);
+    }
+
+    private void storeCountryList(List<InducksCountryNameWithPossession> inducksCountryNames) {
+        this.data = inducksCountryNames;
+        this.notifyCompleteList();
     }
 
     @Override
     public void onBackPressed() {
-        if (type.equals(CollectionType.COA.toString())) {
+        if (type.equals(WhatTheDuck.CollectionType.COA.toString())) {
             onBackFromAddIssueActivity();
         }
     }

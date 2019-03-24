@@ -4,31 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
-import java.util.ArrayList;
+import net.ducksmanager.persistence.models.composite.InducksPublicationWithPossession;
+
+import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PublicationAdapter extends ItemAdapter<PublicationAdapter.Publication> {
+public class PublicationAdapter extends ItemAdapter<InducksPublicationWithPossession> {
 
-    static class Publication {
-        final String publicationCode;
-        final String publicationTitle;
-
-        Publication(String publicationCode, String publicationTitle) {
-            this.publicationCode = publicationCode;
-            this.publicationTitle = publicationTitle;
-        }
-
-        String getPublicationCode() {
-            return publicationCode;
-        }
-
-        String getPublicationTitle() {
-            return publicationTitle;
-        }
-    }
-
-    PublicationAdapter(ItemList itemList, ArrayList<Publication> items) {
+    PublicationAdapter(ItemList itemList, List<InducksPublicationWithPossession> items) {
         super(itemList, R.layout.row, items);
     }
 
@@ -44,11 +28,16 @@ public class PublicationAdapter extends ItemAdapter<PublicationAdapter.Publicati
     }
 
     @Override
+    protected boolean isPossessed(InducksPublicationWithPossession inducksPublicationWithPossession) {
+        return inducksPublicationWithPossession.getPossessed();
+    }
+
+    @Override
     protected View.OnClickListener getOnClickListener() {
         return view -> {
             int position = ((RecyclerView)view.getParent()).getChildLayoutPosition(view);
-            PublicationAdapter.Publication selectedPublication = PublicationAdapter.this.getItem(position);
-            WhatTheDuck.setSelectedPublication (selectedPublication.getPublicationCode());
+            InducksPublicationWithPossession selectedPublication = PublicationAdapter.this.getItem(position);
+            WhatTheDuck.setSelectedPublication (selectedPublication.getPublication().getPublicationCode());
 
             Intent i = new Intent(originActivity, IssueList.class);
             originActivity.startActivity(i);
@@ -56,38 +45,33 @@ public class PublicationAdapter extends ItemAdapter<PublicationAdapter.Publicati
     }
 
     @Override
-    protected boolean isHighlighted(Publication i) {
-        return WhatTheDuck.userCollection.hasPublication(WhatTheDuck.getSelectedCountry(), i.getPublicationCode());
-    }
-
-    @Override
-    protected Integer getPrefixImageResource(Publication i, Activity activity) {
+    protected Integer getPrefixImageResource(InducksPublicationWithPossession i, Activity activity) {
         return null;
     }
 
 
     @Override
-    protected Integer getSuffixImageResource(Publication i) {
+    protected Integer getSuffixImageResource(InducksPublicationWithPossession i) {
         return null;
     }
 
     @Override
-    protected String getIdentifier(Publication i) {
-        return i.getPublicationCode();
+    protected String getIdentifier(InducksPublicationWithPossession i) {
+        return i.getPublication().getPublicationCode();
     }
 
     @Override
-    protected String getSuffixText(Publication i) {
+    protected String getSuffixText(InducksPublicationWithPossession i) {
         return null;
     }
 
     @Override
-    protected String getText(Publication i) {
-        return i.getPublicationTitle();
+    protected String getText(InducksPublicationWithPossession i) {
+        return i.getPublication().getTitle();
     }
 
     @Override
-    protected String getComparatorText(Publication i) {
+    protected String getComparatorText(InducksPublicationWithPossession i) {
         return getText(i);
     }
 }

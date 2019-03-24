@@ -1,4 +1,6 @@
 security_password=mypassword
+role_name=ducksmanager
+role_password=rolepassword
 dm_url=https://dm.net
 api_endpoint_url=http://myserver/dm-server
 matomo_url=http://myserver/matomo

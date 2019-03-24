@@ -95,7 +95,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
     }
 
     public static void handleResultExceptionOnActivity(Exception e, WeakReference<Activity> activityRef) {
-        WhatTheDuck.wtd.initUI();
+        WhatTheDuck.wtd.showLoginForm();
         WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, false);
 
         if (e instanceof SecurityException) {

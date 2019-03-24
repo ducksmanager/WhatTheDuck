@@ -15,11 +15,6 @@ public class Issue implements Serializable {
     private IssueCondition issueCondition = issueConditionStrToIssueCondition(Issue.NO_CONDITION);
     private PurchaseAdapter.PurchaseWithDate purchase;
 
-    public Issue(String issuenumber) {
-        super();
-        this.issueNumber = issuenumber;
-    }
-
     public Issue(String issuenumber, String issueCondition, PurchaseAdapter.PurchaseWithDate purchase) {
         super();
         this.issueNumber = issuenumber;
@@ -33,19 +28,8 @@ public class Issue implements Serializable {
         this.issueCondition = issueCondition;
     }
 
-    public Issue(String issuenumber, IssueCondition issueCondition, PurchaseAdapter.PurchaseWithDate purchase) {
-        super();
-        this.issueNumber = issuenumber;
-        this.issueCondition = issueCondition;
-        this.purchase = purchase;
-    }
-
     public String getIssueNumber() {
         return issueNumber;
-    }
-
-    String getCleanIssueNumber() {
-        return getIssueNumber().replaceAll(" ", "");
     }
 
     public IssueCondition getIssueCondition() {

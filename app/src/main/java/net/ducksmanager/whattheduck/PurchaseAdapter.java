@@ -68,6 +68,11 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
     }
 
     @Override
+    protected boolean isPossessed(Purchase purchase) {
+        return false;
+    }
+
+    @Override
     protected View.OnClickListener getOnClickListener() {
         return null;
     }
@@ -122,7 +127,7 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
     }
 
     @Override
-    protected boolean isHighlighted(Purchase i) {
+    protected boolean isHighlighted(Purchase p) {
         return false;
     }
 
