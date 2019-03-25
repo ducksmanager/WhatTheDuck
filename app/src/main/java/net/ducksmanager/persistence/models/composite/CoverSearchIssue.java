@@ -2,25 +2,36 @@ package net.ducksmanager.persistence.models.composite;
 
 import com.google.gson.annotations.SerializedName;
 
-public class IssueWithFullUrl {
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "coversearch_issue")
+public class CoverSearchIssue {
     @SerializedName(value="coverid")
+    @PrimaryKey
     private String coverId;
 
     @SerializedName(value="countrycode")
+    @ColumnInfo
     private String countryCode;
 
     @SerializedName(value="publicationcode")
+    @ColumnInfo
     private String publicationCode;
 
     @SerializedName(value="publicationtitle")
+    @ColumnInfo
     private String publicationTitle;
 
     @SerializedName(value="issuenumber")
+    @ColumnInfo
     private String issueNumber;
 
+    @ColumnInfo
     private String fullUrl;
 
-    public IssueWithFullUrl(String coverId, String countryCode, String publicationCode, String publicationTitle, String issueNumber, String fullUrl) {
+    public CoverSearchIssue(String coverId, String countryCode, String publicationCode, String publicationTitle, String issueNumber, String fullUrl) {
         this.coverId = coverId;
         this.countryCode = countryCode;
         this.publicationCode = publicationCode;

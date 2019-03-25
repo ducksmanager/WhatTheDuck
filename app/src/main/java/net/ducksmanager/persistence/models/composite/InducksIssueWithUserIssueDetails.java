@@ -24,15 +24,34 @@ public class InducksIssueWithUserIssueDetails {
     }
 
     public static Integer issueConditionToResourceId(String issueCondition) {
-        if (issueCondition == null || issueCondition.equals(NO_CONDITION))
+        if (issueCondition == null) {
             return R.drawable.condition_none;
-        else if (issueCondition.equals(BAD_CONDITION))
-            return R.drawable.condition_bad;
-        else if (issueCondition.equals(NOTSOGOOD_CONDITION))
-            return R.drawable.condition_notsogood;
-        else if (issueCondition.equals(GOOD_CONDITION))
-            return R.drawable.condition_good;
-        return R.drawable.condition_none;
+        }
+        switch (issueCondition) {
+            case NO_CONDITION:
+                return R.drawable.condition_none;
+            case BAD_CONDITION:
+                return R.drawable.condition_bad;
+            case NOTSOGOOD_CONDITION:
+                return R.drawable.condition_notsogood;
+            case GOOD_CONDITION:
+                return R.drawable.condition_good;
+            default:
+                return R.drawable.condition_none;
+        }
+    }
+
+    public static int issueConditionToStringId(String issueCondition) {
+        switch (issueCondition) {
+            case BAD_CONDITION:
+                return R.string.condition_bad;
+            case NOTSOGOOD_CONDITION:
+                return R.string.condition_notsogood;
+            case GOOD_CONDITION:
+                return R.string.condition_good;
+            default:
+                return -1;
+        }
     }
 
     public InducksIssue getIssue() {

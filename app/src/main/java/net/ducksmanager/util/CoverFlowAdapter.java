@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import net.ducksmanager.persistence.models.composite.IssueWithFullUrl;
+import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueDetails;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
@@ -22,32 +22,32 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 class CoverFlowAdapter extends BaseAdapter {
 
     private static final HashMap<String,Bitmap> imageCache = new HashMap<>();
 
-    private ArrayList<IssueWithFullUrl> mData = new ArrayList<>(0);
-    private final Context mContext;
+    private List<CoverSearchIssueWithUserIssueDetails> data;
+    private final Context context;
 
     CoverFlowAdapter(Context context) {
-        mContext = context;
+        this.context = context;
     }
 
-    void setData(ArrayList<IssueWithFullUrl> data) {
-        mData = data;
+    void setData(List<CoverSearchIssueWithUserIssueDetails> data) {
+        this.data = data;
     }
 
     @Override
     public int getCount() {
-        return mData.size();
+        return data.size();
     }
 
     @Override
     public Object getItem(int pos) {
-        return mData.get(pos);
+        return data.get(pos);
     }
 
     @Override
@@ -62,13 +62,13 @@ class CoverFlowAdapter extends BaseAdapter {
 
         ViewHolder viewHolder;
         if (rowView == null) {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             rowView = inflater.inflate(R.layout.item_coverflow, parent, false);
 
             viewHolder = new ViewHolder();
             viewHolder.text = rowView.findViewById(R.id.label);
             viewHolder.image = rowView.findViewById(R.id.image);
-            viewHolder.image.setTag(mData.get(position).getFullUrl());
+            viewHolder.image.setTag(data.get(position).getIssue().getFullUrl());
             viewHolder.progressBar = rowView.findViewById(R.id.progressBar);
 
             DownloadImagesTask task = new DownloadImagesTask(viewHolder.progressBar);
@@ -80,7 +80,7 @@ class CoverFlowAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) rowView.getTag();
         }
 
-        viewHolder.text.setText(mData.get(position).getIssueNumber());
+        viewHolder.text.setText(data.get(position).getIssue().getIssueNumber());
 
         return rowView;
     }

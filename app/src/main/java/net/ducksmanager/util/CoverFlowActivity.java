@@ -1,6 +1,5 @@
 package net.ducksmanager.util;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,41 +10,114 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueDetails;
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails;
 import net.ducksmanager.whattheduck.AddIssue;
 import net.ducksmanager.whattheduck.Issue;
-import net.ducksmanager.persistence.models.composite.IssueWithFullUrl;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
 
 
-public class CoverFlowActivity extends Activity {
+public class CoverFlowActivity extends AppCompatActivity {
 
-    private ArrayList<IssueWithFullUrl> mData = new ArrayList<>(0);
+    private List<CoverSearchIssueWithUserIssueDetails> data;
     private TextSwitcher mResultNumber;
     private ImageSwitcher mCountryBadge;
     private ImageSwitcher mIssueCondition;
 
     private TextView mIssueConditionText;
     private TextView mTitleText;
-    
-    private static IssueWithFullUrl currentSuggestion = null;
-    public static String currentCoverUrl = null;
+
+    public static CoverSearchIssueWithUserIssueDetails currentSuggestion = null;
+
+    CoverFlowAdapter adapter;
+    FeatureCoverFlow coverFlow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ((WhatTheDuckApplication) getApplication()).trackActivity(this);
-
         setContentView(R.layout.activity_coverflow);
 
-        Bundle extras = getIntent().getExtras();
-        mData = (ArrayList<IssueWithFullUrl>) extras.get("resultCollection"); // FIXME fetch from DB instead
+        WhatTheDuck.appDB.coverSearchIssueDao().findAll().observe(this, searchIssues -> {
+            data = searchIssues;
+            adapter = new CoverFlowAdapter(this);
+            adapter.setData(searchIssues);
+
+            coverFlow = findViewById(R.id.coverflow);
+            coverFlow.setAdapter(adapter);
+
+            coverFlow.setOnItemClickListener((parent, view, position, id) -> {
+                if (currentSuggestion.getUserIssue() == null) {
+                    Issue newIssue = new Issue(currentSuggestion.getIssue().getIssueNumber(), null);
+                    WhatTheDuck.setSelectedCountry (currentSuggestion.getIssue().getCountryCode());
+                    WhatTheDuck.setSelectedPublication (currentSuggestion.getIssue().getPublicationCode());
+                    WhatTheDuck.setSelectedIssue(newIssue.getIssueNumber());
+
+                    CoverFlowActivity.this.startActivity(new Intent(CoverFlowActivity.this, AddIssue.class));
+                }
+                else {
+                    Toast.makeText(
+                            CoverFlowActivity.this,
+                            R.string.issue_already_possessed,
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            });
+
+            coverFlow.setOnScrollPositionListener(new FeatureCoverFlow.OnScrollPositionListener() {
+                @Override
+                public void onScrolledToPosition(int position) {
+                    currentSuggestion = data.get(position);
+
+                    String uri = "@drawable/flags_" + currentSuggestion.getIssue().getCountryCode();
+                    int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+
+                    if (imageResource == 0) {
+                        imageResource = R.drawable.flags_unknown;
+                    }
+                    mCountryBadge.setVisibility(View.VISIBLE);
+                    mCountryBadge.setImageResource(imageResource);
+
+                    mIssueConditionText.setVisibility(View.VISIBLE);
+
+                    if (currentSuggestion.getUserIssue() != null) {
+                        String condition = currentSuggestion.getUserIssue().getCondition();
+                        mIssueCondition.setVisibility(View.VISIBLE);
+                        mIssueCondition.setImageResource(InducksIssueWithUserIssueDetails.issueConditionToResourceId(condition));
+                        mIssueConditionText.setText(InducksIssueWithUserIssueDetails.issueConditionToStringId(condition));
+                        mIssueConditionText.setTextSize(18);
+                    }
+                    else {
+                        mIssueCondition.setVisibility(View.GONE);
+                        mIssueConditionText.setText(R.string.add_cover);
+                        mIssueConditionText.setTextSize(14);
+                    }
+
+                    mResultNumber.setVisibility(View.VISIBLE);
+                    mResultNumber.setText(getResources().getString(R.string.result) + " " + (position + 1) + "/" + data.size());
+
+                    mTitleText.setVisibility(View.VISIBLE);
+                    mTitleText.setText(data.get(position).getIssue().getPublicationTitle() + " " + data.get(position).getIssue().getIssueNumber());
+                }
+
+                @Override
+                public void onScrolling() {
+                    mResultNumber.setVisibility(View.INVISIBLE);
+                    mTitleText.setVisibility(View.INVISIBLE);
+                    mCountryBadge.setVisibility(View.INVISIBLE);
+                    mIssueCondition.setVisibility(View.INVISIBLE);
+                    mIssueConditionText.setVisibility(View.INVISIBLE);
+                }
+            });
+        });
 
         mResultNumber = findViewById(R.id.resultNumber);
         mResultNumber.setFactory(() -> {
@@ -73,79 +145,6 @@ public class CoverFlowActivity extends Activity {
             LayoutInflater inflater = LayoutInflater.from(CoverFlowActivity.this);
             mTitleText = (TextView) inflater.inflate(R.layout.item_title, null);
             return mTitleText;
-        });
-
-        CoverFlowAdapter mAdapter = new CoverFlowAdapter(this);
-        mAdapter.setData(mData);
-
-        FeatureCoverFlow mCoverFlow = findViewById(R.id.coverflow);
-        mCoverFlow.setAdapter(mAdapter);
-
-        mCoverFlow.setOnItemClickListener((parent, view, position, id) -> {
-            Issue existingIssue = WhatTheDuck.userCollection.getIssue(currentSuggestion.getCountryCode(), currentSuggestion.getPublicationCode(), currentSuggestion.getIssueNumber());
-            if (existingIssue == null) {
-                Issue newIssue = new Issue(currentSuggestion.getIssueNumber(), null);
-                WhatTheDuck.setSelectedCountry (currentSuggestion.getCountryCode());
-                WhatTheDuck.setSelectedPublication (currentSuggestion.getPublicationCode());
-                WhatTheDuck.setSelectedIssue(newIssue.getIssueNumber());
-
-                CoverFlowActivity.this.startActivity(new Intent(CoverFlowActivity.this, AddIssue.class));
-            }
-            else {
-                Toast.makeText(
-                    CoverFlowActivity.this,
-                    R.string.issue_already_possessed,
-                    Toast.LENGTH_SHORT)
-                .show();
-            }
-        });
-
-        mCoverFlow.setOnScrollPositionListener(new FeatureCoverFlow.OnScrollPositionListener() {
-            @Override
-            public void onScrolledToPosition(int position) {
-                currentSuggestion = mData.get(position);
-                currentCoverUrl = currentSuggestion.getFullUrl();
-
-                String uri = "@drawable/flags_" + currentSuggestion.getCountryCode();
-                int imageResource = getResources().getIdentifier(uri, null, getPackageName());
-
-                if (imageResource == 0) {
-                    imageResource = R.drawable.flags_unknown;
-                }
-                mCountryBadge.setVisibility(View.VISIBLE);
-                mCountryBadge.setImageResource(imageResource);
-
-                mIssueConditionText.setVisibility(View.VISIBLE);
-
-                Issue existingIssue = WhatTheDuck.userCollection.getIssue(currentSuggestion.getCountryCode(), currentSuggestion.getPublicationCode(), currentSuggestion.getIssueNumber());
-                if (existingIssue != null) {
-                    Issue.IssueCondition condition = existingIssue.getIssueCondition();
-                    mIssueCondition.setVisibility(View.VISIBLE);
-                    mIssueCondition.setImageResource(Issue.issueConditionToResourceId(condition));
-                    mIssueConditionText.setText(getResources().getString(Issue.issueConditionToStringId(condition)));
-                    mIssueConditionText.setTextSize(18);
-                }
-                else {
-                    mIssueCondition.setVisibility(View.GONE);
-                    mIssueConditionText.setText(R.string.add_cover);
-                    mIssueConditionText.setTextSize(14);
-                }
-
-                mResultNumber.setVisibility(View.VISIBLE);
-                mResultNumber.setText(getResources().getString(R.string.result) + " " + (position + 1) + "/" + mData.size());
-
-                mTitleText.setVisibility(View.VISIBLE);
-                mTitleText.setText(mData.get(position).getPublicationTitle() + " " + mData.get(position).getIssueNumber());
-            }
-
-            @Override
-            public void onScrolling() {
-                mResultNumber.setVisibility(View.INVISIBLE);
-                mTitleText.setVisibility(View.INVISIBLE);
-                mCountryBadge.setVisibility(View.INVISIBLE);
-                mIssueCondition.setVisibility(View.INVISIBLE);
-                mIssueConditionText.setVisibility(View.INVISIBLE);
-            }
         });
     }
 }
