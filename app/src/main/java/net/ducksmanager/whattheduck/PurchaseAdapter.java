@@ -52,7 +52,7 @@ public class PurchaseAdapter extends ItemAdapter<Purchase> {
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     PurchaseAdapter(Activity activity, HashMap<Integer, Purchase> items) {
-        super(activity, R.layout.row_purchase, new ArrayList<>(items.values())));
+        super(activity, R.layout.row_purchase, new ArrayList<>(items.values()));
     }
 
     @Override

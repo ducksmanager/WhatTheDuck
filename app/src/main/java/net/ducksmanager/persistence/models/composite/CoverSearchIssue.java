@@ -2,6 +2,7 @@ package net.ducksmanager.persistence.models.composite;
 
 import com.google.gson.annotations.SerializedName;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -10,6 +11,7 @@ import androidx.room.PrimaryKey;
 public class CoverSearchIssue {
     @SerializedName(value="coverid")
     @PrimaryKey
+    @NonNull
     private String coverId;
 
     @SerializedName(value="countrycode")
