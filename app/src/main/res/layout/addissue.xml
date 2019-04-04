@@ -180,7 +180,7 @@
                         android:layout_margin="10dp"
                         android:background="@drawable/background_rounded_button"
 
-                        android:text="Create new purchase date"/>
+                        android:text="@string/create_new_purchase_date"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/purchase_list"
