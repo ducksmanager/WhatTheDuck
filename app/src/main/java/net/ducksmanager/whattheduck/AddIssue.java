@@ -98,7 +98,7 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void toggleAddPurchaseButton(Boolean toggle) {
-        findViewById(R.id.addpurchase).setEnabled(toggle);
+        findViewById(R.id.addpurchase).setVisibility(toggle ? View.VISIBLE : View.GONE);
     }
     
     private void showNewPurchase() {

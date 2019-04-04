@@ -173,6 +173,15 @@
                         </LinearLayout>
                     </LinearLayout>
 
+                    <Button
+                        android:id="@+id/addpurchase"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/background_rounded_button"
+
+                        android:text="Create new purchase date"/>
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/purchase_list"
                         android:layout_width="match_parent"
@@ -180,21 +189,6 @@
                         android:layout_marginBottom="26dp"
                         tools:listitem="@layout/row_purchase"/>
                 </LinearLayout>
-
-                <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/addpurchase"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/plus"
-                    app:fab_colorNormal="@color/fab_color"
-                    app:fab_colorPressed="@color/fab_color"
-                    app:fab_colorRipple="@android:color/white"
-                    app:fab_size="mini"/>
             </FrameLayout>
         </LinearLayout>
     </LinearLayout>
