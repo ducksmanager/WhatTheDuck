@@ -1,32 +1,34 @@
 package net.ducksmanager.whattheduck;
 
-import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
-import net.igenius.customcheckbox.CustomCheckBox;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
+public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.ViewHolder> {
+    static Purchase selectedItem = null;
+    private List<Purchase> items;
+    private Context context;
 
     public abstract static class Purchase {
         Boolean noPurchase;
-
         Boolean isNoPurchase() {
             return noPurchase;
         }
     }
 
-    static class SpecialPurchase extends Purchase {
-        SpecialPurchase() {
+    static class NoPurchase extends Purchase {
+        NoPurchase() {
             this.noPurchase= true;
         }
     }
@@ -58,24 +60,53 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-    PurchaseAdapter(Activity activity, HashMap<String,Purchase> items) {
-        super(activity, R.layout.row_purchase, new ArrayList<>(items.values()));
+    PurchaseAdapter(Context context, List<Purchase> items) {
+        this.context = context;
+        this.items = items;
     }
 
     @Override
-    protected ViewHolder getViewHolder(View v) {
-        return new ViewHolder(v);
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
     }
 
     @Override
-    protected View.OnClickListener getOnClickListener() {
-        return null;
+    public void onBindViewHolder(PurchaseAdapter.ViewHolder purchaseHolder, final int i) {
+
+        Purchase purchase = items.get(i);
+        if (purchase != null) {
+            purchaseHolder.purchaseCheck.setChecked(purchase == selectedItem);
+            Boolean isNoPurchase = purchase.isNoPurchase();
+
+            purchaseHolder.purchaseDate.setVisibility(!isNoPurchase ? View.VISIBLE : View.GONE);
+            purchaseHolder.purchaseName.setVisibility(!isNoPurchase ? View.VISIBLE : View.GONE);
+            purchaseHolder.purchaseCheck.setVisibility(View.VISIBLE);
+            purchaseHolder.noPurchaseTitle.setVisibility(isNoPurchase ? View.VISIBLE : View.GONE);
+
+            purchaseHolder.purchaseCheck.setContentDescription(purchase.toString());
+
+            if (!isNoPurchase) {
+                purchaseHolder.purchaseDate.setText(dateFormat.format(((PurchaseWithDate) purchase).getPurchaseDate()));
+                purchaseHolder.purchaseName.setText(((PurchaseWithDate) purchase).getPurchaseName());
+            }
+        }
+    }
+    @Override
+    public int getItemCount() {
+        return items.size();
     }
 
-    class ViewHolder extends ItemAdapter.ViewHolder implements View.OnClickListener {
-        final CustomCheckBox purchaseCheck;
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        final View view = inflater.inflate(R.layout.row_purchase, viewGroup, false);
+        return new ViewHolder(view);
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        final RadioButton purchaseCheck;
         final TextView purchaseDate;
-        final TextView purchaseTitle;
+        final TextView purchaseName;
         final TextView noPurchaseTitle;
 
         ViewHolder(View v) {
@@ -83,86 +114,15 @@ public class PurchaseAdapter extends ItemAdapter<PurchaseAdapter.Purchase> {
 
             purchaseCheck = v.findViewById(R.id.purchasecheck);
             purchaseDate = v.findViewById(R.id.purchasedate);
-            purchaseTitle = getTitleTextView(v);
+            purchaseName = v.findViewById(R.id.purchasename);
             noPurchaseTitle = v.findViewById(R.id.nopurchase);
+
+            View.OnClickListener clickListener = v1 -> {
+                selectedItem = items.get(getAdapterPosition());
+                notifyItemRangeChanged(0, items.size());
+            };
+            itemView.setOnClickListener(clickListener);
+            purchaseCheck.setOnClickListener(clickListener);
         }
-
-        @Override
-        public void onClick(View view) {
-            ((CustomCheckBox)view.findViewById(R.id.purchasecheck)).setChecked(true);
-        }
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
-
-        ViewHolder purchaseHolder = (ViewHolder) holder;
-
-        Purchase purchase = getItem(position);
-        if (purchase != null) {
-            Boolean isNoPurchase = purchase.isNoPurchase();
-
-            purchaseHolder.purchaseDate.setVisibility(!isNoPurchase ? View.VISIBLE : View.GONE);
-            purchaseHolder.purchaseTitle.setVisibility(!isNoPurchase ? View.VISIBLE : View.GONE);
-            purchaseHolder.purchaseCheck.setVisibility(View.VISIBLE);
-            purchaseHolder.noPurchaseTitle.setVisibility(isNoPurchase ? View.VISIBLE : View.GONE);
-
-            v.setMinimumHeight(40);
-            purchaseHolder.purchaseCheck.setContentDescription(purchase.toString());
-
-            purchaseHolder.purchaseCheck.setTag(R.id.check_by_user, Boolean.FALSE);
-            purchaseHolder.purchaseCheck.setChecked(purchase.toString().equals(AddIssue.selectedPurchaseHash));
-            purchaseHolder.purchaseCheck.setTag(R.id.check_by_user, null);
-
-            if (!isNoPurchase) {
-                purchaseHolder.purchaseDate.setText(dateFormat.format(((PurchaseWithDate) purchase).getPurchaseDate()));
-            }
-        }
-    }
-
-    @Override
-    protected boolean isHighlighted(Purchase i) {
-        return false;
-    }
-
-    @Override
-    protected Integer getPrefixImageResource(Purchase i, Activity activity) {
-        return null;
-    }
-
-    @Override
-    protected Integer getSuffixImageResource(Purchase i) {
-        return null;
-    }
-
-    @Override
-    protected String getSuffixText(Purchase i) {
-        return null;
-    }
-
-    @Override
-    protected String getText(Purchase p) {
-        return p instanceof PurchaseWithDate ? ((PurchaseWithDate)p).getPurchaseName() : "";
-    }
-
-    protected Comparator<Purchase> getComparator() {
-        return (purchase1, purchase2) ->
-            PurchaseAdapter.this.getComparatorText(purchase2)
-                .compareTo(PurchaseAdapter.this.getComparatorText(purchase1));
-    }
-
-    @Override
-    protected String getComparatorText(Purchase i) {
-        return i.isNoPurchase()
-            ? "^"
-            : dateFormat.format(((PurchaseWithDate) i).getPurchaseDate());
-    }
-
-    @Override
-    protected String getIdentifier(Purchase i) {
-        return i.isNoPurchase()
-            ? "no"
-            : String.valueOf(((PurchaseWithDate) i).getId());
     }
 }

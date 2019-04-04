@@ -1,6 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="MyDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
-
+    </style>
+    <style name="radioButtonNoCondition">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:gravity">top|center</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/radio_button_no_condition</item>
+        <item name="android:scaleType">matrix</item>
+    </style>
+    <style name="radioButtonBadCondition">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:gravity">top|center</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/radio_button_bad_condition</item>
+        <item name="android:scaleType">matrix</item>
+    </style>
+    <style name="radioButtonNotSoGoodCondition">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:gravity">top|center</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/radio_button_not_so_good_condition</item>
+        <item name="android:scaleType">matrix</item>
+    </style>
+    <style name="radioButtonGoodCondition">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:gravity">top|center</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/radio_button_good_condition</item>
+        <item name="android:scaleType">matrix</item>
     </style>
 </resources>

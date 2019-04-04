@@ -13,7 +13,8 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
@@ -58,15 +59,14 @@ public abstract class GetPurchaseList extends RetrieveTask {
 
             JSONObject object = new JSONObject(response);
             if (object.has("achats")) {
-                HashMap<Integer, PurchaseAdapter.Purchase> purchases = new HashMap<>();
+                List<PurchaseAdapter.Purchase> purchases = new ArrayList<>();
 
                 JSONArray purchaseObjects = object.getJSONArray("achats");
                 for (int i = 0; i < purchaseObjects.length(); i++) {
                     JSONObject purchaseObject = (JSONObject) purchaseObjects.get(i);
                     try {
                         Integer purchaseId = Integer.parseInt((String) purchaseObject.get("ID_Acquisition"));
-                        purchases.put(
-                            purchaseId,
+                        purchases.add(
                             new PurchaseAdapter.PurchaseWithDate(
                                 purchaseId,
                                 PurchaseAdapter.dateFormat.parse((String)purchaseObject.get("Date")),

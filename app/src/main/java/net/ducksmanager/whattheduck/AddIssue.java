@@ -5,37 +5,39 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import net.ducksmanager.retrievetasks.CreatePurchase;
 import net.ducksmanager.retrievetasks.GetPurchaseList;
-import net.ducksmanager.util.MultipleCustomCheckboxes;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
-public class AddIssue extends AppCompatActivity {
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-    private static HashMap<String,PurchaseAdapter.Purchase> purchases;
+public class AddIssue extends AppCompatActivity implements View.OnClickListener {
 
-    private static String selectedCondition = null;
-    static String selectedPurchaseHash = null;
+    private List<PurchaseAdapter.Purchase> purchases;
 
-
-    private final Calendar myCalendar = Calendar.getInstance();
+    private static final Calendar myCalendar = Calendar.getInstance();
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     @Override
@@ -43,44 +45,35 @@ public class AddIssue extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.addissue);
-
-        purchases = WhatTheDuck.userCollection.getPurchasesWithEmptyItem();
+        setPurchases();
         show();
     }
 
+    protected void setPurchases() {
+        purchases = new ArrayList<>(Collections.singletonList(new PurchaseAdapter.NoPurchase()));
+        purchases.addAll(WhatTheDuck.userCollection.getPurchases());
+    }
+
     private void show() {
-        MultipleCustomCheckboxes conditionCheckboxes = new MultipleCustomCheckboxes(
-            new WeakReference<>(findViewById(R.id.condition_selector)),
-            view -> {
-                selectedCondition = view.getContentDescription().toString();
-                ((TextView) findViewById(R.id.addissue_condition_text)).setText(selectedCondition);
-            },
-            view -> {
-                selectedCondition = null;
-                ((TextView) findViewById(R.id.addissue_condition_text)).setText("");
-            }
+        findViewById(R.id.noCondition).setOnClickListener(this);
+        findViewById(R.id.noCondition).performClick();
+        findViewById(R.id.badCondition).setOnClickListener(this);
+        findViewById(R.id.notSoGoodCondition).setOnClickListener(this);
+        findViewById(R.id.goodCondition).setOnClickListener(this);
 
-        );
-        conditionCheckboxes.initClickEvents();
-        conditionCheckboxes.checkInitialCheckbox(checkbox ->
-            checkbox.getId() == R.id.nocondition
-        );
-
-        showPurchases(true);
+        showPurchases();
+        findViewById(R.id.noCondition).performClick();
 
         findViewById(R.id.addissue_ok).setOnClickListener(view -> {
-            final Context appContext = WhatTheDuck.wtd.getApplicationContext();
             String dmCondition;
-            if (selectedCondition.equals(appContext.getString(R.string.condition_none)))
-                dmCondition = Issue.NO_CONDITION;
-            else if (selectedCondition.equals(appContext.getString(R.string.condition_bad)))
-                dmCondition = Issue.BAD_CONDITION;
-            else if (selectedCondition.equals(appContext.getString(R.string.condition_notsogood)))
-                dmCondition = Issue.NOTSOGOOD_CONDITION;
-            else
-                dmCondition = Issue.GOOD_CONDITION;
-
-            PurchaseAdapter.Purchase selectedPurchase= purchases.get(selectedPurchaseHash);
+            RadioGroup r = findViewById(R.id.condition);
+            switch(r.getCheckedRadioButtonId()) {
+                case R.id.noCondition: dmCondition = Issue.NO_CONDITION; break;
+                case R.id.badCondition: dmCondition = Issue.BAD_CONDITION; break;
+                case R.id.notSoGoodCondition: dmCondition = Issue.NOTSOGOOD_CONDITION; break;
+                case R.id.goodCondition: dmCondition = Issue.GOOD_CONDITION; break;
+                default: dmCondition = Issue.NO_CONDITION; break;
+            }
 
             new net.ducksmanager.retrievetasks.AddIssue(
                 new WeakReference<>(AddIssue.this),
@@ -88,8 +81,8 @@ public class AddIssue extends AppCompatActivity {
                 new Issue(
                     WhatTheDuck.getSelectedIssue(),
                     dmCondition,
-                    selectedPurchase instanceof PurchaseAdapter.PurchaseWithDate
-                        ? (PurchaseAdapter.PurchaseWithDate) selectedPurchase
+                    PurchaseAdapter.selectedItem instanceof PurchaseAdapter.PurchaseWithDate
+                        ? (PurchaseAdapter.PurchaseWithDate) PurchaseAdapter.selectedItem
                         : null
                 )
             ).execute();
@@ -154,9 +147,9 @@ public class AddIssue extends AppCompatActivity {
                         new GetPurchaseList(originActivityRef) {
                             @Override
                             protected void afterDataHandling() {
-                                AddIssue.purchases = WhatTheDuck.userCollection.getPurchasesWithEmptyItem();
+                                setPurchases();
                                 AddIssue.this.toggleAddPurchaseButton(true);
-                                AddIssue.this.showPurchases(false);
+                                AddIssue.this.showPurchases();
                                 hideKeyboard(floatingButtonView);
                                 newPurchaseSection.setVisibility(View.GONE);
                             }
@@ -190,23 +183,29 @@ public class AddIssue extends AppCompatActivity {
         }
     }
 
-    private void showPurchases(final Boolean checkNoPurchaseItem) {
+    private void showPurchases() {
         final RecyclerView rv = findViewById(R.id.purchase_list);
         rv.setAdapter(new PurchaseAdapter(this, purchases));
         rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.getViewTreeObserver()
+            .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    ((RadioButton)((LinearLayout)rv.getChildAt(0)).getChildAt(0)).setChecked(true);
+                    rv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            });
+    }
 
-        final MultipleCustomCheckboxes purchaseDateCheckboxes = new MultipleCustomCheckboxes(
-            new WeakReference<>(rv),
-            view ->
-                selectedPurchaseHash = view.getContentDescription().toString(),
-            view ->
-                selectedPurchaseHash = null
-        );
-        rv.post(() -> {
-            purchaseDateCheckboxes.initClickEvents();
-            if (checkNoPurchaseItem) {
-                purchaseDateCheckboxes.checkInitialCheckbox(checkbox -> checkbox.getContentDescription().toString().contains(PurchaseAdapter.SpecialPurchase.class.getSimpleName()));
-            }
-        });
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.noCondition:
+            case R.id.badCondition:
+            case R.id.notSoGoodCondition:
+            case R.id.goodCondition:
+                ((TextView) findViewById(R.id.addissue_condition_text)).setText(view.getContentDescription().toString());
+            break;
+        }
     }
 }

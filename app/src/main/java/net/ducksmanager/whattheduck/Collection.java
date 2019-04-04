@@ -8,30 +8,19 @@ import net.ducksmanager.whattheduck.Issue.IssueCondition;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public class Collection implements Serializable {
     private final HashMap<String,HashMap<String,HashMap<String, Issue>>> issues = new HashMap<>();
-    private HashMap<Integer, PurchaseAdapter.Purchase> purchases = new HashMap<>();
+    private List<PurchaseAdapter.Purchase> purchases = new ArrayList<>();
 
-    public void setPurchases(HashMap<Integer, PurchaseAdapter.Purchase> purchases) {
+    public void setPurchases(List<PurchaseAdapter.Purchase> purchases) {
         this.purchases = purchases;
     }
 
-    private HashMap<Integer, PurchaseAdapter.Purchase> getPurchases() {
+    List<PurchaseAdapter.Purchase> getPurchases() {
         return purchases;
-    }
-
-    HashMap<String,PurchaseAdapter.Purchase> getPurchasesWithEmptyItem() {
-        HashMap<String,PurchaseAdapter.Purchase> purchasesWithEmptyItem = new HashMap<>();
-
-        java.util.List<PurchaseAdapter.Purchase> values = new ArrayList<>(getPurchases().values());
-        values.add(new PurchaseAdapter.SpecialPurchase());
-        for (PurchaseAdapter.Purchase p : values) {
-            purchasesWithEmptyItem.put(p.toString(), p);
-        }
-
-        return purchasesWithEmptyItem;
     }
 
     public enum CollectionType {COA,USER}
