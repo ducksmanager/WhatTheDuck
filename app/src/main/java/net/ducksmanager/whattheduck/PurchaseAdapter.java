@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.ViewHolder> {
@@ -63,11 +62,6 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.ViewHo
     PurchaseAdapter(Context context, List<Purchase> items) {
         this.context = context;
         this.items = items;
-    }
-
-    @Override
-    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
     }
 
     @Override

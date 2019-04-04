@@ -6,12 +6,9 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -184,17 +181,10 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void showPurchases() {
+        PurchaseAdapter.selectedItem = purchases.get(0);
         final RecyclerView rv = findViewById(R.id.purchase_list);
         rv.setAdapter(new PurchaseAdapter(this, purchases));
         rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.getViewTreeObserver()
-            .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    ((RadioButton)((LinearLayout)rv.getChildAt(0)).getChildAt(0)).setChecked(true);
-                    rv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
-            });
     }
 
     @Override
