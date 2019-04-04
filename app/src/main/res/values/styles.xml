@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="MyDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="windowNoTitle">true</item>
     </style>
     <style name="radioButtonNoCondition">
         <item name="android:layout_width">0dp</item>

@@ -97,7 +97,7 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
             showNewPurchase();
         });
 
-        setTitle(getString(R.string.insert_issue__confirm, WhatTheDuck.getSelectedIssue()));
+        ((TextView)findViewById(R.id.addIssueTitle)).setText(getString(R.string.insert_issue__confirm, WhatTheDuck.getSelectedIssue()));
     }
 
     private void toggleAddPurchaseButton(Boolean toggle) {
