@@ -33,7 +33,7 @@
                   android:configChanges="orientation|keyboardHidden">
         </activity>
         <activity android:name="net.ducksmanager.whattheduck.AddIssue"
-                  android:theme="@style/MyDialogTheme"
+                  android:theme="@style/AddIssueTheme"
                   android:excludeFromRecents="true"/>
 
         <provider

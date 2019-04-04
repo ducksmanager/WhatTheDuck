@@ -27,7 +27,6 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -87,22 +86,23 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             downloadFullList();
         }
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            if (type.equals(CollectionType.USER.toString())) {
-                actionBar.setDisplayHomeAsUpEnabled(false);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                if (type.equals(CollectionType.USER.toString())) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                } else {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    getSupportActionBar().setHomeButtonEnabled(true);
+                }
             }
-            else {
-                actionBar.setDisplayHomeAsUpEnabled(true);
-                ((Toolbar) findViewById(R.id.toolbar)).setNavigationOnClickListener(v -> onBackFromAddIssueActivity());
-            }
-        }
-
-        setTitle(
-            type.equals(CollectionType.USER.toString())
+            toolbar.setTitle(
+                type.equals(CollectionType.USER.toString())
                     ? getString(R.string.my_collection)
                     : getString(R.string.add_issue)
-        );
+            );
+        }
     }
 
     private void goToView(Class<?> cls) {
@@ -212,6 +212,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             this.findViewById(R.id.addToCollectionWrapper).setVisibility(GONE);
             this.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
@@ -229,6 +230,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
                 }
             });
         }
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -254,6 +256,9 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             case R.id.action_about:
                 WhatTheDuck.showAbout(this);
 
+        }
+        if (item.getTitle().equals(getString(R.string.add_issue))) {
+            onBackFromAddIssueActivity();
         }
         if (i == null) {
             return super.onOptionsItemSelected(item);
@@ -325,5 +330,10 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             type = CollectionType.USER.toString();
             startActivity(new Intent(WhatTheDuck.wtd, CountryList.class));
         }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        return super.onContextItemSelected(item);
     }
 }
