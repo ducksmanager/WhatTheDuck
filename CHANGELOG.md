@@ -1,3 +1,7 @@
+Version 1.8.7
+
+    Fix back button sometimes not working
+    
 Version 1.8.6
 
     Fix network issue on Android Pie
