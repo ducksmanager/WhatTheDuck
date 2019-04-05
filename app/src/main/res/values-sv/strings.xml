@@ -19,6 +19,7 @@
     <string name="country">Land</string>
     <string name="cover_suggestion">Framsideförslag</string>
     <string name="create">Skapa</string>
+    <string name="create_new_purchase_date">Skapa ett köpdatum</string>
     <string name="email_address">E-mail</string>
     <string name="error">Fel</string>
     <string name="error__malformed_url">URLen är felaktig</string>

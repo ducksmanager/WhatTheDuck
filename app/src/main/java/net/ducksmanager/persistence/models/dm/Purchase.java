@@ -20,6 +20,8 @@ public class Purchase {
     @ColumnInfo
     private String description;
 
+    public Purchase() {}
+
     public Purchase(String date, String description) {
         this.date = date;
         this.description = description;

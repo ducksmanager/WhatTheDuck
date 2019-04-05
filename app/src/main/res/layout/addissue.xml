@@ -6,6 +6,17 @@
               android:id="@+id/addIssue"
               android:layout_height="wrap_content"
               android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/addIssueTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="@string/add_issue"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -35,53 +46,36 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/condition_selector"
-                    android:layout_width="fill_parent"
+                <RadioGroup
+                    android:id="@+id/condition"
+                    android:layout_width="100dp"
                     android:layout_height="20dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="start"
                     android:orientation="horizontal">
 
-                    <net.igenius.customcheckbox.CustomCheckBox
-                        android:id="@+id/nocondition"
-                        android:layout_width="20dp"
-                        android:layout_height="fill_parent"
+                    <RadioButton
+                        android:id="@+id/noCondition"
+                        style="@style/radioButtonNoCondition"
                         android:checked="true"
-                        android:contentDescription="@string/condition_none"
-                        app:color_checked="#989898"
-                        app:color_unchecked="#989898"
-                        app:duration="1"
-                        app:stroke_width="5dp"/>
+                        android:contentDescription="@string/condition_none"/>
 
-                    <net.igenius.customcheckbox.CustomCheckBox
-                        android:layout_width="20dp"
-                        android:layout_height="fill_parent"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginStart="5dp"
-                        android:contentDescription="@string/condition_bad"
-                        app:color_checked="#FF0000"
-                        app:color_unchecked="#FF0000"
-                        app:duration="100"/>
+                    <RadioButton
+                        android:id="@+id/badCondition"
+                        style="@style/radioButtonBadCondition"
+                        android:contentDescription="@string/condition_bad"/>
 
-                    <net.igenius.customcheckbox.CustomCheckBox
-                        android:layout_width="20dp"
-                        android:layout_height="fill_parent"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginStart="5dp"
-                        android:contentDescription="@string/condition_notsogood"
-                        app:color_checked="#FF8000"
-                        app:color_unchecked="#FF8000"
-                        app:duration="100"/>
+                    <RadioButton
+                        android:id="@+id/notSoGoodCondition"
+                        style="@style/radioButtonNotSoGoodCondition"
+                        android:contentDescription="@string/condition_notsogood"/>
 
-                    <net.igenius.customcheckbox.CustomCheckBox
-                        android:layout_width="20dp"
-                        android:layout_height="fill_parent"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginStart="5dp"
-                        android:contentDescription="@string/condition_good"
-                        app:color_checked="#2CA77B"
-                        app:color_unchecked="#2CA77B"
-                        app:duration="100"/>
-                </LinearLayout>
+                    <RadioButton
+                        android:id="@+id/goodCondition"
+                        style="@style/radioButtonGoodCondition"
+                        android:contentDescription="@string/condition_good"/>
+                </RadioGroup>
 
                 <TextView
                     android:id="@+id/addissue_condition_text"
@@ -122,57 +116,71 @@
 
                     <LinearLayout
                         android:id="@+id/newpurchase"
-                        android:orientation="vertical"
-                        android:visibility="gone"
+                        android:layout_width="match_parent"
                         android:layout_height="80dp"
-                        android:layout_width="match_parent">
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
                         <EditText
                             android:id="@+id/purchasedatenew"
                             android:layout_width="fill_parent"
                             android:layout_height="30dp"
                             android:layout_marginTop="0dp"
                             android:layout_marginBottom="0dp"
+                            android:gravity="start|center"
+                            android:hint="@string/purchase_date"
+                            android:inputType="none"
                             android:paddingTop="0dp"
                             android:paddingBottom="8dp"
-                            android:gravity="start|center"
-                            android:textSize="14sp"
-                            android:hint="@string/purchase_date"
-                            android:inputType="none">
+                            android:textSize="14sp">
                         </EditText>
+
                         <EditText
                             android:id="@+id/purchasetitlenew"
-                            android:gravity="start|center"
-                            android:textSize="14sp"
                             android:layout_width="fill_parent"
                             android:layout_height="30dp"
                             android:layout_marginTop="0dp"
                             android:layout_marginBottom="0dp"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="0dp"
+                            android:gravity="start|center"
                             android:hint="@string/purchase_name"
-                            android:inputType="text"/>
+                            android:inputType="text"
+                            android:paddingTop="0dp"
+                            android:paddingBottom="8dp"
+                            android:textSize="14sp"/>
+
                         <LinearLayout
-                            android:orientation="horizontal"
+                            android:layout_width="fill_parent"
                             android:layout_height="20dp"
-                            android:layout_width="fill_parent">
+                            android:orientation="horizontal">
+
                             <Button
                                 android:id="@+id/createpurchase"
                                 android:layout_width="0dp"
-                                android:layout_weight="1"
                                 android:layout_height="fill_parent"
-                                android:textColor="#84cfc6"
+                                android:layout_weight="1"
                                 android:background="@android:color/transparent"
-                                android:text="@string/create"/>
+                                android:text="@string/create"
+                                android:textColor="#84cfc6"/>
+
                             <Button
                                 android:id="@+id/createpurchasecancel"
                                 android:layout_width="0dp"
-                                android:layout_weight="1"
                                 android:layout_height="fill_parent"
-                                android:textColor="@android:color/white"
+                                android:layout_weight="1"
                                 android:background="@android:color/transparent"
-                                android:text="@string/cancel"/>
+                                android:text="@string/cancel"
+                                android:textColor="@android:color/white"/>
                         </LinearLayout>
                     </LinearLayout>
+
+                    <Button
+                        android:id="@+id/addpurchase"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/background_rounded_button"
+
+                        android:text="@string/create_new_purchase_date"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/purchase_list"
@@ -181,21 +189,6 @@
                         android:layout_marginBottom="26dp"
                         tools:listitem="@layout/row_purchase"/>
                 </LinearLayout>
-
-                <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/addpurchase"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/plus"
-                    app:fab_colorNormal="@color/fab_color"
-                    app:fab_colorPressed="@color/fab_color"
-                    app:fab_colorRipple="@android:color/white"
-                    app:fab_size="mini"/>
             </FrameLayout>
         </LinearLayout>
     </LinearLayout>

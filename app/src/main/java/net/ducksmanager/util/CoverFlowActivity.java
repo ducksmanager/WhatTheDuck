@@ -13,7 +13,6 @@ import android.widget.Toast;
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueDetails;
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails;
 import net.ducksmanager.whattheduck.AddIssue;
-import net.ducksmanager.whattheduck.Issue;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
@@ -56,10 +55,9 @@ public class CoverFlowActivity extends AppCompatActivity {
 
             coverFlow.setOnItemClickListener((parent, view, position, id) -> {
                 if (currentSuggestion.getUserIssue() == null) {
-                    Issue newIssue = new Issue(currentSuggestion.getIssue().getIssueNumber(), null);
                     WhatTheDuck.setSelectedCountry (currentSuggestion.getIssue().getCountryCode());
                     WhatTheDuck.setSelectedPublication (currentSuggestion.getIssue().getPublicationCode());
-                    WhatTheDuck.setSelectedIssue(newIssue.getIssueNumber());
+                    WhatTheDuck.setSelectedIssue(currentSuggestion.getIssue().getIssueNumber());
 
                     CoverFlowActivity.this.startActivity(new Intent(CoverFlowActivity.this, AddIssue.class));
                 }

@@ -7,10 +7,10 @@ import net.ducksmanager.whattheduck.R;
 import androidx.room.Embedded;
 
 public class InducksIssueWithUserIssueDetails {
-    private static final String BAD_CONDITION="mauvais";
-    private static final String NOTSOGOOD_CONDITION="moyen";
-    private static final String GOOD_CONDITION="bon";
-    private static final String NO_CONDITION="indefini";
+    public static final String BAD_CONDITION="mauvais";
+    public static final String NOTSOGOOD_CONDITION="moyen";
+    public static final String GOOD_CONDITION="bon";
+    public static final String NO_CONDITION="indefini";
 
     @Embedded
     private InducksIssue issue;
