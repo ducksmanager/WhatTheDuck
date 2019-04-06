@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -46,8 +45,7 @@ public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
 
     @Override
     protected void downloadList() {
-        this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
-        DmServer.api.getIssues(WhatTheDuck.getSelectedPublication()).enqueue(new DmServer.Callback<List<String>>(this) {
+        DmServer.api.getIssues(WhatTheDuck.getSelectedPublication()).enqueue(new DmServer.Callback<List<String>>("getInducksIssues", this) {
             @Override
             public void onSuccessfulResponse(Response<List<String>> response) {
                 List<InducksIssue> issues = new ArrayList<>();

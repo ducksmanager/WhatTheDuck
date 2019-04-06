@@ -9,7 +9,7 @@ public class CoverSearchResults {
     private List<Integer> imageIds;
     private String type;
 
-    public CoverSearchResults(HashMap<String, CoverSearchIssue> issues, List<Integer> imageIds, String type) {
+    public CoverSearchResults(HashMap<String, CoverSearchIssue> issues, List<Integer> imageIds) {
         this.issues = issues;
         this.imageIds = imageIds;
     }

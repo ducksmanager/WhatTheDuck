@@ -9,11 +9,11 @@ public class InducksIssue {
 
     @NonNull
     @ColumnInfo
-    private String inducksPublicationCode;
+    private final String inducksPublicationCode;
 
     @NonNull
     @ColumnInfo
-    private String inducksIssueNumber;
+    private final String inducksIssueNumber;
 
     public InducksIssue(@NonNull String inducksPublicationCode, @NonNull String inducksIssueNumber) {
         this.inducksPublicationCode = inducksPublicationCode;

@@ -33,10 +33,10 @@ public class CoverFlowActivity extends AppCompatActivity {
     private TextView mIssueConditionText;
     private TextView mTitleText;
 
-    public static CoverSearchIssueWithUserIssueDetails currentSuggestion = null;
+    private static CoverSearchIssueWithUserIssueDetails currentSuggestion = null;
 
-    CoverFlowAdapter adapter;
-    FeatureCoverFlow coverFlow;
+    private CoverFlowAdapter adapter;
+    private FeatureCoverFlow coverFlow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

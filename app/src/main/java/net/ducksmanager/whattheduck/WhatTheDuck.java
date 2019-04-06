@@ -51,7 +51,7 @@ import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_DM_
 
 public class WhatTheDuck extends Activity {
     @VisibleForTesting
-    public static final String WTD_PAGE_PATH = "remote/WhatTheDuck.php";
+    private static final String WTD_PAGE_PATH = "remote/WhatTheDuck.php";
 
     public static WhatTheDuck wtd;
 
@@ -135,7 +135,7 @@ public class WhatTheDuck extends Activity {
         });
     }
 
-    void connectAndFetchCollection() {
+    private void connectAndFetchCollection() {
         if (TextUtils.isEmpty(Settings.getUsername()) || TextUtils.isEmpty(Settings.getPassword()) && TextUtils.isEmpty(Settings.getEncryptedPassword())) {
             WhatTheDuck.wtd.alert(R.string.input_error, R.string.input_error__empty_credentials);
             ProgressBar mProgressBar = this.findViewById(R.id.progressBar);
@@ -148,15 +148,12 @@ public class WhatTheDuck extends Activity {
     }
 
     public static void fetchCollection(WeakReference<Activity> activityRef, Class targetClass) {
-        activityRef.get().findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
-        trackEvent("retrievecollection/start");
-        DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<Issue>>(activityRef.get()) {
+        DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<Issue>>("retrieveCollection", activityRef.get()) {
             public void onSuccessfulResponse(Response<List<Issue>> issueListResponse) {
-                trackEvent("retrievecollection/finish");
                 appDB.issueDao().deleteAll();
                 appDB.issueDao().insertList(issueListResponse.body());
 
-                DmServer.api.getUserPurchases().enqueue(new DmServer.Callback<List<Purchase>>(WhatTheDuck.wtd) {
+                DmServer.api.getUserPurchases().enqueue(new DmServer.Callback<List<Purchase>>("getPurchases", WhatTheDuck.wtd) {
                     @Override
                     public void onSuccessfulResponse(Response<List<Purchase>> purchaseListResponse) {
                         appDB.purchaseDao().deleteAll();

@@ -10,10 +10,10 @@ public class InducksCountryName {
 
     @PrimaryKey
     @NonNull
-    private String countryCode;
+    private final String countryCode;
 
     @ColumnInfo
-    private String countryName;
+    private final String countryName;
 
     public InducksCountryName(@NonNull String countryCode, String countryName) {
         this.countryCode = countryCode;

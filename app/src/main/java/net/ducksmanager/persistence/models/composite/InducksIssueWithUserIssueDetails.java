@@ -14,13 +14,13 @@ public class InducksIssueWithUserIssueDetails {
     public static final String NO_CONDITION="indefini";
 
     @Embedded
-    private InducksIssue issue;
+    private final InducksIssue issue;
 
     @Embedded
-    private Issue userIssue;
+    private final Issue userIssue;
 
     @Embedded
-    private Purchase userPurchase;
+    private final Purchase userPurchase;
 
     public InducksIssueWithUserIssueDetails(InducksIssue issue, Issue userIssue, Purchase userPurchase) {
         this.issue = issue;

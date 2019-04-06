@@ -34,7 +34,6 @@ import retrofit2.Response;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
 public class CoverFlowFileHandler {
 
@@ -124,12 +123,12 @@ public class CoverFlowFileHandler {
         instance.transform(resizeTransformation).into(new CompressPhotoTarget());
     }
 
-    public interface TransformationCallback {
+    interface TransformationCallback {
         void onComplete(File outputFile);
         void onFail();
     }
 
-    public class CompressPhotoTarget implements Target {
+    class CompressPhotoTarget implements Target {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
             try {
@@ -170,17 +169,16 @@ public class CoverFlowFileHandler {
             RequestBody fileName = RequestBody.create(MediaType.parse("text/plain"), file.getName());
 
             System.out.println("Starting cover search : " + System.currentTimeMillis());
-            trackEvent("coversearch/start");
-            DmServer.api.searchFromCover(fileToUpload, fileName).enqueue(new DmServer.Callback<CoverSearchResults>(getOriginActivity()) {
+            DmServer.api.searchFromCover(fileToUpload, fileName).enqueue(new DmServer.Callback<CoverSearchResults>("coversearch", getOriginActivity()) {
                 @Override
                 public void onSuccessfulResponse(Response<CoverSearchResults> response) {
-                    trackEvent("coversearch/finish");
                     System.out.println("Ending cover search : " + System.currentTimeMillis());
 
                     if (response.body().getIssues() != null) {
                         for (CoverSearchIssue issue : response.body().getIssues().values()) {
                             issue.setCoverFullUrl(WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL) + "/cover-id/download/" + issue.getCoverId());
                         }
+                        WhatTheDuck.appDB.coverSearchIssueDao().deleteAll();
                         WhatTheDuck.appDB.coverSearchIssueDao().insertList(new ArrayList<>(response.body().getIssues().values()));
                         getOriginActivity().startActivity(new Intent(getOriginActivity(), CoverFlowActivity.class));
                     }

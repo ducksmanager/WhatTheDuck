@@ -16,6 +16,7 @@ import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
+import java.nio.charset.StandardCharsets;
 
 import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
@@ -71,7 +72,7 @@ public class Signup extends Activity {
             trackEvent("signup/finish");
             if (response != null) {
                 try {
-                    response = new String(response.getBytes("ISO8859-1"), "UTF-8");
+                    response = new String(response.getBytes("ISO8859-1"), StandardCharsets.UTF_8);
 
                     if (response.equals("OK")) {
                         Activity originActivity = originActivityRef.get();

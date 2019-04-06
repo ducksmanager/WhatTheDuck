@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.ViewHolder> {
     static Purchase selectedItem = null;
-    private List<Purchase> items;
-    private Context context;
+    private final List<Purchase> items;
+    private final Context context;
 
     static class NoPurchase extends Purchase {
         NoPurchase() {}

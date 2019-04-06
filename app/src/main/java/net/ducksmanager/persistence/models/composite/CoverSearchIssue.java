@@ -14,23 +14,23 @@ public class CoverSearchIssue {
     @SerializedName(value="coverid")
     @PrimaryKey
     @NonNull
-    private String coverId;
+    private final String coverId;
 
     @SerializedName(value="countrycode")
     @ColumnInfo
-    private String coverCountryCode;
+    private final String coverCountryCode;
 
     @SerializedName(value="publicationcode")
     @ColumnInfo
-    private String coverPublicationCode;
+    private final String coverPublicationCode;
 
     @SerializedName(value="publicationtitle")
     @ColumnInfo
-    private String coverPublicationTitle;
+    private final String coverPublicationTitle;
 
     @SerializedName(value="issuenumber")
     @ColumnInfo
-    private String coverIssueNumber;
+    private final String coverIssueNumber;
 
     @ColumnInfo
     private String coverFullUrl;

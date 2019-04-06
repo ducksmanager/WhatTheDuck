@@ -31,11 +31,8 @@ public class IssueAdapter extends ItemAdapter<InducksIssueWithUserIssueDetails> 
                 if (selectedIssue.getUserIssue() != null) {
                     WhatTheDuck.wtd.info(new WeakReference<>(IssueAdapter.this.getOriginActivity()), R.string.input_error__issue_already_possessed, Toast.LENGTH_SHORT);
                 } else {
-                    WhatTheDuck.wtd.toggleProgressbarLoading(new WeakReference<>(IssueAdapter.this.getOriginActivity()), true);
                     WhatTheDuck.setSelectedIssue(selectedIssue.getIssue().getInducksIssueNumber());
-
-                    Intent i = new Intent(originActivity, net.ducksmanager.whattheduck.AddIssue.class);
-                    originActivity.startActivity(i);
+                    originActivity.startActivity(new Intent(originActivity, net.ducksmanager.whattheduck.AddIssue.class));
                 }
             }
         };

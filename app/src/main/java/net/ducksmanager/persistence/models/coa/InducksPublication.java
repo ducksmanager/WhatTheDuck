@@ -10,10 +10,10 @@ public class InducksPublication {
 
     @PrimaryKey
     @NonNull
-    private String publicationCode;
+    private final String publicationCode;
 
     @ColumnInfo
-    private String title;
+    private final String title;
 
     public InducksPublication(@NonNull String publicationCode, String title) {
         this.publicationCode = publicationCode;

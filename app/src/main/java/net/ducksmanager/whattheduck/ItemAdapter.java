@@ -27,7 +27,7 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
     private List<Item> items;
     private ArrayList<Item> filteredItems;
     final Activity originActivity;
-    View v;
+    private View v;
 
     private static FilterTextOnChangeListener filterTextOnChangeListener;
 
@@ -101,7 +101,7 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
         }
     }
 
-    Comparator<Item> getComparator() {
+    private Comparator<Item> getComparator() {
         return (i1, i2) -> {
             String text1 = ItemAdapter.this.getComparatorText(i1);
             String text2 = ItemAdapter.this.getComparatorText(i2);
@@ -164,7 +164,7 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
 
     protected abstract String getText(Item i);
 
-    protected boolean isHighlighted(Item i) {
+    private boolean isHighlighted(Item i) {
         return isPossessed(i);
     }
 

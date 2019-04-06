@@ -39,7 +39,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private Boolean requiresDataDownload = false;
-    protected List<Item> data = new ArrayList<>();
+    List<Item> data = new ArrayList<>();
 
     protected abstract boolean hasList();
     protected abstract void downloadList();
@@ -284,7 +284,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         currentPublicationText.setText(publicationFullName);
     }
 
-    protected void storeItemList(List<Item> items) {
+    void storeItemList(List<Item> items) {
         this.data = items;
         this.requiresDataDownload = false;
         this.show();
@@ -298,10 +298,5 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             type = WhatTheDuck.CollectionType.USER.toString();
             startActivity(new Intent(WhatTheDuck.wtd, CountryList.class));
         }
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        return super.onContextItemSelected(item);
     }
 }

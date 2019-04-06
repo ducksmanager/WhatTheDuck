@@ -23,6 +23,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_ROLE_NAME;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_ROLE_PASSWORD;
@@ -65,10 +66,17 @@ public class DmServer {
 
     public abstract static class Callback<T> implements retrofit2.Callback<T> {
 
-        private WeakReference<Activity> originActivityRef;
+        private final String eventName;
+        private final WeakReference<Activity> originActivityRef;
 
-        protected Callback(Activity originActivity) {
+        protected Callback(String eventName, Activity originActivity) {
+            this.eventName = eventName;
+            trackEvent(eventName + "/start");
+
             this.originActivityRef = new WeakReference<>(originActivity);
+            if (originActivityRef.get().findViewById(R.id.progressBar) != null) {
+                originActivityRef.get().findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
+            }
         }
 
         public abstract void onSuccessfulResponse(Response<T> response);
@@ -91,11 +99,13 @@ public class DmServer {
 
         @Override
         public void onFailure(Call call, Throwable t) {
+            WhatTheDuck.wtd.alert(originActivityRef, R.string.error);
             System.err.println(t.getMessage());
             onFinished();
         }
 
         private void onFinished() {
+            trackEvent(eventName + "/finish");
             if (originActivityRef.get().findViewById(R.id.progressBar) != null) {
                 originActivityRef.get().findViewById(R.id.progressBar).setVisibility(ProgressBar.GONE);
             }

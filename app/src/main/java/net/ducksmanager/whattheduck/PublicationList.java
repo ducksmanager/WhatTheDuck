@@ -2,7 +2,6 @@ package net.ducksmanager.whattheduck;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ProgressBar;
 
 import net.ducksmanager.apigateway.DmServer;
 import net.ducksmanager.persistence.models.coa.InducksPublication;
@@ -23,8 +22,7 @@ public class PublicationList extends ItemList<InducksPublicationWithPossession> 
 
     @Override
     protected void downloadList() {
-        this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
-        DmServer.api.getPublications(WhatTheDuck.getSelectedCountry()).enqueue(new DmServer.Callback<HashMap<String, String>>(this) {
+        DmServer.api.getPublications(WhatTheDuck.getSelectedCountry()).enqueue(new DmServer.Callback<HashMap<String, String>>("getInducksPublications", this) {
             @Override
             public void onSuccessfulResponse(Response<HashMap<String, String>> response) {
                 List<InducksPublication> publications = new ArrayList<>();

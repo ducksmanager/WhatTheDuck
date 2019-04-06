@@ -2,7 +2,6 @@ package net.ducksmanager.whattheduck;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.widget.ProgressBar;
 
 import net.ducksmanager.apigateway.DmServer;
 import net.ducksmanager.persistence.models.coa.InducksCountryName;
@@ -19,7 +18,7 @@ import retrofit2.Response;
 
 public class CountryList extends ItemList<InducksCountryNameWithPossession> {
 
-    public static boolean hasFullList = false;
+    private static boolean hasFullList = false;
 
     @Override
     protected boolean hasList() {
@@ -29,8 +28,7 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
     @Override
     protected void downloadList() {
         String locale = getApplicationContext().getResources().getConfiguration().locale.getLanguage();
-        this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
-        DmServer.api.getCountries(locale).enqueue(new DmServer.Callback<HashMap<String, String>>(this) {
+        DmServer.api.getCountries(locale).enqueue(new DmServer.Callback<HashMap<String, String>>("getInducksCountries", this) {
             @Override
             public void onSuccessfulResponse(Response<HashMap<String, String>> response) {
                 List<InducksCountryName> countries = new ArrayList<>();

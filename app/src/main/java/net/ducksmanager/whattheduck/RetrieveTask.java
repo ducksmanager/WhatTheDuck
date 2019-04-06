@@ -94,7 +94,7 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         return this.thrownException != null;
     }
 
-    public static void handleResultExceptionOnActivity(Exception e, WeakReference<Activity> activityRef) {
+    private static void handleResultExceptionOnActivity(Exception e, WeakReference<Activity> activityRef) {
         WhatTheDuck.wtd.showLoginForm();
         WhatTheDuck.wtd.toggleProgressbarLoading(activityRef, false);
 
