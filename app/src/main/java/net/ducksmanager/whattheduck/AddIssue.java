@@ -52,7 +52,7 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
 
     protected void downloadPurchaseList() {
         this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
-        DmServer.api.getUserPurchases().enqueue(new DmServer.Callback<List<Purchase>>(this.findViewById(R.id.progressBar)) {
+        DmServer.api.getUserPurchases().enqueue(new DmServer.Callback<List<Purchase>>(this) {
             @Override
             public void onSuccessfulResponse(Response<List<Purchase>> response) {
                 WhatTheDuck.appDB.purchaseDao().insertList(response.body());
@@ -72,13 +72,13 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
 
     private void show() {
         findViewById(R.id.noCondition).setOnClickListener(this);
-        findViewById(R.id.noCondition).performClick();
         findViewById(R.id.badCondition).setOnClickListener(this);
         findViewById(R.id.notSoGoodCondition).setOnClickListener(this);
         findViewById(R.id.goodCondition).setOnClickListener(this);
 
         showPurchases();
         findViewById(R.id.noCondition).performClick();
+        PurchaseAdapter.selectedItem = purchases.get(0);
 
         findViewById(R.id.addissue_ok).setOnClickListener(view -> {
             String dmCondition;
@@ -103,11 +103,11 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
             this.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
 
             trackEvent("addissue/start");
-            DmServer.api.createUserIssues(issueListToUpdate).enqueue(new DmServer.Callback<String>() {
+            DmServer.api.createUserIssues(issueListToUpdate).enqueue(new DmServer.Callback<Object>(AddIssue.this) {
                 @Override
-                public void onSuccessfulResponse(Response<String> response) {
+                public void onSuccessfulResponse(Response<Object> response) {
                     trackEvent("addissue/finish");
-
+                    finish();
                     WhatTheDuck.wtd.info(new WeakReference<>(AddIssue.this), R.string.confirmation_message__issue_inserted, Toast.LENGTH_SHORT);
                     WhatTheDuck.fetchCollection(new WeakReference<>(AddIssue.this), IssueList.class);
                 }
@@ -166,9 +166,10 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
 
             hideKeyboard(floatingButtonView);
 
-            DmServer.api.createUserPurchase(new Purchase(purchaseDateNew.getText().toString(), purchaseTitleNew.getText().toString())).enqueue(new DmServer.Callback<String>(this.findViewById(R.id.progressBar)) {
+            Purchase newPurchase = new Purchase(purchaseDateNew.getText().toString(), purchaseTitleNew.getText().toString());
+            DmServer.api.createUserPurchase(newPurchase).enqueue(new DmServer.Callback<Void>(this) {
                 @Override
-                public void onSuccessfulResponse(Response<String> response) {
+                public void onSuccessfulResponse(Response<Void> response) {
                     downloadPurchaseList();
                     AddIssue.this.toggleAddPurchaseButton(true);
                     AddIssue.this.showPurchases();
@@ -194,7 +195,6 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void showPurchases() {
-        PurchaseAdapter.selectedItem = purchases.get(0);
         final RecyclerView rv = findViewById(R.id.purchase_list);
         rv.setAdapter(new PurchaseAdapter(this, purchases));
         rv.setLayoutManager(new LinearLayoutManager(this));

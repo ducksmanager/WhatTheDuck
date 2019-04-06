@@ -32,7 +32,7 @@ public class IssueAdapter extends ItemAdapter<InducksIssueWithUserIssueDetails> 
                     WhatTheDuck.wtd.info(new WeakReference<>(IssueAdapter.this.getOriginActivity()), R.string.input_error__issue_already_possessed, Toast.LENGTH_SHORT);
                 } else {
                     WhatTheDuck.wtd.toggleProgressbarLoading(new WeakReference<>(IssueAdapter.this.getOriginActivity()), true);
-                    WhatTheDuck.setSelectedIssue(selectedIssue.getIssue().getIssueNumber());
+                    WhatTheDuck.setSelectedIssue(selectedIssue.getIssue().getInducksIssueNumber());
 
                     Intent i = new Intent(originActivity, net.ducksmanager.whattheduck.AddIssue.class);
                     originActivity.startActivity(i);
@@ -58,7 +58,7 @@ public class IssueAdapter extends ItemAdapter<InducksIssueWithUserIssueDetails> 
 
     @Override
     protected Integer getSuffixImageResource(InducksIssueWithUserIssueDetails i) {
-        if (i.getUserIssue() != null && i.getUserIssue().getPurchaseId() != null) {
+        if (i.getUserPurchase() != null) {
             return R.drawable.ic_clock;
         } else {
             return null;
@@ -67,8 +67,8 @@ public class IssueAdapter extends ItemAdapter<InducksIssueWithUserIssueDetails> 
 
     @Override
     protected String getSuffixText(InducksIssueWithUserIssueDetails i) {
-        if (i.getUserIssue() != null && i.getUserIssue().getPurchaseId() != null) {
-            return PurchaseAdapter.dateFormat.format(i.getUserIssue().getPurchaseId());
+        if (i.getUserPurchase() != null) {
+            return i.getUserPurchase().getDate();
         } else {
             return null;
         }
@@ -76,12 +76,12 @@ public class IssueAdapter extends ItemAdapter<InducksIssueWithUserIssueDetails> 
 
     @Override
     protected String getIdentifier(InducksIssueWithUserIssueDetails i) {
-        return i.getIssue().getIssueNumber();
+        return i.getIssue().getInducksIssueNumber();
     }
 
     @Override
     protected String getText(InducksIssueWithUserIssueDetails i) {
-        return i.getIssue().getIssueNumber();
+        return i.getIssue().getInducksIssueNumber();
     }
 
     @Override

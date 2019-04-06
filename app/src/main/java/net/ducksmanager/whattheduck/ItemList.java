@@ -166,6 +166,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         }
         else {
             filterEditText.setVisibility(GONE);
+            itemAdapter.updateFilteredList("");
         }
 
         while (recyclerView.getItemDecorationCount() > 0) {

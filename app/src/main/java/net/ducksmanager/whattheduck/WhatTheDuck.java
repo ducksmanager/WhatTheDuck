@@ -31,6 +31,7 @@ import com.koushikdutta.ion.builder.Builders.Any.B;
 import net.ducksmanager.apigateway.DmServer;
 import net.ducksmanager.persistence.AppDatabase;
 import net.ducksmanager.persistence.models.dm.Issue;
+import net.ducksmanager.persistence.models.dm.Purchase;
 import net.ducksmanager.retrievetasks.Signup;
 import net.ducksmanager.util.Settings;
 
@@ -149,13 +150,22 @@ public class WhatTheDuck extends Activity {
     public static void fetchCollection(WeakReference<Activity> activityRef, Class targetClass) {
         activityRef.get().findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
         trackEvent("retrievecollection/start");
-        DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<Issue>>(activityRef.get().findViewById(R.id.progressBar)) {
-            public void onSuccessfulResponse(Response<List<Issue>> response) {
+        DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<Issue>>(activityRef.get()) {
+            public void onSuccessfulResponse(Response<List<Issue>> issueListResponse) {
                 trackEvent("retrievecollection/finish");
-                appDB.issueDao().insertList(response.body());
+                appDB.issueDao().deleteAll();
+                appDB.issueDao().insertList(issueListResponse.body());
 
-                ItemList.type = WhatTheDuck.CollectionType.USER.toString();
-                activityRef.get().startActivity(new Intent(activityRef.get(), targetClass));
+                DmServer.api.getUserPurchases().enqueue(new DmServer.Callback<List<Purchase>>(WhatTheDuck.wtd) {
+                    @Override
+                    public void onSuccessfulResponse(Response<List<Purchase>> purchaseListResponse) {
+                        appDB.purchaseDao().deleteAll();
+                        appDB.purchaseDao().insertList(purchaseListResponse.body());
+
+                        ItemList.type = WhatTheDuck.CollectionType.USER.toString();
+                        activityRef.get().startActivity(new Intent(activityRef.get(), targetClass));
+                    }
+                });
             }
         });
     }

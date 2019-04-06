@@ -4,12 +4,14 @@ import com.google.gson.annotations.Expose;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "purchases")
 public class Purchase {
     @Expose
     @PrimaryKey
+    @ColumnInfo(name = "purchaseId")
     private Integer id;
 
     @Expose
@@ -20,6 +22,7 @@ public class Purchase {
     @ColumnInfo
     private String description;
 
+    @Ignore
     public Purchase() {}
 
     public Purchase(String date, String description) {

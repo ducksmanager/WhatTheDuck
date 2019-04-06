@@ -6,22 +6,22 @@ import androidx.room.Embedded;
 
 public class CoverSearchIssueWithUserIssueDetails {
     @Embedded
-    private CoverSearchIssue issue;
+    private CoverSearchIssue coverSearchIssue;
 
     @Embedded
     private Issue userIssue;
 
-    public CoverSearchIssueWithUserIssueDetails(CoverSearchIssue issue, Issue userIssue) {
-        this.issue = issue;
+    public CoverSearchIssueWithUserIssueDetails(CoverSearchIssue coverSearchIssue, Issue userIssue) {
+        this.coverSearchIssue = coverSearchIssue;
         this.userIssue = userIssue;
     }
 
-    public CoverSearchIssue getIssue() {
-        return issue;
+    public CoverSearchIssue getCoverSearchIssue() {
+        return coverSearchIssue;
     }
 
-    public void setIssue(CoverSearchIssue issue) {
-        this.issue = issue;
+    public void setCoverSearchIssue(CoverSearchIssue coverSearchIssue) {
+        this.coverSearchIssue = coverSearchIssue;
     }
 
     public Issue getUserIssue() {

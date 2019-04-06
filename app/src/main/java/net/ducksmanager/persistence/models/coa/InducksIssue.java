@@ -1,30 +1,33 @@
 package net.ducksmanager.persistence.models.coa;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 
-@Entity(tableName = "inducks_issue", primaryKeys = {"publicationCode", "issueNumber"} )
+@Entity(tableName = "inducks_issue", primaryKeys = {"inducksPublicationCode", "inducksIssueNumber"} )
 public class InducksIssue {
 
     @NonNull
-    private String publicationCode;
+    @ColumnInfo
+    private String inducksPublicationCode;
 
     @NonNull
-    private String issueNumber;
+    @ColumnInfo
+    private String inducksIssueNumber;
 
-    public InducksIssue(@NonNull String publicationCode, @NonNull String issueNumber) {
-        this.publicationCode = publicationCode;
-        this.issueNumber = issueNumber;
+    public InducksIssue(@NonNull String inducksPublicationCode, @NonNull String inducksIssueNumber) {
+        this.inducksPublicationCode = inducksPublicationCode;
+        this.inducksIssueNumber = inducksIssueNumber;
     }
 
     @NonNull
-    public String getPublicationCode() {
-        return publicationCode;
+    public String getInducksPublicationCode() {
+        return inducksPublicationCode;
     }
 
     @NonNull
-    public String getIssueNumber() {
-        return issueNumber;
+    public String getInducksIssueNumber() {
+        return inducksIssueNumber;
     }
 
 }

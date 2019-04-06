@@ -13,8 +13,8 @@ import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 
 import net.ducksmanager.apigateway.DmServer;
-import net.ducksmanager.persistence.models.composite.CoverSearchResults;
 import net.ducksmanager.persistence.models.composite.CoverSearchIssue;
+import net.ducksmanager.persistence.models.composite.CoverSearchResults;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 import androidx.core.content.FileProvider;
 import okhttp3.MediaType;
@@ -170,17 +171,17 @@ public class CoverFlowFileHandler {
 
             System.out.println("Starting cover search : " + System.currentTimeMillis());
             trackEvent("coversearch/start");
-            DmServer.api.searchFromCover(fileToUpload, fileName).enqueue(new DmServer.Callback<CoverSearchResults>(getOriginActivity().findViewById(R.id.progressBar)) {
+            DmServer.api.searchFromCover(fileToUpload, fileName).enqueue(new DmServer.Callback<CoverSearchResults>(getOriginActivity()) {
                 @Override
                 public void onSuccessfulResponse(Response<CoverSearchResults> response) {
                     trackEvent("coversearch/finish");
                     System.out.println("Ending cover search : " + System.currentTimeMillis());
 
                     if (response.body().getIssues() != null) {
-                        for (CoverSearchIssue issue : response.body().getIssues()) {
-                            issue.setFullUrl(WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL) + "/cover-id/download/" + issue.getCoverId());
+                        for (CoverSearchIssue issue : response.body().getIssues().values()) {
+                            issue.setCoverFullUrl(WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL) + "/cover-id/download/" + issue.getCoverId());
                         }
-                        WhatTheDuck.appDB.coverSearchIssueDao().insertList(response.body().getIssues());
+                        WhatTheDuck.appDB.coverSearchIssueDao().insertList(new ArrayList<>(response.body().getIssues().values()));
                         getOriginActivity().startActivity(new Intent(getOriginActivity(), CoverFlowActivity.class));
                     }
                     else {

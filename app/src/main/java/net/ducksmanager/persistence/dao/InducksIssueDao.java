@@ -13,7 +13,7 @@ import androidx.room.Query;
 
 @Dao
 public interface InducksIssueDao {
-    @Query("SELECT inducks_issue.*, issues.* FROM inducks_issue LEFT JOIN issues ON inducks_issue.publicationCode = issues.country || '/' || issues.magazine AND inducks_issue.issueNumber = issues.number WHERE publicationCode = :publicationCode")
+    @Query("SELECT inducks_issue.*, issues.*, purchases.* FROM inducks_issue LEFT JOIN issues ON inducks_issue.inducksPublicationCode = issues.country || '/' || issues.magazine AND inducks_issue.inducksIssueNumber = issues.issueNumber LEFT JOIN purchases ON issues.issuePurchaseId = purchases.purchaseId WHERE inducksPublicationCode = :publicationCode")
     LiveData<List<InducksIssueWithUserIssueDetails>> findByPublicationCode(String publicationCode);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

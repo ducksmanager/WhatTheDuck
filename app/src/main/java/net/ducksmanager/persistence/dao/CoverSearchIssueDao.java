@@ -13,7 +13,7 @@ import androidx.room.Query;
 
 @Dao
 public interface CoverSearchIssueDao {
-    @Query("SELECT coversearch_issue.*, issues.* FROM coversearch_issue LEFT JOIN issues ON coversearch_issue.publicationCode = issues.country || '/' || issues.magazine AND coversearch_issue.issueNumber = issues.number")
+    @Query("SELECT coversearch_issue.*, issues.* FROM coversearch_issue LEFT JOIN issues ON coversearch_issue.coverPublicationCode = issues.country || '/' || issues.magazine AND coversearch_issue.coverIssueNumber = issues.issueNumber")
     LiveData<List<CoverSearchIssueWithUserIssueDetails>> findAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

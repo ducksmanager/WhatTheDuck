@@ -2,6 +2,7 @@ package net.ducksmanager.persistence.models.composite;
 
 import net.ducksmanager.persistence.models.coa.InducksIssue;
 import net.ducksmanager.persistence.models.dm.Issue;
+import net.ducksmanager.persistence.models.dm.Purchase;
 import net.ducksmanager.whattheduck.R;
 
 import androidx.room.Embedded;
@@ -18,9 +19,13 @@ public class InducksIssueWithUserIssueDetails {
     @Embedded
     private Issue userIssue;
 
-    public InducksIssueWithUserIssueDetails(InducksIssue issue, Issue userIssue) {
+    @Embedded
+    private Purchase userPurchase;
+
+    public InducksIssueWithUserIssueDetails(InducksIssue issue, Issue userIssue, Purchase userPurchase) {
         this.issue = issue;
         this.userIssue = userIssue;
+        this.userPurchase = userPurchase;
     }
 
     public static Integer issueConditionToResourceId(String issueCondition) {
@@ -60,6 +65,10 @@ public class InducksIssueWithUserIssueDetails {
 
     public Issue getUserIssue() {
         return userIssue;
+    }
+
+    public Purchase getUserPurchase() {
+        return userPurchase;
     }
 
 }

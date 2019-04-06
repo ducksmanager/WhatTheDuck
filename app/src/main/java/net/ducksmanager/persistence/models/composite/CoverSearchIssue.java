@@ -2,6 +2,8 @@ package net.ducksmanager.persistence.models.composite;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.jetbrains.annotations.NotNull;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -16,57 +18,58 @@ public class CoverSearchIssue {
 
     @SerializedName(value="countrycode")
     @ColumnInfo
-    private String countryCode;
+    private String coverCountryCode;
 
     @SerializedName(value="publicationcode")
     @ColumnInfo
-    private String publicationCode;
+    private String coverPublicationCode;
 
     @SerializedName(value="publicationtitle")
     @ColumnInfo
-    private String publicationTitle;
+    private String coverPublicationTitle;
 
     @SerializedName(value="issuenumber")
     @ColumnInfo
-    private String issueNumber;
+    private String coverIssueNumber;
 
     @ColumnInfo
-    private String fullUrl;
+    private String coverFullUrl;
 
-    public CoverSearchIssue(String coverId, String countryCode, String publicationCode, String publicationTitle, String issueNumber, String fullUrl) {
+    public CoverSearchIssue(@NotNull String coverId, String coverCountryCode, String coverPublicationCode, String coverPublicationTitle, String coverIssueNumber, String coverFullUrl) {
         this.coverId = coverId;
-        this.countryCode = countryCode;
-        this.publicationCode = publicationCode;
-        this.publicationTitle = publicationTitle;
-        this.issueNumber = issueNumber;
-        this.fullUrl = fullUrl;
+        this.coverCountryCode = coverCountryCode;
+        this.coverPublicationCode = coverPublicationCode;
+        this.coverPublicationTitle = coverPublicationTitle;
+        this.coverIssueNumber = coverIssueNumber;
+        this.coverFullUrl = coverFullUrl;
     }
 
+    @NonNull
     public String getCoverId() {
         return coverId;
     }
 
-    public String getCountryCode() {
-        return countryCode;
+    public String getCoverCountryCode() {
+        return coverCountryCode;
     }
 
-    public String getPublicationCode() {
-        return publicationCode;
+    public String getCoverPublicationCode() {
+        return coverPublicationCode;
     }
 
-    public String getPublicationTitle() {
-        return publicationTitle;
+    public String getCoverPublicationTitle() {
+        return coverPublicationTitle;
     }
 
-    public String getIssueNumber() {
-        return issueNumber;
+    public String getCoverIssueNumber() {
+        return coverIssueNumber;
     }
 
-    public String getFullUrl() {
-        return fullUrl;
+    public String getCoverFullUrl() {
+        return coverFullUrl;
     }
 
-    public void setFullUrl(String fullUrl) {
-        this.fullUrl = fullUrl;
+    public void setCoverFullUrl(String coverFullUrl) {
+        this.coverFullUrl = coverFullUrl;
     }
 }

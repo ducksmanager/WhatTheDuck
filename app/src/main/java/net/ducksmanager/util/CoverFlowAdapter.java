@@ -68,7 +68,7 @@ class CoverFlowAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             viewHolder.text = rowView.findViewById(R.id.label);
             viewHolder.image = rowView.findViewById(R.id.image);
-            viewHolder.image.setTag(data.get(position).getIssue().getFullUrl());
+            viewHolder.image.setTag(data.get(position).getCoverSearchIssue().getCoverFullUrl());
             viewHolder.progressBar = rowView.findViewById(R.id.progressBar);
 
             DownloadImagesTask task = new DownloadImagesTask(viewHolder.progressBar);
@@ -80,7 +80,7 @@ class CoverFlowAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) rowView.getTag();
         }
 
-        viewHolder.text.setText(data.get(position).getIssue().getIssueNumber());
+        viewHolder.text.setText(data.get(position).getCoverSearchIssue().getCoverIssueNumber());
 
         return rowView;
     }

@@ -24,7 +24,7 @@ public class PublicationList extends ItemList<InducksPublicationWithPossession> 
     @Override
     protected void downloadList() {
         this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
-        DmServer.api.getPublications(WhatTheDuck.getSelectedCountry()).enqueue(new DmServer.Callback<HashMap<String, String>>(this.findViewById(R.id.progressBar)) {
+        DmServer.api.getPublications(WhatTheDuck.getSelectedCountry()).enqueue(new DmServer.Callback<HashMap<String, String>>(this) {
             @Override
             public void onSuccessfulResponse(Response<HashMap<String, String>> response) {
                 List<InducksPublication> publications = new ArrayList<>();

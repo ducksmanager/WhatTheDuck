@@ -74,7 +74,7 @@ public class IssueEdgeAdapter extends ItemAdapter<InducksIssueWithUserIssueDetai
             WhatTheDuck.getSelectedPublication()
                 .replaceFirst("[^/]+/", "")
                 .replaceAll(" ", ""),
-            i.getIssue().getIssueNumber().replaceAll(" ", ""));
+            i.getIssue().getInducksIssueNumber().replaceAll(" ", ""));
     }
 
     @Override
@@ -109,6 +109,6 @@ public class IssueEdgeAdapter extends ItemAdapter<InducksIssueWithUserIssueDetai
 
     @Override
     protected String getComparatorText(InducksIssueWithUserIssueDetails i) {
-        return i.getIssue().getIssueNumber();
+        return i.getIssue().getInducksIssueNumber();
     }
 }

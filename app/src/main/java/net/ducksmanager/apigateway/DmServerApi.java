@@ -35,10 +35,10 @@ public interface DmServerApi {
     Call<List<Purchase>> getUserPurchases();
 
     @POST("/collection/purchases")
-    Call<String> createUserPurchase(@Body Purchase purchase);
+    Call<Void> createUserPurchase(@Body Purchase purchase);
 
     @POST("/collection/issues")
-    Call<String> createUserIssues(@Body IssueListToUpdate issueListToUpdate);
+    Call<Object> createUserIssues(@Body IssueListToUpdate issueListToUpdate);
 
     @Multipart
     @POST("/cover-id/search")

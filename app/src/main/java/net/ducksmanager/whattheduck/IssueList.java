@@ -47,7 +47,7 @@ public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
     @Override
     protected void downloadList() {
         this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
-        DmServer.api.getIssues(WhatTheDuck.getSelectedPublication()).enqueue(new DmServer.Callback<List<String>>(this.findViewById(R.id.progressBar)) {
+        DmServer.api.getIssues(WhatTheDuck.getSelectedPublication()).enqueue(new DmServer.Callback<List<String>>(this) {
             @Override
             public void onSuccessfulResponse(Response<List<String>> response) {
                 List<InducksIssue> issues = new ArrayList<>();

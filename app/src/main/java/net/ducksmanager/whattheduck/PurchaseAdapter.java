@@ -9,9 +9,7 @@ import android.widget.TextView;
 
 import net.ducksmanager.persistence.models.dm.Purchase;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,8 +21,6 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.ViewHo
     static class NoPurchase extends Purchase {
         NoPurchase() {}
     }
-
-    static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     PurchaseAdapter(Context context, List<Purchase> items) {
         this.context = context;
@@ -47,7 +43,7 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.ViewHo
             purchaseHolder.purchaseCheck.setContentDescription(purchase.toString());
 
             if (!isNoPurchase) {
-                purchaseHolder.purchaseDate.setText(dateFormat.format(purchase.getDate()));
+                purchaseHolder.purchaseDate.setText(purchase.getDate());
                 purchaseHolder.purchaseName.setText(purchase.getDescription());
             }
         }

@@ -55,9 +55,9 @@ public class CoverFlowActivity extends AppCompatActivity {
 
             coverFlow.setOnItemClickListener((parent, view, position, id) -> {
                 if (currentSuggestion.getUserIssue() == null) {
-                    WhatTheDuck.setSelectedCountry (currentSuggestion.getIssue().getCountryCode());
-                    WhatTheDuck.setSelectedPublication (currentSuggestion.getIssue().getPublicationCode());
-                    WhatTheDuck.setSelectedIssue(currentSuggestion.getIssue().getIssueNumber());
+                    WhatTheDuck.setSelectedCountry (currentSuggestion.getCoverSearchIssue().getCoverCountryCode());
+                    WhatTheDuck.setSelectedPublication (currentSuggestion.getCoverSearchIssue().getCoverPublicationCode());
+                    WhatTheDuck.setSelectedIssue(currentSuggestion.getCoverSearchIssue().getCoverIssueNumber());
 
                     CoverFlowActivity.this.startActivity(new Intent(CoverFlowActivity.this, AddIssue.class));
                 }
@@ -75,7 +75,7 @@ public class CoverFlowActivity extends AppCompatActivity {
                 public void onScrolledToPosition(int position) {
                     currentSuggestion = data.get(position);
 
-                    String uri = "@drawable/flags_" + currentSuggestion.getIssue().getCountryCode();
+                    String uri = "@drawable/flags_" + currentSuggestion.getCoverSearchIssue().getCoverCountryCode();
                     int imageResource = getResources().getIdentifier(uri, null, getPackageName());
 
                     if (imageResource == 0) {
@@ -103,7 +103,7 @@ public class CoverFlowActivity extends AppCompatActivity {
                     mResultNumber.setText(getResources().getString(R.string.result) + " " + (position + 1) + "/" + data.size());
 
                     mTitleText.setVisibility(View.VISIBLE);
-                    mTitleText.setText(data.get(position).getIssue().getPublicationTitle() + " " + data.get(position).getIssue().getIssueNumber());
+                    mTitleText.setText(data.get(position).getCoverSearchIssue().getCoverPublicationTitle() + " " + data.get(position).getCoverSearchIssue().getCoverIssueNumber());
                 }
 
                 @Override

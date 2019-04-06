@@ -1,24 +1,24 @@
 package net.ducksmanager.persistence.models.composite;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class CoverSearchResults {
 
-    private List<CoverSearchIssue> issues;
+    private HashMap<String, CoverSearchIssue> issues;
     private List<Integer> imageIds;
     private String type;
 
-    public CoverSearchResults(List<CoverSearchIssue> issues, List<Integer> imageIds, String type) {
+    public CoverSearchResults(HashMap<String, CoverSearchIssue> issues, List<Integer> imageIds, String type) {
         this.issues = issues;
         this.imageIds = imageIds;
-        this.type = type;
     }
 
-    public List<CoverSearchIssue> getIssues() {
+    public HashMap<String, CoverSearchIssue> getIssues() {
         return issues;
     }
 
-    public void setIssues(List<CoverSearchIssue> issues) {
+    public void setIssues(HashMap<String, CoverSearchIssue> issues) {
         this.issues = issues;
     }
 

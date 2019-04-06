@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="fill_parent"
               android:id="@+id/addIssue"
@@ -181,6 +180,14 @@
                         android:background="@drawable/background_rounded_button"
 
                         android:text="@string/create_new_purchase_date"/>
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="40dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        android:visibility="gone"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/purchase_list"

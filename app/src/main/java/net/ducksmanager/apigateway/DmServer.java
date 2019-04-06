@@ -1,13 +1,18 @@
 package net.ducksmanager.apigateway;
 
+import android.app.Activity;
 import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.ducksmanager.util.Settings;
+import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
+
+import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
 
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
@@ -60,13 +65,10 @@ public class DmServer {
 
     public abstract static class Callback<T> implements retrofit2.Callback<T> {
 
-        private ProgressBar progressBar;
+        private WeakReference<Activity> originActivityRef;
 
-        protected Callback(ProgressBar progressBar) {
-            this.progressBar = progressBar;
-        }
-
-        protected Callback() {
+        protected Callback(Activity originActivity) {
+            this.originActivityRef = new WeakReference<>(originActivity);
         }
 
         public abstract void onSuccessfulResponse(Response<T> response);
@@ -77,16 +79,26 @@ public class DmServer {
                 this.onSuccessfulResponse(response);
             }
             else {
-                this.onFailure(call, new Throwable(String.valueOf(response.errorBody())));
+                switch(response.code()) {
+                    case HttpURLConnection.HTTP_UNAUTHORIZED:
+                        WhatTheDuck.wtd.alert(originActivityRef, R.string.input_error__invalid_credentials);
+                    default:
+                        WhatTheDuck.wtd.alert(originActivityRef, R.string.error);
+                }
             }
-            if (this.progressBar != null) {
-                progressBar.setVisibility(ProgressBar.GONE);
-            }
+            onFinished();
         }
 
         @Override
         public void onFailure(Call call, Throwable t) {
             System.err.println(t.getMessage());
+            onFinished();
+        }
+
+        private void onFinished() {
+            if (originActivityRef.get().findViewById(R.id.progressBar) != null) {
+                originActivityRef.get().findViewById(R.id.progressBar).setVisibility(ProgressBar.GONE);
+            }
         }
     }
 }

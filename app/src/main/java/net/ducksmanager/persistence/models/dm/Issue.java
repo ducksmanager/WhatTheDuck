@@ -21,7 +21,7 @@ public class Issue {
     private String magazine;
 
     @Expose
-    @ColumnInfo(name = "number")
+    @ColumnInfo
     private String issueNumber;
 
     @Expose
@@ -29,7 +29,7 @@ public class Issue {
     private String condition;
 
     @Expose
-    @ColumnInfo
+    @ColumnInfo(name="issuePurchaseId")
     private Integer purchaseId;
 
     public Integer getId() {

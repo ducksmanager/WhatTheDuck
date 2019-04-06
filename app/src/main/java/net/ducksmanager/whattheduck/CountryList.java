@@ -30,7 +30,7 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
     protected void downloadList() {
         String locale = getApplicationContext().getResources().getConfiguration().locale.getLanguage();
         this.findViewById(R.id.progressBar).setVisibility(ProgressBar.VISIBLE);
-        DmServer.api.getCountries(locale).enqueue(new DmServer.Callback<HashMap<String, String>>(this.findViewById(R.id.progressBar)) {
+        DmServer.api.getCountries(locale).enqueue(new DmServer.Callback<HashMap<String, String>>(this) {
             @Override
             public void onSuccessfulResponse(Response<HashMap<String, String>> response) {
                 List<InducksCountryName> countries = new ArrayList<>();

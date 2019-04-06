@@ -12,9 +12,12 @@ import androidx.room.Query;
 
 @Dao
 public interface PurchaseDao {
-    @Query("SELECT * FROM purchases")
+    @Query("SELECT * FROM purchases ORDER BY purchases.date DESC")
     LiveData<List<Purchase>> findAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertList(List<Purchase> purchaseList);
+
+    @Query("DELETE FROM purchases")
+    void deleteAll();
 }
