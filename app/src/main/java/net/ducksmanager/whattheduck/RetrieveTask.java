@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 
-import com.koushikdutta.async.future.FutureCallback;
-
 import net.ducksmanager.util.Settings;
 
 import org.json.JSONException;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
@@ -20,14 +17,10 @@ import java.net.URL;
 
 public class RetrieveTask extends AsyncTask<Object, Object, String> {
 
-    private boolean legacyServer = true;
     private final String urlSuffix;
     protected WeakReference<Activity> originActivityRef;
 
     private Exception thrownException;
-    private String fileName;
-    private File file;
-    private FutureCallback futureCallback;
 
     public interface DownloadHandler {
         String getPage(String url);
@@ -59,23 +52,10 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         this.originActivityRef = originActivityRef;
     }
 
-    protected RetrieveTask(String urlSuffix, boolean legacyServer, FutureCallback futureCallback, String fileName, File file) {
-        this.urlSuffix = urlSuffix;
-        this.legacyServer = legacyServer;
-        this.futureCallback = futureCallback;
-        this.fileName = fileName;
-        this.file = file;
-    }
-
     @Override
     protected String doInBackground(Object[] objects) {
         try {
-            if (legacyServer) {
-                return WhatTheDuck.wtd.retrieveOrFail(new DefaultDownloadHandler(), this.urlSuffix);
-            }
-            else {
-                WhatTheDuck.wtd.retrieveOrFailDmServer(this.urlSuffix, this.futureCallback, this.fileName, this.file);
-            }
+            return WhatTheDuck.wtd.retrieveOrFail(new DefaultDownloadHandler(), this.urlSuffix);
 
         } catch (Exception e) {
             this.thrownException = e;
@@ -88,10 +68,6 @@ public class RetrieveTask extends AsyncTask<Object, Object, String> {
         if (this.thrownException != null) {
             handleResultException(this.thrownException);
         }
-    }
-
-    protected boolean hasFailed() {
-        return this.thrownException != null;
     }
 
     private static void handleResultExceptionOnActivity(Exception e, WeakReference<Activity> activityRef) {

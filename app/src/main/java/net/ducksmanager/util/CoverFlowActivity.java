@@ -33,7 +33,7 @@ public class CoverFlowActivity extends AppCompatActivity {
     private TextView mIssueConditionText;
     private TextView mTitleText;
 
-    private static CoverSearchIssueWithUserIssueDetails currentSuggestion = null;
+    public static CoverSearchIssueWithUserIssueDetails currentSuggestion = null;
 
     private CoverFlowAdapter adapter;
     private FeatureCoverFlow coverFlow;

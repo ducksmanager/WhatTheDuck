@@ -24,10 +24,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
-import com.koushikdutta.ion.builder.Builders.Any.B;
-
 import net.ducksmanager.apigateway.DmServer;
 import net.ducksmanager.persistence.AppDatabase;
 import net.ducksmanager.persistence.models.dm.Issue;
@@ -35,7 +31,6 @@ import net.ducksmanager.persistence.models.dm.Purchase;
 import net.ducksmanager.retrievetasks.Signup;
 import net.ducksmanager.util.Settings;
 
-import java.io.File;
 import java.lang.ref.WeakReference;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
@@ -46,7 +41,6 @@ import androidx.annotation.VisibleForTesting;
 import androidx.room.Room;
 import retrofit2.Response;
 
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_DM_URL;
 
 public class WhatTheDuck extends Activity {
@@ -215,30 +209,6 @@ public class WhatTheDuck extends Activity {
         alert(new WeakReference<>(this), titleId, messageId, "");
     }
 
-    public void retrieveOrFailDmServer(String urlSuffix, FutureCallback<String> futureCallback, String fileName, File file) throws Exception {
-        if (isOffline()) {
-            throw new Exception(getString(R.string.network_error));
-        }
-
-        if (Settings.getEncryptedPassword() == null) {
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update(Settings.getPassword().getBytes());
-            Settings.setEncryptedPassword(Settings.byteArray2Hex(md.digest()));
-        }
-
-        urlSuffix = urlSuffix.replaceAll("\\{locale\\}", getApplicationContext().getResources().getConfiguration().locale.getLanguage());
-
-        B call = Ion.with(this.findViewById(android.R.id.content).getContext())
-            .load(WhatTheDuckApplication.config.getProperty(CONFIG_KEY_API_ENDPOINT_URL) + urlSuffix)
-            .setHeader("x-dm-version", WhatTheDuck.wtd.getApplicationVersion());
-
-        if (file != null) {
-            call.setMultipartFile(fileName, file);
-        }
-
-        call.asString().setCallback(futureCallback);
-    }
-
     public String retrieveOrFail(RetrieveTask.DownloadHandler downloadHandler, String urlSuffix) throws Exception {
         if (isOffline()) {
             throw new Exception(""+R.string.network_error);
@@ -278,10 +248,6 @@ public class WhatTheDuck extends Activity {
                 progressBar.setVisibility(ProgressBar.GONE);
             }
         }
-    }
-
-    public void toggleProgressbarLoading(boolean toggle) {
-        toggleProgressbarLoading(new WeakReference<>(WhatTheDuck.wtd), toggle);
     }
 
     private boolean isOffline() {
