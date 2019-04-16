@@ -8,7 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import net.ducksmanager.apigateway.DmServer;
+import net.ducksmanager.persistence.models.composite.UserToCreate;
 import net.ducksmanager.util.Settings;
+import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.RetrieveTask;
 import net.ducksmanager.whattheduck.WhatTheDuck;
@@ -18,11 +21,12 @@ import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.nio.charset.StandardCharsets;
 
+import retrofit2.Response;
+
 import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
 public class Signup extends Activity {
 
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +51,15 @@ public class Signup extends Activity {
             Settings.setUsername(usernameField.getText().toString());
             Settings.setPassword(passwordField.getText().toString());
 
-            String password2 = Settings.toSHA1(passwordConfirmationField.getText().toString());
+            String password2 = passwordConfirmationField.getText().toString();
             String email = emailField.getText().toString();
 
-            new ConnectAndRetrieveList(Signup.this, "&action=signup&mdp_user2="+password2+"&email="+email).execute();
+            DmServer.api.createUser(new UserToCreate(Settings.getUsername(), Settings.getPassword(), password2, email)).enqueue(new DmServer.Callback<Void>("signup", Signup.this) {
+                @Override
+                public void onSuccessfulResponse(Response<Void> response) {
+                    WhatTheDuck.fetchCollection(new WeakReference<>(Signup.this), CountryList.class);
+                }
+            });
         });
         
         cancelSignupButton.setOnClickListener(view -> {
