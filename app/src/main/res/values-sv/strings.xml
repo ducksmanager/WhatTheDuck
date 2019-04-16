@@ -43,7 +43,7 @@
     <string name="my_collection">Min samling</string>
     <string name="network_error">Nätverksfel</string>
     <string name="network_error__no_connection">Godkänn</string>
-    <string name="no_item">Ingen utgåva i denna lista.</string>
+    <string name="no_item">Ingen utgåva i denna lista. Klicka på "+"-ikonen för att lägga till tidningar i din samling!</string>
     <string name="no_purchase_date">Inget inköpsdatum</string>
     <string name="ok">OK</string>
     <string name="password">Lösenord</string>

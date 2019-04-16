@@ -49,7 +49,7 @@
     <string name="network_error__no_connection">Network issue: please check your Internet connection</string>
     <string name="newFeature">New features in the WhatTheDuck app</string>
     <string name="newFeatures18Text">You can now see your bookcase on WhatTheDuck!\n\nWhen in an issue list, tap on the bookcase icon to switch to the bookcase view.</string>
-    <string name="no_item">No issue in this list.</string>
+    <string name="no_item">No issue in this list. Click on the "+" icon to add issues to your collection!</string>
     <string name="no_purchase_date">No purchase date</string>
     <string name="ok">OK</string>
     <string name="password">Password</string>

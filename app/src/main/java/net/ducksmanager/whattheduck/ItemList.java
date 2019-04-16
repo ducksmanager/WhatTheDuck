@@ -152,10 +152,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         }
 
         java.util.List<Item> items = itemAdapter.getItems();
-        TextView emptyListText = this.findViewById(R.id.emptyList);
-        if (emptyListText != null) {
-            emptyListText.setVisibility(this.requiresDataDownload || items.size() > 0 ? INVISIBLE : VISIBLE);
-        }
 
         RecyclerView recyclerView = findViewById(R.id.itemList);
         recyclerView.setAdapter(itemAdapter);
@@ -167,6 +163,11 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         else {
             filterEditText.setVisibility(GONE);
             itemAdapter.updateFilteredList("");
+        }
+
+        TextView emptyListText = this.findViewById(R.id.emptyList);
+        if (emptyListText != null) {
+            emptyListText.setVisibility(this.requiresDataDownload || itemAdapter.getItemCount() > 0 ? INVISIBLE : VISIBLE);
         }
 
         while (recyclerView.getItemDecorationCount() > 0) {
