@@ -22,7 +22,7 @@ public class Settings {
     public static String username = null;
     private static String password = null;
     private static Boolean rememberCredentials = false;
-    public static String encryptedPassword = null;
+    private static String encryptedPassword = null;
     private static Set<String> messagesAlreadyShown = new HashSet<>();
 
     public static final String MESSAGE_KEY_WELCOME = "welcome_message";
@@ -101,7 +101,7 @@ public class Settings {
         return encryptedPassword;
     }
 
-    public static void setEncryptedPassword(String encryptedPassword) {
+    private static void setEncryptedPassword(String encryptedPassword) {
         Settings.encryptedPassword = encryptedPassword;
     }
 
@@ -123,7 +123,7 @@ public class Settings {
         messagesAlreadyShown.add(messageKey);
     }
 
-    public static String byteArray2Hex(byte[] hash) {
+    private static String byteArray2Hex(byte[] hash) {
         Formatter formatter = new Formatter();
         for (byte b : hash) {
             formatter.format("%02x", b);

@@ -5,7 +5,6 @@ import net.ducksmanager.persistence.models.composite.IssueListToUpdate;
 import net.ducksmanager.persistence.models.composite.UserToCreate;
 import net.ducksmanager.persistence.models.dm.Issue;
 import net.ducksmanager.persistence.models.dm.Purchase;
-import net.ducksmanager.persistence.models.dm.User;
 
 import java.util.HashMap;
 import java.util.List;

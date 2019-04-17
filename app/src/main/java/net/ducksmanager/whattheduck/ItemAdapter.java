@@ -27,7 +27,6 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
     private List<Item> items;
     private ArrayList<Item> filteredItems;
     final Activity originActivity;
-    private View v;
 
     private static FilterTextOnChangeListener filterTextOnChangeListener;
 
@@ -48,7 +47,7 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
     @NonNull
     @Override
     public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        v = LayoutInflater.from(originActivity).inflate(resourceToInflate, parent,false);
+        View v = LayoutInflater.from(originActivity).inflate(resourceToInflate, parent, false);
         v.setOnClickListener(getOnClickListener());
         return getViewHolder(v);
     }
@@ -61,7 +60,7 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
         return originActivity;
     }
 
-    public void addOrReplaceFilterOnChangeListener(EditText filterEditText) {
+    void addOrReplaceFilterOnChangeListener(EditText filterEditText) {
         if (filterTextOnChangeListener != null) {
             filterEditText.removeTextChangedListener(filterTextOnChangeListener);
         }

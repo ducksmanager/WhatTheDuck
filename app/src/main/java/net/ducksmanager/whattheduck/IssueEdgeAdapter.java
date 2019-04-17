@@ -35,7 +35,7 @@ public class IssueEdgeAdapter extends ItemAdapter<InducksIssueWithUserIssueDetai
         return null;
     }
 
-    protected class ViewHolder extends ItemAdapter.ViewHolder {
+    class ViewHolder extends ItemAdapter.ViewHolder {
         final ImageView edgeImage;
 
         ViewHolder(View v) {

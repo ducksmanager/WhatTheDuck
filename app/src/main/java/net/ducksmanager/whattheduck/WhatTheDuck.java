@@ -32,20 +32,14 @@ import net.ducksmanager.retrievetasks.Signup;
 import net.ducksmanager.util.Settings;
 
 import java.lang.ref.WeakReference;
-import java.net.URLEncoder;
-import java.security.MessageDigest;
 import java.util.List;
-import java.util.Locale;
 
-import androidx.annotation.VisibleForTesting;
 import androidx.room.Room;
 import retrofit2.Response;
 
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_DM_URL;
 
 public class WhatTheDuck extends Activity {
-    @VisibleForTesting
-    private static final String WTD_PAGE_PATH = "remote/WhatTheDuck.php";
 
     public static WhatTheDuck wtd;
 
@@ -81,7 +75,7 @@ public class WhatTheDuck extends Activity {
         }
     }
 
-    public void showLoginForm() {
+    private void showLoginForm() {
         findViewById(R.id.login_form).setVisibility(View.VISIBLE);
         ((CheckBox) findViewById(R.id.checkBoxRememberCredentials)).setChecked(Settings.username != null);
 
@@ -191,69 +185,18 @@ public class WhatTheDuck extends Activity {
         alert(activity, getString(messageId));
     }
 
-    public void alert(WeakReference<Activity> activity, int titleId, int messageId, String extraMessage) {
+    private void alert(WeakReference<Activity> activity, int titleId, int messageId) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(activity.get());
         builder.setTitle(getString(titleId));
-        builder.setMessage(getString(messageId)+extraMessage);
+        builder.setMessage(getString(messageId));
 
         this.runOnUiThread(() ->
             builder.create().show()
         );
     }
-    
-    public void alert(int titleId, int messageId, String extraMessage) {
-        alert(new WeakReference<>(this), titleId, messageId, extraMessage);
-    }
-    
+
     public void alert(int titleId, int messageId) {
-        alert(new WeakReference<>(this), titleId, messageId, "");
-    }
-
-    public String retrieveOrFail(RetrieveTask.DownloadHandler downloadHandler, String urlSuffix) throws Exception {
-        if (isOffline()) {
-            throw new Exception(""+R.string.network_error);
-        }
-
-        if (Settings.getEncryptedPassword() == null) {
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update(Settings.getPassword().getBytes());
-            Settings.setEncryptedPassword(Settings.byteArray2Hex(md.digest()));
-        }
-
-        String response = downloadHandler.getPage(getDmUrl()+"/"+ WTD_PAGE_PATH
-                                      + "?pseudo_user="+URLEncoder.encode(Settings.username, "UTF-8")
-                                      + "&mdp_user="+ Settings.encryptedPassword
-                                      + "&mdp="+ WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_SECURITY_PASSWORD)
-                                      + "&version="+getApplicationVersion()
-                                      + "&language="+ Locale.getDefault().getLanguage()
-                                      + urlSuffix);
-
-        response = response.replaceAll("/\\/", "");
-        if (response.equals("0")) {
-            throw new SecurityException();
-        }
-        else
-            return response;
-    }
-
-    public void toggleProgressbarLoading(WeakReference<Activity> activityRef, boolean toggle) {
-        ProgressBar progressBar = activityRef.get().findViewById(R.id.progressBar);
-
-        if (progressBar != null) {
-            if (toggle) {
-                progressBar.setVisibility(ProgressBar.VISIBLE);
-            }
-            else {
-                progressBar.clearAnimation();
-                progressBar.setVisibility(ProgressBar.GONE);
-            }
-        }
-    }
-
-    private boolean isOffline() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo == null || !netInfo.isConnected();
+        alert(new WeakReference<>(this), titleId, messageId);
     }
 
     public String getApplicationVersion() {

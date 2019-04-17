@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import net.ducksmanager.persistence.models.dm.Purchase;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,8 +55,9 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.ViewHo
         return items.size();
     }
 
+    @NotNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.row_purchase, viewGroup, false);
         return new ViewHolder(view);

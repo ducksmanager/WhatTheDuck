@@ -38,7 +38,7 @@ public class CountryAdapter extends ItemAdapter<InducksCountryNameWithPossession
         };
     }
 
-    protected class ViewHolder extends ItemAdapter.ViewHolder {
+    class ViewHolder extends ItemAdapter.ViewHolder {
         ViewHolder(View v) {
             super(v);
         }

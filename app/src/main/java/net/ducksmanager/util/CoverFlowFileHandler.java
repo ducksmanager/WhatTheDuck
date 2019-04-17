@@ -19,6 +19,8 @@ import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -196,7 +198,7 @@ public class CoverFlowFileHandler {
                 }
 
                 @Override
-                public void onFailure(Call call, Throwable t) {
+                public void onFailure(@NotNull Call call, @NotNull Throwable t) {
                     if (t.getMessage().contains("exceeds your upload")) {
                         WhatTheDuck.wtd.alert(new WeakReference<>(getOriginActivity()), R.string.add_cover_error_file_too_big);
                     }

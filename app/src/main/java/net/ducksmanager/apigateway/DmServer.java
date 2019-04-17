@@ -11,6 +11,8 @@ import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 
@@ -82,7 +84,7 @@ public class DmServer {
         public abstract void onSuccessfulResponse(Response<T> response);
 
         @Override
-        public void onResponse(Call<T> call, Response<T> response) {
+        public void onResponse(@NotNull Call<T> call, @NotNull Response<T> response) {
             if (response.isSuccessful()) {
                 this.onSuccessfulResponse(response);
             }
@@ -98,7 +100,7 @@ public class DmServer {
         }
 
         @Override
-        public void onFailure(Call call, Throwable t) {
+        public void onFailure(@NotNull Call call, @NotNull Throwable t) {
             WhatTheDuck.wtd.alert(originActivityRef, R.string.error);
             System.err.println(t.getMessage());
             onFinished();

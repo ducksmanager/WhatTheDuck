@@ -6,10 +6,10 @@ import androidx.room.Embedded;
 
 public class CoverSearchIssueWithUserIssueDetails {
     @Embedded
-    private CoverSearchIssue coverSearchIssue;
+    private final CoverSearchIssue coverSearchIssue;
 
     @Embedded
-    private Issue userIssue;
+    private final Issue userIssue;
 
     public CoverSearchIssueWithUserIssueDetails(CoverSearchIssue coverSearchIssue, Issue userIssue) {
         this.coverSearchIssue = coverSearchIssue;
@@ -20,15 +20,8 @@ public class CoverSearchIssueWithUserIssueDetails {
         return coverSearchIssue;
     }
 
-    public void setCoverSearchIssue(CoverSearchIssue coverSearchIssue) {
-        this.coverSearchIssue = coverSearchIssue;
-    }
-
     public Issue getUserIssue() {
         return userIssue;
     }
 
-    public void setUserIssue(Issue userIssue) {
-        this.userIssue = userIssue;
-    }
 }

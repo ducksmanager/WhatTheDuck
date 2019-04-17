@@ -24,7 +24,6 @@ public class WhatTheDuckApplication extends Application {
     public static final String CONFIG_KEY_DM_URL = "dm_url";
     public static final String CONFIG_KEY_ROLE_NAME = "role_name";
     public static final String CONFIG_KEY_ROLE_PASSWORD = "role_password";
-    public static final String CONFIG_KEY_SECURITY_PASSWORD = "security_password";
     public static final String CONFIG_KEY_EDGES_URL = "edges_url";
 
     private static final String CONFIG_KEY_MATOMO_URL = "matomo_url";
