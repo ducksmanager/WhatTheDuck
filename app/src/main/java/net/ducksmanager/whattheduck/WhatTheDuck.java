@@ -26,20 +26,23 @@ import android.widget.Toast;
 
 import net.ducksmanager.apigateway.DmServer;
 import net.ducksmanager.persistence.AppDatabase;
+import net.ducksmanager.persistence.models.composite.UserSetting;
 import net.ducksmanager.persistence.models.dm.Issue;
 import net.ducksmanager.persistence.models.dm.Purchase;
+import net.ducksmanager.persistence.models.dm.User;
 import net.ducksmanager.retrievetasks.Signup;
 import net.ducksmanager.util.Settings;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 import retrofit2.Response;
 
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_DM_URL;
 
-public class WhatTheDuck extends Activity {
+public class WhatTheDuck extends AppCompatActivity {
 
     public static WhatTheDuck wtd;
 
@@ -57,31 +60,35 @@ public class WhatTheDuck extends Activity {
         ((WhatTheDuckApplication) getApplication()).trackActivity(this);
 
         super.onCreate(savedInstanceState);
-
-        Settings.loadUserSettings();
-
-        String encryptedPassword = Settings.getEncryptedPassword();
         DmServer.initApi();
         appDB = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "appDB")
             .allowMainThreadQueries()
             .build();
 
-        setContentView(R.layout.whattheduck);
-        if (encryptedPassword != null) {
-            connectAndFetchCollection();
+        loadUser();
+    }
+
+    public void loadUser() {
+        User user = WhatTheDuck.appDB.userDao().getCurrentUser();
+
+        UserSetting userSettingRememberCredentials = WhatTheDuck.appDB.userSettingDao().findByKey(Settings.SETTING_KEY_REMEMBER_CREDENTIALS);
+        boolean rememberCredentials = userSettingRememberCredentials != null && Boolean.getBoolean(userSettingRememberCredentials.getValue());
+
+        if (user != null && rememberCredentials) {
+            DmServer.setApiDmUser(user.getUsername());
+            DmServer.setApiDmPassword(user.getPassword());
+            fetchCollection(new WeakReference<>(this), CountryList.class, null);
         }
         else {
+            setContentView(R.layout.whattheduck);
             showLoginForm();
         }
     }
 
     private void showLoginForm() {
         findViewById(R.id.login_form).setVisibility(View.VISIBLE);
-        ((CheckBox) findViewById(R.id.checkBoxRememberCredentials)).setChecked(Settings.username != null);
 
-        EditText usernameEditText = findViewById(R.id.username);
-        usernameEditText.setText(Settings.username);
-        usernameEditText.addTextChangedListener(new TextWatcher() {
+        ((EditText)findViewById(R.id.username)).addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
@@ -94,25 +101,16 @@ public class WhatTheDuck extends Activity {
         });
 
         Button signupButton = findViewById(R.id.end_signup);
-        signupButton.setOnClickListener(view -> {
-            Settings.setUsername(((EditText) WhatTheDuck.this.findViewById(R.id.username)).getText().toString());
-            Settings.setPassword(((EditText) WhatTheDuck.this.findViewById(R.id.password)).getText().toString());
-
-            wtd.startActivity(new Intent(wtd, Signup.class));
-        });
+        signupButton.setOnClickListener(view ->
+            wtd.startActivity(new Intent(wtd, Signup.class)
+                .putExtra("username", ((EditText) WhatTheDuck.this.findViewById(R.id.username)).getText().toString())
+            )
+        );
 
         Button loginButton = findViewById(R.id.login);
         loginButton.setOnClickListener(view -> {
             hideKeyboard(view);
-            if (Settings.getUsername() == null
-                || !Settings.getUsername().equals(((EditText) this.findViewById(R.id.username)).getText().toString())
-                || Settings.getEncryptedPassword() == null) {
-
-                Settings.setUsername(((EditText) this.findViewById(R.id.username)).getText().toString());
-                Settings.setPassword(((EditText) this.findViewById(R.id.password)).getText().toString());
-                Settings.setRememberCredentials(((CheckBox) this.findViewById(R.id.checkBoxRememberCredentials)).isChecked());
-            }
-            connectAndFetchCollection();
+            loginAndFetchCollection();
         });
 
         TextView linkToDM = findViewById(R.id.linkToDM);
@@ -123,21 +121,32 @@ public class WhatTheDuck extends Activity {
         });
     }
 
-    private void connectAndFetchCollection() {
-        if (TextUtils.isEmpty(Settings.getUsername()) || TextUtils.isEmpty(Settings.getPassword()) && TextUtils.isEmpty(Settings.getEncryptedPassword())) {
+    private void loginAndFetchCollection() {
+        String username = ((EditText)this.findViewById(R.id.username)).getText().toString();
+        String password = ((EditText)this.findViewById(R.id.password)).getText().toString();
+        Boolean rememberCredentials = ((CheckBox) this.findViewById(R.id.checkBoxRememberCredentials)).isChecked();
+        DmServer.setApiDmUser(username);
+        DmServer.setApiDmPassword(Settings.toSHA1(password));
+
+        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
             WhatTheDuck.wtd.alert(R.string.input_error, R.string.input_error__empty_credentials);
             ProgressBar mProgressBar = this.findViewById(R.id.progressBar);
             mProgressBar.setVisibility(ProgressBar.INVISIBLE);
             this.findViewById(R.id.login_form).setVisibility(View.VISIBLE);
         }
         else {
-            fetchCollection(new WeakReference<>(this), CountryList.class);
+            fetchCollection(new WeakReference<>(this), CountryList.class, rememberCredentials);
         }
     }
 
-    public static void fetchCollection(WeakReference<Activity> activityRef, Class targetClass) {
+    public static void fetchCollection(WeakReference<Activity> activityRef, Class targetClass, Boolean rememberUserCredentials) {
         DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<Issue>>("retrieveCollection", activityRef.get()) {
             public void onSuccessfulResponse(Response<List<Issue>> issueListResponse) {
+                if (rememberUserCredentials != null) {
+                    appDB.userSettingDao().insert(new UserSetting(Settings.SETTING_KEY_REMEMBER_CREDENTIALS, Boolean.toString(rememberUserCredentials)));
+                }
+                appDB.userDao().insert(new User(DmServer.apiDmUser, DmServer.apiDmPassword));
+
                 appDB.issueDao().deleteAll();
                 appDB.issueDao().insertList(issueListResponse.body());
 
@@ -259,6 +268,7 @@ public class WhatTheDuck extends Activity {
     }
 
     public static void trackEvent(String text) {
+        System.out.println(text);
         if (wtd != null) {
             ((WhatTheDuckApplication) wtd.getApplication()).trackEvent(text);
         }

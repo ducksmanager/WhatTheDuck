@@ -1,126 +1,26 @@
 package net.ducksmanager.util;
 
-import android.content.Context;
-import android.text.TextUtils;
-
+import net.ducksmanager.persistence.models.composite.UserMessage;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Formatter;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
 
 public class Settings {
-    public static String USER_SETTINGS = "settings.properties";
-    public static String username = null;
-    private static String password = null;
-    private static Boolean rememberCredentials = false;
-    private static String encryptedPassword = null;
-    private static Set<String> messagesAlreadyShown = new HashSet<>();
-
     public static final String MESSAGE_KEY_WELCOME = "welcome_message";
     public static final String MESSAGE_KEY_DATA_CONSUMPTION = "data_consumption";
     public static final String MESSAGE_KEY_WELCOME_BOOKCASE_VIEW = "welcome_bookcase_view";
-
-    public static void loadUserSettings() {
-        Properties props=new Properties();
-        InputStream inputStream;
-        try {
-            inputStream = WhatTheDuck.wtd.openFileInput(USER_SETTINGS);
-            props.load(inputStream);
-            setUsername((String)props.get("username"));
-            setEncryptedPassword((String)props.get("password"));
-            loadAlreadyShownMessages(props);
-            setRememberCredentials(true);
-            inputStream.close();
-        } catch (IOException e) {
-            System.out.println("No user settings found");
-            messagesAlreadyShown = new HashSet<>();
-        }
-    }
-
-    public static void saveSettings() {
-        Properties props=new Properties();
-
-        if (getRememberCredentials()) {
-            if (getUsername() != null) {
-                props.put("username", getUsername());
-            }
-            if (getEncryptedPassword() != null) {
-                props.put("password", getEncryptedPassword());
-            }
-        } else {
-            props.remove("username");
-            props.remove("password");
-        }
-        saveAlreadyShownMessages(props);
-
-        FileOutputStream outputStream;
-        try {
-            outputStream = WhatTheDuck.wtd.openFileOutput(USER_SETTINGS, Context.MODE_PRIVATE);
-            props.store(outputStream, "WhatTheDuck user settings");
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static String getUsername() {
-        return username;
-    }
-
-    public static void setUsername(String username) {
-        Settings.username = username;
-    }
-
-    private static Boolean getRememberCredentials() {
-        return rememberCredentials;
-    }
-
-    public static void setRememberCredentials(Boolean rememberCredentials) {
-        Settings.rememberCredentials = rememberCredentials;
-    }
-
-    public static String getPassword() {
-        return password;
-    }
-
-    public static void setPassword(String password) {
-        Settings.password = password;
-        setEncryptedPassword(password == null ? null : toSHA1(password));
-    }
-
-    public static String getEncryptedPassword() {
-        return encryptedPassword;
-    }
-
-    private static void setEncryptedPassword(String encryptedPassword) {
-        Settings.encryptedPassword = encryptedPassword;
-    }
-
-    private static void loadAlreadyShownMessages(Properties properties) {
-        String propertyValue = (String) properties.get("messagesAlreadyShown");
-        messagesAlreadyShown = new HashSet<>();
-        messagesAlreadyShown.addAll(Arrays.asList(TextUtils.split(propertyValue == null ? "" : propertyValue, ",")));
-    }
-
-    private static void saveAlreadyShownMessages(Properties properties) {
-        properties.setProperty("messagesAlreadyShown", TextUtils.join(",", messagesAlreadyShown));
-    }
+    public static final String SETTING_KEY_REMEMBER_CREDENTIALS = "remember_credentials";
 
     public static boolean shouldShowMessage(String messageKey) {
-        return !messagesAlreadyShown.contains(messageKey);
+        UserMessage userMessageForReleaseNotes = WhatTheDuck.appDB.userMessageDao().findByKey(messageKey);
+        return userMessageForReleaseNotes != null && userMessageForReleaseNotes.isShown();
     }
 
     public static void addToMessagesAlreadyShown(String messageKey) {
-        messagesAlreadyShown.add(messageKey);
+        WhatTheDuck.appDB.userMessageDao().insert(new UserMessage(messageKey, false));
     }
 
     private static String byteArray2Hex(byte[] hash) {

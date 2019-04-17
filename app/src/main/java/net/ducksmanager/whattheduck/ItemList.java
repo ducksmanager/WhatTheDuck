@@ -17,7 +17,6 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import net.ducksmanager.util.CoverFlowFileHandler;
-import net.ducksmanager.util.Settings;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -137,8 +136,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
                         addToCollection.setVisibility(GONE);
                         ItemList.this.goToAlternativeView();
                     });
-
-                    Settings.saveSettings();
                 }
             }
         }
@@ -216,9 +213,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.action_logout:
-                Settings.setUsername(null);
-                Settings.setPassword(null);
-                Settings.saveSettings();
+                WhatTheDuck.appDB.userDao().deleteAll();
                 i = new Intent(WhatTheDuck.wtd, WhatTheDuck.class);
 
                 break;

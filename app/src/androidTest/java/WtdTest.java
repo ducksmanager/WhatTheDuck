@@ -100,11 +100,6 @@ class WtdTest extends AndroidJUnitRunner {
     public final ActivityTestRule<WhatTheDuck> whatTheDuckActivityRule = new ActivityTestRule<>(WhatTheDuck.class);
 
     @BeforeClass
-    public static void overrideUserSettingsPath() {
-        Settings.USER_SETTINGS = "settings_test.properties";
-    }
-
-    @BeforeClass
     public static void initDownloadHelper() {
         initMockServer();
     }
@@ -125,8 +120,6 @@ class WtdTest extends AndroidJUnitRunner {
     }
 
     void overwriteSettingsAndHideMessages(String... alreadyShownMessageKeys) {
-        WhatTheDuck.wtd.deleteFile(Settings.USER_SETTINGS);
-        Settings.loadUserSettings(); // Reset settings
         for (String alreadyShownMessageKey : alreadyShownMessageKeys) {
             Settings.addToMessagesAlreadyShown(alreadyShownMessageKey);
         }

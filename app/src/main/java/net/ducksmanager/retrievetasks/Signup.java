@@ -38,20 +38,24 @@ public class Signup extends Activity {
         Button endSignupButton = findViewById(R.id.end_signup);
         Button cancelSignupButton = findViewById(R.id.cancel_signup);
 
-        usernameField.setText(Settings.getUsername());
-        passwordField.setText(Settings.getPassword());
+        String defaultUsername = getIntent().getStringExtra("username");
+        if (defaultUsername != null) {
+            usernameField.setText(defaultUsername);
+        }
 
         endSignupButton.setOnClickListener(view -> {
-            Settings.setUsername(usernameField.getText().toString());
-            Settings.setPassword(passwordField.getText().toString());
+            String username = usernameField.getText().toString();
+            String password = passwordField.getText().toString();
 
             String password2 = passwordConfirmationField.getText().toString();
             String email = emailField.getText().toString();
 
-            DmServer.api.createUser(new UserToCreate(Settings.getUsername(), Settings.getPassword(), password2, email)).enqueue(new DmServer.Callback<Void>("signup", Signup.this) {
+            DmServer.api.createUser(new UserToCreate(username, password, password2, email)).enqueue(new DmServer.Callback<Void>("signup", Signup.this) {
                 @Override
                 public void onSuccessfulResponse(Response<Void> response) {
-                    WhatTheDuck.fetchCollection(new WeakReference<>(Signup.this), CountryList.class);
+                    DmServer.setApiDmUser(username);
+                    DmServer.setApiDmPassword(Settings.toSHA1(password));
+                    WhatTheDuck.fetchCollection(new WeakReference<>(Signup.this), CountryList.class, null);
                 }
             });
         });

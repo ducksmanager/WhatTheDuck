@@ -7,9 +7,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.ducksmanager.persistence.models.composite.UserMessage;
 import net.ducksmanager.whattheduck.R;
+import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import java.lang.ref.WeakReference;
+
+import static net.ducksmanager.util.Settings.shouldShowMessage;
 
 public class ReleaseNotes {
 
@@ -29,8 +33,8 @@ public class ReleaseNotes {
     }
 
     public void showOnVersionUpdate(WeakReference<Activity> originActivityRef) {
-        Activity originActivity = originActivityRef.get();
-        if (shouldShowMessage()) {
+        if (shouldShowMessage(getMessageId())) {
+            Activity originActivity = originActivityRef.get();
             AlertDialog.Builder builder = new AlertDialog.Builder(originActivity);
             LayoutInflater factory = LayoutInflater.from(originActivity);
             final View view = factory.inflate(R.layout.release_notes, null);
@@ -39,7 +43,7 @@ public class ReleaseNotes {
             builder.setTitle(originActivity.getString(R.string.newFeature));
 
             builder.setNeutralButton(R.string.ok, (dialogInterface, i) -> {
-                addToMessagesAlreadyShown();
+                WhatTheDuck.appDB.userMessageDao().insert(new UserMessage(getMessageId(), false));
                 dialogInterface.dismiss();
             });
 
@@ -54,14 +58,6 @@ public class ReleaseNotes {
 
             builder.show();
         }
-    }
-
-    private boolean shouldShowMessage() {
-        return Settings.shouldShowMessage(getMessageId());
-    }
-
-    private void addToMessagesAlreadyShown() {
-        Settings.addToMessagesAlreadyShown(getMessageId());
     }
 
     public String getMessageId() {

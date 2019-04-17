@@ -55,7 +55,6 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
                 dialogInterface.dismiss();
             });
             Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME);
-            Settings.saveSettings();
             builder.create().show();
         }
         else {

@@ -6,10 +6,8 @@ import android.widget.ProgressBar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.ducksmanager.util.Settings;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
-import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,9 +27,12 @@ import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_ROLE_NAME;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_ROLE_PASSWORD;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.config;
 
 public class DmServer {
     public static DmServerApi api;
+    public static String apiDmUser;
+    public static String apiDmPassword;
 
     public static void initApi() {
         Gson gson = new GsonBuilder()
@@ -46,10 +47,14 @@ public class DmServer {
                 Request originalRequest = chain.request();
 
                 Request.Builder builder = originalRequest.newBuilder()
-                    .header("Authorization", Credentials.basic(WhatTheDuckApplication.config.getProperty(CONFIG_KEY_ROLE_NAME), WhatTheDuckApplication.config.getProperty(CONFIG_KEY_ROLE_PASSWORD)))
-                    .header("x-dm-version", WhatTheDuck.wtd.getApplicationVersion())
-                    .header("x-dm-user", Settings.getUsername())
-                    .header("x-dm-pass", Settings.getEncryptedPassword());
+                    .header("Authorization", Credentials.basic(config.getProperty(CONFIG_KEY_ROLE_NAME), config.getProperty(CONFIG_KEY_ROLE_PASSWORD)))
+                    .header("x-dm-version", WhatTheDuck.wtd.getApplicationVersion());
+
+                if (getApiDmUser() != null) {
+                    builder
+                        .header("x-dm-user", getApiDmUser())
+                        .header("x-dm-pass", getApiDmPassword());
+                }
 
                 Request newRequest = builder.build();
                 return chain.proceed(newRequest);
@@ -58,12 +63,28 @@ public class DmServer {
             .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(WhatTheDuckApplication.config.getProperty(CONFIG_KEY_API_ENDPOINT_URL))
+            .baseUrl(config.getProperty(CONFIG_KEY_API_ENDPOINT_URL))
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build();
 
         api = retrofit.create(DmServerApi.class);
+    }
+
+    private static String getApiDmUser() {
+        return apiDmUser;
+    }
+
+    public static void setApiDmUser(String apiDmUser) {
+        DmServer.apiDmUser = apiDmUser;
+    }
+
+    private static String getApiDmPassword() {
+        return apiDmPassword;
+    }
+
+    public static void setApiDmPassword(String apiDmPassword) {
+        DmServer.apiDmPassword = apiDmPassword;
     }
 
     public abstract static class Callback<T> implements retrofit2.Callback<T> {

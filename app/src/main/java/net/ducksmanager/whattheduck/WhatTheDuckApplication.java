@@ -5,7 +5,7 @@ import android.app.Application;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 
-import net.ducksmanager.util.Settings;
+import net.ducksmanager.persistence.models.dm.User;
 
 import org.matomo.sdk.Matomo;
 import org.matomo.sdk.Tracker;
@@ -72,9 +72,9 @@ public class WhatTheDuckApplication extends Application {
     public void trackActivity(Activity activity) {
         TrackHelper t = TrackHelper.track();
 
-        String username = Settings.getUsername();
-        if (username != null) {
-            t.dimension(CONFIG_MATOMO_DIMENSION_USER, username);
+        User user = WhatTheDuck.appDB.userDao().getCurrentUser();
+        if (user != null) {
+            t.dimension(CONFIG_MATOMO_DIMENSION_USER, user.getUsername());
             try {
                 t.dimension(CONFIG_MATOMO_DIMENSION_VERSION, activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName);
             } catch (PackageManager.NameNotFoundException e) {
