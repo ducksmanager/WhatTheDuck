@@ -65,16 +65,14 @@ public class WhatTheDuck extends AppCompatActivity {
             .allowMainThreadQueries()
             .build();
 
+        Settings.migrateUserSettingsToDbIfExist();
         loadUser();
     }
 
     public void loadUser() {
         User user = WhatTheDuck.appDB.userDao().getCurrentUser();
 
-        UserSetting userSettingRememberCredentials = WhatTheDuck.appDB.userSettingDao().findByKey(Settings.SETTING_KEY_REMEMBER_CREDENTIALS);
-        boolean rememberCredentials = userSettingRememberCredentials != null && Boolean.getBoolean(userSettingRememberCredentials.getValue());
-
-        if (user != null && rememberCredentials) {
+        if (user != null) {
             DmServer.setApiDmUser(user.getUsername());
             DmServer.setApiDmPassword(user.getPassword());
             fetchCollection(new WeakReference<>(this), CountryList.class, null);
