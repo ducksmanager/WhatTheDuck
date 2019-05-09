@@ -17,7 +17,7 @@ import java.util.Properties;
 
 public class Settings {
     @Deprecated
-    public static String USER_SETTINGS = "settings.properties";
+    public static final String USER_SETTINGS = "settings.properties";
 
     public static final String MESSAGE_KEY_WELCOME = "welcome_message";
     public static final String MESSAGE_KEY_DATA_CONSUMPTION = "data_consumption";

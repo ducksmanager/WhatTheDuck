@@ -44,7 +44,7 @@ public class WhatTheDuck extends AppCompatActivity {
 
     public static WhatTheDuck wtd;
 
-    public static String DB_NAME = "appDB";
+    private static final String DB_NAME = "appDB";
     public static AppDatabase appDB;
 
     private static String selectedCountry = null;
@@ -68,7 +68,7 @@ public class WhatTheDuck extends AppCompatActivity {
         loadUser();
     }
 
-    public void loadUser() {
+    private void loadUser() {
         User user = WhatTheDuck.appDB.userDao().getCurrentUser();
 
         if (user != null) {

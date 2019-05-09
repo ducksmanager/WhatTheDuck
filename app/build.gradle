@@ -52,7 +52,7 @@ dependencies {
     implementation 'com.github.moondroid.coverflow:library:1.0'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.3'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "androidx.room:room-runtime:2.0.0-beta01"
     annotationProcessor "androidx.room:room-compiler:2.0.0-beta01"
@@ -74,5 +74,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.1'
-    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.12.2'
+    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.12.3'
 }

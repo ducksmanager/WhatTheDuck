@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.ViewHolder> {
@@ -30,7 +31,7 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(PurchaseAdapter.ViewHolder purchaseHolder, final int i) {
+    public void onBindViewHolder(@NonNull PurchaseAdapter.ViewHolder purchaseHolder, final int i) {
 
         Purchase purchase = items.get(i);
         if (purchase != null) {

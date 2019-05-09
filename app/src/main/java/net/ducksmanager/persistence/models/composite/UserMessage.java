@@ -13,10 +13,10 @@ public class UserMessage {
     @ColumnInfo
     @PrimaryKey
     @NonNull
-    private String messageKey;
+    private final String messageKey;
 
     @ColumnInfo
-    private Boolean isShown;
+    private final Boolean isShown;
 
     public UserMessage(@NotNull String messageKey, Boolean isShown) {
         this.messageKey = messageKey;

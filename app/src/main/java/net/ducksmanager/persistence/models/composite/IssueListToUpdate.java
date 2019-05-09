@@ -6,16 +6,16 @@ import java.util.List;
 
 public class IssueListToUpdate {
     @Expose
-    private String publicationCode;
+    private final String publicationCode;
 
     @Expose
-    private List<String> issueNumbers;
+    private final List<String> issueNumbers;
 
     @Expose
-    private String condition;
+    private final String condition;
 
     @Expose
-    private Integer purchaseId;
+    private final Integer purchaseId;
 
     public IssueListToUpdate(String publicationCode, List<String> issueNumbers, String condition, Integer purchaseId) {
         this.publicationCode = publicationCode;
