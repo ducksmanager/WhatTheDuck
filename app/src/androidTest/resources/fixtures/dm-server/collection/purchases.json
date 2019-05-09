@@ -1,0 +1,22 @@
+[
+  {
+    "date": "2011-10-15",
+    "description": "Bouquinerie Bordeaux",
+    "id": 1000
+  },
+  {
+    "date": "2011-10-25",
+    "description": "Bouquinerie Madrid",
+    "id": 1002
+  },
+  {
+    "date": "2011-11-01",
+    "description": "Bouquinerie La Rochelle",
+    "id": 1001
+  },
+  {
+    "date": "2011-12-08",
+    "description": "Virgin Bordeaux",
+    "id": 1003
+  }
+]

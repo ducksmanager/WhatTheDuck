@@ -1,0 +1,98 @@
+[
+  {
+    "condition": "bon",
+    "country": "es",
+    "id": 1,
+    "issueNumber": "1",
+    "magazine": "BCB",
+    "purchaseId": null
+  },
+  {
+    "condition": "mauvais",
+    "country": "es",
+    "id": 2,
+    "issueNumber": "3",
+    "magazine": "BCB",
+    "purchaseId": null
+  },
+  {
+    "condition": "bon",
+    "country": "fr",
+    "id": 3,
+    "issueNumber": "200",
+    "magazine": "MP",
+    "purchaseId": null
+  },
+  {
+    "condition": "bon",
+    "country": "fr",
+    "id": 4,
+    "issueNumber": "1",
+    "magazine": "DDD",
+    "purchaseId": null
+  },
+  {
+    "condition": "bon",
+    "country": "fr",
+    "id": 5,
+    "issueNumber": "2",
+    "magazine": "DDD",
+    "purchaseId": null
+  },
+  {
+    "condition": "bon",
+    "country": "fr",
+    "id": 6,
+    "issueNumber": "3",
+    "magazine": "DDD",
+    "purchaseId": null
+  },
+  {
+    "condition": "bon",
+    "country": "fr",
+    "id": 7,
+    "issueNumber": "4",
+    "magazine": "DDD",
+    "purchaseId": null
+  },
+  {
+    "condition": "bon",
+    "country": "fr",
+    "id": 8,
+    "issueNumber": "5",
+    "magazine": "DDD",
+    "purchaseId": null
+  },
+  {
+    "condition": "bon",
+    "country": "se",
+    "id": 9,
+    "issueNumber": "10",
+    "magazine": "KAP",
+    "purchaseId": null
+  },
+  {
+    "condition": "mauvais",
+    "country": "se",
+    "id": 10,
+    "issueNumber": "15",
+    "magazine": "KAP",
+    "purchaseId": null
+  },
+  {
+    "condition": "bon",
+    "country": "us",
+    "id": 11,
+    "issueNumber": "10",
+    "magazine": "WDC",
+    "purchaseId": null
+  },
+  {
+    "condition": "mauvais",
+    "country": "us",
+    "id": 12,
+    "issueNumber": "15",
+    "magazine": "WDC",
+    "purchaseId": null
+  }
+]

@@ -74,46 +74,6 @@ class DownloadHandlerMock {
                 return dispatchForCover(path);
             }
             return new MockResponse().setBody(getJsonFixture("dm-server/" + path.replaceFirst("/", "")));
-//            UrlQuerySanitizer sanitizer = new UrlQuerySanitizer(request.getPath());
-//            String username = sanitizer.getValue("pseudo_user");
-//            if (username == null) {
-//                List<String> parts = Arrays.asList(request.getPath().split("/"));
-//                if (parts.contains("countries")) {
-//                    return new MockResponse().setBody(getLocalizedJsonFixture("dm-server/countries"));
-//                }
-//                if (parts.contains("publications")) {
-//                    return new MockResponse().setBody(getLocalizedJsonFixture("dm-server/publications"));
-//                }
-//                if (parts.contains("issues")) {
-//                    return new MockResponse().setBody(getJsonFixture("dm-server/issues"));
-//                }
-//                if (parts.contains("purchases")) {
-//                    return new MockResponse().setBody(getJsonFixture("dm-server/purchases"));
-//                }
-//                if (parts.containsAll(Arrays.asList("cover-id", "search"))) {
-//                    return new MockResponse().setBody(getJsonFixture("dm-server/cover-search"));
-//                }
-//                if (parts.containsAll(Arrays.asList("cover-id", "download"))) {
-//                    return new MockResponse().setBody(getImageFixture("covers/" + parts.get(parts.size()-1)));
-//                }
-//
-//                return new MockResponse().setStatus("500");
-//            }
-//            switch (username) {
-//                case TEST_USER:
-//                    if (sanitizer.hasParameter("ajouter_achat")) {
-//                        state.put("hasNewPurchase", true);
-//                        return new MockResponse().setBody("OK");
-//                    }
-//                    if (sanitizer.hasParameter("get_achats")) {
-//                        return new MockResponse().setBody(getJsonFixture((Boolean) state.get("hasNewPurchase") ? "dm/purchasesWithNew" : "dm/purchases"));
-//                    }
-//                    if (sanitizer.getValue("mdp_user").equals(Settings.toSHA1(TEST_PASS))) {
-//                        return new MockResponse().setBody(getLocalizedJsonFixture("dm/collection"));
-//                    }
-//                    break;
-//            }
-//            return new MockResponse().setBody("0");
         }
     };
 
@@ -122,10 +82,6 @@ class DownloadHandlerMock {
 
         InputStream inputStream = openPathAsStream(path);
         return convertStreamToString(inputStream);
-    }
-
-    private static String getLocalizedJsonFixture(String name) {
-        return getJsonFixture(name + "/" + WtdTest.currentLocale.getLocale().getLanguage());
     }
 
     private static Buffer getImageFixture(String name, String extension) throws IOException {
