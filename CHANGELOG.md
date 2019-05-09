@@ -1,3 +1,9 @@
+Version 1.9.0 "Elvira"
+
+    Fetch data from the DucksManager API
+    Store local data in a DB instead of in memory
+    Always remember the user credentials
+
 Version 1.8.7
 
     Fix back button sometimes not working
