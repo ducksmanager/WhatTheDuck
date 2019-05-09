@@ -31,7 +31,7 @@ public interface DmServerApi {
     Call<HashMap<String, String>> getPublications(@Path("countryName") String countryName);
 
     @GET("/coa/list/issues/{publicationCode}")
-    Call<List<String>> getIssues(@Path("publicationCode") String publicationCode);
+    Call<List<String>> getIssues(@Path(value="publicationCode", encoded = true) String publicationCode);
 
     @GET("/collection/issues")
     Call<List<Issue>> getUserIssues();

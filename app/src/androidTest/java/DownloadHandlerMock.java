@@ -29,10 +29,10 @@ class DownloadHandlerMock {
 
         @Override
         public MockResponse dispatch(RecordedRequest request) {
-            String path = request.getPath().replaceAll("%2F", "/");
+            String path = request.getPath();
             System.err.println("Mocking " + path);
-            if (request.getPath().contains("/internal/")) {
-                return dispatchForCover(request.getPath());
+            if (path.contains("/internal/")) {
+                return dispatchForCover(path);
             }
             else if (path.contains("/edges/")) {
                 return dispatchForEdges(path);
