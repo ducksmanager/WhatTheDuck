@@ -1,7 +1,4 @@
-import android.net.UrlQuerySanitizer;
 import android.text.TextUtils;
-
-import net.ducksmanager.util.Settings;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,16 +6,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.Headers;
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
 import okio.Okio;
 
+import static net.ducksmanager.util.Settings.toSHA1;
+
 
 class DownloadHandlerMock {
-    public static final String TEST_USER = "demotestuser";
-    public static final String TEST_PASS = "demotestpass";
+    static final String TEST_USER = "demotestuser";
+    static final String TEST_PASS = "demotestpass";
 
     static final HashMap<String, Object> state = new HashMap<>();
     static {
@@ -29,72 +29,91 @@ class DownloadHandlerMock {
 
         @Override
         public MockResponse dispatch(RecordedRequest request) {
-            System.out.println("Mocking " + request.getPath());
+            String path = request.getPath().replaceAll("%2F", "/");
+            System.err.println("Mocking " + path);
             if (request.getPath().contains("/internal/")) {
-                return dispatchForInternal(request);
+                return dispatchForCover(request.getPath());
             }
-            else if (request.getPath().contains("/dm/") || request.getPath().contains("/dm-server/")) {
-                return dispatchForDmServer(request);
+            else if (path.contains("/edges/")) {
+                return dispatchForEdges(path);
             }
-            else if (request.getPath().contains("/edges/")) {
-                return dispatchForEdges(request);
+            else {
+                return dispatchForDmServer(path, request.getHeaders());
             }
-            return null;
         }
 
         // Mocks that are internal to tests (photo mocks for instance)
-        private MockResponse dispatchForInternal(RecordedRequest request) {
-            List<String> parts = Arrays.asList(request.getPath().split("/"));
-            if (parts.contains("covers")) {
+        private MockResponse dispatchForCover(String path) {
+            List<String> parts = Arrays.asList(path.split("/"));
+            try {
                 return new MockResponse().setBody(getImageFixture("covers/" + parts.get(parts.size()-1)));
             }
-            return new MockResponse().setStatus("404");
-        }
-        private MockResponse dispatchForEdges(RecordedRequest request) {
-            List<String> parts = Arrays.asList(request.getPath().split("/"));
-            return new MockResponse().setBody(getImageFixture(
-                "edges/" + TextUtils.join("/", parts.subList(4, parts.size())),
-                null));
+            catch (IOException e) {
+                return new MockResponse().setResponseCode(404);
+            }
         }
 
-        private MockResponse dispatchForDmServer(RecordedRequest request) {
-            UrlQuerySanitizer sanitizer = new UrlQuerySanitizer(request.getPath());
-            String username = sanitizer.getValue("pseudo_user");
-            if (username == null) {
-                List<String> parts = Arrays.asList(request.getPath().split("/"));
-                if (parts.contains("countries")) {
-                    return new MockResponse().setBody(getLocalizedJsonFixture("dm-server/countries"));
-                }
-                if (parts.contains("publications")) {
-                    return new MockResponse().setBody(getLocalizedJsonFixture("dm-server/publications"));
-                }
-                if (parts.contains("issues")) {
-                    return new MockResponse().setBody(getLocalizedJsonFixture("dm-server/issues"));
-                }
-                if (parts.containsAll(Arrays.asList("cover-id", "search"))) {
-                    return new MockResponse().setBody(getJsonFixture("dm-server/cover-search"));
-                }
-                if (parts.containsAll(Arrays.asList("cover-id", "download"))) {
-                    return new MockResponse().setBody(getImageFixture("covers/" + parts.get(parts.size()-1)));
-                }
+        private MockResponse dispatchForEdges(String path) {
+            List<String> parts = Arrays.asList(path.split("/"));
+            try {
+                return new MockResponse().setBody(getImageFixture(
+                    "edges/" + TextUtils.join("/", parts.subList(4, parts.size())),
+                    null));
+            }
+            catch (IOException e) {
+                return new MockResponse().setResponseCode(404);
+            }
+        }
 
-                return new MockResponse().setStatus("500");
+        private MockResponse dispatchForDmServer(String path, Headers headers) {
+
+            if (headers.get("x-dm-pass") != null && !headers.get("x-dm-pass").equals(toSHA1(DownloadHandlerMock.TEST_PASS))) {
+                return new MockResponse().setResponseCode(401);
             }
-            switch (username) {
-                case TEST_USER:
-                    if (sanitizer.hasParameter("ajouter_achat")) {
-                        state.put("hasNewPurchase", true);
-                        return new MockResponse().setBody("OK");
-                    }
-                    if (sanitizer.hasParameter("get_achats")) {
-                        return new MockResponse().setBody(getJsonFixture((Boolean) state.get("hasNewPurchase") ? "dm/purchasesWithNew" : "dm/purchases"));
-                    }
-                    if (sanitizer.getValue("mdp_user").equals(Settings.toSHA1(TEST_PASS))) {
-                        return new MockResponse().setBody(getLocalizedJsonFixture("dm/collection"));
-                    }
-                    break;
+            if (path.contains("cover-id/download")) {
+                return dispatchForCover(path);
             }
-            return new MockResponse().setBody("0");
+            return new MockResponse().setBody(getJsonFixture("dm-server/" + path.replaceFirst("/", "")));
+//            UrlQuerySanitizer sanitizer = new UrlQuerySanitizer(request.getPath());
+//            String username = sanitizer.getValue("pseudo_user");
+//            if (username == null) {
+//                List<String> parts = Arrays.asList(request.getPath().split("/"));
+//                if (parts.contains("countries")) {
+//                    return new MockResponse().setBody(getLocalizedJsonFixture("dm-server/countries"));
+//                }
+//                if (parts.contains("publications")) {
+//                    return new MockResponse().setBody(getLocalizedJsonFixture("dm-server/publications"));
+//                }
+//                if (parts.contains("issues")) {
+//                    return new MockResponse().setBody(getJsonFixture("dm-server/issues"));
+//                }
+//                if (parts.contains("purchases")) {
+//                    return new MockResponse().setBody(getJsonFixture("dm-server/purchases"));
+//                }
+//                if (parts.containsAll(Arrays.asList("cover-id", "search"))) {
+//                    return new MockResponse().setBody(getJsonFixture("dm-server/cover-search"));
+//                }
+//                if (parts.containsAll(Arrays.asList("cover-id", "download"))) {
+//                    return new MockResponse().setBody(getImageFixture("covers/" + parts.get(parts.size()-1)));
+//                }
+//
+//                return new MockResponse().setStatus("500");
+//            }
+//            switch (username) {
+//                case TEST_USER:
+//                    if (sanitizer.hasParameter("ajouter_achat")) {
+//                        state.put("hasNewPurchase", true);
+//                        return new MockResponse().setBody("OK");
+//                    }
+//                    if (sanitizer.hasParameter("get_achats")) {
+//                        return new MockResponse().setBody(getJsonFixture((Boolean) state.get("hasNewPurchase") ? "dm/purchasesWithNew" : "dm/purchases"));
+//                    }
+//                    if (sanitizer.getValue("mdp_user").equals(Settings.toSHA1(TEST_PASS))) {
+//                        return new MockResponse().setBody(getLocalizedJsonFixture("dm/collection"));
+//                    }
+//                    break;
+//            }
+//            return new MockResponse().setBody("0");
         }
     };
 
@@ -109,17 +128,13 @@ class DownloadHandlerMock {
         return getJsonFixture(name + "/" + WtdTest.currentLocale.getLocale().getLanguage());
     }
 
-    private static Buffer getImageFixture(String name, String extension) {
+    private static Buffer getImageFixture(String name, String extension) throws IOException {
         Buffer buffer = new Buffer();
-        try {
-            buffer.writeAll(Okio.source(openPathAsStream(String.format("fixtures/%s%s", name, extension == null ? "" : "." + extension))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        buffer.writeAll(Okio.source(openPathAsStream(String.format("fixtures/%s%s", name, extension == null ? "" : "." + extension))));
         return buffer;
     }
 
-    private static Buffer getImageFixture(String name) {
+    private static Buffer getImageFixture(String name) throws IOException {
         return getImageFixture(name, "jpg");
     }
 

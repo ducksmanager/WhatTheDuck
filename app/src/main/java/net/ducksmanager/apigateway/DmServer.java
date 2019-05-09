@@ -113,6 +113,7 @@ public class DmServer {
                 switch(response.code()) {
                     case HttpURLConnection.HTTP_UNAUTHORIZED:
                         WhatTheDuck.wtd.alert(originActivityRef, R.string.input_error__invalid_credentials);
+                        break;
                     default:
                         WhatTheDuck.wtd.alert(originActivityRef, R.string.error);
                 }
@@ -122,7 +123,7 @@ public class DmServer {
 
         @Override
         public void onFailure(@NotNull Call call, @NotNull Throwable t) {
-            WhatTheDuck.wtd.alert(originActivityRef, R.string.error);
+            WhatTheDuck.wtd.alert(originActivityRef, t.getMessage() + " on " + eventName);
             System.err.println(t.getMessage());
             onFinished();
         }

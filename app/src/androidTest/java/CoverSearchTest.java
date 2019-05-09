@@ -61,7 +61,9 @@ public class CoverSearchTest extends WtdTest {
         Intents.init();
         intending(expectedIntent).respondWith(result);
 
-        onView(allOf(withId(R.id.addToCollectionByPhotoButton), forceFloatingActionButtonsVisible())).perform(click());
+        onView(withId(R.id.addToCollectionByPhotoButton))
+            .perform(forceFloatingActionButtonsVisible(true))
+            .perform(click());
 
         intended(expectedIntent);
         Intents.release();
@@ -74,8 +76,7 @@ public class CoverSearchTest extends WtdTest {
 
         ScreenshotTestRule.takeScreenshot("Cover search result", getActivityInstance(), getScreenshotPath());
 
-        onView(allOf(withId(R.id.image), coverCurrentlyVisible()))
-            .perform(click());
+        onView(allOf(withId(R.id.image), coverCurrentlyVisible())).perform(click());
 
         ScreenshotTestRule.takeScreenshot("Cover search result - add issue", getActivityInstance(), getScreenshotPath());
     }

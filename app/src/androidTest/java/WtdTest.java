@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.rule.ActivityTestRule;
@@ -38,6 +40,7 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Checks.checkNotNull;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -187,6 +190,27 @@ class WtdTest extends AndroidJUnitRunner {
 
         return currentActivity[0];
     }
+
+    static ViewAction forceFloatingActionButtonsVisible(final boolean value) {
+        return new ViewAction() {
+
+            @Override
+            public Matcher<View> getConstraints() {
+                return isAssignableFrom(FloatingActionButton.class);
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                view.setVisibility(value ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            public String getDescription() {
+                return "Force floating action buttons to be visible";
+            }
+        };
+    }
+
 
     static Matcher<Object> forceFloatingActionButtonsVisible() {
         return new BoundedMatcher<Object, FloatingActionButton>(FloatingActionButton.class) {

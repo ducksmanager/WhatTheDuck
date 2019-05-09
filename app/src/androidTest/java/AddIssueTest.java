@@ -53,8 +53,10 @@ public class AddIssueTest extends WtdTest {
         onView(withText(containsString("dynastie"))).perform(ViewActions.click());
 
         assertCurrentActivityIsInstanceOf(IssueList.class, true);
-        onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
+        onView(withId(R.id.addToCollectionBySelectionButton))
+            .perform(forceFloatingActionButtonsVisible(true))
             .perform(click());
+
         onView(withText("6")).perform(ViewActions.click());
 
         assertCurrentActivityIsInstanceOf(AddIssue.class, true);
@@ -65,7 +67,6 @@ public class AddIssueTest extends WtdTest {
         onView(withId(R.id.createpurchase)).perform(click());
 
         onView(allOf(withText("Stockholm loppis"), withParent(withId(R.id.purchase_list))));
-
 
     }
 }
