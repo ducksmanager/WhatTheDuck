@@ -44,6 +44,7 @@ public class WhatTheDuck extends AppCompatActivity {
 
     public static WhatTheDuck wtd;
 
+    public static String DB_NAME = "appDB";
     public static AppDatabase appDB;
 
     private static String selectedCountry = null;
@@ -59,7 +60,7 @@ public class WhatTheDuck extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         DmServer.initApi();
-        appDB = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "appDB")
+        appDB = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, DB_NAME)
             .allowMainThreadQueries()
             .build();
 
@@ -73,7 +74,7 @@ public class WhatTheDuck extends AppCompatActivity {
         if (user != null) {
             DmServer.setApiDmUser(user.getUsername());
             DmServer.setApiDmPassword(user.getPassword());
-            fetchCollection(new WeakReference<>(this), CountryList.class);
+            fetchCollection(new WeakReference<>(this), CountryList.class, false);
         }
         else {
             setContentView(R.layout.whattheduck);
@@ -130,12 +131,12 @@ public class WhatTheDuck extends AppCompatActivity {
             this.findViewById(R.id.login_form).setVisibility(View.VISIBLE);
         }
         else {
-            fetchCollection(new WeakReference<>(this), CountryList.class);
+            fetchCollection(new WeakReference<>(this), CountryList.class, true);
         }
     }
 
-    public static void fetchCollection(WeakReference<Activity> activityRef, Class targetClass) {
-        DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<Issue>>("retrieveCollection", activityRef.get()) {
+    public void fetchCollection(WeakReference<Activity> activityRef, Class targetClass, Boolean alertIfError) {
+        DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<Issue>>("retrieveCollection", activityRef.get(), alertIfError) {
             public void onSuccessfulResponse(Response<List<Issue>> issueListResponse) {
                 appDB.userDao().insert(new User(DmServer.apiDmUser, DmServer.apiDmPassword));
 
@@ -152,6 +153,14 @@ public class WhatTheDuck extends AppCompatActivity {
                         activityRef.get().startActivity(new Intent(activityRef.get(), targetClass));
                     }
                 });
+            }
+
+            @Override
+            public void onErrorResponse(Response<List<Issue>> response) {
+                if (!alertIfError) {
+                    setContentView(R.layout.whattheduck);
+                    showLoginForm();
+                }
             }
         });
     }

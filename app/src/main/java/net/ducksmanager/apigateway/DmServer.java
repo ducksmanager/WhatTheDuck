@@ -91,9 +91,15 @@ public class DmServer {
 
         private final String eventName;
         private final WeakReference<Activity> originActivityRef;
+        private final Boolean alertOnError;
 
         protected Callback(String eventName, Activity originActivity) {
+            this(eventName, originActivity, true);
+        }
+
+        protected Callback(String eventName, Activity originActivity, Boolean alertOnError) {
             this.eventName = eventName;
+            this.alertOnError = alertOnError;
             trackEvent(eventName + "/start");
 
             this.originActivityRef = new WeakReference<>(originActivity);
@@ -110,15 +116,22 @@ public class DmServer {
                 this.onSuccessfulResponse(response);
             }
             else {
-                switch(response.code()) {
-                    case HttpURLConnection.HTTP_UNAUTHORIZED:
-                        WhatTheDuck.wtd.alert(originActivityRef, R.string.input_error__invalid_credentials);
-                        break;
-                    default:
-                        WhatTheDuck.wtd.alert(originActivityRef, R.string.error);
+                if (alertOnError) {
+                    switch (response.code()) {
+                        case HttpURLConnection.HTTP_UNAUTHORIZED:
+                            WhatTheDuck.wtd.alert(originActivityRef, R.string.input_error__invalid_credentials);
+                            break;
+                        default:
+                            WhatTheDuck.wtd.alert(originActivityRef, R.string.error);
+                    }
                 }
+                onErrorResponse(response);
             }
             onFinished();
+        }
+
+        public void onErrorResponse(Response<T> response) {
+
         }
 
         @Override
