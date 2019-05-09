@@ -3,7 +3,6 @@ package net.ducksmanager.util;
 import android.text.TextUtils;
 
 import net.ducksmanager.persistence.models.composite.UserMessage;
-import net.ducksmanager.persistence.models.composite.UserSetting;
 import net.ducksmanager.persistence.models.dm.User;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
@@ -23,7 +22,6 @@ public class Settings {
     public static final String MESSAGE_KEY_WELCOME = "welcome_message";
     public static final String MESSAGE_KEY_DATA_CONSUMPTION = "data_consumption";
     public static final String MESSAGE_KEY_WELCOME_BOOKCASE_VIEW = "welcome_bookcase_view";
-    public static final String SETTING_KEY_REMEMBER_CREDENTIALS = "remember_credentials";
 
     public static void migrateUserSettingsToDbIfExist() {
         Properties props=new Properties();
@@ -42,8 +40,6 @@ public class Settings {
                     WhatTheDuck.appDB.userMessageDao().insert(new UserMessage(messageKey, false));
                 }
             }
-            WhatTheDuck.appDB.userSettingDao().deleteAll();
-            WhatTheDuck.appDB.userSettingDao().insert(new UserSetting(Settings.SETTING_KEY_REMEMBER_CREDENTIALS, Boolean.toString(true)));
             inputStream.close();
             WhatTheDuck.wtd.deleteFile(USER_SETTINGS);
         } catch (IOException e) {

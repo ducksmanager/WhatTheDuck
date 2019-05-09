@@ -28,13 +28,6 @@
 			android:hint="@string/password"
 			android:inputType="textPassword"/>
 
-		<CheckBox
-			android:id="@+id/checkBoxRememberCredentials"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:checked="true"
-			android:text="@string/remember_credentials"/>
-
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content">

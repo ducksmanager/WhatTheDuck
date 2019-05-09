@@ -18,7 +18,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,7 +25,6 @@ import android.widget.Toast;
 
 import net.ducksmanager.apigateway.DmServer;
 import net.ducksmanager.persistence.AppDatabase;
-import net.ducksmanager.persistence.models.composite.UserSetting;
 import net.ducksmanager.persistence.models.dm.Issue;
 import net.ducksmanager.persistence.models.dm.Purchase;
 import net.ducksmanager.persistence.models.dm.User;
@@ -75,7 +73,7 @@ public class WhatTheDuck extends AppCompatActivity {
         if (user != null) {
             DmServer.setApiDmUser(user.getUsername());
             DmServer.setApiDmPassword(user.getPassword());
-            fetchCollection(new WeakReference<>(this), CountryList.class, null);
+            fetchCollection(new WeakReference<>(this), CountryList.class);
         }
         else {
             setContentView(R.layout.whattheduck);
@@ -122,7 +120,6 @@ public class WhatTheDuck extends AppCompatActivity {
     private void loginAndFetchCollection() {
         String username = ((EditText)this.findViewById(R.id.username)).getText().toString();
         String password = ((EditText)this.findViewById(R.id.password)).getText().toString();
-        Boolean rememberCredentials = ((CheckBox) this.findViewById(R.id.checkBoxRememberCredentials)).isChecked();
         DmServer.setApiDmUser(username);
         DmServer.setApiDmPassword(Settings.toSHA1(password));
 
@@ -133,16 +130,13 @@ public class WhatTheDuck extends AppCompatActivity {
             this.findViewById(R.id.login_form).setVisibility(View.VISIBLE);
         }
         else {
-            fetchCollection(new WeakReference<>(this), CountryList.class, rememberCredentials);
+            fetchCollection(new WeakReference<>(this), CountryList.class);
         }
     }
 
-    public static void fetchCollection(WeakReference<Activity> activityRef, Class targetClass, Boolean rememberUserCredentials) {
+    public static void fetchCollection(WeakReference<Activity> activityRef, Class targetClass) {
         DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<Issue>>("retrieveCollection", activityRef.get()) {
             public void onSuccessfulResponse(Response<List<Issue>> issueListResponse) {
-                if (rememberUserCredentials != null) {
-                    appDB.userSettingDao().insert(new UserSetting(Settings.SETTING_KEY_REMEMBER_CREDENTIALS, Boolean.toString(rememberUserCredentials)));
-                }
                 appDB.userDao().insert(new User(DmServer.apiDmUser, DmServer.apiDmPassword));
 
                 appDB.issueDao().deleteAll();

@@ -55,7 +55,7 @@ public class Signup extends Activity {
                 public void onSuccessfulResponse(Response<Void> response) {
                     DmServer.setApiDmUser(username);
                     DmServer.setApiDmPassword(Settings.toSHA1(password));
-                    WhatTheDuck.fetchCollection(new WeakReference<>(Signup.this), CountryList.class, null);
+                    WhatTheDuck.fetchCollection(new WeakReference<>(Signup.this), CountryList.class);
                 }
             });
         });

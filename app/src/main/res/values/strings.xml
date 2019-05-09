@@ -57,7 +57,6 @@
     <string name="purchase_date">Purchase date</string>
     <string name="purchase_name">Purchase name</string>
     <string name="rate_app">Remember to rate What The Duck on the Play Store :-)</string>
-    <string name="remember_credentials">Remember my credentials</string>
     <string name="result">Result</string>
     <string name="signup">Signup</string>
     <string name="signup__confirm">You have signed up to DucksManager successfully, please login.</string>

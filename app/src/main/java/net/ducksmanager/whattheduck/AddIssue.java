@@ -102,7 +102,7 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
                 public void onSuccessfulResponse(Response<Object> response) {
                     finish();
                     WhatTheDuck.wtd.info(new WeakReference<>(AddIssue.this), R.string.confirmation_message__issue_inserted, Toast.LENGTH_SHORT);
-                    WhatTheDuck.fetchCollection(new WeakReference<>(AddIssue.this), IssueList.class, null);
+                    WhatTheDuck.fetchCollection(new WeakReference<>(AddIssue.this), IssueList.class);
                 }
             });
         });
