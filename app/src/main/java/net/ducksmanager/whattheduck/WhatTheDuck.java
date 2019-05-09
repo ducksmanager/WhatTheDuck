@@ -44,7 +44,7 @@ public class WhatTheDuck extends AppCompatActivity {
 
     public static WhatTheDuck wtd;
 
-    private static final String DB_NAME = "appDB";
+    public static String DB_NAME = "appDB";
     public static AppDatabase appDB;
 
     private static String selectedCountry = null;

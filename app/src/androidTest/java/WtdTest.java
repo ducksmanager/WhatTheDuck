@@ -90,6 +90,10 @@ class WtdTest extends AndroidJUnitRunner {
         };
     }
 
+    static {
+        WhatTheDuck.DB_NAME = "appDB_test";
+    }
+
     static MockWebServer mockServer;
 
     String getScreenshotPath() {
