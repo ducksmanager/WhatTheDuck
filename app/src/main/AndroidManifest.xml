@@ -5,9 +5,16 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
                      android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="true"/>
+    <uses-feature android:name="android.hardware.camera.front" android:required="true"/>
+    <uses-feature android:name="android.hardware.camera.front.autofocus" android:required="true"/>
+
     <application
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:name=".WhatTheDuckApplication"
@@ -35,6 +42,7 @@
         <activity android:name="net.ducksmanager.whattheduck.AddIssue"
                   android:theme="@style/AddIssueTheme"
                   android:excludeFromRecents="true"/>
+        <activity android:name=".CoverDetector"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

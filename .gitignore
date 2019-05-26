@@ -4,10 +4,12 @@
 /app/build/
 /app/libs/
 /app/release/
-/local.properties
 /app/src/androidTest/resources/fixtures/covers/
 /app/src/androidTest/resources/fixtures/edges/
 /app/src/main/assets/config.properties
+/app/src/main/res/*.png
+/lib/opencv/build
+/local.properties
+/opencvLibrary*/build
 /screenshots
 /showcase
-/app/src/main/res/*.png

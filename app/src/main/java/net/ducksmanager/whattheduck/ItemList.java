@@ -136,6 +136,12 @@ public abstract class ItemList<Item> extends AppCompatActivity {
                         addToCollection.setVisibility(GONE);
                         ItemList.this.goToAlternativeView();
                     });
+
+                    FloatingActionButton addToCollectionByCameraButton = this.findViewById(R.id.addToCollectionByCameraButton);
+                    addToCollectionByCameraButton.setOnClickListener(view -> {
+                        Intent i = new Intent(WhatTheDuck.wtd, CoverDetector.class);
+                        startActivity(i);
+                    });
                 }
             }
         }
