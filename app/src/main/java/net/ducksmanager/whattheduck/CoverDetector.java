@@ -21,11 +21,13 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.features2d.ORB;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
@@ -37,7 +39,6 @@ import timber.log.Timber;
 
 import static org.opencv.imgproc.Imgproc.CHAIN_APPROX_SIMPLE;
 import static org.opencv.imgproc.Imgproc.MORPH_CLOSE;
-import static org.opencv.imgproc.Imgproc.MORPH_RECT;
 import static org.opencv.imgproc.Imgproc.RETR_EXTERNAL;
 
 public class CoverDetector extends Activity implements OnTouchListener, CvCameraViewListener2 {
@@ -55,6 +56,8 @@ public class CoverDetector extends Activity implements OnTouchListener, CvCamera
     private Size                 SPECTRUM_SIZE;
     private Scalar               CONTOUR_COLOR;
 
+    private ORB detector;
+
     private CameraBridgeViewBase mOpenCvCameraView;
 
     private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
@@ -67,6 +70,7 @@ public class CoverDetector extends Activity implements OnTouchListener, CvCamera
 
                     mOpenCvCameraView.enableView();
                     mOpenCvCameraView.setOnTouchListener(CoverDetector.this);
+                    detector = ORB.create(2000, 1.02f, 100);
 
                 } break;
                 default:
@@ -198,25 +202,6 @@ public class CoverDetector extends Activity implements OnTouchListener, CvCamera
         return false; // don't need subsequent touch events
     }
 
-//    public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
-//        mRgba = inputFrame.rgba();
-//
-//        if (mIsColorSelected) {
-//            mDetector.process(mRgba);
-//            List<MatOfPoint> contours = mDetector.getContours();
-//            Timber.e("Contours count: " + contours.size());
-//            Imgproc.drawContours(mRgba, contours, -1, CONTOUR_COLOR);
-//
-//            Mat colorLabel = mRgba.submat(4, 68, 4, 68);
-//            colorLabel.setTo(mBlobColorRgba);
-//
-//            Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70, 70 + mSpectrum.cols());
-//            mSpectrum.copyTo(spectrumLabel);
-//        }
-//
-//        return mRgba;
-//    }
-
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
         Mat rgba = inputFrame.rgba();
 
@@ -224,7 +209,7 @@ public class CoverDetector extends Activity implements OnTouchListener, CvCamera
         Imgproc.cvtColor(rgba, edges, Imgproc.COLOR_RGB2GRAY);
         Imgproc.Canny(edges, edges, 80, 100);
 
-        Mat kernel = Imgproc.getStructuringElement(MORPH_RECT, new Size(7, 7));
+        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(7, 7));
 
         Mat closed = new Mat();
         Imgproc.morphologyEx(edges, closed, MORPH_CLOSE, kernel);
@@ -248,6 +233,13 @@ public class CoverDetector extends Activity implements OnTouchListener, CvCamera
                 Imgproc.drawContours(rgba, pointsList, -1, new Scalar(0, 255, 0), 4);
             }
         }
+
+
+        Mat gray = inputFrame.gray();
+
+        MatOfKeyPoint keypoints = new MatOfKeyPoint();
+        Mat descriptors = new Mat();
+        detector.detectAndCompute(gray, new Mat(), keypoints, descriptors);
 
         return rgba;
     }
