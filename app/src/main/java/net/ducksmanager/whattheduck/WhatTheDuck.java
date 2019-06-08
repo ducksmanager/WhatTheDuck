@@ -45,7 +45,7 @@ public class WhatTheDuck extends AppCompatActivity {
     public static WhatTheDuck wtd;
 
     public static String DB_NAME = "appDB";
-    public static AppDatabase appDB;
+    public static AppDatabase appDB = null;
 
     private static String selectedCountry = null;
     private static String selectedPublication = null;
@@ -60,11 +60,12 @@ public class WhatTheDuck extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         DmServer.initApi();
-        appDB = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, DB_NAME)
-            .allowMainThreadQueries()
-            .build();
+        if (appDB == null) {
+            appDB = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, DB_NAME)
+                .allowMainThreadQueries()
+                .build();
+        }
 
-        Settings.migrateUserSettingsToDbIfExist();
         loadUser();
     }
 
