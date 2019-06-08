@@ -1,3 +1,6 @@
+Version 1.9.1
+    Fix cover search not working
+
 Version 1.9.0 "Elvira"
 
     Fetch data from the DucksManager API
