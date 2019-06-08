@@ -48,6 +48,31 @@ public class CoverFlowFileHandler {
     private File uploadFile = null;
     private TransformationCallback callback = null;
 
+    private final Target target = new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            try {
+                FileOutputStream ostream = new FileOutputStream(uploadFile);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
+                ostream.flush();
+                ostream.close();
+
+                callback.onComplete(uploadFile);
+            } catch (IOException e) {
+                WhatTheDuck.wtd.alert(getOriginActivityRef(), R.string.internal_error);
+            }
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+            WhatTheDuck.wtd.alert(getOriginActivityRef(), R.string.internal_error);
+            callback.onFail();
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) { }
+    };
+
     public CoverFlowFileHandler(WeakReference<Activity> originActivityRef) {
         CoverFlowFileHandler.originActivityRef = originActivityRef;
     }
@@ -122,7 +147,7 @@ public class CoverFlowFileHandler {
             instance = Picasso.with(getOriginActivity()).load(uploadFile);
         }
 
-        instance.transform(resizeTransformation).into(new CompressPhotoTarget());
+        instance.transform(resizeTransformation).into(target);
     }
 
     interface TransformationCallback {
@@ -130,39 +155,11 @@ public class CoverFlowFileHandler {
         void onFail();
     }
 
-    class CompressPhotoTarget implements Target {
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            try {
-                FileOutputStream ostream = new FileOutputStream(uploadFile);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
-                ostream.flush();
-                ostream.close();
-
-                callback.onComplete(uploadFile);
-            } catch (IOException e) {
-                WhatTheDuck.wtd.alert(getOriginActivityRef(), R.string.internal_error);
-            }
-        }
-
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-            WhatTheDuck.wtd.alert(getOriginActivityRef(), R.string.internal_error);
-            callback.onFail();
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-        }
-    }
-
     public static class SearchFromCover implements TransformationCallback {
         static final String uploadTempDir = "Pictures";
         static final String uploadFileName = "wtd_jpg";
 
-        public SearchFromCover() {
-        }
+        public SearchFromCover() { }
 
         @Override
         public void onComplete(File file) {
