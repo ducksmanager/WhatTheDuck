@@ -23,6 +23,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pusher.pushnotifications.BeamsCallback;
+import com.pusher.pushnotifications.PushNotifications;
+import com.pusher.pushnotifications.PusherCallbackError;
+import com.pusher.pushnotifications.auth.AuthData;
+import com.pusher.pushnotifications.auth.BeamsTokenProvider;
+
 import net.ducksmanager.apigateway.DmServer;
 import net.ducksmanager.persistence.AppDatabase;
 import net.ducksmanager.persistence.models.dm.Issue;
@@ -32,13 +38,19 @@ import net.ducksmanager.retrievetasks.Signup;
 import net.ducksmanager.util.Settings;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 import retrofit2.Response;
+import timber.log.Timber;
 
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_DM_URL;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_PUSHER_INSTANCE_ID;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.config;
 
 public class WhatTheDuck extends AppCompatActivity {
 
@@ -47,11 +59,19 @@ public class WhatTheDuck extends AppCompatActivity {
     public static String DB_NAME = "appDB";
     public static AppDatabase appDB = null;
 
+    public static BeamsTokenProvider tokenProvider;
+
     private static String selectedCountry = null;
     private static String selectedPublication = null;
     private static String selectedIssue = null;
+    private static User user;
 
     public enum CollectionType {COA,USER}
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +90,7 @@ public class WhatTheDuck extends AppCompatActivity {
     }
 
     private void loadUser() {
-        User user = WhatTheDuck.appDB.userDao().getCurrentUser();
+        user = WhatTheDuck.appDB.userDao().getCurrentUser();
 
         if (user != null) {
             DmServer.setApiDmUser(user.getUsername());
@@ -139,6 +159,26 @@ public class WhatTheDuck extends AppCompatActivity {
     public void fetchCollection(WeakReference<Activity> activityRef, Class targetClass, Boolean alertIfError) {
         DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<Issue>>("retrieveCollection", activityRef.get(), alertIfError) {
             public void onSuccessfulResponse(Response<List<Issue>> issueListResponse) {
+
+                tokenProvider = new BeamsTokenProvider(
+                    config.getProperty(CONFIG_KEY_API_ENDPOINT_URL)+"/collection/notification_token",
+                    () -> new AuthData(
+                        DmServer.getRequestHeaders(true),
+                        new HashMap<>()
+                    )
+                );
+                PushNotifications.start(WhatTheDuck.this, config.getProperty(CONFIG_KEY_PUSHER_INSTANCE_ID));
+                PushNotifications.setUserId(user.getUsername(), tokenProvider, new BeamsCallback<Void, PusherCallbackError>(){
+                    @Override
+                    public void onSuccess(@NonNull Void... values) {
+                        Timber.i("Successfully authenticated with Pusher Beams");
+                    }
+
+                    @Override
+                    public void onFailure(PusherCallbackError error) {
+                        Timber.i("PusherBeams : Pusher Beams authentication failed: %s", error.getMessage());
+                    }
+                });
                 appDB.userDao().insert(new User(DmServer.apiDmUser, DmServer.apiDmPassword));
 
                 appDB.issueDao().deleteAll();

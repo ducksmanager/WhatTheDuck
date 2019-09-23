@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
+import java.util.HashMap;
+import java.util.Objects;
 
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
@@ -34,26 +36,33 @@ public class DmServer {
     public static String apiDmUser;
     public static String apiDmPassword;
 
+    public static HashMap<String, String> getRequestHeaders(boolean withUserCredentials) {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Authorization", Credentials.basic(config.getProperty(CONFIG_KEY_ROLE_NAME), config.getProperty(CONFIG_KEY_ROLE_PASSWORD)));
+        headers.put("x-dm-version", WhatTheDuck.wtd.getApplicationVersion());
+        if (withUserCredentials) {
+            headers.put("x-dm-user", getApiDmUser());
+            headers.put("x-dm-pass", getApiDmPassword());
+        }
+        return headers;
+    }
+
     public static void initApi() {
         Gson gson = new GsonBuilder()
             .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
             .create();
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        interceptor.level(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
             .addInterceptor(chain -> {
                 Request originalRequest = chain.request();
 
-                Request.Builder builder = originalRequest.newBuilder()
-                    .header("Authorization", Credentials.basic(config.getProperty(CONFIG_KEY_ROLE_NAME), config.getProperty(CONFIG_KEY_ROLE_PASSWORD)))
-                    .header("x-dm-version", WhatTheDuck.wtd.getApplicationVersion());
-
-                if (getApiDmUser() != null) {
-                    builder
-                        .header("x-dm-user", getApiDmUser())
-                        .header("x-dm-pass", getApiDmPassword());
+                Request.Builder builder = originalRequest.newBuilder();
+                HashMap<String, String> headers = DmServer.getRequestHeaders(getApiDmUser() != null);
+                for (String headerKey : headers.keySet()) {
+                    builder.header(headerKey, Objects.requireNonNull(headers.get(headerKey)));
                 }
 
                 Request newRequest = builder.build();
@@ -71,7 +80,7 @@ public class DmServer {
         api = retrofit.create(DmServerApi.class);
     }
 
-    private static String getApiDmUser() {
+    public static String getApiDmUser() {
         return apiDmUser;
     }
 
