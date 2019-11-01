@@ -4,6 +4,7 @@
 /app/build/
 /app/libs/
 /app/release/
+/app/google-services.json
 /local.properties
 /app/src/androidTest/resources/fixtures/covers/
 /app/src/androidTest/resources/fixtures/edges/
