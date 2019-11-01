@@ -18,7 +18,7 @@ import retrofit2.Response;
 
 public class CountryList extends ItemList<InducksCountryNameWithPossession> {
 
-    private static boolean hasFullList = false;
+    public static boolean hasFullList = false;
 
     @Override
     protected boolean hasList() {

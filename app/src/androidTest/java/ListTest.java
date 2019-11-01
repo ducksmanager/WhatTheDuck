@@ -1,5 +1,5 @@
-import net.ducksmanager.util.ReleaseNotes;
-import net.ducksmanager.util.Settings;
+import android.content.Intent;
+
 import net.ducksmanager.whattheduck.IssueList;
 import net.ducksmanager.whattheduck.ItemAdapter;
 import net.ducksmanager.whattheduck.PublicationList;
@@ -39,19 +39,9 @@ public class ListTest extends WtdTest {
 
     @Before
     public void switchLocaleAndLogin() {
+        whatTheDuckActivityRule.launchActivity(new Intent());
         switchLocale();
-        overwriteSettingsAndHideMessages(
-            Settings.MESSAGE_KEY_WELCOME,
-            Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW,
-            Settings.MESSAGE_KEY_DATA_CONSUMPTION,
-            ReleaseNotes.current.getMessageId()
-        );
         login(DownloadHandlerMock.TEST_USER, DownloadHandlerMock.TEST_PASS);
-    }
-
-    @Before
-    public void resetDownloadMockState() {
-        DownloadHandlerMock.state.remove("server_offline");
     }
 
     @Test

@@ -33,8 +33,6 @@ public class InducksIssueWithUserIssueDetails {
             return R.drawable.condition_none;
         }
         switch (issueCondition) {
-            case NO_CONDITION:
-                return R.drawable.condition_none;
             case BAD_CONDITION:
                 return R.drawable.condition_bad;
             case NOTSOGOOD_CONDITION:

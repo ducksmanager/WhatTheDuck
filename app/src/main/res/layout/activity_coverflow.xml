@@ -35,7 +35,7 @@
         coverflow:scalingThreshold="0.5"
         coverflow:spacing="0.9" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

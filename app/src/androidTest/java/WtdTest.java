@@ -6,7 +6,8 @@ import android.view.View;
 
 import com.github.clans.fab.FloatingActionButton;
 
-import net.ducksmanager.util.Settings;
+import net.ducksmanager.persistence.AppDatabase;
+import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.IssueList;
 import net.ducksmanager.whattheduck.R;
 import net.ducksmanager.whattheduck.WhatTheDuck;
@@ -22,6 +23,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
+import androidx.room.Room;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
@@ -32,7 +35,6 @@ import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
 import okhttp3.mockwebserver.MockWebServer;
 
-import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -44,6 +46,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
@@ -54,13 +57,19 @@ class WtdTest extends AndroidJUnitRunner {
     static Iterable<Object[]> parameterData() {
         return Arrays.asList(new LocaleWithDefaultPublication[][]{
             {new LocaleWithDefaultPublication("se", "sv") {
-                String getDefaultPublication() { return "se/KAP"; }
+                String getDefaultPublication() {
+                    return "se/KAP";
+                }
             }},
             {new LocaleWithDefaultPublication("us", "en") {
-                String getDefaultPublication() { return "us/WDC"; }
+                String getDefaultPublication() {
+                    return "us/WDC";
+                }
             }},
             {new LocaleWithDefaultPublication("fr", "fr") {
-                String getDefaultPublication() { return "fr/DDD"; }
+                String getDefaultPublication() {
+                    return "fr/DDD";
+                }
             }}
         });
     }
@@ -84,13 +93,13 @@ class WtdTest extends AndroidJUnitRunner {
     }
 
     static LocaleWithDefaultPublication currentLocale;
-    static {
-        currentLocale = new LocaleWithDefaultPublication("us", "en") {
-            String getDefaultPublication() { return "us/WDC"; }
-        };
-    }
 
     static {
+        currentLocale = new LocaleWithDefaultPublication("us", "en") {
+            String getDefaultPublication() {
+                return "us/WDC";
+            }
+        };
         WhatTheDuck.DB_NAME = "appDB_test";
     }
 
@@ -104,7 +113,11 @@ class WtdTest extends AndroidJUnitRunner {
     public ScreenshotTestRule screenshotTestRule = new ScreenshotTestRule();
 
     @Rule
-    public final ActivityTestRule<WhatTheDuck> whatTheDuckActivityRule = new ActivityTestRule<>(WhatTheDuck.class);
+    public final ActivityTestRule<WhatTheDuck> whatTheDuckActivityRule = new ActivityTestRule<>(
+        WhatTheDuck.class,
+        true,
+        false
+    );
 
     @BeforeClass
     public static void initDownloadHelper() {
@@ -112,7 +125,18 @@ class WtdTest extends AndroidJUnitRunner {
     }
 
     @Before
-    public void resetListType() {
+    public void resetDownloadMockState() {
+        DownloadHandlerMock.state.remove("server_offline");
+    }
+
+    @Before
+    public void resetDb() {
+        WhatTheDuck.appDB = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDatabase.class).allowMainThreadQueries().build();
+    }
+
+    @Before
+    public void resetConfigs() {
+        CountryList.hasFullList = false;
         IssueList.viewType = IssueList.ViewType.LIST_VIEW;
     }
 
@@ -126,13 +150,8 @@ class WtdTest extends AndroidJUnitRunner {
         }
     }
 
-    void overwriteSettingsAndHideMessages(String... alreadyShownMessageKeys) {
-        for (String alreadyShownMessageKey : alreadyShownMessageKeys) {
-            Settings.addToMessagesAlreadyShown(alreadyShownMessageKey);
-        }
+    WtdTest() {
     }
-
-    WtdTest() { }
 
     WtdTest(LocaleWithDefaultPublication currentLocale) {
         WtdTest.currentLocale = currentLocale;
@@ -179,8 +198,7 @@ class WtdTest extends AndroidJUnitRunner {
         boolean isInstance = currentActivity.getClass().isAssignableFrom(activityClass);
         if (assertTrue) {
             assertTrue(isInstance);
-        }
-        else {
+        } else {
             assertFalse(isInstance);
         }
     }

@@ -59,19 +59,13 @@ public class WhatTheDuck extends AppCompatActivity {
     public static String DB_NAME = "appDB";
     public static AppDatabase appDB = null;
 
-    public static BeamsTokenProvider tokenProvider;
+    private static BeamsTokenProvider tokenProvider;
 
     private static String selectedCountry = null;
     private static String selectedPublication = null;
     private static String selectedIssue = null;
-    private static User user;
 
     public enum CollectionType {COA,USER}
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,7 +84,7 @@ public class WhatTheDuck extends AppCompatActivity {
     }
 
     private void loadUser() {
-        user = WhatTheDuck.appDB.userDao().getCurrentUser();
+        User user = WhatTheDuck.appDB.userDao().getCurrentUser();
 
         if (user != null) {
             DmServer.setApiDmUser(user.getUsername());
@@ -159,27 +153,32 @@ public class WhatTheDuck extends AppCompatActivity {
     public void fetchCollection(WeakReference<Activity> activityRef, Class targetClass, Boolean alertIfError) {
         DmServer.api.getUserIssues().enqueue(new DmServer.Callback<List<Issue>>("retrieveCollection", activityRef.get(), alertIfError) {
             public void onSuccessfulResponse(Response<List<Issue>> issueListResponse) {
+                User user = new User(DmServer.apiDmUser, DmServer.apiDmPassword);
+                appDB.userDao().insert(user);
 
+                String apiEndpointUrl = config.getProperty(CONFIG_KEY_API_ENDPOINT_URL);
                 tokenProvider = new BeamsTokenProvider(
-                    config.getProperty(CONFIG_KEY_API_ENDPOINT_URL)+"/collection/notification_token",
+                    apiEndpointUrl +"/collection/notification_token",
                     () -> new AuthData(
                         DmServer.getRequestHeaders(true),
                         new HashMap<>()
                     )
                 );
-                PushNotifications.start(WhatTheDuck.this, config.getProperty(CONFIG_KEY_PUSHER_INSTANCE_ID));
-                PushNotifications.setUserId(user.getUsername(), tokenProvider, new BeamsCallback<Void, PusherCallbackError>(){
-                    @Override
-                    public void onSuccess(@NonNull Void... values) {
-                        Timber.i("Successfully authenticated with Pusher Beams");
-                    }
 
-                    @Override
-                    public void onFailure(PusherCallbackError error) {
-                        Timber.i("PusherBeams : Pusher Beams authentication failed: %s", error.getMessage());
-                    }
-                });
-                appDB.userDao().insert(new User(DmServer.apiDmUser, DmServer.apiDmPassword));
+                if (!isTestContext(apiEndpointUrl)) {
+                    PushNotifications.start(WhatTheDuck.this, config.getProperty(CONFIG_KEY_PUSHER_INSTANCE_ID));
+                    PushNotifications.setUserId(user.getUsername(), tokenProvider, new BeamsCallback<Void, PusherCallbackError>() {
+                        @Override
+                        public void onSuccess(@NonNull Void... values) {
+                            Timber.i("Successfully authenticated with Pusher Beams");
+                        }
+
+                        @Override
+                        public void onFailure(PusherCallbackError error) {
+                            Timber.i("PusherBeams : Pusher Beams authentication failed: %s", error.getMessage());
+                        }
+                    });
+                }
 
                 appDB.issueDao().deleteAll();
                 appDB.issueDao().insertList(issueListResponse.body());
@@ -204,6 +203,11 @@ public class WhatTheDuck extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    boolean isTestContext(String apiEndpointUrl) {
+        boolean isTestContext = apiEndpointUrl.startsWith("http://");
+        return isTestContext;
     }
 
     private String getDmUrl() {

@@ -80,7 +80,7 @@ public class DmServer {
         api = retrofit.create(DmServerApi.class);
     }
 
-    public static String getApiDmUser() {
+    private static String getApiDmUser() {
         return apiDmUser;
     }
 

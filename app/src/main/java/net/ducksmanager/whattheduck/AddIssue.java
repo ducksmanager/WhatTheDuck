@@ -81,7 +81,6 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
             String dmCondition;
             RadioGroup r = findViewById(R.id.condition);
             switch(r.getCheckedRadioButtonId()) {
-                case R.id.noCondition: dmCondition = InducksIssueWithUserIssueDetails.NO_CONDITION; break;
                 case R.id.badCondition: dmCondition = InducksIssueWithUserIssueDetails.BAD_CONDITION; break;
                 case R.id.notSoGoodCondition: dmCondition = InducksIssueWithUserIssueDetails.NOTSOGOOD_CONDITION; break;
                 case R.id.goodCondition: dmCondition = InducksIssueWithUserIssueDetails.GOOD_CONDITION; break;

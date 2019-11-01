@@ -1,10 +1,9 @@
-import net.ducksmanager.util.ReleaseNotes;
-import net.ducksmanager.util.Settings;
+import android.content.Intent;
+
 import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.R;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -28,14 +27,9 @@ public class FilterTest extends WtdTest {
         super();
     }
 
-    @BeforeClass
-    public static void initDownloadHelper() {
-        WtdTest.initMockServer();
-    }
-
     @Before
     public void login() {
-        overwriteSettingsAndHideMessages(Settings.MESSAGE_KEY_WELCOME, ReleaseNotes.current.getMessageId());
+        whatTheDuckActivityRule.launchActivity(new Intent());
         login(DownloadHandlerMock.TEST_USER, DownloadHandlerMock.TEST_PASS);
     }
 

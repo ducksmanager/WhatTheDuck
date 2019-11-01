@@ -50,20 +50,20 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
     implementation "com.android.support:support-compat:28.0.0"
-    implementation 'com.google.firebase:firebase-analytics:17.2.0'
-    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
+    implementation 'com.google.firebase:firebase-core:17.2.1'
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
-    implementation 'com.pusher:push-notifications-android:1.4.3'
+    implementation 'com.pusher:push-notifications-android:1.4.5'
 
-    implementation 'com.google.android.material:material:1.1.0-alpha10'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta04'
+    implementation 'com.google.android.material:material:1.1.0-beta01'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-rc01'
     implementation 'com.github.moondroid.coverflow:library:1.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.1.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation "androidx.room:room-runtime:2.2.0-rc01"
-    annotationProcessor "androidx.room:room-compiler:2.2.0-rc01"
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation "androidx.room:room-runtime:2.2.1"
+    annotationProcessor "androidx.room:room-compiler:2.2.1"
     implementation 'com.koushikdutta.ion:ion:2.2.1'
     implementation 'com.github.douglasjunior:android-simple-tooltip:0.2.3'
     implementation 'com.squareup.picasso:picasso:2.5.2'
@@ -78,7 +78,7 @@ dependencies {
     androidTestImplementation 'androidx.annotation:annotation:1.1.0'
     androidTestImplementation "androidx.test.ext:junit:1.1.1"
     androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation 'org.hamcrest:hamcrest-library:2.1'
+    androidTestImplementation 'org.hamcrest:hamcrest-library:2.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
