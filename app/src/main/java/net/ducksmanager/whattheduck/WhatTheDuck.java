@@ -166,18 +166,23 @@ public class WhatTheDuck extends AppCompatActivity {
                 );
 
                 if (!isTestContext(apiEndpointUrl)) {
-                    PushNotifications.start(WhatTheDuck.this, config.getProperty(CONFIG_KEY_PUSHER_INSTANCE_ID));
-                    PushNotifications.setUserId(user.getUsername(), tokenProvider, new BeamsCallback<Void, PusherCallbackError>() {
-                        @Override
-                        public void onSuccess(@NonNull Void... values) {
-                            Timber.i("Successfully authenticated with Pusher Beams");
-                        }
+                    try {
+                        PushNotifications.start(WhatTheDuck.this, config.getProperty(CONFIG_KEY_PUSHER_INSTANCE_ID));
+                        PushNotifications.setUserId(user.getUsername(), tokenProvider, new BeamsCallback<Void, PusherCallbackError>() {
+                            @Override
+                            public void onSuccess(@NonNull Void... values) {
+                                Timber.i("Successfully authenticated with Pusher Beams");
+                            }
 
-                        @Override
-                        public void onFailure(PusherCallbackError error) {
-                            Timber.i("PusherBeams : Pusher Beams authentication failed: %s", error.getMessage());
-                        }
-                    });
+                            @Override
+                            public void onFailure(PusherCallbackError error) {
+                                Timber.i("PusherBeams : Pusher Beams authentication failed: %s", error.getMessage());
+                            }
+                        });
+                    }
+                    catch(Exception e) {
+                        Timber.e("Pusher init failed : %s", e.getMessage());
+                    }
                 }
 
                 appDB.issueDao().deleteAll();
@@ -206,8 +211,7 @@ public class WhatTheDuck extends AppCompatActivity {
     }
 
     boolean isTestContext(String apiEndpointUrl) {
-        boolean isTestContext = apiEndpointUrl.startsWith("http://");
-        return isTestContext;
+        return apiEndpointUrl.startsWith("http://");
     }
 
     private String getDmUrl() {
