@@ -113,7 +113,7 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
     }
 
     protected void setData() {
-        WhatTheDuck.appDB.inducksCountryDao().findAll().observe(CountryList.this, this::storeItemList);
+        WhatTheDuck.appDB.inducksCountryDao().findAllWithPossession().observe(CountryList.this, this::storeItemList);
     }
 
     @Override

@@ -46,6 +46,8 @@
     <string name="my_collection">Ma collection</string>
     <string name="network_error">Erreur réseau</string>
     <string name="network_error__no_connection">Problème de réseau : vérifiez votre connexion Internet</string>
+    <string name="newFeature">Nouveautés de WhatTheDuck</string>
+    <string name="newFeatures18Text">Vous pouvez maintenant voir votre bibliothèque depuis l\'application ! Lorsque vous consultez une liste de numéros, appuyez sur l\'icône \"bibliothèque\" pour passer à la vue bibliothèque.</string>
     <string name="no_item">Aucun numéro. Tapez sur le bouton "+" pour ajouter des numéros à votre collection !</string>
     <string name="no_purchase_date">Pas de date d\'achat</string>
     <string name="ok">OK</string>
@@ -58,11 +60,10 @@
     <string name="signup">Inscription</string>
     <string name="signup__confirm">L\'inscription à DucksManager est terminée, \nvous pouvez maintenant vous connecter.</string>
     <string name="signup_end">Terminer l\'inscription</string>
+    <string name="settings">Paramètres</string>
     <string name="username">Nom d\'utilisateur DucksManager</string>
     <string name="version">What The Duck version</string>
+    <string name="welcomeBookcaseViewPortrait">Bienvenue dans votre bibliothèque ! Orientez votre écran en mode paysage pour le meilleur effet ;-)</string>
     <string name="welcomeMessage">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur "+" pour ajouter un numéro.</string>
     <string name="welcomeTitle">Bienvenue sur What The Duck !</string>
-    <string name="welcomeBookcaseViewPortrait">Bienvenue dans votre bibliothèque ! Orientez votre écran en mode paysage pour le meilleur effet ;-)</string>
-    <string name="newFeature">Nouveautés de WhatTheDuck</string>
-    <string name="newFeatures18Text">Vous pouvez maintenant voir votre bibliothèque depuis l\'application ! Lorsque vous consultez une liste de numéros, appuyez sur l\'icône \"bibliothèque\" pour passer à la vue bibliothèque.</string>
 </resources>

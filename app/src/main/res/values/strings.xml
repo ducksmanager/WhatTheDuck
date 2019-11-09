@@ -61,6 +61,7 @@
     <string name="signup">Signup</string>
     <string name="signup__confirm">You have signed up to DucksManager successfully, please login.</string>
     <string name="signup_end">Finish signup</string>
+    <string name="settings">Settings</string>
     <string name="username">Username</string>
     <string name="version">What The Duck version</string>
     <string name="welcomeBookcaseViewPortrait">Welcome to the bookcase view! Rotate your screen to landscape for the best effect ;-)</string>
