@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueDetails;
 import net.ducksmanager.whattheduck.R;
-import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -24,6 +23,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.applicationVersion;
 
 class CoverFlowAdapter extends BaseAdapter {
 
@@ -125,7 +126,7 @@ class CoverFlowAdapter extends BaseAdapter {
             try{
                 URL ulrn = new URL(url);
                 HttpURLConnection con = (HttpURLConnection)ulrn.openConnection();
-                con.setRequestProperty("X-Dm-Version", WhatTheDuck.wtd.getApplicationVersion());
+                con.setRequestProperty("X-Dm-Version", applicationVersion);
 
                 InputStream is = con.getInputStream();
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();

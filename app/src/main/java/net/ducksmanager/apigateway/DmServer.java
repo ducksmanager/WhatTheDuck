@@ -29,6 +29,7 @@ import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_ROLE_NAME;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_ROLE_PASSWORD;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.applicationVersion;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.config;
 
 public class DmServer {
@@ -39,7 +40,7 @@ public class DmServer {
     public static HashMap<String, String> getRequestHeaders(boolean withUserCredentials) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", Credentials.basic(config.getProperty(CONFIG_KEY_ROLE_NAME), config.getProperty(CONFIG_KEY_ROLE_PASSWORD)));
-        headers.put("x-dm-version", WhatTheDuck.wtd.getApplicationVersion());
+        headers.put("x-dm-version", applicationVersion);
         if (withUserCredentials) {
             headers.put("x-dm-user", getApiDmUser());
             headers.put("x-dm-pass", getApiDmPassword());
@@ -145,7 +146,7 @@ public class DmServer {
 
         @Override
         public void onFailure(@NotNull Call call, @NotNull Throwable t) {
-            WhatTheDuck.wtd.alert(originActivityRef, t.getMessage() + " on " + eventName);
+            WhatTheDuck.alert(originActivityRef, t.getMessage() + " on " + eventName);
             System.err.println(t.getMessage());
             onFinished();
         }

@@ -1,5 +1,6 @@
 package net.ducksmanager.whattheduck;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -44,8 +45,8 @@ public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
     }
 
     @Override
-    protected void downloadList() {
-        DmServer.api.getIssues(WhatTheDuck.getSelectedPublication()).enqueue(new DmServer.Callback<List<String>>("getInducksIssues", this) {
+    protected void downloadList(Activity currentActivity) {
+        DmServer.api.getIssues(WhatTheDuck.getSelectedPublication()).enqueue(new DmServer.Callback<List<String>>("getInducksIssues", currentActivity) {
             @Override
             public void onSuccessfulResponse(Response<List<String>> response) {
                 List<InducksIssue> issues = new ArrayList<>();

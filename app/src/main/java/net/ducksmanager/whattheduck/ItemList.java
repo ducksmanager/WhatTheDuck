@@ -1,6 +1,7 @@
 package net.ducksmanager.whattheduck;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,7 +42,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
     List<Item> data = new ArrayList<>();
 
     protected abstract boolean hasList();
-    protected abstract void downloadList();
+    protected abstract void downloadList(Activity currentActivity);
     protected abstract boolean hasDividers();
 
     protected abstract boolean isPossessedByUser();
@@ -82,7 +83,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
         ((WhatTheDuckApplication) getApplication()).trackActivity(this);
         if (!hasList()) {
             this.requiresDataDownload = true;
-            downloadList();
+            downloadList(this);
         }
         else {
             setData();

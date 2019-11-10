@@ -188,7 +188,7 @@ public class CoverFlowFileHandler {
                                     WhatTheDuck.wtd.alert(new WeakReference<>(getOriginActivity()), R.string.add_cover_no_results);
                                     break;
                                 default:
-                                    WhatTheDuck.wtd.alert(new WeakReference<>(getOriginActivity()), response.body().getType());
+                                    WhatTheDuck.alert(new WeakReference<>(getOriginActivity()), response.body().getType());
                             }
                         }
                     }

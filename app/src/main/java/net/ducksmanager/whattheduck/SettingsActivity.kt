@@ -47,12 +47,15 @@ class SettingsActivity : AppCompatActivity() {
                 View.GONE
         }
 
-
-        appDB.inducksCountryDao().findAllWithPossession().observe(this, Observer {countryNames ->
-            val recyclerView = findViewById<RecyclerView>(R.id.notifiedCountriesList)
-            recyclerView.adapter = CountryToNotifyListAdapter(this, countryNames)
-            recyclerView.layoutManager = LinearLayoutManager(this)
-        })
+        CountryList.downloadList(this) { _, _ ->
+            run {
+                appDB.inducksCountryDao().findAllWithPossession().observe(this, Observer { countryNames ->
+                    val recyclerView = findViewById<RecyclerView>(R.id.notifiedCountriesList)
+                    recyclerView.adapter = CountryToNotifyListAdapter(this, countryNames)
+                    recyclerView.layoutManager = LinearLayoutManager(this)
+                })
+            }
+        }
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {

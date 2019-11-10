@@ -1,7 +1,10 @@
 package net.ducksmanager.whattheduck;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
+
+import com.koushikdutta.async.future.FutureCallback;
 
 import net.ducksmanager.apigateway.DmServer;
 import net.ducksmanager.persistence.models.coa.InducksCountryName;
@@ -16,6 +19,8 @@ import java.util.List;
 
 import retrofit2.Response;
 
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.locale;
+
 public class CountryList extends ItemList<InducksCountryNameWithPossession> {
 
     public static boolean hasFullList = false;
@@ -26,9 +31,12 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
     }
 
     @Override
-    protected void downloadList() {
-        String locale = getApplicationContext().getResources().getConfiguration().locale.getLanguage();
-        DmServer.api.getCountries(locale).enqueue(new DmServer.Callback<HashMap<String, String>>("getInducksCountries", this) {
+    protected void downloadList(Activity currentActivity) {
+        downloadList(currentActivity, (e, result) -> setData());
+    }
+
+    public static void downloadList(Activity currentActivity, FutureCallback<CountryList> hasDataCallback) {
+        DmServer.api.getCountries(locale).enqueue(new DmServer.Callback<HashMap<String, String>>("getInducksCountries", currentActivity) {
             @Override
             public void onSuccessfulResponse(Response<HashMap<String, String>> response) {
                 List<InducksCountryName> countries = new ArrayList<>();
@@ -37,7 +45,7 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
                 }
                 WhatTheDuck.appDB.inducksCountryDao().insertList(countries);
                 hasFullList = true;
-                setData();
+                hasDataCallback.onCompleted(null, null);
             }
         });
     }

@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -233,9 +231,10 @@ public class WhatTheDuck extends AppCompatActivity {
         alert(new WeakReference<>(this), getString(messageId));
     }
     
-    public void alert(WeakReference<Activity> activity, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity.get());
-        builder.setTitle(getString(R.string.error));
+    public static void alert(WeakReference<Activity> activityRef, String message) {
+        Activity activity = activityRef.get();
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(activity.getString(R.string.error));
         builder.setMessage(message);
         builder.create().show();
     }
@@ -256,17 +255,6 @@ public class WhatTheDuck extends AppCompatActivity {
 
     public void alert(int titleId, int messageId) {
         alert(new WeakReference<>(this), titleId, messageId);
-    }
-
-    public String getApplicationVersion() {
-        PackageManager manager = this.getPackageManager();
-        PackageInfo info;
-        try {
-            info = manager.getPackageInfo(this.getPackageName(), 0);
-        } catch (NameNotFoundException e) {
-            return "Unknown";
-        }
-        return info.versionName;
     }
 
     public static String getSelectedCountry() {

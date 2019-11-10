@@ -2,6 +2,7 @@ package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 
@@ -32,11 +33,16 @@ public class WhatTheDuckApplication extends Application {
     private static final Integer CONFIG_MATOMO_DIMENSION_USER = 1;
     private static final Integer CONFIG_MATOMO_DIMENSION_VERSION = 2;
 
+    public static String applicationVersion;
+    static String locale;
+
     private Tracker matomoTracker;
 
     public void onCreate() {
         super.onCreate();
         loadConfig(getAssets());
+        locale = getApplicationContext().getResources().getConfiguration().locale.getLanguage();
+        applicationVersion = getApplicationVersion();
     }
 
     private static void loadConfig(AssetManager assets) {
@@ -60,6 +66,17 @@ public class WhatTheDuckApplication extends Application {
                 }
             }
         }
+    }
+
+    public String getApplicationVersion() {
+        PackageManager manager = this.getPackageManager();
+        PackageInfo info;
+        try {
+            info = manager.getPackageInfo(this.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            return "Unknown";
+        }
+        return info.versionName;
     }
 
     private synchronized Tracker getTracker() {

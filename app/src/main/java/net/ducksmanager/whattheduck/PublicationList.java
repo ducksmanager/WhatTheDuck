@@ -1,5 +1,6 @@
 package net.ducksmanager.whattheduck;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -21,8 +22,8 @@ public class PublicationList extends ItemList<InducksPublicationWithPossession> 
     }
 
     @Override
-    protected void downloadList() {
-        DmServer.api.getPublications(WhatTheDuck.getSelectedCountry()).enqueue(new DmServer.Callback<HashMap<String, String>>("getInducksPublications", this) {
+    protected void downloadList(Activity currentActivity) {
+        DmServer.api.getPublications(WhatTheDuck.getSelectedCountry()).enqueue(new DmServer.Callback<HashMap<String, String>>("getInducksPublications", currentActivity) {
             @Override
             public void onSuccessfulResponse(Response<HashMap<String, String>> response) {
                 List<InducksPublication> publications = new ArrayList<>();
