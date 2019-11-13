@@ -1,5 +1,4 @@
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.view.View;
@@ -9,9 +8,8 @@ import com.github.clans.fab.FloatingActionButton;
 import net.ducksmanager.persistence.AppDatabase;
 import net.ducksmanager.whattheduck.CountryList;
 import net.ducksmanager.whattheduck.IssueList;
+import net.ducksmanager.whattheduck.Login;
 import net.ducksmanager.whattheduck.R;
-import net.ducksmanager.whattheduck.WhatTheDuck;
-import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -22,6 +20,7 @@ import org.junit.Rule;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Properties;
 
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
@@ -49,6 +48,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_DM_URL;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_EDGES_URL;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_ROLE_NAME;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_ROLE_PASSWORD;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.DB_NAME;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.applicationContext;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.config;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 
@@ -100,7 +108,7 @@ class WtdTest extends AndroidJUnitRunner {
                 return "us/WDC";
             }
         };
-        WhatTheDuck.DB_NAME = "appDB_test";
+        DB_NAME = "appDB_test";
     }
 
     static MockWebServer mockServer;
@@ -113,8 +121,8 @@ class WtdTest extends AndroidJUnitRunner {
     public ScreenshotTestRule screenshotTestRule = new ScreenshotTestRule();
 
     @Rule
-    public final ActivityTestRule<WhatTheDuck> whatTheDuckActivityRule = new ActivityTestRule<>(
-        WhatTheDuck.class,
+    public final ActivityTestRule<Login> loginActivityRule = new ActivityTestRule<>(
+        Login.class,
         true,
         false
     );
@@ -131,7 +139,7 @@ class WtdTest extends AndroidJUnitRunner {
 
     @Before
     public void resetDb() {
-        WhatTheDuck.appDB = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDatabase.class).allowMainThreadQueries().build();
+        appDB = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDatabase.class).allowMainThreadQueries().build();
     }
 
     @Before
@@ -142,8 +150,7 @@ class WtdTest extends AndroidJUnitRunner {
 
     void switchLocale() {
         if (currentLocale != null) {
-            Context context = WhatTheDuck.wtd.getApplicationContext();
-            Resources resources = context.getResources();
+            Resources resources = applicationContext.getResources();
             Configuration configuration = resources.getConfiguration();
             configuration.setLocale(currentLocale.getLocale());
             resources.updateConfiguration(configuration, resources.getDisplayMetrics());
@@ -157,19 +164,23 @@ class WtdTest extends AndroidJUnitRunner {
         WtdTest.currentLocale = currentLocale;
     }
 
-    static void initMockServer() {
+    private static void initMockServer() {
         mockServer = new MockWebServer();
         mockServer.setDispatcher(DownloadHandlerMock.dispatcher);
-        WhatTheDuckApplication.config.setProperty(
-            WhatTheDuckApplication.CONFIG_KEY_DM_URL,
+
+        config = new Properties();
+        config.setProperty(CONFIG_KEY_ROLE_NAME, "test");
+        config.setProperty(CONFIG_KEY_ROLE_PASSWORD, "test");
+        config.setProperty(
+            CONFIG_KEY_DM_URL,
             mockServer.url("/dm/").toString()
         );
-        WhatTheDuckApplication.config.setProperty(
-            WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL,
+        config.setProperty(
+            CONFIG_KEY_API_ENDPOINT_URL,
             mockServer.url("/dm-server/").toString()
         );
-        WhatTheDuckApplication.config.setProperty(
-            WhatTheDuckApplication.CONFIG_KEY_EDGES_URL,
+        config.setProperty(
+            CONFIG_KEY_EDGES_URL,
             mockServer.url("/edges/").toString()
         );
     }
@@ -187,7 +198,7 @@ class WtdTest extends AndroidJUnitRunner {
 
     void assertToastShown(int textId) {
         onView(withText(textId))
-            .inRoot(withDecorView(not(is(whatTheDuckActivityRule.getActivity().getWindow().getDecorView()))))
+            .inRoot(withDecorView(not(is(loginActivityRule.getActivity().getWindow().getDecorView()))))
             .check(matches(isDisplayed()));
     }
 

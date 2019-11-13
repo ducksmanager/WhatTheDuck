@@ -29,7 +29,7 @@ public class FilterTest extends WtdTest {
 
     @Before
     public void login() {
-        whatTheDuckActivityRule.launchActivity(new Intent());
+        loginActivityRule.launchActivity(new Intent());
         login(DownloadHandlerMock.TEST_USER, DownloadHandlerMock.TEST_PASS);
     }
 

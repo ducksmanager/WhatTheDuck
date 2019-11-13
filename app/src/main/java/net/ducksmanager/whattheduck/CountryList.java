@@ -19,7 +19,11 @@ import java.util.List;
 
 import retrofit2.Response;
 
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CollectionType;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.locale;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedCountry;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedPublication;
 
 public class CountryList extends ItemList<InducksCountryNameWithPossession> {
 
@@ -43,7 +47,7 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
                 for(String countryCode : response.body().keySet()) {
                     countries.add(new InducksCountryName(countryCode, response.body().get(countryCode)));
                 }
-                WhatTheDuck.appDB.inducksCountryDao().insertList(countries);
+                appDB.inducksCountryDao().insertList(countries);
                 hasFullList = true;
                 hasDataCallback.onCompleted(null, null);
             }
@@ -70,8 +74,8 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
         }
 
 
-        WhatTheDuck.setSelectedCountry(null);
-        WhatTheDuck.setSelectedPublication(null);
+        selectedCountry = null;
+        selectedPublication = null;
         show();
     }
 
@@ -121,12 +125,12 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
     }
 
     protected void setData() {
-        WhatTheDuck.appDB.inducksCountryDao().findAllWithPossession().observe(CountryList.this, this::storeItemList);
+        appDB.inducksCountryDao().findAllWithPossession().observe(CountryList.this, this::storeItemList);
     }
 
     @Override
     public void onBackPressed() {
-        if (type.equals(WhatTheDuck.CollectionType.COA.toString())) {
+        if (type.equals(CollectionType.COA.toString())) {
             onBackFromAddIssueActivity();
         }
     }

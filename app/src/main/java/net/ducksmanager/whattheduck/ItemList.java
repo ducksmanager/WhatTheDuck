@@ -32,9 +32,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CollectionType;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedCountry;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedPublication;
 
 public abstract class ItemList<Item> extends AppCompatActivity {
-    public static String type = WhatTheDuck.CollectionType.USER.toString();
+    public static String type = CollectionType.USER.toString();
     static final int MIN_ITEM_NUMBER_FOR_FILTER = 20;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -92,12 +96,12 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
     private void goToView(Class<?> cls) {
         if (!ItemList.this.getClass().equals(cls)) {
-            startActivity(new Intent(WhatTheDuck.wtd, cls));
+            startActivity(new Intent(this, cls));
         }
     }
 
     void goToAlternativeView() {
-        type = (type.equals(WhatTheDuck.CollectionType.USER.toString()) ? WhatTheDuck.CollectionType.COA.toString() : WhatTheDuck.CollectionType.USER.toString());
+        type = (type.equals(CollectionType.USER.toString()) ? CollectionType.COA.toString() : CollectionType.USER.toString());
         loadList();
         show();
     }
@@ -123,10 +127,10 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             if (addToCollection != null) {
                 addToCollection.setMenuButtonColorNormalResId(R.color.holo_green_dark);
                 addToCollection.setMenuButtonColorPressedResId(R.color.holo_green_dark);
-                addToCollection.setVisibility(type.equals(WhatTheDuck.CollectionType.USER.toString()) ? VISIBLE : GONE);
+                addToCollection.setVisibility(type.equals(CollectionType.USER.toString()) ? VISIBLE : GONE);
                 addToCollection.close(false);
 
-                if (type.equals(WhatTheDuck.CollectionType.USER.toString())) {
+                if (type.equals(CollectionType.USER.toString())) {
                     FloatingActionButton addToCollectionByPhotoButton = this.findViewById(R.id.addToCollectionByPhotoButton);
                     addToCollectionByPhotoButton.setOnClickListener(view ->
                         takeCoverPicture()
@@ -214,12 +218,12 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.action_logout:
-                WhatTheDuck.appDB.userDao().deleteAll();
-                i = new Intent(WhatTheDuck.wtd, WhatTheDuck.class);
-
-                break;
-            case R.id.action_about:
-                WhatTheDuck.showAbout(this);
+                appDB.userDao().deleteAll();
+                i = new Intent(this, Login.class);
+            break;
+            case R.id.action_settings:
+                i = new Intent(this, SettingsActivity.class);
+            break;
 
         }
         if (item.getTitle().equals(getString(R.string.add_issue))) {
@@ -236,7 +240,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
 
     private void showNavigation() {
         if (shouldShowNavigationCountry()) {
-            WhatTheDuck.appDB.inducksCountryDao().findByCountryCode(WhatTheDuck.getSelectedCountry())
+            appDB.inducksCountryDao().findByCountryCode(selectedCountry)
                 .observe(this, inducksCountryName ->
                     setNavigationCountry(inducksCountryName.getCountryCode(), inducksCountryName.getCountryName())
                 );
@@ -245,7 +249,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             this.findViewById(R.id.navigationCountry).setVisibility(INVISIBLE);
         }
         if (shouldShowNavigationPublication()) {
-            WhatTheDuck.appDB.inducksPublicationDao().findByPublicationCode(WhatTheDuck.getSelectedPublication())
+            appDB.inducksPublicationDao().findByPublicationCode(selectedPublication)
                 .observe(this, inducksPublication ->
                     setNavigationPublication(inducksPublication.getPublicationCode(), inducksPublication.getTitle())
                 );
@@ -292,8 +296,8 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             goToAlternativeView();
         }
         else {
-            type = WhatTheDuck.CollectionType.USER.toString();
-            startActivity(new Intent(WhatTheDuck.wtd, CountryList.class));
+            type = CollectionType.USER.toString();
+            startActivity(new Intent(this, CountryList.class));
         }
     }
 }

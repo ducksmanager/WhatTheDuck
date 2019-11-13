@@ -1,11 +1,19 @@
 package net.ducksmanager.whattheduck;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Application;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.widget.Toast;
 
+import com.pusher.pushnotifications.auth.BeamsTokenProvider;
+
+import net.ducksmanager.apigateway.DmServer;
 import net.ducksmanager.persistence.AppDatabase;
 import net.ducksmanager.persistence.models.dm.User;
 
@@ -16,7 +24,10 @@ import org.matomo.sdk.extra.TrackHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.Properties;
+
+import androidx.room.Room;
 
 public class WhatTheDuckApplication extends Application {
     public static Properties config = null;
@@ -34,25 +45,49 @@ public class WhatTheDuckApplication extends Application {
     private static final Integer CONFIG_MATOMO_DIMENSION_VERSION = 2;
 
     public static String applicationVersion;
-    static String locale;
+    public static String locale;
 
-    private Tracker matomoTracker;
+    public static String DB_NAME = "appDB";
+    public static AppDatabase appDB = null;
 
-    public void onCreate() {
-        super.onCreate();
+    private static Tracker matomoTracker;
+
+    public static String selectedCountry = null;
+    public static String selectedPublication = null;
+    public static String selectedIssue = null;
+    public static Context applicationContext;
+
+    public static BeamsTokenProvider tokenProvider;
+
+    public enum CollectionType {COA,USER}
+
+    void setup() {
         loadConfig(getAssets());
-        locale = getApplicationContext().getResources().getConfiguration().locale.getLanguage();
+
+        applicationContext = getApplicationContext();
         applicationVersion = getApplicationVersion();
+        locale = applicationContext.getResources().getConfiguration().locale.getLanguage();
+
+        DmServer.initApi();
+
+        if (appDB == null) {
+            appDB = Room.databaseBuilder(applicationContext, AppDatabase.class, DB_NAME)
+                .allowMainThreadQueries()
+                .build();
+        }
     }
 
     private static void loadConfig(AssetManager assets) {
+        if (config != null) {
+            System.out.println("Config already loaded, ignoring");
+            return;
+        }
         InputStream reader = null;
         try {
             reader = assets.open(CONFIG);
             config = new Properties();
             config.load(reader);
         } catch (IOException e) {
-            WhatTheDuck.wtd.alert(R.string.internal_error);
             System.err.println("Config file not found, aborting");
             System.exit(-1);
         } finally {
@@ -60,7 +95,6 @@ public class WhatTheDuckApplication extends Application {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    WhatTheDuck.wtd.alert(R.string.internal_error);
                     System.err.println("Error while reading config file, aborting");
                     System.exit(-1);
                 }
@@ -68,7 +102,7 @@ public class WhatTheDuckApplication extends Application {
         }
     }
 
-    public String getApplicationVersion() {
+    private String getApplicationVersion() {
         PackageManager manager = this.getPackageManager();
         PackageInfo info;
         try {
@@ -79,19 +113,59 @@ public class WhatTheDuckApplication extends Application {
         return info.versionName;
     }
 
-    private synchronized Tracker getTracker() {
+    static String getDmUrl() {
+        return config.getProperty(CONFIG_KEY_DM_URL);
+    }
+
+    static boolean isTestContext(String apiEndpointUrl) {
+        return apiEndpointUrl.startsWith("http://");
+    }
+
+    public static void info(WeakReference<Activity> activity, int titleId, int duration) {
+        Toast.makeText(activity.get(), titleId, duration).show();
+    }
+
+    public static void alert(WeakReference<Activity> activityRef, String message) {
+        Activity activity = activityRef.get();
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(activity.getString(R.string.error));
+        builder.setMessage(message);
+        builder.create().show();
+    }
+
+    public static void alert(WeakReference<Activity> activity, int messageId) {
+        alert(activity, activity.get().getString(messageId));
+    }
+
+    public static void alert(WeakReference<Activity> activityRef, int titleId, int messageId) {
+        Activity activity = activityRef.get();
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(activity.getString(titleId));
+        builder.setMessage(activity.getString(messageId));
+
+        activity.runOnUiThread(() ->
+            builder.create().show()
+        );
+    }
+
+    private static synchronized Tracker getTracker() {
         if (matomoTracker != null) {
             return matomoTracker;
         }
         String matomoUrl = config.getProperty(CONFIG_KEY_MATOMO_URL);
-        matomoTracker = new TrackerBuilder(matomoUrl, 2, "WhatTheDuck").build(Matomo.getInstance(this));
+        try {
+            matomoTracker = new TrackerBuilder(matomoUrl, 2, "WhatTheDuck").build(Matomo.getInstance(applicationContext));
+        }
+        catch(RuntimeException e) {
+            System.err.println("Couldn't initialize tracker");
+        }
         return matomoTracker;
     }
 
     public void trackActivity(Activity activity) {
         TrackHelper t = TrackHelper.track();
 
-        AppDatabase db = WhatTheDuck.appDB;
+        AppDatabase db = appDB;
         if (db != null) {
             User user = db.userDao().getCurrentUser();
             if (user != null) {
@@ -105,18 +179,32 @@ public class WhatTheDuckApplication extends Application {
             t.dimension(CONFIG_MATOMO_DIMENSION_VERSION, "Unknown");
         }
 
-        t
-            .screen(activity.getClass().getSimpleName())
-            .title(activity.getTitle().toString())
-            .with(getTracker());
+        if (getTracker() != null) {
+            t
+                .screen(activity.getClass().getSimpleName())
+                .title(activity.getTitle().toString())
+                .with(getTracker());
+        }
 
     }
 
-    public void trackEvent(String name) {
-        TrackHelper.track()
-            .event("category", "action")
-            .name(name)
-            .value(1.0f)
-            .with(getTracker());
+    public static boolean isMobileConnection() {
+        ConnectivityManager cm = (ConnectivityManager)applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) {
+            return false;
+        }
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE;
+    }
+
+    public static void trackEvent(String text) {
+        System.out.println(text);
+        if (getTracker() != null) {
+            TrackHelper.track()
+                .event("category", "action")
+                .name(text)
+                .value(1.0f)
+                .with(getTracker());
+        }
     }
 }

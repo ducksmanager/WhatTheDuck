@@ -67,7 +67,7 @@ class DownloadHandlerMock {
 
         private MockResponse dispatchForDmServer(String path, Headers headers) {
 
-            if (headers.get("x-dm-pass") != null && !headers.get("x-dm-pass").equals(toSHA1(DownloadHandlerMock.TEST_PASS))) {
+            if (headers.get("x-dm-pass") != null && !headers.get("x-dm-pass").equals(toSHA1(DownloadHandlerMock.TEST_PASS, null))) {
                 return new MockResponse().setResponseCode(401);
             }
             if (path.contains("cover-id/download")) {

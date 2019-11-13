@@ -16,8 +16,6 @@ import net.ducksmanager.apigateway.DmServer;
 import net.ducksmanager.persistence.models.composite.CoverSearchIssue;
 import net.ducksmanager.persistence.models.composite.CoverSearchResults;
 import net.ducksmanager.whattheduck.R;
-import net.ducksmanager.whattheduck.WhatTheDuck;
-import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,6 +34,10 @@ import retrofit2.Response;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.alert;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.config;
 
 public class CoverFlowFileHandler {
 
@@ -59,13 +61,13 @@ public class CoverFlowFileHandler {
 
                 callback.onComplete(uploadFile);
             } catch (IOException e) {
-                WhatTheDuck.wtd.alert(getOriginActivityRef(), R.string.internal_error);
+                alert(getOriginActivityRef(), R.string.internal_error);
             }
         }
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
-            WhatTheDuck.wtd.alert(getOriginActivityRef(), R.string.internal_error);
+            alert(getOriginActivityRef(), R.string.internal_error);
             callback.onFail();
         }
 
@@ -96,7 +98,7 @@ public class CoverFlowFileHandler {
                 uploadFile.delete();
             }
             if (!uploadFile.createNewFile()) {
-                WhatTheDuck.wtd.alert(R.string.internal_error);
+                alert(originActivityRef, R.string.internal_error);
             }
             return FileProvider.getUriForFile(context, "net.ducksmanager.whattheduck.fileprovider", uploadFile);
         } catch (IOException e) {
@@ -175,20 +177,20 @@ public class CoverFlowFileHandler {
 
                     if (response.body().getIssues() != null) {
                         for (CoverSearchIssue issue : response.body().getIssues().values()) {
-                            issue.setCoverFullUrl(WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL) + "/cover-id/download/" + issue.getCoverId());
+                            issue.setCoverFullUrl(config.getProperty(CONFIG_KEY_API_ENDPOINT_URL) + "/cover-id/download/" + issue.getCoverId());
                         }
-                        WhatTheDuck.appDB.coverSearchIssueDao().deleteAll();
-                        WhatTheDuck.appDB.coverSearchIssueDao().insertList(new ArrayList<>(response.body().getIssues().values()));
+                        appDB.coverSearchIssueDao().deleteAll();
+                        appDB.coverSearchIssueDao().insertList(new ArrayList<>(response.body().getIssues().values()));
                         getOriginActivity().startActivity(new Intent(getOriginActivity(), CoverFlowActivity.class));
                     }
                     else {
                         if (response.body().getType() != null) {
                             switch(response.body().getType()) {
                                 case "SEARCH_RESULTS":
-                                    WhatTheDuck.wtd.alert(new WeakReference<>(getOriginActivity()), R.string.add_cover_no_results);
+                                    alert(new WeakReference<>(getOriginActivity()), R.string.add_cover_no_results);
                                     break;
                                 default:
-                                    WhatTheDuck.alert(new WeakReference<>(getOriginActivity()), response.body().getType());
+                                    alert(new WeakReference<>(getOriginActivity()), response.body().getType());
                             }
                         }
                     }
@@ -197,10 +199,10 @@ public class CoverFlowFileHandler {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull Throwable t) {
                     if (t.getMessage().contains("exceeds your upload")) {
-                        WhatTheDuck.wtd.alert(new WeakReference<>(getOriginActivity()), R.string.add_cover_error_file_too_big);
+                        alert(new WeakReference<>(getOriginActivity()), R.string.add_cover_error_file_too_big);
                     }
                     else {
-                        WhatTheDuck.wtd.alert(new WeakReference<>(getOriginActivity()), R.string.internal_error);
+                        alert(new WeakReference<>(getOriginActivity()), R.string.internal_error);
                     }
                 }
             });

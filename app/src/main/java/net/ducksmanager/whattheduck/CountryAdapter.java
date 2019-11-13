@@ -31,7 +31,7 @@ public class CountryAdapter extends ItemAdapter<InducksCountryNameWithPossession
         return view -> {
             int position = ((RecyclerView)view.getParent()).getChildLayoutPosition(view);
             InducksCountryNameWithPossession selectedCountry = CountryAdapter.this.getItem(position);
-            WhatTheDuck.setSelectedCountry (selectedCountry.getCountry().getCountryCode());
+            WhatTheDuckApplication.selectedCountry = selectedCountry.getCountry().getCountryCode();
 
             Intent i = new Intent(originActivity, PublicationList.class);
             originActivity.startActivity(i);

@@ -33,13 +33,13 @@ public class AddIssueTest extends WtdTest {
 
     @Before
     public void login() {
-        whatTheDuckActivityRule.launchActivity(new Intent());
+        loginActivityRule.launchActivity(new Intent());
         login(DownloadHandlerMock.TEST_USER, DownloadHandlerMock.TEST_PASS);
     }
 
 
     @Test
-    public void testShowAddIssueDialog() {
+    public void testShowAddIssueDialog()  {
         assertCurrentActivityIsInstanceOf(CountryList.class, true);
         onView(withText("France")).perform(ViewActions.click());
 

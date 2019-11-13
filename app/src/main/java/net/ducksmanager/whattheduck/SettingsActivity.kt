@@ -10,34 +10,21 @@ import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import net.ducksmanager.apigateway.DmServer
-import net.ducksmanager.persistence.AppDatabase
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
-import net.ducksmanager.whattheduck.WhatTheDuck.DB_NAME
-import net.ducksmanager.whattheduck.WhatTheDuck.appDB
+import net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB
+import net.ducksmanager.whattheduck.WhatTheDuckApplication.applicationVersion
+import retrofit2.Response
 
 class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        DmServer.initApi()
-        if (appDB == null) {
-            appDB = Room.databaseBuilder(applicationContext, AppDatabase::class.java, DB_NAME)
-                .allowMainThreadQueries()
-                .build()
-        }
-
         setContentView(R.layout.settings_activity)
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.settings, SettingsFragment())
-            .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         findViewById<View>(R.id.notifySwitch).setOnClickListener { view ->

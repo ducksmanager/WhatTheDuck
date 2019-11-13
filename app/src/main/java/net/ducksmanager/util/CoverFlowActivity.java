@@ -14,13 +14,17 @@ import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIss
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails;
 import net.ducksmanager.whattheduck.AddIssue;
 import net.ducksmanager.whattheduck.R;
-import net.ducksmanager.whattheduck.WhatTheDuck;
 import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
+
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedCountry;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedIssue;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedPublication;
 
 
 public class CoverFlowActivity extends AppCompatActivity {
@@ -45,7 +49,7 @@ public class CoverFlowActivity extends AppCompatActivity {
         ((WhatTheDuckApplication) getApplication()).trackActivity(this);
         setContentView(R.layout.activity_coverflow);
 
-        WhatTheDuck.appDB.coverSearchIssueDao().findAll().observe(this, searchIssues -> {
+        appDB.coverSearchIssueDao().findAll().observe(this, searchIssues -> {
             data = searchIssues;
             adapter = new CoverFlowAdapter(this);
             adapter.setData(searchIssues);
@@ -55,9 +59,9 @@ public class CoverFlowActivity extends AppCompatActivity {
 
             coverFlow.setOnItemClickListener((parent, view, position, id) -> {
                 if (currentSuggestion.getUserIssue() == null) {
-                    WhatTheDuck.setSelectedCountry (currentSuggestion.getCoverSearchIssue().getCoverCountryCode());
-                    WhatTheDuck.setSelectedPublication (currentSuggestion.getCoverSearchIssue().getCoverPublicationCode());
-                    WhatTheDuck.setSelectedIssue(currentSuggestion.getCoverSearchIssue().getCoverIssueNumber());
+                    selectedCountry = currentSuggestion.getCoverSearchIssue().getCoverCountryCode();
+                    selectedPublication = currentSuggestion.getCoverSearchIssue().getCoverPublicationCode();
+                    selectedIssue = currentSuggestion.getCoverSearchIssue().getCoverIssueNumber();
 
                     CoverFlowActivity.this.startActivity(new Intent(CoverFlowActivity.this, AddIssue.class));
                 }

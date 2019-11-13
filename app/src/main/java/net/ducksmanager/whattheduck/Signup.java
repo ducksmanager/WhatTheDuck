@@ -1,7 +1,6 @@
-package net.ducksmanager.retrievetasks;
+package net.ducksmanager.whattheduck;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -10,16 +9,13 @@ import android.widget.EditText;
 import net.ducksmanager.apigateway.DmServer;
 import net.ducksmanager.persistence.models.composite.UserToCreate;
 import net.ducksmanager.util.Settings;
-import net.ducksmanager.whattheduck.CountryList;
-import net.ducksmanager.whattheduck.R;
-import net.ducksmanager.whattheduck.WhatTheDuck;
-import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import java.lang.ref.WeakReference;
 
+import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Response;
 
-public class Signup extends Activity {
+public class Signup extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,14 +50,14 @@ public class Signup extends Activity {
                 @Override
                 public void onSuccessfulResponse(Response<Void> response) {
                     DmServer.setApiDmUser(username);
-                    DmServer.setApiDmPassword(Settings.toSHA1(password));
-                    WhatTheDuck.wtd.fetchCollection(new WeakReference<>(Signup.this), CountryList.class, true);
+                    DmServer.setApiDmPassword(Settings.toSHA1(password, new WeakReference<>(Signup.this)));
+                    Login.fetchCollection(new WeakReference<>(Signup.this), CountryList.class, true);
                 }
             });
         });
         
         cancelSignupButton.setOnClickListener(view -> {
-            Intent i = new Intent(Signup.this, WhatTheDuck.class);
+            Intent i = new Intent(Signup.this, Login.class);
             Signup.this.startActivity(i);
         });
     }

@@ -39,7 +39,7 @@ public class CoverSearchTest extends WtdTest {
 
     @Before
     public void switchLocaleAndLogin() {
-        whatTheDuckActivityRule.launchActivity(new Intent());
+        loginActivityRule.launchActivity(new Intent());
         switchLocale();
         login(DownloadHandlerMock.TEST_USER, DownloadHandlerMock.TEST_PASS);
     }

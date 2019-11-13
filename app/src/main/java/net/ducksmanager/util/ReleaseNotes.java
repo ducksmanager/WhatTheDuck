@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import net.ducksmanager.persistence.models.composite.UserMessage;
 import net.ducksmanager.whattheduck.R;
-import net.ducksmanager.whattheduck.WhatTheDuck;
+import net.ducksmanager.whattheduck.WhatTheDuckApplication;
 
 import java.lang.ref.WeakReference;
 
@@ -43,7 +43,7 @@ public class ReleaseNotes {
             builder.setTitle(originActivity.getString(R.string.newFeature));
 
             builder.setNeutralButton(R.string.ok, (dialogInterface, i) -> {
-                WhatTheDuck.appDB.userMessageDao().insert(new UserMessage(getMessageId(), false));
+                WhatTheDuckApplication.appDB.userMessageDao().insert(new UserMessage(getMessageId(), false));
                 dialogInterface.dismiss();
             });
 
@@ -60,7 +60,7 @@ public class ReleaseNotes {
         }
     }
 
-    public String getMessageId() {
+    private String getMessageId() {
         return "release_notes_" + majorVersion;
     }
 }

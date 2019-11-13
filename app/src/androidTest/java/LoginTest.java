@@ -20,7 +20,7 @@ public class LoginTest extends WtdTest {
 
     @Before
     public void initActivity() {
-        whatTheDuckActivityRule.launchActivity(new Intent());
+        loginActivityRule.launchActivity(new Intent());
     }
 
     @Test

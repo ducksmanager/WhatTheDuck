@@ -1,12 +1,16 @@
 package net.ducksmanager.util;
 
+import android.app.Activity;
+
 import net.ducksmanager.persistence.models.composite.UserMessage;
 import net.ducksmanager.whattheduck.R;
-import net.ducksmanager.whattheduck.WhatTheDuck;
 
+import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
+
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.*;
 
 public class Settings {
 
@@ -15,12 +19,12 @@ public class Settings {
     public static final String MESSAGE_KEY_WELCOME_BOOKCASE_VIEW = "welcome_bookcase_view";
 
     public static boolean shouldShowMessage(String messageKey) {
-        UserMessage userMessageForReleaseNotes = WhatTheDuck.appDB.userMessageDao().findByKey(messageKey);
+        UserMessage userMessageForReleaseNotes = appDB.userMessageDao().findByKey(messageKey);
         return userMessageForReleaseNotes != null && userMessageForReleaseNotes.isShown();
     }
 
     public static void addToMessagesAlreadyShown(String messageKey) {
-        WhatTheDuck.appDB.userMessageDao().insert(new UserMessage(messageKey, false));
+        appDB.userMessageDao().insert(new UserMessage(messageKey, false));
     }
 
     private static String byteArray2Hex(byte[] hash) {
@@ -33,15 +37,16 @@ public class Settings {
         return hex;
     }
 
-    public static String toSHA1(String text) {
+    public static String toSHA1(String text, WeakReference<Activity> activityRef) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             md.update(text.getBytes());
             return byteArray2Hex(md.digest());
         }
         catch (NoSuchAlgorithmException e) {
-            WhatTheDuck.wtd.alert(R.string.internal_error,
-                               R.string.internal_error__crypting_failed);
+            if (activityRef != null) {
+                alert(activityRef, R.string.internal_error, R.string.internal_error__crypting_failed);
+            }
             return "";
         }
     }

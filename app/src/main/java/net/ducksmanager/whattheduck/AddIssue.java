@@ -2,6 +2,7 @@ package net.ducksmanager.whattheduck;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
@@ -32,6 +33,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Response;
 
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.*;
+
 public class AddIssue extends AppCompatActivity implements View.OnClickListener {
 
     private List<Purchase> purchases;
@@ -51,15 +54,15 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
         DmServer.api.getUserPurchases().enqueue(new DmServer.Callback<List<Purchase>>("getpurchases", this) {
             @Override
             public void onSuccessfulResponse(Response<List<Purchase>> response) {
-                WhatTheDuck.appDB.purchaseDao().deleteAll();
-                WhatTheDuck.appDB.purchaseDao().insertList(response.body());
+                appDB.purchaseDao().deleteAll();
+                appDB.purchaseDao().insertList(response.body());
                 setData();
             }
         });
     }
 
     private void setData() {
-        WhatTheDuck.appDB.purchaseDao().findAll().observe(this, purchases -> {
+        appDB.purchaseDao().findAll().observe(this, purchases -> {
             this.purchases = new ArrayList<>();
             this.purchases.add(new PurchaseAdapter.NoPurchase());
             this.purchases.addAll(purchases);
@@ -88,8 +91,8 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
             }
 
             IssueListToUpdate issueListToUpdate = new IssueListToUpdate(
-                WhatTheDuck.getSelectedPublication(),
-                Collections.singletonList(WhatTheDuck.getSelectedIssue()),
+                selectedPublication,
+                Collections.singletonList(selectedIssue),
                 dmCondition,
                 PurchaseAdapter.selectedItem instanceof PurchaseAdapter.NoPurchase
                     ? null
@@ -100,8 +103,8 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
                 @Override
                 public void onSuccessfulResponse(Response<Object> response) {
                     finish();
-                    WhatTheDuck.wtd.info(new WeakReference<>(AddIssue.this), R.string.confirmation_message__issue_inserted, Toast.LENGTH_SHORT);
-                    WhatTheDuck.wtd.fetchCollection(new WeakReference<>(AddIssue.this), IssueList.class, true);
+                    info(new WeakReference<>(AddIssue.this), R.string.confirmation_message__issue_inserted, Toast.LENGTH_SHORT);
+                    startActivity(new Intent(AddIssue.this, Login.class));
                 }
             });
         });
@@ -115,7 +118,7 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
             showNewPurchase();
         });
 
-        ((TextView)findViewById(R.id.addIssueTitle)).setText(getString(R.string.insert_issue__confirm, WhatTheDuck.getSelectedIssue()));
+        ((TextView)findViewById(R.id.addIssueTitle)).setText(getString(R.string.insert_issue__confirm, selectedIssue));
     }
 
     private void toggleAddPurchaseButton(Boolean toggle) {

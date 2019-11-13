@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.ducksmanager.whattheduck.R;
-import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,12 +24,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_ROLE_NAME;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_ROLE_PASSWORD;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.alert;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.applicationVersion;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.config;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.trackEvent;
 
 public class DmServer {
     public static DmServerApi api;
@@ -129,10 +129,10 @@ public class DmServer {
                 if (alertOnError) {
                     switch (response.code()) {
                         case HttpURLConnection.HTTP_UNAUTHORIZED:
-                            WhatTheDuck.wtd.alert(originActivityRef, R.string.input_error__invalid_credentials);
+                            alert(originActivityRef, R.string.input_error__invalid_credentials);
                             break;
                         default:
-                            WhatTheDuck.wtd.alert(originActivityRef, R.string.error);
+                            alert(originActivityRef, R.string.error);
                     }
                 }
                 onErrorResponse(response);
@@ -146,7 +146,7 @@ public class DmServer {
 
         @Override
         public void onFailure(@NotNull Call call, @NotNull Throwable t) {
-            WhatTheDuck.alert(originActivityRef, t.getMessage() + " on " + eventName);
+            alert(originActivityRef, t.getMessage() + " on " + eventName);
             System.err.println(t.getMessage());
             onFinished();
         }

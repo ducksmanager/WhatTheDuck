@@ -1,4 +1,3 @@
-security_password=mypassword
 role_name=ducksmanager
 role_password=rolepassword
 dm_url=https://dm.net

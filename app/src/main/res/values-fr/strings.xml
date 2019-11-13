@@ -1,5 +1,4 @@
 <resources>
-    <string name="about">A propos de What The Duck</string>
     <string name="add_cover">Cliquez sur la couverture\npour ajouter le numéro à la collection</string>
     <string name="add_cover_error_file_too_big">L\'image est trop grande, veuillez réessayer.</string>
     <string name="add_cover_no_results">Aucun résultat pour votre photo, veuillez réessayer.</string>

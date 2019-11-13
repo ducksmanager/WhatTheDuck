@@ -24,6 +24,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Response;
 
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CollectionType;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.info;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.isMobileConnection;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedCountry;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedPublication;
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.trackEvent;
+
 public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
 
     public enum ViewType {
@@ -46,14 +54,14 @@ public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
 
     @Override
     protected void downloadList(Activity currentActivity) {
-        DmServer.api.getIssues(WhatTheDuck.getSelectedPublication()).enqueue(new DmServer.Callback<List<String>>("getInducksIssues", currentActivity) {
+        DmServer.api.getIssues(selectedPublication).enqueue(new DmServer.Callback<List<String>>("getInducksIssues", currentActivity) {
             @Override
             public void onSuccessfulResponse(Response<List<String>> response) {
                 List<InducksIssue> issues = new ArrayList<>();
                 for(String issueNumber : response.body()) {
-                    issues.add(new InducksIssue(WhatTheDuck.getSelectedPublication(), issueNumber));
+                    issues.add(new InducksIssue(selectedPublication, issueNumber));
                 }
-                WhatTheDuck.appDB.inducksIssueDao().insertList(issues);
+                appDB.inducksIssueDao().insertList(issues);
                 setData();
             }
         });
@@ -66,7 +74,7 @@ public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
 
     @Override
     protected boolean shouldShow() {
-        return WhatTheDuck.getSelectedCountry() != null && WhatTheDuck.getSelectedPublication() != null;
+        return selectedCountry != null && selectedPublication != null;
     }
 
     @Override
@@ -101,7 +109,7 @@ public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
 
         Switch switchView = switchViewWrapper.findViewById(R.id.switchView);
 
-        if (type.equals(WhatTheDuck.CollectionType.COA.toString())) {
+        if (type.equals(CollectionType.COA.toString())) {
             viewType = ViewType.LIST_VIEW;
             switchViewWrapper.setVisibility(View.GONE);
         }
@@ -110,7 +118,7 @@ public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
             switchView.setChecked(viewType.equals(ViewType.EDGE_VIEW));
             switchView.setOnClickListener(view -> {
                 if (switchView.isChecked()) {
-                    if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_DATA_CONSUMPTION) && WhatTheDuck.isMobileConnection()) {
+                    if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_DATA_CONSUMPTION) && isMobileConnection()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(IssueList.this);
                         builder.setTitle(getString(R.string.bookcaseViewTitle));
                         builder.setMessage(getString(R.string.bookcaseViewMessage));
@@ -145,7 +153,7 @@ public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
 
             if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW)
              && listOrientation == RecyclerView.VERTICAL) {
-                WhatTheDuck.wtd.info(new WeakReference<>(this), R.string.welcomeBookcaseViewPortrait, Toast.LENGTH_LONG);
+                info(new WeakReference<>(this), R.string.welcomeBookcaseViewPortrait, Toast.LENGTH_LONG);
                 Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW);
             }
 
@@ -165,7 +173,7 @@ public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
     }
 
     private void switchBetweenViews() {
-        WhatTheDuck.trackEvent("issuelist/switchview");
+        trackEvent("issuelist/switchview");
         viewType = ((Switch)this.findViewById(R.id.switchView)).isChecked() ? ViewType.EDGE_VIEW : ViewType.LIST_VIEW;
         loadList();
         show();
@@ -183,16 +191,16 @@ public class IssueList extends ItemList<InducksIssueWithUserIssueDetails> {
 
     @Override
     protected void setData() {
-        WhatTheDuck.appDB.inducksIssueDao().findByPublicationCode(WhatTheDuck.getSelectedPublication()).observe(this, this::storeItemList);
+        appDB.inducksIssueDao().findByPublicationCode(selectedPublication).observe(this, this::storeItemList);
     }
 
     @Override
     public void onBackPressed() {
-        if (type.equals(WhatTheDuck.CollectionType.COA.toString())) {
+        if (type.equals(CollectionType.COA.toString())) {
             onBackFromAddIssueActivity();
         }
         else {
-            startActivity(new Intent(WhatTheDuck.wtd, PublicationList.class));
+            startActivity(new Intent(this, PublicationList.class));
         }
     }
 }

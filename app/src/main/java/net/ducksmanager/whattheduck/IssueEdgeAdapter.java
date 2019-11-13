@@ -14,6 +14,8 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.*;
+
 public class IssueEdgeAdapter extends ItemAdapter<InducksIssueWithUserIssueDetails> {
     private final int orientation;
     private final RecyclerView recyclerView;
@@ -69,9 +71,9 @@ public class IssueEdgeAdapter extends ItemAdapter<InducksIssueWithUserIssueDetai
     private String getEdgeUrl(InducksIssueWithUserIssueDetails i) {
         return String.format(
             "%s/edges/%s/gen/%s.%s.png",
-            WhatTheDuckApplication.config.getProperty(WhatTheDuckApplication.CONFIG_KEY_EDGES_URL),
-            WhatTheDuck.getSelectedCountry(),
-            WhatTheDuck.getSelectedPublication()
+            config.getProperty(CONFIG_KEY_EDGES_URL),
+            selectedCountry,
+            selectedPublication
                 .replaceFirst("[^/]+/", "")
                 .replaceAll(" ", ""),
             i.getIssue().getInducksIssueNumber().replaceAll(" ", ""));

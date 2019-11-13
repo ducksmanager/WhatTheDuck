@@ -14,6 +14,8 @@ import java.util.List;
 
 import retrofit2.Response;
 
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.*;
+
 public class PublicationList extends ItemList<InducksPublicationWithPossession> {
 
     @Override
@@ -23,14 +25,14 @@ public class PublicationList extends ItemList<InducksPublicationWithPossession> 
 
     @Override
     protected void downloadList(Activity currentActivity) {
-        DmServer.api.getPublications(WhatTheDuck.getSelectedCountry()).enqueue(new DmServer.Callback<HashMap<String, String>>("getInducksPublications", currentActivity) {
+        DmServer.api.getPublications(selectedCountry).enqueue(new DmServer.Callback<HashMap<String, String>>("getInducksPublications", currentActivity) {
             @Override
             public void onSuccessfulResponse(Response<HashMap<String, String>> response) {
                 List<InducksPublication> publications = new ArrayList<>();
                 for(String publicationCode : response.body().keySet()) {
                     publications.add(new InducksPublication(publicationCode, response.body().get(publicationCode)));
                 }
-                WhatTheDuck.appDB.inducksPublicationDao().insertList(publications);
+                appDB.inducksPublicationDao().insertList(publications);
                 setData();
             }
         });
@@ -40,7 +42,7 @@ public class PublicationList extends ItemList<InducksPublicationWithPossession> 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        WhatTheDuck.setSelectedPublication(null);
+        selectedPublication = null;
         show();
     }
 
@@ -56,12 +58,12 @@ public class PublicationList extends ItemList<InducksPublicationWithPossession> 
 
     @Override
     protected void setData() {
-        WhatTheDuck.appDB.inducksPublicationDao().findByCountry(WhatTheDuck.getSelectedCountry()).observe(this, this::storeItemList);
+        appDB.inducksPublicationDao().findByCountry(selectedCountry).observe(this, this::storeItemList);
     }
 
     @Override
     protected boolean shouldShow() {
-        return WhatTheDuck.getSelectedCountry() != null;
+        return selectedCountry != null;
     }
 
     @Override
@@ -101,11 +103,11 @@ public class PublicationList extends ItemList<InducksPublicationWithPossession> 
 
     @Override
     public void onBackPressed() {
-        if (type.equals(WhatTheDuck.CollectionType.COA.toString())) {
+        if (type.equals(CollectionType.COA.toString())) {
             onBackFromAddIssueActivity();
         }
         else {
-            startActivity(new Intent(WhatTheDuck.wtd, CountryList.class));
+            startActivity(new Intent(this, CountryList.class));
         }
     }
 }

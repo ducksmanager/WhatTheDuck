@@ -21,6 +21,8 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.*;
+
 public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
     final int resourceToInflate;
@@ -93,7 +95,7 @@ public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter
     public void updateFilteredList(String textFilter) {
         filteredItems = new ArrayList<>();
         for (Item item : items) {
-            if (!(ItemList.type.equals(WhatTheDuck.CollectionType.USER.toString()) && !isPossessed(item))
+            if (!(ItemList.type.equals(CollectionType.USER.toString()) && !isPossessed(item))
                 && (textFilter.equals("") || getText(item).toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase())))  {
                 filteredItems.add(item);
             }

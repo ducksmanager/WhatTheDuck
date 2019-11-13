@@ -10,6 +10,8 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedPublication;
+
 public class PublicationAdapter extends ItemAdapter<InducksPublicationWithPossession> {
 
     PublicationAdapter(ItemList itemList, List<InducksPublicationWithPossession> items) {
@@ -36,8 +38,7 @@ public class PublicationAdapter extends ItemAdapter<InducksPublicationWithPosses
     protected View.OnClickListener getOnClickListener() {
         return view -> {
             int position = ((RecyclerView)view.getParent()).getChildLayoutPosition(view);
-            InducksPublicationWithPossession selectedPublication = PublicationAdapter.this.getItem(position);
-            WhatTheDuck.setSelectedPublication (selectedPublication.getPublication().getPublicationCode());
+            selectedPublication = PublicationAdapter.this.getItem(position).getPublication().getPublicationCode();
 
             Intent i = new Intent(originActivity, IssueList.class);
             originActivity.startActivity(i);

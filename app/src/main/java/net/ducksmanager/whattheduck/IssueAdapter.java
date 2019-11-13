@@ -12,6 +12,8 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import static net.ducksmanager.whattheduck.WhatTheDuckApplication.*;
+
 public class IssueAdapter extends ItemAdapter<InducksIssueWithUserIssueDetails> {
     IssueAdapter(ItemList itemList, List<InducksIssueWithUserIssueDetails> items) {
         super(itemList, R.layout.row, items);
@@ -26,12 +28,12 @@ public class IssueAdapter extends ItemAdapter<InducksIssueWithUserIssueDetails> 
     protected View.OnClickListener getOnClickListener() {
         return view -> {
             int position = ((RecyclerView) view.getParent()).getChildLayoutPosition(view);
-            if (ItemList.type.equals(WhatTheDuck.CollectionType.COA.toString())) {
-                final InducksIssueWithUserIssueDetails selectedIssue = IssueAdapter.this.getItem(position);
-                if (selectedIssue.getUserIssue() != null) {
-                    WhatTheDuck.wtd.info(new WeakReference<>(IssueAdapter.this.getOriginActivity()), R.string.input_error__issue_already_possessed, Toast.LENGTH_SHORT);
+            if (ItemList.type.equals(CollectionType.COA.toString())) {
+                final InducksIssueWithUserIssueDetails clickedIssue = IssueAdapter.this.getItem(position);
+                if (clickedIssue.getUserIssue() != null) {
+                    info(new WeakReference<>(IssueAdapter.this.getOriginActivity()), R.string.input_error__issue_already_possessed, Toast.LENGTH_SHORT);
                 } else {
-                    WhatTheDuck.setSelectedIssue(selectedIssue.getIssue().getInducksIssueNumber());
+                    selectedIssue = clickedIssue.getIssue().getInducksIssueNumber();
                     originActivity.startActivity(new Intent(originActivity, net.ducksmanager.whattheduck.AddIssue.class));
                 }
             }
