@@ -1,4 +1,4 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
@@ -6,45 +6,83 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/settingsTitle"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:text="@string/settings"/>
-
-    <Switch
-        android:id="@+id/notifySwitch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Notify me about new stories from my favorite authors" />
-
     <LinearLayout
-        android:id="@+id/notifiedCountriesListWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="15dp"
-        android:paddingStart="30dp"
-        android:paddingEnd="30dp"
-        android:paddingLeft="30dp"
-        android:visibility="gone"
-        android:paddingRight="30dp">
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/settingsTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="@string/settings"/>
+
+        <TextView
+            android:id="@+id/version"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/version"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Only for issues released in specific countries" />
+            android:textAlignment="center"
+            android:text="@string/rate_app"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/notifiedCountriesList"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="15dp"
+            android:background="#c0c0c0"/>
+
+        <Switch
+            android:id="@+id/notifySwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="26dp"
-            tools:listitem="@layout/row_notified_country"/>
+            android:text="Notify me about new stories from my favorite authors" />
+
+        <LinearLayout
+            android:id="@+id/notifiedCountriesListWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:paddingLeft="30dp"
+            android:visibility="gone"
+            android:paddingRight="30dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="for issues released in the following countries:" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/notifiedCountriesList"
+                android:layout_width="match_parent"
+                android:layout_height="325dp"
+                android:layout_marginBottom="26dp"
+                tools:listitem="@layout/row_notified_country"/>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="save" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

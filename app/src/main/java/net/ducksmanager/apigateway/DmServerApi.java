@@ -1,5 +1,6 @@
 package net.ducksmanager.apigateway;
 
+import net.ducksmanager.persistence.models.composite.CountryListToUpdate;
 import net.ducksmanager.persistence.models.composite.CoverSearchResults;
 import net.ducksmanager.persistence.models.composite.IssueListToUpdate;
 import net.ducksmanager.persistence.models.composite.UserToCreate;
@@ -38,6 +39,12 @@ public interface DmServerApi {
 
     @GET("/collection/purchases")
     Call<List<Purchase>> getUserPurchases();
+
+    @GET("/collection/notifications/countries")
+    Call<List<String>> getUserNotificationCountries();
+
+    @POST("/collection/notifications/countries")
+    Call<Void> updateUserNotificationCountries(@Body CountryListToUpdate countryListToUpdate);
 
     @POST("/collection/purchases")
     Call<Void> createUserPurchase(@Body Purchase purchase);

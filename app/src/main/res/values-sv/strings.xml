@@ -62,7 +62,7 @@
     <string name="signup_end">Godkänn</string>
     <string name="settings">Inställningar</string>
     <string name="username">Användarnamn</string>
-    <string name="version">What The Duck version</string>
+    <string name="version">What The Duck version %1$s</string>
     <string name="welcomeBookcaseViewPortrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
     <string name="welcomeMessage">Bocka av valet \"Endast min samling\" för att visa berörda utgåvor, och klicka sedan på en utgåva för att lägga till den i din samling</string>
     <string name="welcomeTitle">Välkommen till What The Duck!</string>

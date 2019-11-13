@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
@@ -34,26 +35,26 @@ class SettingsActivity : AppCompatActivity() {
                 View.GONE
         }
 
-        CountryList.downloadList(this) { _, _ ->
-            run {
-                appDB.inducksCountryDao().findAllWithPossession().observe(this, Observer { countryNames ->
-                    val recyclerView = findViewById<RecyclerView>(R.id.notifiedCountriesList)
-                    recyclerView.adapter = CountryToNotifyListAdapter(this, countryNames)
-                    recyclerView.layoutManager = LinearLayoutManager(this)
+        CountryList.downloadList(this) { _, _ -> run {
+            appDB.inducksCountryDao().findAllWithPossession().observe(this, Observer { countryNames ->
+                DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>("getUserNotificationCountries", this) {
+                    override fun onSuccessfulResponse(response: Response<List<String>>?) {
+                        val countriesToNotifyTo = if (response == null) ArrayList() else response.body()
+                        val recyclerView = findViewById<RecyclerView>(R.id.notifiedCountriesList)
+                        recyclerView.adapter = CountryToNotifyListAdapter(this@SettingsActivity, countryNames, countriesToNotifyTo!!)
+                        recyclerView.layoutManager = LinearLayoutManager(this@SettingsActivity)
+                    }
                 })
-            }
-        }
-    }
+            })
+        }}
 
-    class SettingsFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-
-        }
+        findViewById<TextView>(R.id.version).text = getString(R.string.version, applicationVersion)
     }
 
     class CountryToNotifyListAdapter internal constructor(
         private val context: Context,
-        private var countriesToNotify: MutableList<InducksCountryNameWithPossession>
+        private var countries: MutableList<InducksCountryNameWithPossession>,
+        private val countriesToNotifyTo: List<String>
     ) : RecyclerView.Adapter<CountryToNotifyListAdapter.ViewHolder>() {
 
         private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -61,6 +62,7 @@ class SettingsActivity : AppCompatActivity() {
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val countryItemView: TextView = itemView.findViewById(R.id.itemtitle)
             val prefixImageView: ImageView = itemView.findViewById(R.id.prefiximage)
+            val isNotifiedCountry: CheckBox = itemView.findViewById(R.id.isNotifiedCountry)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -70,9 +72,10 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val currentItem = countriesToNotify[position]
+            val currentItem = countries[position]
             holder.countryItemView.text = currentItem.country.countryName
             holder.prefixImageView.setImageResource(getImageResourceFromCountry(currentItem.country))
+            holder.isNotifiedCountry.isChecked = countriesToNotifyTo.contains(currentItem.country.countryCode)
         }
 
         private fun getImageResourceFromCountry(country: InducksCountryName): Int {
@@ -85,6 +88,6 @@ class SettingsActivity : AppCompatActivity() {
             return imageResource
         }
 
-        override fun getItemCount() = countriesToNotify.size
+        override fun getItemCount() = countries.size
     }
 }
