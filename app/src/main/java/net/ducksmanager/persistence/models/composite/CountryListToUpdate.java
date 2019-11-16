@@ -2,13 +2,13 @@ package net.ducksmanager.persistence.models.composite;
 
 import com.google.gson.annotations.Expose;
 
-import java.util.List;
+import java.util.Set;
 
 public class CountryListToUpdate {
     @Expose
-    private final List<String> countries;
+    private final Set<String> countries;
 
-    public CountryListToUpdate(List<String> countries) {
+    public CountryListToUpdate(Set<String> countries) {
         this.countries = countries;
     }
 }

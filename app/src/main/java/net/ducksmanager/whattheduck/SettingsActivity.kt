@@ -5,16 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.Switch
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.settings.*
 import net.ducksmanager.apigateway.DmServer
 import net.ducksmanager.persistence.models.coa.InducksCountryName
+import net.ducksmanager.persistence.models.composite.CountryListToUpdate
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
 import net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB
 import net.ducksmanager.whattheduck.WhatTheDuckApplication.applicationVersion
@@ -25,34 +24,55 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.settings_activity)
+        setContentView(R.layout.settings)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        findViewById<View>(R.id.notifySwitch).setOnClickListener { view ->
-            findViewById<View>(R.id.notifiedCountriesListWrapper).visibility = if ((view as Switch).isChecked)
+        val toggleCountryListVisibility: (notifySwitch: Switch) -> Unit = {
+            findViewById<View>(R.id.notifiedCountriesListWrapper).visibility = if (notifySwitch.isChecked)
                 View.VISIBLE
             else
                 View.GONE
         }
 
+        val notifySwitch = findViewById<Switch>(R.id.notifySwitch)
+        notifySwitch.isClickable = false
+        notifySwitch.setOnClickListener {
+            toggleCountryListVisibility(notifySwitch)
+        }
+
         appDB.inducksCountryDao().findAllWithPossession().observe(this, Observer { countryNames ->
             DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>("getUserNotificationCountries", this) {
                 override fun onSuccessfulResponse(response: Response<List<String>>?) {
-                    val countriesToNotifyTo = if (response == null) ArrayList() else response.body()
+                    val countriesToNotifyTo = if (response == null) HashSet() else response.body()?.toHashSet() as MutableSet<String>
                     val recyclerView = findViewById<RecyclerView>(R.id.notifiedCountriesList)
-                    recyclerView.adapter = CountryToNotifyListAdapter(this@SettingsActivity, countryNames, countriesToNotifyTo!!)
+                    recyclerView.adapter = CountryToNotifyListAdapter(this@SettingsActivity, countryNames, countriesToNotifyTo)
                     recyclerView.layoutManager = LinearLayoutManager(this@SettingsActivity)
+
+                    notifySwitch.isClickable = true
+                    notifySwitch.isChecked = countriesToNotifyTo.isNotEmpty()
+                    toggleCountryListVisibility(notifySwitch)
                 }
             })
         })
 
         findViewById<TextView>(R.id.version).text = getString(R.string.version, applicationVersion)
+
+        findViewById<Button>(R.id.save).setOnClickListener {
+            val recyclerView = findViewById<RecyclerView>(R.id.notifiedCountriesList)
+            val countriesToNotifyTo = (recyclerView.adapter as CountryToNotifyListAdapter).countriesToNotifyTo
+            DmServer.api.updateUserNotificationCountries(CountryListToUpdate(countriesToNotifyTo))
+                .enqueue(object: DmServer.Callback<Void>("updateUserNotificationCountries", this) {
+                    override fun onSuccessfulResponse(response: Response<Void>?) {
+                        finish()
+                    }
+                })
+        }
     }
 
     class CountryToNotifyListAdapter internal constructor(
         private val context: Context,
         private var countries: MutableList<InducksCountryNameWithPossession>,
-        private val countriesToNotifyTo: List<String>
+        val countriesToNotifyTo: MutableSet<String>
     ) : RecyclerView.Adapter<CountryToNotifyListAdapter.ViewHolder>() {
 
         private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -74,6 +94,14 @@ class SettingsActivity : AppCompatActivity() {
             holder.countryItemView.text = currentItem.country.countryName
             holder.prefixImageView.setImageResource(getImageResourceFromCountry(currentItem.country))
             holder.isNotifiedCountry.isChecked = countriesToNotifyTo.contains(currentItem.country.countryCode)
+            holder.isNotifiedCountry.setOnClickListener {
+                if ((it as CheckBox).isChecked) {
+                    countriesToNotifyTo.add(currentItem.country.countryCode)
+                }
+                else  {
+                    countriesToNotifyTo.remove(currentItem.country.countryCode)
+                }
+            }
         }
 
         private fun getImageResourceFromCountry(country: InducksCountryName): Int {
