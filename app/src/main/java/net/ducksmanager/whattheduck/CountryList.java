@@ -27,6 +27,7 @@ import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedPublic
 
 public class CountryList extends ItemList<InducksCountryNameWithPossession> {
 
+    private static final String DUMMY_COUNTRY_CODE = "zz";
     public static boolean hasFullList = false;
 
     @Override
@@ -45,8 +46,11 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
             public void onSuccessfulResponse(Response<HashMap<String, String>> response) {
                 List<InducksCountryName> countries = new ArrayList<>();
                 for(String countryCode : response.body().keySet()) {
-                    countries.add(new InducksCountryName(countryCode, response.body().get(countryCode)));
+                    if (!countryCode.equals(DUMMY_COUNTRY_CODE)) {
+                        countries.add(new InducksCountryName(countryCode, response.body().get(countryCode)));
+                    }
                 }
+                appDB.inducksCountryDao().deleteAll();
                 appDB.inducksCountryDao().insertList(countries);
                 hasFullList = true;
                 hasDataCallback.onCompleted(null, null);

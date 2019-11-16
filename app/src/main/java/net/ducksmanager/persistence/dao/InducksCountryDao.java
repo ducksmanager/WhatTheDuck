@@ -22,4 +22,6 @@ public interface InducksCountryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertList(List<InducksCountryName> issueList);
 
+    @Query("DELETE FROM inducks_countryname")
+    void deleteAll();
 }

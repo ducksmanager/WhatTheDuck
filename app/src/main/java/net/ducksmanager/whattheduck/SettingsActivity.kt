@@ -35,18 +35,16 @@ class SettingsActivity : AppCompatActivity() {
                 View.GONE
         }
 
-        CountryList.downloadList(this) { _, _ -> run {
-            appDB.inducksCountryDao().findAllWithPossession().observe(this, Observer { countryNames ->
-                DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>("getUserNotificationCountries", this) {
-                    override fun onSuccessfulResponse(response: Response<List<String>>?) {
-                        val countriesToNotifyTo = if (response == null) ArrayList() else response.body()
-                        val recyclerView = findViewById<RecyclerView>(R.id.notifiedCountriesList)
-                        recyclerView.adapter = CountryToNotifyListAdapter(this@SettingsActivity, countryNames, countriesToNotifyTo!!)
-                        recyclerView.layoutManager = LinearLayoutManager(this@SettingsActivity)
-                    }
-                })
+        appDB.inducksCountryDao().findAllWithPossession().observe(this, Observer { countryNames ->
+            DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>("getUserNotificationCountries", this) {
+                override fun onSuccessfulResponse(response: Response<List<String>>?) {
+                    val countriesToNotifyTo = if (response == null) ArrayList() else response.body()
+                    val recyclerView = findViewById<RecyclerView>(R.id.notifiedCountriesList)
+                    recyclerView.adapter = CountryToNotifyListAdapter(this@SettingsActivity, countryNames, countriesToNotifyTo!!)
+                    recyclerView.layoutManager = LinearLayoutManager(this@SettingsActivity)
+                }
             })
-        }}
+        })
 
         findViewById<TextView>(R.id.version).text = getString(R.string.version, applicationVersion)
     }
