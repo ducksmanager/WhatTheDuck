@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 
-import com.koushikdutta.async.future.FutureCallback;
-
 import net.ducksmanager.apigateway.DmServer;
 import net.ducksmanager.persistence.models.coa.InducksCountryName;
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession;
@@ -37,10 +35,10 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
 
     @Override
     protected void downloadList(Activity currentActivity) {
-        downloadList(currentActivity, (e, result) -> setData());
+        downloadList(currentActivity, this::setData);
     }
 
-    public static void downloadList(Activity currentActivity, FutureCallback<CountryList> hasDataCallback) {
+    public static void downloadList(Activity currentActivity, Runnable hasDataCallback) {
         DmServer.api.getCountries(locale).enqueue(new DmServer.Callback<HashMap<String, String>>("getInducksCountries", currentActivity) {
             @Override
             public void onSuccessfulResponse(Response<HashMap<String, String>> response) {
@@ -53,7 +51,7 @@ public class CountryList extends ItemList<InducksCountryNameWithPossession> {
                 appDB.inducksCountryDao().deleteAll();
                 appDB.inducksCountryDao().insertList(countries);
                 hasFullList = true;
-                hasDataCallback.onCompleted(null, null);
+                hasDataCallback.run();
             }
         });
     }
