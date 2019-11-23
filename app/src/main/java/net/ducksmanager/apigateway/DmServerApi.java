@@ -3,6 +3,7 @@ package net.ducksmanager.apigateway;
 import net.ducksmanager.persistence.models.composite.CountryListToUpdate;
 import net.ducksmanager.persistence.models.composite.CoverSearchResults;
 import net.ducksmanager.persistence.models.composite.IssueListToUpdate;
+import net.ducksmanager.persistence.models.composite.SuggestionList;
 import net.ducksmanager.persistence.models.composite.UserToCreate;
 import net.ducksmanager.persistence.models.dm.Issue;
 import net.ducksmanager.persistence.models.dm.Purchase;
@@ -51,6 +52,9 @@ public interface DmServerApi {
 
     @POST("/collection/issues")
     Call<Object> createUserIssues(@Body IssueListToUpdate issueListToUpdate);
+
+    @GET("/collection/stats/suggestedissues/countries_to_notify/_")
+    Call<SuggestionList> getSuggestedIssues();
 
     @Multipart
     @POST("/cover-id/search")

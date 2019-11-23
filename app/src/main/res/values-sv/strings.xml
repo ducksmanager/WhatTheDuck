@@ -66,4 +66,7 @@
     <string name="welcomeBookcaseViewPortrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
     <string name="welcomeMessage">Bocka av valet \"Endast min samling\" för att visa berörda utgåvor, och klicka sedan på en utgåva för att lägga till den i din samling</string>
     <string name="welcomeTitle">Välkommen till What The Duck!</string>
+    <string name="suggestions">Suggestions</string>
+    <string name="sort_by_score">Sort by score</string>
+    <string name="sort_by_publication_date">Sort by publication date</string>
 </resources>

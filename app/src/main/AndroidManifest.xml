@@ -23,7 +23,6 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:fullBackupContent">
-        <activity android:name=".SettingsActivity" />
         <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,6 +41,8 @@
             android:name=".AddIssue"
             android:excludeFromRecents="true"
             android:theme="@style/AddIssueTheme" />
+        <activity android:name=".Settings" />
+        <activity android:name=".Suggestions" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

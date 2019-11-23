@@ -19,7 +19,7 @@ import net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB
 import net.ducksmanager.whattheduck.WhatTheDuckApplication.applicationVersion
 import retrofit2.Response
 
-class SettingsActivity : AppCompatActivity() {
+class Settings : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +45,8 @@ class SettingsActivity : AppCompatActivity() {
                 override fun onSuccessfulResponse(response: Response<List<String>>?) {
                     val countriesToNotifyTo = if (response == null) HashSet() else response.body()?.toHashSet() as MutableSet<String>
                     val recyclerView = findViewById<RecyclerView>(R.id.notifiedCountriesList)
-                    recyclerView.adapter = CountryToNotifyListAdapter(this@SettingsActivity, countryNames, countriesToNotifyTo)
-                    recyclerView.layoutManager = LinearLayoutManager(this@SettingsActivity)
+                    recyclerView.adapter = CountryToNotifyListAdapter(this@Settings, countryNames, countriesToNotifyTo)
+                    recyclerView.layoutManager = LinearLayoutManager(this@Settings)
 
                     notifySwitch.isClickable = true
                     notifySwitch.isChecked = countriesToNotifyTo.isNotEmpty()

@@ -66,4 +66,7 @@
     <string name="welcomeBookcaseViewPortrait">Welcome to the bookcase view! Rotate your screen to landscape for the best effect ;-)</string>
     <string name="welcomeMessage">Your DucksManager collection is displayed when you open What The Duck. Tap on a country to view the publications that you possess, or tap on \"+\" to add an issue to your collection.</string>
     <string name="welcomeTitle">Welcome on What The Duck!</string>
+    <string name="suggestions">Suggestions</string>
+    <string name="sort_by_score">Sort by score</string>
+    <string name="sort_by_publication_date">Sort by publication date</string>
 </resources>

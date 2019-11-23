@@ -22,8 +22,8 @@ public class CountryAdapter extends ItemAdapter<InducksCountryNameWithPossession
     }
 
     @Override
-    protected boolean isPossessed(InducksCountryNameWithPossession inducksCountryNameWithPossession) {
-        return inducksCountryNameWithPossession.getPossessed();
+    protected boolean isPossessed(InducksCountryNameWithPossession c) {
+        return c.getPossessed();
     }
 
     @Override
@@ -45,8 +45,8 @@ public class CountryAdapter extends ItemAdapter<InducksCountryNameWithPossession
     }
 
     @Override
-    protected Integer getPrefixImageResource(InducksCountryNameWithPossession i, Activity a) {
-        String uri = "@drawable/flags_" + i.getCountry().getCountryCode();
+    protected Integer getPrefixImageResource(InducksCountryNameWithPossession c, Activity a) {
+        String uri = "@drawable/flags_" + c.getCountry().getCountryCode();
         int imageResource = a.getResources().getIdentifier(uri, null, a.getPackageName());
 
         if (imageResource == 0) {
@@ -56,27 +56,27 @@ public class CountryAdapter extends ItemAdapter<InducksCountryNameWithPossession
     }
 
     @Override
-    protected Integer getSuffixImageResource(InducksCountryNameWithPossession i) {
+    protected Integer getSuffixImageResource(InducksCountryNameWithPossession c) {
         return null;
     }
 
     @Override
-    protected String getSuffixText(InducksCountryNameWithPossession i) {
+    protected String getSuffixText(InducksCountryNameWithPossession c) {
         return null;
     }
 
     @Override
-    protected String getText(InducksCountryNameWithPossession i) {
-        return i.getCountry().getCountryName();
+    protected String getText(InducksCountryNameWithPossession c) {
+        return c.getCountry().getCountryName();
     }
 
     @Override
-    protected String getIdentifier(InducksCountryNameWithPossession i) {
-        return i.getCountry().getCountryCode();
+    protected String getIdentifier(InducksCountryNameWithPossession c) {
+        return c.getCountry().getCountryCode();
     }
 
     @Override
-    protected String getComparatorText(InducksCountryNameWithPossession i) {
-        return getText(i);
+    protected String getComparatorText(InducksCountryNameWithPossession c) {
+        return getText(c);
     }
 }

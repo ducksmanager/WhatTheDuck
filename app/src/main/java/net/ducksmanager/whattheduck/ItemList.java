@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,14 +14,13 @@ import android.widget.TextView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import net.ducksmanager.util.AppCompatActivityWithMenu;
 import net.ducksmanager.util.CoverFlowFileHandler;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +33,7 @@ import static net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedCountry;
 import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedPublication;
 
-public abstract class ItemList<Item> extends AppCompatActivity {
+public abstract class ItemList<Item> extends AppCompatActivityWithMenu {
     public static String type = CollectionType.USER.toString();
     static final int MIN_ITEM_NUMBER_FOR_FILTER = 20;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -55,7 +51,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
     protected abstract boolean shouldShow();
     protected abstract boolean shouldShowNavigationCountry();
     protected abstract boolean shouldShowNavigationPublication();
-    protected abstract boolean shouldShowToolbar();
     protected abstract boolean shouldShowAddToCollectionButton();
     protected abstract boolean shouldShowFilter(List<Item> items);
 
@@ -111,14 +106,7 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             return;
         }
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        if (shouldShowToolbar()) {
-            toolbar.setVisibility(View.VISIBLE);
-            setSupportActionBar(toolbar);
-        }
-        else {
-            toolbar.setVisibility(GONE);
-        }
+        showToolbarIfExists();
 
         showNavigation();
 
@@ -204,38 +192,6 @@ public abstract class ItemList<Item> extends AppCompatActivity {
             CoverFlowFileHandler.current.resizeUntilFileSize(new CoverFlowFileHandler.SearchFromCover());
         }
 
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_user, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i = null;
-
-        switch (item.getItemId()) {
-            case R.id.action_logout:
-                appDB.userDao().deleteAll();
-                i = new Intent(this, Login.class);
-            break;
-            case R.id.action_settings:
-                i = new Intent(this, SettingsActivity.class);
-            break;
-
-        }
-        if (item.getTitle().equals(getString(R.string.add_issue))) {
-            onBackFromAddIssueActivity();
-        }
-        if (i == null) {
-            return super.onOptionsItemSelected(item);
-        }
-        else {
-            startActivity(i);
-            return true;
-        }
     }
 
     private void showNavigation() {
