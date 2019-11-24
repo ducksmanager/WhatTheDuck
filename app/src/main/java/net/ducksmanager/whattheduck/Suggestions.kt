@@ -23,9 +23,7 @@ class Suggestions : AppCompatActivityWithMenu() {
         var storyDetails: java.util.HashMap<String, SuggestionList.SuggestedStory> = HashMap()
     }
 
-    override fun shouldShowToolbar(): Boolean {
-        return true
-    }
+    override fun shouldShowToolbar() = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
