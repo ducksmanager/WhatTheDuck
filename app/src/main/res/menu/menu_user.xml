@@ -1,15 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/action_collection"
+            android:title="@string/collection"
+            app:showAsAction="never"/>
 
-    <item android:id="@+id/action_suggestions"
-        android:title="@string/suggestions"
-        app:showAsAction="never"/>
+        <item android:id="@+id/action_suggestions"
+            android:title="@string/suggestions"
+            app:showAsAction="never"/>
 
-    <item android:id="@+id/action_settings"
-        android:title="@string/settings"
-        app:showAsAction="never"/>
+        <item android:id="@+id/action_settings"
+            android:title="@string/settings"
+            app:showAsAction="never"/>
 
-    <item android:id="@+id/action_logout"
-          android:title="@string/logout"
-          app:showAsAction="never"/>
+        <item android:id="@+id/action_logout"
+              android:title="@string/logout"
+              app:showAsAction="never"/>
+    </group>
 </menu>

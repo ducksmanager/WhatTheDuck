@@ -14,12 +14,12 @@ import net.ducksmanager.apigateway.DmServer
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.CountryListToUpdate
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
-import net.ducksmanager.util.AppCompatActivityWithMenu
+import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB
 import net.ducksmanager.whattheduck.WhatTheDuckApplication.applicationVersion
 import retrofit2.Response
 
-class Settings : AppCompatActivityWithMenu() {
+class Settings : AppCompatActivityWithDrawer() {
     override fun shouldShowToolbar() = true
 
     override fun onCreate(savedInstanceState: Bundle?) {

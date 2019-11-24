@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import net.ducksmanager.apigateway.DmServer
 import net.ducksmanager.persistence.models.composite.SuggestionList
-import net.ducksmanager.util.AppCompatActivityWithMenu
+import net.ducksmanager.util.AppCompatActivityWithDrawer
 import retrofit2.Response
 
 
-class Suggestions : AppCompatActivityWithMenu() {
+class Suggestions : AppCompatActivityWithDrawer() {
 
     companion object {
         var publicationTitles: HashMap<String, String> = HashMap()

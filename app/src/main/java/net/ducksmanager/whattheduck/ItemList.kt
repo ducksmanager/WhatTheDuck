@@ -16,13 +16,13 @@ import com.github.clans.fab.FloatingActionButton
 import com.github.clans.fab.FloatingActionMenu
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.coa.InducksPublication
-import net.ducksmanager.util.AppCompatActivityWithMenu
+import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.util.CoverFlowFileHandler
 import net.ducksmanager.util.CoverFlowFileHandler.SearchFromCover
 import java.lang.ref.WeakReference
 import java.util.*
 
-abstract class ItemList<Item> : AppCompatActivityWithMenu() {
+abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     companion object {
         @JvmField
@@ -51,7 +51,10 @@ abstract class ItemList<Item> : AppCompatActivityWithMenu() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.wtd_list)
+
+        showToolbarIfExists()
 
         findViewById<View>(R.id.navigationAllCountries)
             ?.setOnClickListener { _: View? -> goToView(CountryList::class.java) }
@@ -91,7 +94,6 @@ abstract class ItemList<Item> : AppCompatActivityWithMenu() {
         if (!shouldShow()) {
             return
         }
-        showToolbarIfExists()
         showNavigation()
         val addToCollection = findViewById<FloatingActionMenu>(R.id.addToCollectionWrapper)
         if (shouldShowAddToCollectionButton()) {
