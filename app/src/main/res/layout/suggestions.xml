@@ -13,13 +13,14 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:title="@string/suggestions" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_below="@+id/toolbar">
 
         <TextView
+            android:id="@+id/suggestionsIntro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -30,34 +31,34 @@
 
         <ToggleButton
             android:id="@+id/sort"
+            android:layout_below="@+id/suggestionsIntro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textIsSelectable="false"
             android:textOff="@string/sort_by_score"
             android:textOn="@string/sort_by_publication_date" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/suggestionList"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="26dp"
-            tools:listitem="@layout/row_suggested_issue"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:visibility="visible" />
-    </LinearLayout>
+            android:layout_below="@+id/sort"
+            android:orientation="vertical">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/suggestionList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="26dp"
+                tools:listitem="@layout/row_suggested_issue"/>
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:layout_centerInParent="true"
+                android:visibility="visible" />
+        </RelativeLayout>
 
+    </RelativeLayout>
 </RelativeLayout>
