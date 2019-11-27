@@ -27,7 +27,7 @@ import androidx.room.RoomDatabase;
     InducksCountryName.class, InducksPublication.class, InducksIssue.class,
     CoverSearchIssue.class,
     User.class, UserSetting.class, UserMessage.class
-}, version = 1, exportSchema = false)
+}, version = 1, exportSchema = true)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract IssueDao issueDao();
