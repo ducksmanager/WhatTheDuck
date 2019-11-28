@@ -34,10 +34,10 @@ import retrofit2.Response;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.alert;
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB;
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.config;
+import static net.ducksmanager.whattheduck.WhatTheDuck.CONFIG_KEY_API_ENDPOINT_URL;
+import static net.ducksmanager.whattheduck.WhatTheDuck.alert;
+import static net.ducksmanager.whattheduck.WhatTheDuck.appDB;
+import static net.ducksmanager.whattheduck.WhatTheDuck.config;
 
 public class CoverFlowFileHandler {
 

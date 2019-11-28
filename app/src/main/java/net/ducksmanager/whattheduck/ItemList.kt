@@ -26,7 +26,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     companion object {
         @JvmField
-        var type = WhatTheDuckApplication.CollectionType.USER.toString()
+        var type = WhatTheDuck.CollectionType.USER.toString()
         const val MIN_ITEM_NUMBER_FOR_FILTER = 20
         private const val REQUEST_IMAGE_CAPTURE = 1
     }
@@ -66,7 +66,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     }
 
     fun loadList() {
-        (application as WhatTheDuckApplication).trackActivity(this)
+        (application as WhatTheDuck).trackActivity(this)
         if (!hasList()) {
             requiresDataDownload = true
             downloadList(this)
@@ -82,10 +82,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     }
 
     private fun goToAlternativeView() {
-        type = if (type == WhatTheDuckApplication.CollectionType.USER.toString())
-            WhatTheDuckApplication.CollectionType.COA.toString()
+        type = if (type == WhatTheDuck.CollectionType.USER.toString())
+            WhatTheDuck.CollectionType.COA.toString()
         else
-            WhatTheDuckApplication.CollectionType.USER.toString()
+            WhatTheDuck.CollectionType.USER.toString()
         loadList()
         show()
     }
@@ -100,10 +100,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             if (addToCollection != null) {
                 addToCollection.setMenuButtonColorNormalResId(R.color.holo_green_dark)
                 addToCollection.setMenuButtonColorPressedResId(R.color.holo_green_dark)
-                addToCollection.visibility = if (type == WhatTheDuckApplication.CollectionType.USER.toString()) View.VISIBLE else View.GONE
+                addToCollection.visibility = if (type == WhatTheDuck.CollectionType.USER.toString()) View.VISIBLE else View.GONE
                 addToCollection.close(false)
 
-                if (type == WhatTheDuckApplication.CollectionType.USER.toString()) {
+                if (type == WhatTheDuck.CollectionType.USER.toString()) {
                     findViewById<FloatingActionButton>(R.id.addToCollectionByPhotoButton)
                         .setOnClickListener { takeCoverPicture() }
 
@@ -170,7 +170,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     private fun showNavigation() {
         if (shouldShowNavigationCountry()) {
-            WhatTheDuckApplication.appDB.inducksCountryDao().findByCountryCode(WhatTheDuckApplication.selectedCountry)
+            WhatTheDuck.appDB.inducksCountryDao().findByCountryCode(WhatTheDuck.selectedCountry)
                 .observe(this, Observer { inducksCountryName: InducksCountryName ->
                     setNavigationCountry(inducksCountryName.countryCode, inducksCountryName.countryName)
                 })
@@ -178,7 +178,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             findViewById<View>(R.id.navigationCountry).visibility = View.INVISIBLE
         }
         if (shouldShowNavigationPublication()) {
-            WhatTheDuckApplication.appDB.inducksPublicationDao().findByPublicationCode(WhatTheDuckApplication.selectedPublication)
+            WhatTheDuck.appDB.inducksPublicationDao().findByPublicationCode(WhatTheDuck.selectedPublication)
                 .observe(this, Observer { inducksPublication: InducksPublication ->
                     setNavigationPublication(inducksPublication.publicationCode, inducksPublication.title)
                 })
@@ -221,7 +221,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         if (isPossessedByUser) {
             goToAlternativeView()
         } else {
-            type = WhatTheDuckApplication.CollectionType.USER.toString()
+            type = WhatTheDuck.CollectionType.USER.toString()
             startActivity(Intent(this, CountryList::class.java))
         }
     }

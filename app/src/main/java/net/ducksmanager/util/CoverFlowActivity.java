@@ -14,17 +14,17 @@ import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIss
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails;
 import net.ducksmanager.whattheduck.AddIssue;
 import net.ducksmanager.whattheduck.R;
-import net.ducksmanager.whattheduck.WhatTheDuckApplication;
+import net.ducksmanager.whattheduck.WhatTheDuck;
 
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
 
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB;
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedCountry;
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedIssue;
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedPublication;
+import static net.ducksmanager.whattheduck.WhatTheDuck.appDB;
+import static net.ducksmanager.whattheduck.WhatTheDuck.selectedCountry;
+import static net.ducksmanager.whattheduck.WhatTheDuck.selectedIssue;
+import static net.ducksmanager.whattheduck.WhatTheDuck.selectedPublication;
 
 
 public class CoverFlowActivity extends AppCompatActivity {
@@ -46,7 +46,7 @@ public class CoverFlowActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ((WhatTheDuckApplication) getApplication()).trackActivity(this);
+        ((WhatTheDuck) getApplication()).trackActivity(this);
         setContentView(R.layout.activity_coverflow);
 
         appDB.coverSearchIssueDao().findAll().observe(this, searchIssues -> {

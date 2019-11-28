@@ -21,7 +21,7 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.*;
+import static net.ducksmanager.whattheduck.WhatTheDuck.*;
 
 public abstract class ItemAdapter<Item> extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 

@@ -14,7 +14,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.*;
+import static net.ducksmanager.whattheduck.WhatTheDuck.*;
 
 public class IssueEdgeAdapter extends ItemAdapter<InducksIssueWithUserIssueDetails> {
     private final int orientation;

@@ -24,13 +24,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_API_ENDPOINT_URL;
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_ROLE_NAME;
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.CONFIG_KEY_ROLE_PASSWORD;
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.alert;
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.applicationVersion;
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.config;
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.trackEvent;
+import static net.ducksmanager.whattheduck.WhatTheDuck.CONFIG_KEY_API_ENDPOINT_URL;
+import static net.ducksmanager.whattheduck.WhatTheDuck.CONFIG_KEY_ROLE_NAME;
+import static net.ducksmanager.whattheduck.WhatTheDuck.CONFIG_KEY_ROLE_PASSWORD;
+import static net.ducksmanager.whattheduck.WhatTheDuck.alert;
+import static net.ducksmanager.whattheduck.WhatTheDuck.applicationVersion;
+import static net.ducksmanager.whattheduck.WhatTheDuck.config;
+import static net.ducksmanager.whattheduck.WhatTheDuck.trackEvent;
 
 public class DmServer {
     public static DmServerApi api;

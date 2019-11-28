@@ -23,7 +23,7 @@ public class CountryAdapter extends ItemAdapter<InducksCountryNameWithPossession
 
     @Override
     protected boolean isPossessed(InducksCountryNameWithPossession c) {
-        return c.getPossessed();
+        return c.isPossessed();
     }
 
     @Override
@@ -31,7 +31,7 @@ public class CountryAdapter extends ItemAdapter<InducksCountryNameWithPossession
         return view -> {
             int position = ((RecyclerView)view.getParent()).getChildLayoutPosition(view);
             InducksCountryNameWithPossession selectedCountry = CountryAdapter.this.getItem(position);
-            WhatTheDuckApplication.selectedCountry = selectedCountry.getCountry().getCountryCode();
+            WhatTheDuck.selectedCountry = selectedCountry.country.getCountryCode();
 
             Intent i = new Intent(originActivity, PublicationList.class);
             originActivity.startActivity(i);
@@ -46,7 +46,7 @@ public class CountryAdapter extends ItemAdapter<InducksCountryNameWithPossession
 
     @Override
     protected Integer getPrefixImageResource(InducksCountryNameWithPossession c, Activity a) {
-        String uri = "@drawable/flags_" + c.getCountry().getCountryCode();
+        String uri = "@drawable/flags_" + c.country.getCountryCode();
         int imageResource = a.getResources().getIdentifier(uri, null, a.getPackageName());
 
         if (imageResource == 0) {
@@ -67,12 +67,12 @@ public class CountryAdapter extends ItemAdapter<InducksCountryNameWithPossession
 
     @Override
     protected String getText(InducksCountryNameWithPossession c) {
-        return c.getCountry().getCountryName();
+        return c.country.getCountryName();
     }
 
     @Override
     protected String getIdentifier(InducksCountryNameWithPossession c) {
-        return c.getCountry().getCountryCode();
+        return c.country.getCountryCode();
     }
 
     @Override

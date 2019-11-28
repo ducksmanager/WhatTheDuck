@@ -15,8 +15,8 @@ import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.CountryListToUpdate
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
 import net.ducksmanager.util.AppCompatActivityWithDrawer
-import net.ducksmanager.whattheduck.WhatTheDuckApplication.appDB
-import net.ducksmanager.whattheduck.WhatTheDuckApplication.applicationVersion
+import net.ducksmanager.whattheduck.WhatTheDuck.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.applicationVersion
 import retrofit2.Response
 
 class Settings : AppCompatActivityWithDrawer() {
@@ -72,7 +72,7 @@ class Settings : AppCompatActivityWithDrawer() {
 
     class CountryToNotifyListAdapter internal constructor(
         private val context: Context,
-        private var countries: MutableList<InducksCountryNameWithPossession>,
+        private var countries: List<InducksCountryNameWithPossession>,
         val countriesToNotifyTo: MutableSet<String>
     ) : RecyclerView.Adapter<CountryToNotifyListAdapter.ViewHolder>() {
 

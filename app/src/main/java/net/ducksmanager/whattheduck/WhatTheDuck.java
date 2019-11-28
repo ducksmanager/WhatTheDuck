@@ -29,7 +29,7 @@ import java.util.Properties;
 
 import androidx.room.Room;
 
-public class WhatTheDuckApplication extends Application {
+public class WhatTheDuck extends Application {
     public static Properties config = null;
 
     private static final String CONFIG = "config.properties";
@@ -73,6 +73,7 @@ public class WhatTheDuckApplication extends Application {
         if (appDB == null) {
             appDB = Room.databaseBuilder(applicationContext, AppDatabase.class, DB_NAME)
                 .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
                 .build();
         }
     }
@@ -169,7 +170,7 @@ public class WhatTheDuckApplication extends Application {
         if (db != null) {
             User user = db.userDao().getCurrentUser();
             if (user != null) {
-                t.dimension(CONFIG_MATOMO_DIMENSION_USER, user.getUsername());
+                t.dimension(CONFIG_MATOMO_DIMENSION_USER, user.username);
             }
         }
 

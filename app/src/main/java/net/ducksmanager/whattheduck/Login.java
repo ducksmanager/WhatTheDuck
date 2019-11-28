@@ -37,19 +37,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Response;
 import timber.log.Timber;
 
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.*;
+import static net.ducksmanager.whattheduck.WhatTheDuck.*;
 
 public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ((WhatTheDuckApplication)getApplication()).setup();
+        ((WhatTheDuck)getApplication()).setup();
         User user = appDB.userDao().getCurrentUser();
 
         if (user != null) {
-            DmServer.setApiDmUser(user.getUsername());
-            DmServer.setApiDmPassword(user.getPassword());
+            DmServer.setApiDmUser(user.username);
+            DmServer.setApiDmPassword(user.password);
             fetchCollection(new WeakReference<>(Login.this), CountryList.class, false);
         } else {
             setContentView(R.layout.whattheduck);
@@ -102,7 +102,7 @@ public class Login extends AppCompatActivity {
         WeakReference<Activity> activityRef = new WeakReference<>(this);
 
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
-            WhatTheDuckApplication.alert(activityRef, R.string.input_error, R.string.input_error__empty_credentials);
+            WhatTheDuck.alert(activityRef, R.string.input_error, R.string.input_error__empty_credentials);
             ProgressBar mProgressBar = this.findViewById(R.id.progressBar);
             mProgressBar.setVisibility(ProgressBar.INVISIBLE);
             this.findViewById(R.id.login_form).setVisibility(View.VISIBLE);
@@ -130,7 +130,7 @@ public class Login extends AppCompatActivity {
                 if (!isTestContext(apiEndpointUrl)) {
                     try {
                         PushNotifications.start(activityRef.get(), config.getProperty(CONFIG_KEY_PUSHER_INSTANCE_ID));
-                        PushNotifications.setUserId(user.getUsername(), tokenProvider, new BeamsCallback<Void, PusherCallbackError>() {
+                        PushNotifications.setUserId(user.username, tokenProvider, new BeamsCallback<Void, PusherCallbackError>() {
                             @Override
                             public void onSuccess(@NonNull Void... values) {
                                 Timber.i("Successfully authenticated with Pusher Beams");

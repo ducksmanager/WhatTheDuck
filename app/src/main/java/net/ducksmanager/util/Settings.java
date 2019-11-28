@@ -10,7 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.*;
+import static net.ducksmanager.whattheduck.WhatTheDuck.*;
 
 public class Settings {
 

@@ -20,7 +20,7 @@ public class Signup extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((WhatTheDuckApplication) getApplication()).trackActivity(this);
+        ((WhatTheDuck) getApplication()).trackActivity(this);
 
         setContentView(R.layout.signup);
         

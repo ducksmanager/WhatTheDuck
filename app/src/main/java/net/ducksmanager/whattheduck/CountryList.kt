@@ -35,8 +35,8 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
         } else {
             ReleaseNotes.current.showOnVersionUpdate(WeakReference(this))
         }
-        WhatTheDuckApplication.selectedCountry = null
-        WhatTheDuckApplication.selectedPublication = null
+        WhatTheDuck.selectedCountry = null
+        WhatTheDuck.selectedPublication = null
         show()
     }
 
@@ -63,11 +63,11 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
         get() = CountryAdapter(this, data)
 
     override fun setData() {
-        WhatTheDuckApplication.appDB.inducksCountryDao().findAllWithPossession().observe(this@CountryList, Observer { items: List<InducksCountryNameWithPossession>? -> storeItemList(items!!) })
+        WhatTheDuck.appDB.inducksCountryDao().findAllWithPossession().observe(this@CountryList, Observer { items: List<InducksCountryNameWithPossession>? -> storeItemList(items!!) })
     }
 
     override fun onBackPressed() {
-        if (type == WhatTheDuckApplication.CollectionType.COA.toString()) {
+        if (type == WhatTheDuck.CollectionType.COA.toString()) {
             onBackFromAddIssueActivity()
         }
     }
@@ -77,16 +77,16 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
         @JvmField
         var hasFullList = false
         fun downloadList(currentActivity: Activity?, hasDataCallback: Runnable) {
-            DmServer.api.getCountries(WhatTheDuckApplication.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksCountries", currentActivity) {
+            DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksCountries", currentActivity) {
                 override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                     val countries: MutableList<InducksCountryName> = ArrayList()
                     for (countryCode in response.body()!!.keys) {
                         if (countryCode != DUMMY_COUNTRY_CODE) {
-                            countries.add(InducksCountryName(countryCode, response.body()!![countryCode]))
+                            countries.add(InducksCountryName(countryCode, response.body()!![countryCode]!!))
                         }
                     }
-                    WhatTheDuckApplication.appDB.inducksCountryDao().deleteAll()
-                    WhatTheDuckApplication.appDB.inducksCountryDao().insertList(countries)
+                    WhatTheDuck.appDB.inducksCountryDao().deleteAll()
+                    WhatTheDuck.appDB.inducksCountryDao().insertList(countries)
                     hasFullList = true
                     hasDataCallback.run()
                 }

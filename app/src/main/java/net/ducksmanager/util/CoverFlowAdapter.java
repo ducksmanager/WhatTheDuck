@@ -24,7 +24,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.applicationVersion;
+import static net.ducksmanager.whattheduck.WhatTheDuck.applicationVersion;
 
 class CoverFlowAdapter extends BaseAdapter {
 

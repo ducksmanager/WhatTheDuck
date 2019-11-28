@@ -12,7 +12,7 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.*;
+import static net.ducksmanager.whattheduck.WhatTheDuck.*;
 
 public class IssueAdapter extends ItemAdapter<InducksIssueWithUserIssueDetails> {
     IssueAdapter(ItemList itemList, List<InducksIssueWithUserIssueDetails> items) {
@@ -49,7 +49,7 @@ public class IssueAdapter extends ItemAdapter<InducksIssueWithUserIssueDetails> 
     @Override
     protected Integer getPrefixImageResource(InducksIssueWithUserIssueDetails i, Activity activity) {
         if (this.resourceToInflate == R.layout.row && i.getUserIssue() != null) {
-            return InducksIssueWithUserIssueDetails.issueConditionToResourceId(i.getUserIssue().getCondition());
+            return InducksIssueWithUserIssueDetails.issueConditionToResourceId(i.getUserIssue().condition);
         } else {
             return android.R.color.transparent;
         }

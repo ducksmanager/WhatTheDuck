@@ -15,11 +15,11 @@ import net.ducksmanager.whattheduck.Settings
 abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
 
     companion object {
-        private val menuActions: HashMap<Int, Class<*>> = hashMapOf(
-            R.id.action_collection to CountryList::class.java,
-            R.id.action_settings to Settings::class.java,
-            R.id.action_suggestions to Suggestions::class.java,
-            R.id.action_logout to Login::class.java
+        private val menuActions: HashMap<Int, List<Class<*>>> = hashMapOf(
+            R.id.action_collection to listOf(CountryList::class.java, PublicationList::class.java, IssueList::class.java),
+            R.id.action_settings to listOf(Settings::class.java),
+            R.id.action_suggestions to listOf(Suggestions::class.java),
+            R.id.action_logout to listOf(Login::class.java)
         )
     }
 
@@ -48,15 +48,18 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
 
         val drawerNavigation = findViewById<NavigationView>(R.id.drawerNavigation)
 
-        drawerNavigation.setCheckedItem(menuActions.filterValues { it == this.javaClass }.keys.first())
+        val keys = menuActions.filterValues { it.contains(this.javaClass) }.keys
+        if (keys.isNotEmpty()) {
+            drawerNavigation.setCheckedItem(keys.first())
+        }
 
         drawerNavigation
             .setNavigationItemSelectedListener { menuItem ->
                 if (menuItem.itemId == R.id.action_logout) {
-                    WhatTheDuckApplication.appDB.userDao().deleteAll()
+                    WhatTheDuck.appDB.userDao().deleteAll()
                 }
 
-                val target = menuActions[menuItem.itemId]
+                val target = menuActions[menuItem.itemId]?.get(0)
                 if (this.javaClass != target) {
                     startActivity(Intent(this, target))
                 }

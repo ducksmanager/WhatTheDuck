@@ -43,13 +43,13 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
     }
 
     override fun downloadList(currentActivity: Activity?) {
-        DmServer.api.getIssues(WhatTheDuckApplication.selectedPublication).enqueue(object : DmServer.Callback<List<String>>("getInducksIssues", currentActivity) {
+        DmServer.api.getIssues(WhatTheDuck.selectedPublication).enqueue(object : DmServer.Callback<List<String>>("getInducksIssues", currentActivity) {
             override fun onSuccessfulResponse(response: Response<List<String>>) {
                 val issues: MutableList<InducksIssue> = ArrayList()
                 for (issueNumber in response.body()!!) {
-                    issues.add(InducksIssue(WhatTheDuckApplication.selectedPublication, issueNumber))
+                    issues.add(InducksIssue(WhatTheDuck.selectedPublication, issueNumber))
                 }
-                WhatTheDuckApplication.appDB.inducksIssueDao().insertList(issues)
+                WhatTheDuck.appDB.inducksIssueDao().insertList(issues)
                 setData()
             }
         })
@@ -58,7 +58,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
     override fun hasDividers() = viewType != ViewType.EDGE_VIEW
 
     override fun shouldShow() =
-        WhatTheDuckApplication.selectedCountry != null && WhatTheDuckApplication.selectedPublication != null
+        WhatTheDuck.selectedCountry != null && WhatTheDuck.selectedPublication != null
 
     override fun shouldShowNavigationCountry() = !isLandscapeEdgeView
 
@@ -76,7 +76,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
             val switchViewWrapper = findViewById<RelativeLayout>(R.id.switchViewWrapper)
 
             DraggableRelativeLayout.makeDraggable(switchViewWrapper)
-            if (type == WhatTheDuckApplication.CollectionType.COA.toString()) {
+            if (type == WhatTheDuck.CollectionType.COA.toString()) {
                 viewType = ViewType.LIST_VIEW
                 switchViewWrapper.visibility = View.GONE
             } else {
@@ -85,7 +85,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
                 switchView.isChecked = viewType == ViewType.EDGE_VIEW
                 switchView.setOnClickListener {
                     if (switchView.isChecked) {
-                        if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_DATA_CONSUMPTION) && WhatTheDuckApplication.isMobileConnection()) {
+                        if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_DATA_CONSUMPTION) && WhatTheDuck.isMobileConnection()) {
                             val builder = AlertDialog.Builder(this@IssueList)
                             builder.setTitle(getString(R.string.bookcaseViewTitle))
                             builder.setMessage(getString(R.string.bookcaseViewMessage))
@@ -115,7 +115,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
 
                 if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW)
                     && listOrientation == RecyclerView.VERTICAL) {
-                    WhatTheDuckApplication.info(WeakReference(this), R.string.welcomeBookcaseViewPortrait, Toast.LENGTH_LONG)
+                    WhatTheDuck.info(WeakReference(this), R.string.welcomeBookcaseViewPortrait, Toast.LENGTH_LONG)
                     Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW)
                 }
                 recyclerView.layoutManager = LinearLayoutManager(this, listOrientation, false)
@@ -133,7 +133,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
         }
 
     private fun switchBetweenViews() {
-        WhatTheDuckApplication.trackEvent("issuelist/switchview")
+        WhatTheDuck.trackEvent("issuelist/switchview")
         viewType = if ((findViewById<View>(R.id.switchView) as Switch).isChecked) ViewType.EDGE_VIEW else ViewType.LIST_VIEW
         loadList()
         show()
@@ -145,13 +145,13 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
         }
 
     override fun setData() {
-        WhatTheDuckApplication.appDB.inducksIssueDao().findByPublicationCode(WhatTheDuckApplication.selectedPublication).observe(this, Observer { items: List<InducksIssueWithUserIssueDetails> ->
+        WhatTheDuck.appDB.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication).observe(this, Observer { items: List<InducksIssueWithUserIssueDetails> ->
             storeItemList(items)
         })
     }
 
     override fun onBackPressed() {
-        if (type == WhatTheDuckApplication.CollectionType.COA.toString()) {
+        if (type == WhatTheDuck.CollectionType.COA.toString()) {
             onBackFromAddIssueActivity()
         } else {
             startActivity(Intent(this, PublicationList::class.java))

@@ -16,13 +16,13 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
     }
 
     override fun downloadList(currentActivity: Activity?) {
-        DmServer.api.getPublications(WhatTheDuckApplication.selectedCountry).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksPublications", currentActivity) {
+        DmServer.api.getPublications(WhatTheDuck.selectedCountry).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksPublications", currentActivity) {
             override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                 val publications: MutableList<InducksPublication> = ArrayList()
                 for (publicationCode in response.body()!!.keys) {
-                    publications.add(InducksPublication(publicationCode, response.body()!![publicationCode]))
+                    publications.add(InducksPublication(publicationCode, response.body()!![publicationCode]!!))
                 }
-                WhatTheDuckApplication.appDB.inducksPublicationDao().insertList(publications)
+                WhatTheDuck.appDB.inducksPublicationDao().insertList(publications)
                 setData()
             }
         })
@@ -30,22 +30,22 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WhatTheDuckApplication.selectedPublication = null
+        WhatTheDuck.selectedPublication = null
         show()
     }
 
     override val isPossessedByUser: Boolean
         get() {
-            return data.any { it.possessed }
+            return data.any { it.isPossessed }
         }
 
     override fun setData() {
-        WhatTheDuckApplication.appDB.inducksPublicationDao().findByCountry(WhatTheDuckApplication.selectedCountry).observe(this, Observer { items: List<InducksPublicationWithPossession> ->
+        WhatTheDuck.appDB.inducksPublicationDao().findByCountry(WhatTheDuck.selectedCountry).observe(this, Observer { items: List<InducksPublicationWithPossession> ->
             storeItemList(items)
         })
     }
 
-    override fun shouldShow() = WhatTheDuckApplication.selectedCountry != null
+    override fun shouldShow() = WhatTheDuck.selectedCountry != null
 
     override fun shouldShowNavigationCountry() = true
 
@@ -63,7 +63,7 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
         get() = PublicationAdapter(this, data)
 
     override fun onBackPressed() {
-        if (type == WhatTheDuckApplication.CollectionType.COA.toString()) {
+        if (type == WhatTheDuck.CollectionType.COA.toString()) {
             onBackFromAddIssueActivity()
         } else {
             startActivity(Intent(this, CountryList::class.java))

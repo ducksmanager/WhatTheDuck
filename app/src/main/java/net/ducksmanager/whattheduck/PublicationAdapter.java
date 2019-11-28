@@ -10,7 +10,7 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import static net.ducksmanager.whattheduck.WhatTheDuckApplication.selectedPublication;
+import static net.ducksmanager.whattheduck.WhatTheDuck.selectedPublication;
 
 public class PublicationAdapter extends ItemAdapter<InducksPublicationWithPossession> {
 
@@ -31,14 +31,14 @@ public class PublicationAdapter extends ItemAdapter<InducksPublicationWithPosses
 
     @Override
     protected boolean isPossessed(InducksPublicationWithPossession inducksPublicationWithPossession) {
-        return inducksPublicationWithPossession.getPossessed();
+        return inducksPublicationWithPossession.isPossessed();
     }
 
     @Override
     protected View.OnClickListener getOnClickListener() {
         return view -> {
             int position = ((RecyclerView)view.getParent()).getChildLayoutPosition(view);
-            selectedPublication = PublicationAdapter.this.getItem(position).getPublication().getPublicationCode();
+            selectedPublication = PublicationAdapter.this.getItem(position).publication.getPublicationCode();
 
             Intent i = new Intent(originActivity, IssueList.class);
             originActivity.startActivity(i);
@@ -58,7 +58,7 @@ public class PublicationAdapter extends ItemAdapter<InducksPublicationWithPosses
 
     @Override
     protected String getIdentifier(InducksPublicationWithPossession i) {
-        return i.getPublication().getPublicationCode();
+        return i.publication.getPublicationCode();
     }
 
     @Override
@@ -68,7 +68,7 @@ public class PublicationAdapter extends ItemAdapter<InducksPublicationWithPosses
 
     @Override
     protected String getText(InducksPublicationWithPossession i) {
-        return i.getPublication().getTitle();
+        return i.publication.getTitle();
     }
 
     @Override
