@@ -2,23 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="192dp"
+    android:layout_height="match_parent"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
     android:orientation="vertical">
 
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/app_name"
-        android:scaleType="fitXY"
-        android:src="@drawable/flags_fr" />
+        android:layout_height="100dp">
+        <ImageView
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
 
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/icon" />
+    </LinearLayout>
     <TextView
-        android:id="@+id/textEmail"
+        android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
         android:text="test"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"

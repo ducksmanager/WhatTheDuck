@@ -3,6 +3,7 @@ package net.ducksmanager.util
 import android.content.Intent
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -52,6 +53,9 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
         if (keys.isNotEmpty()) {
             drawerNavigation.setCheckedItem(keys.first())
         }
+
+        drawerNavigation.getHeaderView(0).findViewById<TextView>(R.id.username).text =
+            WhatTheDuck.appDB.userDao().currentUser?.username
 
         drawerNavigation
             .setNavigationItemSelectedListener { menuItem ->
