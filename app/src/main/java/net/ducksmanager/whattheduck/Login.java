@@ -150,7 +150,7 @@ public class Login extends AppCompatActivity {
                 appDB.issueDao().deleteAll();
                 appDB.issueDao().insertList(issueListResponse.body());
 
-                DmServer.api.getUserPurchases().enqueue(new DmServer.Callback<List<Purchase>>("getPurchases", activityRef.get()) {
+                DmServer.api.getUserPurchases().enqueue(new DmServer.Callback<List<Purchase>>("getPurchases", activityRef.get(), true) {
                     @Override
                     public void onSuccessfulResponse(Response<List<Purchase>> purchaseListResponse) {
                         appDB.purchaseDao().deleteAll();

@@ -15,7 +15,7 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
         return false // FIXME
     }
 
-    override fun downloadList(currentActivity: Activity?) {
+    override fun downloadList(currentActivity: Activity) {
         DmServer.api.getPublications(WhatTheDuck.selectedCountry).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksPublications", currentActivity) {
             override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                 val publications: MutableList<InducksPublication> = ArrayList()

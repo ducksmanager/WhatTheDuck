@@ -170,7 +170,7 @@ public class CoverFlowFileHandler {
             RequestBody fileName = RequestBody.create(MediaType.parse("text/plain"), file.getName());
 
             System.out.println("Starting cover search : " + System.currentTimeMillis());
-            DmServer.api.searchFromCover(fileToUpload, fileName).enqueue(new DmServer.Callback<CoverSearchResults>("coversearch", getOriginActivity()) {
+            DmServer.api.searchFromCover(fileToUpload, fileName).enqueue(new DmServer.Callback<CoverSearchResults>("coversearch", getOriginActivity(), true) {
                 @Override
                 public void onSuccessfulResponse(Response<CoverSearchResults> response) {
                     System.out.println("Ending cover search : " + System.currentTimeMillis());

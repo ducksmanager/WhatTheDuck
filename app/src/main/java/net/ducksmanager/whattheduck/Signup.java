@@ -46,7 +46,7 @@ public class Signup extends AppCompatActivity {
             String password2 = passwordConfirmationField.getText().toString();
             String email = emailField.getText().toString();
 
-            DmServer.api.createUser(new UserToCreate(username, password, password2, email)).enqueue(new DmServer.Callback<Void>("signup", Signup.this) {
+            DmServer.api.createUser(new UserToCreate(username, password, password2, email)).enqueue(new DmServer.Callback<Void>("signup", Signup.this, true) {
                 @Override
                 public void onSuccessfulResponse(Response<Void> response) {
                     DmServer.setApiDmUser(username);

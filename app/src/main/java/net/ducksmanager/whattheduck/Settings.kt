@@ -43,8 +43,8 @@ class Settings : AppCompatActivityWithDrawer() {
 
         appDB.inducksCountryDao().findAllWithPossession().observe(this, Observer { countryNames ->
             DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>("getUserNotificationCountries", this) {
-                override fun onSuccessfulResponse(response: Response<List<String>>?) {
-                    val countriesToNotifyTo = if (response == null) HashSet() else response.body()?.toHashSet() as MutableSet<String>
+                override fun onSuccessfulResponse(response: Response<List<String>>) {
+                    val countriesToNotifyTo = response.body()?.toHashSet() as MutableSet<String>
                     val recyclerView = findViewById<RecyclerView>(R.id.notifiedCountriesList)
                     recyclerView.adapter = CountryToNotifyListAdapter(this@Settings, countryNames, countriesToNotifyTo)
                     recyclerView.layoutManager = LinearLayoutManager(this@Settings)
@@ -63,7 +63,7 @@ class Settings : AppCompatActivityWithDrawer() {
             val countriesToNotifyTo = (recyclerView.adapter as CountryToNotifyListAdapter).countriesToNotifyTo
             DmServer.api.updateUserNotificationCountries(CountryListToUpdate(countriesToNotifyTo))
                 .enqueue(object: DmServer.Callback<Void>("updateUserNotificationCountries", this) {
-                    override fun onSuccessfulResponse(response: Response<Void>?) {
+                    override fun onSuccessfulResponse(response: Response<Void>) {
                         finish()
                     }
                 })

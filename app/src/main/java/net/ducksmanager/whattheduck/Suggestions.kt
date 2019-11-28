@@ -36,14 +36,12 @@ class Suggestions : AppCompatActivityWithDrawer() {
         publicationTitles = HashMap()
 
         DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", this) {
-            override fun onSuccessfulResponse(response: Response<SuggestionList>?) {
-                var suggestions: MutableList<SuggestionList.SuggestedIssue> = ArrayList()
-                if (response != null) {
-                    suggestions = response.body()!!.issues.values.toList() as MutableList<SuggestionList.SuggestedIssue>
-                    publicationTitles = response.body()!!.publicationTitles
-                    authorNames = response.body()!!.authors
-                    storyDetails = response.body()!!.storyDetails
-                }
+            override fun onSuccessfulResponse(response: Response<SuggestionList>) {
+                val suggestions = response.body()!!.issues.values.toList() as MutableList<SuggestionList.SuggestedIssue>
+                publicationTitles = response.body()!!.publicationTitles
+                authorNames = response.body()!!.authors
+                storyDetails = response.body()!!.storyDetails
+
                 suggestionListView.adapter = SuggestedIssueAdapter(this@Suggestions, suggestions)
                 (suggestionListView.adapter as SuggestedIssueAdapter).orderByPublicationDate()
                 suggestionListView.layoutManager = LinearLayoutManager(this@Suggestions)

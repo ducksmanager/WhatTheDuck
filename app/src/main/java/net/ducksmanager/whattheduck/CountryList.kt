@@ -16,7 +16,7 @@ import java.util.*
 
 class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
-    override fun downloadList(currentActivity: Activity?) {
+    override fun downloadList(currentActivity: Activity) {
         downloadList(currentActivity, Runnable { setData() })
     }
 
@@ -76,7 +76,7 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
         private const val DUMMY_COUNTRY_CODE = "zz"
         @JvmField
         var hasFullList = false
-        fun downloadList(currentActivity: Activity?, hasDataCallback: Runnable) {
+        fun downloadList(currentActivity: Activity, hasDataCallback: Runnable) {
             DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksCountries", currentActivity) {
                 override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                     val countries: MutableList<InducksCountryName> = ArrayList()

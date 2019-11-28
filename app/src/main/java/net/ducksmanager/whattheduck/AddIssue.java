@@ -33,7 +33,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Response;
 
-import static net.ducksmanager.whattheduck.WhatTheDuck.*;
+import static net.ducksmanager.whattheduck.WhatTheDuck.appDB;
+import static net.ducksmanager.whattheduck.WhatTheDuck.info;
+import static net.ducksmanager.whattheduck.WhatTheDuck.selectedIssue;
+import static net.ducksmanager.whattheduck.WhatTheDuck.selectedPublication;
 
 public class AddIssue extends AppCompatActivity implements View.OnClickListener {
 
@@ -51,7 +54,7 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void downloadPurchaseList() {
-        DmServer.api.getUserPurchases().enqueue(new DmServer.Callback<List<Purchase>>("getpurchases", this) {
+        DmServer.api.getUserPurchases().enqueue(new DmServer.Callback<List<Purchase>>("getpurchases", this, true) {
             @Override
             public void onSuccessfulResponse(Response<List<Purchase>> response) {
                 appDB.purchaseDao().deleteAll();
@@ -99,7 +102,7 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
                     : PurchaseAdapter.selectedItem.getId()
             );
 
-            DmServer.api.createUserIssues(issueListToUpdate).enqueue(new DmServer.Callback<Object>("addissue", AddIssue.this) {
+            DmServer.api.createUserIssues(issueListToUpdate).enqueue(new DmServer.Callback<Object>("addissue", AddIssue.this, true) {
                 @Override
                 public void onSuccessfulResponse(Response<Object> response) {
                     finish();
@@ -162,7 +165,7 @@ public class AddIssue extends AppCompatActivity implements View.OnClickListener 
             hideKeyboard(floatingButtonView);
 
             Purchase newPurchase = new Purchase(purchaseDateNew.getText().toString(), purchaseTitleNew.getText().toString());
-            DmServer.api.createUserPurchase(newPurchase).enqueue(new DmServer.Callback<Void>("createPurchase", this) {
+            DmServer.api.createUserPurchase(newPurchase).enqueue(new DmServer.Callback<Void>("createPurchase", this, true) {
                 @Override
                 public void onSuccessfulResponse(Response<Void> response) {
                     downloadPurchaseList();

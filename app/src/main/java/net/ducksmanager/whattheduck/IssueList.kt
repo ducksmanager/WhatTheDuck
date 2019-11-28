@@ -42,7 +42,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
         return false // FIXME
     }
 
-    override fun downloadList(currentActivity: Activity?) {
+    override fun downloadList(currentActivity: Activity) {
         DmServer.api.getIssues(WhatTheDuck.selectedPublication).enqueue(object : DmServer.Callback<List<String>>("getInducksIssues", currentActivity) {
             override fun onSuccessfulResponse(response: Response<List<String>>) {
                 val issues: MutableList<InducksIssue> = ArrayList()

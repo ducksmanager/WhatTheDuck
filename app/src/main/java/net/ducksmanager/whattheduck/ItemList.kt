@@ -37,7 +37,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     var data: List<Item> = ArrayList()
 
     protected abstract fun hasList(): Boolean
-    protected abstract fun downloadList(currentActivity: Activity?)
+    protected abstract fun downloadList(currentActivity: Activity)
     protected abstract fun hasDividers(): Boolean
     protected abstract val isPossessedByUser: Boolean
     protected abstract fun setData()
