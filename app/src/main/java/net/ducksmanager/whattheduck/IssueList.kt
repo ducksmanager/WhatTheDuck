@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import net.ducksmanager.apigateway.DmServer
+import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksIssue
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails
 import net.ducksmanager.util.DraggableRelativeLayout

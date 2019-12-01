@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import net.ducksmanager.apigateway.DmServer
+import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import retrofit2.Response

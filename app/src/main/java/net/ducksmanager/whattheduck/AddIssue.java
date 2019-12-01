@@ -13,7 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.ducksmanager.apigateway.DmServer;
+import net.ducksmanager.api.DmServer;
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails;
 import net.ducksmanager.persistence.models.composite.IssueListToUpdate;
 import net.ducksmanager.persistence.models.dm.Purchase;

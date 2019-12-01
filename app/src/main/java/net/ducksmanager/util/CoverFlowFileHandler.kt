@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.RequestCreator
 import com.squareup.picasso.Target
 import com.squareup.picasso.Transformation
-import net.ducksmanager.apigateway.DmServer
+import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.composite.CoverSearchResults
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck

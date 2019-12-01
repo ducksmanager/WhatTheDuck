@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
-import net.ducksmanager.apigateway.DmServer;
+import net.ducksmanager.api.DmServer;
 import net.ducksmanager.persistence.models.composite.UserToCreate;
 import net.ducksmanager.util.Settings;
 

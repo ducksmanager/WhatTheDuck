@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.pusher.pushnotifications.auth.BeamsTokenProvider;
 
-import net.ducksmanager.apigateway.DmServer;
+import net.ducksmanager.api.DmServer;
 import net.ducksmanager.persistence.AppDatabase;
 import net.ducksmanager.persistence.models.dm.User;
 

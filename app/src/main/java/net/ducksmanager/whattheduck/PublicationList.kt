@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import net.ducksmanager.apigateway.DmServer
+import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.InducksPublicationWithPossession
 import retrofit2.Response

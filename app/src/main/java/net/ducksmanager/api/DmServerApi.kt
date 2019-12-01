@@ -1,4 +1,4 @@
-package net.ducksmanager.apigateway
+package net.ducksmanager.api
 
 import net.ducksmanager.persistence.models.composite.*
 import net.ducksmanager.persistence.models.dm.Issue

@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.settings.*
-import net.ducksmanager.apigateway.DmServer
+import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.CountryListToUpdate
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession

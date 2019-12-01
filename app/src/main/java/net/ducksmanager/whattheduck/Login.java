@@ -21,7 +21,7 @@ import com.pusher.pushnotifications.PusherCallbackError;
 import com.pusher.pushnotifications.auth.AuthData;
 import com.pusher.pushnotifications.auth.BeamsTokenProvider;
 
-import net.ducksmanager.apigateway.DmServer;
+import net.ducksmanager.api.DmServer;
 import net.ducksmanager.persistence.models.dm.Issue;
 import net.ducksmanager.persistence.models.dm.Purchase;
 import net.ducksmanager.persistence.models.dm.User;

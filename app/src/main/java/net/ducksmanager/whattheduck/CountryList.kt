@@ -5,7 +5,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import net.ducksmanager.apigateway.DmServer
+import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
 import net.ducksmanager.util.ReleaseNotes

@@ -1,4 +1,4 @@
-package net.ducksmanager.apigateway
+package net.ducksmanager.api
 
 import android.app.Activity
 import android.view.View
