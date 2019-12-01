@@ -83,7 +83,7 @@ public class CoverSearchTest extends WtdTest {
         return new BoundedMatcher<Object, ImageView>(ImageView.class) {
             @Override
             public boolean matchesSafely(final ImageView item) {
-                return CoverFlowActivity.currentSuggestion.getCoverSearchIssue().getCoverFullUrl().equals(item.getTag()) && item.getVisibility() == View.VISIBLE;
+                return CoverFlowActivity.currentSuggestion.getCoverSearchIssue().getCoverUrl().equals(item.getTag()) && item.getVisibility() == View.VISIBLE;
             }
 
             @Override

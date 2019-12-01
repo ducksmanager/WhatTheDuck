@@ -8,5 +8,5 @@ class CoverSearchIssueWithUserIssueDetails(
     val coverSearchIssue: CoverSearchIssue,
 
     @Embedded
-    val userIssue: Issue
+    val userIssue: Issue?
 )

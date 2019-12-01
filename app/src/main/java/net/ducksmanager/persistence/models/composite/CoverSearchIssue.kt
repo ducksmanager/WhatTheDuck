@@ -28,6 +28,7 @@ class CoverSearchIssue(
     @ColumnInfo
     val coverIssueNumber: String,
 
+    @SerializedName(value = "coverurl")
     @ColumnInfo
-    var coverFullUrl: String
+    var coverUrl: String
 )

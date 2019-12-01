@@ -5,10 +5,7 @@ import java.util.*
 
 class CoverSearchResults {
     @Expose
-    val issues: HashMap<String, CoverSearchIssue>? = null
-
-    @Expose
-    private val imageIds: List<Int>? = null
+    lateinit var issues: HashMap<String, CoverSearchIssue>
 
     @Expose
     var type: String? = null

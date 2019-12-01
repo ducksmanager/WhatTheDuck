@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "a5d1ef4060fac4332088d08811b8430d",
+    "identityHash": "23e65c2eaac42a51f4c1289b4f142699",
     "entities": [
       {
         "tableName": "issues",
@@ -167,7 +167,7 @@
       },
       {
         "tableName": "coversearch_issue",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`coverId` TEXT NOT NULL, `coverCountryCode` TEXT NOT NULL, `coverPublicationCode` TEXT NOT NULL, `coverPublicationTitle` TEXT NOT NULL, `coverIssueNumber` TEXT NOT NULL, `coverFullUrl` TEXT NOT NULL, PRIMARY KEY(`coverId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`coverId` TEXT NOT NULL, `coverCountryCode` TEXT NOT NULL, `coverPublicationCode` TEXT NOT NULL, `coverPublicationTitle` TEXT NOT NULL, `coverIssueNumber` TEXT NOT NULL, `coverUrl` TEXT NOT NULL, PRIMARY KEY(`coverId`))",
         "fields": [
           {
             "fieldPath": "coverId",
@@ -200,8 +200,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "coverFullUrl",
-            "columnName": "coverFullUrl",
+            "fieldPath": "coverUrl",
+            "columnName": "coverUrl",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -303,7 +303,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a5d1ef4060fac4332088d08811b8430d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '23e65c2eaac42a51f4c1289b4f142699')"
     ]
   }
 }
