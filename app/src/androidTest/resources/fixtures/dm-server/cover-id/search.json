@@ -5,21 +5,24 @@
       "publicationcode": "de\/LTB",
       "publicationtitle": "Lustiges Taschenbuch",
       "issuenumber": "1",
-      "coverid": 19647
+      "coverid": 19647,
+      "coverurl": "https://inducks.org/hr.php?normalsize=1&image=https://outducks.org/webusers/webusers/2009/10/de_ltb_001a_001.jpg"
     },
     "fr\/MPNT 735": {
       "countrycode": "fr",
       "publicationcode": "fr\/MPNT",
       "publicationtitle": "Mickey Parade (nouveau tirage)",
       "issuenumber": "735",
-      "coverid": 51393
+      "coverid": 51393,
+      "coverurl": "https://inducks.org/hr.php?normalsize=1&image=https://outducks.org/renamed/fr/mpnt/0735/fr_mpnt_735a_001.jpg"
     },
     "fr\/MPP  735": {
       "countrycode": "fr",
       "publicationcode": "fr\/MPP",
       "publicationtitle": "Mickey Parade (ancienne s\u00e9rie)",
       "issuenumber": "735",
-      "coverid": 51697
+      "coverid": 51697,
+      "coverurl": "https://inducks.org/hr.php?normalsize=1&image=https://outducks.org/webusers/webusers/2010/02/fr_mpp_0735a_001.jpg"
     }
   },
   "imageIds": [
