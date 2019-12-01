@@ -16,7 +16,7 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
     }
 
     override fun downloadList(currentActivity: Activity) {
-        DmServer.api.getPublications(WhatTheDuck.selectedCountry).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksPublications", currentActivity) {
+        DmServer.api.getPublications(WhatTheDuck.selectedCountry!!).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksPublications", currentActivity) {
             override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                 val publications: MutableList<InducksPublication> = ArrayList()
                 for (publicationCode in response.body()!!.keys) {
@@ -40,9 +40,7 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
         }
 
     override fun setData() {
-        WhatTheDuck.appDB.inducksPublicationDao().findByCountry(WhatTheDuck.selectedCountry).observe(this, Observer { items: List<InducksPublicationWithPossession> ->
-            storeItemList(items)
-        })
+        WhatTheDuck.appDB.inducksPublicationDao().findByCountry(WhatTheDuck.selectedCountry!!).observe(this, Observer(this@PublicationList::storeItemList))
     }
 
     override fun shouldShow() = WhatTheDuck.selectedCountry != null

@@ -34,7 +34,7 @@ object Settings {
     }
 
     @JvmStatic
-    fun toSHA1(text: String, activityRef: WeakReference<Activity?>?): String {
+    fun toSHA1(text: String, activityRef: WeakReference<Activity>?): String {
         return try {
             val md = MessageDigest.getInstance("SHA-1")
             md.update(text.toByteArray())

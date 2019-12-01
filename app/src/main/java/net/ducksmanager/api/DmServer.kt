@@ -22,22 +22,23 @@ object DmServer {
 
     lateinit var api: DmServerApi
 
-    @JvmField
     var apiDmUser: String? = null
 
-    @JvmField
     var apiDmPassword: String? = null
 
     @JvmStatic
-    fun getRequestHeaders(withUserCredentials: Boolean): HashMap<String, String?> {
-        val headers = HashMap<String, String?>()
-        headers["Authorization"] = Credentials.basic(WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_ROLE_NAME), WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_ROLE_PASSWORD))
+    fun getRequestHeaders(withUserCredentials: Boolean): Map<String, String> {
+        val headers = HashMap<String, String>()
+        headers["Authorization"] = Credentials.basic(
+            WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_ROLE_NAME),
+            WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_ROLE_PASSWORD)
+        )
         headers["x-dm-version"] = WhatTheDuck.applicationVersion
-        if (withUserCredentials) {
-            headers["x-dm-user"] = getApiDmUser()
-            headers["x-dm-pass"] = getApiDmPassword()
+        if (withUserCredentials && apiDmUser != null && apiDmPassword != null) {
+            headers["x-dm-user"] = apiDmUser!!
+            headers["x-dm-pass"] = apiDmPassword!!
         }
-        return headers
+        return headers.toMap()
     }
 
     @JvmStatic
@@ -49,9 +50,8 @@ object DmServer {
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         val okHttpClient = OkHttpClient().newBuilder()
             .addInterceptor(Interceptor { chain: Interceptor.Chain ->
-                val originalRequest = chain.request()
-                val builder = originalRequest.newBuilder()
-                val headers = getRequestHeaders(getApiDmUser() != null)
+                val builder = chain.request().newBuilder()
+                val headers = getRequestHeaders(apiDmUser != null)
                 for (headerKey in headers.keys) {
                     builder.header(headerKey, Objects.requireNonNull(headers[headerKey])!!)
                 }
@@ -66,24 +66,6 @@ object DmServer {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
         api = retrofit.create(DmServerApi::class.java)
-    }
-
-    private fun getApiDmUser(): String? {
-        return apiDmUser
-    }
-
-    @JvmStatic
-    fun setApiDmUser(apiDmUser: String?) {
-        DmServer.apiDmUser = apiDmUser
-    }
-
-    private fun getApiDmPassword(): String? {
-        return apiDmPassword
-    }
-
-    @JvmStatic
-    fun setApiDmPassword(apiDmPassword: String?) {
-        DmServer.apiDmPassword = apiDmPassword
     }
 
     abstract class Callback<T> protected constructor(

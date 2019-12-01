@@ -20,7 +20,6 @@ import net.ducksmanager.util.DraggableRelativeLayout
 import net.ducksmanager.util.Settings
 import retrofit2.Response
 import java.lang.ref.WeakReference
-import java.util.*
 
 class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
 
@@ -43,11 +42,10 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
     }
 
     override fun downloadList(currentActivity: Activity) {
-        DmServer.api.getIssues(WhatTheDuck.selectedPublication).enqueue(object : DmServer.Callback<List<String>>("getInducksIssues", currentActivity) {
+        DmServer.api.getIssues(WhatTheDuck.selectedPublication!!).enqueue(object : DmServer.Callback<List<String>>("getInducksIssues", currentActivity) {
             override fun onSuccessfulResponse(response: Response<List<String>>) {
-                val issues: MutableList<InducksIssue> = ArrayList()
-                for (issueNumber in response.body()!!) {
-                    issues.add(InducksIssue(WhatTheDuck.selectedPublication, issueNumber))
+                val issues: List<InducksIssue> = response.body()!!.map { issueNumber ->
+                    InducksIssue(WhatTheDuck.selectedPublication!!, issueNumber)
                 }
                 WhatTheDuck.appDB.inducksIssueDao().insertList(issues)
                 setData()
@@ -83,9 +81,10 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
                 val switchView = switchViewWrapper.findViewById<Switch>(R.id.switchView)
                 switchViewWrapper.visibility = View.VISIBLE
                 switchView.isChecked = viewType == ViewType.EDGE_VIEW
+
                 switchView.setOnClickListener {
                     if (switchView.isChecked) {
-                        if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_DATA_CONSUMPTION) && WhatTheDuck.isMobileConnection()) {
+                        if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_DATA_CONSUMPTION) && WhatTheDuck.isMobileConnection) {
                             val builder = AlertDialog.Builder(this@IssueList)
                             builder.setTitle(getString(R.string.bookcaseViewTitle))
                             builder.setMessage(getString(R.string.bookcaseViewMessage))
@@ -134,7 +133,11 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
 
     private fun switchBetweenViews() {
         WhatTheDuck.trackEvent("issuelist/switchview")
-        viewType = if ((findViewById<View>(R.id.switchView) as Switch).isChecked) ViewType.EDGE_VIEW else ViewType.LIST_VIEW
+        viewType = if (findViewById<Switch>(R.id.switchView).isChecked)
+            ViewType.EDGE_VIEW
+        else
+            ViewType.LIST_VIEW
+
         loadList()
         show()
     }
@@ -145,9 +148,10 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
         }
 
     override fun setData() {
-        WhatTheDuck.appDB.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication).observe(this, Observer { items: List<InducksIssueWithUserIssueDetails> ->
-            storeItemList(items)
-        })
+        WhatTheDuck.appDB.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
+            .observe(this, Observer { items: List<InducksIssueWithUserIssueDetails> ->
+                storeItemList(items)
+            })
     }
 
     override fun onBackPressed() {

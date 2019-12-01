@@ -178,7 +178,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             findViewById<View>(R.id.navigationCountry).visibility = View.INVISIBLE
         }
         if (shouldShowNavigationPublication()) {
-            WhatTheDuck.appDB.inducksPublicationDao().findByPublicationCode(WhatTheDuck.selectedPublication)
+            WhatTheDuck.appDB.inducksPublicationDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
                 .observe(this, Observer { inducksPublication: InducksPublication ->
                     setNavigationPublication(inducksPublication.publicationCode, inducksPublication.title)
                 })

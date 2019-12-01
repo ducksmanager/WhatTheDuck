@@ -30,7 +30,7 @@ import java.io.IOException
 import java.lang.ref.WeakReference
 import java.util.*
 
-class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>?) {
+class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
     companion object {
         private const val MAX_COVER_DIMENSION = 1000
 
@@ -39,10 +39,10 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>?) {
         @JvmField
         var mockedResource: String? = null
 
-        private var originActivityRef: WeakReference<Activity>? = null
+        private lateinit var originActivityRef: WeakReference<Activity>
 
         private val originActivity: Activity?
-            get() = originActivityRef!!.get()
+            get() = originActivityRef.get()
     }
 
     init {
@@ -147,7 +147,7 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>?) {
                 override fun onSuccessfulResponse(response: Response<CoverSearchResults>) {
                     println("Ending cover search : " + System.currentTimeMillis())
                     if (response.body()!!.issues.values.isEmpty()) {
-                        WhatTheDuck.alert(WeakReference(originActivity), R.string.add_cover_no_results)
+                        WhatTheDuck.alert(originActivityRef, R.string.add_cover_no_results)
                     }
                     else {
                         WhatTheDuck.appDB.coverSearchIssueDao().deleteAll()
@@ -158,7 +158,7 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>?) {
 
                 override fun onFailure(call: Call<CoverSearchResults>, t: Throwable) {
                     WhatTheDuck.alert(
-                        WeakReference(originActivity),
+                        originActivityRef,
                         if (t.message!!.contains("exceeds your upload"))
                             R.string.add_cover_error_file_too_big
                         else

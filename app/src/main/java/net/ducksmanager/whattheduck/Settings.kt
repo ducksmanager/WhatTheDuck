@@ -15,8 +15,8 @@ import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.CountryListToUpdate
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
 import net.ducksmanager.util.AppCompatActivityWithDrawer
-import net.ducksmanager.whattheduck.WhatTheDuck.appDB
-import net.ducksmanager.whattheduck.WhatTheDuck.applicationVersion
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
 import retrofit2.Response
 
 class Settings : AppCompatActivityWithDrawer() {

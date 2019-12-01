@@ -57,6 +57,13 @@ android {
     packagingOptions {
         exclude 'README.txt'
     }
+
+    sourceSets {
+        main.kotlin.srcDirs = ['src/main/kotlin']
+        main.java.srcDirs = ['src/main/java']
+        androidTest.kotlin.srcDirs += 'src/androidTest/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/java'
+    }
 }
 
 dependencies {
