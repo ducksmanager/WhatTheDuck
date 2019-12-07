@@ -31,7 +31,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:text="WhatTheDuck suggests a list of magazines that you could be interested in, based on your favorite authors and the stories of these authors that you don't already have.\nYou can change what countries to show in the Settings screen."
+                android:text="@string/suggestions_intro"
                 app:lineHeight="20dp" />
 
             <ToggleButton

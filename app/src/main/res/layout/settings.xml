@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/line"
-                android:text="Notify me about new stories from my favorite authors" />
+                android:text="@string/notify_option" />
 
             <LinearLayout
                 android:id="@+id/notifiedCountriesListWrapper"
@@ -79,7 +79,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="for issues released in the following countries:" />
+                    android:text="@string/option_notified_countries" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -111,7 +111,7 @@
                 android:id="@+id/save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="save" />
+                android:text="@string/save" />
         </RelativeLayout>
     </RelativeLayout>
     <include layout="@layout/drawer_navigation" />

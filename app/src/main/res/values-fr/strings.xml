@@ -56,16 +56,21 @@
     <string name="purchase_name">Description</string>
     <string name="rate_app">Notez What The Duck sur le Play Store :-)</string>
     <string name="result">Résultat</string>
+    <string name="save">OK</string>
+    <string name="settings">Paramètres</string>
     <string name="signup">Inscription</string>
     <string name="signup__confirm">L\'inscription à DucksManager est terminée, \nvous pouvez maintenant vous connecter.</string>
     <string name="signup_end">Terminer l\'inscription</string>
-    <string name="settings">Paramètres</string>
+    <string name="sort_by_publication_date">Sort by publication date</string>
+    <string name="sort_by_score">Sort by score</string>
+    <string name="suggestions">Suggestions</string>
     <string name="username">Nom d\'utilisateur DucksManager</string>
     <string name="version">What The Duck version %1$s</string>
     <string name="welcomeBookcaseViewPortrait">Bienvenue dans votre bibliothèque ! Orientez votre écran en mode paysage pour le meilleur effet ;-)</string>
-    <string name="welcomeMessage">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur "+" pour ajouter un numéro.</string>
+    <string name="welcomeMessage">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur + pour ajouter un numéro.</string>
     <string name="welcomeTitle">Bienvenue sur What The Duck !</string>
-    <string name="suggestions">Suggestions</string>
-    <string name="sort_by_score">Sort by score</string>
-    <string name="sort_by_publication_date">Sort by publication date</string>
+    <string name="collection">Ma collection</string>
+    <string name="notify_option">Recevoir une notification quand des histoires de mes auteurs favoris sont publiées</string>
+    <string name="option_notified_countries">pour les magazines des pays suivants:</string>
+    <string name="suggestions_intro">WhatTheDuck vous propose une liste personalisée de magazines contenant des histoires inédites de vos auteurs favoris. Vous pouvez changer les pays des magazines à afficher dans l\'écran Paramètres</string>
 </resources>
