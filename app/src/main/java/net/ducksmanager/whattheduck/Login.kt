@@ -15,9 +15,6 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.pusher.pushnotifications.BeamsCallback
-import com.pusher.pushnotifications.PushNotifications
-import com.pusher.pushnotifications.PusherCallbackError
 import com.pusher.pushnotifications.auth.AuthData
 import com.pusher.pushnotifications.auth.AuthDataGetter
 import com.pusher.pushnotifications.auth.BeamsTokenProvider
@@ -30,7 +27,6 @@ import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.persistence.models.dm.User
 import net.ducksmanager.util.Settings.toSHA1
 import retrofit2.Response
-import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -54,29 +50,14 @@ class Login : AppCompatActivity() {
                         }
                     )
 
-                    if (!WhatTheDuck.isTestContext(apiEndpointUrl)) {
-                        try {
-                            PushNotifications.start(activityRef.get(), WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_PUSHER_INSTANCE_ID))
-                            PushNotifications.setUserId(user.username, WhatTheDuck.tokenProvider, object : BeamsCallback<Void, PusherCallbackError> {
-                                override fun onSuccess(vararg values: Void) {
-                                    Timber.i("Successfully authenticated with Pusher Beams")
-                                }
+                    WhatTheDuck.registerForNotifications(activityRef)
 
-                                override fun onFailure(error: PusherCallbackError) {
-                                    Timber.i("PusherBeams : Pusher Beams authentication failed: %s", error.message)
-                                }
-                            })
-                        } catch (e: Exception) {
-                            Timber.e("Pusher init failed : %s", e.message)
-                        }
-                    }
                     WhatTheDuck.appDB.issueDao().deleteAll()
                     WhatTheDuck.appDB.issueDao().insertList(response.body()!!)
                     DmServer.api.userPurchases.enqueue(object : DmServer.Callback<List<Purchase>>("getPurchases", activityRef.get()!!, true) {
                         override fun onSuccessfulResponse(response: Response<List<Purchase>>) {
                             WhatTheDuck.appDB.purchaseDao().deleteAll()
                             WhatTheDuck.appDB.purchaseDao().insertList(response.body()!!)
-
 
                             DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", activityRef.get()!!) {
                                 override fun onSuccessfulResponse(response: Response<SuggestionList>) {

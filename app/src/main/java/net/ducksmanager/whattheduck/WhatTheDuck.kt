@@ -10,6 +10,9 @@ import android.content.res.AssetManager
 import android.net.ConnectivityManager
 import android.widget.Toast
 import androidx.room.Room
+import com.pusher.pushnotifications.BeamsCallback
+import com.pusher.pushnotifications.PushNotifications
+import com.pusher.pushnotifications.PusherCallbackError
 import com.pusher.pushnotifications.auth.BeamsTokenProvider
 import net.ducksmanager.api.DmServer.initApi
 import net.ducksmanager.persistence.AppDatabase
@@ -17,6 +20,7 @@ import org.matomo.sdk.Matomo
 import org.matomo.sdk.Tracker
 import org.matomo.sdk.TrackerBuilder
 import org.matomo.sdk.extra.TrackHelper
+import timber.log.Timber
 import java.io.IOException
 import java.io.InputStream
 import java.lang.ref.WeakReference
@@ -112,6 +116,25 @@ class WhatTheDuck : Application() {
             builder.setTitle(activity!!.getString(titleId))
             builder.setMessage(activity.getString(messageId))
             activity.runOnUiThread { builder.create().show() }
+        }
+
+        fun registerForNotifications(activityRef: WeakReference<Activity>) {
+            if (!isTestContext) {
+                try {
+                    PushNotifications.start(activityRef.get(), config.getProperty(CONFIG_KEY_PUSHER_INSTANCE_ID))
+                    PushNotifications.setUserId(appDB.userDao().currentUser!!.username, tokenProvider, object : BeamsCallback<Void, PusherCallbackError> {
+                        override fun onSuccess(vararg values: Void) {
+                            Timber.i("Successfully authenticated with Pusher Beams")
+                        }
+
+                        override fun onFailure(error: PusherCallbackError) {
+                            Timber.i("PusherBeams : Pusher Beams authentication failed: %s", error.message)
+                        }
+                    })
+                } catch (e: Exception) {
+                    Timber.e("Pusher init failed : %s", e.message)
+                }
+            }
         }
 
         @get:Synchronized
