@@ -77,7 +77,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
             val textWrapperView: LinearLayout = itemView.findViewById(R.id.textwrapper)
             val prefixImageView: ImageView = itemView.findViewById(R.id.prefiximage)
             val suffixtextView1: TextView = itemView.findViewById(R.id.suffixtext1)
-            val suffixtextView2: TextView = itemView.findViewById(R.id.suffixtext2)
+            val suffixtextView2: TextView = itemView.findViewById(R.id.scorevalue)
             val storyListView: RecyclerView = itemView.findViewById(R.id.storylist)
         }
 

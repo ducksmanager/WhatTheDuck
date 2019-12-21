@@ -61,29 +61,7 @@
                     android:text="@string/purchase_date"
                     android:textSize="12sp" />
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/suffix2"
-                android:layout_width="70dp"
-                android:layout_height="20dp"
-                android:orientation="horizontal"
-                android:paddingTop="5dp">
-                <ImageView
-                    android:id="@+id/suffiximage2"
-                    android:layout_width="20dp"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@+id/suffiximage_description"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_fire" />
-                <TextView
-                    android:id="@+id/suffixtext2"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:gravity="center"
-                    android:textSize="12sp"
-                    tools:text="score" />
-            </LinearLayout>
+            <include layout="@layout/score" />
         </LinearLayout>
     </LinearLayout>
 

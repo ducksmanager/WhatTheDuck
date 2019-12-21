@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow.OnScrollPositionListener
-import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueDetails
+import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToResourceId
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToStringId
 import net.ducksmanager.whattheduck.AddIssue
@@ -17,7 +17,7 @@ import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 
 class CoverFlowActivity : AppCompatActivity() {
-    private lateinit var data: List<CoverSearchIssueWithUserIssueDetails>
+    private lateinit var data: List<CoverSearchIssueWithUserIssueAndScore>
 
     private lateinit var adapter: CoverFlowAdapter
 
@@ -26,18 +26,19 @@ class CoverFlowActivity : AppCompatActivity() {
     private lateinit var mIssueCondition: ImageSwitcher
     private lateinit var mIssueConditionText: TextView
     private lateinit var mTitleText: TextView
+    private lateinit var mScore: LinearLayout
     private lateinit var coverFlow: FeatureCoverFlow
 
     companion object {
         @JvmField
-        var currentSuggestion: CoverSearchIssueWithUserIssueDetails? = null
+        var currentSuggestion: CoverSearchIssueWithUserIssueAndScore? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (application as WhatTheDuck).trackActivity(this)
         setContentView(R.layout.activity_coverflow)
-        WhatTheDuck.appDB.coverSearchIssueDao().findAll().observe(this, Observer { searchIssues: List<CoverSearchIssueWithUserIssueDetails> ->
+        WhatTheDuck.appDB.coverSearchIssueDao().findAll().observe(this, Observer { searchIssues: List<CoverSearchIssueWithUserIssueAndScore> ->
             data = searchIssues
             adapter = CoverFlowAdapter(this)
             adapter.setData(searchIssues)
@@ -71,7 +72,7 @@ class CoverFlowActivity : AppCompatActivity() {
                     mCountryBadge.setImageResource(imageResource)
                     mIssueConditionText.visibility = View.VISIBLE
 
-                    val condition = currentSuggestion?.userIssue?.condition
+                    val condition = currentSuggestion!!.userIssue?.condition
                     if (condition != null) {
                         mIssueCondition.visibility = View.VISIBLE
                         mIssueCondition.setImageResource(issueConditionToResourceId(condition))
@@ -82,6 +83,10 @@ class CoverFlowActivity : AppCompatActivity() {
                         mIssueConditionText.setText(R.string.add_cover)
                         mIssueConditionText.textSize = 14f
                     }
+
+                    mScore.visibility = if (currentSuggestion!!.suggestionScore > 0) View.VISIBLE else View.GONE
+                    mScore.findViewById<TextView>(R.id.scorevalue).text = currentSuggestion!!.suggestionScore.toString()
+                    mScore.findViewById<TextView>(R.id.scorevalue).textSize = 20F
 
                     mResultNumber.visibility = View.VISIBLE
                     mResultNumber.setText(resources.getString(R.string.result) + " " + (position + 1) + "/" + data.size)
@@ -103,11 +108,13 @@ class CoverFlowActivity : AppCompatActivity() {
         mResultNumber.setFactory {
             LayoutInflater.from(this@CoverFlowActivity).inflate(R.layout.item_title, null)
         }
-        mCountryBadge = findViewById(R.id.imageSwitcherCountryBadge)
+        mCountryBadge = findViewById(R.id.countrybadge)
         mCountryBadge.setFactory { ImageView(applicationContext) }
 
         mIssueCondition = findViewById(R.id.prefiximage)
         mIssueCondition.setFactory { ImageView(applicationContext) }
+
+        mScore = findViewById(R.id.scorewrapper)
 
         val mIssueConditionTextSwitcher = findViewById<TextSwitcher>(R.id.prefiximage_description)
         mIssueConditionTextSwitcher.setFactory {
