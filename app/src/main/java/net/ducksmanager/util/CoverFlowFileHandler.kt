@@ -157,13 +157,10 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
                 }
 
                 override fun onFailure(call: Call<CoverSearchResults>, t: Throwable) {
-                    WhatTheDuck.alert(
-                        originActivityRef,
-                        if (t.message!!.contains("exceeds your upload"))
-                            R.string.add_cover_error_file_too_big
-                        else
-                            R.string.internal_error
-                    )
+                    if (t.message!!.contains("exceeds your upload")) {
+                        WhatTheDuck.alert(originActivityRef, R.string.add_cover_error_file_too_big)
+                    }
+                    WhatTheDuck.alert(originActivityRef, t.message.toString())
                 }
             })
         }
