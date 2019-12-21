@@ -41,11 +41,11 @@ class IssueAdapter internal constructor(
     }
 
     override fun getSuffixImageResource(i: InducksIssueWithUserIssueAndScore): Int? {
-        return if (i.userPurchase != null) R.drawable.ic_clock else (if (i.suggestionScore > 0) R.drawable.ic_fire else null)
+        return if (i.userPurchase != null) R.drawable.ic_clock else (if (i.userIssue == null && i.suggestionScore > 0) R.drawable.ic_fire else null)
     }
 
     override fun getSuffixText(i: InducksIssueWithUserIssueAndScore): String? {
-        return if (i.userPurchase != null) i.userPurchase.date else (if (i.suggestionScore > 0) i.suggestionScore.toString() else null)
+        return if (i.userPurchase != null) i.userPurchase.date else (if (i.userIssue == null && i.suggestionScore > 0) i.suggestionScore.toString() else null)
     }
 
     override fun getIdentifier(i: InducksIssueWithUserIssueAndScore): String? {
