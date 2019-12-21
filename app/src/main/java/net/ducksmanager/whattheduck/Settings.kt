@@ -86,7 +86,7 @@ class Settings : AppCompatActivityWithDrawer() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val itemView = inflater.inflate(R.layout.row_notified_country, parent, false)
-            itemView.findViewById<ImageView>(R.id.suffiximage).visibility = View.GONE
+            itemView.findViewById<ImageView>(R.id.suffiximage1).visibility = View.GONE
             return ViewHolder(itemView)
         }
 

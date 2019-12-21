@@ -15,7 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import net.ducksmanager.api.DmServer
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.IssueListToUpdate
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.whattheduck.PurchaseAdapter.NoPurchase
@@ -72,10 +72,10 @@ class AddIssue : AppCompatActivity(), View.OnClickListener {
 
         findViewById<View>(R.id.addissue_ok).setOnClickListener {
             val dmCondition = when (findViewById<RadioGroup>(R.id.condition).checkedRadioButtonId) {
-                R.id.badCondition -> InducksIssueWithUserIssueDetails.BAD_CONDITION
-                R.id.notSoGoodCondition -> InducksIssueWithUserIssueDetails.NOTSOGOOD_CONDITION
-                R.id.goodCondition -> InducksIssueWithUserIssueDetails.GOOD_CONDITION
-                else -> InducksIssueWithUserIssueDetails.NO_CONDITION
+                R.id.badCondition -> InducksIssueWithUserIssueAndScore.BAD_CONDITION
+                R.id.notSoGoodCondition -> InducksIssueWithUserIssueAndScore.NOTSOGOOD_CONDITION
+                R.id.goodCondition -> InducksIssueWithUserIssueAndScore.GOOD_CONDITION
+                else -> InducksIssueWithUserIssueAndScore.NO_CONDITION
             }
             val issueListToUpdate = IssueListToUpdate(
                 WhatTheDuck.selectedPublication!!, listOf(WhatTheDuck.selectedIssue!!),

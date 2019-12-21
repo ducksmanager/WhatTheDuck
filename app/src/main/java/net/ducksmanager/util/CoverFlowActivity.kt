@@ -10,8 +10,8 @@ import androidx.lifecycle.Observer
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow.OnScrollPositionListener
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueDetails
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails.Companion.issueConditionToResourceId
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails.Companion.issueConditionToStringId
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToResourceId
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToStringId
 import net.ducksmanager.whattheduck.AddIssue
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck

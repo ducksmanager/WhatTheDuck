@@ -10,6 +10,7 @@ import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import net.ducksmanager.api.DmServer
+import net.ducksmanager.persistence.models.composite.SuggestedIssueSimple
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import retrofit2.Response
@@ -38,6 +39,12 @@ class Suggestions : AppCompatActivityWithDrawer() {
         DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", this) {
             override fun onSuccessfulResponse(response: Response<SuggestionList>) {
                 val suggestions = response.body()!!.issues.values.toList() as MutableList<SuggestionList.SuggestedIssue>
+
+                WhatTheDuck.appDB.suggestedIssueDao().deleteAll()
+                WhatTheDuck.appDB.suggestedIssueDao().insertList(suggestions.map {
+                    SuggestedIssueSimple(it.publicationcode, it.issuenumber, it.score)
+                })
+
                 publicationTitles = response.body()!!.publicationTitles
                 authorNames = response.body()!!.authors
                 storyDetails = response.body()!!.storyDetails
@@ -67,9 +74,10 @@ class Suggestions : AppCompatActivityWithDrawer() {
         private val inflater: LayoutInflater = LayoutInflater.from(context)
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val countryItemView: TextView = itemView.findViewById(R.id.itemtitle)
+            val textWrapperView: LinearLayout = itemView.findViewById(R.id.textwrapper)
             val prefixImageView: ImageView = itemView.findViewById(R.id.prefiximage)
-            val suffixtextView: TextView = itemView.findViewById(R.id.suffixtext)
+            val suffixtextView1: TextView = itemView.findViewById(R.id.suffixtext1)
+            val suffixtextView2: TextView = itemView.findViewById(R.id.suffixtext2)
             val storyListView: RecyclerView = itemView.findViewById(R.id.storylist)
         }
 
@@ -81,10 +89,14 @@ class Suggestions : AppCompatActivityWithDrawer() {
             val currentItem = suggestions[position]
             val countryCode = currentItem.publicationcode.split("/")[0]
             val publicationName = publicationTitles.get(currentItem.publicationcode)
-            holder.countryItemView.text = (publicationName ?: "Unknown publication") + " " + currentItem.issuenumber + " (score : " + currentItem.score + ")"
-            holder.countryItemView.typeface = Typeface.DEFAULT_BOLD
+
+            val title = holder.textWrapperView.findViewById<TextView>(R.id.itemtitle)
+            title.text = (publicationName ?: "Unknown publication") + " " + currentItem.issuenumber
+            title.typeface = Typeface.DEFAULT_BOLD
             holder.prefixImageView.setImageResource(getImageResourceFromCountry(countryCode))
-            holder.suffixtextView.text = currentItem.oldestdate ?: "Unknown"
+            holder.suffixtextView1.text = currentItem.oldestdate ?: "Unknown"
+
+            holder.suffixtextView2.text = currentItem.score.toString()
 
             val allStories = currentItem.stories.values.flatten().toSet()
             val storiesWithAuthors: HashMap<String, List<String>> = HashMap()

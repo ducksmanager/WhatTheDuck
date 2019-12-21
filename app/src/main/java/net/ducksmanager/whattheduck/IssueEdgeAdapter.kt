@@ -6,14 +6,14 @@ import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 
 class IssueEdgeAdapter internal constructor(
-    itemList: ItemList<InducksIssueWithUserIssueDetails>,
-    items: List<InducksIssueWithUserIssueDetails>,
+    itemList: ItemList<InducksIssueWithUserIssueAndScore>,
+    items: List<InducksIssueWithUserIssueAndScore>,
     private val recyclerView: RecyclerView,
     private val orientation: Int
-) : ItemAdapter<InducksIssueWithUserIssueDetails>(itemList, R.layout.row_edge, items) {
+) : ItemAdapter<InducksIssueWithUserIssueAndScore>(itemList, R.layout.row_edge, items) {
     private var expectedEdgeHeight: Int? = null
 
     override fun getViewHolder(v: View?) = ViewHolder(v)
@@ -22,12 +22,12 @@ class IssueEdgeAdapter internal constructor(
     override val onClickListener: View.OnClickListener?
         get() = null
 
-    inner class ViewHolder(v: View?) : ItemAdapter<InducksIssueWithUserIssueDetails>.ViewHolder(v!!) {
+    inner class ViewHolder(v: View?) : ItemAdapter<InducksIssueWithUserIssueAndScore>.ViewHolder(v!!) {
         val edgeImage: ImageView = v!!.findViewById(R.id.edgeimage)
 
     }
 
-    override fun onBindViewHolder(holder: ItemAdapter<InducksIssueWithUserIssueDetails>.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ItemAdapter<InducksIssueWithUserIssueAndScore>.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         val itemHolder = holder as ViewHolder
         val item = getItem(position)
@@ -43,7 +43,7 @@ class IssueEdgeAdapter internal constructor(
             .into(itemHolder.edgeImage)
     }
 
-    private fun getEdgeUrl(i: InducksIssueWithUserIssueDetails): String {
+    private fun getEdgeUrl(i: InducksIssueWithUserIssueAndScore): String {
         return String.format(
             "%s/edges/%s/gen/%s.%s.png",
             WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_EDGES_URL),
@@ -54,31 +54,31 @@ class IssueEdgeAdapter internal constructor(
             i.issue.inducksIssueNumber.replace(" ".toRegex(), ""))
     }
 
-    override fun isPossessed(item: InducksIssueWithUserIssueDetails): Boolean {
+    override fun isPossessed(item: InducksIssueWithUserIssueAndScore): Boolean {
         return item.userIssue != null
     }
 
-    override fun getPrefixImageResource(i: InducksIssueWithUserIssueDetails, activity: Activity): Int? {
+    override fun getPrefixImageResource(i: InducksIssueWithUserIssueAndScore, activity: Activity): Int? {
         return null
     }
 
-    override fun getSuffixImageResource(i: InducksIssueWithUserIssueDetails): Int? {
+    override fun getSuffixImageResource(i: InducksIssueWithUserIssueAndScore): Int? {
         return null
     }
 
-    override fun getSuffixText(i: InducksIssueWithUserIssueDetails): String? {
+    override fun getSuffixText(i: InducksIssueWithUserIssueAndScore): String? {
         return null
     }
 
-    override fun getIdentifier(i: InducksIssueWithUserIssueDetails): String? {
+    override fun getIdentifier(i: InducksIssueWithUserIssueAndScore): String? {
         return null
     }
 
-    override fun getText(i: InducksIssueWithUserIssueDetails): String? {
+    override fun getText(i: InducksIssueWithUserIssueAndScore): String? {
         return null
     }
 
-    override fun getComparatorText(i: InducksIssueWithUserIssueDetails): String? {
+    override fun getComparatorText(i: InducksIssueWithUserIssueAndScore): String? {
         return i.issue.inducksIssueNumber
     }
 

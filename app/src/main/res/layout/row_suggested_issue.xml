@@ -5,7 +5,87 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:padding="0dp">
-    <include layout="@layout/row" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/prefiximage"
+            android:layout_width="20dp"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:contentDescription="@+id/prefiximage_description" />
+        <LinearLayout
+            android:id="@+id/textwrapper"
+            android:orientation="vertical"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:padding="6dip"
+            android:layout_height="50dp">
+            <TextView
+                android:id="@+id/itemtitle"
+                android:gravity="center_vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:text="@string/itemtitle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="5dp">
+            <LinearLayout
+                android:id="@+id/suffix1"
+                android:layout_width="90dp"
+                android:layout_height="20dp"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/suffiximage1"
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:gravity="start"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@+id/suffiximage_description"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_clock" />
+                <TextView
+                    android:id="@+id/suffixtext1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:text="@string/purchase_date"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/suffix2"
+                android:layout_width="70dp"
+                android:layout_height="20dp"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+                <ImageView
+                    android:id="@+id/suffiximage2"
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@+id/suffiximage_description"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_fire" />
+                <TextView
+                    android:id="@+id/suffixtext2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    tools:text="score" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginStart="30dp"

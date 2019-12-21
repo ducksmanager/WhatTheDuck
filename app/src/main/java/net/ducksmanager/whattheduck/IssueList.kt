@@ -15,13 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksIssue
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 import net.ducksmanager.util.DraggableRelativeLayout
 import net.ducksmanager.util.Settings
 import retrofit2.Response
 import java.lang.ref.WeakReference
 
-class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
+class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
     companion object {
         @JvmField
@@ -66,10 +66,10 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
 
     override fun shouldShowAddToCollectionButton() = !isLandscapeEdgeView
 
-    override fun shouldShowFilter(items: List<InducksIssueWithUserIssueDetails>) =
+    override fun shouldShowFilter(items: List<InducksIssueWithUserIssueAndScore>) =
         items.size > MIN_ITEM_NUMBER_FOR_FILTER && viewType == ViewType.LIST_VIEW
 
-    override val itemAdapter: ItemAdapter<InducksIssueWithUserIssueDetails>
+    override val itemAdapter: ItemAdapter<InducksIssueWithUserIssueAndScore>
         get() {
             val switchViewWrapper = findViewById<RelativeLayout>(R.id.switchViewWrapper)
 
@@ -149,7 +149,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueDetails>() {
 
     override fun setData() {
         WhatTheDuck.appDB.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
-            .observe(this, Observer { items: List<InducksIssueWithUserIssueDetails> ->
+            .observe(this, Observer { items: List<InducksIssueWithUserIssueAndScore> ->
                 storeItemList(items)
             })
     }

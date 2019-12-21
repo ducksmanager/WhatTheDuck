@@ -6,7 +6,7 @@ import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.whattheduck.R
 
-class InducksIssueWithUserIssueDetails(
+class InducksIssueWithUserIssueAndScore(
     @Embedded
     val issue: InducksIssue,
 
@@ -14,7 +14,9 @@ class InducksIssueWithUserIssueDetails(
     val userIssue: Issue?,
 
     @Embedded
-    val userPurchase: Purchase?
+    val userPurchase: Purchase?,
+
+    val suggestionScore: Int = 0
 ) {
     companion object {
         const val BAD_CONDITION = "mauvais"

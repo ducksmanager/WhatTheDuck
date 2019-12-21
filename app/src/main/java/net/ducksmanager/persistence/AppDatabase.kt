@@ -7,6 +7,7 @@ import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.coa.InducksIssue
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.CoverSearchIssue
+import net.ducksmanager.persistence.models.composite.SuggestedIssueSimple
 import net.ducksmanager.persistence.models.composite.UserMessage
 import net.ducksmanager.persistence.models.composite.UserSetting
 import net.ducksmanager.persistence.models.dm.Issue
@@ -22,7 +23,8 @@ import net.ducksmanager.persistence.models.dm.User
     CoverSearchIssue::class,
     User::class,
     UserSetting::class,
-    UserMessage::class
+    UserMessage::class,
+    SuggestedIssueSimple::class
 ], version = 2, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun issueDao(): IssueDao
@@ -34,4 +36,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun userSettingDao(): UserSettingDao
     abstract fun userMessageDao(): UserMessageDao
+    abstract fun suggestedIssueDao(): SuggestedIssueDao
 }

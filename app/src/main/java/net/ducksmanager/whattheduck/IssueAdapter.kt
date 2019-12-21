@@ -5,14 +5,14 @@ import android.content.Intent
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueDetails.Companion.issueConditionToResourceId
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToResourceId
 import java.lang.ref.WeakReference
 
 class IssueAdapter internal constructor(
-    itemList: ItemList<InducksIssueWithUserIssueDetails>,
-    items: List<InducksIssueWithUserIssueDetails>
-) : ItemAdapter<InducksIssueWithUserIssueDetails>(itemList, R.layout.row, items) {
+    itemList: ItemList<InducksIssueWithUserIssueAndScore>,
+    items: List<InducksIssueWithUserIssueAndScore>
+) : ItemAdapter<InducksIssueWithUserIssueAndScore>(itemList, R.layout.row, items) {
 
     override fun getViewHolder(v: View?) = ViewHolder(v)
 
@@ -30,9 +30,9 @@ class IssueAdapter internal constructor(
             }
         }
 
-    inner class ViewHolder(v: View?) : ItemAdapter<InducksIssueWithUserIssueDetails>.ViewHolder(v!!)
+    inner class ViewHolder(v: View?) : ItemAdapter<InducksIssueWithUserIssueAndScore>.ViewHolder(v!!)
 
-    override fun getPrefixImageResource(i: InducksIssueWithUserIssueDetails, activity: Activity): Int? {
+    override fun getPrefixImageResource(i: InducksIssueWithUserIssueAndScore, activity: Activity): Int? {
         return if (resourceToInflate == R.layout.row && i.userIssue != null) {
             issueConditionToResourceId(i.userIssue.condition)
         } else {
@@ -40,35 +40,27 @@ class IssueAdapter internal constructor(
         }
     }
 
-    override fun getSuffixImageResource(i: InducksIssueWithUserIssueDetails): Int? {
-        return if (i.userPurchase != null) {
-            R.drawable.ic_clock
-        } else {
-            null
-        }
+    override fun getSuffixImageResource(i: InducksIssueWithUserIssueAndScore): Int? {
+        return if (i.userPurchase != null) R.drawable.ic_clock else (if (i.suggestionScore > 0) R.drawable.ic_fire else null)
     }
 
-    override fun getSuffixText(i: InducksIssueWithUserIssueDetails): String? {
-        return if (i.userPurchase != null) {
-            i.userPurchase.date
-        } else {
-            null
-        }
+    override fun getSuffixText(i: InducksIssueWithUserIssueAndScore): String? {
+        return if (i.userPurchase != null) i.userPurchase.date else (if (i.suggestionScore > 0) i.suggestionScore.toString() else null)
     }
 
-    override fun getIdentifier(i: InducksIssueWithUserIssueDetails): String? {
+    override fun getIdentifier(i: InducksIssueWithUserIssueAndScore): String? {
         return i.issue.inducksIssueNumber
     }
 
-    override fun getText(i: InducksIssueWithUserIssueDetails): String? {
+    override fun getText(i: InducksIssueWithUserIssueAndScore): String? {
         return i.issue.inducksIssueNumber
     }
 
-    override fun getComparatorText(i: InducksIssueWithUserIssueDetails): String? {
+    override fun getComparatorText(i: InducksIssueWithUserIssueAndScore): String? {
         return getText(i)
     }
 
-    override fun isPossessed(item: InducksIssueWithUserIssueDetails): Boolean {
+    override fun isPossessed(item: InducksIssueWithUserIssueAndScore): Boolean {
         return item.userIssue != null
     }
 }
