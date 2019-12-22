@@ -1,0 +1,41 @@
+{
+  "minScore": 6,
+  "maxScore": 80,
+  "issues": {
+    "0": {
+      "issuecode": "us/CBL 6",
+      "score": 132,
+      "stories": {
+        "CB": [
+          "W JW   25-01"
+        ]
+      },
+      "publicationcode": "us/CBL",
+      "issuenumber": "6",
+      "oldestdate": "1990-05-00"
+    },
+    "1": {
+      "issuecode": "es/DPP 1",
+      "score": 80,
+      "stories": {
+        "GCa": [
+          "I TL  749-A",
+          "I TL  754-A",
+          "I TL  752-A",
+          "I TL  756-A",
+          "I TL  755-A"
+        ],
+        "RSc": [
+          "I TL  755-A",
+          "I TL  756-A",
+          "I TL  749-A",
+          "I TL  754-A",
+          "I TL  752-A"
+        ]
+      },
+      "publicationcode": "es/DPP",
+      "issuenumber": "1",
+      "oldestdate": "2009-05-27"
+    }
+  }
+}
