@@ -1,13 +1,15 @@
+
 import android.content.Intent
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import net.ducksmanager.whattheduck.CountryList
 import net.ducksmanager.whattheduck.R
-import org.hamcrest.Matchers
+import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,15 +27,15 @@ class FilterTest : WtdTest() {
     fun testShowAddIssueDialog() {
         assertCurrentActivityIsInstanceOf(CountryList::class.java, true)
 
-        Espresso.onView(Matchers.allOf(ViewMatchers.withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
+        onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
             .perform(ViewActions.click())
         assertCurrentActivityIsInstanceOf(CountryList::class.java, true)
 
-        Espresso.onView(ViewMatchers.withId(R.id.filter))
+        onView(withId(R.id.filter))
             .perform(ViewActions.typeText("Fr"), ViewActions.closeSoftKeyboard())
 
-        Espresso.onView(ViewMatchers.withText("France"))
+        onView(withText("France"))
 
-        Espresso.onView(ViewMatchers.withText("Italy")).check(ViewAssertions.doesNotExist())
+        onView(withText("Italy")).check(ViewAssertions.doesNotExist())
     }
 }

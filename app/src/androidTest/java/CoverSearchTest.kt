@@ -1,9 +1,11 @@
+
+import ScreenshotTestRule.Companion.takeScreenshot
 import android.app.Activity
 import android.content.Intent
 import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
@@ -41,7 +43,7 @@ class CoverSearchTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(cu
         Intents.init()
         Intents.intending(expectedIntent).respondWith(result)
 
-        Espresso.onView(ViewMatchers.withId(R.id.addToCollectionByPhotoButton))
+        onView(ViewMatchers.withId(R.id.addToCollectionByPhotoButton))
             .perform(forceFloatingActionButtonsVisible(true))
             .perform(ViewActions.click())
 
@@ -52,9 +54,9 @@ class CoverSearchTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(cu
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-        ScreenshotTestRule.takeScreenshot("Cover search result", activityInstance, screenshotPath)
-        Espresso.onView(Matchers.allOf(ViewMatchers.withId(R.id.image), coverCurrentlyVisible())).perform(ViewActions.click())
-        ScreenshotTestRule.takeScreenshot("Cover search result - add issue", activityInstance, screenshotPath)
+        takeScreenshot("Cover search result", activityInstance, screenshotPath)
+        onView(Matchers.allOf(ViewMatchers.withId(R.id.image), coverCurrentlyVisible())).perform(ViewActions.click())
+        takeScreenshot("Cover search result - add issue", activityInstance, screenshotPath)
     }
 
     companion object {

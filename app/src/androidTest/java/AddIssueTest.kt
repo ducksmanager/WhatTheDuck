@@ -1,10 +1,14 @@
+
 import android.content.Intent
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import net.ducksmanager.whattheduck.*
-import org.hamcrest.Matchers
+import net.ducksmanager.whattheduck.IssueList
+import net.ducksmanager.whattheduck.R
+import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.containsString
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,30 +23,29 @@ class AddIssueTest : WtdTest() {
 
     @Test
     fun testShowAddIssueDialog() {
-        assertCurrentActivityIsInstanceOf(CountryList::class.java, true)
 
-        Espresso.onView(ViewMatchers.withText("France")).perform(ViewActions.click())
-        assertCurrentActivityIsInstanceOf(PublicationList::class.java, true)
+        onView(
+            allOf(withId(R.id.itemtitle), withText("France"), isDisplayed())
+        ).perform(ViewActions.click())
 
-        Espresso.onView(ViewMatchers.withText(Matchers.containsString("dynastie"))).perform(ViewActions.click())
+        onView(withText(containsString("dynastie"))).perform(ViewActions.click())
         assertCurrentActivityIsInstanceOf(IssueList::class.java, true)
 
-        Espresso.onView(ViewMatchers.withId(R.id.addToCollectionBySelectionButton))
+        onView(withId(R.id.addToCollectionBySelectionButton))
             .perform(forceFloatingActionButtonsVisible(true))
             .perform(ViewActions.click())
 
-        Espresso.onView(ViewMatchers.withText("6")).perform(ViewActions.click())
-        assertCurrentActivityIsInstanceOf(AddIssue::class.java, true)
+        onView(withText("6")).perform(ViewActions.click())
 
-        Espresso.onView(ViewMatchers.withId(R.id.addpurchase)).perform(ViewActions.click())
+        onView(withId(R.id.addpurchase)).perform(ViewActions.click())
 
-        Espresso.onView(ViewMatchers.withId(R.id.purchasetitlenew)).perform(ViewActions.typeText("Stockholm loppis"), ViewActions.closeSoftKeyboard())
+        onView(withId(R.id.purchasetitlenew)).perform(ViewActions.typeText("Stockholm loppis"), closeSoftKeyboard())
 
-        Espresso.onView(ViewMatchers.withId(R.id.createpurchase)).perform(ViewActions.click())
+        onView(withId(R.id.createpurchase)).perform(ViewActions.click())
 
-        Espresso.onView(Matchers.allOf(
-            ViewMatchers.withText("Stockholm loppis"),
-            ViewMatchers.withParent(ViewMatchers.withId(R.id.purchase_list))
+        onView(allOf(
+            withText("Stockholm loppis"),
+            withParent(withId(R.id.purchase_list))
         ))
     }
 }

@@ -1,17 +1,21 @@
+
 import android.app.Activity
 import android.view.View
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Checks
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnitRunner
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
@@ -88,21 +92,21 @@ open class WtdTest : AndroidJUnitRunner {
         }
 
         fun login(user: String?, password: String?) {
-            Espresso.onView(ViewMatchers.withId(R.id.username))
+            onView(ViewMatchers.withId(R.id.username))
                 .perform(ViewActions.clearText())
-                .perform(ViewActions.typeText(user), ViewActions.closeSoftKeyboard())
+                .perform(ViewActions.typeText(user), closeSoftKeyboard())
 
-            Espresso.onView(ViewMatchers.withId(R.id.password))
+            onView(ViewMatchers.withId(R.id.password))
                 .perform(ViewActions.clearText())
-                .perform(ViewActions.typeText(password), ViewActions.closeSoftKeyboard())
+                .perform(ViewActions.typeText(password), closeSoftKeyboard())
 
-            Espresso.onView(ViewMatchers.withId(R.id.login)).perform(ViewActions.click())
+            onView(ViewMatchers.withId(R.id.login)).perform(ViewActions.click())
         }
 
         val activityInstance: Activity?
             get() {
                 val currentActivity = arrayOfNulls<Activity>(1)
-                InstrumentationRegistry.getInstrumentation().runOnMainSync {
+                getInstrumentation().runOnMainSync {
                     val resumedActivities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)
                     currentActivity[0] = resumedActivities.iterator().next()
                 }
@@ -112,7 +116,7 @@ open class WtdTest : AndroidJUnitRunner {
         fun forceFloatingActionButtonsVisible(value: Boolean): ViewAction {
             return object : ViewAction {
                 override fun getConstraints(): Matcher<View> {
-                    return ViewMatchers.isAssignableFrom(FloatingActionButton::class.java)
+                    return isAssignableFrom(FloatingActionButton::class.java)
                 }
 
                 override fun perform(uiController: UiController, view: View) {
@@ -196,16 +200,15 @@ open class WtdTest : AndroidJUnitRunner {
     }
 
     fun assertToastShown(textId: Int) {
-        Espresso.onView(ViewMatchers.withText(textId))
+        onView(withText(textId))
             .inRoot(RootMatchers.withDecorView(CoreMatchers.not(CoreMatchers.`is`(loginActivityRule.activity.window.decorView))))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+            .check(matches(ViewMatchers.isDisplayed()))
     }
 
     fun assertCurrentActivityIsInstanceOf(activityClass: Class<*>, assertTrue: Boolean) {
-        val currentActivity = activityInstance
-        Checks.checkNotNull(currentActivity)
+        Checks.checkNotNull(activityInstance)
         Checks.checkNotNull(activityClass)
-        val isInstance = currentActivity!!::class.java.name == activityClass.name
+        val isInstance = activityInstance!!::class.java.name == activityClass.name
         if (assertTrue) {
             Assert.assertTrue(isInstance)
         } else {

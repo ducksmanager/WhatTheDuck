@@ -1,11 +1,13 @@
+
 import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.LargeTest
 import net.ducksmanager.whattheduck.IssueList
 import net.ducksmanager.whattheduck.ItemAdapter
@@ -13,7 +15,7 @@ import net.ducksmanager.whattheduck.PublicationList
 import net.ducksmanager.whattheduck.R
 import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers
+import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -52,7 +54,7 @@ class ListTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(currentLo
 
     @Test
     fun testPublicationList() {
-        Espresso.onView(Matchers.allOf(ViewMatchers.withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
+        onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
             .perform(ViewActions.click())
 
         goToPublicationListView(currentLocale!!.defaultCountry)
@@ -68,10 +70,10 @@ class ListTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(currentLo
 
         assertCurrentActivityIsInstanceOf(IssueList::class.java, true)
 
-        Espresso.onView(Matchers.allOf(ViewMatchers.withId(R.id.addToCollectionByPhotoButton), forceFloatingActionButtonsVisible()))
+        onView(allOf(withId(R.id.addToCollectionByPhotoButton), forceFloatingActionButtonsVisible()))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
 
-        Espresso.onView(Matchers.allOf(ViewMatchers.withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
+        onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
 
         ScreenshotTestRule.takeScreenshot("Collection - Issue list", activityInstance, screenshotPath)
@@ -82,7 +84,7 @@ class ListTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(currentLo
         goToPublicationListView("fr")
         goToIssueListView("fr/DDD")
 
-        Espresso.onView(ViewMatchers.withId(R.id.switchView))
+        onView(withId(R.id.switchView))
             .perform(ViewActions.click())
 
         assertCurrentActivityIsInstanceOf(IssueList::class.java, true)
@@ -97,7 +99,7 @@ class ListTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(currentLo
     private fun goToPublicationListView(countryCode: String) {
         val countryMatcher = getItemMatcher(countryCode.toLowerCase())
 
-        Espresso.onView(ViewMatchers.withId(R.id.itemList))
+        onView(withId(R.id.itemList))
             .perform(
                 RecyclerViewActions.scrollToHolder(countryMatcher),
                 RecyclerViewActions.actionOnHolderItem(countryMatcher, ViewActions.click())
@@ -106,7 +108,7 @@ class ListTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(currentLo
 
     private fun goToIssueListView(publicationCode: String) {
         val publicationMatcher = getItemMatcher(publicationCode)
-        Espresso.onView(ViewMatchers.withId(R.id.itemList))
+        onView(withId(R.id.itemList))
             .perform(
                 RecyclerViewActions.scrollToHolder(publicationMatcher),
                 RecyclerViewActions.actionOnHolderItem(publicationMatcher, ViewActions.click())
