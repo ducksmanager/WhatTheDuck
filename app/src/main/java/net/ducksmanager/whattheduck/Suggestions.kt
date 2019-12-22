@@ -34,8 +34,6 @@ class Suggestions : AppCompatActivityWithDrawer() {
 
         val suggestionListView = findViewById<RecyclerView>(R.id.suggestionList)
 
-        publicationTitles = HashMap()
-
         DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", this) {
             override fun onSuccessfulResponse(response: Response<SuggestionList>) {
                 val suggestions = response.body()!!.issues.values.toList() as MutableList<SuggestionList.SuggestedIssue>

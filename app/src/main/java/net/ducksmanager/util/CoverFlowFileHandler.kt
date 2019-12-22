@@ -37,7 +37,7 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
         lateinit var current: CoverFlowFileHandler
 
         @JvmField
-        var mockedResource: String? = null
+        var mockedRequestResource: String? = null
 
         private lateinit var originActivityRef: WeakReference<Activity>
 
@@ -119,8 +119,8 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
             }
         }
 
-        val instance: RequestCreator = if (mockedResource != null) {
-            Picasso.with(originActivity).load(mockedResource)
+        val instance: RequestCreator = if (mockedRequestResource != null) {
+            Picasso.with(originActivity).load(mockedRequestResource)
         } else {
             Picasso.with(originActivity).invalidate(uploadFile)
             Picasso.with(originActivity).load(uploadFile)

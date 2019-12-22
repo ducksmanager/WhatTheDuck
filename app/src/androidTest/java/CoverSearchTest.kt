@@ -35,7 +35,7 @@ class CoverSearchTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(cu
 
     @Test
     fun testCoverFlowResults() {
-        CoverFlowFileHandler.mockedResource = mockServer!!.url("/internal/covers/2648").toString()
+        CoverFlowFileHandler.mockedRequestResource = mockServer!!.url("/internal/covers/2648").toString()
 
         val result = ActivityResult(Activity.RESULT_OK, Intent())
         val expectedIntent = IntentMatchers.hasAction(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -49,6 +49,7 @@ class CoverSearchTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(cu
 
         Intents.intended(expectedIntent)
         Intents.release()
+
         try {
             Thread.sleep(500)
         } catch (e: InterruptedException) {
