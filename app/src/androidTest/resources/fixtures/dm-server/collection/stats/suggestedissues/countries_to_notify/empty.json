@@ -1,41 +1,60 @@
 {
   "minScore": 6,
-  "maxScore": 80,
+  "maxScore": 18,
   "issues": {
     "0": {
-      "issuecode": "us/CBL 6",
-      "score": 132,
+      "issuecode": "fr/MPNT 735",
+      "score": 6,
       "stories": {
         "CB": [
           "W JW   25-01"
         ]
       },
-      "publicationcode": "us/CBL",
-      "issuenumber": "6",
+      "publicationcode": "fr/MPNT",
+      "issuenumber": "735",
       "oldestdate": "1990-05-00"
     },
     "1": {
-      "issuecode": "es/DPP 1",
-      "score": 80,
+      "issuecode": "us/BT 1",
+      "score": 18,
       "stories": {
         "GCa": [
-          "I TL  749-A",
-          "I TL  754-A",
-          "I TL  752-A",
-          "I TL  756-A",
-          "I TL  755-A"
+          "I TL  749-A"
         ],
         "RSc": [
           "I TL  755-A",
-          "I TL  756-A",
-          "I TL  749-A",
-          "I TL  754-A",
-          "I TL  752-A"
+          "I TL  749-A"
         ]
       },
-      "publicationcode": "es/DPP",
+      "publicationcode": "us/BT",
       "issuenumber": "1",
       "oldestdate": "2009-05-27"
+    }
+  },
+  "authors": {
+    "CB": "Carl Barks",
+    "GCa": "Giorgio Cavazanno",
+    "RSc": "Romano Scarpa"
+  },
+  "publicationTitles": {
+    "fr/MPNT": "Mickey Parade (nouveau tirage)",
+    "us/BT": "Barks Treasury"
+  },
+  "storyDetails": {
+    "W JW   25-01": {
+      "personcode": "CB",
+      "storycomment": "",
+      "title": "Captains Outrageous"
+    },
+    "I TL  749-A": {
+      "personcode": "RSc",
+      "storycomment": "",
+      "title": "Zio Paperone e il rimbombo lunare"
+    },
+    "I TL  755-A": {
+      "personcode": "RSc",
+      "storycomment": "",
+      "title": "Zio Paperone e i cannoni del Mississippi"
     }
   }
 }
