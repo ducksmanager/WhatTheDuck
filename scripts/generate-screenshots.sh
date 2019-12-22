@@ -29,7 +29,7 @@ adb push app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk ${rem
 adb shell pm install -t -r ${remote_app_dir}
 \
 
-adb shell am instrument -w -r -e debug false -e class ListTest,CoverSearchTest ${test_app_name}/androidx.test.runner.AndroidJUnitRunner
+adb shell am instrument -w -r -e debug false -e class ListTest,CoverSearchTest,SuggestionsTest ${test_app_name}/androidx.test.runner.AndroidJUnitRunner
 $shellAsApp cp -r $remote_screenshot_dir /sdcard
 adb pull /sdcard/$showcasedir `pwd`
 
