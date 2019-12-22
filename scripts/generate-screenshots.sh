@@ -21,7 +21,6 @@ remote_app_dir=/data/local/tmp/${test_app_name}
 remote_screenshot_dir=/data/data/net.ducksmanager.whattheduck/files/test-screenshots/${showcasedir}
 shellAsApp="adb shell run-as net.ducksmanager.whattheduck"
 
-rm -rf /sdcard/$showcasedir
 $shellAsApp rm -rf ${remote_screenshot_dir}
 adb shell am force-stop ${test_app_name}
 ./gradlew :app:assembleDebugAndroidTest
