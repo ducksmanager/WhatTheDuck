@@ -1,4 +1,10 @@
+Version 2.0.0 "Cornelius"
+    
+    Add suggestion screen and suggestion notifications
+    Convert to Kotlin
+
 Version 1.9.1
+
     Fix cover search not working
 
 Version 1.9.0 "Elvira"
