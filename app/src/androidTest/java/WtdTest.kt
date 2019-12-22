@@ -27,6 +27,7 @@ import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers
 import org.hamcrest.Description
 import org.hamcrest.Matcher
+import org.hamcrest.Matchers
 import org.junit.Assert
 import org.junit.Before
 import org.junit.BeforeClass
@@ -65,7 +66,7 @@ open class WtdTest : AndroidJUnitRunner {
 
         @BeforeClass
         @JvmStatic
-        fun initDownloadHelper() {
+        fun beforeClass() {
             initMockServer()
         }
 
@@ -214,5 +215,16 @@ open class WtdTest : AndroidJUnitRunner {
         } else {
             Assert.assertFalse(isInstance)
         }
+    }
+
+    protected fun clickOnActionButton(buttonId: Int) {
+        val viewMatcher = onView(Matchers.allOf(ViewMatchers.withId(buttonId), forceFloatingActionButtonsVisible()))
+
+        try {
+            Thread.sleep(500)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+        viewMatcher.perform(ViewActions.click())
     }
 }

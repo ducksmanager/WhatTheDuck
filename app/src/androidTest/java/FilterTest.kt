@@ -9,7 +9,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import net.ducksmanager.whattheduck.CountryList
 import net.ducksmanager.whattheduck.R
-import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,8 +26,7 @@ class FilterTest : WtdTest() {
     fun testShowAddIssueDialog() {
         assertCurrentActivityIsInstanceOf(CountryList::class.java, true)
 
-        onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
-            .perform(ViewActions.click())
+        clickOnActionButton(R.id.addToCollectionBySelectionButton)
         assertCurrentActivityIsInstanceOf(CountryList::class.java, true)
 
         onView(withId(R.id.filter))

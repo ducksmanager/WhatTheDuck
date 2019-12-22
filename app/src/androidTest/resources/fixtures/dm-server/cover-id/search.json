@@ -6,7 +6,7 @@
       "publicationtitle": "Lustiges Taschenbuch",
       "issuenumber": "1",
       "coverid": 19647,
-      "coverurl": "https://inducks.org/hr.php?normalsize=1&image=https://outducks.org/webusers/webusers/2009/10/de_ltb_001a_001.jpg"
+      "coverurl": "http://mocked/19647"
     },
     "fr\/MPNT 735": {
       "countrycode": "fr",
@@ -14,7 +14,7 @@
       "publicationtitle": "Mickey Parade (nouveau tirage)",
       "issuenumber": "735",
       "coverid": 51393,
-      "coverurl": "https://inducks.org/hr.php?normalsize=1&image=https://outducks.org/renamed/fr/mpnt/0735/fr_mpnt_735a_001.jpg"
+      "coverurl": "http://mocked/51393"
     },
     "fr\/MPP  735": {
       "countrycode": "fr",
@@ -22,7 +22,7 @@
       "publicationtitle": "Mickey Parade (ancienne s\u00e9rie)",
       "issuenumber": "735",
       "coverid": 51697,
-      "coverurl": "https://inducks.org/hr.php?normalsize=1&image=https://outducks.org/webusers/webusers/2010/02/fr_mpp_0735a_001.jpg"
+      "coverurl": "http://mocked/51697"
     }
   },
   "imageIds": [

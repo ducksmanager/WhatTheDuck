@@ -11,6 +11,7 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.filters.LargeTest
 import net.ducksmanager.util.CoverFlowActivity
 import net.ducksmanager.util.CoverFlowFileHandler
@@ -43,20 +44,19 @@ class CoverSearchTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(cu
         Intents.init()
         Intents.intending(expectedIntent).respondWith(result)
 
-        onView(ViewMatchers.withId(R.id.addToCollectionByPhotoButton))
-            .perform(forceFloatingActionButtonsVisible(true))
-            .perform(ViewActions.click())
+        clickOnActionButton(R.id.addToCollectionByPhotoButton)
 
         Intents.intended(expectedIntent)
         Intents.release()
 
+        onView(Matchers.allOf(ViewMatchers.withId(R.id.image), isDisplayed()))
         try {
-            Thread.sleep(500)
+            Thread.sleep(2000)
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
         takeScreenshot("Cover search result", activityInstance, screenshotPath)
-        onView(Matchers.allOf(ViewMatchers.withId(R.id.image), coverCurrentlyVisible())).perform(ViewActions.click())
+        onView(coverCurrentlyVisible()).perform(ViewActions.click())
         takeScreenshot("Cover search result - add issue", activityInstance, screenshotPath)
     }
 
@@ -67,8 +67,8 @@ class CoverSearchTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(cu
             return parameterData()
         }
 
-        private fun coverCurrentlyVisible(): Matcher<Any> {
-            return object : BoundedMatcher<Any, ImageView>(ImageView::class.java) {
+        private fun coverCurrentlyVisible(): Matcher<View> {
+            return object : BoundedMatcher<View, ImageView>(ImageView::class.java) {
                 public override fun matchesSafely(item: ImageView): Boolean {
                     return CoverFlowActivity.currentSuggestion!!.coverSearchIssue.coverUrl == item.tag
                         && item.visibility == View.VISIBLE

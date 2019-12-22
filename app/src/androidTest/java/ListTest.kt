@@ -54,8 +54,7 @@ class ListTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(currentLo
 
     @Test
     fun testPublicationList() {
-        onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
-            .perform(ViewActions.click())
+        clickOnActionButton(R.id.addToCollectionBySelectionButton)
 
         goToPublicationListView(currentLocale!!.defaultCountry)
 

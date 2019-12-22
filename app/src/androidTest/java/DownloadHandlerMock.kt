@@ -1,3 +1,4 @@
+import WtdTest.Companion.mockServer
 import android.text.TextUtils
 import net.ducksmanager.util.Settings.toSHA1
 import okhttp3.Headers
@@ -62,9 +63,10 @@ internal object DownloadHandlerMock {
     }
 
     private fun getJsonFixture(name: String): String {
-        return convertStreamToString(
+        val json = convertStreamToString(
             openPathAsStream("fixtures/$name.json")
         )
+        return json.replace("http://mocked/", mockServer!!.url("/internal/covers/").toString(), true)
     }
 
     @Throws(IOException::class)
