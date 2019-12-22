@@ -61,8 +61,8 @@
     <string name="signup">Inscription</string>
     <string name="signup__confirm">L\'inscription à DucksManager est terminée, \nvous pouvez maintenant vous connecter.</string>
     <string name="signup_end">Terminer l\'inscription</string>
-    <string name="sort_by_publication_date">Sort by publication date</string>
-    <string name="sort_by_score">Sort by score</string>
+    <string name="sort_by_publication_date">Trier par date de publication</string>
+    <string name="sort_by_score">Trier par score</string>
     <string name="suggestions">Suggestions</string>
     <string name="username">Nom d\'utilisateur DucksManager</string>
     <string name="version">What The Duck version %1$s</string>
