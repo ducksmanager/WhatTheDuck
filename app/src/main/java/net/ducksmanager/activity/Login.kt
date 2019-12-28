@@ -37,6 +37,9 @@ class Login : AppCompatActivity() {
                     val user = User(DmServer.apiDmUser!!, DmServer.apiDmPassword!!)
                     WhatTheDuck.appDB.userDao().insert(user)
 
+                    WhatTheDuck.appDB.issueDao().deleteAll()
+                    WhatTheDuck.appDB.issueDao().insertList(response.body()!!)
+
                     val apiEndpointUrl: String = WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_API_ENDPOINT_URL)
 
                     WhatTheDuck.tokenProvider = BeamsTokenProvider(
@@ -47,11 +50,11 @@ class Login : AppCompatActivity() {
                             }
                         }
                     )
-
                     WhatTheDuck.registerForNotifications(activityRef)
 
-                    WhatTheDuck.appDB.issueDao().deleteAll()
-                    WhatTheDuck.appDB.issueDao().insertList(response.body()!!)
+                    ItemList.type = WhatTheDuck.CollectionType.USER.toString()
+                    activityRef.get()!!.startActivity(Intent(activityRef.get()!!, targetClass))
+
                     DmServer.api.userPurchases.enqueue(object : DmServer.Callback<List<Purchase>>("getPurchases", activityRef.get()!!, true) {
                         override fun onSuccessfulResponse(response: Response<List<Purchase>>) {
                             WhatTheDuck.appDB.purchaseDao().deleteAll()
@@ -65,9 +68,6 @@ class Login : AppCompatActivity() {
                                     WhatTheDuck.appDB.suggestedIssueDao().insertList(suggestions.map {
                                         SuggestedIssueSimple(it.publicationcode, it.issuenumber, it.score)
                                     })
-
-                                    ItemList.type = WhatTheDuck.CollectionType.USER.toString()
-                                    activityRef.get()!!.startActivity(Intent(activityRef.get(), targetClass))
                                 }
                             })
                         }
@@ -82,6 +82,7 @@ class Login : AppCompatActivity() {
             })
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
