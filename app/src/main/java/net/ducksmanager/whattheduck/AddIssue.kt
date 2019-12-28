@@ -8,17 +8,18 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.DatePicker
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.IssueListToUpdate
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.whattheduck.PurchaseAdapter.NoPurchase
+import net.ducksmanager.whattheduck.databinding.AddissueBinding
 import retrofit2.Response
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
@@ -26,6 +27,8 @@ import java.util.*
 
 class AddIssue : AppCompatActivity(), View.OnClickListener {
     private lateinit var purchases: MutableList<Purchase>
+    private lateinit var binding: AddissueBinding
+
 
     companion object {
         private val myCalendar = Calendar.getInstance()
@@ -34,7 +37,8 @@ class AddIssue : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.addissue)
+        binding = AddissueBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         downloadPurchaseList()
     }
 
@@ -60,18 +64,18 @@ class AddIssue : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun show() {
-        findViewById<View>(R.id.noCondition).setOnClickListener(this)
-        findViewById<View>(R.id.badCondition).setOnClickListener(this)
-        findViewById<View>(R.id.notSoGoodCondition).setOnClickListener(this)
-        findViewById<View>(R.id.goodCondition).setOnClickListener(this)
+        binding.noCondition.setOnClickListener(this)
+        binding.badCondition.setOnClickListener(this)
+        binding.notSoGoodCondition.setOnClickListener(this)
+        binding.goodCondition.setOnClickListener(this)
 
         showPurchases()
-        findViewById<View>(R.id.noCondition).performClick()
+        binding.noCondition.performClick()
 
         PurchaseAdapter.selectedItem = purchases[0]
 
-        findViewById<View>(R.id.addissue_ok).setOnClickListener {
-            val dmCondition = when (findViewById<RadioGroup>(R.id.condition).checkedRadioButtonId) {
+        binding.addissueOk.setOnClickListener {
+            val dmCondition = when (binding.condition.checkedRadioButtonId) {
                 R.id.badCondition -> InducksIssueWithUserIssueAndScore.BAD_CONDITION
                 R.id.notSoGoodCondition -> InducksIssueWithUserIssueAndScore.NOTSOGOOD_CONDITION
                 R.id.goodCondition -> InducksIssueWithUserIssueAndScore.GOOD_CONDITION
@@ -92,18 +96,18 @@ class AddIssue : AppCompatActivity(), View.OnClickListener {
             })
         }
 
-        findViewById<View>(R.id.addissue_cancel).setOnClickListener { finish() }
+        binding.addissueCancel.setOnClickListener { finish() }
 
-        findViewById<View>(R.id.addpurchase).setOnClickListener {
+        binding.addpurchase.setOnClickListener {
             toggleAddPurchaseButton(false)
             showNewPurchase()
         }
 
-        findViewById<TextView>(R.id.addIssueTitle).text = getString(R.string.insert_issue__confirm, WhatTheDuck.selectedIssue)
+        binding.addIssueTitle.text = getString(R.string.insert_issue__confirm, WhatTheDuck.selectedIssue)
     }
 
     private fun toggleAddPurchaseButton(toggle: Boolean) {
-        findViewById<View>(R.id.addpurchase).visibility =
+        binding.addpurchase.visibility =
             if (toggle)
                 View.VISIBLE
             else
@@ -111,10 +115,10 @@ class AddIssue : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun showNewPurchase() {
-        val newPurchaseSection = findViewById<View>(R.id.newpurchase)
+        val newPurchaseSection = binding.newpurchase
         newPurchaseSection.visibility = View.VISIBLE
 
-        val purchaseDateNew = findViewById<EditText>(R.id.purchasedatenew)
+        val purchaseDateNew = binding.purchasedatenew
         purchaseDateNew.requestFocus()
         purchaseDateNew.setText(dateFormat.format(Date()))
         purchaseDateNew.keyListener = null
@@ -128,13 +132,13 @@ class AddIssue : AppCompatActivity(), View.OnClickListener {
                 myCalendar[Calendar.DAY_OF_MONTH]).show()
         }
 
-        val purchaseTitleNew = findViewById<EditText>(R.id.purchasetitlenew)
+        val purchaseTitleNew = binding.purchasetitlenew
         purchaseTitleNew.setOnKeyListener { _, _, _ ->
-            findViewById<View>(R.id.purchasetitlenew).background.colorFilter = null
+            binding.purchasetitlenew.background.colorFilter = null
             false
         }
 
-        findViewById<Button>(R.id.createpurchase)
+        binding.createpurchase
             .setOnClickListener { floatingButtonView: View ->
                 if (purchaseDateNew.text.toString() == "") {
                     purchaseDateNew.background.setColorFilter(ContextCompat.getColor(applicationContext, R.color.colorAccent), PorterDuff.Mode.SRC_IN)
@@ -154,7 +158,7 @@ class AddIssue : AppCompatActivity(), View.OnClickListener {
                 })
             }
 
-        findViewById<Button>(R.id.createpurchasecancel)
+        binding.createpurchasecancel
             .setOnClickListener { floatingButtonView: View ->
                 hideKeyboard(floatingButtonView)
                 newPurchaseSection.visibility = View.GONE
@@ -168,7 +172,7 @@ class AddIssue : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun showPurchases() {
-        val rv = findViewById<RecyclerView>(R.id.purchase_list)
+        val rv = binding.purchaseList
         rv.adapter = PurchaseAdapter(this, purchases)
         rv.layoutManager = LinearLayoutManager(this)
     }
@@ -179,7 +183,7 @@ class AddIssue : AppCompatActivity(), View.OnClickListener {
             R.id.badCondition,
             R.id.notSoGoodCondition,
             R.id.goodCondition ->
-                findViewById<TextView>(R.id.addissue_condition_text).text = view.contentDescription.toString()
+                binding.addissueConditionText.text = view.contentDescription.toString()
         }
     }
 }

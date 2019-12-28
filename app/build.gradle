@@ -64,6 +64,10 @@ android {
         androidTest.kotlin.srcDirs += 'src/androidTest/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/java'
     }
+
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {

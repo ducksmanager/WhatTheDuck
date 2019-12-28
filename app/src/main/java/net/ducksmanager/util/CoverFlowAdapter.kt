@@ -11,9 +11,11 @@ import android.widget.TextView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueAndScore
-import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.databinding.ItemCoverflowBinding
 
 internal class CoverFlowAdapter(private val context: Context) : BaseAdapter() {
+    private lateinit var binding: ItemCoverflowBinding
+
     private var data: List<CoverSearchIssueWithUserIssueAndScore>? = null
 
     fun setData(data: List<CoverSearchIssueWithUserIssueAndScore>?) {
@@ -40,14 +42,16 @@ internal class CoverFlowAdapter(private val context: Context) : BaseAdapter() {
             val coverFullUrl = data!![position].coverSearchIssue.coverUrl
 
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            rowView = inflater.inflate(R.layout.item_coverflow, parent, false)
-            viewHolder = ViewHolder()
-            viewHolder.text = rowView.findViewById(R.id.label)
+            binding = ItemCoverflowBinding.inflate(inflater, parent, false)
+            rowView = binding.root
 
-            viewHolder.image = rowView.findViewById(R.id.image)
+            viewHolder = ViewHolder()
+            viewHolder.text = binding.label
+
+            viewHolder.image = binding.image
             viewHolder.image.tag = coverFullUrl
 
-            viewHolder.progressBar = rowView.findViewById(R.id.progressBar)
+            viewHolder.progressBar = binding.progressBar
 
             Picasso
                 .with(rowView.context)

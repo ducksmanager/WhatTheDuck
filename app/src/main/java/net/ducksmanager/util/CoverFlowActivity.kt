@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow.OnScrollPositionListener
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToResourceId
@@ -15,19 +17,13 @@ import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAn
 import net.ducksmanager.whattheduck.AddIssue
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.databinding.ActivityCoverflowBinding
 
 class CoverFlowActivity : AppCompatActivity() {
     private lateinit var data: List<CoverSearchIssueWithUserIssueAndScore>
+    private lateinit var binding: ActivityCoverflowBinding
 
     private lateinit var adapter: CoverFlowAdapter
-
-    private lateinit var mResultNumber: TextSwitcher
-    private lateinit var mCountryBadge: ImageSwitcher
-    private lateinit var mIssueCondition: ImageSwitcher
-    private lateinit var mIssueConditionText: TextView
-    private lateinit var mTitleText: TextView
-    private lateinit var mScore: LinearLayout
-    private lateinit var coverFlow: FeatureCoverFlow
 
     companion object {
         @JvmField
@@ -37,14 +33,16 @@ class CoverFlowActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (application as WhatTheDuck).trackActivity(this)
-        setContentView(R.layout.activity_coverflow)
+        binding = ActivityCoverflowBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         WhatTheDuck.appDB.coverSearchIssueDao().findAll().observe(this, Observer { searchIssues: List<CoverSearchIssueWithUserIssueAndScore> ->
             data = searchIssues
             adapter = CoverFlowAdapter(this)
             adapter.setData(searchIssues)
-            coverFlow = findViewById(R.id.coverflow)
-            coverFlow.adapter = adapter
-            coverFlow.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, _: Int, _: Long ->
+
+            binding.coverflow.adapter = adapter
+            binding.coverflow.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, _: Int, _: Long ->
                 if (currentSuggestion!!.userIssue == null) {
                     WhatTheDuck.selectedCountry = currentSuggestion!!.coverSearchIssue.coverCountryCode
                     WhatTheDuck.selectedPublication = currentSuggestion!!.coverSearchIssue.coverPublicationCode
@@ -58,75 +56,71 @@ class CoverFlowActivity : AppCompatActivity() {
                         .show()
                 }
             }
-            coverFlow.setOnScrollPositionListener(object : OnScrollPositionListener {
+            binding.coverflow.setOnScrollPositionListener(object : OnScrollPositionListener {
                 override fun onScrolledToPosition(position: Int) {
                     currentSuggestion = data[position]
-
                     val uri = "@drawable/flags_" + currentSuggestion!!.coverSearchIssue.coverCountryCode
                     var imageResource = resources.getIdentifier(uri, null, packageName)
                     if (imageResource == 0) {
                         imageResource = R.drawable.flags_unknown
                     }
 
-                    mCountryBadge.visibility = View.VISIBLE
-                    mCountryBadge.setImageResource(imageResource)
-                    mIssueConditionText.visibility = View.VISIBLE
+                    toggleInfoVisibility(View.VISIBLE)
+
+                    binding.countrybadge.setImageResource(imageResource)
 
                     val condition = currentSuggestion!!.userIssue?.condition
                     if (condition != null) {
-                        mIssueCondition.visibility = View.VISIBLE
-                        mIssueCondition.setImageResource(issueConditionToResourceId(condition))
-                        mIssueConditionText.setText(issueConditionToStringId(condition))
-                        mIssueConditionText.textSize = 18f
+                        binding.conditionbadge.setImageResource(issueConditionToResourceId(condition))
+                        binding.conditiontext.setText(getString(issueConditionToStringId(condition)))
+                        (binding.conditiontext.currentView as TextView).textSize = 18f
                     } else {
-                        mIssueCondition.visibility = View.GONE
-                        mIssueConditionText.setText(R.string.add_cover)
-                        mIssueConditionText.textSize = 14f
+                        binding.conditionbadge.visibility = View.GONE
+                        binding.conditiontext.setText(getString(R.string.add_cover))
+                        (binding.conditiontext.currentView as TextView).textSize = 14f
                     }
 
-                    mScore.visibility = if (currentSuggestion!!.suggestionScore > 0) View.VISIBLE else View.GONE
-                    mScore.findViewById<TextView>(R.id.scorevalue).text = currentSuggestion!!.suggestionScore.toString()
-                    mScore.findViewById<TextView>(R.id.scorevalue).textSize = 20F
+                    if (currentSuggestion!!.suggestionScore <= 0) {
+                        binding.score.root.visibility = View.GONE
+                    }
+                    binding.score.scorevalue.text = currentSuggestion!!.suggestionScore.toString()
+                    binding.score.scorevalue.textSize = 20F
 
-                    mResultNumber.visibility = View.VISIBLE
-                    mResultNumber.setText(resources.getString(R.string.result) + " " + (position + 1) + "/" + data.size)
+                    binding.resultNumber.setText(resources.getString(R.string.result) + " " + (position + 1) + "/" + data.size)
 
-                    mTitleText.visibility = View.VISIBLE
-                    mTitleText.text = data[position].coverSearchIssue.coverPublicationTitle + " " + data[position].coverSearchIssue.coverIssueNumber
+                    binding.countrytitle.setText(data[position].coverSearchIssue.coverPublicationTitle + " " + data[position].coverSearchIssue.coverIssueNumber)
                 }
 
                 override fun onScrolling() {
-                    mResultNumber.visibility = View.INVISIBLE
-                    mTitleText.visibility = View.INVISIBLE
-                    mCountryBadge.visibility = View.INVISIBLE
-                    mIssueCondition.visibility = View.INVISIBLE
-                    mIssueConditionText.visibility = View.INVISIBLE
+                    toggleInfoVisibility(View.INVISIBLE)
+                }
+
+                fun toggleInfoVisibility(visibility: Int) {
+                    listOf(
+                        binding.countrybadge,
+                        binding.countrytitle,
+                        binding.conditionbadge,
+                        binding.conditiontext,
+                        binding.score.root,
+                        binding.resultNumber
+                    ).forEach{ it.visibility = visibility }
                 }
             })
         })
-        mResultNumber = findViewById(R.id.resultNumber)
-        mResultNumber.setFactory {
+
+        binding.resultNumber.setFactory {
             LayoutInflater.from(this@CoverFlowActivity).inflate(R.layout.item_title, null)
         }
-        mCountryBadge = findViewById(R.id.countrybadge)
-        mCountryBadge.setFactory { ImageView(applicationContext) }
+        binding.countrybadge.setFactory { ImageView(applicationContext) }
 
-        mIssueCondition = findViewById(R.id.prefiximage)
-        mIssueCondition.setFactory { ImageView(applicationContext) }
-
-        mScore = findViewById(R.id.scorewrapper)
-
-        val mIssueConditionTextSwitcher = findViewById<TextSwitcher>(R.id.prefiximage_description)
-        mIssueConditionTextSwitcher.setFactory {
-            val inflater = LayoutInflater.from(this@CoverFlowActivity)
-            mIssueConditionText = inflater.inflate(R.layout.item_title, null) as TextView
-            mIssueConditionText
+        binding.countrytitle.setFactory {
+            LayoutInflater.from(this@CoverFlowActivity).inflate(R.layout.item_title, null) as TextView
         }
-        val mTitleSwitcher = findViewById<TextSwitcher>(R.id.title)
-        mTitleSwitcher.setFactory {
-            val inflater = LayoutInflater.from(this@CoverFlowActivity)
-            mTitleText = inflater.inflate(R.layout.item_title, null) as TextView
-            mTitleText
+
+        binding.conditionbadge.setFactory { ImageView(applicationContext) }
+
+        binding.conditiontext.setFactory {
+            LayoutInflater.from(this@CoverFlowActivity).inflate(R.layout.item_title, null) as TextView
         }
     }
 }

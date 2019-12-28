@@ -34,7 +34,6 @@ class WhatTheDuck : Application() {
         COA, USER
     }
 
-
     companion object {
         lateinit var config: Properties
         var isTestContext = false

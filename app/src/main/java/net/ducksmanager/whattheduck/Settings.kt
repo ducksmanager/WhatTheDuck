@@ -5,10 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.ImageView
+import android.widget.Switch
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.row.view.*
 import kotlinx.android.synthetic.main.settings.*
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksCountryName
@@ -17,25 +21,29 @@ import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPosse
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
+import net.ducksmanager.whattheduck.databinding.SettingsBinding
 import retrofit2.Response
 
 class Settings : AppCompatActivityWithDrawer() {
+    private lateinit var binding: SettingsBinding
+    
     override fun shouldShowToolbar() = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.settings)
+        binding = SettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         showToolbarIfExists()
 
         val toggleCountryListVisibility: (notifySwitch: Switch) -> Unit = {
-            findViewById<View>(R.id.notifiedCountriesListWrapper).visibility = if (notifySwitch.isChecked)
+            binding.notifiedCountriesListWrapper.visibility = if (notifySwitch.isChecked)
                 View.VISIBLE
             else
                 View.GONE
         }
 
-        val notifySwitch = findViewById<Switch>(R.id.notifySwitch)
+        val notifySwitch = binding.notifySwitch
         notifySwitch.isClickable = false
         notifySwitch.setOnClickListener {
             toggleCountryListVisibility(notifySwitch)
@@ -45,7 +53,7 @@ class Settings : AppCompatActivityWithDrawer() {
             DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>("getUserNotificationCountries", this) {
                 override fun onSuccessfulResponse(response: Response<List<String>>) {
                     val countriesToNotifyTo = response.body()?.toHashSet() as MutableSet<String>
-                    val recyclerView = findViewById<RecyclerView>(R.id.notifiedCountriesList)
+                    val recyclerView = binding.notifiedCountriesList
                     recyclerView.adapter = CountryToNotifyListAdapter(this@Settings, countryNames, countriesToNotifyTo)
                     recyclerView.layoutManager = LinearLayoutManager(this@Settings)
 
@@ -56,10 +64,10 @@ class Settings : AppCompatActivityWithDrawer() {
             })
         })
 
-        findViewById<TextView>(R.id.version).text = getString(R.string.version, applicationVersion)
+        binding.version.text = getString(R.string.version, applicationVersion)
 
-        findViewById<Button>(R.id.save).setOnClickListener {
-            val recyclerView = findViewById<RecyclerView>(R.id.notifiedCountriesList)
+        binding.save.setOnClickListener {
+            val recyclerView = binding.notifiedCountriesList
             val countriesToNotifyTo = (recyclerView.adapter as CountryToNotifyListAdapter).countriesToNotifyTo
             DmServer.api.updateUserNotificationCountries(CountryListToUpdate(countriesToNotifyTo))
                 .enqueue(object: DmServer.Callback<Void>("updateUserNotificationCountries", this) {
@@ -86,7 +94,7 @@ class Settings : AppCompatActivityWithDrawer() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val itemView = inflater.inflate(R.layout.row_notified_country, parent, false)
-            itemView.findViewById<ImageView>(R.id.suffiximage).visibility = View.GONE
+            itemView.suffiximage.visibility = View.GONE
             return ViewHolder(itemView)
         }
 

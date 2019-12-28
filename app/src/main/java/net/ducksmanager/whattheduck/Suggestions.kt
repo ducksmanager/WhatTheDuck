@@ -9,14 +9,17 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.row_suggested_issue.view.*
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.composite.SuggestedIssueSimple
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.util.AppCompatActivityWithDrawer
+import net.ducksmanager.whattheduck.databinding.SuggestionsBinding
 import retrofit2.Response
 
 
 class Suggestions : AppCompatActivityWithDrawer() {
+    private lateinit var binding: SuggestionsBinding
 
     companion object {
         var publicationTitles: HashMap<String, String> = HashMap()
@@ -29,10 +32,12 @@ class Suggestions : AppCompatActivityWithDrawer() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.suggestions)
+        binding = SuggestionsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
         showToolbarIfExists()
 
-        val suggestionListView = findViewById<RecyclerView>(R.id.suggestionList)
+        val suggestionListView = binding.suggestionList
 
         DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", this) {
             override fun onSuccessfulResponse(response: Response<SuggestionList>) {
@@ -53,7 +58,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
             }
         })
 
-        findViewById<ToggleButton>(R.id.sort).setOnClickListener {
+        binding.sort.setOnClickListener {
             val adapter = suggestionListView.adapter as SuggestedIssueAdapter
             if ((it as ToggleButton).isChecked) {
                 adapter.orderByScore()
@@ -88,7 +93,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
             val countryCode = currentItem.publicationcode.split("/")[0]
             val publicationName = publicationTitles.get(currentItem.publicationcode)
 
-            val title = holder.textWrapperView.findViewById<TextView>(R.id.itemtitle)
+            val title = holder.textWrapperView.itemtitle
             title.text = (publicationName ?: "Unknown publication") + " " + currentItem.issuenumber
             title.typeface = Typeface.DEFAULT_BOLD
             holder.prefixImageView.setImageResource(getImageResourceFromCountry(countryCode))
@@ -180,7 +185,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
             val currentItem = authors[position]
             holder.authorBadge.text = currentItem
             holder.authorBadge.setOnClickListener {
-                Toast.makeText(context, authorNames.get((it as Button).text), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, authorNames[(it as Button).text], Toast.LENGTH_SHORT).show()
             }
         }
     }

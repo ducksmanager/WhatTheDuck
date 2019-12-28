@@ -5,20 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.github.clans.fab.FloatingActionButton
-import com.github.clans.fab.FloatingActionMenu
+import kotlinx.android.synthetic.main.wtd_list_navigation_country.view.*
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.util.CoverFlowFileHandler
 import net.ducksmanager.util.CoverFlowFileHandler.SearchFromCover
+import net.ducksmanager.whattheduck.databinding.WtdListBinding
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -35,6 +31,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     @JvmField
     var data: List<Item> = ArrayList()
+    private lateinit var binding: WtdListBinding
 
     protected abstract fun hasList(): Boolean
     protected abstract fun downloadList(currentActivity: Activity)
@@ -52,15 +49,14 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.wtd_list)
+        binding =  WtdListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         showToolbarIfExists()
 
-        findViewById<View>(R.id.navigationAllCountries)
-            ?.setOnClickListener { _: View? -> goToView(CountryList::class.java) }
+        binding.navigationAllCountries.root.setOnClickListener { goToView(CountryList::class.java) }
 
-        findViewById<View>(R.id.navigationCountry)
-            ?.findViewById<View>(R.id.selected)?.setOnClickListener { _: View? -> goToView(PublicationList::class.java) }
+        binding.navigationCountry.root.selected?.setOnClickListener { _: View? -> goToView(PublicationList::class.java) }
 
         loadList()
     }
@@ -95,27 +91,25 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             return
         }
         showNavigation()
-        val addToCollection = findViewById<FloatingActionMenu>(R.id.addToCollectionWrapper)
+        val addToCollection = binding.addToCollectionWrapper
         if (shouldShowAddToCollectionButton()) {
-            if (addToCollection != null) {
-                addToCollection.setMenuButtonColorNormalResId(R.color.holo_green_dark)
-                addToCollection.setMenuButtonColorPressedResId(R.color.holo_green_dark)
-                addToCollection.visibility = if (type == WhatTheDuck.CollectionType.USER.toString()) View.VISIBLE else View.GONE
-                addToCollection.close(false)
+            addToCollection.setMenuButtonColorNormalResId(R.color.holo_green_dark)
+            addToCollection.setMenuButtonColorPressedResId(R.color.holo_green_dark)
+            addToCollection.visibility = if (type == WhatTheDuck.CollectionType.USER.toString()) View.VISIBLE else View.GONE
+            addToCollection.close(false)
 
-                if (type == WhatTheDuck.CollectionType.USER.toString()) {
-                    findViewById<FloatingActionButton>(R.id.addToCollectionByPhotoButton)
-                        .setOnClickListener { takeCoverPicture() }
+            if (type == WhatTheDuck.CollectionType.USER.toString()) {
+                binding.addToCollectionByPhotoButton
+                    .setOnClickListener { takeCoverPicture() }
 
-                    findViewById<FloatingActionButton>(R.id.addToCollectionBySelectionButton)
-                        .setOnClickListener {
-                            addToCollection.visibility = View.GONE
-                            goToAlternativeView()
-                        }
-                }
+                binding.addToCollectionBySelectionButton
+                    .setOnClickListener {
+                        addToCollection.visibility = View.GONE
+                        goToAlternativeView()
+                    }
             }
         } else {
-            addToCollection!!.visibility = View.GONE
+            addToCollection.visibility = View.GONE
         }
         val itemAdapter = itemAdapter
 
@@ -123,18 +117,17 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             itemAdapter.resetItems()
         }
 
-        val recyclerView = findViewById<RecyclerView>(R.id.itemList)
+        val recyclerView = binding.itemList
         recyclerView.adapter = itemAdapter
 
-        val filterEditText = findViewById<EditText>(R.id.filter)
+        val filterEditText = binding.filter
         if (shouldShowFilter(itemAdapter.items)) {
             itemAdapter.addOrReplaceFilterOnChangeListener(filterEditText)
         } else {
             filterEditText.visibility = View.GONE
             itemAdapter.updateFilteredList("")
         }
-        findViewById<TextView>(R.id.emptyList)
-            ?.visibility = if (requiresDataDownload || itemAdapter.itemCount > 0) View.INVISIBLE else View.VISIBLE
+        binding.emptyList.visibility = if (requiresDataDownload || itemAdapter.itemCount > 0) View.INVISIBLE else View.VISIBLE
 
         while (recyclerView.itemDecorationCount > 0) {
             recyclerView.removeItemDecorationAt(0)
@@ -162,8 +155,8 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            findViewById<View>(R.id.addToCollectionWrapper).visibility = View.VISIBLE
-            findViewById<View>(R.id.progressBar).visibility = View.VISIBLE
+            binding.addToCollectionWrapper.visibility = View.VISIBLE
+            binding.progressBar.visibility = View.VISIBLE
             CoverFlowFileHandler.current.resizeUntilFileSize(SearchFromCover())
         }
     }
@@ -175,7 +168,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
                     setNavigationCountry(inducksCountryName.countryCode, inducksCountryName.countryName)
                 })
         } else {
-            findViewById<View>(R.id.navigationCountry).visibility = View.INVISIBLE
+            binding.navigationCountry.root.visibility = View.INVISIBLE
         }
         if (shouldShowNavigationPublication()) {
             WhatTheDuck.appDB.inducksPublicationDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
@@ -183,32 +176,27 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
                     setNavigationPublication(inducksPublication.publicationCode, inducksPublication.title)
                 })
         } else {
-            findViewById<View>(R.id.navigationPublication).visibility = View.INVISIBLE
+            binding.navigationPublication.root.visibility = View.INVISIBLE
         }
     }
 
     private fun setNavigationCountry(selectedCountry: String, countryFullName: String) {
-        val countryNavigationView = findViewById<View>(R.id.navigationCountry)
+        val countryNavigationView = binding.navigationCountry
         val uri = "@drawable/flags_$selectedCountry"
         var imageResource = resources.getIdentifier(uri, null, packageName)
         if (imageResource == 0) {
             imageResource = R.drawable.flags_unknown
         }
 
-        countryNavigationView.findViewById<ImageView>(R.id.selectedBadgeImage)
-            .setImageResource(imageResource)
-        countryNavigationView.findViewById<TextView>(R.id.selectedText)
-            .text = countryFullName
+        countryNavigationView.selectedBadgeImage.setImageResource(imageResource)
+        countryNavigationView.selectedText.text = countryFullName
     }
 
     private fun setNavigationPublication(selectedPublication: String, publicationFullName: String) {
-        val publicationNavigationView = findViewById<View>(R.id.navigationPublication)
+        val publicationNavigationView = binding.navigationPublication
 
-        publicationNavigationView.findViewById<TextView>(R.id.selectedBadge)
-            .text = selectedPublication.split("/").toTypedArray()[1]
-
-        publicationNavigationView.findViewById<TextView>(R.id.selectedText)
-            .text = publicationFullName
+        publicationNavigationView.selectedBadge.text = selectedPublication.split("/").toTypedArray()[1]
+        publicationNavigationView.selectedText.text = publicationFullName
     }
 
     fun storeItemList(items: List<Item>) {

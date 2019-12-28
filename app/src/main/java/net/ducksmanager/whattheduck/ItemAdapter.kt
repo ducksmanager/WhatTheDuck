@@ -68,7 +68,7 @@ abstract class ItemAdapter<Item> internal constructor(
         filteredItems = ArrayList()
         for (item in items) {
             if (!(ItemList.type == WhatTheDuck.CollectionType.USER.toString() && !isPossessed(item))
-                && (textFilter == "" || getText(item)!!.toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase()))) {
+                && (textFilter == "" || getText(item)!!.toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase(Locale.getDefault())))) {
                 filteredItems.add(item)
             }
         }

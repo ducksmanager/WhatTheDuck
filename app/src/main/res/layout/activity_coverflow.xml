@@ -21,14 +21,16 @@
             android:adjustViewBounds="true" />
 
         <TextSwitcher
-            android:id="@+id/title"
+            android:id="@+id/countrytitle"
             android:paddingStart="5dp"
             android:paddingLeft="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <include layout="@layout/score"
+    <include
+        android:id="@+id/score"
+        layout="@layout/score"
         android:layout_gravity="center"
         android:layout_width="50dp"
         android:layout_height="30dp" />
@@ -52,12 +54,12 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
         <ImageSwitcher
-            android:id="@+id/prefiximage"
+            android:id="@+id/conditionbadge"
             android:layout_width="24dip"
             android:layout_height="fill_parent"
             android:paddingBottom="72dp" />
         <TextSwitcher
-            android:id="@+id/prefiximage_description"
+            android:id="@+id/conditiontext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="72dp"
