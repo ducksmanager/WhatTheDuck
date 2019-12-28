@@ -1,12 +1,16 @@
-package net.ducksmanager.whattheduck
+package net.ducksmanager.adapter
 
 import android.app.Activity
 import android.content.Intent
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import net.ducksmanager.activity.AddIssue
+import net.ducksmanager.activity.ItemList
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToResourceId
+import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 import java.lang.ref.WeakReference
 
 class IssueAdapter internal constructor(

@@ -1,4 +1,4 @@
-package net.ducksmanager.whattheduck
+package net.ducksmanager.activity
 
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
@@ -18,7 +18,10 @@ import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.IssueListToUpdate
 import net.ducksmanager.persistence.models.dm.Purchase
-import net.ducksmanager.whattheduck.PurchaseAdapter.NoPurchase
+import net.ducksmanager.adapter.PurchaseAdapter
+import net.ducksmanager.adapter.PurchaseAdapter.NoPurchase
+import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.databinding.AddissueBinding
 import retrofit2.Response
 import java.lang.ref.WeakReference

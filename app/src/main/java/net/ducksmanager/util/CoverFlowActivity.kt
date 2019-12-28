@@ -14,7 +14,7 @@ import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow.OnScroll
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToResourceId
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToStringId
-import net.ducksmanager.whattheduck.AddIssue
+import net.ducksmanager.activity.AddIssue
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.databinding.ActivityCoverflowBinding

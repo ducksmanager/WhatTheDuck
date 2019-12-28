@@ -9,9 +9,9 @@ import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.LargeTest
-import net.ducksmanager.whattheduck.IssueList
-import net.ducksmanager.whattheduck.ItemAdapter
-import net.ducksmanager.whattheduck.PublicationList
+import net.ducksmanager.activity.IssueList
+import net.ducksmanager.adapter.ItemAdapter
+import net.ducksmanager.activity.PublicationList
 import net.ducksmanager.whattheduck.R
 import org.hamcrest.Description
 import org.hamcrest.Matcher

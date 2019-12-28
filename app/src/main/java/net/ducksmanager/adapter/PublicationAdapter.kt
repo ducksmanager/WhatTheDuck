@@ -1,10 +1,14 @@
-package net.ducksmanager.whattheduck
+package net.ducksmanager.adapter
 
 import android.app.Activity
 import android.content.Intent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import net.ducksmanager.activity.IssueList
+import net.ducksmanager.activity.ItemList
 import net.ducksmanager.persistence.models.composite.InducksPublicationWithPossession
+import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 
 class PublicationAdapter internal constructor(
     itemList: ItemList<InducksPublicationWithPossession>,

@@ -1,4 +1,4 @@
-package net.ducksmanager.whattheduck
+package net.ducksmanager.activity
 
 import android.content.Context
 import android.graphics.Typeface
@@ -14,6 +14,8 @@ import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.composite.SuggestedIssueSimple
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.util.AppCompatActivityWithDrawer
+import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.databinding.SuggestionsBinding
 import retrofit2.Response
 

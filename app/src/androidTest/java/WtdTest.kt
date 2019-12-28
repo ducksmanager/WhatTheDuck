@@ -21,6 +21,9 @@ import androidx.test.runner.AndroidJUnitRunner
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
 import com.github.clans.fab.FloatingActionButton
+import net.ducksmanager.activity.CountryList
+import net.ducksmanager.activity.IssueList
+import net.ducksmanager.activity.Login
 import net.ducksmanager.persistence.AppDatabase
 import net.ducksmanager.whattheduck.*
 import okhttp3.mockwebserver.MockWebServer

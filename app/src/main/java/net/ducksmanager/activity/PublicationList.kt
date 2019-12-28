@@ -1,4 +1,4 @@
-package net.ducksmanager.whattheduck
+package net.ducksmanager.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -7,6 +7,9 @@ import androidx.lifecycle.Observer
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.InducksPublicationWithPossession
+import net.ducksmanager.adapter.ItemAdapter
+import net.ducksmanager.adapter.PublicationAdapter
+import net.ducksmanager.whattheduck.WhatTheDuck
 import retrofit2.Response
 import java.util.*
 

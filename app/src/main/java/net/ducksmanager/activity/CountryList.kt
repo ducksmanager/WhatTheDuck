@@ -1,15 +1,19 @@
-package net.ducksmanager.whattheduck
+package net.ducksmanager.activity
 
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import net.ducksmanager.adapter.CountryAdapter
+import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
 import net.ducksmanager.util.ReleaseNotes
 import net.ducksmanager.util.Settings
+import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 import retrofit2.Response
 import java.lang.ref.WeakReference
 import java.util.*

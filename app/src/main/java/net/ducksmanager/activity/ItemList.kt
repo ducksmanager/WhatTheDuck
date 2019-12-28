@@ -1,4 +1,4 @@
-package net.ducksmanager.whattheduck
+package net.ducksmanager.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -14,6 +14,9 @@ import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.util.CoverFlowFileHandler
 import net.ducksmanager.util.CoverFlowFileHandler.SearchFromCover
+import net.ducksmanager.adapter.ItemAdapter
+import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.databinding.WtdListBinding
 import java.lang.ref.WeakReference
 import java.util.*

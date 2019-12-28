@@ -1,4 +1,4 @@
-package net.ducksmanager.whattheduck
+package net.ducksmanager.adapter
 
 import android.app.Activity
 import android.graphics.Typeface
@@ -9,7 +9,10 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import net.ducksmanager.activity.ItemList
 import net.ducksmanager.util.FilterTextOnChangeListener
+import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 import net.greypanther.natsort.CaseInsensitiveSimpleNaturalComparator
 import java.util.*
 

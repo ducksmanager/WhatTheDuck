@@ -1,4 +1,4 @@
-package net.ducksmanager.whattheduck
+package net.ducksmanager.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.RadioButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import net.ducksmanager.persistence.models.dm.Purchase
+import net.ducksmanager.whattheduck.R
 
 class PurchaseAdapter internal constructor(private val context: Context, private val items: List<Purchase>) : RecyclerView.Adapter<PurchaseAdapter.ViewHolder>() {
 

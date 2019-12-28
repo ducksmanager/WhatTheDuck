@@ -1,13 +1,11 @@
-package net.ducksmanager.whattheduck
+package net.ducksmanager.activity
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
 import android.text.TextUtils
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
@@ -22,17 +20,18 @@ import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.persistence.models.dm.User
 import net.ducksmanager.util.Settings.toSHA1
-import net.ducksmanager.whattheduck.databinding.WhattheduckBinding
+import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.databinding.LoginBinding
 import retrofit2.Response
 import java.lang.ref.WeakReference
 import java.util.*
 
 class Login : AppCompatActivity() {
-    private lateinit var binding: WhattheduckBinding
+    private lateinit var binding: LoginBinding
 
     companion object {
-        
-        fun fetchCollection(activityRef: WeakReference<Activity>, targetClass: Class<*>?, alertIfError: Boolean?) {
+        fun fetchCollection(activityRef: WeakReference<Activity>, targetClass: Class<*>, alertIfError: Boolean?) {
             DmServer.api.userIssues.enqueue(object : DmServer.Callback<List<Issue>>("retrieveCollection", activityRef.get()!!, alertIfError!!) {
                 override fun onSuccessfulResponse(response: Response<List<Issue>>) {
                     val user = User(DmServer.apiDmUser!!, DmServer.apiDmPassword!!)
@@ -94,23 +93,13 @@ class Login : AppCompatActivity() {
             DmServer.apiDmPassword = user.password
             fetchCollection(WeakReference(this@Login), CountryList::class.java, false)
         } else {
-            binding = WhattheduckBinding.inflate(layoutInflater)
+            binding = LoginBinding.inflate(layoutInflater)
             setContentView(binding.root)
             showLoginForm()
         }
     }
 
     private fun showLoginForm() {
-        binding.loginForm.visibility = View.VISIBLE
-
-        binding.username.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun afterTextChanged(s: Editable) {
-                binding.password.setText("")
-            }
-        })
-
         binding.endSignup.setOnClickListener {
             startActivity(Intent(this, Signup::class.java)
                 .putExtra("username", binding.username.text.toString())
@@ -142,7 +131,6 @@ class Login : AppCompatActivity() {
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
             WhatTheDuck.alert(activityRef, R.string.input_error, R.string.input_error__empty_credentials)
             binding.progressBar.visibility = View.INVISIBLE
-            binding.loginForm.visibility = View.VISIBLE
         } else {
             fetchCollection(activityRef, CountryList::class.java, true)
         }

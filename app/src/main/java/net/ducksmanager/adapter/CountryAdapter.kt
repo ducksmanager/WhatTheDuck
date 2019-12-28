@@ -1,10 +1,14 @@
-package net.ducksmanager.whattheduck
+package net.ducksmanager.adapter
 
 import android.app.Activity
 import android.content.Intent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import net.ducksmanager.activity.ItemList
+import net.ducksmanager.activity.PublicationList
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
+import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 
 class CountryAdapter internal constructor(
     itemList: ItemList<InducksCountryNameWithPossession>,

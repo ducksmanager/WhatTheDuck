@@ -1,4 +1,4 @@
-package net.ducksmanager.whattheduck
+package net.ducksmanager.adapter
 
 import android.app.Activity
 import android.content.res.Configuration
@@ -6,7 +6,10 @@ import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import net.ducksmanager.activity.ItemList
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
+import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 
 class IssueEdgeAdapter internal constructor(
     itemList: ItemList<InducksIssueWithUserIssueAndScore>,

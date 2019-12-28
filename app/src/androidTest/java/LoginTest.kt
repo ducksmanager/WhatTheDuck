@@ -1,7 +1,7 @@
 import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import net.ducksmanager.whattheduck.CountryList
+import net.ducksmanager.activity.CountryList
 import net.ducksmanager.whattheduck.R
 import org.junit.Before
 import org.junit.Test

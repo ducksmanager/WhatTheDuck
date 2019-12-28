@@ -23,26 +23,26 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:fullBackupContent">
-        <activity android:name=".Login">
+        <activity android:name="net.ducksmanager.activity.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Signup" />
-        <activity android:name=".CountryList" />
-        <activity android:name=".PublicationList" />
-        <activity android:name=".IssueList" />
+        <activity android:name="net.ducksmanager.activity.Signup" />
+        <activity android:name="net.ducksmanager.activity.CountryList" />
+        <activity android:name="net.ducksmanager.activity.PublicationList" />
+        <activity android:name="net.ducksmanager.activity.IssueList" />
         <activity
             android:name="net.ducksmanager.util.CoverFlowActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AddIssue"
+            android:name="net.ducksmanager.activity.AddIssue"
             android:excludeFromRecents="true"
             android:theme="@style/AddIssueTheme" />
-        <activity android:name=".Settings" />
-        <activity android:name=".Suggestions" />
+        <activity android:name="net.ducksmanager.activity.Settings" />
+        <activity android:name="net.ducksmanager.activity.Suggestions" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

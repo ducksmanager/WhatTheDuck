@@ -1,4 +1,4 @@
-package net.ducksmanager.whattheduck
+package net.ducksmanager.activity
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -13,11 +13,15 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import net.ducksmanager.adapter.IssueAdapter
+import net.ducksmanager.adapter.IssueEdgeAdapter
+import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksIssue
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 import net.ducksmanager.util.DraggableRelativeLayout
 import net.ducksmanager.util.Settings
+import net.ducksmanager.whattheduck.*
 import retrofit2.Response
 import java.lang.ref.WeakReference
 
