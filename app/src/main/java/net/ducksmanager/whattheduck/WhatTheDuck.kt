@@ -8,6 +8,8 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.widget.Toast
 import androidx.room.Room
 import com.pusher.pushnotifications.BeamsCallback
@@ -156,8 +158,12 @@ class WhatTheDuck : Application() {
         val isMobileConnection: Boolean
             get() {
                 val cm = applicationContext!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                val activeNetwork = cm.activeNetworkInfo
-                return activeNetwork.type == ConnectivityManager.TYPE_MOBILE
+
+                return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    cm.activeNetworkInfo != null && cm.activeNetworkInfo.isConnected && cm.activeNetworkInfo.type == ConnectivityManager.TYPE_MOBILE
+                } else {
+                    cm.activeNetwork != null && cm.getNetworkCapabilities(cm.activeNetwork).hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                }
             }
 
         fun trackEvent(text: String?) {
