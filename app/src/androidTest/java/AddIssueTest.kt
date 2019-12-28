@@ -25,7 +25,7 @@ class AddIssueTest : WtdTest() {
     fun testShowAddIssueDialog() {
 
         onView(
-            allOf(withId(R.id.itemtitle), withText("France"), isDisplayed())
+            allOf(withId(R.id.itemtitle), withText(containsString("Fr")), isDisplayed())
         ).perform(ViewActions.click())
 
         onView(withText(containsString("dynastie"))).perform(ViewActions.click())
