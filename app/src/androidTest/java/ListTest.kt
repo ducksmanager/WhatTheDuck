@@ -10,8 +10,8 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.LargeTest
 import net.ducksmanager.activity.IssueList
-import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.activity.PublicationList
+import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.whattheduck.R
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -34,7 +34,7 @@ class ListTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(currentLo
         private fun getItemMatcher(identifier: String): Matcher<RecyclerView.ViewHolder> {
             return object : BoundedMatcher<RecyclerView.ViewHolder, RecyclerView.ViewHolder>(ItemAdapter.ViewHolder::class.java) {
                 override fun matchesSafely(item: RecyclerView.ViewHolder): Boolean {
-                    return (item as ItemAdapter<*>.ViewHolder).titleTextView!!.getTag() == identifier
+                    return (item as ItemAdapter<*>.ViewHolder).titleTextView!!.tag == identifier
                 }
 
                 override fun describeTo(description: Description) {

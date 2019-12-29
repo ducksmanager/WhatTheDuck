@@ -93,14 +93,14 @@ class Suggestions : AppCompatActivityWithDrawer() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val currentItem = suggestions[position]
             val countryCode = currentItem.publicationcode.split("/")[0]
-            val publicationName = publicationTitles.get(currentItem.publicationcode)
+            val publicationName = publicationTitles[currentItem.publicationcode]
 
             val title = holder.textWrapperView.itemtitle
             title.text = (publicationName ?: "Unknown publication") + " " + currentItem.issuenumber
             title.typeface = Typeface.DEFAULT_BOLD
             holder.prefixImageView.setImageResource(getImageResourceFromCountry(countryCode))
-            holder.suffixtextView1.text = currentItem.oldestdate ?: "Unknown"
 
+            holder.suffixtextView1.text = currentItem.oldestdate ?: "Unknown"
             holder.suffixtextView2.text = currentItem.score.toString()
 
             val allStories = currentItem.stories.values.flatten().toSet()

@@ -4,8 +4,6 @@ import android.view.View
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -13,7 +11,6 @@ import androidx.test.espresso.intent.Checks
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.ActivityTestRule
@@ -25,7 +22,8 @@ import net.ducksmanager.activity.CountryList
 import net.ducksmanager.activity.IssueList
 import net.ducksmanager.activity.Login
 import net.ducksmanager.persistence.AppDatabase
-import net.ducksmanager.whattheduck.*
+import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers
 import org.hamcrest.Description
@@ -116,22 +114,6 @@ open class WtdTest : AndroidJUnitRunner {
                 }
                 return currentActivity[0]
             }
-
-        fun forceFloatingActionButtonsVisible(value: Boolean): ViewAction {
-            return object : ViewAction {
-                override fun getConstraints(): Matcher<View> {
-                    return isAssignableFrom(FloatingActionButton::class.java)
-                }
-
-                override fun perform(uiController: UiController, view: View) {
-                    view.visibility = if (value) View.VISIBLE else View.GONE
-                }
-
-                override fun getDescription(): String {
-                    return "Force floating action buttons to be visible"
-                }
-            }
-        }
 
         fun forceFloatingActionButtonsVisible(): Matcher<Any> {
             return object : BoundedMatcher<Any, FloatingActionButton>(FloatingActionButton::class.java) {

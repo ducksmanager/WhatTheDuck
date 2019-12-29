@@ -39,7 +39,7 @@ class WhatTheDuck : Application() {
         var isTestContext = false
 
         private const val CONFIG = "config.properties"
-        const val CONFIG_KEY_PUSHER_INSTANCE_ID = "pusher_instance_id"
+        private const val CONFIG_KEY_PUSHER_INSTANCE_ID = "pusher_instance_id"
         const val CONFIG_KEY_API_ENDPOINT_URL = "api_endpoint_url"
         const val CONFIG_KEY_DM_URL = "dm_url"
         const val CONFIG_KEY_ROLE_NAME = "role_name"

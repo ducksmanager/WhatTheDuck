@@ -85,7 +85,7 @@ internal object DownloadHandlerMock {
     }
 
     private fun openPathAsStream(path: String): InputStream {
-        val path2=path.replace("_.json", "empty.json");
+        val path2=path.replace("_.json", "empty.json")
         val loader = Thread.currentThread().contextClassLoader
         return loader.getResourceAsStream(path2)
             ?: throw IllegalStateException("Invalid path: $path2")

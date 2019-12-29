@@ -39,7 +39,7 @@ class IssueEdgeAdapter internal constructor(
             expectedEdgeHeight = if (orientation == Configuration.ORIENTATION_LANDSCAPE) recyclerView.height else recyclerView.width
         }
         Picasso
-            .with(holder.itemView.getContext())
+            .with(holder.itemView.context)
             .load(getEdgeUrl(item))
             .resize(0, expectedEdgeHeight!!)
             .rotate(if (orientation == Configuration.ORIENTATION_LANDSCAPE) 0f else 90f)
