@@ -41,6 +41,9 @@
             android:layout_width="fill_parent"
             android:textSize="12sp"
             android:layout_height="fill_parent"
-            android:gravity="center" />
+            android:text="@string/purchase_date"
+            android:paddingLeft="5dp"
+            android:paddingStart="5dp"
+            android:gravity="start|center" />
     </LinearLayout>
 </LinearLayout>

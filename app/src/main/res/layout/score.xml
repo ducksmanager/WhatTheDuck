@@ -20,6 +20,9 @@
         tools:text="score"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:gravity="center"
+        android:gravity="start"
+        android:paddingLeft="5dp"
+        android:paddingStart="5dp"
+        android:textStyle="bold"
         android:textSize="12sp" />
 </LinearLayout>
