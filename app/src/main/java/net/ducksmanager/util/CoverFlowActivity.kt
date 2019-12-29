@@ -2,19 +2,16 @@ package net.ducksmanager.util
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow.OnScrollPositionListener
+import net.ducksmanager.activity.AddIssue
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToResourceId
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToStringId
-import net.ducksmanager.activity.AddIssue
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.databinding.ActivityCoverflowBinding
@@ -72,12 +69,12 @@ class CoverFlowActivity : AppCompatActivity() {
                     val condition = currentSuggestion!!.userIssue?.condition
                     if (condition != null) {
                         binding.conditionbadge.setImageResource(issueConditionToResourceId(condition))
-                        binding.conditiontext.setText(getString(issueConditionToStringId(condition)))
-                        (binding.conditiontext.currentView as TextView).textSize = 18f
+                        binding.conditiontext.text = getString(issueConditionToStringId(condition))
+                        binding.conditiontext.textSize = 18f
                     } else {
                         binding.conditionbadge.visibility = View.GONE
-                        binding.conditiontext.setText(getString(R.string.add_cover))
-                        (binding.conditiontext.currentView as TextView).textSize = 14f
+                        binding.conditiontext.text = getString(R.string.add_cover)
+                        binding.conditiontext.textSize = 14f
                     }
 
                     if (currentSuggestion!!.suggestionScore <= 0) {
@@ -86,9 +83,9 @@ class CoverFlowActivity : AppCompatActivity() {
                     binding.score.scorevalue.text = currentSuggestion!!.suggestionScore.toString()
                     binding.score.scorevalue.textSize = 20F
 
-                    binding.resultNumber.setText(resources.getString(R.string.result) + " " + (position + 1) + "/" + data.size)
+                    binding.resultNumber.text = resources.getString(R.string.result) + " " + (position + 1) + "/" + data.size
 
-                    binding.countrytitle.setText(data[position].coverSearchIssue.coverPublicationTitle + " " + data[position].coverSearchIssue.coverIssueNumber)
+                    binding.issuetitle.text = data[position].coverSearchIssue.coverPublicationTitle + " " + data[position].coverSearchIssue.coverIssueNumber
                 }
 
                 override fun onScrolling() {
@@ -98,7 +95,7 @@ class CoverFlowActivity : AppCompatActivity() {
                 fun toggleInfoVisibility(visibility: Int) {
                     listOf(
                         binding.countrybadge,
-                        binding.countrytitle,
+                        binding.issuetitle,
                         binding.conditionbadge,
                         binding.conditiontext,
                         binding.score.root,
@@ -107,20 +104,5 @@ class CoverFlowActivity : AppCompatActivity() {
                 }
             })
         })
-
-        binding.resultNumber.setFactory {
-            LayoutInflater.from(this@CoverFlowActivity).inflate(R.layout.item_title, null)
-        }
-        binding.countrybadge.setFactory { ImageView(applicationContext) }
-
-        binding.countrytitle.setFactory {
-            LayoutInflater.from(this@CoverFlowActivity).inflate(R.layout.item_title, null) as TextView
-        }
-
-        binding.conditionbadge.setFactory { ImageView(applicationContext) }
-
-        binding.conditiontext.setFactory {
-            LayoutInflater.from(this@CoverFlowActivity).inflate(R.layout.item_title, null) as TextView
-        }
     }
 }

@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:coverflow="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,32 +8,40 @@
     tools:context="net.ducksmanager.util.CoverFlowActivity">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:paddingTop="24dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:paddingTop="24dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/countrybadge"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/flags_fr"
+                android:adjustViewBounds="true" />
+            <TextView
+                android:id="@+id/issuetitle"
+                android:paddingStart="5dp"
+                android:paddingLeft="5dp"
+                android:text="text"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
-        <ImageSwitcher
-            android:id="@+id/countrybadge"
-            android:layout_width="20dp"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true" />
-
-        <TextSwitcher
-            android:id="@+id/countrytitle"
-            android:paddingStart="5dp"
-            android:paddingLeft="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <include
+            layout="@layout/score"
+            android:id="@+id/score"
+            android:layout_gravity="center"
+            android:layout_width="50dp"
+            android:layout_height="30dp" />
     </LinearLayout>
-
-    <include
-        android:id="@+id/score"
-        layout="@layout/score"
-        android:layout_gravity="center"
-        android:layout_width="50dp"
-        android:layout_height="30dp" />
 
     <it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow
         android:id="@+id/coverflow"
@@ -53,27 +61,31 @@
         android:layout_alignParentBottom="true"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
-        <ImageSwitcher
+        <ImageView
             android:id="@+id/conditionbadge"
             android:layout_width="24dip"
             android:layout_height="fill_parent"
+            android:src="@drawable/condition_good"
             android:paddingBottom="72dp" />
-        <TextSwitcher
+        <TextView
             android:id="@+id/conditiontext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="72dp"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
+            android:text="@string/condition_good"
             android:textColor="#FFFFFF" />
     </LinearLayout>
 
-
-    <TextSwitcher
+    <TextView
         android:id="@+id/resultNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="16dp"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:text="@string/result"
         android:layout_alignParentBottom="true"
         android:layout_centerVertical="true" />
 
@@ -85,4 +97,4 @@
         android:indeterminate="true"
         android:visibility="gone" />
 
-</LinearLayout>
+</RelativeLayout>
