@@ -1,3 +1,11 @@
+Version 2.0.2
+
+    Fix cover search results layout
+
+Version 2.0.1
+
+    Not released
+
 Version 2.0.0 "Cornelius"
     
     Add suggestion screen and suggestion notifications
