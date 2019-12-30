@@ -9,6 +9,10 @@ import org.jetbrains.annotations.NotNull
 @Entity(tableName = "user_settings")
 class UserSetting(settingKey: @NotNull String?, value: String) {
 
+    companion object {
+        const val SETTING_KEY_NOTIFICATIONS_ENABLED = "SETTING_KEY_NOTIFICATIONS_ENABLED"
+    }
+
     @PrimaryKey
     @NonNull
     private var settingKey: String

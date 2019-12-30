@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
-import android.widget.Switch
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,12 +17,15 @@ import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.CountryListToUpdate
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
+import net.ducksmanager.persistence.models.composite.UserSetting
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
 import net.ducksmanager.whattheduck.databinding.SettingsBinding
 import retrofit2.Response
+import java.lang.ref.WeakReference
 
 class Settings : AppCompatActivityWithDrawer() {
     private lateinit var binding: SettingsBinding
@@ -37,18 +39,7 @@ class Settings : AppCompatActivityWithDrawer() {
         setContentView(binding.root)
         showToolbarIfExists()
 
-        val toggleCountryListVisibility: (notifySwitch: Switch) -> Unit = {
-            binding.notifiedCountriesListWrapper.visibility = if (notifySwitch.isChecked)
-                View.VISIBLE
-            else
-                View.GONE
-        }
-
-        val notifySwitch = binding.notifySwitch
-        notifySwitch.isClickable = false
-        notifySwitch.setOnClickListener {
-            toggleCountryListVisibility(notifySwitch)
-        }
+        binding.notifySwitch.isChecked = appDB.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)?.value.equals("1")
 
         appDB.inducksCountryDao().findAllWithPossession().observe(this, Observer { countryNames ->
             DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>("getUserNotificationCountries", this) {
@@ -57,10 +48,6 @@ class Settings : AppCompatActivityWithDrawer() {
                     val recyclerView = binding.notifiedCountriesList
                     recyclerView.adapter = CountryToNotifyListAdapter(this@Settings, countryNames, countriesToNotifyTo)
                     recyclerView.layoutManager = LinearLayoutManager(this@Settings)
-
-                    notifySwitch.isClickable = true
-                    notifySwitch.isChecked = countriesToNotifyTo.isNotEmpty()
-                    toggleCountryListVisibility(notifySwitch)
                 }
             })
         })
@@ -68,8 +55,14 @@ class Settings : AppCompatActivityWithDrawer() {
         binding.version.text = getString(R.string.version, applicationVersion)
 
         binding.save.setOnClickListener {
-            val recyclerView = binding.notifiedCountriesList
-            val countriesToNotifyTo = (recyclerView.adapter as CountryToNotifyListAdapter).countriesToNotifyTo
+            if (notifySwitch.isChecked) {
+                WhatTheDuck.registerForNotifications(WeakReference(this@Settings), true)
+            }
+            else {
+                WhatTheDuck.unregisterFromNotifications()
+            }
+
+            val countriesToNotifyTo = (binding.notifiedCountriesList.adapter as CountryToNotifyListAdapter).countriesToNotifyTo
             DmServer.api.updateUserNotificationCountries(CountryListToUpdate(countriesToNotifyTo))
                 .enqueue(object: DmServer.Callback<Void>("updateUserNotificationCountries", this) {
                     override fun onSuccessfulResponse(response: Response<Void>) {
@@ -96,6 +89,7 @@ class Settings : AppCompatActivityWithDrawer() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val itemView = inflater.inflate(R.layout.row_notified_country, parent, false)
             itemView.suffiximage.visibility = View.GONE
+            itemView.suffixtext.visibility = View.GONE
             return ViewHolder(itemView)
         }
 

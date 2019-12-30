@@ -50,7 +50,7 @@ class Login : AppCompatActivity() {
                             }
                         }
                     )
-                    WhatTheDuck.registerForNotifications(activityRef)
+                    WhatTheDuck.registerForNotifications(activityRef, false)
 
                     ItemList.type = WhatTheDuck.CollectionType.USER.toString()
                     activityRef.get()!!.startActivity(Intent(activityRef.get()!!, targetClass))

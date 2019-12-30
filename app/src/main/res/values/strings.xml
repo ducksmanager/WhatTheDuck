@@ -51,9 +51,9 @@
     <string name="newFeatures18Text">You can now see your bookcase on WhatTheDuck!\n\nWhen in an issue list, tap on the bookcase icon to switch to the bookcase view.</string>
     <string name="no_item">No issue in this list. Click on the "+" icon to add issues to your collection!</string>
     <string name="no_purchase_date">No purchase date</string>
-    <string name="notify_option">Notify me about new stories from my favorite authors</string>
+    <string name="notify_option">Notify me when new stories from my favorite authors come out</string>
     <string name="ok">OK</string>
-    <string name="option_notified_countries">for issues released in the following countries:</string>
+    <string name="option_notified_countries">Suggest me issues released in the following countries:</string>
     <string name="password">Password</string>
     <string name="password_confirm">Password confirmation</string>
     <string name="purchase_date">Purchase date</string>

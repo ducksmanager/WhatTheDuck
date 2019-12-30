@@ -70,7 +70,7 @@
     <string name="welcomeMessage">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur + pour ajouter un numéro.</string>
     <string name="welcomeTitle">Bienvenue sur What The Duck !</string>
     <string name="collection">Ma collection</string>
-    <string name="notify_option">Recevoir une notification quand des histoires de mes auteurs favoris sont publiées</string>
-    <string name="option_notified_countries">pour les magazines des pays suivants:</string>
+    <string name="notify_option">Me notifier quand des nouvelles histoires de mes auteurs favoris sont publiées</string>
+    <string name="option_notified_countries">Me suggérer des magazines des pays suivants:</string>
     <string name="suggestions_intro">WhatTheDuck vous propose une liste personalisée de magazines contenant des histoires inédites de vos auteurs favoris. Vous pouvez changer les pays des magazines à afficher dans l\'écran Paramètres</string>
 </resources>

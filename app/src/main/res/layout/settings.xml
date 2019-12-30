@@ -36,7 +36,7 @@
                 <TextView
                     android:id="@+id/version"
                     android:textSize="20sp"
-                    android:textAlignment="center"
+                    android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/version"/>
@@ -44,7 +44,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
+                    android:gravity="center"
                     android:text="@string/rate_app"/>
             </LinearLayout>
 
@@ -56,16 +56,9 @@
                 android:layout_below="@+id/appPresentation"
                 android:background="#c0c0c0"/>
 
-            <Switch
-                android:id="@+id/notifySwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/line"
-                android:text="@string/notify_option" />
-
             <LinearLayout
                 android:id="@+id/notifiedCountriesListWrapper"
-                android:layout_below="@+id/notifySwitch"
+                android:layout_below="@+id/line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -73,7 +66,7 @@
                 android:paddingStart="30dp"
                 android:paddingEnd="30dp"
                 android:paddingLeft="30dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:paddingRight="30dp">
 
                 <TextView
@@ -89,8 +82,15 @@
                         android:id="@+id/notifiedCountriesList"
                         android:layout_width="match_parent"
                         android:layout_height="325dp"
-                        android:layout_marginBottom="26dp"
                         tools:listitem="@layout/row_notified_country"/>
+
+                    <Switch
+                        android:id="@+id/notifySwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:layout_below="@+id/notifiedCountriesList"
+                        android:text="@string/notify_option" />
 
                     <ProgressBar
                         android:id="@+id/progressBar"

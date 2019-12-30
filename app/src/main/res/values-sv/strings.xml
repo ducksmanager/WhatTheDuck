@@ -53,7 +53,7 @@
     <string name="no_purchase_date">Inget inköpsdatum</string>
     <string name="notify_option">Meddela mig om nya berättelser från mina favoritförfattare</string>
     <string name="ok">OK</string>
-    <string name="option_notified_countries">för utgåvor släppta i följande länder:</string>
+    <string name="option_notified_countries">Föreslå mig om utgåvor släppta i följande länder:</string>
     <string name="password">Lösenord</string>
     <string name="password_confirm">Upprepa lösenord</string>
     <string name="purchase_date">Inköpsdatum</string>

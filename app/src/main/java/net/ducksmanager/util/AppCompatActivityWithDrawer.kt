@@ -12,7 +12,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import net.ducksmanager.activity.*
 import net.ducksmanager.activity.Settings
-import net.ducksmanager.whattheduck.*
+import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 
 abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
 
@@ -61,6 +62,7 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
         drawerNavigation
             .setNavigationItemSelectedListener { menuItem ->
                 if (menuItem.itemId == R.id.action_logout) {
+                    WhatTheDuck.unregisterFromNotifications()
                     WhatTheDuck.appDB.userDao().deleteAll()
                 }
 

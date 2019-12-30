@@ -18,6 +18,7 @@ import com.pusher.pushnotifications.PusherCallbackError
 import com.pusher.pushnotifications.auth.BeamsTokenProvider
 import net.ducksmanager.api.DmServer.initApi
 import net.ducksmanager.persistence.AppDatabase
+import net.ducksmanager.persistence.models.composite.UserSetting
 import org.matomo.sdk.Matomo
 import org.matomo.sdk.Tracker
 import org.matomo.sdk.TrackerBuilder
@@ -119,22 +120,36 @@ class WhatTheDuck : Application() {
             activity.runOnUiThread { builder.create().show() }
         }
 
-        fun registerForNotifications(activityRef: WeakReference<Activity>) {
+        fun registerForNotifications(activityRef: WeakReference<Activity>, forceEnable: Boolean) {
             if (!isTestContext) {
                 try {
-                    PushNotifications.start(activityRef.get(), config.getProperty(CONFIG_KEY_PUSHER_INSTANCE_ID))
-                    PushNotifications.setUserId(appDB.userDao().currentUser!!.username, tokenProvider, object : BeamsCallback<Void, PusherCallbackError> {
-                        override fun onSuccess(vararg values: Void) {
-                            Timber.i("Successfully authenticated with Pusher Beams")
-                        }
+                    val notificationSetting = appDB.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)
+                    if (notificationSetting == null || notificationSetting.value == "1" || forceEnable) {
+                        PushNotifications.start(activityRef.get(), config.getProperty(CONFIG_KEY_PUSHER_INSTANCE_ID))
+                        PushNotifications.setUserId(appDB.userDao().currentUser!!.username, tokenProvider, object : BeamsCallback<Void, PusherCallbackError> {
+                            override fun onSuccess(vararg values: Void) {
+                                appDB.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED, "1"))
+                                Timber.i("Successfully registered for notifications")
+                            }
 
-                        override fun onFailure(error: PusherCallbackError) {
-                            Timber.i("PusherBeams : Pusher Beams authentication failed: %s", error.message)
-                        }
-                    })
+                            override fun onFailure(error: PusherCallbackError) {
+                                Timber.i("PusherBeams : Pusher Beams authentication failed: %s", error.message)
+                            }
+                        })
+                    }
                 } catch (e: Exception) {
                     Timber.e("Pusher init failed : %s", e.message)
                 }
+            }
+        }
+
+        fun unregisterFromNotifications() {
+            if (!isTestContext) {
+                PushNotifications.stop()
+                Timber.i("Successfully unregistered from notifications")
+                val setting = appDB.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)
+                setting?.value = "0"
+                appDB.userSettingDao().update(setting)
             }
         }
 
