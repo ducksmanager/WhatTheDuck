@@ -1,3 +1,7 @@
+Version 2.0.3
+
+    Distinguish between enabling notifications and enabling suggestions
+
 Version 2.0.2
 
     Fix cover search results layout

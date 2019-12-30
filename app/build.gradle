@@ -14,8 +14,8 @@ android {
         applicationId "net.ducksmanager.whattheduck"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 57
-        versionName "2.0.2"
+        versionCode 58
+        versionName "2.0.3"
 
         javaCompileOptions {
             annotationProcessorOptions {
