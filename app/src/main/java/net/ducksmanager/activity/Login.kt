@@ -44,7 +44,7 @@ class Login : AppCompatActivity() {
 
                     WhatTheDuck.tokenProvider = BeamsTokenProvider(
                         "$apiEndpointUrl/collection/notification_token",
-                        object: AuthDataGetter {
+                        object : AuthDataGetter {
                             override fun getAuthData(): AuthData {
                                 return AuthData(getRequestHeaders(true), HashMap())
                             }
@@ -62,7 +62,7 @@ class Login : AppCompatActivity() {
 
                             DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", activityRef.get()!!) {
                                 override fun onSuccessfulResponse(response: Response<SuggestionList>) {
-                                    val suggestions = response.body()!!.issues.values.toList() as MutableList<SuggestionList.SuggestedIssue>
+                                    val suggestions = response.body()!!.issues.values.toMutableList()
 
                                     WhatTheDuck.appDB.suggestedIssueDao().deleteAll()
                                     WhatTheDuck.appDB.suggestedIssueDao().insertList(suggestions.map {

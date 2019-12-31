@@ -145,8 +145,12 @@ class WhatTheDuck : Application() {
 
         fun unregisterFromNotifications() {
             if (!isTestContext) {
-                PushNotifications.stop()
-                Timber.i("Successfully unregistered from notifications")
+                try {
+                    PushNotifications.stop()
+                    Timber.i("Successfully unregistered from notifications")
+                } catch (e: Exception) {
+                    Timber.e("Pusher init failed to stop : %s", e.message)
+                }
                 val setting = appDB.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)
                 setting?.value = "0"
                 appDB.userSettingDao().update(setting)

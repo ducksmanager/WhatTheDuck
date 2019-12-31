@@ -13,4 +13,4 @@ class UserToCreate(
     private val password2: String,
 
     email: String
-) : User(username, password)
+) : User(username, password, email)

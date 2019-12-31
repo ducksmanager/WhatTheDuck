@@ -1,3 +1,7 @@
+Version 2.0.4
+
+    Fix new user form
+
 Version 2.0.3
 
     Distinguish between enabling notifications and enabling suggestions
