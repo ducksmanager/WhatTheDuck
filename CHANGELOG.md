@@ -1,3 +1,7 @@
+Version 2.0.5
+
+    Fix Matomo tracking
+    
 Version 2.0.4
 
     Fix new user form

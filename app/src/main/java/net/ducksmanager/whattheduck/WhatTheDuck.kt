@@ -166,7 +166,7 @@ class WhatTheDuck : Application() {
 
                 val matomoUrl = config.getProperty(CONFIG_KEY_MATOMO_URL)
                 try {
-                    matomoTracker = TrackerBuilder(matomoUrl, 2, "WhatTheDuck").build(Matomo.getInstance(applicationContext))
+                    matomoTracker = TrackerBuilder.createDefault(matomoUrl, 2).build(Matomo.getInstance(applicationContext))
                 } catch (e: RuntimeException) {
                     System.err.println("Couldn't initialize tracker")
                 }

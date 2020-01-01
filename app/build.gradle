@@ -14,8 +14,8 @@ android {
         applicationId "net.ducksmanager.whattheduck"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 59
-        versionName "2.0.4"
+        versionCode 60
+        versionName "2.0.5"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -94,7 +94,7 @@ dependencies {
     implementation 'com.github.douglasjunior:android-simple-tooltip:0.2.3'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'org.matomo.sdk:tracker:4.1.0'
+    implementation 'org.matomo.sdk:tracker:4.1.1'
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'net.grey-panther:natural-comparator:1.1'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
