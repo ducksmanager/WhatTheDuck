@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import net.ducksmanager.adapter.ItemAdapter
+import net.ducksmanager.adapter.PublicationAdapter
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.InducksPublicationWithPossession
-import net.ducksmanager.adapter.ItemAdapter
-import net.ducksmanager.adapter.PublicationAdapter
 import net.ducksmanager.whattheduck.WhatTheDuck
 import retrofit2.Response
 import java.util.*
@@ -25,7 +25,7 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
                 for (publicationCode in response.body()!!.keys) {
                     publications.add(InducksPublication(publicationCode, response.body()!![publicationCode]!!))
                 }
-                WhatTheDuck.appDB.inducksPublicationDao().insertList(publications)
+                WhatTheDuck.appDB!!.inducksPublicationDao().insertList(publications)
                 setData()
             }
         })
@@ -43,7 +43,7 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
         }
 
     override fun setData() {
-        WhatTheDuck.appDB.inducksPublicationDao().findByCountry(WhatTheDuck.selectedCountry!!).observe(this, Observer(this@PublicationList::storeItemList))
+        WhatTheDuck.appDB!!.inducksPublicationDao().findByCountry(WhatTheDuck.selectedCountry!!).observe(this, Observer(this@PublicationList::storeItemList))
     }
 
     override fun shouldShow() = WhatTheDuck.selectedCountry != null

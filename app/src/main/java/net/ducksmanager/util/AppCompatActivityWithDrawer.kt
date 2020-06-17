@@ -57,13 +57,13 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
         }
 
         drawerNavigation.getHeaderView(0).findViewById<TextView>(R.id.username).text =
-            WhatTheDuck.appDB.userDao().currentUser?.username
+            WhatTheDuck.appDB!!.userDao().currentUser?.username
 
         drawerNavigation
             .setNavigationItemSelectedListener { menuItem ->
                 if (menuItem.itemId == R.id.action_logout) {
                     WhatTheDuck.unregisterFromNotifications()
-                    WhatTheDuck.appDB.userDao().deleteAll()
+                    WhatTheDuck.appDB!!.userDao().deleteAll()
                 }
 
                 val target = menuActions[menuItem.itemId]?.get(0)

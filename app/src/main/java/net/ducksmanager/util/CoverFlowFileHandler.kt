@@ -150,8 +150,8 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
                         WhatTheDuck.alert(originActivityRef, R.string.add_cover_no_results)
                     }
                     else {
-                        WhatTheDuck.appDB.coverSearchIssueDao().deleteAll()
-                        WhatTheDuck.appDB.coverSearchIssueDao().insertList(ArrayList(response.body()!!.issues.values))
+                        WhatTheDuck.appDB!!.coverSearchIssueDao().deleteAll()
+                        WhatTheDuck.appDB!!.coverSearchIssueDao().insertList(ArrayList(response.body()!!.issues.values))
                         originActivity!!.startActivity(Intent(originActivity, CoverFlowActivity::class.java))
                     }
                 }

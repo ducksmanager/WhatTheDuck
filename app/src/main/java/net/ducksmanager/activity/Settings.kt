@@ -39,9 +39,9 @@ class Settings : AppCompatActivityWithDrawer() {
         setContentView(binding.root)
         showToolbarIfExists()
 
-        binding.notifySwitch.isChecked = appDB.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)?.value.equals("1")
+        binding.notifySwitch.isChecked = appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)?.value.equals("1")
 
-        appDB.inducksCountryDao().findAllWithPossession().observe(this, Observer { countryNames ->
+        appDB!!.inducksCountryDao().findAllWithPossession().observe(this, Observer { countryNames ->
             DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>("getUserNotificationCountries", this) {
                 override fun onSuccessfulResponse(response: Response<List<String>>) {
                     val countriesToNotifyTo = response.body()?.toHashSet() as MutableSet<String>

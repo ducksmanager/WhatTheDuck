@@ -21,7 +21,8 @@ import net.ducksmanager.persistence.models.coa.InducksIssue
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 import net.ducksmanager.util.DraggableRelativeLayout
 import net.ducksmanager.util.Settings
-import net.ducksmanager.whattheduck.*
+import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 import retrofit2.Response
 import java.lang.ref.WeakReference
 
@@ -51,7 +52,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
                 val issues: List<InducksIssue> = response.body()!!.map { issueNumber ->
                     InducksIssue(WhatTheDuck.selectedPublication!!, issueNumber)
                 }
-                WhatTheDuck.appDB.inducksIssueDao().insertList(issues)
+                WhatTheDuck.appDB!!.inducksIssueDao().insertList(issues)
                 setData()
             }
         })
@@ -152,7 +153,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         }
 
     override fun setData() {
-        WhatTheDuck.appDB.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
+        WhatTheDuck.appDB!!.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
             .observe(this, Observer { items: List<InducksIssueWithUserIssueAndScore> ->
                 storeItemList(items)
             })

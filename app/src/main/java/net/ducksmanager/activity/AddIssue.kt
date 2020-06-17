@@ -14,12 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import net.ducksmanager.adapter.PurchaseAdapter
+import net.ducksmanager.adapter.PurchaseAdapter.NoPurchase
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.IssueListToUpdate
 import net.ducksmanager.persistence.models.dm.Purchase
-import net.ducksmanager.adapter.PurchaseAdapter
-import net.ducksmanager.adapter.PurchaseAdapter.NoPurchase
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.databinding.AddissueBinding
@@ -49,8 +49,8 @@ class AddIssue : AppCompatActivity(), View.OnClickListener {
         DmServer.api.userPurchases.enqueue(object : DmServer.Callback<List<Purchase>>("getpurchases", this, true) {
             override fun onSuccessfulResponse(response: Response<List<Purchase>>) {
                 response.body()?.let {
-                    WhatTheDuck.appDB.purchaseDao().deleteAll()
-                    WhatTheDuck.appDB.purchaseDao().insertList(it)
+                    WhatTheDuck.appDB!!.purchaseDao().deleteAll()
+                    WhatTheDuck.appDB!!.purchaseDao().insertList(it)
                 }
                 setData()
             }
@@ -58,7 +58,7 @@ class AddIssue : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setData() {
-        WhatTheDuck.appDB.purchaseDao().findAll().observe(this, Observer<List<Purchase>> { purchases: List<Purchase> ->
+        WhatTheDuck.appDB!!.purchaseDao().findAll().observe(this, Observer { purchases: List<Purchase> ->
             this.purchases = arrayListOf(NoPurchase())
             this.purchases.addAll(purchases)
 

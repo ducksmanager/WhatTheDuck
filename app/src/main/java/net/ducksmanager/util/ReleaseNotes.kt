@@ -27,7 +27,7 @@ class ReleaseNotes private constructor(private val majorVersion: String, private
             builder.setView(view)
             builder.setTitle(originActivity!!.getString(R.string.newFeature))
             builder.setNeutralButton(R.string.ok) { dialogInterface: DialogInterface, _: Int ->
-                WhatTheDuck.appDB.userMessageDao().insert(UserMessage(getMessageId(), false))
+                WhatTheDuck.appDB!!.userMessageDao().insert(UserMessage(getMessageId(), false))
                 dialogInterface.dismiss()
             }
             (view.findViewById<View>(R.id.text) as TextView).setText(messageId)

@@ -9,12 +9,12 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.wtd_list_navigation_country.view.*
+import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.util.CoverFlowFileHandler
 import net.ducksmanager.util.CoverFlowFileHandler.SearchFromCover
-import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.databinding.WtdListBinding
@@ -166,7 +166,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     private fun showNavigation() {
         if (shouldShowNavigationCountry()) {
-            WhatTheDuck.appDB.inducksCountryDao().findByCountryCode(WhatTheDuck.selectedCountry)
+            WhatTheDuck.appDB!!.inducksCountryDao().findByCountryCode(WhatTheDuck.selectedCountry)
                 .observe(this, Observer { inducksCountryName: InducksCountryName ->
                     setNavigationCountry(inducksCountryName.countryCode, inducksCountryName.countryName)
                 })
@@ -174,7 +174,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             binding.navigationCountry.root.visibility = View.INVISIBLE
         }
         if (shouldShowNavigationPublication()) {
-            WhatTheDuck.appDB.inducksPublicationDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
+            WhatTheDuck.appDB!!.inducksPublicationDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
                 .observe(this, Observer { inducksPublication: InducksPublication ->
                     setNavigationPublication(inducksPublication.publicationCode, inducksPublication.title)
                 })

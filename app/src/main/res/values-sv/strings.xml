@@ -20,6 +20,7 @@
     <string name="confirmation_message__issue_inserted">Utgåvan har lagts till i din samling</string>
     <string name="country">Land</string>
     <string name="cover_suggestion">Framsideförslag</string>
+    <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
     <string name="create">Skapa</string>
     <string name="create_new_purchase_date">Skapa ett köpdatum</string>
     <string name="edge_view">Bokhylla</string>
@@ -49,8 +50,10 @@
     <string name="network_error__no_connection">Godkänn</string>
     <string name="newFeature">Nyhet i WhatTheDuck appen</string>
     <string name="newFeatures18Text">Du kan nu se din bokhylla i WhatTheDuck!\n\nNär du är i utgåvolistan, tryck på bokhylleikonen för att ändra till bokhyllan.</string>
-    <string name="no_item">Ingen utgåva i denna lista. Klicka på "+"-ikonen för att lägga till tidningar i din samling!</string>
+    <string name="no_item">Förslagen uppdateras dagligen.</string>
     <string name="no_purchase_date">Inget inköpsdatum</string>
+    <string name="no_suggestion">Vi har inga förslag åt dig. Se till att du betygsatt dina favoritförfattare på webbplatsen DucksManager.</string>
+    <string name="no_title">Ingen titel</string>
     <string name="notify_option">Meddela mig om nya berättelser från mina favoritförfattare</string>
     <string name="ok">OK</string>
     <string name="option_notified_countries">Föreslå mig om utgåvor släppta i följande länder:</string>
@@ -69,6 +72,8 @@
     <string name="sort_by_score">Sortera efter poäng</string>
     <string name="suggestions">Förslag</string>
     <string name="suggestions_intro">WhatTheDuck ger dig en personlig lista av samlingar som innehåller nya berättelser från dina favoritförfattare. Du kan ändra vilka länder som visas under Inställningar.</string>
+    <string name="title_template">%1$s %2$s</string>
+    <string name="unknown_publication">Okänd publikation</string>
     <string name="username">Användarnamn</string>
     <string name="version">What The Duck version %1$s</string>
     <string name="welcomeBookcaseViewPortrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>

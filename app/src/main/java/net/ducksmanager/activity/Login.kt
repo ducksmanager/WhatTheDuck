@@ -35,10 +35,10 @@ class Login : AppCompatActivity() {
             DmServer.api.userIssues.enqueue(object : DmServer.Callback<List<Issue>>("retrieveCollection", activityRef.get()!!, alertIfError!!) {
                 override fun onSuccessfulResponse(response: Response<List<Issue>>) {
                     val user = User(DmServer.apiDmUser!!, DmServer.apiDmPassword!!)
-                    WhatTheDuck.appDB.userDao().insert(user)
+                    WhatTheDuck.appDB!!.userDao().insert(user)
 
-                    WhatTheDuck.appDB.issueDao().deleteAll()
-                    WhatTheDuck.appDB.issueDao().insertList(response.body()!!)
+                    WhatTheDuck.appDB!!.issueDao().deleteAll()
+                    WhatTheDuck.appDB!!.issueDao().insertList(response.body()!!)
 
                     val apiEndpointUrl: String = WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_API_ENDPOINT_URL)
 
@@ -57,15 +57,15 @@ class Login : AppCompatActivity() {
 
                     DmServer.api.userPurchases.enqueue(object : DmServer.Callback<List<Purchase>>("getPurchases", activityRef.get()!!, true) {
                         override fun onSuccessfulResponse(response: Response<List<Purchase>>) {
-                            WhatTheDuck.appDB.purchaseDao().deleteAll()
-                            WhatTheDuck.appDB.purchaseDao().insertList(response.body()!!)
+                            WhatTheDuck.appDB!!.purchaseDao().deleteAll()
+                            WhatTheDuck.appDB!!.purchaseDao().insertList(response.body()!!)
 
                             DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", activityRef.get()!!) {
                                 override fun onSuccessfulResponse(response: Response<SuggestionList>) {
                                     val suggestions = response.body()!!.issues.values.toMutableList()
 
-                                    WhatTheDuck.appDB.suggestedIssueDao().deleteAll()
-                                    WhatTheDuck.appDB.suggestedIssueDao().insertList(suggestions.map {
+                                    WhatTheDuck.appDB!!.suggestedIssueDao().deleteAll()
+                                    WhatTheDuck.appDB!!.suggestedIssueDao().insertList(suggestions.map {
                                         SuggestedIssueSimple(it.publicationcode, it.issuenumber, it.score)
                                     })
                                 }
@@ -88,7 +88,7 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         (application as WhatTheDuck).setup()
 
-        val user: User? = WhatTheDuck.appDB.userDao().currentUser
+        val user: User? = WhatTheDuck.appDB!!.userDao().currentUser
         if (user != null) {
             DmServer.apiDmUser = user.username
             DmServer.apiDmPassword = user.password

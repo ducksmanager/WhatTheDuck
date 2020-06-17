@@ -15,12 +15,12 @@ object Settings {
     const val MESSAGE_KEY_WELCOME_BOOKCASE_VIEW = "welcome_bookcase_view"
 
     fun shouldShowMessage(messageKey: String?): Boolean {
-        val userMessageForReleaseNotes = WhatTheDuck.appDB.userMessageDao().findByKey(messageKey!!)
+        val userMessageForReleaseNotes = WhatTheDuck.appDB!!.userMessageDao().findByKey(messageKey!!)
         return userMessageForReleaseNotes != null && userMessageForReleaseNotes.isShown
     }
 
     fun addToMessagesAlreadyShown(messageKey: String?) {
-        WhatTheDuck.appDB.userMessageDao().insert(UserMessage(messageKey, false))
+        WhatTheDuck.appDB!!.userMessageDao().insert(UserMessage(messageKey, false))
     }
 
     private fun byteArray2Hex(hash: ByteArray): String {

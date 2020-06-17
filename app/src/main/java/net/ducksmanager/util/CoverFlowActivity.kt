@@ -33,7 +33,7 @@ class CoverFlowActivity : AppCompatActivity() {
         binding = ActivityCoverflowBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        WhatTheDuck.appDB.coverSearchIssueDao().findAll().observe(this, Observer { searchIssues: List<CoverSearchIssueWithUserIssueAndScore> ->
+        WhatTheDuck.appDB!!.coverSearchIssueDao().findAll().observe(this, Observer { searchIssues: List<CoverSearchIssueWithUserIssueAndScore> ->
             data = searchIssues
             adapter = CoverFlowAdapter(this)
             adapter.setData(searchIssues)
@@ -83,9 +83,18 @@ class CoverFlowActivity : AppCompatActivity() {
                     binding.score.scorevalue.text = currentSuggestion!!.suggestionScore.toString()
                     binding.score.scorevalue.textSize = 20F
 
-                    binding.resultNumber.text = resources.getString(R.string.result) + " " + (position + 1) + "/" + data.size
+                    binding.resultNumber.text = resources.getString(
+                        R.string.coversearch_result_template,
+                        resources.getString(R.string.result),
+                        position + 1,
+                        data.size
+                    )
 
-                    binding.issuetitle.text = data[position].coverSearchIssue.coverPublicationTitle + " " + data[position].coverSearchIssue.coverIssueNumber
+                    binding.issuetitle.text = resources.getString(
+                        R.string.title_template,
+                        data[position].coverSearchIssue.coverPublicationTitle,
+                        data[position].coverSearchIssue.coverIssueNumber
+                    )
                 }
 
                 override fun onScrolling() {

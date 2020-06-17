@@ -40,13 +40,19 @@ class Suggestions : AppCompatActivityWithDrawer() {
         showToolbarIfExists()
 
         val suggestionListView = binding.suggestionList
+        val noSuggestionView = binding.suggestionsNoResults
 
         DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", this) {
             override fun onSuccessfulResponse(response: Response<SuggestionList>) {
-                val suggestions = response.body()!!.issues.values.toList() as MutableList<SuggestionList.SuggestedIssue>
+                val suggestions = mutableListOf<SuggestionList.SuggestedIssue>()
+                val list = response.body()!!.issues.values.toList()
+                suggestions.addAll(list)
 
-                WhatTheDuck.appDB.suggestedIssueDao().deleteAll()
-                WhatTheDuck.appDB.suggestedIssueDao().insertList(suggestions.map {
+                suggestionListView.visibility = if (list.isNotEmpty()) View.VISIBLE else View.GONE
+                noSuggestionView.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+
+                WhatTheDuck.appDB!!.suggestedIssueDao().deleteAll()
+                WhatTheDuck.appDB!!.suggestedIssueDao().insertList(suggestions.map {
                     SuggestedIssueSimple(it.publicationcode, it.issuenumber, it.score)
                 })
 
@@ -96,7 +102,11 @@ class Suggestions : AppCompatActivityWithDrawer() {
             val publicationName = publicationTitles[currentItem.publicationcode]
 
             val title = holder.textWrapperView.itemtitle
-            title.text = (publicationName ?: "Unknown publication") + " " + currentItem.issuenumber
+            title.text = context.getString(
+                R.string.title_template,
+                publicationName ?: context.getString(R.string.unknown_publication),
+                currentItem.issuenumber
+            )
             title.typeface = Typeface.DEFAULT_BOLD
             holder.prefixImageView.setImageResource(getImageResourceFromCountry(countryCode))
 
@@ -159,7 +169,11 @@ class Suggestions : AppCompatActivityWithDrawer() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val currentItem = stories.values.toList()[position]
             val storyCode = stories.keys.toList()[position]
-            holder.storyTitleView.text = storyDetails[storyCode]?.title ?: "Unknown title"
+            holder.storyTitleView.text = if (storyDetails[storyCode]?.title?.isEmpty()!!) {
+                context.getString(R.string.no_title)
+            } else {
+                storyDetails[storyCode]?.title
+            }
 
             holder.authorListView.adapter = AuthorAdapter(context, currentItem)
             holder.authorListView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)

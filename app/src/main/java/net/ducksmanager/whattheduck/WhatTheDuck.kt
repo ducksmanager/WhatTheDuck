@@ -57,7 +57,7 @@ class WhatTheDuck : Application() {
         lateinit var applicationVersion: String
 
         var DB_NAME = "appDB"
-        lateinit var appDB: AppDatabase
+        var appDB: AppDatabase? = null
 
         private var matomoTracker: Tracker? = null
 
@@ -125,12 +125,12 @@ class WhatTheDuck : Application() {
         fun registerForNotifications(activityRef: WeakReference<Activity>, forceEnable: Boolean) {
             if (!isTestContext) {
                 try {
-                    val notificationSetting = appDB.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)
+                    val notificationSetting = appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)
                     if (notificationSetting == null || notificationSetting.value == "1" || forceEnable) {
                         PushNotifications.start(activityRef.get(), config.getProperty(CONFIG_KEY_PUSHER_INSTANCE_ID))
-                        PushNotifications.setUserId(appDB.userDao().currentUser!!.username, tokenProvider, object : BeamsCallback<Void, PusherCallbackError> {
+                        PushNotifications.setUserId(appDB!!.userDao().currentUser!!.username, tokenProvider, object : BeamsCallback<Void, PusherCallbackError> {
                             override fun onSuccess(vararg values: Void) {
-                                appDB.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED, "1"))
+                                appDB!!.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED, "1"))
                                 Timber.i("Successfully registered for notifications")
                             }
 
@@ -153,9 +153,9 @@ class WhatTheDuck : Application() {
                 } catch (e: Exception) {
                     Timber.e("Pusher init failed to stop : %s", e.message)
                 }
-                val setting = appDB.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)
+                val setting = appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)
                 setting?.value = "0"
-                appDB.userSettingDao().update(setting)
+                appDB!!.userSettingDao().update(setting)
             }
         }
 
@@ -229,7 +229,7 @@ class WhatTheDuck : Application() {
 
     fun trackActivity(activity: Activity) {
         val t = TrackHelper.track()
-        val user = appDB.userDao().currentUser
+        val user = appDB!!.userDao().currentUser
 
         if (user != null) {
             t.dimension(CONFIG_MATOMO_DIMENSION_USER, user.username)

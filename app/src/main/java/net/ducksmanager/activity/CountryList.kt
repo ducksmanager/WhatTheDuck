@@ -67,7 +67,7 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
         get() = CountryAdapter(this, data)
 
     override fun setData() {
-        WhatTheDuck.appDB.inducksCountryDao().findAllWithPossession().observe(this@CountryList, Observer { items: List<InducksCountryNameWithPossession>? -> storeItemList(items!!) })
+        WhatTheDuck.appDB!!.inducksCountryDao().findAllWithPossession().observe(this@CountryList, Observer { items: List<InducksCountryNameWithPossession>? -> storeItemList(items!!) })
     }
 
     override fun onBackPressed() {
@@ -89,8 +89,8 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
                             countries.add(InducksCountryName(countryCode, response.body()!![countryCode]!!))
                         }
                     }
-                    WhatTheDuck.appDB.inducksCountryDao().deleteAll()
-                    WhatTheDuck.appDB.inducksCountryDao().insertList(countries)
+                    WhatTheDuck.appDB!!.inducksCountryDao().deleteAll()
+                    WhatTheDuck.appDB!!.inducksCountryDao().insertList(countries)
                     hasFullList = true
                     hasDataCallback.run()
                 }

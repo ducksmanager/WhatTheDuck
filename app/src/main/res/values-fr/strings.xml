@@ -10,6 +10,7 @@
     <string name="by_cover_photo">Depuis une photo de couverture</string>
     <string name="by_issue_selection">Par sélection de numéro</string>
     <string name="cancel">Annuler</string>
+    <string name="collection">Ma collection</string>
     <string name="condition">Etat</string>
     <string name="condition_bad">Mauvais état</string>
     <string name="condition_good">Bon état</string>
@@ -18,6 +19,7 @@
     <string name="confirmation_message__issue_inserted">Le numéro a été ajouté à votre collection</string>
     <string name="country">Pays</string>
     <string name="cover_suggestion">Suggestion de couverture</string>
+    <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
     <string name="create">Créer</string>
     <string name="create_new_purchase_date">Créer une date d\'achat</string>
     <string name="edge_view">Bibliothèque</string>
@@ -49,7 +51,11 @@
     <string name="newFeatures18Text">Vous pouvez maintenant voir votre bibliothèque depuis l\'application ! Lorsque vous consultez une liste de numéros, appuyez sur l\'icône \"bibliothèque\" pour passer à la vue bibliothèque.</string>
     <string name="no_item">Aucun numéro. Tapez sur le bouton "+" pour ajouter des numéros à votre collection !</string>
     <string name="no_purchase_date">Pas de date d\'achat</string>
+    <string name="no_suggestion">Nous n\'avons pas de suggestions à vous proposer. Assurez-vous d\'avoir noté vos auteurs préférés sur le site DucksManager.\nLes suggsetions sont mises à jour quotidiennement</string>
+    <string name="no_title">Sans titre</string>
+    <string name="notify_option">Me notifier quand des nouvelles histoires de mes auteurs favoris sont publiées</string>
     <string name="ok">OK</string>
+    <string name="option_notified_countries">Me suggérer des magazines des pays suivants:</string>
     <string name="password">Mot de passe</string>
     <string name="password_confirm">Confirmation mot de passe</string>
     <string name="purchase_date">Date d\'achat</string>
@@ -64,13 +70,12 @@
     <string name="sort_by_publication_date">Trier par date de publication</string>
     <string name="sort_by_score">Trier par score</string>
     <string name="suggestions">Suggestions</string>
+    <string name="suggestions_intro">WhatTheDuck vous propose une liste personalisée de magazines contenant des histoires inédites de vos auteurs favoris. Vous pouvez changer les pays des magazines à afficher dans l\'écran Paramètres</string>
+    <string name="title_template">%1$s %2$s</string>
+    <string name="unknown_publication">Magazine inconnu</string>
     <string name="username">Nom d\'utilisateur DucksManager</string>
     <string name="version">What The Duck version %1$s</string>
     <string name="welcomeBookcaseViewPortrait">Bienvenue dans votre bibliothèque ! Orientez votre écran en mode paysage pour le meilleur effet ;-)</string>
     <string name="welcomeMessage">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur + pour ajouter un numéro.</string>
     <string name="welcomeTitle">Bienvenue sur What The Duck !</string>
-    <string name="collection">Ma collection</string>
-    <string name="notify_option">Me notifier quand des nouvelles histoires de mes auteurs favoris sont publiées</string>
-    <string name="option_notified_countries">Me suggérer des magazines des pays suivants:</string>
-    <string name="suggestions_intro">WhatTheDuck vous propose une liste personalisée de magazines contenant des histoires inédites de vos auteurs favoris. Vous pouvez changer les pays des magazines à afficher dans l\'écran Paramètres</string>
 </resources>

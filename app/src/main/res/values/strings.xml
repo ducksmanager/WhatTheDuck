@@ -20,6 +20,7 @@
     <string name="confirmation_message__issue_inserted">The issue has been added to your collection</string>
     <string name="country">Country</string>
     <string name="cover_suggestion">Cover suggestion</string>
+    <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
     <string name="create">Create</string>
     <string name="create_new_purchase_date">Create new purchase date</string>
     <string name="edge_view">Bookcase</string>
@@ -51,6 +52,8 @@
     <string name="newFeatures18Text">You can now see your bookcase on WhatTheDuck!\n\nWhen in an issue list, tap on the bookcase icon to switch to the bookcase view.</string>
     <string name="no_item">No issue in this list. Click on the "+" icon to add issues to your collection!</string>
     <string name="no_purchase_date">No purchase date</string>
+    <string name="no_suggestion">We don\'t have any suggestion for you. Make sure that you rated your favorite authors on the DucksManager.\nThe suggestions are updated daily.</string>
+    <string name="no_title">No title</string>
     <string name="notify_option">Notify me when new stories from my favorite authors come out</string>
     <string name="ok">OK</string>
     <string name="option_notified_countries">Suggest me issues released in the following countries:</string>
@@ -69,6 +72,8 @@
     <string name="sort_by_score">Sort by score</string>
     <string name="suggestions">Suggestions</string>
     <string name="suggestions_intro">WhatTheDuck provides you with a personalized list of issues containing new stories from your favorite authors. You can change what countries to show in the Settings screen.</string>
+    <string name="title_template">%1$s %2$s</string>
+    <string name="unknown_publication">Unknown publication</string>
     <string name="username">Username</string>
     <string name="version">What The Duck version %1$s</string>
     <string name="welcomeBookcaseViewPortrait">Welcome to the bookcase view! Rotate your screen to landscape for the best effect ;-)</string>

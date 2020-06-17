@@ -47,7 +47,7 @@ open class WtdTest : AndroidJUnitRunner {
 
     companion object {
         fun parameterData(): Iterable<Array<Any>> {
-            return listOf<Array<Any>>(
+            return listOf(
                 arrayOf(object : LocaleWithDefaultPublication("se", "sv") {
                     override val defaultPublication: String
                         get() = "se/KAP"
