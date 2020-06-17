@@ -1,3 +1,8 @@
+Version 2.1.0 "Gus"
+
+    Bump Gradle and various dependencies
+    Show a specific message if no suggestions are available to the current user
+
 Version 2.0.6
 
     Clear cache on app start
