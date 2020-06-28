@@ -1,16 +1,16 @@
 package net.ducksmanager.adapter
 
 import android.app.Activity
-import android.content.Intent
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import net.ducksmanager.activity.AddIssue
 import net.ducksmanager.activity.ItemList
+import net.ducksmanager.activity.ItemList.Companion.isCoaList
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToResourceId
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
 import java.lang.ref.WeakReference
 
 class IssueAdapter internal constructor(
@@ -18,21 +18,66 @@ class IssueAdapter internal constructor(
     items: List<InducksIssueWithUserIssueAndScore>
 ) : ItemAdapter<InducksIssueWithUserIssueAndScore>(itemList, R.layout.row, items) {
 
+    private var firstRangeIssueNumber: String? = null
+
     override fun getViewHolder(v: View?) = ViewHolder(v)
 
-    override val onClickListener: View.OnClickListener?
-        get() = View.OnClickListener { view: View ->
+    override val onClickListener = View.OnClickListener { view: View ->
+        if (isCoaList()) {
             val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
-            if (ItemList.type == WhatTheDuck.CollectionType.COA.toString()) {
-                val clickedIssue = getItem(position)
-                if (clickedIssue.userIssue != null) {
-                    WhatTheDuck.info(WeakReference(originActivity), R.string.input_error__issue_already_possessed, Toast.LENGTH_SHORT)
-                } else {
-                    WhatTheDuck.selectedIssue = clickedIssue.issue.inducksIssueNumber
-                    originActivity.startActivity(Intent(originActivity, AddIssue::class.java))
-                }
+            val clickedIssue = getItem(position)
+            if (clickedIssue.userIssue != null) {
+                WhatTheDuck.info(WeakReference(originActivity), R.string.input_error__issue_already_possessed, Toast.LENGTH_SHORT)
+            } else {
+                toggleSelectedIssue(clickedIssue.issue.inducksIssueNumber)
+                this.notifyDataSetChanged()
             }
         }
+    }
+
+    override var onLongClickListener = View.OnLongClickListener { view: View ->
+        if (isCoaList()) {
+            val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
+            if (getItem(position).userIssue != null) {
+                WhatTheDuck.info(WeakReference(originActivity), R.string.input_error__issue_already_possessed, Toast.LENGTH_SHORT)
+            } else {
+                firstRangeIssueNumber = if (firstRangeIssueNumber != null) {
+                    var hasReachedFirstRangeIssueNumber = false
+                    for (filteredItem in filteredItems) {
+                        if (hasReachedFirstRangeIssueNumber && filteredItem.userIssue == null) {
+                            toggleSelectedIssue(filteredItem.issue.inducksIssueNumber)
+                            if (filteredItem.issue.inducksIssueNumber === getItem(position).issue.inducksIssueNumber) {
+                                break
+                            }
+                        }
+                        if (filteredItem.issue.inducksIssueNumber == firstRangeIssueNumber) {
+                            hasReachedFirstRangeIssueNumber = true
+                        }
+                    }
+                    null
+                } else {
+                    val currentIssueNumber = getItem(position).issue.inducksIssueNumber
+                    toggleSelectedIssue(currentIssueNumber)
+                    WhatTheDuck.info(WeakReference(originActivity), R.string.longTapToEndIssueRangeSelection, Toast.LENGTH_SHORT)
+                    currentIssueNumber
+                }
+                this.notifyDataSetChanged()
+            }
+        }
+        true
+    }
+
+    private fun toggleSelectedIssue(issueNumber: String) {
+        if (selectedIssues.contains(issueNumber)) {
+            selectedIssues.remove(issueNumber)
+        } else selectedIssues.add(issueNumber)
+    }
+
+    private fun toggleSelectionTipAndButtons() {
+        if (selectedIssues.isEmpty()) {
+
+        }
+    }
 
     inner class ViewHolder(v: View?) : ItemAdapter<InducksIssueWithUserIssueAndScore>.ViewHolder(v!!)
 
@@ -45,11 +90,23 @@ class IssueAdapter internal constructor(
     }
 
     override fun getSuffixImageResource(i: InducksIssueWithUserIssueAndScore): Int? {
-        return if (i.userPurchase != null) R.drawable.ic_clock else (if (i.userIssue == null && i.suggestionScore > 0) R.drawable.ic_fire else null)
+        return when {
+            i.userPurchase != null -> R.drawable.ic_clock
+            i.userIssue != null -> null
+            else -> when {
+                i.suggestionScore > 0 -> R.drawable.ic_fire
+                selectedIssues.contains(i.issue.inducksIssueNumber) -> R.drawable.ic_checkbox_checked
+                else -> R.drawable.ic_checkbox
+            }
+        }
     }
 
     override fun getSuffixText(i: InducksIssueWithUserIssueAndScore): String? {
-        return if (i.userPurchase != null) i.userPurchase.date else (if (i.userIssue == null && i.suggestionScore > 0) i.suggestionScore.toString() else null)
+        return when {
+            i.userPurchase != null -> i.userPurchase.date
+            i.userIssue == null && i.suggestionScore > 0 -> i.suggestionScore.toString()
+            else -> null
+        }
     }
 
     override fun getIdentifier(i: InducksIssueWithUserIssueAndScore): String? {

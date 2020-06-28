@@ -11,6 +11,7 @@ class UserSetting(settingKey: @NotNull String?, value: String) {
 
     companion object {
         const val SETTING_KEY_NOTIFICATIONS_ENABLED = "SETTING_KEY_NOTIFICATIONS_ENABLED"
+        const val SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED = "SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED"
     }
 
     @PrimaryKey

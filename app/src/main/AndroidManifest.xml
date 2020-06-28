@@ -38,7 +38,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="net.ducksmanager.activity.AddIssue"
+            android:name="net.ducksmanager.activity.AddIssues"
             android:excludeFromRecents="true"
             android:theme="@style/AddIssueTheme" />
         <activity android:name="net.ducksmanager.activity.Settings" />

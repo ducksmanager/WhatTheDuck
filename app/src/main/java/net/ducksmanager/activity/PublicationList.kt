@@ -64,10 +64,14 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
         get() = PublicationAdapter(this, data)
 
     override fun onBackPressed() {
-        if (type == WhatTheDuck.CollectionType.COA.toString()) {
+        if (isCoaList()) {
             onBackFromAddIssueActivity()
         } else {
             startActivity(Intent(this, CountryList::class.java))
         }
     }
+
+    override fun shouldShowItemSelectionTip() = false
+
+    override fun shouldShowSelectionValidation() = false
 }

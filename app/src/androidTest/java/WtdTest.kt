@@ -36,7 +36,7 @@ import org.junit.Rule
 import java.util.*
 
 open class WtdTest : AndroidJUnitRunner {
-    abstract class LocaleWithDefaultPublication(country: String?, language: String?) {
+    abstract class LocaleWithDefaultPublication(country: String, language: String) {
         val locale: Locale = Locale(language, country)
         val defaultCountry: String
             get() = locale.country
@@ -46,7 +46,7 @@ open class WtdTest : AndroidJUnitRunner {
     }
 
     companion object {
-        fun parameterData(): Iterable<Array<Any>> {
+        fun parameterData(): List<Array<out LocaleWithDefaultPublication>> {
             return listOf(
                 arrayOf(object : LocaleWithDefaultPublication("se", "sv") {
                     override val defaultPublication: String

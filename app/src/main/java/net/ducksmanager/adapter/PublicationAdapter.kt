@@ -22,12 +22,11 @@ class PublicationAdapter internal constructor(
         return item.isPossessed
     }
 
-    override val onClickListener: View.OnClickListener?
-        get() = View.OnClickListener { view: View ->
-            val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
-            WhatTheDuck.selectedPublication = getItem(position).publication.publicationCode
-            originActivity.startActivity(Intent(originActivity, IssueList::class.java))
-        }
+    override val onClickListener = View.OnClickListener { view: View ->
+        val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
+        WhatTheDuck.selectedPublication = getItem(position).publication.publicationCode
+        originActivity.startActivity(Intent(originActivity, IssueList::class.java))
+    }
 
     override fun getPrefixImageResource(i: InducksPublicationWithPossession, activity: Activity): Int? {
         return null

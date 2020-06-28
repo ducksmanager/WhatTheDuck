@@ -32,7 +32,10 @@
     <string name="input_error__empty_credentials">Du måste fylla i alla fälten för att fortsätta</string>
     <string name="input_error__invalid_credentials">Ogiltig information</string>
     <string name="input_error__issue_already_possessed">Du har redan den här utgåvan i din samling</string>
-    <string name="insert_issue__confirm">Lägg till utgåva %1$s</string>
+    <string name="input_error__no_issue_selected">Välj åtminstone en utgåva att lägga till</string>
+    <string name="insert_issue__title_multiple_issues_plural">Lägger till utgåva %1$s och %2$d andra</string>
+    <string name="insert_issue__title_multiple_issues_singular">Lägger till utgåva %1$s och en till</string>
+    <string name="insert_issue__title_single_issue">Lägger till utgåva %1$s</string>
     <string name="internal_error">Internt fel</string>
     <string name="internal_error__crypting_failed">Krypteringen av din information misslyckades</string>
     <string name="internal_error__empty_list">Tom lista</string>
@@ -40,11 +43,13 @@
     <string name="internal_error__malformed_list">Utgåvolistan är felaktig</string>
     <string name="internal_error__purchase_creation_failed">Skapandet av inköpsdatum misslyckades</string>
     <string name="issue_already_possessed">Du har redan den här utgåvan i din samling</string>
+    <string name="issueSelectionTip">Välj en utgåva att lägga till genom att trycka på den. Välj en sekvens av utgåvor genom att trycka länge på den första i sekvensen.</string>
     <string name="itemtitle">Utgåvans nummer</string>
     <string name="link_to_ducksmanager_website">What The Duck är mobilappen av DucksManager. Klicka här för gå till DucksManagers hemsida.</string>
     <string name="list_view">Lista</string>
     <string name="login">Login</string>
     <string name="logout">Logga ut</string>
+    <string name="longTapToEndIssueRangeSelection">Tryck länge på den sista utgåvan</string>
     <string name="my_collection">Min samling</string>
     <string name="network_error">Nätverksfel</string>
     <string name="network_error__no_connection">Godkänn</string>

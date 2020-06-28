@@ -14,7 +14,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class AddIssueTest : WtdTest() {
+class AddIssuesTest : WtdTest() {
     @Before
     fun login() {
         loginActivityRule.launchActivity(Intent())
@@ -34,6 +34,8 @@ class AddIssueTest : WtdTest() {
         clickOnActionButton(R.id.addToCollectionBySelectionButton)
 
         onView(withText("6")).perform(ViewActions.click())
+
+        onView(withId(R.id.validateSelection)).perform(ViewActions.click())
 
         onView(withId(R.id.addpurchase)).perform(ViewActions.click())
 

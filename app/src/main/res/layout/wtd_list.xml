@@ -2,11 +2,12 @@
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerLayout"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -51,6 +52,34 @@
             android:inputType="textNoSuggestions">
         </EditText>
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tipIssueSelection"
+            android:layout_below="@+id/filter"
+            android:padding="5dp"
+            android:background="@color/holo_green_dark"
+            android:textColor="@android:color/white">
+            <TextView
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:background="@color/holo_green_dark"
+                android:textColor="@android:color/white"
+                android:text="@string/issueSelectionTip"
+                />
+
+            <Button
+                android:id="@+id/tipIssueSelectionOK"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:padding="0dp"
+                android:layout_gravity="center"
+                android:text="OK" />
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/itemList"
             android:layout_width="fill_parent"
@@ -59,7 +88,8 @@
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/row"
-            android:layout_below="@id/filter" />
+            tools:itemCount="50"
+            android:layout_below="@id/tipIssueSelection" />
 
         <TextView
             android:id="@+id/emptyList"
@@ -121,6 +151,35 @@
                     android:src="@drawable/ic_view_edge"/>
             </LinearLayout>
         </RelativeLayout>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/cancelSelection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="70dp"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="false"
+            android:src="@drawable/ic_cancel"
+            app:fab_label="Annuler"
+            app:fab_colorNormal="#555"
+            app:fab_colorPressed="#555"
+            app:fab_colorRipple="@android:color/white" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/validateSelection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="false"
+            android:src="@drawable/ic_check"
+            app:fab_label="Ajouter"
+            app:fab_colorNormal="@android:color/holo_green_dark"
+            app:fab_colorPressed="@android:color/holo_green_dark"
+            app:fab_colorRipple="@android:color/white" />
 
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/addToCollectionWrapper"

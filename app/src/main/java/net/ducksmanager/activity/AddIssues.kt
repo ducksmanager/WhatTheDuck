@@ -28,10 +28,9 @@ import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddIssue : AppCompatActivity(), View.OnClickListener {
+class AddIssues : AppCompatActivity(), View.OnClickListener {
     private lateinit var purchases: MutableList<Purchase>
     private lateinit var binding: AddissueBinding
-
 
     companion object {
         private val myCalendar = Calendar.getInstance()
@@ -85,16 +84,17 @@ class AddIssue : AppCompatActivity(), View.OnClickListener {
                 else -> InducksIssueWithUserIssueAndScore.NO_CONDITION
             }
             val issueListToUpdate = IssueListToUpdate(
-                WhatTheDuck.selectedPublication!!, listOf(WhatTheDuck.selectedIssue!!),
+                WhatTheDuck.selectedPublication!!,
+                WhatTheDuck.selectedIssues,
                 dmCondition,
                 if (PurchaseAdapter.selectedItem is NoPurchase) null else PurchaseAdapter.selectedItem!!.id
             )
 
-            DmServer.api.createUserIssues(issueListToUpdate).enqueue(object : DmServer.Callback<Any>("addissue", this@AddIssue, true) {
+            DmServer.api.createUserIssues(issueListToUpdate).enqueue(object : DmServer.Callback<Any>("addissue", this@AddIssues, true) {
                 override fun onSuccessfulResponse(response: Response<Any>) {
                     finish()
-                    WhatTheDuck.info(WeakReference(this@AddIssue), R.string.confirmation_message__issue_inserted, Toast.LENGTH_SHORT)
-                    startActivity(Intent(this@AddIssue, Login::class.java))
+                    WhatTheDuck.info(WeakReference(this@AddIssues), R.string.confirmation_message__issue_inserted, Toast.LENGTH_SHORT)
+                    startActivity(Intent(this@AddIssues, Login::class.java))
                 }
             })
         }
@@ -106,7 +106,17 @@ class AddIssue : AppCompatActivity(), View.OnClickListener {
             showNewPurchase()
         }
 
-        binding.addIssueTitle.text = getString(R.string.insert_issue__confirm, WhatTheDuck.selectedIssue)
+        when (WhatTheDuck.selectedIssues.size) {
+            1 -> {
+                binding.addIssueTitle.text = getString(R.string.insert_issue__title_single_issue, WhatTheDuck.selectedIssues.first())
+            }
+            2 -> {
+                binding.addIssueTitle.text = getString(R.string.insert_issue__title_multiple_issues_singular, WhatTheDuck.selectedIssues.first())
+            }
+            else -> {
+                binding.addIssueTitle.text = getString(R.string.insert_issue__title_multiple_issues_plural, WhatTheDuck.selectedIssues.first(), WhatTheDuck.selectedIssues.size - 1)
+            }
+        }
     }
 
     private fun toggleAddPurchaseButton(toggle: Boolean) {

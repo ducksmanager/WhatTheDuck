@@ -71,7 +71,7 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
     }
 
     override fun onBackPressed() {
-        if (type == WhatTheDuck.CollectionType.COA.toString()) {
+        if (isCoaList()) {
             onBackFromAddIssueActivity()
         }
     }
@@ -97,4 +97,8 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
             })
         }
     }
+
+    override fun shouldShowItemSelectionTip() = false
+
+    override fun shouldShowSelectionValidation() = false
 }

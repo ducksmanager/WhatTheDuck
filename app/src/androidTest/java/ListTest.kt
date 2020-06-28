@@ -27,7 +27,7 @@ class ListTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(currentLo
     companion object {
         @JvmStatic
         @Parameterized.Parameters
-        fun data(): Iterable<Array<Any>> {
+        fun data(): List<Array<out LocaleWithDefaultPublication>> {
             return parameterData()
         }
 

@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow.OnScrollPositionListener
-import net.ducksmanager.activity.AddIssue
+import net.ducksmanager.activity.AddIssues
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToResourceId
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToStringId
@@ -43,8 +43,8 @@ class CoverFlowActivity : AppCompatActivity() {
                 if (currentSuggestion!!.userIssue == null) {
                     WhatTheDuck.selectedCountry = currentSuggestion!!.coverSearchIssue.coverCountryCode
                     WhatTheDuck.selectedPublication = currentSuggestion!!.coverSearchIssue.coverPublicationCode
-                    WhatTheDuck.selectedIssue = currentSuggestion!!.coverSearchIssue.coverIssueNumber
-                    this@CoverFlowActivity.startActivity(Intent(this@CoverFlowActivity, AddIssue::class.java))
+                    WhatTheDuck.selectedIssues = mutableSetOf(currentSuggestion!!.coverSearchIssue.coverIssueNumber)
+                    this@CoverFlowActivity.startActivity(Intent(this@CoverFlowActivity, AddIssues::class.java))
                 } else {
                     Toast.makeText(
                         this@CoverFlowActivity,

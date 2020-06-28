@@ -21,14 +21,13 @@ class CountryAdapter internal constructor(
         return item.isPossessed
     }
 
-    override val onClickListener: View.OnClickListener?
-        get() = View.OnClickListener { view: View ->
-            val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
-            val selectedCountry = getItem(position)
-            WhatTheDuck.selectedCountry = selectedCountry.country.countryCode
-            val i = Intent(originActivity, PublicationList::class.java)
-            originActivity.startActivity(i)
-        }
+    override val onClickListener = View.OnClickListener { view: View ->
+        val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
+        val selectedCountry = getItem(position)
+        WhatTheDuck.selectedCountry = selectedCountry.country.countryCode
+        val i = Intent(originActivity, PublicationList::class.java)
+        originActivity.startActivity(i)
+    }
 
     inner class ViewHolder(v: View?) : ItemAdapter<InducksCountryNameWithPossession>.ViewHolder(v!!)
 

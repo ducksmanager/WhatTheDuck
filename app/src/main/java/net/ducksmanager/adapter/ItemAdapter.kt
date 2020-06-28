@@ -9,12 +9,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import net.ducksmanager.activity.ItemList
+import net.ducksmanager.activity.ItemList.Companion.isCoaList
 import net.ducksmanager.util.FilterTextOnChangeListener
 import net.ducksmanager.whattheduck.R
-import net.ducksmanager.whattheduck.WhatTheDuck
 import net.greypanther.natsort.CaseInsensitiveSimpleNaturalComparator
 import java.util.*
+import kotlin.collections.ArrayList
 
 abstract class ItemAdapter<Item> internal constructor(
     val originActivity: Activity,
@@ -30,8 +30,7 @@ abstract class ItemAdapter<Item> internal constructor(
         processItems()
     }
 
-
-    private lateinit var filteredItems: ArrayList<Item>
+    protected lateinit var filteredItems: ArrayList<Item>
     protected abstract fun isPossessed(item: Item): Boolean
 
     private fun processItems() {
@@ -42,10 +41,13 @@ abstract class ItemAdapter<Item> internal constructor(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(originActivity).inflate(resourceToInflate, parent, false)
         v.setOnClickListener(onClickListener)
+        v.setOnLongClickListener(onLongClickListener)
         return getViewHolder(v)
     }
 
     protected abstract val onClickListener: View.OnClickListener?
+
+    protected open val onLongClickListener: View.OnLongClickListener? = null
 
     protected abstract fun getViewHolder(v: View?): ViewHolder
 
@@ -64,13 +66,12 @@ abstract class ItemAdapter<Item> internal constructor(
         val prefixImage: ImageView? = v.findViewById(R.id.prefiximage)
         val suffixImage: ImageView? = v.findViewById(R.id.suffiximage)
         val suffixText: TextView? = v.findViewById(R.id.suffixtext)
-
     }
 
     fun updateFilteredList(textFilter: String) {
         filteredItems = ArrayList()
         for (item in items) {
-            if (!(ItemList.type == WhatTheDuck.CollectionType.USER.toString() && !isPossessed(item))
+            if ((isCoaList() || isPossessed(item))
                 && (textFilter == "" || getText(item)!!.toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase(Locale.getDefault())))) {
                 filteredItems.add(item)
             }

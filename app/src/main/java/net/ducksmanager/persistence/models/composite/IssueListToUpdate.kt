@@ -7,7 +7,7 @@ class IssueListToUpdate(
     private val publicationCode: String,
 
     @Expose
-    private val issueNumbers: List<String>,
+    private val issueNumbers: Set<String>,
 
     @Expose
     private val condition: String,

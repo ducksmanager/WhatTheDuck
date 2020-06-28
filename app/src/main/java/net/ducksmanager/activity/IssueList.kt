@@ -7,22 +7,27 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.Switch
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.clans.fab.FloatingActionButton
 import net.ducksmanager.adapter.IssueAdapter
 import net.ducksmanager.adapter.IssueEdgeAdapter
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksIssue
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
+import net.ducksmanager.persistence.models.composite.UserSetting
 import net.ducksmanager.util.DraggableRelativeLayout
 import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
 import retrofit2.Response
 import java.lang.ref.WeakReference
 
@@ -39,8 +44,13 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        selectedIssues = mutableSetOf()
         show()
     }
+
+    override fun shouldShowItemSelectionTip(): Boolean = isCoaList() && ! appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED)?.value.equals("0")
+
+    override fun shouldShowSelectionValidation(): Boolean = isCoaList()
 
     override fun hasList(): Boolean {
         return false // FIXME
@@ -52,7 +62,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
                 val issues: List<InducksIssue> = response.body()!!.map { issueNumber ->
                     InducksIssue(WhatTheDuck.selectedPublication!!, issueNumber)
                 }
-                WhatTheDuck.appDB!!.inducksIssueDao().insertList(issues)
+                appDB!!.inducksIssueDao().insertList(issues)
                 setData()
             }
         })
@@ -74,14 +84,36 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
     override fun shouldShowFilter(items: List<InducksIssueWithUserIssueAndScore>) =
         items.size > MIN_ITEM_NUMBER_FOR_FILTER && viewType == ViewType.LIST_VIEW
 
+    private val recyclerView: RecyclerView
+        get() {
+            return findViewById(R.id.itemList)
+        }
+
     override val itemAdapter: ItemAdapter<InducksIssueWithUserIssueAndScore>
         get() {
             val switchViewWrapper = findViewById<RelativeLayout>(R.id.switchViewWrapper)
-
             DraggableRelativeLayout.makeDraggable(switchViewWrapper)
-            if (type == WhatTheDuck.CollectionType.COA.toString()) {
+
+            if (isCoaList()) {
                 viewType = ViewType.LIST_VIEW
                 switchViewWrapper.visibility = View.GONE
+
+                findViewById<Button>(R.id.tipIssueSelectionOK).setOnClickListener {
+                    appDB!!.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED, "0"))
+                    findViewById<Button>(R.id.tipIssueSelection).visibility = View.GONE
+                }
+                findViewById<FloatingActionButton>(R.id.cancelSelection).setOnClickListener {
+                    selectedIssues.clear()
+                    itemAdapter.notifyDataSetChanged()
+                }
+                findViewById<FloatingActionButton>(R.id.validateSelection).setOnClickListener {
+                    if (selectedIssues.isEmpty()) {
+                        WhatTheDuck.info(WeakReference(this), R.string.input_error__no_issue_selected, Toast.LENGTH_SHORT)
+                    }
+                    else {
+                        this.startActivity(Intent(this, AddIssues::class.java))
+                    }
+                }
             } else {
                 val switchView = switchViewWrapper.findViewById<Switch>(R.id.switchView)
                 switchViewWrapper.visibility = View.VISIBLE
@@ -112,7 +144,6 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
                 }
             }
 
-            val recyclerView = findViewById<RecyclerView>(R.id.itemList)
             return if (viewType == ViewType.EDGE_VIEW) {
                 val deviceOrientation = resources.configuration.orientation
                 val listOrientation = if (deviceOrientation == Configuration.ORIENTATION_LANDSCAPE) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
@@ -153,14 +184,14 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         }
 
     override fun setData() {
-        WhatTheDuck.appDB!!.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
+        appDB!!.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
             .observe(this, Observer { items: List<InducksIssueWithUserIssueAndScore> ->
                 storeItemList(items)
             })
     }
 
     override fun onBackPressed() {
-        if (type == WhatTheDuck.CollectionType.COA.toString()) {
+        if (isCoaList()) {
             onBackFromAddIssueActivity()
         } else {
             startActivity(Intent(this, PublicationList::class.java))

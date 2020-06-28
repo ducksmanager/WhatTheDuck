@@ -31,7 +31,10 @@
     <string name="input_error__empty_credentials">Vous devez saisir votre pseudonyme et votre mot de passe pour continuer</string>
     <string name="input_error__invalid_credentials">Vos identifiants sont invalides</string>
     <string name="input_error__issue_already_possessed">Vous possédez déjà ce numéro</string>
-    <string name="insert_issue__confirm">Ajout du numéro %1$s</string>
+    <string name="input_error__no_issue_selected">Sélectionnez au moins un numéro à ajouter</string>
+    <string name="insert_issue__title_multiple_issues_plural">Ajout du numéro %1$s et %2$d autres</string>
+    <string name="insert_issue__title_multiple_issues_singular">Ajout du numéro %1$s et 1 autre</string>
+    <string name="insert_issue__title_single_issue">Ajout du numéro %1$s</string>
     <string name="internal_error">Erreur interne</string>
     <string name="internal_error__crypting_failed">L\'encryptage de vos identifiants a échoué</string>
     <string name="internal_error__empty_list">Liste vide</string>
@@ -39,11 +42,13 @@
     <string name="internal_error__malformed_list">La liste des numéros est mal formée</string>
     <string name="internal_error__purchase_creation_failed">La création de la date d\'achat a échoué</string>
     <string name="issue_already_possessed">Vous possédez déjà ce numéro dans votre collection</string>
+    <string name="issueSelectionTip">Sélectionnez un numéro à ajouter en appuyant dessus.\nSélectionnez une liste de numéros consécutive en effectuant un appui long.</string>
     <string name="itemtitle">Numéro</string>
     <string name="link_to_ducksmanager_website">What The Duck est l\'application mobile de DucksManager. Cliquez ici pour accéder au site Web de DucksManager.</string>
     <string name="list_view">Liste</string>
     <string name="login">Connexion</string>
     <string name="logout">Déconnexion</string>
+    <string name="longTapToEndIssueRangeSelection">Faites un appui long sur le dernier numéro conséutif à ajouter</string>
     <string name="my_collection">Ma collection</string>
     <string name="network_error">Erreur réseau</string>
     <string name="network_error__no_connection">Problème de réseau : vérifiez votre connexion Internet</string>

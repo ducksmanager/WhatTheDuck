@@ -32,7 +32,10 @@
     <string name="input_error__empty_credentials">You need to enter your credentials to continue</string>
     <string name="input_error__invalid_credentials">Invalid credentials</string>
     <string name="input_error__issue_already_possessed">You already have this issue in your collection</string>
-    <string name="insert_issue__confirm">Adding issue %1$s</string>
+    <string name="input_error__no_issue_selected">Select at least one issue to add</string>
+    <string name="insert_issue__title_multiple_issues_plural">Adding issue %1$s and %2$d others</string>
+    <string name="insert_issue__title_multiple_issues_singular">Adding issue %1$s and 1 other</string>
+    <string name="insert_issue__title_single_issue">Adding issue %1$s</string>
     <string name="internal_error">Internal error</string>
     <string name="internal_error__crypting_failed">The encryption of your credentials failed</string>
     <string name="internal_error__empty_list">Empty list</string>
@@ -40,11 +43,13 @@
     <string name="internal_error__malformed_list">The list is malformed, please try again later</string>
     <string name="internal_error__purchase_creation_failed">The creation of the purchase date failed</string>
     <string name="issue_already_possessed">You already have this issue in your collection</string>
+    <string name="issueSelectionTip">Select an issue to add by tapping on it.\\nSelect a range of issues by long-tapping on the first item of the range.</string>
     <string name="itemtitle">Item</string>
     <string name="link_to_ducksmanager_website">What The Duck is the mobile app of DucksManager. Click here to access the DucksManager website.</string>
     <string name="list_view">List</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
+    <string name="longTapToEndIssueRangeSelection">Long-tap on the last issue of your range</string>
     <string name="my_collection">My collection</string>
     <string name="network_error">Network error</string>
     <string name="network_error__no_connection">Network issue: please check your Internet connection</string>

@@ -28,6 +28,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         var type = WhatTheDuck.CollectionType.USER.toString()
         const val MIN_ITEM_NUMBER_FOR_FILTER = 20
         private const val REQUEST_IMAGE_CAPTURE = 1
+
+        fun isCoaList() : Boolean {
+            return type == WhatTheDuck.CollectionType.COA.toString()
+        }
     }
 
     private var requiresDataDownload = false
@@ -46,6 +50,8 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     protected abstract fun shouldShowNavigationPublication(): Boolean
     protected abstract fun shouldShowAddToCollectionButton(): Boolean
     protected abstract fun shouldShowFilter(items: List<Item>): Boolean
+    protected abstract fun shouldShowItemSelectionTip(): Boolean
+    protected abstract fun shouldShowSelectionValidation(): Boolean
 
     protected abstract val itemAdapter: ItemAdapter<Item>
 
@@ -81,10 +87,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     }
 
     private fun goToAlternativeView() {
-        type = if (type == WhatTheDuck.CollectionType.USER.toString())
-            WhatTheDuck.CollectionType.COA.toString()
-        else
+        type = if (isCoaList())
             WhatTheDuck.CollectionType.USER.toString()
+        else
+            WhatTheDuck.CollectionType.COA.toString()
         loadList()
         show()
     }
@@ -98,10 +104,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         if (shouldShowAddToCollectionButton()) {
             addToCollection.setMenuButtonColorNormalResId(R.color.holo_green_dark)
             addToCollection.setMenuButtonColorPressedResId(R.color.holo_green_dark)
-            addToCollection.visibility = if (type == WhatTheDuck.CollectionType.USER.toString()) View.VISIBLE else View.GONE
+            addToCollection.visibility = if (isCoaList()) View.GONE else View.VISIBLE
             addToCollection.close(false)
 
-            if (type == WhatTheDuck.CollectionType.USER.toString()) {
+            if (!isCoaList()) {
                 binding.addToCollectionByPhotoButton
                     .setOnClickListener { takeCoverPicture() }
 
@@ -130,6 +136,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             filterEditText.visibility = View.GONE
             itemAdapter.updateFilteredList("")
         }
+        binding.tipIssueSelection.visibility = if (shouldShowItemSelectionTip()) View.VISIBLE else View.GONE
+        binding.validateSelection.visibility = if (shouldShowSelectionValidation()) View.VISIBLE else View.GONE
+        binding.cancelSelection.visibility = if (shouldShowSelectionValidation()) View.VISIBLE else View.GONE
+
         binding.emptyList.visibility = if (requiresDataDownload || itemAdapter.itemCount > 0) View.INVISIBLE else View.VISIBLE
 
         while (recyclerView.itemDecorationCount > 0) {
