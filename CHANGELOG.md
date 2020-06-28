@@ -1,3 +1,7 @@
+Version 2.2.0 "Flintheart"
+
+    Allow adding multiple issues to the collection at once
+
 Version 2.1.0 "Gus"
 
     Bump Gradle and various dependencies
