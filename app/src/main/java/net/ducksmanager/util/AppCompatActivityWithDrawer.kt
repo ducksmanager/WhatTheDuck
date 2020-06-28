@@ -3,6 +3,7 @@ package net.ducksmanager.util
 import android.content.Intent
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -21,8 +22,7 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
         private val menuActions: HashMap<Int, List<Class<*>>> = hashMapOf(
             R.id.action_collection to listOf(CountryList::class.java, PublicationList::class.java, IssueList::class.java),
             R.id.action_settings to listOf(Settings::class.java),
-            R.id.action_suggestions to listOf(Suggestions::class.java),
-            R.id.action_logout to listOf(Login::class.java)
+            R.id.action_suggestions to listOf(Suggestions::class.java)
         )
     }
 
@@ -56,16 +56,17 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
             drawerNavigation.setCheckedItem(keys.first())
         }
 
+        drawerNavigation.findViewById<LinearLayout>(R.id.action_logout).setOnClickListener{
+            WhatTheDuck.unregisterFromNotifications()
+            WhatTheDuck.appDB!!.userDao().deleteAll()
+            this.startActivity(Intent(this, Login::class.java))
+        }
+
         drawerNavigation.getHeaderView(0).findViewById<TextView>(R.id.username).text =
             WhatTheDuck.appDB!!.userDao().currentUser?.username
 
         drawerNavigation
             .setNavigationItemSelectedListener { menuItem ->
-                if (menuItem.itemId == R.id.action_logout) {
-                    WhatTheDuck.unregisterFromNotifications()
-                    WhatTheDuck.appDB!!.userDao().deleteAll()
-                }
-
                 val target = menuActions[menuItem.itemId]?.get(0)
                 if (this.javaClass != target) {
                     startActivity(Intent(this, target))

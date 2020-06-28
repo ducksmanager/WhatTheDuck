@@ -10,4 +10,29 @@
     app:headerLayout="@layout/navigationview_header"
     app:menu="@menu/menu_user"
     app:itemTextAppearance="@drawable/navigation_drawer"
-    tools:showIn="@layout/suggestions" />
+    tools:showIn="@layout/suggestions">
+    <LinearLayout
+        android:id="@+id/action_logout"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="60dp"
+            android:paddingHorizontal="15dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_log_out" />
+        <TextView
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="5dp"
+            android:textAlignment="textStart"
+            android:textStyle="bold"
+            android:icon="@drawable/ic_log_out"
+            android:text="@string/logout" />
+    </LinearLayout>
+
+</com.google.android.material.navigation.NavigationView>

@@ -15,10 +15,5 @@
             android:title="@string/settings"
             android:icon="@drawable/ic_cog"
             app:showAsAction="never"/>
-
-        <item android:id="@+id/action_logout"
-              android:title="@string/logout"
-              android:icon="@drawable/ic_log_out"
-              app:showAsAction="never"/>
     </group>
 </menu>
