@@ -154,7 +154,7 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
         binding.createpurchase
             .setOnClickListener { floatingButtonView: View ->
                 if (purchaseDateNew.text.toString() == "") {
-                    purchaseDateNew.background.setColorFilter(ContextCompat.getColor(applicationContext, R.color.colorAccent), PorterDuff.Mode.SRC_IN)
+                    purchaseDateNew.background.setColorFilter(ContextCompat.getColor(applicationContext, R.color.fab_color), PorterDuff.Mode.SRC_IN)
                     return@setOnClickListener
                 }
 

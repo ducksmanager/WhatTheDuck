@@ -81,7 +81,6 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.2.5'
 
     implementation 'com.github.clans:fab:1.6.4'
-    implementation 'com.github.douglasjunior:android-simple-tooltip:0.2.3'
     implementation 'com.github.moondroid.coverflow:library:1.0'
 
     implementation 'com.google.android.material:material:1.1.0'
