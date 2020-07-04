@@ -77,7 +77,6 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
     }
 
     companion object {
-        private const val DUMMY_COUNTRY_CODE = "zz"
         @JvmField
         var hasFullList = false
         fun downloadList(currentActivity: Activity, hasDataCallback: Runnable) {
@@ -85,9 +84,7 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
                 override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                     val countries: MutableList<InducksCountryName> = ArrayList()
                     for (countryCode in response.body()!!.keys) {
-                        if (countryCode != DUMMY_COUNTRY_CODE) {
-                            countries.add(InducksCountryName(countryCode, response.body()!![countryCode]!!))
-                        }
+                        countries.add(InducksCountryName(countryCode, response.body()!![countryCode]!!))
                     }
                     WhatTheDuck.appDB!!.inducksCountryDao().deleteAll()
                     WhatTheDuck.appDB!!.inducksCountryDao().insertList(countries)
