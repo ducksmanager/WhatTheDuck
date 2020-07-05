@@ -94,10 +94,6 @@ class WhatTheDuck : Application() {
         val dmUrl: String
             get() = config.getProperty(CONFIG_KEY_DM_URL)
 
-        fun isTestContext(apiEndpointUrl: String): Boolean {
-            return apiEndpointUrl.startsWith("http://")
-        }
-
         fun info(activity: WeakReference<Activity?>, titleId: Int, duration: Int) {
             Toast.makeText(activity.get(), titleId, duration).show()
         }
