@@ -14,7 +14,7 @@ interface SuggestedIssueDao {
     @Query("DELETE FROM suggested_issues")
     fun deleteAll()
 
-    @Query("SELECT suggested_issues.* FROM suggested_issues WHERE publicationCode = :publicationCode AND issueNumber = :issueNumber")
-    fun find(publicationCode: String, issueNumber: String): SuggestedIssueSimple?
+    @Query("SELECT suggested_issues.* FROM suggested_issues")
+    fun findAll() : List<SuggestedIssueSimple>
 
 }

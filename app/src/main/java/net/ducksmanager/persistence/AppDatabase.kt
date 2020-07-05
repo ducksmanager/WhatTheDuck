@@ -2,39 +2,45 @@ package net.ducksmanager.persistence
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import net.ducksmanager.persistence.dao.*
-import net.ducksmanager.persistence.models.coa.InducksCountryName
-import net.ducksmanager.persistence.models.coa.InducksIssue
-import net.ducksmanager.persistence.models.coa.InducksPublication
+import net.ducksmanager.persistence.models.coa.*
 import net.ducksmanager.persistence.models.composite.CoverSearchIssue
 import net.ducksmanager.persistence.models.composite.SuggestedIssueSimple
 import net.ducksmanager.persistence.models.composite.UserMessage
 import net.ducksmanager.persistence.models.composite.UserSetting
+import net.ducksmanager.persistence.models.converter.StringListConverter
+import net.ducksmanager.persistence.models.converter.StringMutableSetConverter
 import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.persistence.models.dm.User
 
 @Database(entities = [
+    CoverSearchIssue::class,
+    InducksCountryName::class,
+    InducksIssue::class,
+    InducksPerson::class,
+    InducksPublication::class,
+    InducksStory::class,
     Issue::class,
     Purchase::class,
-    InducksCountryName::class,
-    InducksPublication::class,
-    InducksIssue::class,
-    CoverSearchIssue::class,
+    SuggestedIssueSimple::class,
     User::class,
-    UserSetting::class,
     UserMessage::class,
-    SuggestedIssueSimple::class
-], version = 2, exportSchema = true)
+    UserSetting::class
+], version = 4, exportSchema = true)
+@TypeConverters(StringMutableSetConverter::class, StringListConverter::class)
 abstract class AppDatabase : RoomDatabase() {
+    abstract fun coverSearchIssueDao(): CoverSearchIssueDao
+    abstract fun inducksCountryDao(): InducksCountryDao
+    abstract fun inducksIssueDao(): InducksIssueDao
+    abstract fun inducksPersonDao(): InducksPersonDao
+    abstract fun inducksPublicationDao(): InducksPublicationDao
+    abstract fun inducksStoryDao(): InducksStoryDao
     abstract fun issueDao(): IssueDao
     abstract fun purchaseDao(): PurchaseDao
-    abstract fun inducksCountryDao(): InducksCountryDao
-    abstract fun inducksPublicationDao(): InducksPublicationDao
-    abstract fun inducksIssueDao(): InducksIssueDao
-    abstract fun coverSearchIssueDao(): CoverSearchIssueDao
-    abstract fun userDao(): UserDao
-    abstract fun userSettingDao(): UserSettingDao
-    abstract fun userMessageDao(): UserMessageDao
     abstract fun suggestedIssueDao(): SuggestedIssueDao
+    abstract fun userDao(): UserDao
+    abstract fun userMessageDao(): UserMessageDao
+    abstract fun userSettingDao(): UserSettingDao
 }

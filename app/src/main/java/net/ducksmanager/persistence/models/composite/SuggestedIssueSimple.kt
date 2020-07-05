@@ -11,5 +11,11 @@ class SuggestedIssueSimple(
     val issueNumber: String,
 
     @ColumnInfo
-    val suggestionScore: Int
+    val suggestionScore: Int,
+
+    @ColumnInfo
+    val oldestdate: String?,
+
+    @ColumnInfo
+    val stories: MutableSet<String> = mutableSetOf()
 )

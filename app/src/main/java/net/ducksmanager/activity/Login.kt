@@ -14,7 +14,6 @@ import com.pusher.pushnotifications.auth.AuthDataGetter
 import com.pusher.pushnotifications.auth.BeamsTokenProvider
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.api.DmServer.getRequestHeaders
-import net.ducksmanager.persistence.models.composite.SuggestedIssueSimple
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.Purchase
@@ -62,12 +61,7 @@ class Login : AppCompatActivity() {
 
                             DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", activityRef.get()!!) {
                                 override fun onSuccessfulResponse(response: Response<SuggestionList>) {
-                                    val suggestions = response.body()!!.issues.values.toMutableList()
-
-                                    WhatTheDuck.appDB!!.suggestedIssueDao().deleteAll()
-                                    WhatTheDuck.appDB!!.suggestedIssueDao().insertList(suggestions.map {
-                                        SuggestedIssueSimple(it.publicationcode, it.issuenumber, it.score)
-                                    })
+                                    Suggestions.loadSuggestions(response.body()!!)
                                 }
                             })
                         }

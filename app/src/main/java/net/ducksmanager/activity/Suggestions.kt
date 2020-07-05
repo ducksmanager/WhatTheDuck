@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.row_suggested_issue.view.*
 import net.ducksmanager.api.DmServer
+import net.ducksmanager.persistence.models.coa.InducksPerson
+import net.ducksmanager.persistence.models.coa.InducksPublication
+import net.ducksmanager.persistence.models.coa.InducksStory
 import net.ducksmanager.persistence.models.composite.SuggestedIssueSimple
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.util.AppCompatActivityWithDrawer
@@ -24,9 +27,41 @@ class Suggestions : AppCompatActivityWithDrawer() {
     private lateinit var binding: SuggestionsBinding
 
     companion object {
-        var publicationTitles: HashMap<String, String> = HashMap()
-        var authorNames: HashMap<String, String> = HashMap()
-        var storyDetails: java.util.HashMap<String, SuggestionList.SuggestedStory> = HashMap()
+        lateinit var publicationTitles: List<InducksPublication>
+        lateinit var authorNames: List<InducksPerson>
+        lateinit var storyDetails: List<InducksStory>
+
+        public fun loadSuggestions(suggestionList: SuggestionList) {
+            val suggestions = suggestionList.issues.values.toMutableList()
+
+            val storyDetails: Set<InducksStory> = suggestionList.storyDetails.map { (key, it) ->
+                InducksStory(key, it.title, mutableSetOf(), it.storycomment)
+            }.toMutableSet()
+
+            suggestions.forEach { suggestion ->
+                suggestion.stories.forEach { (personcode, storycodes) ->
+                    storycodes.forEach { storycode ->
+                        storyDetails.find { inducksStory -> storycode == inducksStory.storycode }?.personcodes?.add(personcode)
+                    }
+                }
+            }
+            WhatTheDuck.appDB!!.inducksStoryDao().insertSet(storyDetails)
+
+            WhatTheDuck.appDB!!.suggestedIssueDao().deleteAll()
+            WhatTheDuck.appDB!!.suggestedIssueDao().insertList(suggestions.map {
+                val stories = mutableSetOf<String>()
+                it.stories.values.forEach { storycode -> stories.addAll(storycode) }
+                SuggestedIssueSimple(it.publicationcode, it.issuenumber, it.score, it.oldestdate, stories)
+            })
+
+            WhatTheDuck.appDB!!.inducksPublicationDao().insertList(suggestionList.publicationTitles.map { (key, it) ->
+                InducksPublication(key, it)
+            })
+
+            WhatTheDuck.appDB!!.inducksPersonDao().insertList(suggestionList.authors.map { (key, it) ->
+                InducksPerson(key, it)
+            })
+        }
     }
 
     override fun shouldShowToolbar() = true
@@ -44,23 +79,19 @@ class Suggestions : AppCompatActivityWithDrawer() {
 
         DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", this) {
             override fun onSuccessfulResponse(response: Response<SuggestionList>) {
-                val suggestions = mutableListOf<SuggestionList.SuggestedIssue>()
-                val list = response.body()!!.issues.values.toList()
-                suggestions.addAll(list)
+                loadSuggestions(response.body()!!)
 
-                suggestionListView.visibility = if (list.isNotEmpty()) View.VISIBLE else View.GONE
-                noSuggestionView.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+                val suggestions = WhatTheDuck.appDB!!.suggestedIssueDao().findAll()
+                publicationTitles = WhatTheDuck.appDB!!.inducksPublicationDao().findAll()
+                authorNames = WhatTheDuck.appDB!!.inducksPersonDao().findAll()
+                storyDetails = WhatTheDuck.appDB!!.inducksStoryDao().findAll()
 
-                WhatTheDuck.appDB!!.suggestedIssueDao().deleteAll()
-                WhatTheDuck.appDB!!.suggestedIssueDao().insertList(suggestions.map {
-                    SuggestedIssueSimple(it.publicationcode, it.issuenumber, it.score)
-                })
+                val showSuggestions = suggestions.isNotEmpty() && publicationTitles.isNotEmpty() && authorNames.isNotEmpty() && storyDetails.isNotEmpty()
 
-                publicationTitles = response.body()!!.publicationTitles
-                authorNames = response.body()!!.authors
-                storyDetails = response.body()!!.storyDetails
+                suggestionListView.visibility = if (showSuggestions) View.VISIBLE else View.GONE
+                noSuggestionView.visibility = if (!showSuggestions) View.VISIBLE else View.GONE
 
-                suggestionListView.adapter = SuggestedIssueAdapter(this@Suggestions, suggestions)
+                suggestionListView.adapter = SuggestedIssueAdapter(this@Suggestions, suggestions.toMutableList())
                 (suggestionListView.adapter as SuggestedIssueAdapter).orderByPublicationDate()
                 suggestionListView.layoutManager = LinearLayoutManager(this@Suggestions)
             }
@@ -79,7 +110,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
 
     class SuggestedIssueAdapter internal constructor(
         private val context: Context,
-        var suggestions: MutableList<SuggestionList.SuggestedIssue>
+        var suggestions: MutableList<SuggestedIssueSimple>
     ) : RecyclerView.Adapter<SuggestedIssueAdapter.ViewHolder>() {
 
         private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -97,30 +128,30 @@ class Suggestions : AppCompatActivityWithDrawer() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val currentItem = suggestions[position]
-            val countryCode = currentItem.publicationcode.split("/")[0]
-            val publicationName = publicationTitles[currentItem.publicationcode]
+            val currentIssue = suggestions[position]
+            val countryCode = currentIssue.publicationCode.split("/")[0]
+            val publicationName = publicationTitles.find {
+                inducksPublication -> inducksPublication.publicationCode == currentIssue.publicationCode
+            }?.title
 
             val title = holder.textWrapperView.itemtitle
             title.text = context.getString(
                 R.string.title_template,
                 publicationName ?: context.getString(R.string.unknown_publication),
-                currentItem.issuenumber
+                currentIssue.issueNumber
             )
             title.typeface = Typeface.DEFAULT_BOLD
             holder.prefixImageView.setImageResource(getImageResourceFromCountry(countryCode))
 
-            holder.suffixtextView1.text = currentItem.oldestdate ?: "Unknown"
-            holder.suffixtextView2.text = currentItem.score.toString()
+            holder.suffixtextView1.text = currentIssue.oldestdate ?: "Unknown"
+            holder.suffixtextView2.text = currentIssue.suggestionScore.toString()
 
-            val allStories = currentItem.stories.values.flatten().toSet()
-            val storiesWithAuthors: HashMap<String, List<String>> = HashMap()
-            for (story in allStories) {
-                storiesWithAuthors[story] = currentItem.stories.keys.filter { author ->
-                    currentItem.stories[author]!!.contains(story)
-                }
+            val issueStories = currentIssue.stories
+            val storiesWithAuthors: HashMap<String, Set<String>> = HashMap()
+            for (storycode in issueStories) {
+                storiesWithAuthors[storycode] = storyDetails.find { inducksStory -> inducksStory.storycode == storycode }?.personcodes!!.toSet()
             }
-            holder.storyListView.adapter = StoryAdapter(context, storiesWithAuthors, storyDetails)
+            holder.storyListView.adapter = StoryAdapter(context, storiesWithAuthors)
             holder.storyListView.layoutManager = LinearLayoutManager(context)
         }
 
@@ -142,15 +173,14 @@ class Suggestions : AppCompatActivityWithDrawer() {
         }
 
         fun orderByScore() {
-            suggestions.sortByDescending { it.score }
+            suggestions.sortByDescending { it.suggestionScore }
             notifyDataSetChanged()
         }
     }
 
     class StoryAdapter internal constructor(
         private val context: Context,
-        private val stories: HashMap<String, List<String>>,
-        private val storyDetails: HashMap<String, SuggestionList.SuggestedStory>
+        private val stories: HashMap<String, Set<String>>
     ) : RecyclerView.Adapter<StoryAdapter.ViewHolder>() {
 
         private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -167,15 +197,16 @@ class Suggestions : AppCompatActivityWithDrawer() {
         override fun getItemCount() = stories.size
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val currentItem = stories.values.toList()[position]
+            val currentStory = stories.values.toList()[position]
             val storyCode = stories.keys.toList()[position]
-            holder.storyTitleView.text = if (storyDetails[storyCode]?.title?.isEmpty()!!) {
+            val story = storyDetails.find { inducksStory -> inducksStory.storycode == storyCode }
+            holder.storyTitleView.text = if (story?.title?.isEmpty()!!) {
                 context.getString(R.string.no_title)
             } else {
-                storyDetails[storyCode]?.title
+                story.title
             }
 
-            holder.authorListView.adapter = AuthorAdapter(context, currentItem)
+            holder.authorListView.adapter = AuthorAdapter(context, currentStory.toList())
             holder.authorListView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
     }
@@ -201,7 +232,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
             val currentItem = authors[position]
             holder.authorBadge.text = currentItem
             holder.authorBadge.setOnClickListener {
-                Toast.makeText(context, authorNames[(it as Button).text], Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, authorNames.find { author -> author.personcode == (it as Button).text }!!.fullname, Toast.LENGTH_SHORT).show()
             }
         }
     }

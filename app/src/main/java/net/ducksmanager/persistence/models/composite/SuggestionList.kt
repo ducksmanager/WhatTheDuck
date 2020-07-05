@@ -31,7 +31,7 @@ class SuggestionList(
         private val personcode: String,
 
         @Expose
-        private val storycomment: String
+        val storycomment: String
     )
 
     inner class SuggestedIssue private constructor(

@@ -16,6 +16,9 @@ interface InducksPublicationDao {
     @Query("SELECT * FROM inducks_publication WHERE publicationCode = :publicationCode")
     fun findByPublicationCode(publicationCode: String): LiveData<InducksPublication>
 
+    @Query("SELECT * FROM inducks_publication")
+    fun findAll(): List<InducksPublication>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertList(issueList: List<InducksPublication>)
 }
