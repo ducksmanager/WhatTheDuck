@@ -1,3 +1,7 @@
+Version 2.3.0 "Gyro"
+
+    Show issue titles when they exist
+
 Version 2.2.0 "Flintheart"
 
     Allow adding multiple issues to the collection at once
