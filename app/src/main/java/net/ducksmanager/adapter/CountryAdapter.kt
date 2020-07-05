@@ -44,6 +44,10 @@ class CountryAdapter internal constructor(
         return null
     }
 
+    override fun getDescriptionText(i: InducksCountryNameWithPossession) : String? {
+        return null
+    }
+
     override fun getSuffixText(i: InducksCountryNameWithPossession): String? {
         return null
     }

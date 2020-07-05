@@ -7,10 +7,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.RelativeLayout
-import android.widget.Switch
-import android.widget.Toast
+import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -57,10 +54,10 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
     }
 
     override fun downloadList(currentActivity: Activity) {
-        DmServer.api.getIssues(WhatTheDuck.selectedPublication!!).enqueue(object : DmServer.Callback<List<String>>("getInducksIssues", currentActivity) {
-            override fun onSuccessfulResponse(response: Response<List<String>>) {
-                val issues: List<InducksIssue> = response.body()!!.map { issueNumber ->
-                    InducksIssue(WhatTheDuck.selectedPublication!!, issueNumber)
+        DmServer.api.getIssues(WhatTheDuck.selectedPublication!!).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", currentActivity) {
+            override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
+                val issues: List<InducksIssue> = response.body()!!.map { (issueNumber, title) ->
+                    InducksIssue(WhatTheDuck.selectedPublication!!, issueNumber, title)
                 }
                 appDB!!.inducksIssueDao().insertList(issues)
                 setData()
@@ -100,7 +97,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
                 findViewById<Button>(R.id.tipIssueSelectionOK).setOnClickListener {
                     appDB!!.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED, "0"))
-                    findViewById<Button>(R.id.tipIssueSelection).visibility = View.GONE
+                    findViewById<LinearLayout>(R.id.tipIssueSelection).visibility = View.GONE
                 }
                 findViewById<FloatingActionButton>(R.id.cancelSelection).setOnClickListener {
                     selectedIssues.clear()

@@ -43,8 +43,9 @@
     <string name="internal_error__malformed_list">The list is malformed, please try again later</string>
     <string name="internal_error__purchase_creation_failed">The creation of the purchase date failed</string>
     <string name="issue_already_possessed">You already have this issue in your collection</string>
-    <string name="issueSelectionTip">Select an issue to add by tapping on it.\\nSelect a range of issues by long-tapping on the first item of the range.</string>
+    <string name="issueSelectionTip">Select an issue to add by tapping on it.\nSelect a range of issues by long-tapping on the first item of the range.</string>
     <string name="itemtitle">Item</string>
+    <string name="itemdescription">Description</string>
     <string name="link_to_ducksmanager_website">What The Duck is the mobile app of DucksManager. Click here to access the DucksManager website.</string>
     <string name="list_view">List</string>
     <string name="login">Login</string>

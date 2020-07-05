@@ -28,7 +28,7 @@ import net.ducksmanager.persistence.models.dm.User
     User::class,
     UserMessage::class,
     UserSetting::class
-], version = 4, exportSchema = true)
+], version = 5, exportSchema = true)
 @TypeConverters(StringMutableSetConverter::class, StringListConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun coverSearchIssueDao(): CoverSearchIssueDao

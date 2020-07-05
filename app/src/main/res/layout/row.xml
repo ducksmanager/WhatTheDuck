@@ -13,16 +13,28 @@
         android:scaleType="fitCenter"
         android:contentDescription="@+id/prefiximage_description" />
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="0dip"
         android:layout_weight="1"
         android:padding="6dip"
-        android:layout_height="wrap_content">
+        android:layout_height="fill_parent">
         <TextView
             android:id="@+id/itemtitle"
-            android:layout_width="fill_parent"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/itemtitle" />
+        <TextView
+            android:id="@+id/itemdescription"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="#fff"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/itemdescription" />
     </LinearLayout>
     <ImageView
         android:id="@+id/suffiximage"

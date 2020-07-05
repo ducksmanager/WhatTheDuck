@@ -19,8 +19,8 @@ interface DmServerApi {
     @GET("/coa/list/publications/{countryName}")
     fun getPublications(@Path("countryName") countryName: String): Call<HashMap<String, String>>
 
-    @GET("/coa/list/issues/{publicationCode}")
-    fun getIssues(@Path(value = "publicationCode", encoded = true) publicationCode: String): Call<List<String>>
+    @GET("/coa/list/issues/withTitle/{publicationCode}")
+    fun getIssues(@Path(value = "publicationCode", encoded = true) publicationCode: String): Call<HashMap<String, String>>
 
     @get:GET("/collection/issues")
     val userIssues: Call<List<Issue>>

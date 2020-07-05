@@ -84,4 +84,5 @@
     <string name="welcomeBookcaseViewPortrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
     <string name="welcomeMessage">Din DucksManager-samling visas när du öppnar What The Duck. Klicka på ett land för att se de publikationer du har, eller tryck på \"+\" för att lägga till en utgåva  i din samling.</string>
     <string name="welcomeTitle">Välkommen till What The Duck!</string>
+    <string name="itemdescription">Description</string>
 </resources>

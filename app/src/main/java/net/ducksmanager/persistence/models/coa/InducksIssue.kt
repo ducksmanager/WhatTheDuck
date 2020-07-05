@@ -9,5 +9,8 @@ class InducksIssue(
     val inducksPublicationCode: String,
 
     @ColumnInfo
-    val inducksIssueNumber: String
+    val inducksIssueNumber: String,
+
+    @ColumnInfo
+    val title: String
 )

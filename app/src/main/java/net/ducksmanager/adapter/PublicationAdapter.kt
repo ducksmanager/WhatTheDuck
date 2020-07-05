@@ -36,6 +36,10 @@ class PublicationAdapter internal constructor(
         return null
     }
 
+    override fun getDescriptionText(i: InducksPublicationWithPossession) : String? {
+        return null
+    }
+
     override fun getIdentifier(i: InducksPublicationWithPossession): String? {
         return i.publication.publicationCode
     }

@@ -64,6 +64,7 @@ abstract class ItemAdapter<Item> internal constructor(
     open inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val titleTextView: TextView? = v.findViewById(R.id.itemtitle)
         val prefixImage: ImageView? = v.findViewById(R.id.prefiximage)
+        val descriptionText: TextView? = v.findViewById(R.id.itemdescription)
         val suffixImage: ImageView? = v.findViewById(R.id.suffiximage)
         val suffixText: TextView? = v.findViewById(R.id.suffixtext)
     }
@@ -105,6 +106,15 @@ abstract class ItemAdapter<Item> internal constructor(
                 holder.prefixImage.setImageResource(imageResource)
             }
         }
+        if (holder.descriptionText != null) {
+            val text = getDescriptionText(i)
+            if (text == null) {
+                holder.descriptionText.visibility = View.GONE
+            } else {
+                holder.descriptionText.visibility = View.VISIBLE
+                holder.descriptionText.text = text
+            }
+        }
         if (holder.suffixImage != null) {
             val imageResource = getSuffixImageResource(i)
             if (imageResource == null) {
@@ -127,6 +137,7 @@ abstract class ItemAdapter<Item> internal constructor(
 
     protected abstract fun getPrefixImageResource(i: Item, activity: Activity): Int?
     protected abstract fun getSuffixImageResource(i: Item): Int?
+    protected abstract fun getDescriptionText(i: Item): String?
     protected abstract fun getSuffixText(i: Item): String?
     protected abstract fun getComparatorText(i: Item): String?
     protected abstract fun getIdentifier(i: Item): String?

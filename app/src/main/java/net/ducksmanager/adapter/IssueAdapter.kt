@@ -101,6 +101,10 @@ class IssueAdapter internal constructor(
         }
     }
 
+    override fun getDescriptionText(i: InducksIssueWithUserIssueAndScore) : String? {
+        return i.issue.title
+    }
+
     override fun getSuffixText(i: InducksIssueWithUserIssueAndScore): String? {
         return when {
             i.userPurchase != null -> i.userPurchase.date

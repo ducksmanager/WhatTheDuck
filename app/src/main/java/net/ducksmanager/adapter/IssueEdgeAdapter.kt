@@ -69,6 +69,10 @@ class IssueEdgeAdapter internal constructor(
         return null
     }
 
+    override fun getDescriptionText(i: InducksIssueWithUserIssueAndScore) : String? {
+        return null
+    }
+
     override fun getSuffixText(i: InducksIssueWithUserIssueAndScore): String? {
         return null
     }
