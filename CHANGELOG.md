@@ -1,3 +1,7 @@
+Version 2.3.1
+
+    Fix suggested countries layout
+
 Version 2.3.0 "Gyro"
 
     Show issue titles when they exist
