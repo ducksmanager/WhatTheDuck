@@ -23,6 +23,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
             android:orientation="vertical"
             android:layout_below="@+id/toolbar">
 
@@ -65,10 +66,15 @@
                 android:orientation="vertical"
                 android:paddingStart="30dp"
                 android:paddingLeft="30dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="30dp"
                 android:paddingRight="30dp"
                 android:visibility="visible">
+
+                <Switch
+                    android:id="@+id/notifySwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/notify_option" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -77,41 +83,24 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="360dp">
+                    android:layout_height="wrap_content">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/notifiedCountriesList"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        tools:listitem="@layout/row_notified_country" />
-
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="center"
-                        android:indeterminate="true"
-                        android:visibility="gone" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/notifiedCountriesList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/row_notified_country" />
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    android:visibility="gone" />
                 </RelativeLayout>
             </LinearLayout>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:layout_alignParentBottom="true">
 
-            <Switch
-                android:id="@+id/notifySwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="@string/notify_option" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"

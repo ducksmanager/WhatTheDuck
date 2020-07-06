@@ -90,6 +90,7 @@ class Settings : AppCompatActivityWithDrawer() {
             val itemView = inflater.inflate(R.layout.row_notified_country, parent, false)
             itemView.suffiximage.visibility = View.GONE
             itemView.suffixtext.visibility = View.GONE
+            itemView.itemdescription.visibility = View.GONE
             return ViewHolder(itemView)
         }
 
