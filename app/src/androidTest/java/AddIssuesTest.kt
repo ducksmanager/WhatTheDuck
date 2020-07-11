@@ -31,6 +31,8 @@ class AddIssuesTest : WtdTest() {
         onView(withText(containsString("dynastie"))).perform(ViewActions.click())
         assertCurrentActivityIsInstanceOf(IssueList::class.java, true)
 
+        onView(withId(R.id.addToCollectionWrapper)).perform(ViewActions.click())
+
         clickOnActionButton(R.id.addToCollectionBySelectionButton)
 
         onView(withText("6")).perform(ViewActions.click())

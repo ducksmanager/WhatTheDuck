@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.view.View.*
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -102,10 +103,14 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         showNavigation()
         val addToCollection = binding.addToCollectionWrapper
         if (shouldShowAddToCollectionButton()) {
-            addToCollection.setMenuButtonColorNormalResId(R.color.holo_green_dark)
-            addToCollection.setMenuButtonColorPressedResId(R.color.holo_green_dark)
-            addToCollection.visibility = if (isCoaList()) View.GONE else View.VISIBLE
-            addToCollection.close(false)
+            addToCollection.visibility = if (isCoaList()) GONE else VISIBLE
+            binding.addToCollectionByPhotoButton.visibility = GONE
+            binding.addToCollectionBySelectionButton.visibility = GONE
+
+            addToCollection.setOnClickListener {
+                binding.addToCollectionByPhotoButton.visibility = if (binding.addToCollectionByPhotoButton.visibility == GONE) VISIBLE else GONE
+                binding.addToCollectionBySelectionButton.visibility = if (binding.addToCollectionBySelectionButton.visibility == GONE) VISIBLE else GONE
+            }
 
             if (!isCoaList()) {
                 binding.addToCollectionByPhotoButton
@@ -113,12 +118,12 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
                 binding.addToCollectionBySelectionButton
                     .setOnClickListener {
-                        addToCollection.visibility = View.GONE
+                        addToCollection.visibility = GONE
                         goToAlternativeView()
                     }
             }
         } else {
-            addToCollection.visibility = View.GONE
+            addToCollection.visibility = GONE
         }
         val itemAdapter = itemAdapter
 
@@ -133,14 +138,14 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         if (shouldShowFilter(itemAdapter.items)) {
             itemAdapter.addOrReplaceFilterOnChangeListener(filterEditText)
         } else {
-            filterEditText.visibility = View.GONE
+            filterEditText.visibility = GONE
             itemAdapter.updateFilteredList("")
         }
-        binding.tipIssueSelection.visibility = if (shouldShowItemSelectionTip()) View.VISIBLE else View.GONE
-        binding.validateSelection.visibility = if (shouldShowSelectionValidation()) View.VISIBLE else View.GONE
-        binding.cancelSelection.visibility = if (shouldShowSelectionValidation()) View.VISIBLE else View.GONE
+        binding.tipIssueSelection.visibility = if (shouldShowItemSelectionTip()) VISIBLE else GONE
+        binding.validateSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
+        binding.cancelSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
 
-        binding.emptyList.visibility = if (requiresDataDownload || itemAdapter.itemCount > 0) View.INVISIBLE else View.VISIBLE
+        binding.emptyList.visibility = if (requiresDataDownload || itemAdapter.itemCount > 0) INVISIBLE else VISIBLE
 
         while (recyclerView.itemDecorationCount > 0) {
             recyclerView.removeItemDecorationAt(0)
@@ -168,8 +173,8 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            binding.addToCollectionWrapper.visibility = View.VISIBLE
-            binding.progressBar.visibility = View.VISIBLE
+            binding.addToCollectionWrapper.visibility = VISIBLE
+            binding.progressBar.visibility = VISIBLE
             CoverFlowFileHandler.current.resizeUntilFileSize(SearchFromCover())
         }
     }
@@ -181,7 +186,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
                     setNavigationCountry(inducksCountryName.countryCode, inducksCountryName.countryName)
                 })
         } else {
-            binding.navigationCountry.root.visibility = View.INVISIBLE
+            binding.navigationCountry.root.visibility = INVISIBLE
         }
         if (shouldShowNavigationPublication()) {
             WhatTheDuck.appDB!!.inducksPublicationDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
@@ -189,7 +194,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
                     setNavigationPublication(inducksPublication.publicationCode, inducksPublication.title)
                 })
         } else {
-            binding.navigationPublication.root.visibility = View.INVISIBLE
+            binding.navigationPublication.root.visibility = INVISIBLE
         }
     }
 

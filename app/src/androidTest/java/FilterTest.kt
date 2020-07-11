@@ -26,7 +26,9 @@ class FilterTest : WtdTest() {
     fun testShowAddIssueDialog() {
         assertCurrentActivityIsInstanceOf(CountryList::class.java, true)
 
+        onView(withId(R.id.addToCollectionWrapper)).perform(ViewActions.click())
         clickOnActionButton(R.id.addToCollectionBySelectionButton)
+
         assertCurrentActivityIsInstanceOf(CountryList::class.java, true)
 
         onView(withId(R.id.filter))

@@ -3,10 +3,8 @@ import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.BoundedMatcher
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.LargeTest
 import net.ducksmanager.activity.IssueList
@@ -15,7 +13,6 @@ import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.whattheduck.R
 import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -54,6 +51,7 @@ class ListTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(currentLo
 
     @Test
     fun testPublicationList() {
+        onView(withId(R.id.addToCollectionWrapper)).perform(ViewActions.click())
         clickOnActionButton(R.id.addToCollectionBySelectionButton)
 
         goToPublicationListView(currentLocale!!.defaultCountry)
@@ -69,11 +67,7 @@ class ListTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(currentLo
 
         assertCurrentActivityIsInstanceOf(IssueList::class.java, true)
 
-        onView(allOf(withId(R.id.addToCollectionByPhotoButton), forceFloatingActionButtonsVisible()))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-
-        onView(allOf(withId(R.id.addToCollectionBySelectionButton), forceFloatingActionButtonsVisible()))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withId(R.id.addToCollectionWrapper)).perform(ViewActions.click())
 
         ScreenshotTestRule.takeScreenshot("Collection - Issue list", activityInstance, screenshotPath)
     }

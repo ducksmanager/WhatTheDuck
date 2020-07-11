@@ -1,6 +1,4 @@
-
 import android.app.Activity
-import android.view.View
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -8,7 +6,6 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Checks
-import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -17,7 +14,6 @@ import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnitRunner
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
-import com.github.clans.fab.FloatingActionButton
 import net.ducksmanager.activity.CountryList
 import net.ducksmanager.activity.IssueList
 import net.ducksmanager.activity.Login
@@ -26,9 +22,6 @@ import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers
-import org.hamcrest.Description
-import org.hamcrest.Matcher
-import org.hamcrest.Matchers
 import org.junit.Assert
 import org.junit.Before
 import org.junit.BeforeClass
@@ -114,19 +107,6 @@ open class WtdTest : AndroidJUnitRunner {
                 }
                 return currentActivity[0]
             }
-
-        fun forceFloatingActionButtonsVisible(): Matcher<Any> {
-            return object : BoundedMatcher<Any, FloatingActionButton>(FloatingActionButton::class.java) {
-                public override fun matchesSafely(item: FloatingActionButton): Boolean {
-                    item.visibility = View.VISIBLE
-                    return true
-                }
-
-                override fun describeTo(description: Description) {
-                    description.appendText("Force floating action buttons to be visible")
-                }
-            }
-        }
     }
 
     init {
@@ -203,8 +183,7 @@ open class WtdTest : AndroidJUnitRunner {
     }
 
     protected fun clickOnActionButton(buttonId: Int) {
-        val viewMatcher = onView(Matchers.allOf(ViewMatchers.withId(buttonId), forceFloatingActionButtonsVisible()))
-
+        val viewMatcher = onView(ViewMatchers.withId(buttonId))
         try {
             Thread.sleep(500)
         } catch (e: InterruptedException) {

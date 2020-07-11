@@ -44,6 +44,7 @@ class CoverSearchTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(cu
         Intents.init()
         Intents.intending(expectedIntent).respondWith(result)
 
+        onView(ViewMatchers.withId(R.id.addToCollectionWrapper)).perform(ViewActions.click())
         clickOnActionButton(R.id.addToCollectionByPhotoButton)
 
         Intents.intended(expectedIntent)

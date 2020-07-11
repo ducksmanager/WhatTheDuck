@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="WhatTheDuckTheme" parent="Theme.MaterialComponents.Bridge">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">#303030</item>
+        <item name="colorOnBackground">#fff</item>
+    </style>
     <style name="AddIssueTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="windowNoTitle">true</item>
     </style>

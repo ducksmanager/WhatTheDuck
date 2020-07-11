@@ -152,69 +152,100 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <com.github.clans.fab.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/cancelSelection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="70dp"
+            android:layout_above="@id/validateSelection"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_alignParentEnd="false"
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="false"
             android:src="@drawable/ic_cancel"
-            app:fab_label="Annuler"
-            app:fab_colorNormal="#555"
-            app:fab_colorPressed="#555"
-            app:fab_colorRipple="@android:color/white" />
+            app:backgroundTint="#555"
+            app:rippleColor="@android:color/white" />
 
-        <com.github.clans.fab.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/validateSelection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="false"
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="false"
             android:src="@drawable/ic_check"
-            app:fab_label="Ajouter"
-            app:fab_colorNormal="@android:color/holo_green_dark"
-            app:fab_colorPressed="@android:color/holo_green_dark"
-            app:fab_colorRipple="@android:color/white" />
+            app:backgroundTint="@android:color/holo_green_dark"
+            app:rippleColor="@android:color/white" />
 
-        <com.github.clans.fab.FloatingActionMenu
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/addToCollectionBySelectionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/addToCollectionByPhotoButton"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="false"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:padding="5dp"
+            android:contentDescription="@string/by_issue_selection"
+            android:gravity="center"
+            android:text="@string/by_issue_selection"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:backgroundTint="#303030"
+            app:fabSize="mini"
+            app:icon="@drawable/ic_view_headline"
+            app:iconGravity="textEnd"
+            app:iconTint="@android:color/white"
+            app:rippleColor="@android:color/white"
+            />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/addToCollectionByPhotoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="false"
+            android:layout_above="@id/addToCollectionWrapper"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:padding="5dp"
+            android:gravity="center"
+            app:icon="@android:drawable/ic_menu_camera"
+            app:iconGravity="textEnd"
+            app:iconTint="@android:color/white"
+            android:text="@string/by_cover_photo"
+            android:textSize="12sp"
+            android:textAlignment="gravity"
+            android:textColor="@android:color/white"
+            app:backgroundTint="#303030"
+            app:rippleColor="@android:color/white"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addToCollectionWrapper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="false"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="false"
             android:src="@drawable/plus"
-            app:fab_colorRipple="@android:color/white"
-            app:fab_size="mini">
-
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/addToCollectionBySelectionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_view_headline"
-                app:fab_size="mini"
-                app:fab_colorNormal="@android:color/holo_green_dark"
-                app:fab_colorPressed="@android:color/holo_green_dark"
-                app:fab_colorRipple="@android:color/white"
-                app:fab_label="@string/by_issue_selection" />
-
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/addToCollectionByPhotoButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_camera"
-                app:fab_size="mini"
-                app:fab_colorNormal="@android:color/holo_green_dark"
-                app:fab_colorPressed="@android:color/holo_green_dark"
-                app:fab_colorRipple="@android:color/white"
-                app:fab_label="@string/by_cover_photo" />
-        </com.github.clans.fab.FloatingActionMenu>
+            app:backgroundTint="@android:color/holo_green_dark"
+            app:tint="@android:color/white"
+            app:rippleColor="@android:color/white" />
     </RelativeLayout>
     <include layout="@layout/drawer_navigation" />
 </androidx.drawerlayout.widget.DrawerLayout>

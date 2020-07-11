@@ -11,7 +11,6 @@ import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.clans.fab.FloatingActionButton
 import net.ducksmanager.adapter.IssueAdapter
 import net.ducksmanager.adapter.IssueEdgeAdapter
 import net.ducksmanager.adapter.ItemAdapter
@@ -99,11 +98,11 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
                     appDB!!.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED, "0"))
                     findViewById<LinearLayout>(R.id.tipIssueSelection).visibility = View.GONE
                 }
-                findViewById<FloatingActionButton>(R.id.cancelSelection).setOnClickListener {
+                findViewById<View>(R.id.cancelSelection).setOnClickListener {
                     selectedIssues.clear()
                     itemAdapter.notifyDataSetChanged()
                 }
-                findViewById<FloatingActionButton>(R.id.validateSelection).setOnClickListener {
+                findViewById<View>(R.id.validateSelection).setOnClickListener {
                     if (selectedIssues.isEmpty()) {
                         WhatTheDuck.info(WeakReference(this), R.string.input_error__no_issue_selected, Toast.LENGTH_SHORT)
                     }

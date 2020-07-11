@@ -20,7 +20,7 @@
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/icon"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
+        android:theme="@style/WhatTheDuckTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:fullBackupContent">
         <activity android:name="net.ducksmanager.activity.Login">
