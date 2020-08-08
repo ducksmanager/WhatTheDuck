@@ -8,7 +8,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.widget.*
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import net.ducksmanager.adapter.IssueAdapter
@@ -28,62 +27,6 @@ import retrofit2.Response
 import java.lang.ref.WeakReference
 
 class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
-
-    companion object {
-        @JvmField
-        var viewType = ViewType.LIST_VIEW
-    }
-
-    enum class ViewType {
-        LIST_VIEW, EDGE_VIEW
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        selectedIssues = mutableSetOf()
-        show()
-    }
-
-    override fun shouldShowItemSelectionTip(): Boolean = isCoaList() && ! appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED)?.value.equals("0")
-
-    override fun shouldShowSelectionValidation(): Boolean = isCoaList()
-
-    override fun hasList(): Boolean {
-        return false // FIXME
-    }
-
-    override fun downloadList(currentActivity: Activity) {
-        DmServer.api.getIssues(WhatTheDuck.selectedPublication!!).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", currentActivity) {
-            override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
-                val issues: List<InducksIssue> = response.body()!!.map { (issueNumber, title) ->
-                    InducksIssue(WhatTheDuck.selectedPublication!!, issueNumber, title)
-                }
-                appDB!!.inducksIssueDao().insertList(issues)
-                setData()
-            }
-        })
-    }
-
-    override fun hasDividers() = viewType != ViewType.EDGE_VIEW
-
-    override fun shouldShow() =
-        WhatTheDuck.selectedCountry != null && WhatTheDuck.selectedPublication != null
-
-    override fun shouldShowNavigationCountry() = !isLandscapeEdgeView
-
-    override fun shouldShowNavigationPublication() = !isLandscapeEdgeView
-
-    override fun shouldShowToolbar() = !isLandscapeEdgeView
-
-    override fun shouldShowAddToCollectionButton() = !isLandscapeEdgeView
-
-    override fun shouldShowFilter(items: List<InducksIssueWithUserIssueAndScore>) =
-        items.size > MIN_ITEM_NUMBER_FOR_FILTER && viewType == ViewType.LIST_VIEW
-
-    private val recyclerView: RecyclerView
-        get() {
-            return findViewById(R.id.itemList)
-        }
 
     override val itemAdapter: ItemAdapter<InducksIssueWithUserIssueAndScore>
         get() {
@@ -157,6 +100,60 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
             }
         }
 
+    companion object {
+        @JvmField
+        var viewType = ViewType.LIST_VIEW
+    }
+
+    enum class ViewType {
+        LIST_VIEW, EDGE_VIEW
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        selectedIssues = mutableSetOf()
+        show()
+    }
+
+    override fun shouldShowItemSelectionTip(): Boolean = isCoaList() && ! appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED)?.value.equals("0")
+
+    override fun shouldShowSelectionValidation(): Boolean = isCoaList()
+
+    override fun getList() = appDB!!.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
+
+    override fun downloadList(currentActivity: Activity) {
+        DmServer.api.getIssues(WhatTheDuck.selectedPublication!!).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", currentActivity) {
+            override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
+                val issues: List<InducksIssue> = response.body()!!.map { (issueNumber, title) ->
+                    InducksIssue(WhatTheDuck.selectedPublication!!, issueNumber, title)
+                }
+                appDB!!.inducksIssueDao().insertList(issues)
+                setData()
+            }
+        })
+    }
+
+    override fun hasDividers() = viewType != ViewType.EDGE_VIEW
+
+    override fun shouldShow() =
+        WhatTheDuck.selectedCountry != null && WhatTheDuck.selectedPublication != null
+
+    override fun shouldShowNavigationCountry() = !isLandscapeEdgeView
+
+    override fun shouldShowNavigationPublication() = !isLandscapeEdgeView
+
+    override fun shouldShowToolbar() = !isLandscapeEdgeView
+
+    override fun shouldShowAddToCollectionButton() = !isLandscapeEdgeView
+
+    override fun shouldShowFilter(items: List<InducksIssueWithUserIssueAndScore>) =
+        items.size > MIN_ITEM_NUMBER_FOR_FILTER && viewType == ViewType.LIST_VIEW
+
+    private val recyclerView: RecyclerView
+        get() {
+            return findViewById(R.id.itemList)
+        }
+
     private val isLandscapeEdgeView: Boolean
         get() {
             val deviceOrientation = resources.configuration.orientation
@@ -174,17 +171,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         show()
     }
 
-    override val isPossessedByUser: Boolean
-        get() {
-            return data.any { it.userIssue != null }
-        }
-
-    override fun setData() {
-        appDB!!.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
-            .observe(this, Observer { items: List<InducksIssueWithUserIssueAndScore> ->
-                storeItemList(items)
-            })
-    }
+    override fun isPossessedByUser() = data.any { it.userIssue != null }
 
     override fun onBackPressed() {
         if (isCoaList()) {

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import net.ducksmanager.adapter.CountryAdapter
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.api.DmServer
@@ -14,14 +13,27 @@ import net.ducksmanager.util.ReleaseNotes
 import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import retrofit2.Response
 import java.lang.ref.WeakReference
 import java.util.*
 
 class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
+    override val itemAdapter: ItemAdapter<InducksCountryNameWithPossession>
+        get() = CountryAdapter(this, data)
+
     override fun downloadList(currentActivity: Activity) {
-        downloadList(currentActivity, Runnable { setData() })
+        DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksCountries", currentActivity) {
+            override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
+                val countries: List<InducksCountryName> = response.body()!!.keys.map { countryCode ->
+                    InducksCountryName(countryCode, response.body()!![countryCode]!!)
+                }
+                appDB!!.inducksCountryDao().deleteAll()
+                appDB!!.inducksCountryDao().insertList(countries)
+                setData()
+            }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,10 +56,9 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
         show()
     }
 
-    override val isPossessedByUser: Boolean
-        get() = true
+    override fun isPossessedByUser() = true
 
-    override fun hasList() = hasFullList
+    override fun getList() = appDB!!.inducksCountryDao().findAllWithPossession()
 
     override fun shouldShow() = true
 
@@ -63,35 +74,9 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
     override fun hasDividers() = true
 
-    override val itemAdapter: ItemAdapter<InducksCountryNameWithPossession>
-        get() = CountryAdapter(this, data)
-
-    override fun setData() {
-        WhatTheDuck.appDB!!.inducksCountryDao().findAllWithPossession().observe(this@CountryList, Observer { items: List<InducksCountryNameWithPossession>? -> storeItemList(items!!) })
-    }
-
     override fun onBackPressed() {
         if (isCoaList()) {
             onBackFromAddIssueActivity()
-        }
-    }
-
-    companion object {
-        @JvmField
-        var hasFullList = false
-        fun downloadList(currentActivity: Activity, hasDataCallback: Runnable) {
-            DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksCountries", currentActivity) {
-                override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
-                    val countries: MutableList<InducksCountryName> = ArrayList()
-                    for (countryCode in response.body()!!.keys) {
-                        countries.add(InducksCountryName(countryCode, response.body()!![countryCode]!!))
-                    }
-                    WhatTheDuck.appDB!!.inducksCountryDao().deleteAll()
-                    WhatTheDuck.appDB!!.inducksCountryDao().insertList(countries)
-                    hasFullList = true
-                    hasDataCallback.run()
-                }
-            })
         }
     }
 

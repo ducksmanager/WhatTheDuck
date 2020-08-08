@@ -73,12 +73,6 @@ class IssueAdapter internal constructor(
         } else selectedIssues.add(issueNumber)
     }
 
-    private fun toggleSelectionTipAndButtons() {
-        if (selectedIssues.isEmpty()) {
-
-        }
-    }
-
     inner class ViewHolder(v: View?) : ItemAdapter<InducksIssueWithUserIssueAndScore>.ViewHolder(v!!)
 
     override fun getPrefixImageResource(i: InducksIssueWithUserIssueAndScore, activity: Activity): Int? {

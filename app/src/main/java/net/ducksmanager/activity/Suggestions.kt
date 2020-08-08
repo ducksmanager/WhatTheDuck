@@ -31,7 +31,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
         lateinit var authorNames: List<InducksPerson>
         lateinit var storyDetails: List<InducksStory>
 
-        public fun loadSuggestions(suggestionList: SuggestionList) {
+        fun loadSuggestions(suggestionList: SuggestionList) {
             val suggestions = suggestionList.issues.values.toMutableList()
 
             val storyDetails: Set<InducksStory> = suggestionList.storyDetails.map { (key, it) ->

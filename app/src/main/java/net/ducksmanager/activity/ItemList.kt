@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.view.View.*
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,11 +42,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     var data: List<Item> = ArrayList()
     private lateinit var binding: WtdListBinding
 
-    protected abstract fun hasList(): Boolean
+    protected abstract fun getList(): LiveData<List<Item>>
     protected abstract fun downloadList(currentActivity: Activity)
     protected abstract fun hasDividers(): Boolean
-    protected abstract val isPossessedByUser: Boolean
-    protected abstract fun setData()
+    protected abstract fun isPossessedByUser(): Boolean
     protected abstract fun shouldShow(): Boolean
     protected abstract fun shouldShowNavigationCountry(): Boolean
     protected abstract fun shouldShowNavigationPublication(): Boolean
@@ -94,6 +94,19 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             WhatTheDuck.CollectionType.COA.toString()
         loadList()
         show()
+    }
+
+    private fun hasList(): Boolean {
+        val list = getList().value
+        return list !== null && list.isNotEmpty()
+    }
+
+    protected fun setData() {
+        getList().observe(this, Observer { items ->
+            data = items
+            requiresDataDownload = false
+            show()
+        })
     }
 
     fun show() {
@@ -217,14 +230,8 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         publicationNavigationView.selectedText.text = publicationFullName
     }
 
-    fun storeItemList(items: List<Item>) {
-        data = items
-        requiresDataDownload = false
-        show()
-    }
-
     fun onBackFromAddIssueActivity() {
-        if (isPossessedByUser) {
+        if (isPossessedByUser()) {
             goToAlternativeView()
         } else {
             type = WhatTheDuck.CollectionType.USER.toString()
