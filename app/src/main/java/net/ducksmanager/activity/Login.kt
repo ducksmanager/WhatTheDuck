@@ -22,6 +22,7 @@ import net.ducksmanager.util.Settings.toSHA1
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.databinding.LoginBinding
+import retrofit2.Call
 import retrofit2.Response
 import java.lang.ref.WeakReference
 import java.util.*
@@ -31,7 +32,12 @@ class Login : AppCompatActivity() {
 
     companion object {
         fun fetchCollection(activityRef: WeakReference<Activity>, targetClass: Class<*>, alertIfError: Boolean?) {
+            ItemList.type = WhatTheDuck.CollectionType.USER.toString()
+
             DmServer.api.userIssues.enqueue(object : DmServer.Callback<List<Issue>>("retrieveCollection", activityRef.get()!!, alertIfError!!) {
+                override fun onFailure(call: Call<List<Issue>>, t: Throwable) {
+                    activityRef.get()!!.startActivity(Intent(activityRef.get()!!, targetClass))
+                }
                 override fun onSuccessfulResponse(response: Response<List<Issue>>) {
                     val user = User(DmServer.apiDmUser!!, DmServer.apiDmPassword!!)
                     WhatTheDuck.appDB!!.userDao().insert(user)
@@ -51,19 +57,18 @@ class Login : AppCompatActivity() {
                     )
                     WhatTheDuck.registerForNotifications(activityRef, false)
 
-                    ItemList.type = WhatTheDuck.CollectionType.USER.toString()
                     activityRef.get()!!.startActivity(Intent(activityRef.get()!!, targetClass))
 
                     DmServer.api.userPurchases.enqueue(object : DmServer.Callback<List<Purchase>>("getPurchases", activityRef.get()!!, true) {
                         override fun onSuccessfulResponse(response: Response<List<Purchase>>) {
                             WhatTheDuck.appDB!!.purchaseDao().deleteAll()
                             WhatTheDuck.appDB!!.purchaseDao().insertList(response.body()!!)
+                        }
+                    })
 
-                            DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", activityRef.get()!!) {
-                                override fun onSuccessfulResponse(response: Response<SuggestionList>) {
-                                    Suggestions.loadSuggestions(response.body()!!)
-                                }
-                            })
+                    DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", activityRef.get()!!) {
+                        override fun onSuccessfulResponse(response: Response<SuggestionList>) {
+                            Suggestions.loadSuggestions(response.body()!!)
                         }
                     })
                 }

@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.View
+import android.widget.LinearLayout
 import net.ducksmanager.adapter.CountryAdapter
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.api.DmServer
@@ -25,12 +27,20 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
     override fun downloadList(currentActivity: Activity) {
         DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksCountries", currentActivity) {
+            override val isFailureAllowed = true
+
             override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                 val countries: List<InducksCountryName> = response.body()!!.keys.map { countryCode ->
                     InducksCountryName(countryCode, response.body()!![countryCode]!!)
                 }
                 appDB!!.inducksCountryDao().deleteAll()
                 appDB!!.inducksCountryDao().insertList(countries)
+                setData()
+            }
+
+            override fun onFailureFailover() {
+                isOfflineMode = true
+                findViewById<LinearLayout>(R.id.action_logout).visibility = View.GONE
                 setData()
             }
         })
@@ -68,7 +78,7 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
     override fun shouldShowToolbar() = true
 
-    override fun shouldShowAddToCollectionButton() = true
+    override fun shouldShowAddToCollectionButton() = !isOfflineMode
 
     override fun shouldShowFilter(items: List<InducksCountryNameWithPossession>) = items.size > MIN_ITEM_NUMBER_FOR_FILTER
 

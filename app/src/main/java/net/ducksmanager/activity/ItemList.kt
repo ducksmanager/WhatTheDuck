@@ -28,12 +28,13 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     companion object {
         @JvmField
         var type = WhatTheDuck.CollectionType.USER.toString()
-        const val MIN_ITEM_NUMBER_FOR_FILTER = 20
-        private const val REQUEST_IMAGE_CAPTURE = 1
 
         fun isCoaList() : Boolean {
             return type == WhatTheDuck.CollectionType.COA.toString()
         }
+
+        const val MIN_ITEM_NUMBER_FOR_FILTER = 20
+        private const val REQUEST_IMAGE_CAPTURE = 1
     }
 
     private var requiresDataDownload = false
@@ -114,6 +115,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             return
         }
         showNavigation()
+        binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
         val addToCollection = binding.addToCollectionWrapper
         if (shouldShowAddToCollectionButton()) {
             addToCollection.visibility = if (isCoaList()) GONE else VISIBLE

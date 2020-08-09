@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +28,7 @@ import net.ducksmanager.whattheduck.databinding.SettingsBinding
 import retrofit2.Response
 import java.lang.ref.WeakReference
 
+
 class Settings : AppCompatActivityWithDrawer() {
     private lateinit var binding: SettingsBinding
     
@@ -43,8 +45,19 @@ class Settings : AppCompatActivityWithDrawer() {
 
         appDB!!.inducksCountryDao().findAllWithPossession().observe(this, Observer { countryNames ->
             DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>("getUserNotificationCountries", this) {
+                override val isFailureAllowed = true
                 override fun onSuccessfulResponse(response: Response<List<String>>) {
-                    val countriesToNotifyTo = response.body()?.toHashSet() as MutableSet<String>
+                    loadData(response.body()?.toHashSet() as MutableSet<String>)
+                }
+
+                override fun onFailureFailover() {
+                    binding.offlineMode.visibility = View.VISIBLE
+                    binding.save.isEnabled = false
+                    findViewById<LinearLayout>(R.id.action_logout).visibility = View.GONE
+                    loadData(mutableSetOf())
+                }
+
+                fun loadData(countriesToNotifyTo: MutableSet<String>) {
                     val recyclerView = binding.notifiedCountriesList
                     recyclerView.adapter = CountryToNotifyListAdapter(this@Settings, countryNames, countriesToNotifyTo)
                     recyclerView.layoutManager = LinearLayoutManager(this@Settings)

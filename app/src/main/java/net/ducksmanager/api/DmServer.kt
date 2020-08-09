@@ -15,7 +15,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.ref.WeakReference
-import java.net.HttpURLConnection
+import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 import java.util.*
 
 object DmServer {
@@ -75,6 +75,8 @@ object DmServer {
     ) : retrofit2.Callback<T> {
         private val originActivityRef: WeakReference<Activity>
 
+        open val isFailureAllowed = false
+
         abstract fun onSuccessfulResponse(response: Response<T>)
 
         override fun onResponse(call: Call<T>, response: Response<T>) {
@@ -83,7 +85,7 @@ object DmServer {
             } else {
                 if (alertOnError) {
                     when (response.code()) {
-                        HttpURLConnection.HTTP_UNAUTHORIZED -> WhatTheDuck.alert(originActivityRef, R.string.input_error__invalid_credentials)
+                        HTTP_UNAUTHORIZED -> WhatTheDuck.alert(originActivityRef, R.string.input_error__invalid_credentials)
                         else -> WhatTheDuck.alert(originActivityRef, R.string.error)
                     }
                 }
@@ -94,9 +96,16 @@ object DmServer {
 
         open fun onErrorResponse(response: Response<T>?) {}
 
+        open fun onFailureFailover() {}
+
         override fun onFailure(call: Call<T>, t: Throwable) {
-            WhatTheDuck.alert(originActivityRef, t.message + " on " + eventName)
-            System.err.println(t.message)
+            if (isFailureAllowed) {
+                onFailureFailover()
+            }
+            else {
+                WhatTheDuck.alert(originActivityRef, t.message + " on " + eventName)
+                System.err.println(t.message)
+            }
             onFinished()
         }
 

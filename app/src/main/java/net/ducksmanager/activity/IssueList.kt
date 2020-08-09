@@ -123,11 +123,19 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
     override fun downloadList(currentActivity: Activity) {
         DmServer.api.getIssues(WhatTheDuck.selectedPublication!!).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", currentActivity) {
+            override val isFailureAllowed = true
+
             override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                 val issues: List<InducksIssue> = response.body()!!.map { (issueNumber, title) ->
                     InducksIssue(WhatTheDuck.selectedPublication!!, issueNumber, title)
                 }
                 appDB!!.inducksIssueDao().insertList(issues)
+                setData()
+            }
+
+            override fun onFailureFailover() {
+                isOfflineMode = true
+                findViewById<LinearLayout>(R.id.action_logout).visibility = View.GONE
                 setData()
             }
         })
@@ -144,7 +152,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
     override fun shouldShowToolbar() = !isLandscapeEdgeView
 
-    override fun shouldShowAddToCollectionButton() = !isLandscapeEdgeView
+    override fun shouldShowAddToCollectionButton() = !isOfflineMode && !isLandscapeEdgeView
 
     override fun shouldShowFilter(items: List<InducksIssueWithUserIssueAndScore>) =
         items.size > MIN_ITEM_NUMBER_FOR_FILTER && viewType == ViewType.LIST_VIEW

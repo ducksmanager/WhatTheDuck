@@ -78,9 +78,19 @@ class Suggestions : AppCompatActivityWithDrawer() {
         val noSuggestionView = binding.suggestionsNoResults
 
         DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", this) {
+            override val isFailureAllowed = true
             override fun onSuccessfulResponse(response: Response<SuggestionList>) {
                 loadSuggestions(response.body()!!)
+                loadData()
+            }
 
+            override fun onFailureFailover() {
+                binding.offlineMode.visibility = View.VISIBLE
+                findViewById<LinearLayout>(R.id.action_logout).visibility = View.GONE
+                loadData()
+            }
+
+            fun loadData() {
                 val suggestions = WhatTheDuck.appDB!!.suggestedIssueDao().findAll()
                 publicationTitles = WhatTheDuck.appDB!!.inducksPublicationDao().findAll()
                 authorNames = WhatTheDuck.appDB!!.inducksPersonDao().findAll()
@@ -148,8 +158,8 @@ class Suggestions : AppCompatActivityWithDrawer() {
 
             val issueStories = currentIssue.stories
             val storiesWithAuthors: HashMap<String, Set<String>> = HashMap()
-            for (storycode in issueStories) {
-                storiesWithAuthors[storycode] = storyDetails.find { inducksStory -> inducksStory.storycode == storycode }?.personcodes!!.toSet()
+            for (storyCode in issueStories) {
+                storiesWithAuthors[storyCode] = storyDetails.find { inducksStory -> inducksStory.storycode == storyCode }?.personcodes!!.toSet()
             }
             holder.storyListView.adapter = StoryAdapter(context, storiesWithAuthors)
             holder.storyListView.layoutManager = LinearLayoutManager(context)

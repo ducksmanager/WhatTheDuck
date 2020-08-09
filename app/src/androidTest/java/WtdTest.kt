@@ -1,3 +1,4 @@
+
 import android.app.Activity
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
@@ -14,7 +15,6 @@ import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnitRunner
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
-import net.ducksmanager.activity.CountryList
 import net.ducksmanager.activity.IssueList
 import net.ducksmanager.activity.Login
 import net.ducksmanager.persistence.AppDatabase
@@ -146,7 +146,6 @@ open class WtdTest : AndroidJUnitRunner {
 
     @Before
     fun resetConfigs() {
-        CountryList.hasFullList = false
         IssueList.viewType = IssueList.ViewType.LIST_VIEW
     }
 

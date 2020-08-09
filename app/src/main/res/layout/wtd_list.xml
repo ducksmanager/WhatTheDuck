@@ -21,12 +21,24 @@
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
+        <TextView
+            android:id="@+id/offlineMode"
+            android:layout_below="@+id/toolbar"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:background="#f09313"
+            android:textColor="@android:color/white"
+            android:text="Vous êtes en mode hors-ligne. Vous pouvez naviguer dans votre collection mais pas la modifier. Certaines fonctionnalités ne seront pas disponibles."
+            />
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/navigation"
-            android:layout_below="@+id/toolbar">
+            android:layout_below="@+id/offlineMode">
             <include
                 android:id="@+id/navigationAllCountries"
                 layout="@layout/wtd_list_navigation_all_countries" />
