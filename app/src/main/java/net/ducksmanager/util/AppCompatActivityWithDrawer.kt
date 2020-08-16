@@ -58,7 +58,9 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
             drawerNavigation.setCheckedItem(keys.first())
         }
 
-        drawerNavigation.findViewById<LinearLayout>(R.id.action_logout).setOnClickListener{
+        val logoutButton = drawerNavigation.findViewById<LinearLayout>(R.id.action_logout)
+        logoutButton.visibility = if (WhatTheDuck.isOfflineMode) View.GONE else View.VISIBLE
+        logoutButton.setOnClickListener{
             WhatTheDuck.unregisterFromNotifications()
             WhatTheDuck.appDB!!.userDao().deleteAll()
             this.startActivity(Intent(this, Login::class.java))

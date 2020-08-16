@@ -40,6 +40,7 @@ class WhatTheDuck : Application() {
     companion object {
         lateinit var config: Properties
         var isTestContext = false
+        var isOfflineMode = false
 
         private const val CONFIG = "config.properties"
         private const val CONFIG_KEY_PUSHER_INSTANCE_ID = "pusher_instance_id"

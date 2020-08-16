@@ -3,7 +3,6 @@ package net.ducksmanager.persistence.dao
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import net.ducksmanager.persistence.models.coa.InducksIssue
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
@@ -19,6 +18,9 @@ interface InducksIssueDao {
         " WHERE inducksPublicationCode = :publicationCode")
     fun findByPublicationCode(publicationCode: String): LiveData<List<InducksIssueWithUserIssueAndScore>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Query("DELETE FROM inducks_issue")
+    fun deleteAll()
+
+    @Insert
     fun insertList(issueList: List<InducksIssue>)
 }

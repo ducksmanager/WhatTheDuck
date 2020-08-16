@@ -8,11 +8,11 @@ import net.ducksmanager.persistence.models.composite.UserMessage
 
 @Dao
 interface UserMessageDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(userMessage: UserMessage)
-
     @Query("SELECT * FROM user_messages WHERE messageKey = :key")
     fun findByKey(key: String): UserMessage?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(userMessage: UserMessage)
 
     @Query("DELETE FROM user_messages")
     fun deleteAll()

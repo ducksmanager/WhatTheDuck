@@ -102,7 +102,7 @@ object DmServer {
             if (isFailureAllowed) {
                 onFailureFailover()
             }
-            else {
+            else if (!WhatTheDuck.isOfflineMode) {
                 WhatTheDuck.alert(originActivityRef, t.message + " on " + eventName)
                 System.err.println(t.message)
             }
@@ -110,11 +110,13 @@ object DmServer {
         }
 
         private fun onFinished() {
+            println("API call end : $eventName")
             WhatTheDuck.trackEvent("$eventName/finish")
             originActivityRef.get()!!.findViewById<View?>(R.id.progressBar)?.visibility = ProgressBar.GONE
         }
 
         init {
+            println("API call start : $eventName")
             WhatTheDuck.trackEvent("$eventName/start")
             originActivityRef = WeakReference(originActivity)
             originActivityRef.get()!!.findViewById<View>(R.id.progressBar)?.visibility = ProgressBar.VISIBLE

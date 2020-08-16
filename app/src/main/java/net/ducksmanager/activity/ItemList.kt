@@ -37,14 +37,11 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         private const val REQUEST_IMAGE_CAPTURE = 1
     }
 
-    private var requiresDataDownload = false
-
     @JvmField
     var data: List<Item> = ArrayList()
     private lateinit var binding: WtdListBinding
 
     protected abstract fun getList(): LiveData<List<Item>>
-    protected abstract fun downloadList(currentActivity: Activity)
     protected abstract fun hasDividers(): Boolean
     protected abstract fun isPossessedByUser(): Boolean
     protected abstract fun shouldShow(): Boolean
@@ -74,12 +71,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     fun loadList() {
         (application as WhatTheDuck).trackActivity(this)
-        if (!hasList()) {
-            requiresDataDownload = true
-            downloadList(this)
-        } else {
-            setData()
-        }
+        setData()
     }
 
     private fun goToView(cls: Class<*>) {
@@ -102,10 +94,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         return list !== null && list.isNotEmpty()
     }
 
-    protected fun setData() {
+    private fun setData() {
+        binding.progressBar.visibility = VISIBLE
         getList().observe(this, Observer { items ->
             data = items
-            requiresDataDownload = false
             show()
         })
     }
@@ -115,6 +107,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             return
         }
         showNavigation()
+        binding.progressBar.visibility = GONE
         binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
         val addToCollection = binding.addToCollectionWrapper
         if (shouldShowAddToCollectionButton()) {
@@ -142,10 +135,6 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         }
         val itemAdapter = itemAdapter
 
-        if (requiresDataDownload) {
-            itemAdapter.resetItems()
-        }
-
         val recyclerView = binding.itemList
         recyclerView.adapter = itemAdapter
 
@@ -160,7 +149,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.validateSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
         binding.cancelSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
 
-        binding.emptyList.visibility = if (requiresDataDownload || itemAdapter.itemCount > 0) INVISIBLE else VISIBLE
+        binding.emptyList.visibility = if (itemAdapter.itemCount > 0) INVISIBLE else VISIBLE
 
         while (recyclerView.itemDecorationCount > 0) {
             recyclerView.removeItemDecorationAt(0)

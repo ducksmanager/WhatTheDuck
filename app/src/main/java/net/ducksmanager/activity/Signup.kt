@@ -39,7 +39,7 @@ class Signup : AppCompatActivity() {
                 override fun onSuccessfulResponse(response: Response<Void>) {
                     DmServer.apiDmUser = username
                     DmServer.apiDmPassword = toSHA1(password, WeakReference(this@Signup))
-                    Login.fetchCollection(WeakReference(this@Signup), CountryList::class.java, true)
+                    Login.fetchCollection(WeakReference(this@Signup), true)
                 }
             })
         }

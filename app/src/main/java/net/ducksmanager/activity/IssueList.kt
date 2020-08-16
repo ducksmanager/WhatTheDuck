@@ -1,6 +1,5 @@
 package net.ducksmanager.activity
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
@@ -13,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import net.ducksmanager.adapter.IssueAdapter
 import net.ducksmanager.adapter.IssueEdgeAdapter
 import net.ducksmanager.adapter.ItemAdapter
-import net.ducksmanager.api.DmServer
-import net.ducksmanager.persistence.models.coa.InducksIssue
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.UserSetting
 import net.ducksmanager.util.DraggableRelativeLayout
@@ -23,7 +20,6 @@ import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
-import retrofit2.Response
 import java.lang.ref.WeakReference
 
 class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
@@ -120,26 +116,6 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
     override fun shouldShowSelectionValidation(): Boolean = isCoaList()
 
     override fun getList() = appDB!!.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
-
-    override fun downloadList(currentActivity: Activity) {
-        DmServer.api.getIssues(WhatTheDuck.selectedPublication!!).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", currentActivity) {
-            override val isFailureAllowed = true
-
-            override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
-                val issues: List<InducksIssue> = response.body()!!.map { (issueNumber, title) ->
-                    InducksIssue(WhatTheDuck.selectedPublication!!, issueNumber, title)
-                }
-                appDB!!.inducksIssueDao().insertList(issues)
-                setData()
-            }
-
-            override fun onFailureFailover() {
-                isOfflineMode = true
-                findViewById<LinearLayout>(R.id.action_logout).visibility = View.GONE
-                setData()
-            }
-        })
-    }
 
     override fun hasDividers() = viewType != ViewType.EDGE_VIEW
 

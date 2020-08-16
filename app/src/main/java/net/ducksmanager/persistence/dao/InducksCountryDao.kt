@@ -3,7 +3,6 @@ package net.ducksmanager.persistence.dao
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
@@ -16,7 +15,7 @@ interface InducksCountryDao {
     @Query("SELECT * FROM inducks_countryname WHERE countryCode = :countryCode")
     fun findByCountryCode(countryCode: String?): LiveData<InducksCountryName>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     fun insertList(issueList: List<InducksCountryName>)
 
     @Query("DELETE FROM inducks_countryname")

@@ -16,11 +16,11 @@ interface DmServerApi {
     @GET("/coa/list/countries/{locale}")
     fun getCountries(@Path("locale") locale: String): Call<HashMap<String, String>>
 
-    @GET("/coa/list/publications/{countryName}")
-    fun getPublications(@Path("countryName") countryName: String): Call<HashMap<String, String>>
+    @get:GET("/coa/list/publications")
+    val publications: Call<HashMap<String, String>>
 
-    @GET("/coa/list/issues/withTitle/{publicationCode}")
-    fun getIssues(@Path(value = "publicationCode", encoded = true) publicationCode: String): Call<HashMap<String, String>>
+    @get:GET("/coa/list/issues")
+    val issues: Call<HashMap<String, HashMap<String, String>>>
 
     @get:GET("/collection/issues")
     val userIssues: Call<List<Issue>>
@@ -31,6 +31,9 @@ interface DmServerApi {
     @get:GET("/collection/notifications/countries")
     val userNotificationCountries: Call<List<String>>
 
+    @get:GET("/collection/stats/suggestedissues/countries_to_notify/_")
+    val suggestedIssues: Call<SuggestionList>
+
     @POST("/collection/notifications/countries")
     fun updateUserNotificationCountries(@Body countryListToUpdate: CountryListToUpdate): Call<Void>
 
@@ -39,9 +42,6 @@ interface DmServerApi {
 
     @POST("/collection/issues")
     fun createUserIssues(@Body issueListToUpdate: IssueListToUpdate): Call<Any>
-
-    @get:GET("/collection/stats/suggestedissues/countries_to_notify/_")
-    val suggestedIssues: Call<SuggestionList>
 
     @Multipart
     @POST("/cover-id/search")
