@@ -2,6 +2,8 @@ package net.ducksmanager.activity
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.adapter.PublicationAdapter
 import net.ducksmanager.persistence.models.composite.InducksPublicationWithPossession
@@ -10,15 +12,14 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 
 class PublicationList : ItemList<InducksPublicationWithPossession>() {
 
-    override val itemAdapter: ItemAdapter<InducksPublicationWithPossession>
-        get() = PublicationAdapter(this, data)
+    override var itemAdapter: ItemAdapter<InducksPublicationWithPossession> = PublicationAdapter(this)
 
-    override fun getList() = appDB!!.inducksPublicationDao().findByCountry(WhatTheDuck.selectedCountry!!)
+    override val AndroidViewModel.data: LiveData<List<InducksPublicationWithPossession>>
+        get() = appDB!!.inducksPublicationDao().findByCountry(WhatTheDuck.selectedCountry!!)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WhatTheDuck.selectedPublication = null
-        show()
     }
 
     override fun isPossessedByUser() = data.any { it.isPossessed }

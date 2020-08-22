@@ -11,16 +11,13 @@ import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 
 class PublicationAdapter internal constructor(
-    itemList: ItemList<InducksPublicationWithPossession>,
-    items: List<InducksPublicationWithPossession>
-) : ItemAdapter<InducksPublicationWithPossession>(itemList, R.layout.row, items) {
+    itemList: ItemList<InducksPublicationWithPossession>
+) : ItemAdapter<InducksPublicationWithPossession>(itemList, R.layout.row) {
     override fun getViewHolder(v: View?) = ViewHolder(v)
 
     inner class ViewHolder(v: View?) : ItemAdapter<InducksPublicationWithPossession>.ViewHolder(v!!)
 
-    override fun isPossessed(item: InducksPublicationWithPossession): Boolean {
-        return item.isPossessed
-    }
+    override fun isPossessed(item: InducksPublicationWithPossession): Boolean = item.isPossessed
 
     override val onClickListener = View.OnClickListener { view: View ->
         val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
@@ -28,31 +25,17 @@ class PublicationAdapter internal constructor(
         originActivity.startActivity(Intent(originActivity, IssueList::class.java))
     }
 
-    override fun getPrefixImageResource(i: InducksPublicationWithPossession, activity: Activity): Int? {
-        return null
-    }
+    override fun getPrefixImageResource(i: InducksPublicationWithPossession, activity: Activity): Int? = null
 
-    override fun getSuffixImageResource(i: InducksPublicationWithPossession): Int? {
-        return null
-    }
+    override fun getSuffixImageResource(i: InducksPublicationWithPossession): Int? = null
 
-    override fun getDescriptionText(i: InducksPublicationWithPossession) : String? {
-        return null
-    }
+    override fun getDescriptionText(i: InducksPublicationWithPossession) : String? = null
 
-    override fun getIdentifier(i: InducksPublicationWithPossession): String? {
-        return i.publication.publicationCode
-    }
+    override fun getIdentifier(i: InducksPublicationWithPossession): String? = i.publication.publicationCode
 
-    override fun getSuffixText(i: InducksPublicationWithPossession): String? {
-        return null
-    }
+    override fun getSuffixText(i: InducksPublicationWithPossession): String? = null
 
-    override fun getText(i: InducksPublicationWithPossession): String? {
-        return i.publication.title
-    }
+    override fun getText(i: InducksPublicationWithPossession): String? = i.publication.title
 
-    override fun getComparatorText(i: InducksPublicationWithPossession): String? {
-        return getText(i)
-    }
+    override fun getComparatorText(i: InducksPublicationWithPossession): String? = getText(i)
 }

@@ -9,7 +9,6 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.row.view.*
@@ -43,7 +42,7 @@ class Settings : AppCompatActivityWithDrawer() {
 
         binding.notifySwitch.isChecked = appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)?.value.equals("1")
 
-        appDB!!.inducksCountryDao().findAllWithPossession().observe(this, Observer { countryNames ->
+        appDB!!.inducksCountryDao().findAllWithPossession().observe(this, { countryNames ->
             DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>("getUserNotificationCountries", this) {
                 override val isFailureAllowed = true
                 override fun onSuccessfulResponse(response: Response<List<String>>) {
@@ -93,7 +92,7 @@ class Settings : AppCompatActivityWithDrawer() {
 
         private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val countryItemView: TextView = itemView.findViewById(R.id.itemtitle)
             val prefixImageView: ImageView = itemView.findViewById(R.id.prefiximage)
             val isNotifiedCountry: CheckBox = itemView.findViewById(R.id.isNotifiedCountry)

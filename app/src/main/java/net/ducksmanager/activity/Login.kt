@@ -14,7 +14,6 @@ import com.pusher.pushnotifications.auth.AuthDataGetter
 import com.pusher.pushnotifications.auth.BeamsTokenProvider
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksCountryName
-import net.ducksmanager.persistence.models.coa.InducksIssue
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.persistence.models.dm.Issue
@@ -56,7 +55,9 @@ class Login : AppCompatActivity() {
 
                 override fun onSuccessfulResponse(response: Response<List<Issue>>) {
                     val user = User(DmServer.apiDmUser!!, DmServer.apiDmPassword!!)
-                    appDB!!.userDao().insert(user)
+                    if (user.username !== WhatTheDuck.currentUser?.username) {
+                        appDB!!.userDao().insert(user)
+                    }
 
                     appDB!!.issueDao().deleteAll()
                     appDB!!.issueDao().insertList(response.body()!!)
@@ -77,19 +78,6 @@ class Login : AppCompatActivity() {
                             appDB!!.inducksPublicationDao().insertList(response.body()!!.keys.map { publicationCode ->
                                 InducksPublication(publicationCode, response.body()!![publicationCode]!!)
                             })
-                        }
-                    })
-
-                    DmServer.api.issues.enqueue(object : DmServer.Callback<HashMap<String, HashMap<String, String>>>("retrieveAllIssues", originActivity, alertIfError!!) {
-                        override fun onSuccessfulResponse(response: Response<HashMap<String, HashMap<String, String>>>) {
-                            val issues = arrayListOf<InducksIssue>()
-                            response.body()!!.forEach { (publicationCode, publicationIssues) ->
-                                issues.addAll(publicationIssues.map { (issueNumber, title) ->
-                                    InducksIssue(publicationCode, issueNumber, title)
-                                })
-                            }
-                            appDB!!.inducksIssueDao().deleteAll()
-                            appDB!!.inducksIssueDao().insertList(issues)
                         }
                     })
 
@@ -117,9 +105,7 @@ class Login : AppCompatActivity() {
             WhatTheDuck.tokenProvider = BeamsTokenProvider(
                 "$apiEndpointUrl/collection/notification_token",
                 object : AuthDataGetter {
-                    override fun getAuthData(): AuthData {
-                        return AuthData(DmServer.getRequestHeaders(true), HashMap())
-                    }
+                    override fun getAuthData(): AuthData = AuthData(DmServer.getRequestHeaders(true), HashMap())
                 }
             )
             WhatTheDuck.registerForNotifications(activityRef, false)
@@ -131,16 +117,18 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         (application as WhatTheDuck).setup()
 
-        val user: User? = appDB!!.userDao().currentUser
-        if (user != null) {
-            DmServer.apiDmUser = user.username
-            DmServer.apiDmPassword = user.password
-            fetchCollection(WeakReference(this@Login), false)
-        } else {
-            binding = LoginBinding.inflate(layoutInflater)
-            setContentView(binding.root)
-            showLoginForm()
-        }
+        appDB!!.userDao().currentUser.observe(this, { user ->
+            if (user != null) {
+                WhatTheDuck.currentUser = user
+                DmServer.apiDmUser = user.username
+                DmServer.apiDmPassword = user.password
+                fetchCollection(WeakReference(this@Login), false)
+            } else {
+                binding = LoginBinding.inflate(layoutInflater)
+                setContentView(binding.root)
+                showLoginForm()
+            }
+        })
     }
 
     private fun showLoginForm() {

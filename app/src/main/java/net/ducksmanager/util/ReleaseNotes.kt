@@ -40,9 +40,7 @@ class ReleaseNotes private constructor(private val majorVersion: String, private
         }
     }
 
-    private fun getMessageId(): String {
-        return "release_notes_$majorVersion"
-    }
+    private fun getMessageId(): String = "release_notes_$majorVersion"
 
     init {
         this.imageId = imageId

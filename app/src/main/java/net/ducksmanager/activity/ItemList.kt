@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.view.View.*
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.wtd_list_navigation_country.view.*
@@ -21,7 +21,6 @@ import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.databinding.WtdListBinding
 import java.lang.ref.WeakReference
-import java.util.*
 
 abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
@@ -29,19 +28,19 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         @JvmField
         var type = WhatTheDuck.CollectionType.USER.toString()
 
-        fun isCoaList() : Boolean {
-            return type == WhatTheDuck.CollectionType.COA.toString()
-        }
+        fun isCoaList() : Boolean = type == WhatTheDuck.CollectionType.COA.toString()
 
         const val MIN_ITEM_NUMBER_FOR_FILTER = 20
         private const val REQUEST_IMAGE_CAPTURE = 1
     }
 
+    private lateinit var viewModel: AndroidViewModel
+    abstract val AndroidViewModel.data: LiveData<List<Item>>
+
     @JvmField
     var data: List<Item> = ArrayList()
     private lateinit var binding: WtdListBinding
 
-    protected abstract fun getList(): LiveData<List<Item>>
     protected abstract fun hasDividers(): Boolean
     protected abstract fun isPossessedByUser(): Boolean
     protected abstract fun shouldShow(): Boolean
@@ -52,7 +51,9 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     protected abstract fun shouldShowItemSelectionTip(): Boolean
     protected abstract fun shouldShowSelectionValidation(): Boolean
 
-    protected abstract val itemAdapter: ItemAdapter<Item>
+    open fun downloadList() {}
+
+    protected abstract var itemAdapter: ItemAdapter<Item>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,12 +67,9 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
         binding.navigationCountry.root.selected?.setOnClickListener { _: View? -> goToView(PublicationList::class.java) }
 
-        loadList()
-    }
+        binding.itemList.adapter = itemAdapter
 
-    fun loadList() {
-        (application as WhatTheDuck).trackActivity(this)
-        setData()
+        loadList()
     }
 
     private fun goToView(cls: Class<*>) {
@@ -86,28 +84,42 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         else
             WhatTheDuck.CollectionType.COA.toString()
         loadList()
+    }
+
+    protected fun loadList() {
+        (application as WhatTheDuck).trackActivity(this)
         show()
-    }
 
-    private fun hasList(): Boolean {
-        val list = getList().value
-        return list !== null && list.isNotEmpty()
-    }
+        viewModel = AndroidViewModel(application)
+        val viewModelData = viewModel.data
+        if (viewModelData.value == null) {
+            binding.progressBar.visibility = VISIBLE
+        }
+        viewModelData.observe(this, { items ->
+            if (items.isEmpty()) {
+                downloadList()
+            }
+            else {
+                itemAdapter.setItems(items)
+                binding.emptyList.visibility = if (items.isNotEmpty()) INVISIBLE else VISIBLE
+                binding.progressBar.visibility = GONE
 
-    private fun setData() {
-        binding.progressBar.visibility = VISIBLE
-        getList().observe(this, Observer { items ->
-            data = items
-            show()
+                val filterEditText = binding.filter
+                if (shouldShowFilter(itemAdapter.items)) {
+                    itemAdapter.addOrReplaceFilterOnChangeListener(filterEditText)
+                } else {
+                    filterEditText.visibility = GONE
+                    itemAdapter.updateFilteredList("")
+                }
+            }
         })
     }
 
-    fun show() {
+    private fun show() {
         if (!shouldShow()) {
             return
         }
         showNavigation()
-        binding.progressBar.visibility = GONE
         binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
         val addToCollection = binding.addToCollectionWrapper
         if (shouldShowAddToCollectionButton()) {
@@ -133,23 +145,11 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         } else {
             addToCollection.visibility = GONE
         }
-        val itemAdapter = itemAdapter
 
         val recyclerView = binding.itemList
-        recyclerView.adapter = itemAdapter
-
-        val filterEditText = binding.filter
-        if (shouldShowFilter(itemAdapter.items)) {
-            itemAdapter.addOrReplaceFilterOnChangeListener(filterEditText)
-        } else {
-            filterEditText.visibility = GONE
-            itemAdapter.updateFilteredList("")
-        }
         binding.tipIssueSelection.visibility = if (shouldShowItemSelectionTip()) VISIBLE else GONE
         binding.validateSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
         binding.cancelSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
-
-        binding.emptyList.visibility = if (itemAdapter.itemCount > 0) INVISIBLE else VISIBLE
 
         while (recyclerView.itemDecorationCount > 0) {
             recyclerView.removeItemDecorationAt(0)
@@ -186,7 +186,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     private fun showNavigation() {
         if (shouldShowNavigationCountry()) {
             WhatTheDuck.appDB!!.inducksCountryDao().findByCountryCode(WhatTheDuck.selectedCountry)
-                .observe(this, Observer { inducksCountryName: InducksCountryName ->
+                .observe(this, { inducksCountryName: InducksCountryName ->
                     setNavigationCountry(inducksCountryName.countryCode, inducksCountryName.countryName)
                 })
         } else {
@@ -194,7 +194,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         }
         if (shouldShowNavigationPublication()) {
             WhatTheDuck.appDB!!.inducksPublicationDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
-                .observe(this, Observer { inducksPublication: InducksPublication ->
+                .observe(this, { inducksPublication: InducksPublication ->
                     setNavigationPublication(inducksPublication.publicationCode, inducksPublication.title)
                 })
         } else {

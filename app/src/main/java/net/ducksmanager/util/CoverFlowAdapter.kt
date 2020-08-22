@@ -22,17 +22,11 @@ internal class CoverFlowAdapter(private val context: Context) : BaseAdapter() {
         this.data = data
     }
 
-    override fun getCount(): Int {
-        return data!!.size
-    }
+    override fun getCount(): Int = data!!.size
 
-    override fun getItem(pos: Int): Any {
-        return data!![pos]
-    }
+    override fun getItem(pos: Int): Any = data!![pos]
 
-    override fun getItemId(pos: Int): Long {
-        return pos.toLong()
-    }
+    override fun getItemId(pos: Int): Long = pos.toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         var rowView = convertView

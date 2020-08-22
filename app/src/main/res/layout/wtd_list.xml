@@ -146,7 +146,7 @@
                     android:contentDescription="@string/list_view"
                     android:src="@drawable/ic_view_headline"/>
 
-                <Switch
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

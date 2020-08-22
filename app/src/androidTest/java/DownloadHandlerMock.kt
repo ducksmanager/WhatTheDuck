@@ -80,9 +80,7 @@ internal object DownloadHandlerMock {
     }
 
     @Throws(IOException::class)
-    private fun getImageFixture(name: String): Buffer {
-        return getImageFixture(name, "jpg")
-    }
+    private fun getImageFixture(name: String): Buffer = getImageFixture(name, "jpg")
 
     private fun openPathAsStream(path: String): InputStream {
         val path2=path.replace("_.json", "empty.json")

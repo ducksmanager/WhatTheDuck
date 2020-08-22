@@ -24,15 +24,11 @@ class ListTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(currentLo
     companion object {
         @JvmStatic
         @Parameterized.Parameters
-        fun data(): List<Array<out LocaleWithDefaultPublication>> {
-            return parameterData()
-        }
+        fun data(): List<Array<out LocaleWithDefaultPublication>> = parameterData()
 
         private fun getItemMatcher(identifier: String): Matcher<RecyclerView.ViewHolder> {
             return object : BoundedMatcher<RecyclerView.ViewHolder, RecyclerView.ViewHolder>(ItemAdapter.ViewHolder::class.java) {
-                override fun matchesSafely(item: RecyclerView.ViewHolder): Boolean {
-                    return (item as ItemAdapter<*>.ViewHolder).titleTextView!!.tag == identifier
-                }
+                override fun matchesSafely(item: RecyclerView.ViewHolder): Boolean = (item as ItemAdapter<*>.ViewHolder).titleTextView!!.tag == identifier
 
                 override fun describeTo(description: Description) {
                     description.appendText("view holder with ID: $identifier")

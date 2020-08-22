@@ -3,6 +3,8 @@ package net.ducksmanager.activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import net.ducksmanager.adapter.CountryAdapter
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
@@ -10,13 +12,14 @@ import net.ducksmanager.util.ReleaseNotes
 import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
-import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import java.lang.ref.WeakReference
 
 class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
-    override val itemAdapter: ItemAdapter<InducksCountryNameWithPossession>
-        get() = CountryAdapter(this, data)
+    override var itemAdapter: ItemAdapter<InducksCountryNameWithPossession> = CountryAdapter(this)
+
+    override val AndroidViewModel.data: LiveData<List<InducksCountryNameWithPossession>>
+        get() = WhatTheDuck.appDB!!.inducksCountryDao().findAllWithPossession()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +38,9 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
         }
         WhatTheDuck.selectedCountry = null
         WhatTheDuck.selectedPublication = null
-        show()
     }
 
     override fun isPossessedByUser() = true
-
-    override fun getList() = appDB!!.inducksCountryDao().findAllWithPossession()
 
     override fun shouldShow() = true
 

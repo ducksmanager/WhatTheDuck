@@ -11,22 +11,17 @@ import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 
 class CountryAdapter internal constructor(
-    itemList: ItemList<InducksCountryNameWithPossession>,
-    items: List<InducksCountryNameWithPossession>
-) : ItemAdapter<InducksCountryNameWithPossession>(itemList, R.layout.row, items) {
+    itemList: ItemList<InducksCountryNameWithPossession>
+) : ItemAdapter<InducksCountryNameWithPossession>(itemList, R.layout.row) {
 
     override fun getViewHolder(v: View?) = ViewHolder(v)
 
-    override fun isPossessed(item: InducksCountryNameWithPossession): Boolean {
-        return item.isPossessed
-    }
+    override fun isPossessed(item: InducksCountryNameWithPossession) = item.isPossessed
 
     override val onClickListener = View.OnClickListener { view: View ->
         val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
-        val selectedCountry = getItem(position)
-        WhatTheDuck.selectedCountry = selectedCountry.country.countryCode
-        val i = Intent(originActivity, PublicationList::class.java)
-        originActivity.startActivity(i)
+        WhatTheDuck.selectedCountry = getItem(position).country.countryCode
+        originActivity.startActivity(Intent(originActivity, PublicationList::class.java))
     }
 
     inner class ViewHolder(v: View?) : ItemAdapter<InducksCountryNameWithPossession>.ViewHolder(v!!)
@@ -40,27 +35,15 @@ class CountryAdapter internal constructor(
         return imageResource
     }
 
-    override fun getSuffixImageResource(i: InducksCountryNameWithPossession): Int? {
-        return null
-    }
+    override fun getSuffixImageResource(i: InducksCountryNameWithPossession): Int? = null
 
-    override fun getDescriptionText(i: InducksCountryNameWithPossession) : String? {
-        return null
-    }
+    override fun getDescriptionText(i: InducksCountryNameWithPossession) : String? = null
 
-    override fun getSuffixText(i: InducksCountryNameWithPossession): String? {
-        return null
-    }
+    override fun getSuffixText(i: InducksCountryNameWithPossession): String? = null
 
-    override fun getText(i: InducksCountryNameWithPossession): String? {
-        return i.country.countryName
-    }
+    override fun getText(i: InducksCountryNameWithPossession): String? = i.country.countryName
 
-    override fun getIdentifier(i: InducksCountryNameWithPossession): String? {
-        return i.country.countryCode
-    }
+    override fun getIdentifier(i: InducksCountryNameWithPossession): String? = i.country.countryCode
 
-    override fun getComparatorText(i: InducksCountryNameWithPossession): String? {
-        return getText(i)
-    }
+    override fun getComparatorText(i: InducksCountryNameWithPossession): String? = getText(i)
 }

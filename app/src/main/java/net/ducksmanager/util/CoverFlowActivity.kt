@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow.OnScrollPositionListener
 import net.ducksmanager.activity.AddIssues
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueAndScore
@@ -33,7 +32,7 @@ class CoverFlowActivity : AppCompatActivity() {
         binding = ActivityCoverflowBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        WhatTheDuck.appDB!!.coverSearchIssueDao().findAll().observe(this, Observer { searchIssues: List<CoverSearchIssueWithUserIssueAndScore> ->
+        WhatTheDuck.appDB!!.coverSearchIssueDao().findAll().observe(this, { searchIssues: List<CoverSearchIssueWithUserIssueAndScore> ->
             data = searchIssues
             adapter = CoverFlowAdapter(this)
             adapter.setData(searchIssues)

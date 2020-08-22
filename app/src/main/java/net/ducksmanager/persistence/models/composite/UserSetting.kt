@@ -21,9 +21,7 @@ class UserSetting(settingKey: @NotNull String?, value: String) {
     @ColumnInfo
     var value: String
 
-    fun getSettingKey(): @NotNull String? {
-        return settingKey
-    }
+    fun getSettingKey(): @NotNull String? = settingKey
 
     fun setSettingKey(settingKey: @NotNull String?) {
         this.settingKey = settingKey!!

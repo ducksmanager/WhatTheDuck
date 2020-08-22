@@ -30,9 +30,7 @@ class PurchaseAdapter internal constructor(private val context: Context, private
         }
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = items.size
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)

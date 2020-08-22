@@ -21,6 +21,7 @@ import com.squareup.picasso.PicassoCache
 import net.ducksmanager.api.DmServer.initApi
 import net.ducksmanager.persistence.AppDatabase
 import net.ducksmanager.persistence.models.composite.UserSetting
+import net.ducksmanager.persistence.models.dm.User
 import org.matomo.sdk.Matomo
 import org.matomo.sdk.Tracker
 import org.matomo.sdk.TrackerBuilder
@@ -61,6 +62,8 @@ class WhatTheDuck : Application() {
         var appDB: AppDatabase? = null
 
         private var matomoTracker: Tracker? = null
+
+        var currentUser: User? = null
 
         var selectedCountry: String? = null
         var selectedPublication: String? = null
@@ -125,7 +128,7 @@ class WhatTheDuck : Application() {
                     val notificationSetting = appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)
                     if (notificationSetting == null || notificationSetting.value == "1" || forceEnable) {
                         PushNotifications.start(activityRef.get(), config.getProperty(CONFIG_KEY_PUSHER_INSTANCE_ID))
-                        PushNotifications.setUserId(appDB!!.userDao().currentUser!!.username, tokenProvider, object : BeamsCallback<Void, PusherCallbackError> {
+                        PushNotifications.setUserId(currentUser!!.username, tokenProvider, object : BeamsCallback<Void, PusherCallbackError> {
                             override fun onSuccess(vararg values: Void) {
                                 appDB!!.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED, "1"))
                                 Timber.i("Successfully registered for notifications")
@@ -226,10 +229,9 @@ class WhatTheDuck : Application() {
 
     fun trackActivity(activity: Activity) {
         val t = TrackHelper.track()
-        val user = appDB!!.userDao().currentUser
 
-        if (user != null) {
-            t.dimension(CONFIG_MATOMO_DIMENSION_USER, user.username)
+        if (currentUser != null) {
+            t.dimension(CONFIG_MATOMO_DIMENSION_USER, currentUser!!.username)
         }
         try {
             t.dimension(CONFIG_MATOMO_DIMENSION_VERSION, activity.packageManager.getPackageInfo(activity.packageName, 0).versionName)

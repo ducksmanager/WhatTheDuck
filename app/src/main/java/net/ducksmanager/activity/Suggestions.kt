@@ -54,10 +54,6 @@ class Suggestions : AppCompatActivityWithDrawer() {
                 SuggestedIssueSimple(it.publicationcode, it.issuenumber, it.score, it.oldestdate, stories)
             })
 
-            WhatTheDuck.appDB!!.inducksPublicationDao().insertList(suggestionList.publicationTitles.map { (key, it) ->
-                InducksPublication(key, it)
-            })
-
             WhatTheDuck.appDB!!.inducksPersonDao().insertList(suggestionList.authors.map { (key, it) ->
                 InducksPerson(key, it)
             })
@@ -125,7 +121,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
 
         private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val textWrapperView: LinearLayout = itemView.findViewById(R.id.textwrapper)
             val prefixImageView: ImageView = itemView.findViewById(R.id.prefiximage)
             val suffixtextView1: TextView = itemView.findViewById(R.id.suffixtext1)
@@ -133,9 +129,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
             val storyListView: RecyclerView = itemView.findViewById(R.id.storylist)
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(inflater.inflate(R.layout.row_suggested_issue, parent, false))
-        }
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(inflater.inflate(R.layout.row_suggested_issue, parent, false))
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val currentIssue = suggestions[position]
@@ -195,14 +189,12 @@ class Suggestions : AppCompatActivityWithDrawer() {
 
         private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val authorListView: RecyclerView = itemView.findViewById(R.id.authorlist)
             val storyTitleView: TextView = itemView.findViewById(R.id.storyTitle)
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(inflater.inflate(R.layout.row_story, parent, false))
-        }
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(inflater.inflate(R.layout.row_story, parent, false))
 
         override fun getItemCount() = stories.size
 
@@ -228,13 +220,11 @@ class Suggestions : AppCompatActivityWithDrawer() {
 
         private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val authorBadge: Button = itemView.findViewById(R.id.authorBadge)
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(inflater.inflate(R.layout.row_author, parent, false))
-        }
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(inflater.inflate(R.layout.row_author, parent, false))
 
         override fun getItemCount() = authors.size
 

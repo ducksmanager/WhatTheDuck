@@ -13,7 +13,5 @@ class UserMessage(messageKey: @NotNull String?, @ColumnInfo val isShown: Boolean
     @NonNull
     private val messageKey: String = messageKey!!
 
-    fun getMessageKey(): @NotNull String? {
-        return messageKey
-    }
+    fun getMessageKey(): @NotNull String? = messageKey
 }

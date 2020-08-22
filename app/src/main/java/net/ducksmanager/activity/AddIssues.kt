@@ -12,7 +12,6 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import net.ducksmanager.adapter.PurchaseAdapter
 import net.ducksmanager.adapter.PurchaseAdapter.NoPurchase
@@ -34,7 +33,6 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
 
     companion object {
         private val myCalendar = Calendar.getInstance()
-        private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +55,7 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setData() {
-        WhatTheDuck.appDB!!.purchaseDao().findAll().observe(this, Observer { purchases: List<Purchase> ->
+        WhatTheDuck.appDB!!.purchaseDao().findAll().observe(this, { purchases: List<Purchase> ->
             this.purchases = arrayListOf(NoPurchase())
             this.purchases.addAll(purchases)
 
@@ -128,6 +126,8 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun showNewPurchase() {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
         val newPurchaseSection = binding.newpurchase
         newPurchaseSection.visibility = View.VISIBLE
 

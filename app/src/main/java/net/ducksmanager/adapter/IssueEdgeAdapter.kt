@@ -13,21 +13,17 @@ import net.ducksmanager.whattheduck.WhatTheDuck
 
 class IssueEdgeAdapter internal constructor(
     itemList: ItemList<InducksIssueWithUserIssueAndScore>,
-    items: List<InducksIssueWithUserIssueAndScore>,
     private val recyclerView: RecyclerView,
     private val orientation: Int
-) : ItemAdapter<InducksIssueWithUserIssueAndScore>(itemList, R.layout.row_edge, items) {
+) : ItemAdapter<InducksIssueWithUserIssueAndScore>(itemList, R.layout.row_edge) {
     private var expectedEdgeHeight: Int? = null
 
     override fun getViewHolder(v: View?) = ViewHolder(v)
 
-
-    override val onClickListener: View.OnClickListener?
-        get() = null
+    override val onClickListener: View.OnClickListener? = null
 
     inner class ViewHolder(v: View?) : ItemAdapter<InducksIssueWithUserIssueAndScore>.ViewHolder(v!!) {
         val edgeImage: ImageView = v!!.findViewById(R.id.edgeimage)
-
     }
 
     override fun onBindViewHolder(holder: ItemAdapter<InducksIssueWithUserIssueAndScore>.ViewHolder, position: Int) {
@@ -57,36 +53,20 @@ class IssueEdgeAdapter internal constructor(
             i.issue.inducksIssueNumber.replace(" ".toRegex(), ""))
     }
 
-    override fun isPossessed(item: InducksIssueWithUserIssueAndScore): Boolean {
-        return item.userIssue != null
-    }
+    override fun isPossessed(item: InducksIssueWithUserIssueAndScore): Boolean = item.userIssue != null
 
-    override fun getPrefixImageResource(i: InducksIssueWithUserIssueAndScore, activity: Activity): Int? {
-        return null
-    }
+    override fun getPrefixImageResource(i: InducksIssueWithUserIssueAndScore, activity: Activity): Int? = null
 
-    override fun getSuffixImageResource(i: InducksIssueWithUserIssueAndScore): Int? {
-        return null
-    }
+    override fun getSuffixImageResource(i: InducksIssueWithUserIssueAndScore): Int? = null
 
-    override fun getDescriptionText(i: InducksIssueWithUserIssueAndScore) : String? {
-        return null
-    }
+    override fun getDescriptionText(i: InducksIssueWithUserIssueAndScore) : String? = null
 
-    override fun getSuffixText(i: InducksIssueWithUserIssueAndScore): String? {
-        return null
-    }
+    override fun getSuffixText(i: InducksIssueWithUserIssueAndScore): String? = null
 
-    override fun getIdentifier(i: InducksIssueWithUserIssueAndScore): String? {
-        return null
-    }
+    override fun getIdentifier(i: InducksIssueWithUserIssueAndScore): String? = null
 
-    override fun getText(i: InducksIssueWithUserIssueAndScore): String? {
-        return null
-    }
+    override fun getText(i: InducksIssueWithUserIssueAndScore): String? = null
 
-    override fun getComparatorText(i: InducksIssueWithUserIssueAndScore): String? {
-        return i.issue.inducksIssueNumber
-    }
+    override fun getComparatorText(i: InducksIssueWithUserIssueAndScore): String? = i.issue.inducksIssueNumber
 
 }

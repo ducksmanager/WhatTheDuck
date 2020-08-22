@@ -14,9 +14,8 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
 import java.lang.ref.WeakReference
 
 class IssueAdapter internal constructor(
-    itemList: ItemList<InducksIssueWithUserIssueAndScore>,
-    items: List<InducksIssueWithUserIssueAndScore>
-) : ItemAdapter<InducksIssueWithUserIssueAndScore>(itemList, R.layout.row, items) {
+    itemList: ItemList<InducksIssueWithUserIssueAndScore>
+) : ItemAdapter<InducksIssueWithUserIssueAndScore>(itemList, R.layout.row) {
 
     private var firstRangeIssueNumber: String? = null
 
@@ -95,9 +94,7 @@ class IssueAdapter internal constructor(
         }
     }
 
-    override fun getDescriptionText(i: InducksIssueWithUserIssueAndScore) : String? {
-        return i.issue.title
-    }
+    override fun getDescriptionText(i: InducksIssueWithUserIssueAndScore) : String? = i.issue.title
 
     override fun getSuffixText(i: InducksIssueWithUserIssueAndScore): String? {
         return when {
@@ -107,19 +104,11 @@ class IssueAdapter internal constructor(
         }
     }
 
-    override fun getIdentifier(i: InducksIssueWithUserIssueAndScore): String? {
-        return i.issue.inducksIssueNumber
-    }
+    override fun getIdentifier(i: InducksIssueWithUserIssueAndScore): String? = i.issue.inducksIssueNumber
 
-    override fun getText(i: InducksIssueWithUserIssueAndScore): String? {
-        return i.issue.inducksIssueNumber
-    }
+    override fun getText(i: InducksIssueWithUserIssueAndScore): String? = i.issue.inducksIssueNumber
 
-    override fun getComparatorText(i: InducksIssueWithUserIssueAndScore): String? {
-        return getText(i)
-    }
+    override fun getComparatorText(i: InducksIssueWithUserIssueAndScore): String? = getText(i)
 
-    override fun isPossessed(item: InducksIssueWithUserIssueAndScore): Boolean {
-        return item.userIssue != null
-    }
+    override fun isPossessed(item: InducksIssueWithUserIssueAndScore): Boolean = item.userIssue != null
 }

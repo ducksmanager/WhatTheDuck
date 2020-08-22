@@ -17,9 +17,7 @@ class SuggestionsTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(cu
     companion object {
         @JvmStatic
         @Parameterized.Parameters
-        fun data(): List<Array<out LocaleWithDefaultPublication>> {
-            return parameterData()
-        }
+        fun data(): List<Array<out LocaleWithDefaultPublication>> = parameterData()
     }
 
     @Before

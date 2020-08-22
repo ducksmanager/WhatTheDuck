@@ -1,5 +1,6 @@
 package net.ducksmanager.persistence.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -9,7 +10,7 @@ import net.ducksmanager.persistence.models.dm.User
 @Dao
 interface UserDao {
     @get:Query("SELECT * FROM users LIMIT 1")
-    val currentUser: User?
+    val currentUser: LiveData<User?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(user: User)

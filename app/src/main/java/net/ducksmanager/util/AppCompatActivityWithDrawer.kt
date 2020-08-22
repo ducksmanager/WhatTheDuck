@@ -15,6 +15,7 @@ import net.ducksmanager.activity.*
 import net.ducksmanager.activity.Settings
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.currentUser
 
 abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
 
@@ -29,9 +30,7 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
     protected var isOfflineMode = false
 
     private val drawerLayout: DrawerLayout?
-        get() {
-            return findViewById(R.id.drawerLayout)
-        }
+        get() = findViewById(R.id.drawerLayout)
 
     protected abstract fun shouldShowToolbar(): Boolean
 
@@ -66,8 +65,7 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
             this.startActivity(Intent(this, Login::class.java))
         }
 
-        drawerNavigation.getHeaderView(0).findViewById<TextView>(R.id.username).text =
-            WhatTheDuck.appDB!!.userDao().currentUser?.username
+        drawerNavigation.getHeaderView(0).findViewById<TextView>(R.id.username).text = currentUser?.username
 
         drawerNavigation
             .setNavigationItemSelectedListener { menuItem ->

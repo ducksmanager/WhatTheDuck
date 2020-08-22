@@ -18,9 +18,10 @@ import kotlin.collections.ArrayList
 
 abstract class ItemAdapter<Item> internal constructor(
     val originActivity: Activity,
-    val resourceToInflate: Int,
-    var items: List<Item>
+    val resourceToInflate: Int
 ) : RecyclerView.Adapter<ItemAdapter<Item>.ViewHolder>() {
+
+    public var items = emptyList<Item>()
 
     companion object {
         private var filterTextOnChangeListener: FilterTextOnChangeListener? = null
@@ -32,6 +33,11 @@ abstract class ItemAdapter<Item> internal constructor(
 
     protected lateinit var filteredItems: ArrayList<Item>
     protected abstract fun isPossessed(item: Item): Boolean
+
+    internal fun setItems(items: List<Item>) {
+        this.items = items
+        this.notifyDataSetChanged()
+    }
 
     private fun processItems() {
         Collections.sort(items, comparator)
@@ -143,20 +149,14 @@ abstract class ItemAdapter<Item> internal constructor(
     protected abstract fun getIdentifier(i: Item): String?
     protected abstract fun getText(i: Item): String?
 
-    private fun isHighlighted(i: Item): Boolean {
-        return isPossessed(i)
-    }
+    private fun isHighlighted(i: Item): Boolean = isPossessed(i)
 
     fun resetItems() {
         items = ArrayList()
         filteredItems = ArrayList()
     }
 
-    override fun getItemCount(): Int {
-        return filteredItems.size
-    }
+    override fun getItemCount(): Int = filteredItems.size
 
-    fun getItem(position: Int): Item {
-        return filteredItems[position]
-    }
+    fun getItem(position: Int): Item = filteredItems[position]
 }

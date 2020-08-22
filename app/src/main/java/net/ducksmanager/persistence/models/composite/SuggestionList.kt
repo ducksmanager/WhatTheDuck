@@ -23,7 +23,7 @@ class SuggestionList(
     val storyDetails: HashMap<String, SuggestedStory>
 ) {
 
-    inner class SuggestedStory private constructor(
+    class SuggestedStory private constructor(
         @Expose
         val title: String,
 
@@ -34,7 +34,7 @@ class SuggestionList(
         val storycomment: String
     )
 
-    inner class SuggestedIssue private constructor(
+    class SuggestedIssue private constructor(
         @Expose
         val stories: HashMap<String, HashSet<String>>,
 

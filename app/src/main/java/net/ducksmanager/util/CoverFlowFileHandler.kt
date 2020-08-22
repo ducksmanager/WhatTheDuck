@@ -114,9 +114,7 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
                 }
             }
 
-            override fun key(): String {
-                return "resizing to maximum accepted dimensions"
-            }
+            override fun key(): String = "resizing to maximum accepted dimensions"
         }
 
         val instance: RequestCreator = if (mockedRequestResource != null) {

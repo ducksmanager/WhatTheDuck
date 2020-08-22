@@ -64,9 +64,7 @@ class CoverSearchTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(cu
     companion object {
         @JvmStatic
         @Parameterized.Parameters
-        fun data(): List<Array<out LocaleWithDefaultPublication>> {
-            return parameterData()
-        }
+        fun data(): List<Array<out LocaleWithDefaultPublication>> = parameterData()
 
         private fun coverCurrentlyVisible(): Matcher<View> {
             return object : BoundedMatcher<View, ImageView>(ImageView::class.java) {
