@@ -7,13 +7,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import net.ducksmanager.adapter.CountryAdapter
 import net.ducksmanager.adapter.ItemAdapter
+import net.ducksmanager.api.DmServer
+import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
 import net.ducksmanager.util.ReleaseNotes
 import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
+import retrofit2.Response
 import java.lang.ref.WeakReference
+import java.util.*
 
 class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
@@ -21,6 +25,19 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
     override val AndroidViewModel.data: LiveData<List<InducksCountryNameWithPossession>>
         get() = WhatTheDuck.appDB!!.inducksCountryDao().findAllWithPossession()
+
+    override fun downloadList() {
+        if (!isOfflineMode) {
+            DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksCountries", this) {
+                override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
+                    WhatTheDuck.appDB!!.inducksCountryDao().deleteAll()
+                    WhatTheDuck.appDB!!.inducksCountryDao().insertList( response.body()!!.keys.map { countryCode ->
+                        InducksCountryName(countryCode, response.body()!![countryCode]!!)
+                    })
+                }
+            })
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

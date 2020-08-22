@@ -13,7 +13,6 @@ import com.pusher.pushnotifications.auth.AuthData
 import com.pusher.pushnotifications.auth.AuthDataGetter
 import com.pusher.pushnotifications.auth.BeamsTokenProvider
 import net.ducksmanager.api.DmServer
-import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.persistence.models.dm.Issue
@@ -62,15 +61,7 @@ class Login : AppCompatActivity() {
                     appDB!!.issueDao().deleteAll()
                     appDB!!.issueDao().insertList(response.body()!!)
 
-                    DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksCountries", originActivity) {
-                        override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
-                            appDB!!.inducksCountryDao().deleteAll()
-                            appDB!!.inducksCountryDao().insertList( response.body()!!.keys.map { countryCode ->
-                                InducksCountryName(countryCode, response.body()!![countryCode]!!)
-                            })
-                            originActivity.startActivity(Intent(activityRef.get(), targetClass))
-                        }
-                    })
+                    originActivity.startActivity(Intent(activityRef.get(), targetClass))
 
                     DmServer.api.publications.enqueue(object : DmServer.Callback<HashMap<String, String>>("retrieveAllPublications", originActivity, true) {
                         override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
