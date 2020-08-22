@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.wtd_list_navigation_country.view.*
 import net.ducksmanager.adapter.ItemAdapter
-import net.ducksmanager.persistence.models.coa.InducksCountryName
-import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.util.CoverFlowFileHandler
 import net.ducksmanager.util.CoverFlowFileHandler.SearchFromCover
@@ -25,6 +23,9 @@ import java.lang.ref.WeakReference
 abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     companion object {
+        const val COUNTRY_NAME_INTENT_EXTRA = "countryName"
+        const val PUBLICATION_TITLE_INTENT_EXTRA = "publicationTitle"
+
         @JvmField
         var type = WhatTheDuck.CollectionType.USER.toString()
 
@@ -72,9 +73,12 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         loadList()
     }
 
-    private fun goToView(cls: Class<*>) {
+    fun goToView(cls: Class<*>) {
         if (this@ItemList.javaClass != cls) {
-            startActivity(Intent(this, cls))
+            val outgoingIntent = Intent(this, cls)
+            outgoingIntent.putExtra(COUNTRY_NAME_INTENT_EXTRA, binding.navigationCountry.selectedText.text)
+            outgoingIntent.putExtra(PUBLICATION_TITLE_INTENT_EXTRA, binding.navigationPublication.selectedText.text)
+            startActivity(outgoingIntent)
         }
     }
 
@@ -119,7 +123,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         if (!shouldShow()) {
             return
         }
-        showNavigation()
+        toggleNavigation()
         binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
         val addToCollection = binding.addToCollectionWrapper
         if (shouldShowAddToCollectionButton()) {
@@ -183,26 +187,16 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         }
     }
 
-    private fun showNavigation() {
-        if (shouldShowNavigationCountry()) {
-            WhatTheDuck.appDB!!.inducksCountryDao().findByCountryCode(WhatTheDuck.selectedCountry)
-                .observe(this, { inducksCountryName: InducksCountryName ->
-                    setNavigationCountry(inducksCountryName.countryCode, inducksCountryName.countryName)
-                })
-        } else {
+    private fun toggleNavigation() {
+        if (!shouldShowNavigationCountry()) {
             binding.navigationCountry.root.visibility = INVISIBLE
         }
-        if (shouldShowNavigationPublication()) {
-            WhatTheDuck.appDB!!.inducksPublicationDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
-                .observe(this, { inducksPublication: InducksPublication ->
-                    setNavigationPublication(inducksPublication.publicationCode, inducksPublication.title)
-                })
-        } else {
+        if (!shouldShowNavigationPublication()) {
             binding.navigationPublication.root.visibility = INVISIBLE
         }
     }
 
-    private fun setNavigationCountry(selectedCountry: String, countryFullName: String) {
+    protected fun setNavigationCountry(selectedCountry: String, countryFullName: String) {
         val countryNavigationView = binding.navigationCountry
         val uri = "@drawable/flags_$selectedCountry"
         var imageResource = resources.getIdentifier(uri, null, packageName)
@@ -214,7 +208,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         countryNavigationView.selectedText.text = countryFullName
     }
 
-    private fun setNavigationPublication(selectedPublication: String, publicationFullName: String) {
+    protected fun setNavigationPublication(selectedPublication: String, publicationFullName: String) {
         val publicationNavigationView = binding.navigationPublication
 
         publicationNavigationView.selectedBadge.text = selectedPublication.split("/").toTypedArray()[1]

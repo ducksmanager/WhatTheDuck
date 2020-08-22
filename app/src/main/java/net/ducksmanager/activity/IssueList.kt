@@ -34,6 +34,10 @@ import java.util.*
 
 class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
+    companion object {
+        var viewType = ViewType.LIST_VIEW
+    }
+
     override val AndroidViewModel.data: LiveData<List<InducksIssueWithUserIssueAndScore>>
         get() = appDB!!.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
 
@@ -57,17 +61,15 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         }
     }
 
-    companion object {
-        @JvmField
-        var viewType = ViewType.LIST_VIEW
-    }
-
     enum class ViewType {
         LIST_VIEW, EDGE_VIEW
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setNavigationCountry(WhatTheDuck.selectedCountry!!, intent.getStringExtra(COUNTRY_NAME_INTENT_EXTRA)!!)
+        setNavigationPublication(WhatTheDuck.selectedPublication!!, intent.getStringExtra(PUBLICATION_TITLE_INTENT_EXTRA)!!)
+
         selectedIssues = mutableSetOf()
         val switchViewWrapper = findViewById<RelativeLayout>(R.id.switchViewWrapper)
         DraggableRelativeLayout.makeDraggable(switchViewWrapper)

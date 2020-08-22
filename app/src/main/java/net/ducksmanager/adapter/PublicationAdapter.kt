@@ -6,6 +6,8 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import net.ducksmanager.activity.IssueList
 import net.ducksmanager.activity.ItemList
+import net.ducksmanager.activity.ItemList.Companion.COUNTRY_NAME_INTENT_EXTRA
+import net.ducksmanager.activity.ItemList.Companion.PUBLICATION_TITLE_INTENT_EXTRA
 import net.ducksmanager.persistence.models.composite.InducksPublicationWithPossession
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
@@ -21,8 +23,15 @@ class PublicationAdapter internal constructor(
 
     override val onClickListener = View.OnClickListener { view: View ->
         val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
-        WhatTheDuck.selectedPublication = getItem(position).publication.publicationCode
-        originActivity.startActivity(Intent(originActivity, IssueList::class.java))
+        val selectedPublication = getItem(position).publication
+        WhatTheDuck.selectedPublication = selectedPublication.publicationCode
+
+        itemList.goToView(IssueList::class.java)
+
+        val intent = Intent(originActivity, IssueList::class.java)
+        intent.putExtra(COUNTRY_NAME_INTENT_EXTRA, itemList.intent.getStringExtra(COUNTRY_NAME_INTENT_EXTRA))
+        intent.putExtra(PUBLICATION_TITLE_INTENT_EXTRA, selectedPublication.title)
+        originActivity.startActivity(intent)
     }
 
     override fun getPrefixImageResource(i: InducksPublicationWithPossession, activity: Activity): Int? = null

@@ -20,6 +20,7 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WhatTheDuck.selectedPublication = null
+        setNavigationCountry(WhatTheDuck.selectedCountry!!, intent.getStringExtra(COUNTRY_NAME_INTENT_EXTRA)!!)
     }
 
     override fun isPossessedByUser() = data.any { it.isPossessed }

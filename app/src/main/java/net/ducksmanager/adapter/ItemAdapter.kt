@@ -21,27 +21,20 @@ abstract class ItemAdapter<Item> internal constructor(
     val resourceToInflate: Int
 ) : RecyclerView.Adapter<ItemAdapter<Item>.ViewHolder>() {
 
-    public var items = emptyList<Item>()
+    var items = emptyList<Item>()
+    protected var filteredItems = mutableListOf<Item>()
 
     companion object {
         private var filterTextOnChangeListener: FilterTextOnChangeListener? = null
     }
 
-    init {
-        processItems()
-    }
-
-    protected lateinit var filteredItems: ArrayList<Item>
     protected abstract fun isPossessed(item: Item): Boolean
 
     internal fun setItems(items: List<Item>) {
         this.items = items
-        this.notifyDataSetChanged()
-    }
-
-    private fun processItems() {
-        Collections.sort(items, comparator)
+        Collections.sort(this.items, comparator)
         filteredItems = ArrayList(items)
+        this.notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
