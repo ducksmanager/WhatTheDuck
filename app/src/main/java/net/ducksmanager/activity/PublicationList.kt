@@ -9,6 +9,7 @@ import net.ducksmanager.adapter.PublicationAdapter
 import net.ducksmanager.persistence.models.composite.InducksPublicationWithPossession
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 
 class PublicationList : ItemList<InducksPublicationWithPossession>() {
 

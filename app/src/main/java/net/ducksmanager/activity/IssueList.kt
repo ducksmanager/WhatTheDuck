@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -27,6 +29,7 @@ import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
 import retrofit2.Response
 import java.lang.ref.WeakReference
@@ -42,17 +45,31 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         get() = appDB!!.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
 
     override fun downloadList() {
-        DmServer.api.getIssues(WhatTheDuck.selectedPublication!!).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", this) {
-            override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
-                appDB!!.inducksIssueDao().insertList(response.body()!!.map { (issueNumber, title) ->
-                    InducksIssue(WhatTheDuck.selectedPublication!!, issueNumber, title)
+        // Create fake Inducks issues in the local DB corresponding to the user's issues
+        if (isOfflineMode) {
+            appDB!!.issueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!).observe(this, { userIssues ->
+                appDB!!.inducksIssueDao().insertList(userIssues.map { issue ->
+                    InducksIssue(WhatTheDuck.selectedPublication!!, issue.issueNumber, "")
                 })
-            }
-        })
+            })
+        }
+        else {
+            DmServer.api.getIssues(WhatTheDuck.selectedPublication!!).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", this) {
+                override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
+                    appDB!!.inducksIssueDao().insertList(response.body()!!.map { (issueNumber, title) ->
+                        InducksIssue(WhatTheDuck.selectedPublication!!, issueNumber, title)
+                    })
+                }
+            })
+        }
     }
 
     override lateinit var itemAdapter: ItemAdapter<InducksIssueWithUserIssueAndScore>
     init {
+        updateAdapter()
+    }
+
+    private fun updateAdapter() {
         itemAdapter = if (viewType == ViewType.EDGE_VIEW) {
             val deviceOrientation = resources.configuration.orientation
             IssueEdgeAdapter(this, recyclerView, deviceOrientation)
@@ -74,13 +91,13 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         val switchViewWrapper = findViewById<RelativeLayout>(R.id.switchViewWrapper)
         DraggableRelativeLayout.makeDraggable(switchViewWrapper)
 
+        switchViewWrapper.visibility = GONE
         if (isCoaList()) {
             viewType = ViewType.LIST_VIEW
-            switchViewWrapper.visibility = View.GONE
 
             findViewById<Button>(R.id.tipIssueSelectionOK).setOnClickListener {
                 appDB!!.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED, "0"))
-                findViewById<LinearLayout>(R.id.tipIssueSelection).visibility = View.GONE
+                findViewById<LinearLayout>(R.id.tipIssueSelection).visibility = GONE
             }
             findViewById<View>(R.id.cancelSelection).setOnClickListener {
                 selectedIssues.clear()
@@ -93,9 +110,9 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
                     this.startActivity(Intent(this, AddIssues::class.java))
                 }
             }
-        } else {
+        } else if (!isOfflineMode){
             val switchView = switchViewWrapper.findViewById<SwitchCompat>(R.id.switchView)
-            switchViewWrapper.visibility = View.VISIBLE
+            switchViewWrapper.visibility = VISIBLE
             switchView.isChecked = viewType == ViewType.EDGE_VIEW
 
             switchView.setOnClickListener {
@@ -171,6 +188,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         else
             ViewType.LIST_VIEW
 
+        updateAdapter()
         loadList()
     }
 

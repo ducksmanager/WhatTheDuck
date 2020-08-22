@@ -27,8 +27,6 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
         )
     }
 
-    protected var isOfflineMode = false
-
     private val drawerLayout: DrawerLayout?
         get() = findViewById(R.id.drawerLayout)
 

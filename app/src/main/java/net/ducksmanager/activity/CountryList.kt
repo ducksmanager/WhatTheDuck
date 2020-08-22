@@ -12,6 +12,7 @@ import net.ducksmanager.util.ReleaseNotes
 import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import java.lang.ref.WeakReference
 
 class CountryList : ItemList<InducksCountryNameWithPossession>() {

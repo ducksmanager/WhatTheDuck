@@ -17,6 +17,7 @@ import net.ducksmanager.util.CoverFlowFileHandler
 import net.ducksmanager.util.CoverFlowFileHandler.SearchFromCover
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.databinding.WtdListBinding
 import java.lang.ref.WeakReference
 
@@ -68,8 +69,6 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
         binding.navigationCountry.root.selected?.setOnClickListener { _: View? -> goToView(PublicationList::class.java) }
 
-        binding.itemList.adapter = itemAdapter
-
         loadList()
     }
 
@@ -92,6 +91,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     protected fun loadList() {
         (application as WhatTheDuck).trackActivity(this)
+        binding.itemList.adapter = itemAdapter
         show()
 
         viewModel = AndroidViewModel(application)
@@ -125,11 +125,12 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         }
         toggleNavigation()
         binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
+
+        binding.addToCollectionByPhotoButton.visibility = GONE
+        binding.addToCollectionBySelectionButton.visibility = GONE
         val addToCollection = binding.addToCollectionWrapper
         if (shouldShowAddToCollectionButton()) {
             addToCollection.visibility = if (isCoaList()) GONE else VISIBLE
-            binding.addToCollectionByPhotoButton.visibility = GONE
-            binding.addToCollectionBySelectionButton.visibility = GONE
 
             addToCollection.setOnClickListener {
                 binding.addToCollectionByPhotoButton.visibility = if (binding.addToCollectionByPhotoButton.visibility == GONE) VISIBLE else GONE
