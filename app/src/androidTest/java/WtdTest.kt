@@ -20,6 +20,7 @@ import net.ducksmanager.activity.Login
 import net.ducksmanager.persistence.AppDatabase
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers
 import org.junit.Assert
@@ -138,7 +139,7 @@ open class WtdTest : AndroidJUnitRunner {
 
     @Before
     fun resetDb() {
-        WhatTheDuck.appDB = Room.inMemoryDatabaseBuilder(
+        appDB = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             AppDatabase::class.java
         ).allowMainThreadQueries().build()

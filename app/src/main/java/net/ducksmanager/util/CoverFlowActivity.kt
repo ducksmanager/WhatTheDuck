@@ -13,6 +13,7 @@ import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAn
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToStringId
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.databinding.ActivityCoverflowBinding
 
 class CoverFlowActivity : AppCompatActivity() {
@@ -32,7 +33,7 @@ class CoverFlowActivity : AppCompatActivity() {
         binding = ActivityCoverflowBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        WhatTheDuck.appDB!!.coverSearchIssueDao().findAll().observe(this, { searchIssues: List<CoverSearchIssueWithUserIssueAndScore> ->
+        appDB!!.coverSearchIssueDao().findAll().observe(this, { searchIssues: List<CoverSearchIssueWithUserIssueAndScore> ->
             data = searchIssues
             adapter = CoverFlowAdapter(this)
             adapter.setData(searchIssues)

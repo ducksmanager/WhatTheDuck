@@ -4,6 +4,7 @@ import android.app.Activity
 import net.ducksmanager.persistence.models.composite.UserMessage
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import java.lang.ref.WeakReference
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -15,12 +16,12 @@ object Settings {
     const val MESSAGE_KEY_WELCOME_BOOKCASE_VIEW = "welcome_bookcase_view"
 
     fun shouldShowMessage(messageKey: String?): Boolean {
-        val userMessageForReleaseNotes = WhatTheDuck.appDB!!.userMessageDao().findByKey(messageKey!!)
-        return userMessageForReleaseNotes != null && userMessageForReleaseNotes.isShown
+        val userMessage = appDB!!.userMessageDao().findByKey(messageKey!!)
+        return userMessage != null && userMessage.isShown
     }
 
     fun addToMessagesAlreadyShown(messageKey: String?) {
-        WhatTheDuck.appDB!!.userMessageDao().insert(UserMessage(messageKey, false))
+        appDB!!.userMessageDao().insert(UserMessage(messageKey, false))
     }
 
     private fun byteArray2Hex(hash: ByteArray): String {

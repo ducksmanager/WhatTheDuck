@@ -17,6 +17,7 @@ import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.composite.CoverSearchResults
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -148,8 +149,8 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
                         WhatTheDuck.alert(originActivityRef, R.string.add_cover_no_results)
                     }
                     else {
-                        WhatTheDuck.appDB!!.coverSearchIssueDao().deleteAll()
-                        WhatTheDuck.appDB!!.coverSearchIssueDao().insertList(ArrayList(response.body()!!.issues.values))
+                        appDB!!.coverSearchIssueDao().deleteAll()
+                        appDB!!.coverSearchIssueDao().insertList(ArrayList(response.body()!!.issues.values))
                         originActivity!!.startActivity(Intent(originActivity, CoverFlowActivity::class.java))
                     }
                 }

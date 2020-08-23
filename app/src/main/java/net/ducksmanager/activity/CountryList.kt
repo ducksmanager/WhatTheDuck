@@ -14,6 +14,7 @@ import net.ducksmanager.util.ReleaseNotes
 import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import retrofit2.Response
 import java.lang.ref.WeakReference
@@ -24,14 +25,14 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
     override var itemAdapter: ItemAdapter<InducksCountryNameWithPossession> = CountryAdapter(this)
 
     override val AndroidViewModel.data: LiveData<List<InducksCountryNameWithPossession>>
-        get() = WhatTheDuck.appDB!!.inducksCountryDao().findAllWithPossession()
+        get() = appDB!!.inducksCountryDao().findAllWithPossession()
 
     override fun downloadList() {
         if (!isOfflineMode) {
             DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksCountries", this) {
                 override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
-                    WhatTheDuck.appDB!!.inducksCountryDao().deleteAll()
-                    WhatTheDuck.appDB!!.inducksCountryDao().insertList( response.body()!!.keys.map { countryCode ->
+                    appDB!!.inducksCountryDao().deleteAll()
+                    appDB!!.inducksCountryDao().insertList( response.body()!!.keys.map { countryCode ->
                         InducksCountryName(countryCode, response.body()!![countryCode]!!)
                     })
                 }

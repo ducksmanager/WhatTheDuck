@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import net.ducksmanager.persistence.models.composite.UserMessage
 import net.ducksmanager.whattheduck.R
-import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import java.lang.ref.WeakReference
 
 class ReleaseNotes private constructor(private val majorVersion: String, private val messageId: Int, imageId: Int) {
@@ -27,7 +27,7 @@ class ReleaseNotes private constructor(private val majorVersion: String, private
             builder.setView(view)
             builder.setTitle(originActivity!!.getString(R.string.newFeature))
             builder.setNeutralButton(R.string.ok) { dialogInterface: DialogInterface, _: Int ->
-                WhatTheDuck.appDB!!.userMessageDao().insert(UserMessage(getMessageId(), false))
+                appDB!!.userMessageDao().insert(UserMessage(getMessageId(), false))
                 dialogInterface.dismiss()
             }
             (view.findViewById<View>(R.id.text) as TextView).setText(messageId)

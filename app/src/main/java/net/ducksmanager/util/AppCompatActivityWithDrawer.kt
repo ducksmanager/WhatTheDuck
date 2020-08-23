@@ -15,6 +15,7 @@ import net.ducksmanager.activity.*
 import net.ducksmanager.activity.Settings
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.currentUser
 
 abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
@@ -59,7 +60,7 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
         logoutButton.visibility = if (WhatTheDuck.isOfflineMode) View.GONE else View.VISIBLE
         logoutButton.setOnClickListener{
             WhatTheDuck.unregisterFromNotifications()
-            WhatTheDuck.appDB!!.userDao().deleteAll()
+            appDB!!.userDao().deleteAll()
             this.startActivity(Intent(this, Login::class.java))
         }
 

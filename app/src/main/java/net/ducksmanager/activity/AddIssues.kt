@@ -21,6 +21,7 @@ import net.ducksmanager.persistence.models.composite.IssueListToUpdate
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.databinding.AddissueBinding
 import retrofit2.Response
 import java.lang.ref.WeakReference
@@ -46,8 +47,8 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
         DmServer.api.userPurchases.enqueue(object : DmServer.Callback<List<Purchase>>("getpurchases", this, true) {
             override fun onSuccessfulResponse(response: Response<List<Purchase>>) {
                 response.body()?.let {
-                    WhatTheDuck.appDB!!.purchaseDao().deleteAll()
-                    WhatTheDuck.appDB!!.purchaseDao().insertList(it)
+                    appDB!!.purchaseDao().deleteAll()
+                    appDB!!.purchaseDao().insertList(it)
                 }
                 setData()
             }
@@ -55,7 +56,7 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setData() {
-        WhatTheDuck.appDB!!.purchaseDao().findAll().observe(this, { purchases: List<Purchase> ->
+        appDB!!.purchaseDao().findAll().observe(this, { purchases: List<Purchase> ->
             this.purchases = arrayListOf(NoPurchase())
             this.purchases.addAll(purchases)
 

@@ -18,7 +18,7 @@ import net.ducksmanager.persistence.models.composite.SuggestedIssueSimple
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.whattheduck.R
-import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.databinding.SuggestionsBinding
 import retrofit2.Response
 
@@ -45,16 +45,16 @@ class Suggestions : AppCompatActivityWithDrawer() {
                     }
                 }
             }
-            WhatTheDuck.appDB!!.inducksStoryDao().insertSet(storyDetails)
+            appDB!!.inducksStoryDao().insertSet(storyDetails)
 
-            WhatTheDuck.appDB!!.suggestedIssueDao().deleteAll()
-            WhatTheDuck.appDB!!.suggestedIssueDao().insertList(suggestions.map {
+            appDB!!.suggestedIssueDao().deleteAll()
+            appDB!!.suggestedIssueDao().insertList(suggestions.map {
                 val stories = mutableSetOf<String>()
                 it.stories.values.forEach { storycode -> stories.addAll(storycode) }
                 SuggestedIssueSimple(it.publicationcode, it.issuenumber, it.score, it.oldestdate, stories)
             })
 
-            WhatTheDuck.appDB!!.inducksPersonDao().insertList(suggestionList.authors.map { (key, it) ->
+            appDB!!.inducksPersonDao().insertList(suggestionList.authors.map { (key, it) ->
                 InducksPerson(key, it)
             })
         }
@@ -87,10 +87,10 @@ class Suggestions : AppCompatActivityWithDrawer() {
             }
 
             fun loadData() {
-                val suggestions = WhatTheDuck.appDB!!.suggestedIssueDao().findAll()
-                publicationTitles = WhatTheDuck.appDB!!.inducksPublicationDao().findAll()
-                authorNames = WhatTheDuck.appDB!!.inducksPersonDao().findAll()
-                storyDetails = WhatTheDuck.appDB!!.inducksStoryDao().findAll()
+                val suggestions = appDB!!.suggestedIssueDao().findAll()
+                publicationTitles = appDB!!.inducksPublicationDao().findAll()
+                authorNames = appDB!!.inducksPersonDao().findAll()
+                storyDetails = appDB!!.inducksStoryDao().findAll()
 
                 val showSuggestions = suggestions.isNotEmpty() && publicationTitles.isNotEmpty() && authorNames.isNotEmpty() && storyDetails.isNotEmpty()
 
