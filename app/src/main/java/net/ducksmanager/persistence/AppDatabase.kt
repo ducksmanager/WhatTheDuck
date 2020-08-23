@@ -9,12 +9,13 @@ import net.ducksmanager.persistence.models.composite.CoverSearchIssue
 import net.ducksmanager.persistence.models.composite.SuggestedIssueSimple
 import net.ducksmanager.persistence.models.composite.UserMessage
 import net.ducksmanager.persistence.models.composite.UserSetting
-import net.ducksmanager.persistence.models.converter.StringListConverter
+import net.ducksmanager.persistence.models.converter.InstantConverter
 import net.ducksmanager.persistence.models.converter.StringMutableSetConverter
 import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.NotificationCountry
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.persistence.models.dm.User
+import net.ducksmanager.persistence.models.internal.Sync
 
 @Database(entities = [
     CoverSearchIssue::class,
@@ -27,11 +28,12 @@ import net.ducksmanager.persistence.models.dm.User
     NotificationCountry::class,
     Purchase::class,
     SuggestedIssueSimple::class,
+    Sync::class,
     User::class,
     UserMessage::class,
     UserSetting::class
 ], version = 6, exportSchema = true)
-@TypeConverters(StringMutableSetConverter::class, StringListConverter::class)
+@TypeConverters(StringMutableSetConverter::class, InstantConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun coverSearchIssueDao(): CoverSearchIssueDao
     abstract fun inducksCountryDao(): InducksCountryDao
@@ -43,6 +45,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun notificationCountryDao(): NotificationCountryDao
     abstract fun purchaseDao(): PurchaseDao
     abstract fun suggestedIssueDao(): SuggestedIssueDao
+    abstract fun syncDao(): SyncDao
     abstract fun userDao(): UserDao
     abstract fun userMessageDao(): UserMessageDao
     abstract fun userSettingDao(): UserSettingDao

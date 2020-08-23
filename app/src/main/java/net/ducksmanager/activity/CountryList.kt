@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import net.ducksmanager.adapter.CountryAdapter
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.api.DmServer
+import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_ALL_COUNTRIES
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
 import net.ducksmanager.util.ReleaseNotes
@@ -28,8 +29,8 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
         get() = appDB!!.inducksCountryDao().findAllWithPossession()
 
     override fun downloadList() {
-        if (!isOfflineMode) {
-            DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksCountries", this) {
+        if (!isOfflineMode && Login.isObsoleteSync(appDB!!.syncDao().findLatest())) {
+            DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>(EVENT_RETRIEVE_ALL_COUNTRIES, this) {
                 override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                     appDB!!.inducksCountryDao().deleteAll()
                     appDB!!.inducksCountryDao().insertList( response.body()!!.keys.map { countryCode ->

@@ -18,7 +18,7 @@ import com.pusher.pushnotifications.PusherCallbackError
 import com.pusher.pushnotifications.auth.BeamsTokenProvider
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.PicassoCache
-import net.ducksmanager.api.DmServer.initApi
+import net.ducksmanager.api.DmServer.Companion.initApi
 import net.ducksmanager.persistence.AppDatabase
 import net.ducksmanager.persistence.models.composite.UserSetting
 import net.ducksmanager.persistence.models.dm.User

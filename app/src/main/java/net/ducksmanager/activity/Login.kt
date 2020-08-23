@@ -7,19 +7,27 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import android.view.View.*
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.pusher.pushnotifications.auth.AuthData
 import com.pusher.pushnotifications.auth.AuthDataGetter
 import com.pusher.pushnotifications.auth.BeamsTokenProvider
 import net.ducksmanager.api.DmServer
+import net.ducksmanager.api.DmServer.Companion.EVENT_GET_PURCHASES
+import net.ducksmanager.api.DmServer.Companion.EVENT_GET_SUGGESTED_ISSUES
+import net.ducksmanager.api.DmServer.Companion.EVENT_GET_USER_NOTIFICATION_COUNTRIES
+import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_ALL_PUBLICATIONS
+import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_COLLECTION
+import net.ducksmanager.api.DmServer.Companion.getRequestHeaders
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.NotificationCountry
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.persistence.models.dm.User
+import net.ducksmanager.persistence.models.internal.Sync
 import net.ducksmanager.util.Settings.toSHA1
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
@@ -28,24 +36,32 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.databinding.LoginBinding
 import retrofit2.Response
 import java.lang.ref.WeakReference
+import java.time.Instant
 import java.util.*
 
 class Login : AppCompatActivity() {
     private lateinit var binding: LoginBinding
 
     companion object {
+        fun isObsoleteSync(latestSync: Sync?) = latestSync == null || latestSync.timestamp.epochSecond - Instant.now().epochSecond > 12 * 60 * 60
+
         fun fetchCollection(activityRef: WeakReference<Activity>, alertIfError: Boolean?) {
             ItemList.type = WhatTheDuck.CollectionType.USER.toString()
 
             val originActivity = activityRef.get()!!
             val targetClass = CountryList::class.java
 
-            DmServer.api.userIssues.enqueue(object : DmServer.Callback<List<Issue>>("retrieveCollection", originActivity, alertIfError!!) {
+            val latestSync = appDB!!.syncDao().findLatest()
+
+            DmServer.api.userIssues.enqueue(object : DmServer.Callback<List<Issue>>(EVENT_RETRIEVE_COLLECTION, originActivity, alertIfError!!) {
                 override val isFailureAllowed = true
 
                 override fun onFailureFailover() {
                     isOfflineMode = true
-                    originActivity.startActivity(Intent(activityRef.get(), targetClass))
+                    originActivity.startActivity(
+                        Intent(activityRef.get(),
+                        if (latestSync == null) Login::class.java else targetClass)
+                    )
                 }
 
                 override fun onErrorResponse(response: Response<List<Issue>>?) {
@@ -65,29 +81,20 @@ class Login : AppCompatActivity() {
 
                     originActivity.startActivity(Intent(activityRef.get(), targetClass))
 
-                    DmServer.api.publications.enqueue(object : DmServer.Callback<HashMap<String, String>>("retrieveAllPublications", originActivity, true) {
-                        override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
-                            appDB!!.inducksPublicationDao().deleteAll()
-                            appDB!!.inducksPublicationDao().insertList(response.body()!!.keys.map { publicationCode ->
-                                InducksPublication(publicationCode, response.body()!![publicationCode]!!)
-                            })
-                        }
-                    })
-
-                    DmServer.api.userPurchases.enqueue(object : DmServer.Callback<List<Purchase>>("getPurchases", originActivity, true) {
+                    DmServer.api.userPurchases.enqueue(object : DmServer.Callback<List<Purchase>>(EVENT_GET_PURCHASES, originActivity, true) {
                         override fun onSuccessfulResponse(response: Response<List<Purchase>>) {
                             appDB!!.purchaseDao().deleteAll()
                             appDB!!.purchaseDao().insertList(response.body()!!)
                         }
                     })
 
-                    DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", originActivity) {
+                    DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>(EVENT_GET_SUGGESTED_ISSUES, originActivity) {
                         override fun onSuccessfulResponse(response: Response<SuggestionList>) {
                             Suggestions.loadSuggestions(response.body()!!)
                         }
                     })
 
-                    DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>("getUserNotificationCountries", originActivity) {
+                    DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>(EVENT_GET_USER_NOTIFICATION_COUNTRIES, originActivity) {
                         override val isFailureAllowed = true
                         override fun onSuccessfulResponse(response: Response<List<String>>) {
                             appDB!!.notificationCountryDao().deleteAll()
@@ -96,6 +103,17 @@ class Login : AppCompatActivity() {
                             })
                         }
                     })
+
+                    if (isObsoleteSync(latestSync)) {
+                        DmServer.api.publications.enqueue(object : DmServer.Callback<HashMap<String, String>>(EVENT_RETRIEVE_ALL_PUBLICATIONS, originActivity, true) {
+                            override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
+                                appDB!!.inducksPublicationDao().deleteAll()
+                                appDB!!.inducksPublicationDao().insertList(response.body()!!.keys.map { publicationCode ->
+                                    InducksPublication(publicationCode, response.body()!![publicationCode]!!)
+                                })
+                            }
+                        })
+                    }
 
                     registerForNotifications(activityRef)
                 }
@@ -108,7 +126,7 @@ class Login : AppCompatActivity() {
             WhatTheDuck.tokenProvider = BeamsTokenProvider(
                 "$apiEndpointUrl/collection/notification_token",
                 object : AuthDataGetter {
-                    override fun getAuthData(): AuthData = AuthData(DmServer.getRequestHeaders(true), HashMap())
+                    override fun getAuthData(): AuthData = AuthData(getRequestHeaders(true), HashMap())
                 }
             )
             WhatTheDuck.registerForNotifications(activityRef, false)
@@ -120,16 +138,20 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         (application as WhatTheDuck).setup()
 
-        appDB!!.userDao().currentUser.observe(this, { user ->
-            binding = LoginBinding.inflate(layoutInflater)
-            setContentView(binding.root)
+        binding = LoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        if (isOfflineMode) {
+            showLoginForm()
+            return
+        }
+
+        appDB!!.userDao().currentUser.observe(this, { user ->
             if (user != null) {
                 WhatTheDuck.currentUser = user
                 DmServer.apiDmUser = user.username
                 DmServer.apiDmPassword = user.password
 
-                binding.loginForm.visibility = GONE
                 binding.progressBar.visibility = VISIBLE
                 fetchCollection(WeakReference(this@Login), false)
             } else {
@@ -139,6 +161,10 @@ class Login : AppCompatActivity() {
     }
 
     private fun showLoginForm() {
+        binding.loginForm.visibility = VISIBLE
+        if (isOfflineMode) {
+            binding.offlineMode.visibility = VISIBLE
+        }
         binding.endSignup.setOnClickListener {
             startActivity(Intent(this, Signup::class.java)
                 .putExtra("username", binding.username.text.toString())

@@ -17,6 +17,7 @@ import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.currentUser
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 
 abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
 
@@ -57,7 +58,7 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
         }
 
         val logoutButton = drawerNavigation.findViewById<LinearLayout>(R.id.action_logout)
-        logoutButton.visibility = if (WhatTheDuck.isOfflineMode) View.GONE else View.VISIBLE
+        logoutButton.visibility = if (isOfflineMode) View.GONE else View.VISIBLE
         logoutButton.setOnClickListener{
             WhatTheDuck.unregisterFromNotifications()
             appDB!!.userDao().deleteAll()

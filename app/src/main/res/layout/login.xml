@@ -6,9 +6,23 @@
 
 	<LinearLayout
 		android:id="@+id/login_form"
+		android:visibility="invisible"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="vertical">
+
+		<TextView
+			android:id="@+id/offlineMode"
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textAlignment="center"
+			android:gravity="center"
+			android:background="#f09313"
+			android:textColor="@android:color/white"
+			android:visibility="gone"
+			android:text="La connexion à votre compte DucksManager a échoué, vérifiez que votre connexion Internet est active. Vous pourrez consulter votre collection hors-ligne une fois que votre collection sera synchronisée."
+			/>
 
 		<EditText
 			android:id="@+id/username"
