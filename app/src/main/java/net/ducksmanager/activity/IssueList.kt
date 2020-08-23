@@ -171,9 +171,6 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
     override fun shouldShowAddToCollectionButton() = !isOfflineMode && !isLandscapeEdgeView
 
-    override fun shouldShowFilter(items: List<InducksIssueWithUserIssueAndScore>) =
-        items.size > MIN_ITEM_NUMBER_FOR_FILTER && viewType == ViewType.LIST_VIEW
-
     private val recyclerView: RecyclerView
         get() {
             return findViewById(R.id.itemList)

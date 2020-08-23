@@ -71,8 +71,6 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
     override fun shouldShowAddToCollectionButton() = !isOfflineMode
 
-    override fun shouldShowFilter(items: List<InducksCountryNameWithPossession>) = items.size > MIN_ITEM_NUMBER_FOR_FILTER
-
     override fun hasDividers() = true
 
     override fun onBackPressed() {

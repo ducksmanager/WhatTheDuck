@@ -49,7 +49,6 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     protected abstract fun shouldShowNavigationCountry(): Boolean
     protected abstract fun shouldShowNavigationPublication(): Boolean
     protected abstract fun shouldShowAddToCollectionButton(): Boolean
-    protected abstract fun shouldShowFilter(items: List<Item>): Boolean
     protected abstract fun shouldShowItemSelectionTip(): Boolean
     protected abstract fun shouldShowSelectionValidation(): Boolean
 
@@ -109,11 +108,11 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
                 binding.progressBar.visibility = GONE
 
                 val filterEditText = binding.filter
-                if (shouldShowFilter(itemAdapter.items)) {
+                itemAdapter.updateFilteredList("")
+                if (itemAdapter.shouldShowFilter()) {
                     itemAdapter.addOrReplaceFilterOnChangeListener(filterEditText)
                 } else {
                     filterEditText.visibility = GONE
-                    itemAdapter.updateFilteredList("")
                 }
             }
         })

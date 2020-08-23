@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import net.ducksmanager.activity.ItemList
 import net.ducksmanager.activity.ItemList.Companion.isCoaList
 import net.ducksmanager.util.FilterTextOnChangeListener
 import net.ducksmanager.whattheduck.R
@@ -23,6 +24,8 @@ abstract class ItemAdapter<Item> internal constructor(
 
     var items = emptyList<Item>()
     protected var filteredItems = mutableListOf<Item>()
+
+    open fun shouldShowFilter() = filteredItems.size > ItemList.MIN_ITEM_NUMBER_FOR_FILTER
 
     companion object {
         private var filterTextOnChangeListener: FilterTextOnChangeListener? = null
@@ -69,13 +72,12 @@ abstract class ItemAdapter<Item> internal constructor(
     }
 
     fun updateFilteredList(textFilter: String) {
-        filteredItems = ArrayList()
-        for (item in items) {
-            if ((isCoaList() || isPossessed(item))
-                && (textFilter == "" || getText(item)!!.toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase(Locale.getDefault())))) {
-                filteredItems.add(item)
+        filteredItems = items
+            .filter {
+                (isCoaList() || isPossessed(it)) &&
+                (textFilter == "" || getText(it)!!.toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase(Locale.getDefault())))
             }
-        }
+            .toMutableList()
     }
 
     private val comparator: Comparator<Item>

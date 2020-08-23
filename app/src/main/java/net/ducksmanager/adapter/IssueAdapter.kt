@@ -4,6 +4,7 @@ import android.app.Activity
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import net.ducksmanager.activity.IssueList
 import net.ducksmanager.activity.ItemList
 import net.ducksmanager.activity.ItemList.Companion.isCoaList
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
@@ -20,6 +21,8 @@ class IssueAdapter internal constructor(
     private var firstRangeIssueNumber: String? = null
 
     override fun getViewHolder(v: View?) = ViewHolder(v)
+
+    override fun shouldShowFilter() = filteredItems.size > ItemList.MIN_ITEM_NUMBER_FOR_FILTER && IssueList.viewType == IssueList.ViewType.LIST_VIEW
 
     override val onClickListener = View.OnClickListener { view: View ->
         if (isCoaList()) {

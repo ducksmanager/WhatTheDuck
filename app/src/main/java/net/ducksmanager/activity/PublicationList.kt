@@ -36,8 +36,6 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
 
     override fun shouldShowAddToCollectionButton() = !isOfflineMode
 
-    override fun shouldShowFilter(items: List<InducksPublicationWithPossession>) = items.size > MIN_ITEM_NUMBER_FOR_FILTER
-
     override fun hasDividers() = true
 
     override fun onBackPressed() {
