@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.view.View.*
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.pusher.pushnotifications.auth.AuthData
@@ -120,14 +121,18 @@ class Login : AppCompatActivity() {
         (application as WhatTheDuck).setup()
 
         appDB!!.userDao().currentUser.observe(this, { user ->
+            binding = LoginBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+
             if (user != null) {
                 WhatTheDuck.currentUser = user
                 DmServer.apiDmUser = user.username
                 DmServer.apiDmPassword = user.password
+
+                binding.loginForm.visibility = GONE
+                binding.progressBar.visibility = VISIBLE
                 fetchCollection(WeakReference(this@Login), false)
             } else {
-                binding = LoginBinding.inflate(layoutInflater)
-                setContentView(binding.root)
                 showLoginForm()
             }
         })
@@ -142,7 +147,21 @@ class Login : AppCompatActivity() {
 
         binding.login.setOnClickListener { view: View? ->
             hideKeyboard(view)
-            loginAndFetchCollection()
+            val username = binding.username.text.toString()
+            val password = binding.password.text.toString()
+
+            DmServer.apiDmUser = username
+            DmServer.apiDmPassword = toSHA1(password, WeakReference(this))
+
+            val activityRef = WeakReference<Activity>(this)
+
+            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
+                WhatTheDuck.alert(activityRef, R.string.input_error, R.string.input_error__empty_credentials)
+                binding.progressBar.visibility = INVISIBLE
+            } else {
+                binding.progressBar.visibility = VISIBLE
+                fetchCollection(activityRef, true)
+            }
         }
 
         binding.linkToDM.setOnClickListener { view: View? ->
@@ -150,23 +169,6 @@ class Login : AppCompatActivity() {
             this@Login.startActivity(
                 Intent(Intent.ACTION_VIEW).setData(Uri.parse(WhatTheDuck.dmUrl))
             )
-        }
-    }
-
-    private fun loginAndFetchCollection() {
-        val username = binding.username.text.toString()
-        val password = binding.password.text.toString()
-
-        DmServer.apiDmUser = username
-        DmServer.apiDmPassword = toSHA1(password, WeakReference(this))
-
-        val activityRef = WeakReference<Activity>(this)
-
-        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
-            WhatTheDuck.alert(activityRef, R.string.input_error, R.string.input_error__empty_credentials)
-            binding.progressBar.visibility = View.INVISIBLE
-        } else {
-            fetchCollection(activityRef, true)
         }
     }
 
