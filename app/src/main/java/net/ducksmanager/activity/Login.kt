@@ -16,6 +16,7 @@ import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.persistence.models.dm.Issue
+import net.ducksmanager.persistence.models.dm.NotificationCountry
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.persistence.models.dm.User
 import net.ducksmanager.util.Settings.toSHA1
@@ -82,6 +83,16 @@ class Login : AppCompatActivity() {
                     DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", originActivity) {
                         override fun onSuccessfulResponse(response: Response<SuggestionList>) {
                             Suggestions.loadSuggestions(response.body()!!)
+                        }
+                    })
+
+                    DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>("getUserNotificationCountries", originActivity) {
+                        override val isFailureAllowed = true
+                        override fun onSuccessfulResponse(response: Response<List<String>>) {
+                            appDB!!.notificationCountryDao().deleteAll()
+                            appDB!!.notificationCountryDao().insertList(response.body()!!.map {
+                                NotificationCountry(it)
+                            })
                         }
                     })
 

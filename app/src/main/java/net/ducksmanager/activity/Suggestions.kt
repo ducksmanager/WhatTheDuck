@@ -10,7 +10,6 @@ import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.row_suggested_issue.view.*
-import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksPerson
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.coa.InducksStory
@@ -19,8 +18,8 @@ import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.databinding.SuggestionsBinding
-import retrofit2.Response
 
 
 class Suggestions : AppCompatActivityWithDrawer() {
@@ -67,41 +66,30 @@ class Suggestions : AppCompatActivityWithDrawer() {
 
         binding = SuggestionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         showToolbarIfExists()
 
         val suggestionListView = binding.suggestionList
         val noSuggestionView = binding.suggestionsNoResults
 
-        DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>("getSuggestedIssues", this) {
-            override val isFailureAllowed = true
-            override fun onSuccessfulResponse(response: Response<SuggestionList>) {
-                loadSuggestions(response.body()!!)
-                loadData()
-            }
+        if (isOfflineMode) {
+            binding.offlineMode.visibility = View.VISIBLE
+        }
 
-            override fun onFailureFailover() {
-                binding.offlineMode.visibility = View.VISIBLE
-                findViewById<LinearLayout>(R.id.action_logout).visibility = View.GONE
-                loadData()
-            }
+        val suggestions = appDB!!.suggestedIssueDao().findAll()
+        publicationTitles = appDB!!.inducksPublicationDao().findAll()
+        authorNames = appDB!!.inducksPersonDao().findAll()
+        storyDetails = appDB!!.inducksStoryDao().findAll()
 
-            fun loadData() {
-                val suggestions = appDB!!.suggestedIssueDao().findAll()
-                publicationTitles = appDB!!.inducksPublicationDao().findAll()
-                authorNames = appDB!!.inducksPersonDao().findAll()
-                storyDetails = appDB!!.inducksStoryDao().findAll()
+        val showSuggestions = suggestions.isNotEmpty() && publicationTitles.isNotEmpty() && authorNames.isNotEmpty() && storyDetails.isNotEmpty()
 
-                val showSuggestions = suggestions.isNotEmpty() && publicationTitles.isNotEmpty() && authorNames.isNotEmpty() && storyDetails.isNotEmpty()
+        suggestionListView.visibility = if (showSuggestions) View.VISIBLE else View.GONE
+        noSuggestionView.visibility = if (!showSuggestions) View.VISIBLE else View.GONE
 
-                suggestionListView.visibility = if (showSuggestions) View.VISIBLE else View.GONE
-                noSuggestionView.visibility = if (!showSuggestions) View.VISIBLE else View.GONE
+        suggestionListView.adapter = SuggestedIssueAdapter(this@Suggestions, suggestions.toMutableList())
+        (suggestionListView.adapter as SuggestedIssueAdapter).orderByPublicationDate()
+        suggestionListView.layoutManager = LinearLayoutManager(this@Suggestions)
 
-                suggestionListView.adapter = SuggestedIssueAdapter(this@Suggestions, suggestions.toMutableList())
-                (suggestionListView.adapter as SuggestedIssueAdapter).orderByPublicationDate()
-                suggestionListView.layoutManager = LinearLayoutManager(this@Suggestions)
-            }
-        })
 
         binding.sort.setOnClickListener {
             val adapter = suggestionListView.adapter as SuggestedIssueAdapter

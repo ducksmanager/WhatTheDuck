@@ -12,6 +12,7 @@ import net.ducksmanager.persistence.models.composite.UserSetting
 import net.ducksmanager.persistence.models.converter.StringListConverter
 import net.ducksmanager.persistence.models.converter.StringMutableSetConverter
 import net.ducksmanager.persistence.models.dm.Issue
+import net.ducksmanager.persistence.models.dm.NotificationCountry
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.persistence.models.dm.User
 
@@ -23,12 +24,13 @@ import net.ducksmanager.persistence.models.dm.User
     InducksPublication::class,
     InducksStory::class,
     Issue::class,
+    NotificationCountry::class,
     Purchase::class,
     SuggestedIssueSimple::class,
     User::class,
     UserMessage::class,
     UserSetting::class
-], version = 5, exportSchema = true)
+], version = 6, exportSchema = true)
 @TypeConverters(StringMutableSetConverter::class, StringListConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun coverSearchIssueDao(): CoverSearchIssueDao
@@ -38,6 +40,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun inducksPublicationDao(): InducksPublicationDao
     abstract fun inducksStoryDao(): InducksStoryDao
     abstract fun issueDao(): IssueDao
+    abstract fun notificationCountryDao(): NotificationCountryDao
     abstract fun purchaseDao(): PurchaseDao
     abstract fun suggestedIssueDao(): SuggestedIssueDao
     abstract fun userDao(): UserDao

@@ -15,10 +15,7 @@ object Settings {
     const val MESSAGE_KEY_DATA_CONSUMPTION = "data_consumption"
     const val MESSAGE_KEY_WELCOME_BOOKCASE_VIEW = "welcome_bookcase_view"
 
-    fun shouldShowMessage(messageKey: String?): Boolean {
-        val userMessage = appDB!!.userMessageDao().findByKey(messageKey!!)
-        return userMessage != null && userMessage.isShown
-    }
+    fun shouldShowMessage(messageKey: String?) = appDB!!.userMessageDao().findByKey(messageKey!!)?.isShown == true
 
     fun addToMessagesAlreadyShown(messageKey: String?) {
         appDB!!.userMessageDao().insert(UserMessage(messageKey, false))
