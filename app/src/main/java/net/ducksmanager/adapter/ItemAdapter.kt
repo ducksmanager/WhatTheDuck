@@ -151,7 +151,7 @@ abstract class ItemAdapter<Item> internal constructor(
         filteredItems = ArrayList()
     }
 
-    override fun getItemCount(): Int = filteredItems.size
+    override fun getItemCount() = filteredItems.size
 
-    fun getItem(position: Int): Item = filteredItems[position]
+    fun getItem(position: Int) = filteredItems[position]
 }

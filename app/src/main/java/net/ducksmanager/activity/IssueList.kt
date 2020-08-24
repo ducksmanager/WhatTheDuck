@@ -41,23 +41,25 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         var viewType = ViewType.LIST_VIEW
     }
 
+    fun getPublicationCode() = WhatTheDuck.selectedPublication!!.publicationCode
+
     override val AndroidViewModel.data: LiveData<List<InducksIssueWithUserIssueAndScore>>
-        get() = appDB!!.inducksIssueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!)
+        get() = appDB!!.inducksIssueDao().findByPublicationCode(getPublicationCode())
 
     override fun downloadList() {
         // Create fake Inducks issues in the local DB corresponding to the user's issues
         if (isOfflineMode) {
-            appDB!!.issueDao().findByPublicationCode(WhatTheDuck.selectedPublication!!).observe(this, { userIssues ->
+            appDB!!.issueDao().findByPublicationCode(getPublicationCode()).observe(this, { userIssues ->
                 appDB!!.inducksIssueDao().insertList(userIssues.map { issue ->
-                    InducksIssue(WhatTheDuck.selectedPublication!!, issue.issueNumber, "")
+                    InducksIssue(getPublicationCode(), issue.issueNumber, "")
                 })
             })
         }
         else {
-            DmServer.api.getIssues(WhatTheDuck.selectedPublication!!).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", this) {
+            DmServer.api.getIssues(getPublicationCode()).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", this) {
                 override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                     appDB!!.inducksIssueDao().insertList(response.body()!!.map { (issueNumber, title) ->
-                        InducksIssue(WhatTheDuck.selectedPublication!!, issueNumber, title)
+                        InducksIssue(getPublicationCode(), issueNumber, title)
                     })
                 }
             })
@@ -84,8 +86,8 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setNavigationCountry(WhatTheDuck.selectedCountry!!, intent.getStringExtra(COUNTRY_NAME_INTENT_EXTRA)!!)
-        setNavigationPublication(WhatTheDuck.selectedPublication!!, intent.getStringExtra(PUBLICATION_TITLE_INTENT_EXTRA)!!)
+        setNavigationCountry(WhatTheDuck.selectedCountry!!)
+        setNavigationPublication(WhatTheDuck.selectedPublication!!)
 
         selectedIssues = mutableSetOf()
         val switchViewWrapper = findViewById<RelativeLayout>(R.id.switchViewWrapper)

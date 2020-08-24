@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.wtd_list_navigation_country.view.*
 import net.ducksmanager.adapter.ItemAdapter
+import net.ducksmanager.persistence.models.coa.InducksCountryName
+import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.util.CoverFlowFileHandler
 import net.ducksmanager.util.CoverFlowFileHandler.SearchFromCover
@@ -24,10 +26,6 @@ import java.lang.ref.WeakReference
 abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     companion object {
-        const val COUNTRY_NAME_INTENT_EXTRA = "countryName"
-        const val PUBLICATION_TITLE_INTENT_EXTRA = "publicationTitle"
-
-        @JvmField
         var type = WhatTheDuck.CollectionType.USER.toString()
 
         fun isCoaList() : Boolean = type == WhatTheDuck.CollectionType.COA.toString()
@@ -71,12 +69,9 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         loadList()
     }
 
-    fun goToView(cls: Class<*>) {
+    private fun goToView(cls: Class<*>) {
         if (this@ItemList.javaClass != cls) {
-            val outgoingIntent = Intent(this, cls)
-            outgoingIntent.putExtra(COUNTRY_NAME_INTENT_EXTRA, binding.navigationCountry.selectedText.text)
-            outgoingIntent.putExtra(PUBLICATION_TITLE_INTENT_EXTRA, binding.navigationPublication.selectedText.text)
-            startActivity(outgoingIntent)
+            startActivity(Intent(this, cls))
         }
     }
 
@@ -196,23 +191,23 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         }
     }
 
-    protected fun setNavigationCountry(selectedCountry: String, countryFullName: String) {
+    protected fun setNavigationCountry(country: InducksCountryName) {
         val countryNavigationView = binding.navigationCountry
-        val uri = "@drawable/flags_$selectedCountry"
+        val uri = "@drawable/flags_${country.countryCode}"
         var imageResource = resources.getIdentifier(uri, null, packageName)
         if (imageResource == 0) {
             imageResource = R.drawable.flags_unknown
         }
 
         countryNavigationView.selectedBadgeImage.setImageResource(imageResource)
-        countryNavigationView.selectedText.text = countryFullName
+        countryNavigationView.selectedText.text = country.countryName
     }
 
-    protected fun setNavigationPublication(selectedPublication: String, publicationFullName: String) {
+    protected fun setNavigationPublication(publication: InducksPublication) {
         val publicationNavigationView = binding.navigationPublication
 
-        publicationNavigationView.selectedBadge.text = selectedPublication.split("/").toTypedArray()[1]
-        publicationNavigationView.selectedText.text = publicationFullName
+        publicationNavigationView.selectedBadge.text = publication.publicationCode.split("/").toTypedArray()[1]
+        publicationNavigationView.selectedText.text = publication.title
     }
 
     fun onBackFromAddIssueActivity() {

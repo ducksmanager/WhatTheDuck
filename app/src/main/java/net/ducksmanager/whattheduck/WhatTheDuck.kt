@@ -20,6 +20,8 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.PicassoCache
 import net.ducksmanager.api.DmServer.Companion.initApi
 import net.ducksmanager.persistence.AppDatabase
+import net.ducksmanager.persistence.models.coa.InducksCountryName
+import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.UserSetting
 import net.ducksmanager.persistence.models.dm.User
 import org.matomo.sdk.Matomo
@@ -65,8 +67,8 @@ class WhatTheDuck : Application() {
 
         var currentUser: User? = null
 
-        var selectedCountry: String? = null
-        var selectedPublication: String? = null
+        var selectedCountry: InducksCountryName? = null
+        var selectedPublication: InducksPublication? = null
         var selectedIssues: MutableSet<String> = mutableSetOf()
 
         @JvmField

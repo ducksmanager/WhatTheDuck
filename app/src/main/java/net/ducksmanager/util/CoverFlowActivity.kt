@@ -23,7 +23,6 @@ class CoverFlowActivity : AppCompatActivity() {
     private lateinit var adapter: CoverFlowAdapter
 
     companion object {
-        @JvmField
         var currentSuggestion: CoverSearchIssueWithUserIssueAndScore? = null
     }
 
@@ -41,8 +40,8 @@ class CoverFlowActivity : AppCompatActivity() {
             binding.coverflow.adapter = adapter
             binding.coverflow.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, _: Int, _: Long ->
                 if (currentSuggestion!!.userIssue == null) {
-                    WhatTheDuck.selectedCountry = currentSuggestion!!.coverSearchIssue.coverCountryCode
-                    WhatTheDuck.selectedPublication = currentSuggestion!!.coverSearchIssue.coverPublicationCode
+                    WhatTheDuck.selectedCountry = appDB!!.inducksCountryDao().findByCountryCode(currentSuggestion!!.coverSearchIssue.coverCountryCode).value
+                    WhatTheDuck.selectedPublication = appDB!!.inducksPublicationDao().findByPublicationCode(currentSuggestion!!.coverSearchIssue.coverPublicationCode).value
                     WhatTheDuck.selectedIssues = mutableSetOf(currentSuggestion!!.coverSearchIssue.coverIssueNumber)
                     this@CoverFlowActivity.startActivity(Intent(this@CoverFlowActivity, AddIssues::class.java))
                 } else {

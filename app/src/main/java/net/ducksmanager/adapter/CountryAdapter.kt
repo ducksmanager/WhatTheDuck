@@ -5,11 +5,10 @@ import android.content.Intent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import net.ducksmanager.activity.ItemList
-import net.ducksmanager.activity.ItemList.Companion.COUNTRY_NAME_INTENT_EXTRA
 import net.ducksmanager.activity.PublicationList
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
 import net.ducksmanager.whattheduck.R
-import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
 
 class CountryAdapter internal constructor(
     itemList: ItemList<InducksCountryNameWithPossession>
@@ -21,12 +20,9 @@ class CountryAdapter internal constructor(
 
     override val onClickListener = View.OnClickListener { view: View ->
         val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
-        val selectedCountry = getItem(position).country
+        selectedCountry = getItem(position).country
 
-        WhatTheDuck.selectedCountry = selectedCountry.countryCode
-        val intent = Intent(originActivity, PublicationList::class.java)
-        intent.putExtra(COUNTRY_NAME_INTENT_EXTRA, selectedCountry.countryName)
-        originActivity.startActivity(intent)
+        originActivity.startActivity(Intent(originActivity, PublicationList::class.java))
     }
 
     inner class ViewHolder(v: View?) : ItemAdapter<InducksCountryNameWithPossession>.ViewHolder(v!!)

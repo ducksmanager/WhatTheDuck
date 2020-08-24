@@ -46,8 +46,8 @@ class IssueEdgeAdapter internal constructor(
         return String.format(
             "%s/edges/%s/gen/%s.%s.png",
             WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_EDGES_URL),
-            WhatTheDuck.selectedCountry,
-            WhatTheDuck.selectedPublication!!
+            WhatTheDuck.selectedCountry!!.countryCode,
+            WhatTheDuck.selectedPublication!!.publicationCode
                 .replaceFirst("[^/]+/".toRegex(), "")
                 .replace(" ".toRegex(), ""),
             i.issue.inducksIssueNumber.replace(" ".toRegex(), ""))

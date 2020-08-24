@@ -37,7 +37,6 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
 
         lateinit var current: CoverFlowFileHandler
 
-        @JvmField
         var mockedRequestResource: String? = null
 
         private lateinit var originActivityRef: WeakReference<Activity>

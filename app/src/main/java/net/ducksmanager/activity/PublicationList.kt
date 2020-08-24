@@ -16,12 +16,12 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
     override var itemAdapter: ItemAdapter<InducksPublicationWithPossession> = PublicationAdapter(this)
 
     override val AndroidViewModel.data: LiveData<List<InducksPublicationWithPossession>>
-        get() = appDB!!.inducksPublicationDao().findByCountry(WhatTheDuck.selectedCountry!!)
+        get() = appDB!!.inducksPublicationDao().findByCountry(WhatTheDuck.selectedCountry!!.countryCode)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WhatTheDuck.selectedPublication = null
-        setNavigationCountry(WhatTheDuck.selectedCountry!!, intent.getStringExtra(COUNTRY_NAME_INTENT_EXTRA)!!)
+        setNavigationCountry(WhatTheDuck.selectedCountry!!)
     }
 
     override fun isPossessedByUser() = data.any { it.isPossessed }

@@ -83,7 +83,7 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
                 else -> InducksIssueWithUserIssueAndScore.NO_CONDITION
             }
             val issueListToUpdate = IssueListToUpdate(
-                WhatTheDuck.selectedPublication!!,
+                WhatTheDuck.selectedPublication!!.publicationCode,
                 WhatTheDuck.selectedIssues,
                 dmCondition,
                 if (PurchaseAdapter.selectedItem is NoPurchase) null else PurchaseAdapter.selectedItem!!.id
