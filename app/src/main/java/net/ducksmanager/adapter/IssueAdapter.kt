@@ -89,11 +89,8 @@ class IssueAdapter internal constructor(
         return when {
             i.userPurchase != null -> R.drawable.ic_clock
             i.userIssue != null -> null
-            else -> when {
-                i.suggestionScore > 0 -> R.drawable.ic_fire
-                selectedIssues.contains(i.issue.inducksIssueNumber) -> R.drawable.ic_checkbox_checked
-                else -> R.drawable.ic_checkbox
-            }
+            selectedIssues.contains(i.issue.inducksIssueNumber) -> R.drawable.ic_checkbox_checked
+            else -> R.drawable.ic_checkbox
         }
     }
 
@@ -102,7 +99,6 @@ class IssueAdapter internal constructor(
     override fun getSuffixText(i: InducksIssueWithUserIssueAndScore): String? {
         return when {
             i.userPurchase != null -> i.userPurchase.date
-            i.userIssue == null && i.suggestionScore > 0 -> i.suggestionScore.toString()
             else -> null
         }
     }
