@@ -30,6 +30,7 @@
             android:paddingHorizontal="15dp"
             android:paddingVertical="5dp"
             android:textAlignment="textStart"
+            android:gravity="start"
             android:textStyle="bold"
             android:icon="@drawable/ic_log_out"
             android:text="@string/logout" />

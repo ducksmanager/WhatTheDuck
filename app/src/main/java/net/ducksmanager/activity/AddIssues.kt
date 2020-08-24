@@ -22,7 +22,7 @@ import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
-import net.ducksmanager.whattheduck.databinding.AddissueBinding
+import net.ducksmanager.whattheduck.databinding.AddissuesBinding
 import retrofit2.Response
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
@@ -30,7 +30,7 @@ import java.util.*
 
 class AddIssues : AppCompatActivity(), View.OnClickListener {
     private lateinit var purchases: MutableList<Purchase>
-    private lateinit var binding: AddissueBinding
+    private lateinit var binding: AddissuesBinding
 
     companion object {
         private val myCalendar = Calendar.getInstance()
@@ -38,7 +38,7 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = AddissueBinding.inflate(layoutInflater)
+        binding = AddissuesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         downloadPurchaseList()
     }

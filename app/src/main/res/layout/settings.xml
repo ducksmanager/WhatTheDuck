@@ -27,11 +27,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:gravity="center_horizontal"
             android:background="#f09313"
             android:textColor="@android:color/white"
             android:visibility="gone"
-            android:text="Vous êtes en mode hors-ligne. Vous pouvez naviguer dans votre collection mais pas la modifier. Certaines fonctionnalités ne seront pas disponibles."
-            />
+            android:text="Vous êtes en mode hors-ligne. Vous pouvez naviguer dans votre collection mais pas la modifier. Certaines fonctionnalités ne seront pas disponibles." />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -82,7 +82,7 @@
                 android:paddingRight="30dp"
                 android:visibility="visible">
 
-                <Switch
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/notifySwitch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
