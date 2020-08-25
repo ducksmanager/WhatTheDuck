@@ -39,7 +39,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     @JvmField
     var data: List<Item> = ArrayList()
-    private lateinit var binding: WtdListBinding
+    protected lateinit var binding: WtdListBinding
 
     protected abstract fun hasDividers(): Boolean
     protected abstract fun isPossessedByUser(): Boolean

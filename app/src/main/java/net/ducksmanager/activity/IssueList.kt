@@ -5,12 +5,8 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.AndroidViewModel
@@ -93,22 +89,22 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         setNavigationPublication(WhatTheDuck.selectedPublication!!)
 
         selectedIssues = mutableSetOf()
-        val switchViewWrapper = findViewById<RelativeLayout>(R.id.switchViewWrapper)
+        val switchViewWrapper = binding.switchViewWrapper
         DraggableRelativeLayout.makeDraggable(switchViewWrapper)
 
         switchViewWrapper.visibility = GONE
         if (isCoaList()) {
             viewType = ViewType.LIST_VIEW
 
-            findViewById<Button>(R.id.tipIssueSelectionOK).setOnClickListener {
+            binding.tipIssueSelectionOK.setOnClickListener {
                 appDB!!.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED, "0"))
-                findViewById<LinearLayout>(R.id.tipIssueSelection).visibility = GONE
+                binding.tipIssueSelection.visibility = GONE
             }
-            findViewById<View>(R.id.cancelSelection).setOnClickListener {
+            binding.cancelSelection.setOnClickListener {
                 selectedIssues.clear()
                 itemAdapter.notifyDataSetChanged()
             }
-            findViewById<View>(R.id.validateSelection).setOnClickListener {
+            binding.validateSelection.setOnClickListener {
                 if (selectedIssues.isEmpty()) {
                     WhatTheDuck.info(WeakReference(this), R.string.input_error__no_issue_selected, Toast.LENGTH_SHORT)
                 } else {
@@ -116,7 +112,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
                 }
             }
         } else if (!isOfflineMode){
-            val switchView = switchViewWrapper.findViewById<SwitchCompat>(R.id.switchView)
+            val switchView = binding.switchView
             switchViewWrapper.visibility = VISIBLE
             switchView.isChecked = viewType == ViewType.EDGE_VIEW
 
