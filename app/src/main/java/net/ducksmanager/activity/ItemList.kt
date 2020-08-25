@@ -34,7 +34,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         private const val REQUEST_IMAGE_CAPTURE = 1
     }
 
-    private lateinit var viewModel: AndroidViewModel
+    protected lateinit var viewModel: AndroidViewModel
     abstract val AndroidViewModel.data: LiveData<List<Item>>
 
     @JvmField
@@ -86,6 +86,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     protected fun loadList() {
         (application as WhatTheDuck).trackActivity(this)
         binding.itemList.adapter = itemAdapter
+        downloadList()
         show()
 
         viewModel = AndroidViewModel(application)
@@ -94,22 +95,19 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             binding.progressBar.visibility = VISIBLE
         }
         viewModelData.observe(this, { items ->
-            if (items.isEmpty()) {
-                downloadList()
-            }
-            else {
-                itemAdapter.setItems(items)
-                binding.emptyList.visibility = if (items.isNotEmpty()) INVISIBLE else VISIBLE
-                binding.progressBar.visibility = GONE
+            itemAdapter.setItems(items)
+            binding.emptyList.visibility = if (items.isNotEmpty()) INVISIBLE else VISIBLE
+            binding.progressBar.visibility = GONE
+            binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
 
-                val filterEditText = binding.filter
-                itemAdapter.updateFilteredList("")
-                if (itemAdapter.shouldShowFilter()) {
-                    itemAdapter.addOrReplaceFilterOnChangeListener(filterEditText)
-                } else {
-                    filterEditText.visibility = GONE
-                }
+            val filterEditText = binding.filter
+            itemAdapter.updateFilteredList("")
+            if (itemAdapter.shouldShowFilter()) {
+                itemAdapter.addOrReplaceFilterOnChangeListener(filterEditText)
+            } else {
+                filterEditText.visibility = GONE
             }
+            show()
         })
     }
 

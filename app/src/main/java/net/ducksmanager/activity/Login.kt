@@ -54,10 +54,7 @@ class Login : AppCompatActivity() {
             val latestSync = appDB!!.syncDao().findLatest()
 
             DmServer.api.userIssues.enqueue(object : DmServer.Callback<List<Issue>>(EVENT_RETRIEVE_COLLECTION, originActivity, alertIfError!!) {
-                override val isFailureAllowed = true
-
                 override fun onFailureFailover() {
-                    isOfflineMode = true
                     originActivity.startActivity(
                         Intent(activityRef.get(),
                         if (latestSync == null) Login::class.java else targetClass)
@@ -95,7 +92,6 @@ class Login : AppCompatActivity() {
                     })
 
                     DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>(EVENT_GET_USER_NOTIFICATION_COUNTRIES, originActivity) {
-                        override val isFailureAllowed = true
                         override fun onSuccessfulResponse(response: Response<List<String>>) {
                             appDB!!.notificationCountryDao().deleteAll()
                             appDB!!.notificationCountryDao().insertList(response.body()!!.map {

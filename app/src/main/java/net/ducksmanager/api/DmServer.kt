@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder
 import net.ducksmanager.persistence.models.internal.Sync
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -85,13 +86,11 @@ class DmServer {
     }
 
     abstract class Callback<T> protected constructor(
-        val eventName: String,
+        private val eventName: String,
         originActivity: Activity,
         private val alertOnError: Boolean = true
     ) : retrofit2.Callback<T> {
         private val originActivityRef: WeakReference<Activity>
-
-        open val isFailureAllowed = false
 
         init {
             println("API call start : $eventName")
@@ -104,6 +103,7 @@ class DmServer {
 
         override fun onResponse(call: Call<T>, response: Response<T>) {
             if (response.isSuccessful) {
+                isOfflineMode = false
                 onSuccessfulResponse(response)
                 logSync()
             } else {
@@ -123,13 +123,8 @@ class DmServer {
         open fun onFailureFailover() {}
 
         override fun onFailure(call: Call<T>, t: Throwable) {
-            if (isFailureAllowed) {
-                onFailureFailover()
-            }
-            else if (!WhatTheDuck.isOfflineMode) {
-                WhatTheDuck.alert(originActivityRef, t.message + " on " + eventName)
-                System.err.println(t.message)
-            }
+            isOfflineMode = true
+            onFailureFailover()
             onFinished()
         }
 

@@ -18,8 +18,8 @@ interface InducksIssueDao {
         " WHERE inducksPublicationCode = :publicationCode")
     fun findByPublicationCode(publicationCode: String): LiveData<List<InducksIssueWithUserIssueAndScore>>
 
-    @Query("DELETE FROM inducks_issue")
-    fun deleteAll()
+    @Query("DELETE FROM inducks_issue WHERE inducksPublicationCode = :publicationCode")
+    fun deleteByPublicationCode(publicationCode: String)
 
     @Insert
     fun insertList(issueList: List<InducksIssue>)

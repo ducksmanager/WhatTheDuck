@@ -47,23 +47,26 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         get() = appDB!!.inducksIssueDao().findByPublicationCode(getPublicationCode())
 
     override fun downloadList() {
-        // Create fake Inducks issues in the local DB corresponding to the user's issues
-        if (isOfflineMode) {
-            appDB!!.issueDao().findByPublicationCode(getPublicationCode()).observe(this, { userIssues ->
-                appDB!!.inducksIssueDao().insertList(userIssues.map { issue ->
-                    InducksIssue(getPublicationCode(), issue.issueNumber, "")
+        DmServer.api.getIssues(getPublicationCode()).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", this) {
+            override fun onFailureFailover() {
+                viewModel.data.observe(this@IssueList, { existingInducksIssues ->
+                    if (existingInducksIssues.isEmpty()) {
+                        // Create fake Inducks issues in the local DB corresponding to the user's issues
+                        appDB!!.issueDao().findByPublicationCode(getPublicationCode()).observe(this@IssueList, { userIssues ->
+                            appDB!!.inducksIssueDao().insertList(userIssues.map { issue ->
+                                InducksIssue(getPublicationCode(), issue.issueNumber, "")
+                            })
+                        })
+                    }
                 })
-            })
-        }
-        else {
-            DmServer.api.getIssues(getPublicationCode()).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", this) {
-                override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
-                    appDB!!.inducksIssueDao().insertList(response.body()!!.map { (issueNumber, title) ->
-                        InducksIssue(getPublicationCode(), issueNumber, title)
-                    })
-                }
-            })
-        }
+            }
+            override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
+                appDB!!.inducksIssueDao().deleteByPublicationCode(getPublicationCode())
+                appDB!!.inducksIssueDao().insertList(response.body()!!.map { (issueNumber, title) ->
+                    InducksIssue(getPublicationCode(), issueNumber, title)
+                })
+            }
+        })
     }
 
     override lateinit var itemAdapter: ItemAdapter<InducksIssueWithUserIssueAndScore>
