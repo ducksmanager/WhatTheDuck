@@ -29,7 +29,7 @@
             android:background="#f09313"
             android:textColor="@android:color/white"
             android:visibility="gone"
-            android:text="Vous êtes en mode hors-ligne. Vous pouvez naviguer dans votre collection mais pas la modifier. Certaines fonctionnalités ne seront pas disponibles." />
+            android:text="@string/offline_mode" />
 
         <RelativeLayout
             android:layout_width="match_parent"

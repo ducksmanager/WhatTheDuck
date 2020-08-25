@@ -21,7 +21,7 @@
 			android:background="#f09313"
 			android:textColor="@android:color/white"
 			android:visibility="gone"
-			android:text="La connexion à votre compte DucksManager a échoué, vérifiez que votre connexion Internet est active. Vous pourrez consulter votre collection hors-ligne une fois que votre collection sera synchronisée."
+			android:text="@string/error__cannot_login"
 			/>
 
 		<EditText

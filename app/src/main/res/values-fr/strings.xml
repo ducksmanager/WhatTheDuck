@@ -26,6 +26,7 @@
     <string name="email_address">Adresse e-mail</string>
     <string name="error">Erreur</string>
     <string name="error__malformed_url">L\'adresse Web est mal formée</string>
+    <string name="error__cannot_login">La connexion à votre compte DucksManager a échoué, vérifiez que votre connexion Internet est active. Vous pourrez consulter votre collection hors-ligne une fois que votre collection sera synchronisée.</string>
     <string name="filter">Filtrer</string>
     <string name="input_error">Erreur de saisie</string>
     <string name="input_error__empty_credentials">Vous devez saisir votre pseudonyme et votre mot de passe pour continuer</string>
@@ -84,4 +85,5 @@
     <string name="welcomeMessage">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur + pour ajouter un numéro.</string>
     <string name="welcomeTitle">Bienvenue sur What The Duck !</string>
     <string name="itemdescription">Description</string>
+    <string name="offline_mode">Vous êtes en mode hors-ligne. Vous pouvez naviguer dans votre collection mais pas la modifier. Certaines fonctionnalités ne seront pas disponibles.</string>
 </resources>

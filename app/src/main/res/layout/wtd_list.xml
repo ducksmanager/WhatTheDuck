@@ -30,7 +30,7 @@
             android:textAlignment="center"
             android:background="#f09313"
             android:textColor="@android:color/white"
-            android:text="Vous êtes en mode hors-ligne. Vous pouvez naviguer dans votre collection mais pas la modifier. Certaines fonctionnalités ne seront pas disponibles."
+            android:text="@string/offline_mode"
             />
 
         <LinearLayout
@@ -78,10 +78,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
+                android:gravity="center_horizontal"
                 android:background="@color/holo_green_dark"
                 android:textColor="@android:color/white"
-                android:text="@string/issueSelectionTip"
-                />
+                android:text="@string/issueSelectionTip" />
 
             <Button
                 android:id="@+id/tipIssueSelectionOK"
@@ -89,7 +89,8 @@
                 android:layout_height="40dp"
                 android:padding="0dp"
                 android:layout_gravity="center"
-                android:text="OK" />
+                android:text="OK"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
