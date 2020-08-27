@@ -71,7 +71,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
     }
 
     override fun onObserve(): (t: List<InducksIssueWithUserIssueAndScore>) -> Unit {
-        binding.switchViewWrapper.visibility = if (isOfflineMode) GONE else VISIBLE
+        binding.switchViewWrapper.visibility = if (isOfflineMode || isCoaList()) GONE else VISIBLE
         return super.onObserve()
     }
 

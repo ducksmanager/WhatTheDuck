@@ -115,16 +115,13 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
         binding.addToCollectionByPhotoButton.visibility = GONE
         binding.addToCollectionBySelectionButton.visibility = GONE
-        val addToCollection = binding.addToCollectionWrapper
-        if (shouldShowAddToCollectionButton()) {
-            addToCollection.setOnClickListener {
-                binding.addToCollectionByPhotoButton.visibility = if (binding.addToCollectionByPhotoButton.visibility == GONE) VISIBLE else GONE
-                binding.addToCollectionBySelectionButton.visibility = if (binding.addToCollectionBySelectionButton.visibility == GONE) VISIBLE else GONE
-            }
-
-            binding.addToCollectionByPhotoButton.setOnClickListener { takeCoverPicture() }
-            binding.addToCollectionBySelectionButton.setOnClickListener { goToAlternativeView() }
+        binding.addToCollectionWrapper.setOnClickListener {
+            binding.addToCollectionByPhotoButton.visibility = if (binding.addToCollectionByPhotoButton.visibility == GONE) VISIBLE else GONE
+            binding.addToCollectionBySelectionButton.visibility = if (binding.addToCollectionBySelectionButton.visibility == GONE) VISIBLE else GONE
         }
+
+        binding.addToCollectionByPhotoButton.setOnClickListener { takeCoverPicture() }
+        binding.addToCollectionBySelectionButton.setOnClickListener { goToAlternativeView() }
 
         val recyclerView = binding.itemList
         binding.tipIssueSelection.visibility = if (shouldShowItemSelectionTip()) VISIBLE else GONE

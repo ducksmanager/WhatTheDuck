@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import android.widget.Toast
@@ -116,6 +117,7 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
                 binding.addIssueTitle.text = getString(R.string.insert_issue__title_multiple_issues_plural, WhatTheDuck.selectedIssues.first(), WhatTheDuck.selectedIssues.size - 1)
             }
         }
+        binding.progressBar.visibility = GONE
     }
 
     private fun toggleAddPurchaseButton(toggle: Boolean) {
