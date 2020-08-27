@@ -157,7 +157,9 @@ class WhatTheDuck : Application() {
                 }
                 val setting = appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)
                 setting?.value = "0"
-                appDB!!.userSettingDao().update(setting)
+                if (setting != null) {
+                    appDB!!.userSettingDao().update(setting)
+                }
             }
         }
 

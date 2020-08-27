@@ -34,7 +34,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         private const val REQUEST_IMAGE_CAPTURE = 1
     }
 
-    protected lateinit var viewModel: AndroidViewModel
+    protected var viewModel = AndroidViewModel(application)
     abstract val AndroidViewModel.data: LiveData<List<Item>>
 
     @JvmField
@@ -50,7 +50,26 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     protected abstract fun shouldShowItemSelectionTip(): Boolean
     protected abstract fun shouldShowSelectionValidation(): Boolean
 
-    open fun downloadList() {}
+    open fun downloadAndShowList() {
+        val viewModelData = viewModel.data
+        viewModelData.observe(this, onObserve())
+    }
+
+    open fun onObserve(): (t: List<Item>) -> Unit = { items ->
+        binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
+        itemAdapter.setItems(items)
+        binding.emptyList.visibility = if (items.isNotEmpty()) INVISIBLE else VISIBLE
+        binding.addToCollectionWrapper.visibility = if (shouldShowAddToCollectionButton()) VISIBLE else INVISIBLE
+
+        val filterEditText = binding.filter
+        itemAdapter.updateFilteredList("")
+        if (itemAdapter.shouldShowFilter()) {
+            itemAdapter.addOrReplaceFilterOnChangeListener(filterEditText)
+        } else {
+            filterEditText.visibility = GONE
+        }
+        binding.progressBar.visibility = GONE
+    }
 
     protected abstract var itemAdapter: ItemAdapter<Item>
 
@@ -85,36 +104,12 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     protected fun loadList() {
         (application as WhatTheDuck).trackActivity(this)
-        binding.itemList.adapter = itemAdapter
-        downloadList()
         show()
-
-        viewModel = AndroidViewModel(application)
-        val viewModelData = viewModel.data
-        if (viewModelData.value == null) {
-            binding.progressBar.visibility = VISIBLE
-        }
-        viewModelData.observe(this, { items ->
-            itemAdapter.setItems(items)
-            binding.emptyList.visibility = if (items.isNotEmpty()) INVISIBLE else VISIBLE
-            binding.progressBar.visibility = GONE
-            binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
-
-            val filterEditText = binding.filter
-            itemAdapter.updateFilteredList("")
-            if (itemAdapter.shouldShowFilter()) {
-                itemAdapter.addOrReplaceFilterOnChangeListener(filterEditText)
-            } else {
-                filterEditText.visibility = GONE
-            }
-            show()
-        })
     }
 
     private fun show() {
-        if (!shouldShow()) {
-            return
-        }
+        binding.itemList.adapter = itemAdapter
+
         toggleNavigation()
         binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
 
@@ -122,25 +117,13 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.addToCollectionBySelectionButton.visibility = GONE
         val addToCollection = binding.addToCollectionWrapper
         if (shouldShowAddToCollectionButton()) {
-            addToCollection.visibility = if (isCoaList()) GONE else VISIBLE
-
             addToCollection.setOnClickListener {
                 binding.addToCollectionByPhotoButton.visibility = if (binding.addToCollectionByPhotoButton.visibility == GONE) VISIBLE else GONE
                 binding.addToCollectionBySelectionButton.visibility = if (binding.addToCollectionBySelectionButton.visibility == GONE) VISIBLE else GONE
             }
 
-            if (!isCoaList()) {
-                binding.addToCollectionByPhotoButton
-                    .setOnClickListener { takeCoverPicture() }
-
-                binding.addToCollectionBySelectionButton
-                    .setOnClickListener {
-                        addToCollection.visibility = GONE
-                        goToAlternativeView()
-                    }
-            }
-        } else {
-            addToCollection.visibility = GONE
+            binding.addToCollectionByPhotoButton.setOnClickListener { takeCoverPicture() }
+            binding.addToCollectionBySelectionButton.setOnClickListener { goToAlternativeView() }
         }
 
         val recyclerView = binding.itemList
@@ -157,6 +140,8 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
                 LinearLayoutManager(this).orientation
             ))
         }
+
+        downloadAndShowList()
     }
 
     private fun takeCoverPicture() {

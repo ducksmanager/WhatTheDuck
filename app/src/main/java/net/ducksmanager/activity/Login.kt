@@ -17,18 +17,17 @@ import com.pusher.pushnotifications.auth.BeamsTokenProvider
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.api.DmServer.Companion.EVENT_GET_PURCHASES
 import net.ducksmanager.api.DmServer.Companion.EVENT_GET_SUGGESTED_ISSUES
-import net.ducksmanager.api.DmServer.Companion.EVENT_GET_USER_NOTIFICATION_COUNTRIES
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_ALL_PUBLICATIONS
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_COLLECTION
 import net.ducksmanager.api.DmServer.Companion.getRequestHeaders
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.persistence.models.dm.Issue
-import net.ducksmanager.persistence.models.dm.NotificationCountry
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.persistence.models.dm.User
 import net.ducksmanager.persistence.models.internal.Sync
-import net.ducksmanager.util.Settings.toSHA1
+import net.ducksmanager.util.Settings.Companion.loadNotificationCountries
+import net.ducksmanager.util.Settings.Companion.toSHA1
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
@@ -91,14 +90,7 @@ class Login : AppCompatActivity() {
                         }
                     })
 
-                    DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>(EVENT_GET_USER_NOTIFICATION_COUNTRIES, originActivity) {
-                        override fun onSuccessfulResponse(response: Response<List<String>>) {
-                            appDB!!.notificationCountryDao().deleteAll()
-                            appDB!!.notificationCountryDao().insertList(response.body()!!.map {
-                                NotificationCountry(it)
-                            })
-                        }
-                    })
+                    loadNotificationCountries(originActivity)
 
                     if (isObsoleteSync(latestSync)) {
                         DmServer.api.publications.enqueue(object : DmServer.Callback<HashMap<String, String>>(EVENT_RETRIEVE_ALL_PUBLICATIONS, originActivity, true) {

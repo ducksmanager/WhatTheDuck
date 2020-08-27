@@ -42,7 +42,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
     override val AndroidViewModel.data: LiveData<List<InducksIssueWithUserIssueAndScore>>
         get() = appDB!!.inducksIssueDao().findByPublicationCode(getPublicationCode())
 
-    override fun downloadList() {
+    override fun downloadAndShowList() {
         DmServer.api.getIssues(getPublicationCode()).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", this) {
             override fun onFailureFailover() {
                 viewModel.data.observe(this@IssueList, { existingInducksIssues ->
@@ -52,7 +52,11 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
                             appDB!!.inducksIssueDao().insertList(userIssues.map { issue ->
                                 InducksIssue(getPublicationCode(), issue.issueNumber, "")
                             })
+                            super@IssueList.downloadAndShowList()
                         })
+                    }
+                    else {
+                        super@IssueList.downloadAndShowList()
                     }
                 })
             }
@@ -61,8 +65,14 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
                 appDB!!.inducksIssueDao().insertList(response.body()!!.map { (issueNumber, title) ->
                     InducksIssue(getPublicationCode(), issueNumber, title)
                 })
+                super@IssueList.downloadAndShowList()
             }
         })
+    }
+
+    override fun onObserve(): (t: List<InducksIssueWithUserIssueAndScore>) -> Unit {
+        binding.switchViewWrapper.visibility = if (isOfflineMode) GONE else VISIBLE
+        return super.onObserve()
     }
 
     override lateinit var itemAdapter: ItemAdapter<InducksIssueWithUserIssueAndScore>
@@ -92,7 +102,6 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         val switchViewWrapper = binding.switchViewWrapper
         DraggableRelativeLayout.makeDraggable(switchViewWrapper)
 
-        switchViewWrapper.visibility = GONE
         if (isCoaList()) {
             viewType = ViewType.LIST_VIEW
 
@@ -111,9 +120,8 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
                     this.startActivity(Intent(this, AddIssues::class.java))
                 }
             }
-        } else if (!isOfflineMode){
+        } else {
             val switchView = binding.switchView
-            switchViewWrapper.visibility = VISIBLE
             switchView.isChecked = viewType == ViewType.EDGE_VIEW
 
             switchView.setOnClickListener {
@@ -170,7 +178,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
     override fun shouldShowToolbar() = !isLandscapeEdgeView
 
-    override fun shouldShowAddToCollectionButton() = !isOfflineMode && !isLandscapeEdgeView
+    override fun shouldShowAddToCollectionButton() = !isCoaList() && !isOfflineMode && !isLandscapeEdgeView
 
     private val recyclerView: RecyclerView
         get() {

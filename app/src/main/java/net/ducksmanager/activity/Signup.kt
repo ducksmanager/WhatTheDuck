@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.composite.UserToCreate
-import net.ducksmanager.util.Settings.toSHA1
+import net.ducksmanager.util.Settings.Companion.toSHA1
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.databinding.SignupBinding

@@ -34,7 +34,7 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
 
     override fun shouldShowToolbar() = true
 
-    override fun shouldShowAddToCollectionButton() = !isOfflineMode
+    override fun shouldShowAddToCollectionButton() = !isCoaList() && !isOfflineMode
 
     override fun hasDividers() = true
 
