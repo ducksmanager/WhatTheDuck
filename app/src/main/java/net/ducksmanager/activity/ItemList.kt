@@ -67,9 +67,16 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     open fun onObserve(): (t: List<Item>) -> Unit = { items ->
         binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
         itemAdapter.setItems(items)
-        binding.emptyList.visibility = if (items.isEmpty() || (isCoaList() && isOfflineMode)) VISIBLE else INVISIBLE
+
+        val isEmptyList = items.isEmpty() || (isCoaList() && isOfflineMode)
+        binding.emptyList.visibility = if (isEmptyList) VISIBLE else INVISIBLE
+        binding.itemList.visibility = if (isEmptyList) INVISIBLE else VISIBLE
         if (isCoaList() && isOfflineMode) {
             binding.emptyList.text = getString(R.string.offline_mode_cannot_view)
+            binding.emptyList.setOnClickListener{
+                type = WhatTheDuck.CollectionType.USER.toString()
+                startActivity(Intent(this, CountryList::class.java))
+            }
         }
         binding.addToCollectionWrapper.visibility = if (shouldShowAddToCollectionButton()) VISIBLE else INVISIBLE
 

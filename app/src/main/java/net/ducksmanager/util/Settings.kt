@@ -29,6 +29,10 @@ class Settings {
                     })
                     callback()
                 }
+
+                override fun onFailureFailover() {
+                    callback()
+                }
             })
         }
 
