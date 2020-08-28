@@ -34,7 +34,7 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
 
     protected abstract fun shouldShowToolbar(): Boolean
 
-    protected open fun showToolbarIfExists() {
+    protected open fun toggleToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         if (shouldShowToolbar()) {
             toolbar.visibility = View.VISIBLE

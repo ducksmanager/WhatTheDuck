@@ -86,5 +86,6 @@
     <string name="welcomeMessage">Your DucksManager collection is displayed when you open What The Duck. Tap on a country to view the publications that you possess, or tap on \"+\" to add an issue to your collection.</string>
     <string name="welcomeTitle">Welcome on What The Duck!</string>
     <string name="offline_mode">You are using offline mode. You can browse through your collection but not update it. Some features will not be available.</string>
+    <string name="offline_mode_cannot_view">This view is not available in offline mode.</string>
     <string name="error__cannot_login">Loading your DucksManager account failed, check that your Internet connection is active. You will be able to browse through your collection while offline once your collection is synchronized.</string>
 </resources>

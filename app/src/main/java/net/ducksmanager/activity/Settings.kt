@@ -38,7 +38,7 @@ class Settings : AppCompatActivityWithDrawer() {
 
         binding = SettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        showToolbarIfExists()
+        toggleToolbar()
 
         binding.notifySwitch.isChecked = appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)?.value.equals("1")
 

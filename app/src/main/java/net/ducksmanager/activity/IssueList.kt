@@ -33,6 +33,8 @@ import java.util.*
 
 class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
+    override lateinit var itemAdapter: ItemAdapter<InducksIssueWithUserIssueAndScore>
+
     companion object {
         var viewType = ViewType.LIST_VIEW
     }
@@ -75,11 +77,6 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         return super.onObserve()
     }
 
-    override lateinit var itemAdapter: ItemAdapter<InducksIssueWithUserIssueAndScore>
-    init {
-        updateAdapter()
-    }
-
     private fun updateAdapter() {
         itemAdapter = if (viewType == ViewType.EDGE_VIEW) {
             val deviceOrientation = resources.configuration.orientation
@@ -98,10 +95,13 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         if (isCoaList()) {
             viewType = ViewType.LIST_VIEW
         }
+        updateAdapter()
+        binding.itemList.adapter = itemAdapter
         super.show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        updateAdapter()
         super.onCreate(savedInstanceState)
         setNavigationCountry(WhatTheDuck.selectedCountry!!)
         setNavigationPublication(WhatTheDuck.selectedPublication!!)
@@ -167,7 +167,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
     override fun shouldShowItemSelectionTip(): Boolean = isCoaList() && ! appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED)?.value.equals("0")
 
-    override fun shouldShowSelectionValidation(): Boolean = isCoaList()
+    override fun shouldShowSelectionValidation(): Boolean = isCoaList() && !isOfflineMode
 
     override fun hasDividers() = viewType != ViewType.EDGE_VIEW
 
@@ -196,6 +196,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
             ViewType.LIST_VIEW
 
         updateAdapter()
+        binding.itemList.adapter = itemAdapter
         loadList()
     }
 

@@ -67,7 +67,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
         binding = SuggestionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        showToolbarIfExists()
+        toggleToolbar()
 
         val suggestionListView = binding.suggestionList
         val noSuggestionView = binding.suggestionsNoResults

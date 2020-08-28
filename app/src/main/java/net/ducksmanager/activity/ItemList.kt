@@ -67,7 +67,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     open fun onObserve(): (t: List<Item>) -> Unit = { items ->
         binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
         itemAdapter.setItems(items)
-        binding.emptyList.visibility = if (items.isNotEmpty()) INVISIBLE else VISIBLE
+        binding.emptyList.visibility = if (items.isEmpty() || (isCoaList() && isOfflineMode)) VISIBLE else INVISIBLE
+        if (isCoaList() && isOfflineMode) {
+            binding.emptyList.text = getString(R.string.offline_mode_cannot_view)
+        }
         binding.addToCollectionWrapper.visibility = if (shouldShowAddToCollectionButton()) VISIBLE else INVISIBLE
 
         val filterEditText = binding.filter
@@ -91,8 +94,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
                     isOfflineMode = false
                     lifecycleScope.launch {
                         withContext(Dispatchers.Main) {
-                            this@ItemList.binding.offlineMode.visibility = GONE
-                            downloadAndShowList()
+                            loadList()
                         }
                     }
                 }
@@ -103,8 +105,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
                     isOfflineMode = true
                     lifecycleScope.launch {
                         withContext(Dispatchers.Main) {
-                            this@ItemList.binding.offlineMode.visibility = VISIBLE
-                            downloadAndShowList()
+                            loadList()
                         }
                     }
                 }
@@ -115,14 +116,34 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding =  WtdListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        showToolbarIfExists()
+        toggleToolbar()
+        toggleNavigation()
 
         binding.navigationAllCountries.root.setOnClickListener { goToView(CountryList::class.java) }
-
         binding.navigationCountry.root.selected?.setOnClickListener { _: View? -> goToView(PublicationList::class.java) }
 
-        loadList()
+        binding.addToCollectionWrapper.setOnClickListener {
+            binding.addToCollectionByPhotoButton.visibility = if (binding.addToCollectionByPhotoButton.visibility == GONE) VISIBLE else GONE
+            binding.addToCollectionBySelectionButton.visibility = if (binding.addToCollectionBySelectionButton.visibility == GONE) VISIBLE else GONE
+        }
 
+        binding.addToCollectionByPhotoButton.setOnClickListener { takeCoverPicture() }
+        binding.addToCollectionBySelectionButton.setOnClickListener { goToAlternativeView() }
+
+        binding.itemList.adapter = itemAdapter
+        val recyclerView = binding.itemList
+        while (recyclerView.itemDecorationCount > 0) {
+            recyclerView.removeItemDecorationAt(0)
+        }
+        if (hasDividers()) {
+            recyclerView.addItemDecoration(DividerItemDecoration(
+                recyclerView.context,
+                LinearLayoutManager(this).orientation
+            ))
+        }
+
+        (application as WhatTheDuck).trackActivity(this)
+        loadList()
     }
 
     override fun onStop() {
@@ -137,50 +158,31 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     }
 
     private fun goToAlternativeView() {
-        type = if (isCoaList())
-            WhatTheDuck.CollectionType.USER.toString()
-        else
-            WhatTheDuck.CollectionType.COA.toString()
+        if (isCoaList()) {
+            type = WhatTheDuck.CollectionType.USER.toString()
+        }
+        else {
+            IssueList.viewType = IssueList.ViewType.LIST_VIEW
+            type = WhatTheDuck.CollectionType.COA.toString()
+        }
+        (application as WhatTheDuck).trackActivity(this)
         loadList()
     }
 
     protected fun loadList() {
-        (application as WhatTheDuck).trackActivity(this)
         show()
+        downloadAndShowList()
     }
 
     protected open fun show() {
-        binding.itemList.adapter = itemAdapter
-
-        toggleNavigation()
         binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
 
         binding.addToCollectionByPhotoButton.visibility = GONE
         binding.addToCollectionBySelectionButton.visibility = GONE
-        binding.addToCollectionWrapper.setOnClickListener {
-            binding.addToCollectionByPhotoButton.visibility = if (binding.addToCollectionByPhotoButton.visibility == GONE) VISIBLE else GONE
-            binding.addToCollectionBySelectionButton.visibility = if (binding.addToCollectionBySelectionButton.visibility == GONE) VISIBLE else GONE
-        }
 
-        binding.addToCollectionByPhotoButton.setOnClickListener { takeCoverPicture() }
-        binding.addToCollectionBySelectionButton.setOnClickListener { goToAlternativeView() }
-
-        val recyclerView = binding.itemList
         binding.tipIssueSelection.visibility = if (shouldShowItemSelectionTip()) VISIBLE else GONE
         binding.validateSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
         binding.cancelSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
-
-        while (recyclerView.itemDecorationCount > 0) {
-            recyclerView.removeItemDecorationAt(0)
-        }
-        if (hasDividers()) {
-            recyclerView.addItemDecoration(DividerItemDecoration(
-                recyclerView.context,
-                LinearLayoutManager(this).orientation
-            ))
-        }
-
-        downloadAndShowList()
     }
 
     private fun takeCoverPicture() {
