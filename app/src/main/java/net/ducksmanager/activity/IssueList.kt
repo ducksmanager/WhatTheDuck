@@ -93,59 +93,60 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         LIST_VIEW, EDGE_VIEW
     }
 
+    override fun show() {
+        binding.switchView.isChecked = viewType == ViewType.EDGE_VIEW
+        if (isCoaList()) {
+            viewType = ViewType.LIST_VIEW
+        }
+        super.show()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setNavigationCountry(WhatTheDuck.selectedCountry!!)
         setNavigationPublication(WhatTheDuck.selectedPublication!!)
 
         selectedIssues = mutableSetOf()
-        val switchViewWrapper = binding.switchViewWrapper
-        DraggableRelativeLayout.makeDraggable(switchViewWrapper)
+        DraggableRelativeLayout.makeDraggable(binding.switchViewWrapper)
 
-        if (isCoaList()) {
-            viewType = ViewType.LIST_VIEW
+        binding.tipIssueSelectionOK.setOnClickListener {
+            appDB!!.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED, "0"))
+            binding.tipIssueSelection.visibility = GONE
+        }
+        binding.cancelSelection.setOnClickListener {
+            selectedIssues.clear()
+            itemAdapter.notifyDataSetChanged()
+        }
+        binding.validateSelection.setOnClickListener {
+            if (selectedIssues.isEmpty()) {
+                WhatTheDuck.info(WeakReference(this), R.string.input_error__no_issue_selected, Toast.LENGTH_SHORT)
+            } else {
+                this.startActivity(Intent(this, AddIssues::class.java))
+            }
+        }
 
-            binding.tipIssueSelectionOK.setOnClickListener {
-                appDB!!.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED, "0"))
-                binding.tipIssueSelection.visibility = GONE
-            }
-            binding.cancelSelection.setOnClickListener {
-                selectedIssues.clear()
-                itemAdapter.notifyDataSetChanged()
-            }
-            binding.validateSelection.setOnClickListener {
-                if (selectedIssues.isEmpty()) {
-                    WhatTheDuck.info(WeakReference(this), R.string.input_error__no_issue_selected, Toast.LENGTH_SHORT)
-                } else {
-                    this.startActivity(Intent(this, AddIssues::class.java))
-                }
-            }
-        } else {
-            val switchView = binding.switchView
-            switchView.isChecked = viewType == ViewType.EDGE_VIEW
-
-            switchView.setOnClickListener {
-                if (switchView.isChecked) {
-                    if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_DATA_CONSUMPTION) && WhatTheDuck.isMobileConnection) {
-                        val builder = AlertDialog.Builder(this@IssueList)
-                        builder.setTitle(getString(R.string.bookcaseViewTitle))
-                        builder.setMessage(getString(R.string.bookcaseViewMessage))
-                        builder.setNegativeButton(R.string.cancel) { dialogInterface: DialogInterface, _: Int ->
-                            switchView.toggle()
-                            dialogInterface.dismiss()
-                        }
-                        builder.setPositiveButton(R.string.ok) { dialogInterface: DialogInterface, _: Int ->
-                            Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_DATA_CONSUMPTION)
-                            dialogInterface.dismiss()
-                            switchBetweenViews()
-                        }
-                        builder.create().show()
-                    } else {
+        val switchView = binding.switchView
+        switchView.setOnClickListener {
+            if (switchView.isChecked) {
+                if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_DATA_CONSUMPTION) && WhatTheDuck.isMobileConnection) {
+                    val builder = AlertDialog.Builder(this@IssueList)
+                    builder.setTitle(getString(R.string.bookcaseViewTitle))
+                    builder.setMessage(getString(R.string.bookcaseViewMessage))
+                    builder.setNegativeButton(R.string.cancel) { dialogInterface: DialogInterface, _: Int ->
+                        switchView.toggle()
+                        dialogInterface.dismiss()
+                    }
+                    builder.setPositiveButton(R.string.ok) { dialogInterface: DialogInterface, _: Int ->
+                        Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_DATA_CONSUMPTION)
+                        dialogInterface.dismiss()
                         switchBetweenViews()
                     }
+                    builder.create().show()
                 } else {
                     switchBetweenViews()
                 }
+            } else {
+                switchBetweenViews()
             }
         }
 

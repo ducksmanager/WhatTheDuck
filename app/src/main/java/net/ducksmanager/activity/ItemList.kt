@@ -2,15 +2,22 @@ package net.ducksmanager.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.view.View.*
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.wtd_list_navigation_country.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.coa.InducksPublication
@@ -34,6 +41,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         private const val REQUEST_IMAGE_CAPTURE = 1
     }
 
+    lateinit var networkCallback: ConnectivityManager.NetworkCallback
     protected var viewModel = AndroidViewModel(application)
     abstract val AndroidViewModel.data: LiveData<List<Item>>
 
@@ -51,8 +59,9 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     protected abstract fun shouldShowSelectionValidation(): Boolean
 
     open fun downloadAndShowList() {
-        val viewModelData = viewModel.data
-        viewModelData.observe(this, onObserve())
+        if (!viewModel.data.hasObservers()) {
+            viewModel.data.observe(this, onObserve())
+        }
     }
 
     open fun onObserve(): (t: List<Item>) -> Unit = { items ->
@@ -76,6 +85,33 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        networkCallback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                if (isOfflineMode) {
+                    isOfflineMode = false
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.Main) {
+                            this@ItemList.binding.offlineMode.visibility = GONE
+                            downloadAndShowList()
+                        }
+                    }
+                }
+            }
+
+            override fun onLost(network: Network?) {
+                if (!isOfflineMode) {
+                    isOfflineMode = true
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.Main) {
+                            this@ItemList.binding.offlineMode.visibility = VISIBLE
+                            downloadAndShowList()
+                        }
+                    }
+                }
+            }
+        }
+        WhatTheDuck.connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), networkCallback)
+
         binding =  WtdListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -86,6 +122,12 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.navigationCountry.root.selected?.setOnClickListener { _: View? -> goToView(PublicationList::class.java) }
 
         loadList()
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        WhatTheDuck.connectivityManager.unregisterNetworkCallback(networkCallback)
     }
 
     private fun goToView(cls: Class<*>) {
@@ -107,7 +149,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         show()
     }
 
-    private fun show() {
+    protected open fun show() {
         binding.itemList.adapter = itemAdapter
 
         toggleNavigation()
