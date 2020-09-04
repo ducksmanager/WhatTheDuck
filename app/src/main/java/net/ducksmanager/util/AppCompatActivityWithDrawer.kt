@@ -34,7 +34,7 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
 
     protected abstract fun shouldShowToolbar(): Boolean
 
-    protected open fun showToolbarIfExists() {
+    protected open fun toggleToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         if (shouldShowToolbar()) {
             toolbar.visibility = View.VISIBLE
@@ -69,10 +69,8 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
 
         drawerNavigation
             .setNavigationItemSelectedListener { menuItem ->
-                val target = menuActions[menuItem.itemId]?.get(0)
-                if (this.javaClass != target) {
-                    startActivity(Intent(this, target))
-                }
+                ItemList.type = WhatTheDuck.CollectionType.USER.toString()
+                startActivity(Intent(this, menuActions[menuItem.itemId]?.get(0)))
 
                 drawerLayout!!.closeDrawers()
 

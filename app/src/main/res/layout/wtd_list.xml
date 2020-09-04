@@ -262,6 +262,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="false"
+            android:visibility="invisible"
             android:src="@drawable/plus"
             app:backgroundTint="@android:color/holo_green_dark"
             app:tint="@android:color/white"

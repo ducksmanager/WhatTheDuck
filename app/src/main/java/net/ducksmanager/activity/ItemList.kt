@@ -2,15 +2,22 @@ package net.ducksmanager.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.view.View.*
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.wtd_list_navigation_country.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.coa.InducksPublication
@@ -34,7 +41,8 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         private const val REQUEST_IMAGE_CAPTURE = 1
     }
 
-    protected lateinit var viewModel: AndroidViewModel
+    lateinit var networkCallback: ConnectivityManager.NetworkCallback
+    protected var viewModel = AndroidViewModel(application)
     abstract val AndroidViewModel.data: LiveData<List<Item>>
 
     @JvmField
@@ -50,104 +58,87 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     protected abstract fun shouldShowItemSelectionTip(): Boolean
     protected abstract fun shouldShowSelectionValidation(): Boolean
 
-    open fun downloadList() {}
+    open fun downloadAndShowList() {
+        if (!viewModel.data.hasObservers()) {
+            viewModel.data.observe(this, onObserve())
+        }
+    }
+
+    open fun onObserve(): (t: List<Item>) -> Unit = { items ->
+        binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
+        itemAdapter.setItems(items)
+
+        val isEmptyList = items.isEmpty() || (isCoaList() && isOfflineMode)
+        binding.emptyList.visibility = if (isEmptyList) VISIBLE else INVISIBLE
+        binding.itemList.visibility = if (isEmptyList) INVISIBLE else VISIBLE
+        if (isCoaList() && isOfflineMode) {
+            binding.emptyList.text = getString(R.string.offline_mode_cannot_view)
+            binding.emptyList.setOnClickListener{
+                type = WhatTheDuck.CollectionType.USER.toString()
+                startActivity(Intent(this, CountryList::class.java))
+            }
+        }
+        binding.addToCollectionWrapper.visibility = if (shouldShowAddToCollectionButton()) VISIBLE else INVISIBLE
+
+        val filterEditText = binding.filter
+        itemAdapter.updateFilteredList("")
+        if (itemAdapter.shouldShowFilter()) {
+            itemAdapter.addOrReplaceFilterOnChangeListener(filterEditText)
+        } else {
+            filterEditText.visibility = GONE
+        }
+        binding.progressBar.visibility = GONE
+    }
 
     protected abstract var itemAdapter: ItemAdapter<Item>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        networkCallback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                if (isOfflineMode) {
+                    isOfflineMode = false
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.Main) {
+                            loadList()
+                        }
+                    }
+                }
+            }
+
+            override fun onLost(network: Network?) {
+                if (!isOfflineMode) {
+                    isOfflineMode = true
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.Main) {
+                            loadList()
+                        }
+                    }
+                }
+            }
+        }
+        WhatTheDuck.connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), networkCallback)
+
         binding =  WtdListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        showToolbarIfExists()
+        toggleToolbar()
+        toggleNavigation()
 
         binding.navigationAllCountries.root.setOnClickListener { goToView(CountryList::class.java) }
-
         binding.navigationCountry.root.selected?.setOnClickListener { _: View? -> goToView(PublicationList::class.java) }
 
-        loadList()
-    }
-
-    private fun goToView(cls: Class<*>) {
-        if (this@ItemList.javaClass != cls) {
-            startActivity(Intent(this, cls))
+        binding.addToCollectionWrapper.setOnClickListener {
+            binding.addToCollectionByPhotoButton.visibility = if (binding.addToCollectionByPhotoButton.visibility == GONE) VISIBLE else GONE
+            binding.addToCollectionBySelectionButton.visibility = if (binding.addToCollectionBySelectionButton.visibility == GONE) VISIBLE else GONE
         }
-    }
 
-    private fun goToAlternativeView() {
-        type = if (isCoaList())
-            WhatTheDuck.CollectionType.USER.toString()
-        else
-            WhatTheDuck.CollectionType.COA.toString()
-        loadList()
-    }
+        binding.addToCollectionByPhotoButton.setOnClickListener { takeCoverPicture() }
+        binding.addToCollectionBySelectionButton.setOnClickListener { goToAlternativeView() }
 
-    protected fun loadList() {
-        (application as WhatTheDuck).trackActivity(this)
         binding.itemList.adapter = itemAdapter
-        downloadList()
-        show()
-
-        viewModel = AndroidViewModel(application)
-        val viewModelData = viewModel.data
-        if (viewModelData.value == null) {
-            binding.progressBar.visibility = VISIBLE
-        }
-        viewModelData.observe(this, { items ->
-            itemAdapter.setItems(items)
-            binding.emptyList.visibility = if (items.isNotEmpty()) INVISIBLE else VISIBLE
-            binding.progressBar.visibility = GONE
-            binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
-
-            val filterEditText = binding.filter
-            itemAdapter.updateFilteredList("")
-            if (itemAdapter.shouldShowFilter()) {
-                itemAdapter.addOrReplaceFilterOnChangeListener(filterEditText)
-            } else {
-                filterEditText.visibility = GONE
-            }
-            show()
-        })
-    }
-
-    private fun show() {
-        if (!shouldShow()) {
-            return
-        }
-        toggleNavigation()
-        binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
-
-        binding.addToCollectionByPhotoButton.visibility = GONE
-        binding.addToCollectionBySelectionButton.visibility = GONE
-        val addToCollection = binding.addToCollectionWrapper
-        if (shouldShowAddToCollectionButton()) {
-            addToCollection.visibility = if (isCoaList()) GONE else VISIBLE
-
-            addToCollection.setOnClickListener {
-                binding.addToCollectionByPhotoButton.visibility = if (binding.addToCollectionByPhotoButton.visibility == GONE) VISIBLE else GONE
-                binding.addToCollectionBySelectionButton.visibility = if (binding.addToCollectionBySelectionButton.visibility == GONE) VISIBLE else GONE
-            }
-
-            if (!isCoaList()) {
-                binding.addToCollectionByPhotoButton
-                    .setOnClickListener { takeCoverPicture() }
-
-                binding.addToCollectionBySelectionButton
-                    .setOnClickListener {
-                        addToCollection.visibility = GONE
-                        goToAlternativeView()
-                    }
-            }
-        } else {
-            addToCollection.visibility = GONE
-        }
-
         val recyclerView = binding.itemList
-        binding.tipIssueSelection.visibility = if (shouldShowItemSelectionTip()) VISIBLE else GONE
-        binding.validateSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
-        binding.cancelSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
-
         while (recyclerView.itemDecorationCount > 0) {
             recyclerView.removeItemDecorationAt(0)
         }
@@ -157,6 +148,48 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
                 LinearLayoutManager(this).orientation
             ))
         }
+
+        (application as WhatTheDuck).trackActivity(this)
+        loadList()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        WhatTheDuck.connectivityManager.unregisterNetworkCallback(networkCallback)
+    }
+
+    private fun goToView(cls: Class<*>) {
+        if (this@ItemList.javaClass != cls) {
+            startActivity(Intent(this, cls))
+        }
+    }
+
+    private fun goToAlternativeView() {
+        if (isCoaList()) {
+            type = WhatTheDuck.CollectionType.USER.toString()
+        }
+        else {
+            IssueList.viewType = IssueList.ViewType.LIST_VIEW
+            type = WhatTheDuck.CollectionType.COA.toString()
+        }
+        (application as WhatTheDuck).trackActivity(this)
+        loadList()
+    }
+
+    protected fun loadList() {
+        show()
+        downloadAndShowList()
+    }
+
+    protected open fun show() {
+        binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
+
+        binding.addToCollectionByPhotoButton.visibility = GONE
+        binding.addToCollectionBySelectionButton.visibility = GONE
+
+        binding.tipIssueSelection.visibility = if (shouldShowItemSelectionTip()) VISIBLE else GONE
+        binding.validateSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
+        binding.cancelSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
     }
 
     private fun takeCoverPicture() {

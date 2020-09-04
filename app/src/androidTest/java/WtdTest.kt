@@ -69,7 +69,7 @@ open class WtdTest : AndroidJUnitRunner {
             mockServer = MockWebServer()
             mockServer!!.dispatcher = DownloadHandlerMock.dispatcher
 
-            WhatTheDuck.config = Properties()
+            WhatTheDuck.loadedConfig = Properties()
             WhatTheDuck.config.setProperty(WhatTheDuck.CONFIG_KEY_ROLE_NAME, "test")
             WhatTheDuck.config.setProperty(WhatTheDuck.CONFIG_KEY_ROLE_PASSWORD, "test")
 

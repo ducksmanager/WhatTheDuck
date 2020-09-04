@@ -17,6 +17,7 @@ import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.CountryListToUpdate
 import net.ducksmanager.persistence.models.composite.UserSetting
 import net.ducksmanager.util.AppCompatActivityWithDrawer
+import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
@@ -37,24 +38,27 @@ class Settings : AppCompatActivityWithDrawer() {
 
         binding = SettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        showToolbarIfExists()
+        toggleToolbar()
 
         binding.notifySwitch.isChecked = appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)?.value.equals("1")
 
-        appDB!!.inducksCountryDao().findAllWithNotification().observe(this, { countryNamesWithNotification ->
-            val countryNames = countryNamesWithNotification.map { it.country }
-            val countriesToNotifyTo = countryNamesWithNotification.filter { it.isNotified }.map { it.country.countryCode }.toMutableSet()
+        Settings.loadNotificationCountries(this) {
+            appDB!!.inducksCountryDao().findAllWithNotification().observe(this, { countryNamesWithNotification ->
+                val countryNames = countryNamesWithNotification.map { it.country }
+                val countriesToNotifyTo = countryNamesWithNotification.filter { it.isNotified }.map { it.country.countryCode }.toMutableSet()
 
-            val recyclerView = binding.notifiedCountriesList
-            recyclerView.adapter = CountryToNotifyListAdapter(this@Settings, countryNames, countriesToNotifyTo)
-            recyclerView.layoutManager = LinearLayoutManager(this@Settings)
+                val recyclerView = binding.notifiedCountriesList
+                recyclerView.adapter = CountryToNotifyListAdapter(this@Settings, countryNames, countriesToNotifyTo)
+                recyclerView.layoutManager = LinearLayoutManager(this@Settings)
 
-            if (isOfflineMode) {
-                binding.offlineMode.visibility = View.VISIBLE
-                binding.notifySwitch.isEnabled = false
-                binding.save.isEnabled = false
-            }
-        })
+                if (isOfflineMode) {
+                    binding.offlineMode.visibility = View.VISIBLE
+                    binding.notifySwitch.isEnabled = false
+                    binding.save.isEnabled = false
+                }
+                binding.progressBar.visibility = View.GONE
+            })
+        }
 
         binding.version.text = getString(R.string.version, applicationVersion)
 

@@ -33,6 +33,8 @@ import java.util.*
 
 class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
+    override lateinit var itemAdapter: ItemAdapter<InducksIssueWithUserIssueAndScore>
+
     companion object {
         var viewType = ViewType.LIST_VIEW
     }
@@ -42,7 +44,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
     override val AndroidViewModel.data: LiveData<List<InducksIssueWithUserIssueAndScore>>
         get() = appDB!!.inducksIssueDao().findByPublicationCode(getPublicationCode())
 
-    override fun downloadList() {
+    override fun downloadAndShowList() {
         DmServer.api.getIssues(getPublicationCode()).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", this) {
             override fun onFailureFailover() {
                 viewModel.data.observe(this@IssueList, { existingInducksIssues ->
@@ -52,7 +54,11 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
                             appDB!!.inducksIssueDao().insertList(userIssues.map { issue ->
                                 InducksIssue(getPublicationCode(), issue.issueNumber, "")
                             })
+                            super@IssueList.downloadAndShowList()
                         })
+                    }
+                    else {
+                        super@IssueList.downloadAndShowList()
                     }
                 })
             }
@@ -61,13 +67,14 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
                 appDB!!.inducksIssueDao().insertList(response.body()!!.map { (issueNumber, title) ->
                     InducksIssue(getPublicationCode(), issueNumber, title)
                 })
+                super@IssueList.downloadAndShowList()
             }
         })
     }
 
-    override lateinit var itemAdapter: ItemAdapter<InducksIssueWithUserIssueAndScore>
-    init {
-        updateAdapter()
+    override fun onObserve(): (t: List<InducksIssueWithUserIssueAndScore>) -> Unit {
+        binding.switchViewWrapper.visibility = if (isOfflineMode || isCoaList()) GONE else VISIBLE
+        return super.onObserve()
     }
 
     private fun updateAdapter() {
@@ -83,61 +90,63 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         LIST_VIEW, EDGE_VIEW
     }
 
+    override fun show() {
+        binding.switchView.isChecked = viewType == ViewType.EDGE_VIEW
+        if (isCoaList()) {
+            viewType = ViewType.LIST_VIEW
+        }
+        updateAdapter()
+        binding.itemList.adapter = itemAdapter
+        super.show()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        updateAdapter()
         super.onCreate(savedInstanceState)
         setNavigationCountry(WhatTheDuck.selectedCountry!!)
         setNavigationPublication(WhatTheDuck.selectedPublication!!)
 
         selectedIssues = mutableSetOf()
-        val switchViewWrapper = binding.switchViewWrapper
-        DraggableRelativeLayout.makeDraggable(switchViewWrapper)
+        DraggableRelativeLayout.makeDraggable(binding.switchViewWrapper)
 
-        switchViewWrapper.visibility = GONE
-        if (isCoaList()) {
-            viewType = ViewType.LIST_VIEW
+        binding.tipIssueSelectionOK.setOnClickListener {
+            appDB!!.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED, "0"))
+            binding.tipIssueSelection.visibility = GONE
+        }
+        binding.cancelSelection.setOnClickListener {
+            selectedIssues.clear()
+            itemAdapter.notifyDataSetChanged()
+        }
+        binding.validateSelection.setOnClickListener {
+            if (selectedIssues.isEmpty()) {
+                WhatTheDuck.info(WeakReference(this), R.string.input_error__no_issue_selected, Toast.LENGTH_SHORT)
+            } else {
+                this.startActivity(Intent(this, AddIssues::class.java))
+            }
+        }
 
-            binding.tipIssueSelectionOK.setOnClickListener {
-                appDB!!.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED, "0"))
-                binding.tipIssueSelection.visibility = GONE
-            }
-            binding.cancelSelection.setOnClickListener {
-                selectedIssues.clear()
-                itemAdapter.notifyDataSetChanged()
-            }
-            binding.validateSelection.setOnClickListener {
-                if (selectedIssues.isEmpty()) {
-                    WhatTheDuck.info(WeakReference(this), R.string.input_error__no_issue_selected, Toast.LENGTH_SHORT)
-                } else {
-                    this.startActivity(Intent(this, AddIssues::class.java))
-                }
-            }
-        } else if (!isOfflineMode){
-            val switchView = binding.switchView
-            switchViewWrapper.visibility = VISIBLE
-            switchView.isChecked = viewType == ViewType.EDGE_VIEW
-
-            switchView.setOnClickListener {
-                if (switchView.isChecked) {
-                    if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_DATA_CONSUMPTION) && WhatTheDuck.isMobileConnection) {
-                        val builder = AlertDialog.Builder(this@IssueList)
-                        builder.setTitle(getString(R.string.bookcaseViewTitle))
-                        builder.setMessage(getString(R.string.bookcaseViewMessage))
-                        builder.setNegativeButton(R.string.cancel) { dialogInterface: DialogInterface, _: Int ->
-                            switchView.toggle()
-                            dialogInterface.dismiss()
-                        }
-                        builder.setPositiveButton(R.string.ok) { dialogInterface: DialogInterface, _: Int ->
-                            Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_DATA_CONSUMPTION)
-                            dialogInterface.dismiss()
-                            switchBetweenViews()
-                        }
-                        builder.create().show()
-                    } else {
+        val switchView = binding.switchView
+        switchView.setOnClickListener {
+            if (switchView.isChecked) {
+                if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_DATA_CONSUMPTION) && WhatTheDuck.isMobileConnection) {
+                    val builder = AlertDialog.Builder(this@IssueList)
+                    builder.setTitle(getString(R.string.bookcaseViewTitle))
+                    builder.setMessage(getString(R.string.bookcaseViewMessage))
+                    builder.setNegativeButton(R.string.cancel) { dialogInterface: DialogInterface, _: Int ->
+                        switchView.toggle()
+                        dialogInterface.dismiss()
+                    }
+                    builder.setPositiveButton(R.string.ok) { dialogInterface: DialogInterface, _: Int ->
+                        Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_DATA_CONSUMPTION)
+                        dialogInterface.dismiss()
                         switchBetweenViews()
                     }
+                    builder.create().show()
                 } else {
                     switchBetweenViews()
                 }
+            } else {
+                switchBetweenViews()
             }
         }
 
@@ -158,7 +167,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
     override fun shouldShowItemSelectionTip(): Boolean = isCoaList() && ! appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED)?.value.equals("0")
 
-    override fun shouldShowSelectionValidation(): Boolean = isCoaList()
+    override fun shouldShowSelectionValidation(): Boolean = isCoaList() && !isOfflineMode
 
     override fun hasDividers() = viewType != ViewType.EDGE_VIEW
 
@@ -170,7 +179,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
     override fun shouldShowToolbar() = !isLandscapeEdgeView
 
-    override fun shouldShowAddToCollectionButton() = !isOfflineMode && !isLandscapeEdgeView
+    override fun shouldShowAddToCollectionButton() = !isCoaList() && !isOfflineMode && !isLandscapeEdgeView
 
     private val recyclerView: RecyclerView
         get() {
@@ -187,6 +196,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
             ViewType.LIST_VIEW
 
         updateAdapter()
+        binding.itemList.adapter = itemAdapter
         loadList()
     }
 

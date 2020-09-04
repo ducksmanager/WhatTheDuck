@@ -28,7 +28,7 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
     override val AndroidViewModel.data: LiveData<List<InducksCountryNameWithPossession>>
         get() = appDB!!.inducksCountryDao().findAllWithPossession()
 
-    override fun downloadList() {
+    override fun downloadAndShowList() {
         if (!isOfflineMode && Login.isObsoleteSync(appDB!!.syncDao().findLatest())) {
             DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>(EVENT_RETRIEVE_ALL_COUNTRIES, this) {
                 override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
@@ -36,8 +36,12 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
                     appDB!!.inducksCountryDao().insertList( response.body()!!.keys.map { countryCode ->
                         InducksCountryName(countryCode, response.body()!![countryCode]!!)
                     })
+                    super@CountryList.downloadAndShowList()
                 }
             })
+        }
+        else {
+            super@CountryList.downloadAndShowList()
         }
     }
 
@@ -70,7 +74,7 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
     override fun shouldShowToolbar() = true
 
-    override fun shouldShowAddToCollectionButton() = !isOfflineMode
+    override fun shouldShowAddToCollectionButton() = !isCoaList() && !isOfflineMode
 
     override fun hasDividers() = true
 

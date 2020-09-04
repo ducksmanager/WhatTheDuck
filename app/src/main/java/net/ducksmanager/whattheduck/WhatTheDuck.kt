@@ -6,7 +6,6 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.res.AssetManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -41,7 +40,33 @@ class WhatTheDuck : Application() {
     }
 
     companion object {
-        lateinit var config: Properties
+        private lateinit var instance: WhatTheDuck
+        private var loadedConfig: Properties? = null
+
+        val config: Properties
+            get() {
+                if (loadedConfig == null) {
+                    var reader: InputStream? = null
+                    try {
+                        reader = instance.assets.open(CONFIG)
+                        loadedConfig = Properties()
+                        loadedConfig!!.load(reader)
+                    } catch (e: IOException) {
+                        System.err.println("Config file not found, aborting")
+                        exitProcess(-1)
+                    } finally {
+                        if (reader != null) {
+                            try {
+                                reader.close()
+                            } catch (e: IOException) {
+                                System.err.println("Error while reading config file, aborting")
+                                exitProcess(-1)
+                            }
+                        }
+                    }
+                }
+                return loadedConfig!!
+            }
         var isTestContext = false
         var isOfflineMode = false
 
@@ -60,6 +85,8 @@ class WhatTheDuck : Application() {
 
         lateinit var applicationVersion: String
 
+        lateinit var connectivityManager: ConnectivityManager
+
         var DB_NAME = "appDB"
         var appDB: AppDatabase? = null
 
@@ -75,27 +102,6 @@ class WhatTheDuck : Application() {
         var applicationContext: Context? = null
 
         var tokenProvider: BeamsTokenProvider? = null
-
-        private fun loadConfig(assets: AssetManager) {
-            var reader: InputStream? = null
-            try {
-                reader = assets.open(CONFIG)
-                config = Properties()
-                config.load(reader)
-            } catch (e: IOException) {
-                System.err.println("Config file not found, aborting")
-                exitProcess(-1)
-            } finally {
-                if (reader != null) {
-                    try {
-                        reader.close()
-                    } catch (e: IOException) {
-                        System.err.println("Error while reading config file, aborting")
-                        exitProcess(-1)
-                    }
-                }
-            }
-        }
 
         val dmUrl: String
             get() = config.getProperty(CONFIG_KEY_DM_URL)
@@ -157,7 +163,9 @@ class WhatTheDuck : Application() {
                 }
                 val setting = appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)
                 setting?.value = "0"
-                appDB!!.userSettingDao().update(setting)
+                if (setting != null) {
+                    appDB!!.userSettingDao().update(setting)
+                }
             }
         }
 
@@ -179,12 +187,10 @@ class WhatTheDuck : Application() {
 
         val isMobileConnection: Boolean
             get() {
-                val cm = applicationContext!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
                 return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    cm.activeNetworkInfo != null && cm.activeNetworkInfo.isConnected && cm.activeNetworkInfo.type == ConnectivityManager.TYPE_MOBILE
+                    connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected && connectivityManager.activeNetworkInfo.type == ConnectivityManager.TYPE_MOBILE
                 } else {
-                    cm.activeNetwork != null && cm.getNetworkCapabilities(cm.activeNetwork).hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                    connectivityManager.activeNetwork != null && connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
                 }
             }
 
@@ -201,12 +207,13 @@ class WhatTheDuck : Application() {
     }
 
     fun setup() {
+        instance = this
         initApplicationVersion()
+        initConnectivityManager()
         Companion.applicationContext = applicationContext
         locale = applicationContext.resources.configuration.locale.language
 
         if (!isTestContext) {
-            loadConfig(assets)
             appDB = Room.databaseBuilder(applicationContext, AppDatabase::class.java, DB_NAME)
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
@@ -216,6 +223,10 @@ class WhatTheDuck : Application() {
         initApi()
         PicassoCache.clearCache(Picasso.with(applicationContext))
 
+    }
+
+    private fun initConnectivityManager() {
+        connectivityManager = applicationContext!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
     private fun initApplicationVersion() {
