@@ -23,6 +23,8 @@ import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
 import net.ducksmanager.whattheduck.databinding.AddissuesBinding
 import retrofit2.Response
 import java.lang.ref.WeakReference
@@ -84,8 +86,8 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
                 else -> InducksIssueWithUserIssueAndScore.NO_CONDITION
             }
             val issueListToUpdate = IssueListToUpdate(
-                WhatTheDuck.selectedPublication!!.publicationCode,
-                WhatTheDuck.selectedIssues,
+                selectedPublication!!.publicationCode,
+                selectedIssues,
                 dmCondition,
                 if (PurchaseAdapter.selectedItem is NoPurchase) null else PurchaseAdapter.selectedItem!!.id
             )
@@ -106,15 +108,15 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
             showNewPurchase()
         }
 
-        when (WhatTheDuck.selectedIssues.size) {
+        when (selectedIssues.size) {
             1 -> {
-                binding.addIssueTitle.text = getString(R.string.insert_issue__title_single_issue, WhatTheDuck.selectedIssues.first())
+                binding.addIssueTitle.text = getString(R.string.insert_issue__title_single_issue, selectedIssues.first())
             }
             2 -> {
-                binding.addIssueTitle.text = getString(R.string.insert_issue__title_multiple_issues_singular, WhatTheDuck.selectedIssues.first())
+                binding.addIssueTitle.text = getString(R.string.insert_issue__title_multiple_issues_singular, selectedIssues.first())
             }
             else -> {
-                binding.addIssueTitle.text = getString(R.string.insert_issue__title_multiple_issues_plural, WhatTheDuck.selectedIssues.first(), WhatTheDuck.selectedIssues.size - 1)
+                binding.addIssueTitle.text = getString(R.string.insert_issue__title_multiple_issues_plural, selectedIssues.first(), selectedIssues.size - 1)
             }
         }
         binding.progressBar.visibility = GONE

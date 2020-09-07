@@ -3,6 +3,7 @@ package net.ducksmanager.util
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.View.VISIBLE
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,9 @@ import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAn
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
 import net.ducksmanager.whattheduck.databinding.ActivityCoverflowBinding
 
 class CoverFlowActivity : AppCompatActivity() {
@@ -33,17 +37,25 @@ class CoverFlowActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         appDB!!.coverSearchIssueDao().findAll().observe(this, { searchIssues: List<CoverSearchIssueWithUserIssueAndScore> ->
+            if (searchIssues.isEmpty()) {
+                return@observe
+            }
             data = searchIssues
             adapter = CoverFlowAdapter(this)
             adapter.setData(searchIssues)
 
+            binding.coverflow.visibility = VISIBLE
             binding.coverflow.adapter = adapter
             binding.coverflow.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, _: Int, _: Long ->
                 if (currentSuggestion!!.userIssue == null) {
-                    WhatTheDuck.selectedCountry = appDB!!.inducksCountryDao().findByCountryCode(currentSuggestion!!.coverSearchIssue.coverCountryCode).value
-                    WhatTheDuck.selectedPublication = appDB!!.inducksPublicationDao().findByPublicationCode(currentSuggestion!!.coverSearchIssue.coverPublicationCode).value
-                    WhatTheDuck.selectedIssues = mutableSetOf(currentSuggestion!!.coverSearchIssue.coverIssueNumber)
-                    this@CoverFlowActivity.startActivity(Intent(this@CoverFlowActivity, AddIssues::class.java))
+                    appDB!!.inducksCountryDao().findByCountryCode(currentSuggestion!!.coverSearchIssue.coverCountryCode).observe(this, { country ->
+                        selectedCountry = country
+                        appDB!!.inducksPublicationDao().findByPublicationCode(currentSuggestion!!.coverSearchIssue.coverPublicationCode).observe(this, { publication ->
+                            selectedPublication = publication
+                            selectedIssues = mutableSetOf(currentSuggestion!!.coverSearchIssue.coverIssueNumber)
+                            this@CoverFlowActivity.startActivity(Intent(this@CoverFlowActivity, AddIssues::class.java))
+                        })
+                    })
                 } else {
                     Toast.makeText(
                         this@CoverFlowActivity,
@@ -61,7 +73,7 @@ class CoverFlowActivity : AppCompatActivity() {
                         imageResource = R.drawable.flags_unknown
                     }
 
-                    toggleInfoVisibility(View.VISIBLE)
+                    toggleInfoVisibility(VISIBLE)
 
                     binding.countrybadge.setImageResource(imageResource)
 
