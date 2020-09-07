@@ -5,10 +5,12 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.view.View.*
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +30,7 @@ import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.databinding.WtdListBinding
+import java.lang.RuntimeException
 import java.lang.ref.WeakReference
 
 abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
@@ -95,7 +98,8 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        networkCallback = object : ConnectivityManager.NetworkCallback() {
+        networkCallback = @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+        object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 if (isOfflineMode) {
                     isOfflineMode = false
@@ -118,7 +122,9 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
                 }
             }
         }
-        WhatTheDuck.connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), networkCallback)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            WhatTheDuck.connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), networkCallback)
+        }
 
         binding =  WtdListBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -155,7 +161,11 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     override fun onStop() {
         super.onStop()
-        WhatTheDuck.connectivityManager.unregisterNetworkCallback(networkCallback)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            try {
+                WhatTheDuck.connectivityManager.unregisterNetworkCallback(networkCallback)
+            } catch (e: RuntimeException) { }
+        }
     }
 
     private fun goToView(cls: Class<*>) {
