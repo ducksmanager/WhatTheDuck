@@ -1,4 +1,5 @@
 *.iml
+*.keystore
 .gradle
 /.idea/
 /app/build/
