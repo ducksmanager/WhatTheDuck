@@ -42,7 +42,9 @@ class Login : AppCompatActivity() {
     private lateinit var binding: LoginBinding
 
     companion object {
-        fun isObsoleteSync(latestSync: Sync?) = latestSync == null || latestSync.timestamp.epochSecond - Instant.now().epochSecond > 12 * 60 * 60
+        fun isObsoleteSync(latestSync: Sync?): Boolean {
+            return latestSync == null || latestSync.timestamp.epochSecond - Instant.now().epochSecond > 12 * 60 * 60
+        }
 
         fun fetchCollection(activityRef: WeakReference<Activity>, alertIfError: Boolean?) {
             ItemList.type = WhatTheDuck.CollectionType.USER.toString()
@@ -69,6 +71,7 @@ class Login : AppCompatActivity() {
                 override fun onSuccessfulResponse(response: Response<List<Issue>>) {
                     val user = User(DmServer.apiDmUser!!, DmServer.apiDmPassword!!)
                     if (user.username !== WhatTheDuck.currentUser?.username) {
+                        WhatTheDuck.currentUser = user
                         appDB!!.userDao().insert(user)
                     }
 
@@ -135,15 +138,15 @@ class Login : AppCompatActivity() {
         }
 
         appDB!!.userDao().currentUser.observe(this, { user ->
-            if (user != null) {
-                WhatTheDuck.currentUser = user
+            if (user == null) {
+                showLoginForm()
+            }
+            else if (WhatTheDuck.currentUser == null) {
                 DmServer.apiDmUser = user.username
                 DmServer.apiDmPassword = user.password
 
                 binding.progressBar.visibility = VISIBLE
                 fetchCollection(WeakReference(this@Login), false)
-            } else {
-                showLoginForm()
             }
         })
     }

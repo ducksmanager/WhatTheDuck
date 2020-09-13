@@ -41,7 +41,7 @@ class WhatTheDuck : Application() {
 
     companion object {
         private lateinit var instance: WhatTheDuck
-        private var loadedConfig: Properties? = null
+        var loadedConfig: Properties? = null
 
         val config: Properties
             get() {

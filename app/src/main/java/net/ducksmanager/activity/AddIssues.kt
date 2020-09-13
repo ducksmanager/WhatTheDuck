@@ -8,6 +8,7 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import android.widget.Toast
@@ -123,18 +124,14 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun toggleAddPurchaseButton(toggle: Boolean) {
-        binding.addpurchase.visibility =
-            if (toggle)
-                View.VISIBLE
-            else
-                View.GONE
+        binding.addpurchase.visibility = if (toggle) VISIBLE else GONE
     }
 
     private fun showNewPurchase() {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
         val newPurchaseSection = binding.newpurchase
-        newPurchaseSection.visibility = View.VISIBLE
+        newPurchaseSection.visibility = VISIBLE
 
         val purchaseDateNew = binding.purchasedatenew
         purchaseDateNew.requestFocus()
@@ -171,7 +168,7 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
                         downloadPurchaseList()
                         toggleAddPurchaseButton(true)
                         showPurchases()
-                        newPurchaseSection.visibility = View.GONE
+                        newPurchaseSection.visibility = GONE
                     }
                 })
             }
@@ -179,7 +176,7 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
         binding.createpurchasecancel
             .setOnClickListener { floatingButtonView: View ->
                 hideKeyboard(floatingButtonView)
-                newPurchaseSection.visibility = View.GONE
+                newPurchaseSection.visibility = GONE
                 toggleAddPurchaseButton(true)
             }
     }

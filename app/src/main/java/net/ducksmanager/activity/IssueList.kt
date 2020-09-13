@@ -26,7 +26,9 @@ import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
 import retrofit2.Response
 import java.lang.ref.WeakReference
 import java.util.*
@@ -39,7 +41,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         var viewType = ViewType.LIST_VIEW
     }
 
-    fun getPublicationCode() = WhatTheDuck.selectedPublication!!.publicationCode
+    fun getPublicationCode() = selectedPublication!!.publicationCode
 
     override val AndroidViewModel.data: LiveData<List<InducksIssueWithUserIssueAndScore>>
         get() = appDB!!.inducksIssueDao().findByPublicationCode(getPublicationCode())
@@ -103,8 +105,8 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         updateAdapter()
         super.onCreate(savedInstanceState)
-        setNavigationCountry(WhatTheDuck.selectedCountry!!)
-        setNavigationPublication(WhatTheDuck.selectedPublication!!)
+        setNavigationCountry(selectedCountry!!)
+        setNavigationPublication(selectedPublication!!)
 
         selectedIssues = mutableSetOf()
         DraggableRelativeLayout.makeDraggable(binding.switchViewWrapper)
@@ -171,7 +173,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
     override fun hasDividers() = viewType != ViewType.EDGE_VIEW
 
-    override fun shouldShow() = WhatTheDuck.selectedCountry != null && WhatTheDuck.selectedPublication != null
+    override fun shouldShow() = selectedCountry != null && selectedPublication != null
 
     override fun shouldShowNavigationCountry() = !isLandscapeEdgeView
 

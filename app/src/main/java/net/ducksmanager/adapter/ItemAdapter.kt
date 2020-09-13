@@ -22,7 +22,7 @@ abstract class ItemAdapter<Item> internal constructor(
     val resourceToInflate: Int
 ) : RecyclerView.Adapter<ItemAdapter<Item>.ViewHolder>() {
 
-    var items = emptyList<Item>()
+    private var items = emptyList<Item>()
     protected var filteredItems = mutableListOf<Item>()
 
     open fun shouldShowFilter() = filteredItems.size > ItemList.MIN_ITEM_NUMBER_FOR_FILTER
