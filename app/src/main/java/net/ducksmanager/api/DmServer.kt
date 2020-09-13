@@ -30,14 +30,7 @@ class DmServer {
         const val EVENT_GET_USER_NOTIFICATION_COUNTRIES = "getUserNotificationCountries"
         const val EVENT_RETRIEVE_ALL_COUNTRIES = "getInducksCountries"
 
-        var completedSyncs = hashMapOf(
-            EVENT_RETRIEVE_COLLECTION to false,
-            EVENT_RETRIEVE_ALL_PUBLICATIONS to false,
-            EVENT_GET_PURCHASES to false,
-            EVENT_GET_SUGGESTED_ISSUES to false,
-            EVENT_GET_USER_NOTIFICATION_COUNTRIES to false,
-            EVENT_RETRIEVE_ALL_COUNTRIES to false,
-        )
+        lateinit var completedSyncs: HashMap<String, Boolean>
 
         lateinit var api: DmServerApi
 
@@ -45,20 +38,27 @@ class DmServer {
         var apiDmPassword: String? = null
 
         fun getRequestHeaders(withUserCredentials: Boolean): Map<String, String> {
-            val headers = HashMap<String, String>()
-            headers["Authorization"] = Credentials.basic(
-                WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_ROLE_NAME),
-                WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_ROLE_PASSWORD)
-            )
-            headers["x-dm-version"] = WhatTheDuck.applicationVersion
-            if (withUserCredentials && apiDmUser != null && apiDmPassword != null) {
-                headers["x-dm-user"] = apiDmUser!!
-                headers["x-dm-pass"] = apiDmPassword!!
-            }
-            return headers.toMap()
+            val filledUserCredentials = withUserCredentials && apiDmUser != null && apiDmPassword != null
+            return hashMapOf(
+                "Authorization" to Credentials.basic(
+                    WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_ROLE_NAME),
+                    WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_ROLE_PASSWORD)
+                ),
+                "x-dm-version" to WhatTheDuck.applicationVersion,
+                "x-dm-user" to if (filledUserCredentials) apiDmUser!! else "",
+                "x-dm-pass" to if (filledUserCredentials) apiDmPassword!! else ""
+            ).toMap()
         }
 
         fun initApi() {
+            completedSyncs = hashMapOf(
+                EVENT_RETRIEVE_COLLECTION to false,
+                EVENT_RETRIEVE_ALL_PUBLICATIONS to false,
+                EVENT_GET_PURCHASES to false,
+                EVENT_GET_SUGGESTED_ISSUES to false,
+                EVENT_GET_USER_NOTIFICATION_COUNTRIES to false,
+                EVENT_RETRIEVE_ALL_COUNTRIES to false,
+            )
             val gson = GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create()

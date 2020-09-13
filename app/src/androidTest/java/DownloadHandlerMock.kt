@@ -1,6 +1,6 @@
 import WtdTest.Companion.mockServer
 import android.text.TextUtils
-import net.ducksmanager.util.Settings.toSHA1
+import net.ducksmanager.util.Settings.Companion.toSHA1
 import okhttp3.Headers
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -23,7 +23,7 @@ internal object DownloadHandlerMock {
     val dispatcher: Dispatcher = object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse {
             val path = request.path
-            System.err.println("Mocking $path")
+            println("Mocking $path")
             return when {
                 path!!.contains("/internal/") -> dispatchForCover(path)
                 path.contains("/edges/") -> dispatchForEdges(path)
@@ -63,9 +63,7 @@ internal object DownloadHandlerMock {
     }
 
     private fun getJsonFixture(name: String): String {
-        val json = convertStreamToString(
-            openPathAsStream("fixtures/$name.json")
-        )
+        val json = convertStreamToString(openPathAsStream("fixtures/$name.json"))
         return json.replace("http://mocked/", mockServer!!.url("/internal/covers/").toString(), true)
     }
 
@@ -83,9 +81,14 @@ internal object DownloadHandlerMock {
     private fun getImageFixture(name: String): Buffer = getImageFixture(name, "jpg")
 
     private fun openPathAsStream(path: String): InputStream {
-        val path2=path.replace("_.json", "empty.json")
+        var path2=path.replace("_.json", "empty.json")
         val loader = Thread.currentThread().contextClassLoader
-        return loader.getResourceAsStream(path2)
+        var resourceAsStream = loader!!.getResourceAsStream(path2)
+        if (resourceAsStream == null) {
+            path2=path2.replace(".json", "/${WtdTest.currentLocale!!.defaultCountry}.json")
+            resourceAsStream = loader.getResourceAsStream(path2)
+        }
+        return resourceAsStream
             ?: throw IllegalStateException("Invalid path: $path2")
     }
 

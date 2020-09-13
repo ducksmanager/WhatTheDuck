@@ -1,7 +1,11 @@
 
 import android.app.Activity
+import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Resources
+import android.os.LocaleList
 import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
@@ -20,13 +24,16 @@ import net.ducksmanager.activity.Login
 import net.ducksmanager.persistence.AppDatabase
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_API_ENDPOINT_URL
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_DM_URL
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_EDGES_URL
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_ROLE_NAME
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_ROLE_PASSWORD
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.config
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers
-import org.junit.Assert
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Rule
+import org.junit.*
 import java.util.*
 
 open class WtdTest : AndroidJUnitRunner {
@@ -70,19 +77,19 @@ open class WtdTest : AndroidJUnitRunner {
             mockServer!!.dispatcher = DownloadHandlerMock.dispatcher
 
             WhatTheDuck.loadedConfig = Properties()
-            WhatTheDuck.config.setProperty(WhatTheDuck.CONFIG_KEY_ROLE_NAME, "test")
-            WhatTheDuck.config.setProperty(WhatTheDuck.CONFIG_KEY_ROLE_PASSWORD, "test")
+            config.setProperty(CONFIG_KEY_ROLE_NAME, "test")
+            config.setProperty(CONFIG_KEY_ROLE_PASSWORD, "test")
 
-            WhatTheDuck.config.setProperty(
-                WhatTheDuck.CONFIG_KEY_DM_URL,
+            config.setProperty(
+                CONFIG_KEY_DM_URL,
                 mockServer!!.url("/dm/").toString()
             )
-            WhatTheDuck.config.setProperty(
-                WhatTheDuck.CONFIG_KEY_API_ENDPOINT_URL,
+            config.setProperty(
+                CONFIG_KEY_API_ENDPOINT_URL,
                 mockServer!!.url("/dm-server/").toString()
             )
-            WhatTheDuck.config.setProperty(
-                WhatTheDuck.CONFIG_KEY_EDGES_URL,
+            config.setProperty(
+                CONFIG_KEY_EDGES_URL,
                 mockServer!!.url("/edges/").toString()
             )
         }
@@ -112,8 +119,7 @@ open class WtdTest : AndroidJUnitRunner {
 
     init {
         currentLocale = object : LocaleWithDefaultPublication("us", "en") {
-            override val defaultPublication: String
-                get() = "us/WDC"
+            override val defaultPublication: String = "us/WDC"
         }
         WhatTheDuck.DB_NAME = "appDB_test"
         WhatTheDuck.isTestContext = true
@@ -140,9 +146,15 @@ open class WtdTest : AndroidJUnitRunner {
     @Before
     fun resetDb() {
         appDB = Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
+            getApplicationContext(),
             AppDatabase::class.java
         ).allowMainThreadQueries().build()
+        WhatTheDuck.currentUser = null
+    }
+
+    @After
+    fun closeDB() {
+        appDB!!.close()
     }
 
     @Before
@@ -152,10 +164,13 @@ open class WtdTest : AndroidJUnitRunner {
 
     fun switchLocale() {
         if (currentLocale != null) {
-            val resources = WhatTheDuck.applicationContext!!.resources
-            val configuration = resources.configuration
-            configuration.setLocale(currentLocale!!.locale)
-            resources.updateConfiguration(configuration, resources.displayMetrics)
+            Locale.setDefault(currentLocale!!.locale)
+            // here we update locale for app resources
+            val context: Context = getApplicationContext()
+            val res: Resources = context.resources
+            val config: Configuration = res.configuration
+            config.setLocales(LocaleList(currentLocale!!.locale))
+            res.updateConfiguration(config, res.displayMetrics)
         }
     }
 

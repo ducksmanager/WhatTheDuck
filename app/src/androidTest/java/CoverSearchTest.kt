@@ -69,7 +69,7 @@ class CoverSearchTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(cu
         private fun coverCurrentlyVisible(): Matcher<View> {
             return object : BoundedMatcher<View, ImageView>(ImageView::class.java) {
                 public override fun matchesSafely(item: ImageView): Boolean {
-                    return CoverFlowActivity.currentSuggestion!!.coverSearchIssue.coverUrl == item.tag
+                    return item.tag != null && CoverFlowActivity.currentSuggestion?.coverSearchIssue?.coverUrl == item.tag
                         && item.visibility == View.VISIBLE
                 }
 

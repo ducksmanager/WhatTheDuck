@@ -35,7 +35,7 @@ class AddIssuesTest : WtdTest() {
 
         clickOnActionButton(R.id.addToCollectionBySelectionButton)
 
-        onView(withText("6")).perform(ViewActions.click())
+        onView(allOf(withId(R.id.itemtitle), withText("6"))).perform(ViewActions.click())
 
         onView(withId(R.id.validateSelection)).perform(ViewActions.click())
 
