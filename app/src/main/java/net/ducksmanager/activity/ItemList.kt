@@ -2,35 +2,27 @@ package net.ducksmanager.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkRequest
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.view.View.*
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.wtd_list_navigation_country.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.util.AppCompatActivityWithDrawer
+import net.ducksmanager.util.ConnectionDetector
 import net.ducksmanager.util.CoverFlowFileHandler
 import net.ducksmanager.util.CoverFlowFileHandler.SearchFromCover
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.databinding.WtdListBinding
-import java.lang.RuntimeException
 import java.lang.ref.WeakReference
 
 abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
@@ -44,7 +36,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         private const val REQUEST_IMAGE_CAPTURE = 1
     }
 
-    lateinit var networkCallback: ConnectivityManager.NetworkCallback
+    lateinit var connectionDetector: ConnectionDetector
     protected var viewModel = AndroidViewModel(application)
     abstract val AndroidViewModel.data: LiveData<List<Item>>
 
@@ -98,36 +90,12 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        networkCallback = @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-        object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                if (isOfflineMode) {
-                    isOfflineMode = false
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.Main) {
-                            loadList()
-                        }
-                    }
-                }
-            }
-
-            override fun onLost(network: Network?) {
-                if (!isOfflineMode) {
-                    isOfflineMode = true
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.Main) {
-                            loadList()
-                        }
-                    }
-                }
-            }
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            WhatTheDuck.connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), networkCallback)
-        }
-
         binding =  WtdListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        connectionDetector = ConnectionDetector(lifecycleScope) { run {
+            loadList()
+        } }
 
         toggleToolbar()
         toggleNavigation()
@@ -161,11 +129,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     override fun onStop() {
         super.onStop()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            try {
-                WhatTheDuck.connectivityManager.unregisterNetworkCallback(networkCallback)
-            } catch (e: RuntimeException) { }
-        }
+        connectionDetector.unregister()
     }
 
     private fun goToView(cls: Class<*>) {
