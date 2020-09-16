@@ -30,7 +30,7 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
     override fun downloadAndShowList() {
         if (!isOfflineMode && Login.isObsoleteSync(appDB!!.syncDao().findLatest())) {
-            DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>(EVENT_RETRIEVE_ALL_COUNTRIES, this) {
+            DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>(EVENT_RETRIEVE_ALL_COUNTRIES, this, true) {
                 override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                     appDB!!.inducksCountryDao().deleteAll()
                     appDB!!.inducksCountryDao().insertList( response.body()!!.keys.map { countryCode ->

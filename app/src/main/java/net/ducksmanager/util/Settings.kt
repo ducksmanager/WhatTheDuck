@@ -21,7 +21,7 @@ class Settings {
         const val MESSAGE_KEY_WELCOME_BOOKCASE_VIEW = "welcome_bookcase_view"
 
         fun loadNotificationCountries(originActivity: Activity, callback: () -> Unit = {}) {
-            DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>(DmServer.EVENT_GET_USER_NOTIFICATION_COUNTRIES, originActivity) {
+            DmServer.api.userNotificationCountries.enqueue(object : DmServer.Callback<List<String>>(DmServer.EVENT_GET_USER_NOTIFICATION_COUNTRIES, originActivity, false) {
                 override fun onSuccessfulResponse(response: Response<List<String>>) {
                     appDB!!.notificationCountryDao().deleteAll()
                     appDB!!.notificationCountryDao().insertList(response.body()!!.map {

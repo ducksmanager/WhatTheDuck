@@ -14,17 +14,16 @@ import java.util.*
 internal object DownloadHandlerMock {
     const val TEST_USER = "demotestuser"
     const val TEST_PASS = "demotestpass"
-    val state = HashMap<String, Any>()
-
-    init {
-        state["hasNewPurchase"] = false
-    }
+    var state = hashMapOf(
+        "offlineMode" to false
+    )
 
     val dispatcher: Dispatcher = object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse {
             val path = request.path
             println("Mocking $path")
             return when {
+                state["offlineMode"]!! -> MockResponse().setResponseCode(404)
                 path!!.contains("/internal/") -> dispatchForCover(path)
                 path.contains("/edges/") -> dispatchForEdges(path)
                 else -> dispatchForDmServer(path, request.headers)
@@ -63,8 +62,8 @@ internal object DownloadHandlerMock {
     }
 
     private fun getJsonFixture(name: String): String {
-        val json = convertStreamToString(openPathAsStream("fixtures/$name.json"))
-        return json.replace("http://mocked/", mockServer!!.url("/internal/covers/").toString(), true)
+        return convertStreamToString(openPathAsStream("fixtures/$name.json"))
+            .replace("http://mocked/", mockServer!!.url("/internal/covers/").toString(), true)
     }
 
     @Throws(IOException::class)
@@ -88,8 +87,7 @@ internal object DownloadHandlerMock {
             path2=path2.replace(".json", "/${WtdTest.currentLocale!!.defaultCountry}.json")
             resourceAsStream = loader.getResourceAsStream(path2)
         }
-        return resourceAsStream
-            ?: throw IllegalStateException("Invalid path: $path2")
+        return resourceAsStream ?: throw IllegalStateException("Invalid path: $path2")
     }
 
     private fun convertStreamToString(inputStream: InputStream): String {

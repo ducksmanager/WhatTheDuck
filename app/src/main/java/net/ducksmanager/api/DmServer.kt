@@ -17,6 +17,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.ref.WeakReference
+import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 import java.time.Instant
 import java.util.*
@@ -88,7 +89,7 @@ class DmServer {
     abstract class Callback<T> protected constructor(
         private val eventName: String,
         originActivity: Activity,
-        private val alertOnError: Boolean = true
+        private val alertOnError: Boolean
     ) : retrofit2.Callback<T> {
         private val originActivityRef: WeakReference<Activity>
 
@@ -110,10 +111,16 @@ class DmServer {
                 if (alertOnError) {
                     when (response.code()) {
                         HTTP_UNAUTHORIZED -> WhatTheDuck.alert(originActivityRef, R.string.input_error__invalid_credentials)
+                        HTTP_NOT_FOUND -> WhatTheDuck.alert(originActivityRef, R.string.offline_mode_cannot_login)
                         else -> WhatTheDuck.alert(originActivityRef, R.string.error)
                     }
                 }
                 onErrorResponse(response)
+                if (response.code() == HTTP_NOT_FOUND) {
+                    isOfflineMode = true
+                    onFailureFailover()
+                    onFinished()
+                }
             }
             onFinished()
         }

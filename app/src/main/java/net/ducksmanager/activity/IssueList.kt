@@ -47,7 +47,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         get() = appDB!!.inducksIssueDao().findByPublicationCode(getPublicationCode())
 
     override fun downloadAndShowList() {
-        DmServer.api.getIssues(getPublicationCode()).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", this) {
+        DmServer.api.getIssues(getPublicationCode()).enqueue(object : DmServer.Callback<HashMap<String, String>>("getInducksIssues", this, false) {
             override fun onFailureFailover() {
                 viewModel.data.observe(this@IssueList, { existingInducksIssues ->
                     if (existingInducksIssues.isEmpty()) {

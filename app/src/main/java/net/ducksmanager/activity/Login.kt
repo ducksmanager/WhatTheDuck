@@ -56,17 +56,12 @@ class Login : AppCompatActivity() {
 
             DmServer.api.userIssues.enqueue(object : DmServer.Callback<List<Issue>>(EVENT_RETRIEVE_COLLECTION, originActivity, alertIfError!!) {
                 override fun onFailureFailover() {
-                    originActivity.startActivity(
-                        Intent(activityRef.get(),
-                        if (latestSync == null) Login::class.java else targetClass)
-                    )
-                }
-
-                override fun onErrorResponse(response: Response<List<Issue>>?) {
-                    if (!alertIfError!!) {
-                        originActivity.startActivity(Intent(activityRef.get(), Login::class.java))
+                    if (latestSync != null) {
+                        originActivity.startActivity(Intent(activityRef.get(), targetClass))
                     }
                 }
+
+                override fun onErrorResponse(response: Response<List<Issue>>?) {}
 
                 override fun onSuccessfulResponse(response: Response<List<Issue>>) {
                     val user = User(DmServer.apiDmUser!!, DmServer.apiDmPassword!!)
@@ -87,7 +82,7 @@ class Login : AppCompatActivity() {
                         }
                     })
 
-                    DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>(EVENT_GET_SUGGESTED_ISSUES, originActivity) {
+                    DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>(EVENT_GET_SUGGESTED_ISSUES, originActivity, true) {
                         override fun onSuccessfulResponse(response: Response<SuggestionList>) {
                             Suggestions.loadSuggestions(response.body()!!)
                         }

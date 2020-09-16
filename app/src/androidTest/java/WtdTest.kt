@@ -4,15 +4,19 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.LocaleList
+import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.intent.Checks
+import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.ActivityTestRule
@@ -21,6 +25,7 @@ import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
 import net.ducksmanager.activity.IssueList
 import net.ducksmanager.activity.Login
+import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.persistence.AppDatabase
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
@@ -32,7 +37,10 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_ROLE_PASSWO
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.config
 import okhttp3.mockwebserver.MockWebServer
-import org.hamcrest.CoreMatchers
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.not
+import org.hamcrest.Description
+import org.hamcrest.Matcher
 import org.junit.*
 import java.util.*
 
@@ -115,6 +123,17 @@ open class WtdTest : AndroidJUnitRunner {
                 }
                 return currentActivity[0]
             }
+
+
+        protected fun getItemMatcher(identifier: String): Matcher<RecyclerView.ViewHolder> {
+            return object : BoundedMatcher<RecyclerView.ViewHolder, RecyclerView.ViewHolder>(ItemAdapter.ViewHolder::class.java) {
+                override fun matchesSafely(item: RecyclerView.ViewHolder): Boolean = (item as ItemAdapter<*>.ViewHolder).titleTextView!!.tag == identifier
+
+                override fun describeTo(description: Description) {
+                    description.appendText("view holder with ID: $identifier")
+                }
+            }
+        }
     }
 
     init {
@@ -139,11 +158,6 @@ open class WtdTest : AndroidJUnitRunner {
     )
 
     @Before
-    fun resetDownloadMockState() {
-        DownloadHandlerMock.state.remove("server_offline")
-    }
-
-    @Before
     fun resetDb() {
         appDB = Room.inMemoryDatabaseBuilder(
             getApplicationContext(),
@@ -160,6 +174,8 @@ open class WtdTest : AndroidJUnitRunner {
     @Before
     fun resetConfigs() {
         IssueList.viewType = IssueList.ViewType.LIST_VIEW
+        WhatTheDuck.isOfflineMode = false
+        DownloadHandlerMock.state["offlineMode"] = false
     }
 
     fun switchLocale() {
@@ -182,8 +198,8 @@ open class WtdTest : AndroidJUnitRunner {
 
     fun assertToastShown(textId: Int) {
         onView(withText(textId))
-            .inRoot(RootMatchers.withDecorView(CoreMatchers.not(CoreMatchers.`is`(loginActivityRule.activity.window.decorView))))
-            .check(matches(ViewMatchers.isDisplayed()))
+            .inRoot(RootMatchers.withDecorView(not(`is`(loginActivityRule.activity.window.decorView))))
+            .check(matches(isDisplayed()))
     }
 
     fun assertCurrentActivityIsInstanceOf(activityClass: Class<*>, assertTrue: Boolean) {
@@ -205,5 +221,24 @@ open class WtdTest : AndroidJUnitRunner {
             e.printStackTrace()
         }
         viewMatcher.perform(ViewActions.click())
+    }
+
+    protected fun goToPublicationListView(countryCode: String) {
+        val countryMatcher = getItemMatcher(countryCode.toLowerCase())
+
+        onView(ViewMatchers.withId(R.id.itemList))
+            .perform(
+                RecyclerViewActions.scrollToHolder(countryMatcher),
+                RecyclerViewActions.actionOnHolderItem(countryMatcher, ViewActions.click())
+            )
+    }
+
+    protected fun goToIssueListView(publicationCode: String) {
+        val publicationMatcher = getItemMatcher(publicationCode)
+        onView(ViewMatchers.withId(R.id.itemList))
+            .perform(
+                RecyclerViewActions.scrollToHolder(publicationMatcher),
+                RecyclerViewActions.actionOnHolderItem(publicationMatcher, ViewActions.click())
+            )
     }
 }

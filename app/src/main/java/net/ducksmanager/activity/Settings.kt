@@ -72,7 +72,7 @@ class Settings : AppCompatActivityWithDrawer() {
 
             val countriesToNotifyTo = (binding.notifiedCountriesList.adapter as CountryToNotifyListAdapter).countriesToNotifyTo
             DmServer.api.updateUserNotificationCountries(CountryListToUpdate(countriesToNotifyTo))
-                .enqueue(object: DmServer.Callback<Void>("updateUserNotificationCountries", this) {
+                .enqueue(object: DmServer.Callback<Void>("updateUserNotificationCountries", this, true) {
                     override fun onSuccessfulResponse(response: Response<Void>) {
                         finish()
                     }

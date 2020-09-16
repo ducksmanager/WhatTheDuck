@@ -1,18 +1,12 @@
 
 import android.content.Intent
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.LargeTest
 import net.ducksmanager.activity.IssueList
 import net.ducksmanager.activity.PublicationList
-import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.whattheduck.R
-import org.hamcrest.Description
-import org.hamcrest.Matcher
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,16 +19,6 @@ class ListTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(currentLo
         @JvmStatic
         @Parameterized.Parameters
         fun data(): List<Array<out LocaleWithDefaultPublication>> = parameterData()
-
-        private fun getItemMatcher(identifier: String): Matcher<RecyclerView.ViewHolder> {
-            return object : BoundedMatcher<RecyclerView.ViewHolder, RecyclerView.ViewHolder>(ItemAdapter.ViewHolder::class.java) {
-                override fun matchesSafely(item: RecyclerView.ViewHolder): Boolean = (item as ItemAdapter<*>.ViewHolder).titleTextView!!.tag == identifier
-
-                override fun describeTo(description: Description) {
-                    description.appendText("view holder with ID: $identifier")
-                }
-            }
-        }
     }
 
     @Before
@@ -83,24 +67,5 @@ class ListTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(currentLo
             e.printStackTrace()
         }
         ScreenshotTestRule.takeScreenshot("Collection - Issue list - edge view", activityInstance, screenshotPath)
-    }
-
-    private fun goToPublicationListView(countryCode: String) {
-        val countryMatcher = getItemMatcher(countryCode.toLowerCase())
-
-        onView(withId(R.id.itemList))
-            .perform(
-                RecyclerViewActions.scrollToHolder(countryMatcher),
-                RecyclerViewActions.actionOnHolderItem(countryMatcher, ViewActions.click())
-            )
-    }
-
-    private fun goToIssueListView(publicationCode: String) {
-        val publicationMatcher = getItemMatcher(publicationCode)
-        onView(withId(R.id.itemList))
-            .perform(
-                RecyclerViewActions.scrollToHolder(publicationMatcher),
-                RecyclerViewActions.actionOnHolderItem(publicationMatcher, ViewActions.click())
-            )
     }
 }
