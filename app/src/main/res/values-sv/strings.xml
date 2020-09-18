@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="add_cover">Klicka på framsidan för att lägga till den i samlingen</string>
+    <string name="add_cover">Klicka på framsidan
+\nför att lägga till den i samlingen</string>
     <string name="add_cover_error_file_too_big">Bilden är för stor, försök igen.</string>
     <string name="add_cover_no_results">Ingen framsida matchar din bild, försök igen.</string>
     <string name="add_issue">Lägg till utgåva</string>
@@ -43,7 +44,7 @@
     <string name="internal_error__malformed_list">Utgåvolistan är felaktig</string>
     <string name="internal_error__purchase_creation_failed">Skapandet av inköpsdatum misslyckades</string>
     <string name="issue_already_possessed">Du har redan den här utgåvan i din samling</string>
-    <string name="issueSelectionTip">Välj en utgåva att lägga till genom att trycka på den. Välj en sekvens av utgåvor genom att trycka länge på den första i sekvensen.</string>
+    <string name="issueSelectionTip">Välj en utgåva att lägga till genom att trycka på den.\nVälj en sekvens av utgåvor genom att trycka länge på den första i sekvensen.</string>
     <string name="itemtitle">Utgåvans nummer</string>
     <string name="link_to_ducksmanager_website">What The Duck är mobilappen av DucksManager. Klicka här för gå till DucksManagers hemsida.</string>
     <string name="list_view">Lista</string>
@@ -85,4 +86,8 @@
     <string name="welcomeMessage">Din DucksManager-samling visas när du öppnar What The Duck. Klicka på ett land för att se de publikationer du har, eller tryck på \"+\" för att lägga till en utgåva  i din samling.</string>
     <string name="welcomeTitle">Välkommen till What The Duck!</string>
     <string name="itemdescription">Description</string>
+    <string name="error__cannot_login">Inläsning av ditt DucksManager-konto misslyckades. Säkerställ att din internetuppkoppling är aktiv. Du kommer att kunna bläddra igenom din samling offline när samlingen har synkroniserats.</string>
+    <string name="offline_mode_cannot_view">Denna överblick är inte tillgänglig i offline-läget. Klicka här för att återgå till samlingsvyn.</string>
+    <string name="offline_mode">Du är i offline-läge. Du kan bläddra igenom din samling men inte uppdatera den. Vissa funktioner är inte tillgängliga.</string>
+    <string name="offline_mode_cannot_login">What The Duck kunde inte hämta din samling. Är du ansluten till internet\?</string>
 </resources>
