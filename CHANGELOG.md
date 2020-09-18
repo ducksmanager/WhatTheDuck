@@ -1,3 +1,7 @@
+Version 2.4.0 "Fethry"
+
+    Offline mode
+
 Version 2.3.1
 
     Fix suggested countries layout
