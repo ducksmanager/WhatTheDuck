@@ -1,4 +1,8 @@
-Version 2.4.0 "Fethry"
+Version 2.4.4
+
+    Fix showing collection after adding an issue (empty screen)
+
+Version 2.4.3 "Fethry"
 
     Offline mode
 

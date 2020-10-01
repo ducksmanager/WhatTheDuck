@@ -97,6 +97,7 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
                 override fun onSuccessfulResponse(response: Response<Any>) {
                     finish()
                     WhatTheDuck.info(WeakReference(this@AddIssues), R.string.confirmation_message__issue_inserted, Toast.LENGTH_SHORT)
+                    WhatTheDuck.currentUser = null // Force to re-trigger a collection fetch
                     startActivity(Intent(this@AddIssues, Login::class.java))
                 }
             })
