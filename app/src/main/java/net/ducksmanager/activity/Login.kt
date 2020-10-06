@@ -10,6 +10,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.pusher.pushnotifications.auth.AuthData
 import com.pusher.pushnotifications.auth.AuthDataGetter
@@ -56,7 +57,11 @@ class Login : AppCompatActivity() {
 
             DmServer.api.userIssues.enqueue(object : DmServer.Callback<List<Issue>>(EVENT_RETRIEVE_COLLECTION, originActivity, alertIfError!!) {
                 override fun onFailureFailover() {
-                    if (latestSync != null) {
+                    if (latestSync == null) {
+                        isOfflineMode = true
+                        activityRef.get()!!.findViewById<TextView>(R.id.offlineMode).visibility = VISIBLE
+                    }
+                    else {
                         originActivity.startActivity(Intent(activityRef.get(), targetClass))
                     }
                 }
