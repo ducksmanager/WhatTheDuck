@@ -42,20 +42,17 @@
         android:layout_height="fill_parent"
         android:adjustViewBounds="true"
         android:src="@drawable/ic_clock"
+        android:layout_gravity="end"
         android:scaleType="fitCenter"
         android:contentDescription="@+id/suffiximage_description" />
-    <LinearLayout
-        android:orientation="vertical"
+    <TextView
+        android:id="@+id/suffixtext"
         android:layout_width="70dp"
-        android:layout_height="fill_parent">
-        <TextView
-            android:id="@+id/suffixtext"
-            android:layout_width="fill_parent"
-            android:textSize="12sp"
-            android:layout_height="fill_parent"
-            android:text="@string/purchase_date"
-            android:paddingLeft="5dp"
-            android:paddingStart="5dp"
-            android:gravity="start|center" />
-    </LinearLayout>
+        android:textSize="12sp"
+        android:layout_height="fill_parent"
+        android:layout_gravity="end"
+        android:text="@string/purchase_date"
+        android:paddingLeft="5dp"
+        android:paddingStart="5dp"
+        android:gravity="start|center" />
 </LinearLayout>
