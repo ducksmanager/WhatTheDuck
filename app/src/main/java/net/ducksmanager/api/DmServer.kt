@@ -132,13 +132,13 @@ class DmServer {
         override fun onFailure(call: Call<T>, t: Throwable) {
             isOfflineMode = true
             onFailureFailover()
+            originActivityRef.get()!!.findViewById<View?>(R.id.progressBar)?.visibility = ProgressBar.GONE
             onFinished()
         }
 
         private fun onFinished() {
             println("API call end : $eventName")
             WhatTheDuck.trackEvent("$eventName/finish")
-            originActivityRef.get()!!.findViewById<View?>(R.id.progressBar)?.visibility = ProgressBar.GONE
         }
 
         private fun logSync() {

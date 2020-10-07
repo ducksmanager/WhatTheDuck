@@ -25,6 +25,7 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.databinding.WtdListBinding
 import java.lang.ref.WeakReference
 
+
 abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     companion object {
@@ -36,7 +37,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         private const val REQUEST_IMAGE_CAPTURE = 1
     }
 
-    lateinit var connectionDetector: ConnectionDetector
+    private lateinit var connectionDetector: ConnectionDetector
     protected var viewModel = AndroidViewModel(application)
     abstract val AndroidViewModel.data: LiveData<List<Item>>
 
@@ -118,8 +119,8 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         }
         if (hasDividers()) {
             recyclerView.addItemDecoration(DividerItemDecoration(
-                recyclerView.context,
-                LinearLayoutManager(this).orientation
+                    recyclerView.context,
+                    LinearLayoutManager(this).orientation
             ))
         }
 
