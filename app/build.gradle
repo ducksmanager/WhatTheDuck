@@ -89,8 +89,8 @@ dependencies {
     implementation 'com.github.moondroid.coverflow:library:1.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.google.firebase:firebase-analytics:17.5.0'
-    implementation 'com.google.firebase:firebase-core:17.5.0'
+    implementation 'com.google.firebase:firebase-analytics:17.6.0'
+    implementation 'com.google.firebase:firebase-core:17.5.1'
     implementation 'com.google.firebase:firebase-messaging:20.3.0'
 
     implementation 'com.jakewharton.timber:timber:4.7.1'

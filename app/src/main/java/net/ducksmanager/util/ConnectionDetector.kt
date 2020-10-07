@@ -13,7 +13,7 @@ import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.connectivityManager
 
 open class ConnectionDetector(lifecycleScope: LifecycleCoroutineScope, callback: () -> Unit) {
-    var networkCallback: ConnectivityManager.NetworkCallback = @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private var networkCallback: ConnectivityManager.NetworkCallback = @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             if (WhatTheDuck.isOfflineMode) {
