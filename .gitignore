@@ -13,3 +13,5 @@
 /screenshots
 /showcase
 /app/src/main/res/*.png
+/build/intermediates/lint-cache/
+/app/debug/
