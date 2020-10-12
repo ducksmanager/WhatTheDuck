@@ -37,6 +37,9 @@ interface DmServerApi {
     @POST("/collection/notifications/countries")
     fun updateUserNotificationCountries(@Body countryListToUpdate: CountryListToUpdate): Call<Void>
 
+    @POST("/collection/feedback")
+    fun sendFeedback(@Body feedback: UserFeedback): Call<Void>
+
     @POST("/collection/purchases")
     fun createUserPurchase(@Body purchase: Purchase): Call<Void>
 

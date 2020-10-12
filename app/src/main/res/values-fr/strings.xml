@@ -79,6 +79,7 @@
     <string name="sort_by_score">Trier par score</string>
     <string name="suggestions">Suggestions</string>
     <string name="suggestions_intro">WhatTheDuck vous propose une liste personalisée de magazines contenant des histoires inédites de vos auteurs favoris. Vous pouvez changer les pays des magazines à afficher dans l\'écran Paramètres.</string>
+    <string name="thanks_report">Merci pour votre retour !</string>
     <string name="title_template">%1$s %2$s</string>
     <string name="unknown_publication">Magazine inconnu</string>
     <string name="username">Nom d\'utilisateur DucksManager</string>
@@ -90,4 +91,5 @@
     <string name="offline_mode">Vous êtes en mode hors-ligne. Vous pouvez naviguer dans votre collection mais pas la modifier. Certaines fonctionnalités ne seront pas disponibles.</string>
     <string name="offline_mode_cannot_view">Cette vue n\'est pas disponible en mode hors-ligne. Tapez ici pour revenir à votre collection.</string>
     <string name="offline_mode_cannot_login">What The Duck n\'a pas pu récupérer votre collection. Vérifiez votre connection Internet.</string>
+    <string name="report">Signaler un problème</string>
 </resources>

@@ -89,4 +89,6 @@
     <string name="offline_mode_cannot_login">What The Duck couldn\'t retrieve your collection. Are you connected to the Internet?</string>
     <string name="offline_mode_cannot_view">This view is not available in offline mode. Click here to go back to the collection view</string>
     <string name="error__cannot_login">Loading your DucksManager account failed, check that your Internet connection is active. You will be able to browse through your collection while offline once your collection is synchronized.</string>
+    <string name="report">Report a problem</string>
+    <string name="thanks_report">Thanks for your report!</string>
 </resources>

@@ -15,10 +15,10 @@
 
     <application
         android:name=".WhatTheDuck"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/icon"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/WhatTheDuckTheme"
         tools:ignore="GoogleAppIndexingWarning"
@@ -43,6 +43,9 @@
             android:theme="@style/AddIssueTheme" />
         <activity android:name="net.ducksmanager.activity.Settings" />
         <activity android:name="net.ducksmanager.activity.Suggestions" />
+        <activity
+            android:name="net.ducksmanager.activity.Report"
+            android:windowSoftInputMode="adjustResize" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -65,6 +65,12 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
             this.startActivity(Intent(this, Login::class.java))
         }
 
+        val reportButton = drawerNavigation.findViewById<LinearLayout>(R.id.action_report)
+        reportButton.visibility = if (isOfflineMode) View.GONE else View.VISIBLE
+        reportButton.setOnClickListener {
+            this.startActivity(Intent(this, Report::class.java))
+        }
+
         drawerNavigation.getHeaderView(0).findViewById<TextView>(R.id.username).text = currentUser?.username
 
         drawerNavigation

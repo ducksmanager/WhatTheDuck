@@ -106,7 +106,7 @@ dependencies {
     implementation 'org.matomo.sdk:tracker:4.1.2'
 
     // Testing-only dependencies
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.1'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.annotation:annotation:1.1.0'
