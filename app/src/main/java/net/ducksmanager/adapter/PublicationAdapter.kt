@@ -17,7 +17,7 @@ class PublicationAdapter internal constructor(
 
     inner class ViewHolder(v: View?) : ItemAdapter<InducksPublicationWithPossession>.ViewHolder(v!!)
 
-    override fun isPossessed(item: InducksPublicationWithPossession): Boolean = item.isPossessed
+    override fun isPossessed(item: InducksPublicationWithPossession): Boolean = item.possessedIssues > 0
 
     override val onClickListener = View.OnClickListener { view: View ->
         val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
@@ -34,7 +34,7 @@ class PublicationAdapter internal constructor(
 
     override fun getIdentifier(i: InducksPublicationWithPossession): String? = i.publication.publicationCode
 
-    override fun getSuffixText(i: InducksPublicationWithPossession): String? = null
+    override fun getSuffixText(i: InducksPublicationWithPossession): String? = String.format("%d/%d", i.possessedIssues, i.referencedIssues)
 
     override fun getText(i: InducksPublicationWithPossession): String? = i.publication.title
 

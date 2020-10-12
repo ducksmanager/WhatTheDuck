@@ -16,6 +16,7 @@ import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import retrofit2.Response
 import java.lang.ref.WeakReference
@@ -29,7 +30,7 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
         get() = appDB!!.inducksCountryDao().findAllWithPossession()
 
     override fun downloadAndShowList() {
-        if (!isOfflineMode && Login.isObsoleteSync(appDB!!.syncDao().findLatest())) {
+        if (!isOfflineMode && Login.isObsoleteSync(appDB!!.syncDao().findLatest(applicationVersion))) {
             DmServer.api.getCountries(WhatTheDuck.locale).enqueue(object : DmServer.Callback<HashMap<String, String>>(EVENT_RETRIEVE_ALL_COUNTRIES, this, true) {
                 override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                     appDB!!.inducksCountryDao().deleteAll()

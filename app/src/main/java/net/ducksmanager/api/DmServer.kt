@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder
 import net.ducksmanager.persistence.models.internal.Sync
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import okhttp3.Credentials
 import okhttp3.Interceptor
@@ -26,6 +27,7 @@ class DmServer {
     companion object {
         const val EVENT_RETRIEVE_COLLECTION = "retrieveCollection"
         const val EVENT_RETRIEVE_ALL_PUBLICATIONS = "retrieveAllPublications"
+        const val EVENT_RETRIEVE_ISSUE_COUNT = "retrieveIssueCount"
         const val EVENT_GET_PURCHASES = "getPurchases"
         const val EVENT_GET_SUGGESTED_ISSUES = "getSuggestedIssues"
         const val EVENT_GET_USER_NOTIFICATION_COUNTRIES = "getUserNotificationCountries"
@@ -147,7 +149,7 @@ class DmServer {
                 completedSyncs[eventName] = true
             }
             if (completedSyncs.values.all { it }) {
-                WhatTheDuck.appDB!!.syncDao().insert(Sync(Instant.now()))
+                WhatTheDuck.appDB!!.syncDao().insert(Sync(Instant.now(), applicationVersion))
             }
         }
     }

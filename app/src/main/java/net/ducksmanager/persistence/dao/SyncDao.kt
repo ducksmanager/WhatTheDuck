@@ -8,8 +8,8 @@ import net.ducksmanager.persistence.models.internal.Sync
 
 @Dao
 interface SyncDao {
-    @Query("SELECT * FROM sync ORDER BY timestamp DESC LIMIT 1")
-    fun findLatest() : Sync?
+    @Query("SELECT * FROM sync WHERE appVersion = :applicationVersion ORDER BY timestamp DESC LIMIT 1")
+    fun findLatest(applicationVersion: String) : Sync?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(sync: Sync)

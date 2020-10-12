@@ -24,7 +24,7 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
         setNavigationCountry(WhatTheDuck.selectedCountry!!)
     }
 
-    override fun isPossessedByUser() = data.any { it.isPossessed }
+    override fun isPossessedByUser() = data.any { it.possessedIssues > 0 }
 
     override fun shouldShow() = WhatTheDuck.selectedCountry != null
 

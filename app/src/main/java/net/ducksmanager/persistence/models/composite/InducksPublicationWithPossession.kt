@@ -9,5 +9,8 @@ class InducksPublicationWithPossession {
     lateinit var publication: InducksPublication
 
     @ColumnInfo
-    var isPossessed: Boolean = false
+    var possessedIssues: Int = 0
+
+    @ColumnInfo
+    var referencedIssues: Int = 0
 }

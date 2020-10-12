@@ -20,8 +20,10 @@ import net.ducksmanager.api.DmServer.Companion.EVENT_GET_PURCHASES
 import net.ducksmanager.api.DmServer.Companion.EVENT_GET_SUGGESTED_ISSUES
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_ALL_PUBLICATIONS
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_COLLECTION
+import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_ISSUE_COUNT
 import net.ducksmanager.api.DmServer.Companion.getRequestHeaders
 import net.ducksmanager.persistence.models.coa.InducksPublication
+import net.ducksmanager.persistence.models.composite.InducksIssueCount
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.Purchase
@@ -32,6 +34,7 @@ import net.ducksmanager.util.Settings.Companion.toSHA1
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.databinding.LoginBinding
 import retrofit2.Response
@@ -53,7 +56,7 @@ class Login : AppCompatActivity() {
             val originActivity = activityRef.get()!!
             val targetClass = CountryList::class.java
 
-            val latestSync = appDB!!.syncDao().findLatest()
+            val latestSync = appDB!!.syncDao().findLatest(applicationVersion)
 
             DmServer.api.userIssues.enqueue(object : DmServer.Callback<List<Issue>>(EVENT_RETRIEVE_COLLECTION, originActivity, alertIfError!!) {
                 override fun onFailureFailover() {
@@ -101,6 +104,14 @@ class Login : AppCompatActivity() {
                                 appDB!!.inducksPublicationDao().deleteAll()
                                 appDB!!.inducksPublicationDao().insertList(response.body()!!.keys.map { publicationCode ->
                                     InducksPublication(publicationCode, response.body()!![publicationCode]!!)
+                                })
+                            }
+                        })
+                        DmServer.api.issueCount.enqueue(object : DmServer.Callback<HashMap<String, Int>>(EVENT_RETRIEVE_ISSUE_COUNT, originActivity, true) {
+                            override fun onSuccessfulResponse(response: Response<HashMap<String, Int>>) {
+                                appDB!!.inducksIssueCountDao().deleteAll()
+                                appDB!!.inducksIssueCountDao().insertList(response.body()!!.keys.map { publicationCode ->
+                                    InducksIssueCount(publicationCode, response.body()!![publicationCode]!!)
                                 })
                             }
                         })

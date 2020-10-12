@@ -9,7 +9,12 @@ import net.ducksmanager.persistence.models.composite.InducksPublicationWithPosse
 
 @Dao
 interface InducksPublicationDao {
-    @Query("SELECT DISTINCT inducks_publication.*, CASE WHEN issues.country IS NULL THEN 0 ELSE 1 END AS isPossessed FROM inducks_publication LEFT JOIN issues ON inducks_publication.publicationCode = issues.country || '/' || issues.magazine WHERE publicationCode LIKE (:countryName || '/%')")
+    @Query("SELECT DISTINCT inducks_publication.*, COUNT(user_issues.issueNumber) AS possessedIssues, issue_count.count AS referencedIssues" +
+            " FROM inducks_publication" +
+            " LEFT JOIN issues AS user_issues ON inducks_publication.publicationCode = user_issues.country || '/' || user_issues.magazine" +
+            " LEFT JOIN inducks_issue_count issue_count ON inducks_publication.publicationCode = issue_count.publicationCode" +
+            " WHERE inducks_publication.publicationCode LIKE (:countryName || '/%')" +
+            " GROUP BY inducks_publication.publicationCode")
     fun findByCountry(countryName: String): LiveData<List<InducksPublicationWithPossession>>
 
     @Query("SELECT * FROM inducks_publication WHERE publicationCode = :publicationCode")

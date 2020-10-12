@@ -5,10 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import net.ducksmanager.persistence.dao.*
 import net.ducksmanager.persistence.models.coa.*
-import net.ducksmanager.persistence.models.composite.CoverSearchIssue
-import net.ducksmanager.persistence.models.composite.SuggestedIssueSimple
-import net.ducksmanager.persistence.models.composite.UserMessage
-import net.ducksmanager.persistence.models.composite.UserSetting
+import net.ducksmanager.persistence.models.composite.*
 import net.ducksmanager.persistence.models.converter.InstantConverter
 import net.ducksmanager.persistence.models.converter.StringMutableSetConverter
 import net.ducksmanager.persistence.models.dm.Issue
@@ -21,6 +18,7 @@ import net.ducksmanager.persistence.models.internal.Sync
     CoverSearchIssue::class,
     InducksCountryName::class,
     InducksIssue::class,
+    InducksIssueCount::class,
     InducksPerson::class,
     InducksPublication::class,
     InducksStory::class,
@@ -32,12 +30,13 @@ import net.ducksmanager.persistence.models.internal.Sync
     User::class,
     UserMessage::class,
     UserSetting::class
-], version = 6, exportSchema = true)
+], version = 7, exportSchema = true)
 @TypeConverters(StringMutableSetConverter::class, InstantConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun coverSearchIssueDao(): CoverSearchIssueDao
     abstract fun inducksCountryDao(): InducksCountryDao
     abstract fun inducksIssueDao(): InducksIssueDao
+    abstract fun inducksIssueCountDao(): InducksIssueCountDao
     abstract fun inducksPersonDao(): InducksPersonDao
     abstract fun inducksPublicationDao(): InducksPublicationDao
     abstract fun inducksStoryDao(): InducksStoryDao
