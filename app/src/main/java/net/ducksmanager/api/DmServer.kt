@@ -121,6 +121,7 @@ class DmServer {
                     onFailureFailover()
                     onFinished()
                 }
+                originActivityRef.get()!!.findViewById<View?>(R.id.progressBar)?.visibility = ProgressBar.GONE
             }
             onFinished()
         }
