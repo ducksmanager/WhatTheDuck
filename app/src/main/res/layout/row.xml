@@ -1,58 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content">
+
     <ImageView
-        android:id="@+id/prefiximage"
-        android:layout_width="20dp"
-        android:layout_height="fill_parent"
-        android:layout_marginRight="4dp"
-        android:layout_marginEnd="4dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:contentDescription="@+id/prefiximage_description" />
-    <LinearLayout
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/row"
+        android:layout_alignBottom="@id/row"
+        android:src="@drawable/background_shape" />
+
+    <RelativeLayout
+        android:id="@+id/row"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_width="0dip"
-        android:layout_weight="1"
-        android:padding="6dip"
-        android:layout_height="fill_parent">
+        android:padding="6dip">
+
+        <ImageView
+            android:id="@+id/prefiximage"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@+id/prefiximage_description"
+            android:gravity="center_vertical"
+            android:scaleType="fitCenter" />
+
         <TextView
             android:id="@+id/itemtitle"
-            android:gravity="center_vertical"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/prefiximage"
+            android:layout_toRightOf="@id/prefiximage"
+            android:gravity="center_vertical"
             android:text="@string/itemtitle" />
+
         <TextView
             android:id="@+id/itemdescription"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="95dp"
+            android:layout_marginRight="95dp"
+            android:layout_toEndOf="@id/itemtitle"
+            android:layout_toRightOf="@id/itemtitle"
             android:gravity="center_vertical"
-            android:paddingLeft="10dp"
             android:paddingStart="10dp"
-            android:paddingRight="10dp"
-            android:paddingEnd="10dp"
-            android:textColor="#fff"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/itemdescription" />
-    </LinearLayout>
-    <ImageView
-        android:id="@+id/suffiximage"
-        android:layout_width="20dp"
-        android:layout_height="fill_parent"
-        android:adjustViewBounds="true"
-        android:src="@drawable/ic_clock"
-        android:layout_gravity="end"
-        android:scaleType="fitCenter"
-        android:contentDescription="@+id/suffiximage_description" />
-    <TextView
-        android:id="@+id/suffixtext"
-        android:layout_width="70dp"
-        android:textSize="12sp"
-        android:layout_height="fill_parent"
-        android:layout_gravity="end"
-        android:text="@string/purchase_date"
-        android:paddingLeft="5dp"
-        android:paddingStart="5dp"
-        android:gravity="start|center" />
-</LinearLayout>
+            android:paddingLeft="10dp"
+            android:text="@string/itemdescription"
+            android:textColor="#fff" />
+
+        <ImageView
+            android:id="@+id/suffiximage"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/suffixtext"
+            android:layout_toLeftOf="@id/suffixtext"
+            android:adjustViewBounds="true"
+            android:contentDescription="@+id/suffiximage_description"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_clock" />
+
+        <TextView
+            android:id="@+id/suffixtext"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:gravity="end|center"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:text="@string/purchase_date"
+            android:textSize="12sp" />
+    </RelativeLayout>
+</RelativeLayout>

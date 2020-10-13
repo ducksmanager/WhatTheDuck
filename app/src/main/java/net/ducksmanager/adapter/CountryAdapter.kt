@@ -47,4 +47,6 @@ class CountryAdapter internal constructor(
     override fun getIdentifier(i: InducksCountryNameWithPossession): String? = i.country.countryCode
 
     override fun getComparatorText(i: InducksCountryNameWithPossession): String? = getText(i)
+
+    override fun getLineFill(i: InducksCountryNameWithPossession): Float = 0.0F
 }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import net.ducksmanager.activity.ItemList
@@ -16,10 +17,11 @@ import net.ducksmanager.whattheduck.R
 import net.greypanther.natsort.CaseInsensitiveSimpleNaturalComparator
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.min
 
 abstract class ItemAdapter<Item> internal constructor(
-    val originActivity: Activity,
-    val resourceToInflate: Int
+        val originActivity: Activity,
+        val resourceToInflate: Int
 ) : RecyclerView.Adapter<ItemAdapter<Item>.ViewHolder>() {
 
     private var items = emptyList<Item>()
@@ -64,6 +66,8 @@ abstract class ItemAdapter<Item> internal constructor(
     }
 
     open inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val row: RelativeLayout? = v.findViewById(R.id.row)
+        val background: ImageView? = v.findViewById(R.id.background)
         val titleTextView: TextView? = v.findViewById(R.id.itemtitle)
         val prefixImage: ImageView? = v.findViewById(R.id.prefiximage)
         val descriptionText: TextView? = v.findViewById(R.id.itemdescription)
@@ -75,7 +79,7 @@ abstract class ItemAdapter<Item> internal constructor(
         filteredItems = items
             .filter {
                 (isCoaList() || isPossessed(it)) &&
-                (textFilter == "" || getText(it)!!.toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase(Locale.getDefault())))
+                        (textFilter == "" || getText(it)!!.toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase(Locale.getDefault())))
             }
             .toMutableList()
     }
@@ -93,6 +97,15 @@ abstract class ItemAdapter<Item> internal constructor(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val i = getItem(position)
+
+        if (holder.row != null && holder.background != null) {
+            val backgroundWidth = holder.row.context.resources.displayMetrics.widthPixels * getLineFill(i)
+            if (backgroundWidth > 0) {
+                holder.background.layoutParams.width = (
+                    min(1f, backgroundWidth)
+                ).toInt()
+            };
+        }
         if (holder.titleTextView != null) {
             holder.titleTextView.text = getText(i)
             holder.titleTextView.tag = getIdentifier(i)
@@ -143,6 +156,7 @@ abstract class ItemAdapter<Item> internal constructor(
     protected abstract fun getComparatorText(i: Item): String?
     protected abstract fun getIdentifier(i: Item): String?
     protected abstract fun getText(i: Item): String?
+    protected abstract fun getLineFill(i: Item): Float
 
     private fun isHighlighted(i: Item): Boolean = isPossessed(i)
 

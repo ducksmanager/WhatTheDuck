@@ -39,4 +39,6 @@ class PublicationAdapter internal constructor(
     override fun getText(i: InducksPublicationWithPossession): String? = i.publication.title
 
     override fun getComparatorText(i: InducksPublicationWithPossession): String? = getText(i)
+
+    override fun getLineFill(i: InducksPublicationWithPossession): Float = (i.possessedIssues.toFloat() / i.referencedIssues.toFloat())
 }

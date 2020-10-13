@@ -4,11 +4,10 @@ import android.annotation.SuppressLint
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
-import android.widget.RelativeLayout
 
 object DraggableRelativeLayout {
     @SuppressLint("ClickableViewAccessibility")
-    fun makeDraggable(view: RelativeLayout) {
+    fun makeDraggable(view: View) {
         view.setOnTouchListener(object : OnTouchListener {
             var dX = 0f
             var dY = 0f

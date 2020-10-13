@@ -69,4 +69,5 @@ class IssueEdgeAdapter internal constructor(
 
     override fun getComparatorText(i: InducksIssueWithUserIssueAndScore): String? = i.issue.inducksIssueNumber
 
+    override fun getLineFill(i: InducksIssueWithUserIssueAndScore): Float = 0.0F
 }
