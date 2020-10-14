@@ -14,7 +14,7 @@ import java.lang.ref.WeakReference
 
 class ReleaseNotes private constructor(private val majorVersion: String, private val messageId: Int, imageId: Int) {
     companion object {
-        val current: ReleaseNotes = ReleaseNotes("1.8", R.string.newFeatures18Text, R.drawable.bookcase_view_switch)
+        val current: ReleaseNotes = ReleaseNotes("1.8", R.string.new_features_18_text, R.drawable.bookcase_view_switch)
     }
 
     private val imageId: Int?
@@ -25,7 +25,7 @@ class ReleaseNotes private constructor(private val majorVersion: String, private
             val factory = LayoutInflater.from(originActivity)
             val view = factory.inflate(R.layout.release_notes, null)
             builder.setView(view)
-            builder.setTitle(originActivity!!.getString(R.string.newFeature))
+            builder.setTitle(originActivity!!.getString(R.string.new_feature))
             builder.setNeutralButton(R.string.ok) { dialogInterface: DialogInterface, _: Int ->
                 appDB!!.userMessageDao().insert(UserMessage(getMessageId(), false))
                 dialogInterface.dismiss()

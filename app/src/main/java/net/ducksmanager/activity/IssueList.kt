@@ -132,8 +132,8 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
             if (switchView.isChecked) {
                 if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_DATA_CONSUMPTION) && WhatTheDuck.isMobileConnection) {
                     val builder = AlertDialog.Builder(this@IssueList)
-                    builder.setTitle(getString(R.string.bookcaseViewTitle))
-                    builder.setMessage(getString(R.string.bookcaseViewMessage))
+                    builder.setTitle(getString(R.string.bookcase_view_title))
+                    builder.setMessage(getString(R.string.bookcase_view_message))
                     builder.setNegativeButton(R.string.cancel) { dialogInterface: DialogInterface, _: Int ->
                         switchView.toggle()
                         dialogInterface.dismiss()
@@ -158,7 +158,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
             if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW)
                 && listOrientation == RecyclerView.VERTICAL) {
-                WhatTheDuck.info(WeakReference(this), R.string.welcomeBookcaseViewPortrait, Toast.LENGTH_LONG)
+                WhatTheDuck.info(WeakReference(this), R.string.welcome_bookcase_view_portrait, Toast.LENGTH_LONG)
                 Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW)
             }
             recyclerView.layoutManager = LinearLayoutManager(this, listOrientation, false)

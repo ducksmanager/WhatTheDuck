@@ -50,8 +50,8 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
         super.onCreate(savedInstanceState)
         if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_WELCOME)) {
             val builder = AlertDialog.Builder(this@CountryList)
-            builder.setTitle(getString(R.string.welcomeTitle))
-            builder.setMessage(getString(R.string.welcomeMessage))
+            builder.setTitle(getString(R.string.welcome_title))
+            builder.setMessage(getString(R.string.welcome_message))
             builder.setPositiveButton(R.string.ok) { dialogInterface: DialogInterface, _: Int ->
                 ReleaseNotes.current.showOnVersionUpdate(WeakReference(this@CountryList))
                 dialogInterface.dismiss()

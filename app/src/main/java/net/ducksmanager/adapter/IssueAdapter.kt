@@ -60,7 +60,7 @@ class IssueAdapter internal constructor(
                 } else {
                     val currentIssueNumber = getItem(position).issue.inducksIssueNumber
                     toggleSelectedIssue(currentIssueNumber)
-                    WhatTheDuck.info(WeakReference(originActivity), R.string.longTapToEndIssueRangeSelection, Toast.LENGTH_SHORT)
+                    WhatTheDuck.info(WeakReference(originActivity), R.string.long_tap_to_end_issue_range_selection, Toast.LENGTH_SHORT)
                     currentIssueNumber
                 }
                 this.notifyDataSetChanged()

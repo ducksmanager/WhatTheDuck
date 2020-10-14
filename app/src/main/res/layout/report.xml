@@ -26,7 +26,7 @@
             android:gravity="center_horizontal"
             android:padding="20dp"
             android:orientation="horizontal"
-            android:text="Quelque chose ne fonctionne pas sur l'application ?\nDétaillez votre problème et nous essaierons de le résoudre dans une prochaine version :-)"
+            android:text="@string/report_description"
             android:textAlignment="center" />
 
         <EditText
@@ -38,8 +38,7 @@
             android:autofillHints=""
             android:inputType="text"
             android:gravity="top"
-            android:hint="Décrivez votre problème"
-            android:contentDescription="Décrivez votre problème" />
+            android:hint="@string/report_hint" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -49,7 +48,7 @@
             android:id="@+id/report_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Envoyer" />
+            android:text="@string/report_send" />
         </RelativeLayout>
     </RelativeLayout>
 

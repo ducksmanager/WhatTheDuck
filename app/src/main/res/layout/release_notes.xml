@@ -17,6 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_view_edge"
-        android:contentDescription="@string/newFeature"/>
+        android:contentDescription="@string/new_feature"/>
 
 </LinearLayout>

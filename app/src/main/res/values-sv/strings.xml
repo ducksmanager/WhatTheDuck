@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="add_cover">Klicka på framsidan
-\nför att lägga till den i samlingen</string>
+    <string name="add_cover">Klicka på framsidan\nför att lägga till den i samlingen</string>
     <string name="add_cover_error_file_too_big">Bilden är för stor, försök igen.</string>
     <string name="add_cover_no_results">Ingen framsida matchar din bild, försök igen.</string>
     <string name="add_issue">Lägg till utgåva</string>
     <string name="all_countries">Alla länder</string>
     <string name="app_name">What The Duck</string>
-    <string name="bookcaseViewMessage">Att visa bokhyllevyn på ett mobilt nätverk kan leda till höga kostnader. Vill du fortfarande visa den?</string>
-    <string name="bookcaseViewTitle">Bokhyllevy</string>
+    <string name="bookcase_view_message">Att visa bokhyllevyn på ett mobilt nätverk kan leda till höga kostnader. Vill du fortfarande visa den?</string>
+    <string name="bookcase_view_title">Bokhyllevy</string>
     <string name="by_cover_photo">Från bild</string>
     <string name="by_issue_selection">Från utgåva</string>
     <string name="cancel">Ta bort</string>
@@ -27,6 +26,7 @@
     <string name="edge_view">Bokhylla</string>
     <string name="email_address">E-mail</string>
     <string name="error">Fel</string>
+    <string name="error__cannot_login">Inläsning av ditt DucksManager-konto misslyckades. Säkerställ att din internetuppkoppling är aktiv. Du kommer att kunna bläddra igenom din samling offline när samlingen har synkroniserats.</string>
     <string name="error__malformed_url">URLen är felaktig</string>
     <string name="filter">Filter</string>
     <string name="input_error">Input fel</string>
@@ -44,23 +44,28 @@
     <string name="internal_error__malformed_list">Utgåvolistan är felaktig</string>
     <string name="internal_error__purchase_creation_failed">Skapandet av inköpsdatum misslyckades</string>
     <string name="issue_already_possessed">Du har redan den här utgåvan i din samling</string>
-    <string name="issueSelectionTip">Välj en utgåva att lägga till genom att trycka på den.\nVälj en sekvens av utgåvor genom att trycka länge på den första i sekvensen.</string>
+    <string name="issue_selection_tip">Välj en utgåva att lägga till genom att trycka på den.\nVälj en sekvens av utgåvor genom att trycka länge på den första i sekvensen.</string>
+    <string name="item_description">Description</string>
     <string name="itemtitle">Utgåvans nummer</string>
     <string name="link_to_ducksmanager_website">What The Duck är mobilappen av DucksManager. Klicka här för gå till DucksManagers hemsida.</string>
     <string name="list_view">Lista</string>
+    <string name="loading_collection">Laddar din samling…</string>
     <string name="login">Login</string>
     <string name="logout">Logga ut</string>
-    <string name="longTapToEndIssueRangeSelection">Tryck länge på den sista utgåvan</string>
+    <string name="long_tap_to_end_issue_range_selection">Tryck länge på den sista utgåvan</string>
     <string name="my_collection">Min samling</string>
     <string name="network_error">Nätverksfel</string>
     <string name="network_error__no_connection">Godkänn</string>
-    <string name="newFeature">Nyhet i WhatTheDuck appen</string>
-    <string name="newFeatures18Text">Du kan nu se din bokhylla i WhatTheDuck!\n\nNär du är i utgåvolistan, tryck på bokhylleikonen för att ändra till bokhyllan.</string>
+    <string name="new_feature">Nyhet i WhatTheDuck appen</string>
+    <string name="new_features_18_text">Du kan nu se din bokhylla i WhatTheDuck!\n\nNär du är i utgåvolistan, tryck på bokhylleikonen för att ändra till bokhyllan.</string>
     <string name="no_item">Förslagen uppdateras dagligen.</string>
     <string name="no_purchase_date">Inget inköpsdatum</string>
     <string name="no_suggestion">Vi har inga förslag åt dig. Se till att du betygsatt dina favoritförfattare på webbplatsen DucksManager.</string>
     <string name="no_title">Ingen titel</string>
     <string name="notify_option">Meddela mig om nya berättelser från mina favoritförfattare</string>
+    <string name="offline_mode">Du är i offline-läge. Du kan bläddra igenom din samling men inte uppdatera den. Vissa funktioner är inte tillgängliga.</string>
+    <string name="offline_mode_cannot_login">What The Duck kunde inte hämta din samling. Är du ansluten till internet\?</string>
+    <string name="offline_mode_cannot_view">Denna överblick är inte tillgänglig i offline-läget. Klicka här för att återgå till samlingsvyn.</string>
     <string name="ok">OK</string>
     <string name="option_notified_countries">Föreslå utgåvor släppta i följande länder:</string>
     <string name="password">Lösenord</string>
@@ -68,6 +73,10 @@
     <string name="purchase_date">Inköpsdatum</string>
     <string name="purchase_name">Inköpsnamn</string>
     <string name="rate_app">Kom ihåg att betygsätta What The Duck på Play Store :-)</string>
+    <string name="report">Rapportera ett problem</string>
+    <string name="report_description">Är det något som inte fungerar i appen? Beskriv ditt problem så ska vi försöka lösa det i nästa version :-)</string>
+    <string name="report_hint">Beskriv problemet</string>
+    <string name="report_send">Skicka</string>
     <string name="result">Resultat</string>
     <string name="save">Spara</string>
     <string name="settings">Inställningar</string>
@@ -78,16 +87,12 @@
     <string name="sort_by_score">Sortera efter poäng</string>
     <string name="suggestions">Förslag</string>
     <string name="suggestions_intro">WhatTheDuck ger dig en personlig lista av samlingar som innehåller nya berättelser från dina favoritförfattare. Du kan ändra vilka länder som visas under Inställningar.</string>
+    <string name="thanks_report">Tack för din feedback!</string>
     <string name="title_template">%1$s %2$s</string>
     <string name="unknown_publication">Okänd publikation</string>
     <string name="username">Användarnamn</string>
     <string name="version">What The Duck version %1$s</string>
-    <string name="welcomeBookcaseViewPortrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
-    <string name="welcomeMessage">Din DucksManager-samling visas när du öppnar What The Duck. Klicka på ett land för att se de publikationer du har, eller tryck på \"+\" för att lägga till en utgåva  i din samling.</string>
-    <string name="welcomeTitle">Välkommen till What The Duck!</string>
-    <string name="itemdescription">Description</string>
-    <string name="error__cannot_login">Inläsning av ditt DucksManager-konto misslyckades. Säkerställ att din internetuppkoppling är aktiv. Du kommer att kunna bläddra igenom din samling offline när samlingen har synkroniserats.</string>
-    <string name="offline_mode_cannot_view">Denna överblick är inte tillgänglig i offline-läget. Klicka här för att återgå till samlingsvyn.</string>
-    <string name="offline_mode">Du är i offline-läge. Du kan bläddra igenom din samling men inte uppdatera den. Vissa funktioner är inte tillgängliga.</string>
-    <string name="offline_mode_cannot_login">What The Duck kunde inte hämta din samling. Är du ansluten till internet\?</string>
+    <string name="welcome_bookcase_view_portrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
+    <string name="welcome_message">Din DucksManager-samling visas när du öppnar What The Duck. Klicka på ett land för att se de publikationer du har, eller tryck på \"+\" för att lägga till en utgåva  i din samling.</string>
+    <string name="welcome_title">Välkommen till What The Duck!</string>
 </resources>

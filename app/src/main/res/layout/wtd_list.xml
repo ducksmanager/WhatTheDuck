@@ -81,7 +81,7 @@
                 android:gravity="center_horizontal"
                 android:background="@color/holo_green_dark"
                 android:textColor="@android:color/white"
-                android:text="@string/issueSelectionTip" />
+                android:text="@string/issue_selection_tip" />
 
             <Button
                 android:id="@+id/tipIssueSelectionOK"
