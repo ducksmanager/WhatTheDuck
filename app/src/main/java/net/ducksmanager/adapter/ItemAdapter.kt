@@ -17,7 +17,7 @@ import net.ducksmanager.whattheduck.R
 import net.greypanther.natsort.CaseInsensitiveSimpleNaturalComparator
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.min
+import kotlin.math.max
 
 abstract class ItemAdapter<Item> internal constructor(
         val originActivity: Activity,
@@ -101,10 +101,11 @@ abstract class ItemAdapter<Item> internal constructor(
         if (holder.row != null && holder.background != null) {
             val backgroundWidth = holder.row.context.resources.displayMetrics.widthPixels * getLineFill(i)
             if (backgroundWidth > 0) {
-                holder.background.layoutParams.width = (
-                    min(1f, backgroundWidth)
-                ).toInt()
-            };
+                holder.background.layoutParams.width = max(1, backgroundWidth.toInt())
+            }
+            else {
+                holder.background.layoutParams.width = 0
+            }
         }
         if (holder.titleTextView != null) {
             holder.titleTextView.text = getText(i)
