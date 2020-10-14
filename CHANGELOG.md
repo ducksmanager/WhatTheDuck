@@ -1,3 +1,9 @@
+Version 2.5.0
+
+    Show the amount of issues possessed by the user for each publication
+    Add "Report" screen
+    Add loading screen with app logo when loading the collection during app launch
+
 Version 2.4.4
 
     Fix showing collection after adding an issue (empty screen)
