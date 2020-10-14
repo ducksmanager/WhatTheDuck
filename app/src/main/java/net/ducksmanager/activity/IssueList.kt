@@ -188,7 +188,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
             return findViewById(R.id.itemList)
         }
 
-    private val isLandscapeEdgeView = viewType == ViewType.EDGE_VIEW && resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    private val isLandscapeEdgeView = viewType == ViewType.EDGE_VIEW && resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     private fun switchBetweenViews() {
         WhatTheDuck.trackEvent("issuelist/switchview")
