@@ -1,3 +1,7 @@
+Version 2.5.1
+
+    Fix background in notified countries list
+
 Version 2.5.0
 
     Show the amount of issues possessed by the user for each publication
