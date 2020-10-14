@@ -89,6 +89,7 @@ class Settings : AppCompatActivityWithDrawer() {
         private val inflater: LayoutInflater = LayoutInflater.from(context)
 
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val background: ImageView? = itemView.findViewById(R.id.background)
             val countryItemView: TextView = itemView.findViewById(R.id.itemtitle)
             val prefixImageView: ImageView = itemView.findViewById(R.id.prefiximage)
             val isNotifiedCountry: CheckBox = itemView.findViewById(R.id.isNotifiedCountry)
@@ -104,6 +105,7 @@ class Settings : AppCompatActivityWithDrawer() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val currentItem = countries[position]
+            holder.background?.layoutParams?.width = 0
             holder.countryItemView.text = currentItem.countryName
             holder.prefixImageView.setImageResource(getImageResourceFromCountry(currentItem))
             holder.isNotifiedCountry.isEnabled = !isOfflineMode
