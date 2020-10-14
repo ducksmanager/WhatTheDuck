@@ -1,81 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-	<LinearLayout
-		android:id="@+id/login_form"
-		android:visibility="invisible"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="invisible">
 
-		<TextView
-			android:id="@+id/offlineMode"
-			android:orientation="horizontal"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:textAlignment="center"
-			android:gravity="center"
-			android:background="#f09313"
-			android:textColor="@android:color/white"
-			android:visibility="gone"
-			android:text="@string/error__cannot_login"
-			/>
+        <TextView
+            android:id="@+id/offlineMode"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#f09313"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:text="@string/error__cannot_login"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
 
-		<EditText
-			android:id="@+id/username"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:hint="@string/username"
-			android:inputType="text">
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/username"
+            android:inputType="text">
 
-			<requestFocus/>
-		</EditText>
+            <requestFocus />
+        </EditText>
 
-		<EditText
-			android:id="@+id/password"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:hint="@string/password"
-			android:inputType="textPassword"/>
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
 
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-			<Button
-				android:id="@+id/login"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="@string/login"/>
+            <Button
+                android:id="@+id/login"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/login" />
 
-			<Button
-				android:id="@+id/end_signup"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:text="@string/signup"/>
+            <Button
+                android:id="@+id/end_signup"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/signup" />
 
-		</LinearLayout>
+        </LinearLayout>
 
-		<TextView
-			android:id="@+id/linkToDM"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="20dp"
-			android:text="@string/link_to_ducksmanager_website"/>
-	</LinearLayout>
+        <TextView
+            android:id="@+id/linkToDM"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/link_to_ducksmanager_website" />
+    </LinearLayout>
 
-	<ProgressBar
-		android:id="@+id/progressBar"
-		android:layout_width="40dp"
-		android:layout_height="48dp"
-		android:layout_centerInParent="true"
-		android:layout_gravity="center"
-		android:indeterminate="true"
-		android:visibility="gone"/>
+    <LinearLayout
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:contentDescription="@string/app_name"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:background="@mipmap/icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chargement de votre collection..." />
+    </LinearLayout>
 
 </RelativeLayout>
