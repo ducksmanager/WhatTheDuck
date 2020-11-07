@@ -3,7 +3,6 @@
     <string name="add_cover">Klicka på framsidan\nför att lägga till den i samlingen</string>
     <string name="add_cover_error_file_too_big">Bilden är för stor, försök igen.</string>
     <string name="add_cover_no_results">Ingen framsida matchar din bild, försök igen.</string>
-    <string name="add_issue">Lägg till utgåva</string>
     <string name="all_countries">Alla länder</string>
     <string name="app_name">What The Duck</string>
     <string name="bookcase_view_message">Att visa bokhyllevyn på ett mobilt nätverk kan leda till höga kostnader. Vill du fortfarande visa den?</string>
@@ -17,7 +16,7 @@
     <string name="condition_good">Bra skick</string>
     <string name="condition_none">Ospecificerat skick</string>
     <string name="condition_notsogood">Genomsnittligt skick</string>
-    <string name="confirmation_message__issue_inserted">Utgåvan har lagts till i din samling</string>
+    <string name="confirmation_message__collection_updated">Utgåvan har lagts till i din samling</string>
     <string name="country">Land</string>
     <string name="cover_suggestion">Framsideförslag</string>
     <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
@@ -32,8 +31,7 @@
     <string name="input_error">Input fel</string>
     <string name="input_error__empty_credentials">Du måste fylla i alla fälten för att fortsätta</string>
     <string name="input_error__invalid_credentials">Ogiltig information</string>
-    <string name="input_error__issue_already_possessed">Du har redan den här utgåvan i din samling</string>
-    <string name="input_error__no_issue_selected">Välj åtminstone en utgåva att lägga till</string>
+    <string name="input_error__no_issue_selected">Välj åtminstone en utgåva</string>
     <string name="insert_issue__title_multiple_issues_plural">Lägger till utgåva %1$s och %2$d andra</string>
     <string name="insert_issue__title_multiple_issues_singular">Lägger till utgåva %1$s och en till</string>
     <string name="insert_issue__title_single_issue">Lägger till utgåva %1$s</string>
@@ -44,7 +42,7 @@
     <string name="internal_error__malformed_list">Utgåvolistan är felaktig</string>
     <string name="internal_error__purchase_creation_failed">Skapandet av inköpsdatum misslyckades</string>
     <string name="issue_already_possessed">Du har redan den här utgåvan i din samling</string>
-    <string name="issue_selection_tip">Välj en utgåva att lägga till genom att trycka på den.\nVälj en sekvens av utgåvor genom att trycka länge på den första i sekvensen.</string>
+    <string name="issue_selection_tip">Välj en utgåva genom att trycka på den.\nVälj en sekvens av utgåvor genom att trycka länge på den första i sekvensen.</string>
     <string name="item_description">Description</string>
     <string name="itemtitle">Utgåvans nummer</string>
     <string name="link_to_ducksmanager_website">What The Duck är mobilappen av DucksManager. Klicka här för gå till DucksManagers hemsida.</string>

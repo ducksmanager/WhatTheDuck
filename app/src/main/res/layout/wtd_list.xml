@@ -263,7 +263,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="false"
             android:visibility="invisible"
-            android:src="@drawable/plus"
+            android:src="@drawable/ic_pen"
             app:backgroundTint="@android:color/holo_green_dark"
             app:tint="@android:color/white"
             app:rippleColor="@android:color/white" />

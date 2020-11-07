@@ -7,8 +7,7 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import android.widget.Toast
@@ -32,7 +31,7 @@ import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddIssues : AppCompatActivity(), View.OnClickListener {
+class AddIssues : AppCompatActivity(), OnClickListener {
     private lateinit var purchases: MutableList<Purchase>
     private lateinit var binding: AddissuesBinding
 
@@ -44,6 +43,19 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = AddissuesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        when (selectedIssues.size) {
+            1 -> {
+                binding.addIssueTitle.text = getString(R.string.insert_issue__title_single_issue, selectedIssues.first())
+            }
+            2 -> {
+                binding.addIssueTitle.text = getString(R.string.insert_issue__title_multiple_issues_singular, selectedIssues.first())
+            }
+            else -> {
+                binding.addIssueTitle.text = getString(R.string.insert_issue__title_multiple_issues_plural, selectedIssues.first(), selectedIssues.size - 1)
+            }
+        }
+
         downloadPurchaseList()
     }
 
@@ -69,6 +81,7 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun show() {
+        binding.missing.setOnClickListener(this)
         binding.noCondition.setOnClickListener(this)
         binding.badCondition.setOnClickListener(this)
         binding.notSoGoodCondition.setOnClickListener(this)
@@ -81,6 +94,7 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
 
         binding.addissueOk.setOnClickListener {
             val dmCondition = when (binding.condition.checkedRadioButtonId) {
+                R.id.missing -> InducksIssueWithUserIssueAndScore.MISSING
                 R.id.badCondition -> InducksIssueWithUserIssueAndScore.BAD_CONDITION
                 R.id.notSoGoodCondition -> InducksIssueWithUserIssueAndScore.NOTSOGOOD_CONDITION
                 R.id.goodCondition -> InducksIssueWithUserIssueAndScore.GOOD_CONDITION
@@ -96,7 +110,7 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
             DmServer.api.createUserIssues(issueListToUpdate).enqueue(object : DmServer.Callback<Any>("addissue", this@AddIssues, true) {
                 override fun onSuccessfulResponse(response: Response<Any>) {
                     finish()
-                    WhatTheDuck.info(WeakReference(this@AddIssues), R.string.confirmation_message__issue_inserted, Toast.LENGTH_SHORT)
+                    WhatTheDuck.info(WeakReference(this@AddIssues), R.string.confirmation_message__collection_updated, Toast.LENGTH_SHORT)
                     WhatTheDuck.currentUser = null // Force to re-trigger a collection fetch
                     startActivity(Intent(this@AddIssues, Login::class.java))
                 }
@@ -108,18 +122,6 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
         binding.addpurchase.setOnClickListener {
             toggleAddPurchaseButton(false)
             showNewPurchase()
-        }
-
-        when (selectedIssues.size) {
-            1 -> {
-                binding.addIssueTitle.text = getString(R.string.insert_issue__title_single_issue, selectedIssues.first())
-            }
-            2 -> {
-                binding.addIssueTitle.text = getString(R.string.insert_issue__title_multiple_issues_singular, selectedIssues.first())
-            }
-            else -> {
-                binding.addIssueTitle.text = getString(R.string.insert_issue__title_multiple_issues_plural, selectedIssues.first(), selectedIssues.size - 1)
-            }
         }
         binding.progressBar.visibility = GONE
     }
@@ -195,11 +197,14 @@ class AddIssues : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(view: View) {
         when (view.id) {
+            R.id.missing,
             R.id.noCondition,
             R.id.badCondition,
             R.id.notSoGoodCondition,
             R.id.goodCondition ->
                 binding.addissueConditionText.text = view.contentDescription.toString()
         }
+
+        binding.purchasesection.visibility = if (view.id == R.id.missing) INVISIBLE else VISIBLE
     }
 }

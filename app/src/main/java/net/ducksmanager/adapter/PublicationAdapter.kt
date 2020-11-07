@@ -26,6 +26,8 @@ class PublicationAdapter internal constructor(
         originActivity.startActivity(Intent(originActivity, IssueList::class.java))
     }
 
+    override fun getCheckboxImageResource(i: InducksPublicationWithPossession, activity: Activity): Int? = null
+
     override fun getPrefixImageResource(i: InducksPublicationWithPossession, activity: Activity): Int? = null
 
     override fun getSuffixImageResource(i: InducksPublicationWithPossession): Int? = null

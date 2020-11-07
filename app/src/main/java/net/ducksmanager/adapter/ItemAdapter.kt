@@ -69,6 +69,7 @@ abstract class ItemAdapter<Item> internal constructor(
         val row: RelativeLayout? = v.findViewById(R.id.row)
         val background: ImageView? = v.findViewById(R.id.background)
         val titleTextView: TextView? = v.findViewById(R.id.itemtitle)
+        val checkboxImage: ImageView? = v.findViewById(R.id.checkbox)
         val prefixImage: ImageView? = v.findViewById(R.id.prefiximage)
         val descriptionText: TextView? = v.findViewById(R.id.itemdescription)
         val suffixImage: ImageView? = v.findViewById(R.id.suffiximage)
@@ -112,6 +113,15 @@ abstract class ItemAdapter<Item> internal constructor(
             holder.titleTextView.tag = getIdentifier(i)
             holder.titleTextView.setTypeface(null, if (isHighlighted(i)) Typeface.BOLD else Typeface.NORMAL)
         }
+        if (holder.checkboxImage != null) {
+            val imageResource = getCheckboxImageResource(i, originActivity)
+            if (imageResource == null) {
+                holder.checkboxImage.visibility = View.GONE
+            } else {
+                holder.checkboxImage.visibility = View.VISIBLE
+                holder.checkboxImage.setImageResource(imageResource)
+            }
+        }
         if (holder.prefixImage != null) {
             val imageResource = getPrefixImageResource(i, originActivity)
             if (imageResource == null) {
@@ -150,6 +160,7 @@ abstract class ItemAdapter<Item> internal constructor(
         }
     }
 
+    protected abstract fun getCheckboxImageResource(i: Item, activity: Activity): Int?
     protected abstract fun getPrefixImageResource(i: Item, activity: Activity): Int?
     protected abstract fun getSuffixImageResource(i: Item): Int?
     protected abstract fun getDescriptionText(i: Item): String?

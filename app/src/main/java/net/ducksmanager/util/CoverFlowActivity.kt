@@ -79,8 +79,11 @@ class CoverFlowActivity : AppCompatActivity() {
 
                     val condition = currentSuggestion!!.userIssue?.condition
                     if (condition != null) {
-                        binding.conditionbadge.setImageResource(issueConditionToResourceId(condition))
-                        binding.conditiontext.text = getString(issueConditionToStringId(condition))
+                        val conditionResourceId = issueConditionToResourceId(condition)
+                        if (conditionResourceId != null) {
+                            binding.conditionbadge.setImageResource(conditionResourceId)
+                            binding.conditiontext.text = getString(issueConditionToStringId(condition))
+                        }
                         binding.conditiontext.textSize = 18f
                     } else {
                         binding.conditionbadge.visibility = View.GONE

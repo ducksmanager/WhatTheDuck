@@ -55,6 +55,8 @@ class IssueEdgeAdapter internal constructor(
 
     override fun isPossessed(item: InducksIssueWithUserIssueAndScore): Boolean = item.userIssue != null
 
+    override fun getCheckboxImageResource(i: InducksIssueWithUserIssueAndScore, activity: Activity): Int? = null
+
     override fun getPrefixImageResource(i: InducksIssueWithUserIssueAndScore, activity: Activity): Int? = null
 
     override fun getSuffixImageResource(i: InducksIssueWithUserIssueAndScore): Int? = null

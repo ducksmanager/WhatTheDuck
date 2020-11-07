@@ -19,9 +19,23 @@
         android:padding="6dip">
 
         <ImageView
+            android:id="@+id/checkbox"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@+id/prefiximage_description"
+            android:gravity="center_vertical"
+            android:scaleType="fitCenter"
+            android:visibility="gone" />
+
+        <ImageView
             android:id="@+id/prefiximage"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/checkbox"
+            android:layout_toRightOf="@id/checkbox"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
             android:adjustViewBounds="true"

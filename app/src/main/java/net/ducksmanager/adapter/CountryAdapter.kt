@@ -27,6 +27,8 @@ class CountryAdapter internal constructor(
 
     inner class ViewHolder(v: View?) : ItemAdapter<InducksCountryNameWithPossession>.ViewHolder(v!!)
 
+    override fun getCheckboxImageResource(i: InducksCountryNameWithPossession, activity: Activity): Int? = null
+
     override fun getPrefixImageResource(i: InducksCountryNameWithPossession, activity: Activity): Int? {
         val uri = "@drawable/flags_" + i.country.countryCode
         var imageResource = activity.resources.getIdentifier(uri, null, activity.packageName)

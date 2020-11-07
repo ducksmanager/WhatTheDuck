@@ -3,7 +3,6 @@
     <string name="add_cover">Click on the cover\nto add it to your collection</string>
     <string name="add_cover_error_file_too_big">The picture is too big, please try again.</string>
     <string name="add_cover_no_results">No cover matches your photo, please try again.</string>
-    <string name="add_issue">Add an issue</string>
     <string name="all_countries">All countries</string>
     <string name="app_name">What The Duck</string>
     <string name="bookcase_view_message">Displaying the bookcase view when on a mobile network can lead to a high data consumption. Do you still want to display it?</string>
@@ -15,9 +14,10 @@
     <string name="condition">Condition</string>
     <string name="condition_bad">Bad condition</string>
     <string name="condition_good">Good condition</string>
+    <string name="condition_missing">Missing issue</string>
     <string name="condition_none">Unspecified condition</string>
     <string name="condition_notsogood">Not-so-good condition</string>
-    <string name="confirmation_message__issue_inserted">The issue has been added to your collection</string>
+    <string name="confirmation_message__collection_updated">Your collection has been updated</string>
     <string name="country">Country</string>
     <string name="cover_suggestion">Cover suggestion</string>
     <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
@@ -32,11 +32,10 @@
     <string name="input_error">Input error</string>
     <string name="input_error__empty_credentials">You need to enter your credentials to continue</string>
     <string name="input_error__invalid_credentials">Invalid credentials</string>
-    <string name="input_error__issue_already_possessed">You already have this issue in your collection</string>
-    <string name="input_error__no_issue_selected">Select at least one issue to add</string>
-    <string name="insert_issue__title_multiple_issues_plural">Adding issue %1$s and %2$d others</string>
-    <string name="insert_issue__title_multiple_issues_singular">Adding issue %1$s and 1 other</string>
-    <string name="insert_issue__title_single_issue">Adding issue %1$s</string>
+    <string name="input_error__no_issue_selected">Select at least one issue</string>
+    <string name="insert_issue__title_multiple_issues_plural">Issue %1$s and %2$d others</string>
+    <string name="insert_issue__title_multiple_issues_singular">Issue %1$s and 1 other</string>
+    <string name="insert_issue__title_single_issue">Issue %1$s</string>
     <string name="internal_error">Internal error</string>
     <string name="internal_error__crypting_failed">The encryption of your credentials failed</string>
     <string name="internal_error__empty_list">Empty list</string>
@@ -44,7 +43,7 @@
     <string name="internal_error__malformed_list">The list is malformed, please try again later</string>
     <string name="internal_error__purchase_creation_failed">The creation of the purchase date failed</string>
     <string name="issue_already_possessed">You already have this issue in your collection</string>
-    <string name="issue_selection_tip">Select an issue to add by tapping on it.\nSelect a range of issues by long-tapping on the first item of the range.</string>
+    <string name="issue_selection_tip">Select an issue by tapping on it.\nSelect a range of issues by long-tapping on the first item of the range.</string>
     <string name="item_description">Description</string>
     <string name="itemtitle">Item</string>
     <string name="link_to_ducksmanager_website">What The Duck is the mobile app of DucksManager. Click here to access the DucksManager website.</string>

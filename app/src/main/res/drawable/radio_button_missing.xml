@@ -1,0 +1,10 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:state_pressed="false"
+          android:drawable="@drawable/radio_button_pressed_missing"/>
+    <item android:state_checked="false" android:state_pressed="false"
+          android:drawable="@drawable/radio_button"/>
+    <item android:state_checked="true" android:state_pressed="true"
+          android:drawable="@drawable/radio_button_pressed_missing"/>
+    <item android:state_checked="false" android:state_pressed="true"
+          android:drawable="@drawable/radio_button"/>
+</selector>

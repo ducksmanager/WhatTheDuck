@@ -10,6 +10,17 @@
     <style name="AddIssueTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="radioButtonMissing">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:gravity">top|center</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/radio_button_missing</item>
+        <item name="android:scaleType">matrix</item>
+    </style>
     <style name="radioButtonNoCondition">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>

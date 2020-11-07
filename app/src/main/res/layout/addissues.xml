@@ -14,8 +14,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:text="@string/add_issue"/>
+        android:textStyle="bold" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -46,7 +45,7 @@
 
                 <RadioGroup
                     android:id="@+id/condition"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
@@ -54,23 +53,33 @@
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:id="@+id/noCondition"
-                        style="@style/radioButtonNoCondition"
+                        android:id="@+id/missing"
+                        android:layout_width="20dp"
+                        style="@style/radioButtonMissing"
                         android:checked="true"
+                        android:contentDescription="@string/condition_missing"/>
+
+                    <RadioButton
+                        android:id="@+id/noCondition"
+                        android:layout_width="20dp"
+                        style="@style/radioButtonNoCondition"
                         android:contentDescription="@string/condition_none"/>
 
                     <RadioButton
                         android:id="@+id/badCondition"
+                        android:layout_width="20dp"
                         style="@style/radioButtonBadCondition"
                         android:contentDescription="@string/condition_bad"/>
 
                     <RadioButton
                         android:id="@+id/notSoGoodCondition"
+                        android:layout_width="20dp"
                         style="@style/radioButtonNotSoGoodCondition"
                         android:contentDescription="@string/condition_notsogood"/>
 
                     <RadioButton
                         android:id="@+id/goodCondition"
+                        android:layout_width="20dp"
                         style="@style/radioButtonGoodCondition"
                         android:contentDescription="@string/condition_good"/>
                 </RadioGroup>

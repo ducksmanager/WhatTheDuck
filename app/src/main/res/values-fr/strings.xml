@@ -3,7 +3,6 @@
     <string name="add_cover">Cliquez sur la couverture\npour ajouter le numéro à la collection</string>
     <string name="add_cover_error_file_too_big">L\'image est trop grande, veuillez réessayer.</string>
     <string name="add_cover_no_results">Aucun résultat pour votre photo, veuillez réessayer.</string>
-    <string name="add_issue">Ajout de numéro</string>
     <string name="all_countries">Tous les pays</string>
     <string name="app_name">What The Duck</string>
     <string name="bookcase_view_message">L\'affichage de la bibliothèque en utilisant les données mobiles peut entraîner une consommation importante de données mobiles. Voulez-vous tout de même afficher la vue Bibliothèque ?</string>
@@ -17,7 +16,7 @@
     <string name="condition_good">Bon état</string>
     <string name="condition_none">Etat non spécifié</string>
     <string name="condition_notsogood">Etat moyen</string>
-    <string name="confirmation_message__issue_inserted">Le numéro a été ajouté à votre collection</string>
+    <string name="confirmation_message__collection_updated">Votre collection a été mise à jour</string>
     <string name="country">Pays</string>
     <string name="cover_suggestion">Suggestion de couverture</string>
     <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
@@ -32,11 +31,10 @@
     <string name="input_error">Erreur de saisie</string>
     <string name="input_error__empty_credentials">Vous devez saisir votre pseudonyme et votre mot de passe pour continuer</string>
     <string name="input_error__invalid_credentials">Vos identifiants sont invalides</string>
-    <string name="input_error__issue_already_possessed">Vous possédez déjà ce numéro</string>
-    <string name="input_error__no_issue_selected">Sélectionnez au moins un numéro à ajouter</string>
-    <string name="insert_issue__title_multiple_issues_plural">Ajout du numéro %1$s et %2$d autres</string>
-    <string name="insert_issue__title_multiple_issues_singular">Ajout du numéro %1$s et 1 autre</string>
-    <string name="insert_issue__title_single_issue">Ajout du numéro %1$s</string>
+    <string name="input_error__no_issue_selected">Sélectionnez au moins un numéro</string>
+    <string name="insert_issue__title_multiple_issues_plural">Numéro %1$s et %2$d autres</string>
+    <string name="insert_issue__title_multiple_issues_singular">Numéro %1$s et 1 autre</string>
+    <string name="insert_issue__title_single_issue">Numéro %1$s</string>
     <string name="internal_error">Erreur interne</string>
     <string name="internal_error__crypting_failed">L\'encryptage de vos identifiants a échoué</string>
     <string name="internal_error__empty_list">Liste vide</string>
@@ -44,7 +42,7 @@
     <string name="internal_error__malformed_list">La liste des numéros est mal formée</string>
     <string name="internal_error__purchase_creation_failed">La création de la date d\'achat a échoué</string>
     <string name="issue_already_possessed">Vous possédez déjà ce numéro dans votre collection</string>
-    <string name="issue_selection_tip">Sélectionnez un numéro à ajouter en appuyant dessus.\nSélectionnez une liste de numéros consécutive en effectuant un appui long.</string>
+    <string name="issue_selection_tip">Sélectionnez un numéro en appuyant dessus.\nSélectionnez une liste de numéros consécutive en effectuant un appui long.</string>
     <string name="item_description">Description</string>
     <string name="itemtitle">Numéro</string>
     <string name="link_to_ducksmanager_website">What The Duck est l\'application mobile de DucksManager. Cliquez ici pour accéder au site Web de DucksManager.</string>
@@ -52,7 +50,7 @@
     <string name="loading_collection">Chargement de votre collection…</string>
     <string name="login">Connexion</string>
     <string name="logout">Déconnexion</string>
-    <string name="long_tap_to_end_issue_range_selection">Faites un appui long sur le dernier numéro conséutif à ajouter</string>
+    <string name="long_tap_to_end_issue_range_selection">Faites un appui long sur le dernier numéro consécutif à sélectionner</string>
     <string name="my_collection">Ma collection</string>
     <string name="network_error">Erreur réseau</string>
     <string name="network_error__no_connection">Problème de réseau : vérifiez votre connexion Internet</string>
@@ -98,4 +96,6 @@
     <string name="send">Envoyer</string>
     <string name="reset_password_title">Mot de passe oublié ?</string>
     <string name="reset_password_description">Indiquez votre addresse e-mail pour réinitialiser votre mot de passe</string>
+    <string name="condition_missing">Numéro manquant</string>
+    <string name="reset_password_confirmation">Si l\'adresse e-mail entrée correspond à un compte DucksManager, nous venons d\'y envoyer un lien permettant la réinitialisation du mot de passe. Si l\'e-mail ne vous parvient pas d\'ici quelques minutes, veuillez vérifier votre dossier Spam.</string>
 </resources>
