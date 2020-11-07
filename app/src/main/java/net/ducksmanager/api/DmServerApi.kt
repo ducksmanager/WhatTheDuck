@@ -13,6 +13,9 @@ interface DmServerApi {
     @PUT("/ducksmanager/user")
     fun createUser(@Body user: UserToCreate): Call<Void>
 
+    @POST("/ducksmanager/resetpassword/init")
+    fun initForgotPassword(@Body emailWrapper: EmailWrapper): Call<Void>
+
     @GET("/coa/list/countries/{locale}")
     fun getCountries(@Path("locale") locale: String): Call<HashMap<String, String>>
 

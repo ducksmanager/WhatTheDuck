@@ -95,4 +95,8 @@
     <string name="welcome_bookcase_view_portrait">Welcome to the bookcase view! Rotate your screen to landscape for the best effect ;-)</string>
     <string name="welcome_message">Your DucksManager collection is displayed when you open What The Duck. Tap on a country to view the publications that you possess, or tap on \"+\" to add an issue to your collection.</string>
     <string name="welcome_title">Welcome on What The Duck!</string>
+    <string name="reset_password_description">Fill in your e-mail address to reset your password.</string>
+    <string name="reset_password_confirmation">If the typed e-mail address corresponds to a DucksManager account, we just sent there a link allowing you to reset your password. If the e-mail does not reach you within a few minutes, please check your "Spam" folder.</string>
+    <string name="send">Send</string>
+    <string name="reset_password_title">Forgot password?</string>
 </resources>

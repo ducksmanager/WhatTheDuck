@@ -183,6 +183,10 @@ class Login : AppCompatActivity() {
             }
         }
 
+        binding.forgotPassword.setOnClickListener {
+            startActivity(Intent(this, ForgotPassword::class.java))
+        }
+
         binding.login.setOnClickListener { view: View? ->
             hideKeyboard(view)
             val username = binding.username.text.toString()
