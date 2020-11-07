@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -171,6 +172,15 @@ class Login : AppCompatActivity() {
             startActivity(Intent(this, Signup::class.java)
                 .putExtra("username", binding.username.text.toString())
             )
+        }
+
+        binding.revealPassword.setOnClickListener {
+            if (binding.password.transformationMethod === null) {
+                binding.password.transformationMethod = PasswordTransformationMethod()
+            }
+            else {
+                binding.password.transformationMethod = null
+            }
         }
 
         binding.login.setOnClickListener { view: View? ->
