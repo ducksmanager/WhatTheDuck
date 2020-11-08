@@ -23,6 +23,8 @@ class ForgotPassword : AppCompatActivity() {
             val email = binding.emailAddress.text.toString()
             DmServer.api.initForgotPassword(EmailWrapper(email)).enqueue(object : DmServer.Callback<Void>("initForgotPassword", this@ForgotPassword, true) {
                 override fun onSuccessfulResponse(response: Response<Void>) {
+                    binding.emailAddress.isEnabled = false
+                    binding.sendEmail.isEnabled = false
                     binding.feedback.text = getString(reset_password_confirmation)
                 }
             })

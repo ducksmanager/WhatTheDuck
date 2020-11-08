@@ -1,3 +1,10 @@
+Version 2.6.0 "OK Quack"
+
+    Allow to update and remove issues
+    Add "Forgot password" page
+    Add context menu to copy the list of owned or missing issues in the current view
+    Show message when a new version is available
+
 Version 2.5.1
 
     Fix background in notified countries list

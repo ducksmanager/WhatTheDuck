@@ -16,7 +16,7 @@
     <string name="condition_good">Bra skick</string>
     <string name="condition_none">Ospecificerat skick</string>
     <string name="condition_notsogood">Genomsnittligt skick</string>
-    <string name="confirmation_message__collection_updated">Utgåvan har lagts till i din samling</string>
+    <string name="confirmation_message__collection_updated">Din samling har uppdaterats</string>
     <string name="country">Land</string>
     <string name="cover_suggestion">Framsideförslag</string>
     <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
@@ -32,9 +32,9 @@
     <string name="input_error__empty_credentials">Du måste fylla i alla fälten för att fortsätta</string>
     <string name="input_error__invalid_credentials">Ogiltig information</string>
     <string name="input_error__no_issue_selected">Välj åtminstone en utgåva</string>
-    <string name="insert_issue__title_multiple_issues_plural">Lägger till utgåva %1$s och %2$d andra</string>
-    <string name="insert_issue__title_multiple_issues_singular">Lägger till utgåva %1$s och en till</string>
-    <string name="insert_issue__title_single_issue">Lägger till utgåva %1$s</string>
+    <string name="insert_issue__title_multiple_issues_plural">Utgåva %1$s och %2$d andra</string>
+    <string name="insert_issue__title_multiple_issues_singular">Utgåva %1$s och en till</string>
+    <string name="insert_issue__title_single_issue">Utgåva %1$s</string>
     <string name="internal_error">Internt fel</string>
     <string name="internal_error__crypting_failed">Krypteringen av din information misslyckades</string>
     <string name="internal_error__empty_list">Tom lista</string>
@@ -93,4 +93,16 @@
     <string name="welcome_bookcase_view_portrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
     <string name="welcome_message">Din DucksManager-samling visas när du öppnar What The Duck. Klicka på ett land för att se de publikationer du har, eller tryck på \"+\" för att lägga till en utgåva  i din samling.</string>
     <string name="welcome_title">Välkommen till What The Duck!</string>
+    <string name="condition_missing">Utgåva saknas</string>
+    <string name="issue_list_copied">Listan har kopierats till dina urklipp.</string>
+    <string name="issue_list_copy_missing">Kopiera saknade utgåvor</string>
+    <string name="issue_list_copy_possessed">Kopiera ägda utgåvor</string>
+    <string name="issue_list_copy_missing_title">Saknade utgåvor av&#160;</string>
+    <string name="issue_list_copy_possessed_title">Ägda utgåvor av&#160;</string>
+    <string name="new_version_available">En ny version av What The Duck finns tillgänglig!\\nKlicka här för att uppdatera appen</string>
+    <string name="no_issue">Ingen utgåva</string>
+    <string name="reset_password_title">Glömt lösenord?</string>
+    <string name="reset_password_description">Skriv in din emailadress för att återställa ditt lösenord.</string>
+    <string name="reset_password_confirmation">Om emailadressen överensstämmer med ett DucksManager konto skickas en länk för att återställa ditt lösenord. Om du inte får ett email inom några minter, kolla din Spam mapp.</string>
+    <string name="send">Skicka</string>
 </resources>

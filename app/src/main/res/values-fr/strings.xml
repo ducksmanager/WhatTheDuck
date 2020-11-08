@@ -98,4 +98,11 @@
     <string name="reset_password_description">Indiquez votre addresse e-mail pour réinitialiser votre mot de passe</string>
     <string name="condition_missing">Numéro manquant</string>
     <string name="reset_password_confirmation">Si l\'adresse e-mail entrée correspond à un compte DucksManager, nous venons d\'y envoyer un lien permettant la réinitialisation du mot de passe. Si l\'e-mail ne vous parvient pas d\'ici quelques minutes, veuillez vérifier votre dossier Spam.</string>
+    <string name="issue_list_copied">La liste a été copiée dans votre presse-papiers.</string>
+    <string name="issue_list_copy_possessed">Copier les numéros possédés</string>
+    <string name="issue_list_copy_missing">Copier les numéros manquants</string>
+    <string name="issue_list_copy_possessed_title">Numéros possédés de&#160;</string>
+    <string name="issue_list_copy_missing_title">Numéros manquants de&#160;</string>
+    <string name="no_issue">Aucun numéro</string>
+    <string name="new_version_available">Une nouvelle version de What The Duck est disponible ! Cliquez ici pour mettre à jour l\'application</string>
 </resources>
