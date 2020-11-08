@@ -69,14 +69,18 @@ class WhatTheDuck : Application() {
             }
         var isTestContext = false
         var isOfflineMode = false
+        var isNewVersionAvailable = false
 
         private const val CONFIG = "config.properties"
         private const val CONFIG_KEY_PUSHER_INSTANCE_ID = "pusher_instance_id"
         const val CONFIG_KEY_API_ENDPOINT_URL = "api_endpoint_url"
+        const val CONFIG_KEY_APPFOLLOW_API_ENDPOINT_URL = "appfollow_api_endpoint_url"
+        const val CONFIG_KEY_APPFOLLOW_API_USER = "appfollow_api_secret"
         const val CONFIG_KEY_DM_URL = "dm_url"
         const val CONFIG_KEY_ROLE_NAME = "role_name"
         const val CONFIG_KEY_ROLE_PASSWORD = "role_password"
         const val CONFIG_KEY_EDGES_URL = "edges_url"
+        private const val CONFIG_KEY_PLAY_STORE_URL = "api_google_play_url"
         private const val CONFIG_KEY_MATOMO_URL = "matomo_url"
         private const val CONFIG_MATOMO_DIMENSION_USER = 1
         private const val CONFIG_MATOMO_DIMENSION_VERSION = 2
@@ -84,6 +88,7 @@ class WhatTheDuck : Application() {
         lateinit var locale: String
 
         lateinit var applicationVersion: String
+        lateinit var applicationPackage: String
 
         lateinit var connectivityManager: ConnectivityManager
 
@@ -105,6 +110,9 @@ class WhatTheDuck : Application() {
 
         val dmUrl: String
             get() = config.getProperty(CONFIG_KEY_DM_URL)
+
+        val playStoreUrl: String
+            get() = config.getProperty(CONFIG_KEY_PLAY_STORE_URL)
 
         fun info(activity: WeakReference<Activity?>, titleId: Int, duration: Int) {
             Toast.makeText(activity.get(), titleId, duration).show()
@@ -216,6 +224,7 @@ class WhatTheDuck : Application() {
         if (!isTestContext) {
             appDB = Room.databaseBuilder(applicationContext, AppDatabase::class.java, DB_NAME)
                 .allowMainThreadQueries()
+                .addMigrations(AppDatabase.MIGRATION_7_8)
                 .fallbackToDestructiveMigration()
                 .build()
         }
@@ -238,6 +247,7 @@ class WhatTheDuck : Application() {
             return
         }
         applicationVersion = info.versionName
+        applicationPackage = info.packageName
     }
 
     fun trackActivity(activity: Activity) {

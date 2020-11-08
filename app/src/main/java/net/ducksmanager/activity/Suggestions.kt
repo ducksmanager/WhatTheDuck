@@ -73,7 +73,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
         val noSuggestionView = binding.suggestionsNoResults
 
         if (isOfflineMode) {
-            binding.offlineMode.visibility = View.VISIBLE
+            binding.warningMessage.visibility = View.VISIBLE
         }
 
         val suggestions = appDB!!.suggestedIssueDao().findAll()

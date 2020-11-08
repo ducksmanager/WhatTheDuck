@@ -6,10 +6,19 @@ import android.widget.ProgressBar
 import com.google.gson.GsonBuilder
 import net.ducksmanager.persistence.models.internal.Sync
 import net.ducksmanager.whattheduck.R
-import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_API_ENDPOINT_URL
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_APPFOLLOW_API_ENDPOINT_URL
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_APPFOLLOW_API_USER
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_ROLE_NAME
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_ROLE_PASSWORD
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.alert
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.config
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.trackEvent
 import okhttp3.Credentials
+import okhttp3.Headers.Companion.toHeaders
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -33,9 +42,12 @@ class DmServer {
         const val EVENT_GET_USER_NOTIFICATION_COUNTRIES = "getUserNotificationCountries"
         const val EVENT_RETRIEVE_ALL_COUNTRIES = "getInducksCountries"
 
+        const val EVENT_RETRIEVE_LATEST_APP_VERSION = "retrieveLatestAppVersion"
+
         lateinit var completedSyncs: HashMap<String, Boolean>
 
         lateinit var api: DmServerApi
+        lateinit var appFollowApi: AppFollowApi
 
         var apiDmUser: String? = null
         var apiDmPassword: String? = null
@@ -44,10 +56,10 @@ class DmServer {
             val filledUserCredentials = withUserCredentials && apiDmUser != null && apiDmPassword != null
             return hashMapOf(
                 "Authorization" to Credentials.basic(
-                    WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_ROLE_NAME),
-                    WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_ROLE_PASSWORD)
+                    config.getProperty(CONFIG_KEY_ROLE_NAME),
+                    config.getProperty(CONFIG_KEY_ROLE_PASSWORD)
                 ),
-                "x-dm-version" to WhatTheDuck.applicationVersion,
+                "x-dm-version" to applicationVersion,
                 "x-dm-user" to if (filledUserCredentials) apiDmUser!! else "",
                 "x-dm-pass" to if (filledUserCredentials) apiDmPassword!! else ""
             ).toMap()
@@ -61,30 +73,52 @@ class DmServer {
                 EVENT_GET_SUGGESTED_ISSUES to false,
                 EVENT_GET_USER_NOTIFICATION_COUNTRIES to false,
                 EVENT_RETRIEVE_ALL_COUNTRIES to false,
+                EVENT_RETRIEVE_LATEST_APP_VERSION to false,
             )
             val gson = GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create()
-            val interceptor = HttpLoggingInterceptor()
+            val interceptor = HttpLoggingInterceptor {}
             interceptor.level = HttpLoggingInterceptor.Level.BODY
-            val okHttpClient = OkHttpClient().newBuilder()
+
+            val okHttpClientDmApi = OkHttpClient().newBuilder()
                 .addInterceptor(Interceptor { chain: Interceptor.Chain ->
-                    val builder = chain.request().newBuilder()
-                    val headers = getRequestHeaders(apiDmUser != null)
-                    for (headerKey in headers.keys) {
-                        builder.header(headerKey, Objects.requireNonNull(headers[headerKey])!!)
-                    }
-                    val newRequest = builder.build()
-                    chain.proceed(newRequest)
+                    chain.proceed(chain.request().newBuilder().headers(
+                        getRequestHeaders(apiDmUser != null).toHeaders())
+                        .build()
+                    )
                 })
                 .addInterceptor(interceptor)
                 .build()
+
             val retrofit = Retrofit.Builder()
-                .baseUrl(WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_API_ENDPOINT_URL))
-                .client(okHttpClient)
+                .baseUrl(config.getProperty(CONFIG_KEY_API_ENDPOINT_URL))
+                .client(okHttpClientDmApi)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
             api = retrofit.create(DmServerApi::class.java)
+
+            val okHttpClientAppFollowApi = OkHttpClient().newBuilder()
+                .addInterceptor(Interceptor { chain: Interceptor.Chain ->
+                    chain.proceed(chain.request().newBuilder().headers(
+                        hashMapOf(
+                            "Authorization" to Credentials.basic(
+                                config.getProperty(CONFIG_KEY_APPFOLLOW_API_USER),
+                                ""
+                            )
+                        ).toHeaders())
+                        .build()
+                    )
+                })
+                .addInterceptor(interceptor)
+                .build()
+
+            val retrofitAppFollow = Retrofit.Builder()
+                .baseUrl(config.getProperty(CONFIG_KEY_APPFOLLOW_API_ENDPOINT_URL))
+                .client(okHttpClientAppFollowApi)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build()
+            appFollowApi = retrofitAppFollow.create(AppFollowApi::class.java)
         }
     }
 
@@ -97,7 +131,7 @@ class DmServer {
 
         init {
             println("API call start : $eventName")
-            WhatTheDuck.trackEvent("$eventName/start")
+            trackEvent("$eventName/start")
             originActivityRef = WeakReference(originActivity)
             originActivityRef.get()!!.findViewById<View>(R.id.progressBar)?.visibility = ProgressBar.VISIBLE
         }
@@ -112,9 +146,9 @@ class DmServer {
             } else {
                 if (alertOnError) {
                     when (response.code()) {
-                        HTTP_UNAUTHORIZED -> WhatTheDuck.alert(originActivityRef, R.string.input_error__invalid_credentials)
-                        HTTP_NOT_FOUND -> WhatTheDuck.alert(originActivityRef, R.string.offline_mode_cannot_login)
-                        else -> WhatTheDuck.alert(originActivityRef, R.string.error)
+                        HTTP_UNAUTHORIZED -> alert(originActivityRef, R.string.input_error__invalid_credentials)
+                        HTTP_NOT_FOUND -> alert(originActivityRef, R.string.offline_mode_cannot_login)
+                        else -> alert(originActivityRef, R.string.error)
                     }
                 }
                 onErrorResponse(response)
@@ -141,7 +175,7 @@ class DmServer {
 
         private fun onFinished() {
             println("API call end : $eventName")
-            WhatTheDuck.trackEvent("$eventName/finish")
+            trackEvent("$eventName/finish")
         }
 
         private fun logSync() {
@@ -149,7 +183,7 @@ class DmServer {
                 completedSyncs[eventName] = true
             }
             if (completedSyncs.values.all { it }) {
-                WhatTheDuck.appDB!!.syncDao().insert(Sync(Instant.now(), applicationVersion))
+                appDB!!.syncDao().insert(Sync(Instant.now(), applicationVersion))
             }
         }
     }

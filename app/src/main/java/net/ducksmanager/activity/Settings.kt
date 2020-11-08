@@ -52,7 +52,7 @@ class Settings : AppCompatActivityWithDrawer() {
                 recyclerView.layoutManager = LinearLayoutManager(this@Settings)
 
                 if (isOfflineMode) {
-                    binding.offlineMode.visibility = View.VISIBLE
+                    binding.warningMessage.visibility = View.VISIBLE
                     binding.notifySwitch.isEnabled = false
                     binding.save.isEnabled = false
                 }

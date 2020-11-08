@@ -31,9 +31,24 @@
         </activity>
         <activity android:name="net.ducksmanager.activity.Signup" />
         <activity android:name="net.ducksmanager.activity.ForgotPassword" />
-        <activity android:name="net.ducksmanager.activity.CountryList" />
-        <activity android:name="net.ducksmanager.activity.PublicationList" />
-        <activity android:name="net.ducksmanager.activity.IssueList" />
+        <activity android:name="net.ducksmanager.activity.CountryList">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="net.ducksmanager.activity.PublicationList">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="net.ducksmanager.activity.IssueList">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="net.ducksmanager.util.CoverFlowActivity"
             android:configChanges="orientation|keyboardHidden"

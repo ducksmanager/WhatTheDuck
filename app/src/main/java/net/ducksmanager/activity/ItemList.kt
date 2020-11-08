@@ -2,6 +2,7 @@ package net.ducksmanager.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
@@ -21,6 +22,9 @@ import net.ducksmanager.util.CoverFlowFileHandler
 import net.ducksmanager.util.CoverFlowFileHandler.SearchFromCover
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationPackage
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isNewVersionAvailable
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.databinding.WtdListBinding
 import java.lang.ref.WeakReference
@@ -31,7 +35,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     companion object {
         var type = WhatTheDuck.CollectionType.USER.toString()
 
-        fun isCoaList() : Boolean = type == WhatTheDuck.CollectionType.COA.toString()
+        fun isCoaList(): Boolean = type == WhatTheDuck.CollectionType.COA.toString()
 
         const val MIN_ITEM_NUMBER_FOR_FILTER = 20
         private const val REQUEST_IMAGE_CAPTURE = 1
@@ -56,12 +60,39 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     open fun downloadAndShowList() {
         if (!viewModel.data.hasObservers()) {
+            val latestVersion = appDB!!.appVersionDao().find()
+            isNewVersionAvailable = if (latestVersion == null) false else latestVersion.version != WhatTheDuck.applicationVersion
             viewModel.data.observe(this, onObserve())
         }
     }
 
     open fun onObserve(): (t: List<Item>) -> Unit = { items ->
-        binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
+        binding.warningMessage.visibility = VISIBLE
+        when {
+            isOfflineMode -> {
+                binding.warningMessage.text = getString(R.string.offline_mode)
+                binding.warningMessage.setOnClickListener {}
+            }
+            isNewVersionAvailable -> {
+                binding.warningMessage.text = getString(R.string.new_version_available)
+                binding.warningMessage.setOnClickListener {
+                    val urlFallback = "https://play.google.com/store/apps/details?id=$applicationPackage"
+                    val url = try {
+                        this.packageManager.getPackageInfo("com.android.vending", 0)
+                        "market://details?id=$applicationPackage"
+                    } catch (e: Exception) {
+                        urlFallback
+                    }
+                    val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(url))
+                    if(intent.resolveActivity(packageManager) != null)
+                        this@ItemList.startActivity(intent)
+                    else {
+                        this@ItemList.startActivity(intent.setData(Uri.parse(urlFallback)))
+                    }
+                }
+            }
+            else -> binding.warningMessage.visibility = GONE
+        }
         itemAdapter.setItems(items)
 
         val isEmptyList = items.isEmpty() || (isCoaList() && isOfflineMode)
@@ -69,7 +100,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.itemList.visibility = if (isEmptyList) INVISIBLE else VISIBLE
         if (isCoaList() && isOfflineMode) {
             binding.emptyList.text = getString(R.string.offline_mode_cannot_view)
-            binding.emptyList.setOnClickListener{
+            binding.emptyList.setOnClickListener {
                 type = WhatTheDuck.CollectionType.USER.toString()
                 startActivity(Intent(this, CountryList::class.java))
             }
@@ -91,13 +122,15 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding =  WtdListBinding.inflate(layoutInflater)
+        binding = WtdListBinding.inflate(layoutInflater)
         registerForContextMenu(binding.root)
         setContentView(binding.root)
 
-        connectionDetector = ConnectionDetector(lifecycleScope) { run {
-            loadList()
-        } }
+        connectionDetector = ConnectionDetector(lifecycleScope) {
+            run {
+                loadList()
+            }
+        }
 
         toggleToolbar()
         toggleNavigation()
@@ -120,8 +153,8 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         }
         if (hasDividers()) {
             recyclerView.addItemDecoration(DividerItemDecoration(
-                    recyclerView.context,
-                    LinearLayoutManager(this).orientation
+                recyclerView.context,
+                LinearLayoutManager(this).orientation
             ))
         }
 
@@ -143,8 +176,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     private fun goToAlternativeView() {
         if (isCoaList()) {
             type = WhatTheDuck.CollectionType.USER.toString()
-        }
-        else {
+        } else {
             IssueList.viewType = IssueList.ViewType.LIST_VIEW
             type = WhatTheDuck.CollectionType.COA.toString()
         }
@@ -158,7 +190,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     }
 
     protected open fun show() {
-        binding.offlineMode.visibility = if (isOfflineMode) VISIBLE else GONE
+        binding.warningMessage.visibility = if (isOfflineMode) VISIBLE else GONE
 
         binding.addToCollectionByPhotoButton.visibility = GONE
         binding.addToCollectionBySelectionButton.visibility = GONE

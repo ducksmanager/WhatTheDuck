@@ -42,7 +42,7 @@ class OfflineModeTest(currentLocale: LocaleWithDefaultPublication?) : WtdTest(cu
         goToPublicationListView("fr")
         goToIssueListView("fr/DDD")
 
-        Espresso.onView(ViewMatchers.withId(R.id.offlineMode)).check(matches(isDisplayed()))
+        Espresso.onView(ViewMatchers.withId(R.id.warningMessage)).check(matches(isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.addToCollectionWrapper)).check(matches(not(isDisplayed())))
     }
 }

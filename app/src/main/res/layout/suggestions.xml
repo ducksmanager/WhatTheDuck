@@ -19,7 +19,7 @@
             app:title="@string/suggestions" />
 
         <TextView
-            android:id="@+id/offlineMode"
+            android:id="@+id/warningMessage"
             android:layout_below="@+id/toolbar"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_below="@+id/offlineMode">
+            android:layout_below="@+id/warningMessage">
 
             <TextView
                 android:id="@+id/suggestionsIntro"

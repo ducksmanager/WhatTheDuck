@@ -3,7 +3,10 @@ package net.ducksmanager.persistence
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import net.ducksmanager.persistence.dao.*
+import net.ducksmanager.persistence.models.appfollow.AppVersion
 import net.ducksmanager.persistence.models.coa.*
 import net.ducksmanager.persistence.models.composite.*
 import net.ducksmanager.persistence.models.converter.InstantConverter
@@ -14,7 +17,9 @@ import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.persistence.models.dm.User
 import net.ducksmanager.persistence.models.internal.Sync
 
+
 @Database(entities = [
+    AppVersion::class,
     CoverSearchIssue::class,
     InducksCountryName::class,
     InducksIssue::class,
@@ -30,9 +35,19 @@ import net.ducksmanager.persistence.models.internal.Sync
     User::class,
     UserMessage::class,
     UserSetting::class
-], version = 7, exportSchema = true)
+], version = 8, exportSchema = true)
 @TypeConverters(StringMutableSetConverter::class, InstantConverter::class)
 abstract class AppDatabase : RoomDatabase() {
+
+    companion object {
+        val MIGRATION_7_8: Migration = object : Migration(7, 8) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("create table app_version(version text not null constraint app_version_pk primary key)")
+            }
+        }
+    }
+
+    abstract fun appVersionDao(): AppVersionDao
     abstract fun coverSearchIssueDao(): CoverSearchIssueDao
     abstract fun inducksCountryDao(): InducksCountryDao
     abstract fun inducksIssueDao(): InducksIssueDao

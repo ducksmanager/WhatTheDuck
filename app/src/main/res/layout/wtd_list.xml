@@ -22,13 +22,14 @@
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
         <TextView
-            android:id="@+id/offlineMode"
+            android:id="@+id/warningMessage"
             android:layout_below="@+id/toolbar"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:background="#f09313"
+            android:padding="5dp"
             android:textColor="@android:color/white"
             android:text="@string/offline_mode"
             />
@@ -38,7 +39,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/navigation"
-            android:layout_below="@+id/offlineMode">
+            android:layout_below="@+id/warningMessage">
             <include
                 android:id="@+id/navigationAllCountries"
                 layout="@layout/wtd_list_navigation_all_countries" />

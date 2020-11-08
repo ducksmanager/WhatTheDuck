@@ -16,13 +16,19 @@ import androidx.appcompat.app.AppCompatActivity
 import com.pusher.pushnotifications.auth.AuthData
 import com.pusher.pushnotifications.auth.AuthDataGetter
 import com.pusher.pushnotifications.auth.BeamsTokenProvider
-import net.ducksmanager.api.DmServer
+import net.ducksmanager.api.DmServer.Callback
 import net.ducksmanager.api.DmServer.Companion.EVENT_GET_PURCHASES
 import net.ducksmanager.api.DmServer.Companion.EVENT_GET_SUGGESTED_ISSUES
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_ALL_PUBLICATIONS
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_COLLECTION
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_ISSUE_COUNT
+import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_LATEST_APP_VERSION
+import net.ducksmanager.api.DmServer.Companion.api
+import net.ducksmanager.api.DmServer.Companion.apiDmPassword
+import net.ducksmanager.api.DmServer.Companion.apiDmUser
+import net.ducksmanager.api.DmServer.Companion.appFollowApi
 import net.ducksmanager.api.DmServer.Companion.getRequestHeaders
+import net.ducksmanager.persistence.models.appfollow.Apps
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.InducksIssueCount
 import net.ducksmanager.persistence.models.composite.SuggestionList
@@ -59,11 +65,11 @@ class Login : AppCompatActivity() {
 
             val latestSync = appDB!!.syncDao().findLatest(applicationVersion)
 
-            DmServer.api.userIssues.enqueue(object : DmServer.Callback<List<Issue>>(EVENT_RETRIEVE_COLLECTION, originActivity, alertIfError!!) {
+            api.userIssues.enqueue(object : Callback<List<Issue>>(EVENT_RETRIEVE_COLLECTION, originActivity, alertIfError!!) {
                 override fun onFailureFailover() {
                     if (latestSync == null) {
                         isOfflineMode = true
-                        activityRef.get()!!.findViewById<TextView>(R.id.offlineMode).visibility = VISIBLE
+                        activityRef.get()!!.findViewById<TextView>(R.id.warningMessage).visibility = VISIBLE
                     }
                     else {
                         originActivity.startActivity(Intent(activityRef.get(), targetClass))
@@ -73,7 +79,7 @@ class Login : AppCompatActivity() {
                 override fun onErrorResponse(response: Response<List<Issue>>?) {}
 
                 override fun onSuccessfulResponse(response: Response<List<Issue>>) {
-                    val user = User(DmServer.apiDmUser!!, DmServer.apiDmPassword!!)
+                    val user = User(apiDmUser!!, apiDmPassword!!)
                     if (user.username !== WhatTheDuck.currentUser?.username) {
                         WhatTheDuck.currentUser = user
                         appDB!!.userDao().insert(user)
@@ -84,14 +90,14 @@ class Login : AppCompatActivity() {
 
                     originActivity.startActivity(Intent(activityRef.get(), targetClass))
 
-                    DmServer.api.userPurchases.enqueue(object : DmServer.Callback<List<Purchase>>(EVENT_GET_PURCHASES, originActivity, true) {
+                    api.userPurchases.enqueue(object : Callback<List<Purchase>>(EVENT_GET_PURCHASES, originActivity, true) {
                         override fun onSuccessfulResponse(response: Response<List<Purchase>>) {
                             appDB!!.purchaseDao().deleteAll()
                             appDB!!.purchaseDao().insertList(response.body()!!)
                         }
                     })
 
-                    DmServer.api.suggestedIssues.enqueue(object : DmServer.Callback<SuggestionList>(EVENT_GET_SUGGESTED_ISSUES, originActivity, true) {
+                    api.suggestedIssues.enqueue(object : Callback<SuggestionList>(EVENT_GET_SUGGESTED_ISSUES, originActivity, true) {
                         override fun onSuccessfulResponse(response: Response<SuggestionList>) {
                             Suggestions.loadSuggestions(response.body()!!)
                         }
@@ -100,7 +106,13 @@ class Login : AppCompatActivity() {
                     loadNotificationCountries(originActivity)
 
                     if (isObsoleteSync(latestSync)) {
-                        DmServer.api.publications.enqueue(object : DmServer.Callback<HashMap<String, String>>(EVENT_RETRIEVE_ALL_PUBLICATIONS, originActivity, true) {
+                        appFollowApi.getAppVersion().enqueue(object : Callback<Apps>(EVENT_RETRIEVE_LATEST_APP_VERSION, originActivity, true) {
+                            override fun onSuccessfulResponse(response: Response<Apps>) {
+                                appDB!!.appVersionDao().deleteAll()
+                                appDB!!.appVersionDao().insert(response.body()!!.apps.first().app)
+                            }
+                        })
+                        api.publications.enqueue(object : Callback<HashMap<String, String>>(EVENT_RETRIEVE_ALL_PUBLICATIONS, originActivity, true) {
                             override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                                 appDB!!.inducksPublicationDao().deleteAll()
                                 appDB!!.inducksPublicationDao().insertList(response.body()!!.keys.map { publicationCode ->
@@ -108,7 +120,7 @@ class Login : AppCompatActivity() {
                                 })
                             }
                         })
-                        DmServer.api.issueCount.enqueue(object : DmServer.Callback<HashMap<String, Int>>(EVENT_RETRIEVE_ISSUE_COUNT, originActivity, true) {
+                        api.issueCount.enqueue(object : Callback<HashMap<String, Int>>(EVENT_RETRIEVE_ISSUE_COUNT, originActivity, true) {
                             override fun onSuccessfulResponse(response: Response<HashMap<String, Int>>) {
                                 appDB!!.inducksIssueCountDao().deleteAll()
                                 appDB!!.inducksIssueCountDao().insertList(response.body()!!.keys.map { publicationCode ->
@@ -154,8 +166,8 @@ class Login : AppCompatActivity() {
                 showLoginForm()
             }
             else if (WhatTheDuck.currentUser == null) {
-                DmServer.apiDmUser = user.username
-                DmServer.apiDmPassword = user.password
+                apiDmUser = user.username
+                apiDmPassword = user.password
 
                 binding.progressBar.visibility = VISIBLE
                 fetchCollection(WeakReference(this@Login), false)
@@ -166,7 +178,7 @@ class Login : AppCompatActivity() {
     private fun showLoginForm() {
         binding.loginForm.visibility = VISIBLE
         if (isOfflineMode) {
-            binding.offlineMode.visibility = VISIBLE
+            binding.warningMessage.visibility = VISIBLE
         }
         binding.endSignup.setOnClickListener {
             startActivity(Intent(this, Signup::class.java)
@@ -192,8 +204,8 @@ class Login : AppCompatActivity() {
             val username = binding.username.text.toString()
             val password = binding.password.text.toString()
 
-            DmServer.apiDmUser = username
-            DmServer.apiDmPassword = toSHA1(password, WeakReference(this))
+            apiDmUser = username
+            apiDmPassword = toSHA1(password, WeakReference(this))
 
             val activityRef = WeakReference<Activity>(this)
 
