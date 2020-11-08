@@ -47,6 +47,11 @@
     <string name="item_description">Description</string>
     <string name="itemtitle">Item</string>
     <string name="link_to_ducksmanager_website">What The Duck is the mobile app of DucksManager. Click here to access the DucksManager website.</string>
+    <string name="issue_list_copied">The list has been copied to your clipboard.</string>
+    <string name="issue_list_copy_possessed">Copy possessed issues</string>
+    <string name="issue_list_copy_possessed_title">Possessed issues for&#160;</string>
+    <string name="issue_list_copy_missing">Copy missing issues</string>
+    <string name="issue_list_copy_missing_title">Missing issues for&#160;</string>
     <string name="list_view">List</string>
     <string name="loading_collection">Loading your collection…</string>
     <string name="login">Login</string>
@@ -98,4 +103,5 @@
     <string name="reset_password_confirmation">If the typed e-mail address corresponds to a DucksManager account, we just sent there a link allowing you to reset your password. If the e-mail does not reach you within a few minutes, please check your "Spam" folder.</string>
     <string name="send">Send</string>
     <string name="reset_password_title">Forgot password?</string>
+    <string name="no_issue">No issue</string>
 </resources>

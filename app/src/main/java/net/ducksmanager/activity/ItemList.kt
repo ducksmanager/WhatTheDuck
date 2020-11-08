@@ -92,6 +92,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         super.onCreate(savedInstanceState)
 
         binding =  WtdListBinding.inflate(layoutInflater)
+        registerForContextMenu(binding.root)
         setContentView(binding.root)
 
         connectionDetector = ConnectionDetector(lifecycleScope) { run {

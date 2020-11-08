@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/copyPossessed"
+        android:title="@string/issue_list_copy_possessed"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/copyMissing"
+        android:title="@string/issue_list_copy_missing"
+        app:showAsAction="never" />
+</menu>
