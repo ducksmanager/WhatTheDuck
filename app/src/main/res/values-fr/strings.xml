@@ -6,7 +6,7 @@
     <string name="all_countries">Tous les pays</string>
     <string name="app_name">What The Duck</string>
     <string name="bookcase_view_message">L\'affichage de la bibliothèque en utilisant les données mobiles peut entraîner une consommation importante de données mobiles. Voulez-vous tout de même afficher la vue Bibliothèque ?</string>
-    <string name="bookcase_view_title">Vue Bibliothèque</string>
+    <string name="bookcase_view_title">Vue de la bibliothèque</string>
     <string name="by_cover_photo">Depuis une photo de couverture</string>
     <string name="by_issue_selection">Par sélection de numéro</string>
     <string name="cancel">Annuler</string>
@@ -101,8 +101,8 @@
     <string name="issue_list_copied">La liste a été copiée dans votre presse-papiers.</string>
     <string name="issue_list_copy_possessed">Copier les numéros possédés</string>
     <string name="issue_list_copy_missing">Copier les numéros manquants</string>
-    <string name="issue_list_copy_possessed_title">Numéros possédés de&#160;</string>
-    <string name="issue_list_copy_missing_title">Numéros manquants de&#160;</string>
+    <string name="issue_list_copy_possessed_title">Numéros possédés de </string>
+    <string name="issue_list_copy_missing_title">Numéros manquants de </string>
     <string name="no_issue">Aucun numéro</string>
     <string name="new_version_available">Une nouvelle version de What The Duck est disponible ! Cliquez ici pour mettre à jour l\'application</string>
 </resources>
