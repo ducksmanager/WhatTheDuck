@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="country">Land</string>
+    <string name="confirmation_message__collection_updated">Ihre Sammlung wurde aktualisiert</string>
+    <string name="condition_notsogood">Nicht so gute Zustand</string>
+    <string name="condition_none">Nicht spezifizierte Zustand</string>
+    <string name="condition_missing">Fehlende Ausgabe</string>
+    <string name="condition_good">Gute Zustand</string>
+    <string name="condition_bad">Schlechte Zustand</string>
+    <string name="condition">Zustand</string>
+    <string name="collection">Meine Sammlung</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="app_name">What The Duck</string>
+    <string name="all_countries">Alle Länder</string>
+</resources>
