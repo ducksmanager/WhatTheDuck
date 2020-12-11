@@ -61,7 +61,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     open fun downloadAndShowList() {
         if (!viewModel.data.hasObservers()) {
             val latestVersion = appDB!!.appVersionDao().find()
-            isNewVersionAvailable = if (latestVersion == null) false else latestVersion.version != WhatTheDuck.applicationVersion
+            isNewVersionAvailable = if (latestVersion == null) false else latestVersion.version > WhatTheDuck.applicationVersion
             viewModel.data.observe(this, onObserve())
         }
     }
