@@ -28,7 +28,7 @@ internal class CoverFlowAdapter(private val context: Context) : BaseAdapter() {
 
     override fun getItemId(pos: Int): Long = pos.toLong()
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var rowView = convertView
         val viewHolder: ViewHolder
 

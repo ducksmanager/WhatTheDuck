@@ -46,7 +46,9 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         var viewType = ViewType.LIST_VIEW
     }
 
-    fun getPublicationCode() = selectedPublication!!.publicationCode
+    fun getPublicationCode(): String {
+        return selectedPublication!!.publicationCode
+    }
 
     override val AndroidViewModel.data: LiveData<List<InducksIssueWithUserIssueAndScore>>
         get() = appDB!!.inducksIssueDao().findByPublicationCode(getPublicationCode())
@@ -236,7 +238,8 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
             return findViewById(R.id.itemList)
         }
 
-    private val isLandscapeEdgeView = viewType == ViewType.EDGE_VIEW && resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE
+    private val isLandscapeEdgeView: Boolean
+        get() = viewType == ViewType.EDGE_VIEW && resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     private fun switchBetweenViews() {
         WhatTheDuck.trackEvent("issuelist/switchview")

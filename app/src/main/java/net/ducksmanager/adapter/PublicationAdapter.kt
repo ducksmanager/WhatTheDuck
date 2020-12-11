@@ -34,13 +34,13 @@ class PublicationAdapter internal constructor(
 
     override fun getDescriptionText(i: InducksPublicationWithPossession) : String? = null
 
-    override fun getIdentifier(i: InducksPublicationWithPossession): String? = i.publication.publicationCode
+    override fun getIdentifier(i: InducksPublicationWithPossession): String = i.publication.publicationCode
 
-    override fun getSuffixText(i: InducksPublicationWithPossession): String? = String.format("%d/%d", i.possessedIssues, i.referencedIssues)
+    override fun getSuffixText(i: InducksPublicationWithPossession): String = String.format("%d/%d", i.possessedIssues, i.referencedIssues)
 
-    override fun getText(i: InducksPublicationWithPossession): String? = i.publication.title
+    override fun getText(i: InducksPublicationWithPossession): String = i.publication.title
 
-    override fun getComparatorText(i: InducksPublicationWithPossession): String? = getText(i)
+    override fun getComparatorText(i: InducksPublicationWithPossession): String = getText(i)
 
     override fun getLineFill(i: InducksPublicationWithPossession): Float = (i.possessedIssues.toFloat() / i.referencedIssues.toFloat())
 }

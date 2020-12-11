@@ -63,7 +63,7 @@ class Settings : AppCompatActivityWithDrawer() {
         binding.version.text = getString(R.string.version, applicationVersion)
 
         binding.save.setOnClickListener {
-            if (notifySwitch.isChecked) {
+            if (binding.notifySwitch.isChecked) {
                 WhatTheDuck.registerForNotifications(WeakReference(this@Settings), true)
             }
             else {

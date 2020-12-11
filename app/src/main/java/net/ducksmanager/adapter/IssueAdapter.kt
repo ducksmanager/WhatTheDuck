@@ -78,7 +78,7 @@ class IssueAdapter internal constructor(
         }
     }
 
-    override fun getPrefixImageResource(i: InducksIssueWithUserIssueAndScore, activity: Activity): Int? {
+    override fun getPrefixImageResource(i: InducksIssueWithUserIssueAndScore, activity: Activity): Int {
         return if (resourceToInflate == R.layout.row && i.userIssue != null) {
             issueConditionToResourceId(i.userIssue.condition) ?: android.R.color.transparent
         } else {
@@ -93,7 +93,7 @@ class IssueAdapter internal constructor(
         }
     }
 
-    override fun getDescriptionText(i: InducksIssueWithUserIssueAndScore): String? = i.issue.title
+    override fun getDescriptionText(i: InducksIssueWithUserIssueAndScore): String = i.issue.title
 
     override fun getSuffixText(i: InducksIssueWithUserIssueAndScore): String? {
         return when {
@@ -102,11 +102,11 @@ class IssueAdapter internal constructor(
         }
     }
 
-    override fun getIdentifier(i: InducksIssueWithUserIssueAndScore): String? = i.issue.inducksIssueNumber
+    override fun getIdentifier(i: InducksIssueWithUserIssueAndScore): String = i.issue.inducksIssueNumber
 
-    override fun getText(i: InducksIssueWithUserIssueAndScore): String? = i.issue.inducksIssueNumber
+    override fun getText(i: InducksIssueWithUserIssueAndScore): String = i.issue.inducksIssueNumber
 
-    override fun getComparatorText(i: InducksIssueWithUserIssueAndScore): String? = getText(i)
+    override fun getComparatorText(i: InducksIssueWithUserIssueAndScore): String = getText(i)
 
     override fun isPossessed(item: InducksIssueWithUserIssueAndScore): Boolean = item.userIssue != null
 

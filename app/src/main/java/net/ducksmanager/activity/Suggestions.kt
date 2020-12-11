@@ -104,7 +104,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
 
     class SuggestedIssueAdapter internal constructor(
         private val context: Context,
-        var suggestions: MutableList<SuggestedIssueSimple>
+        private var suggestions: MutableList<SuggestedIssueSimple>
     ) : RecyclerView.Adapter<SuggestedIssueAdapter.ViewHolder>() {
 
         private val inflater: LayoutInflater = LayoutInflater.from(context)

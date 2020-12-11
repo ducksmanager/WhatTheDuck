@@ -29,7 +29,7 @@ class CountryAdapter internal constructor(
 
     override fun getCheckboxImageResource(i: InducksCountryNameWithPossession, activity: Activity): Int? = null
 
-    override fun getPrefixImageResource(i: InducksCountryNameWithPossession, activity: Activity): Int? {
+    override fun getPrefixImageResource(i: InducksCountryNameWithPossession, activity: Activity): Int {
         val uri = "@drawable/flags_" + i.country.countryCode
         var imageResource = activity.resources.getIdentifier(uri, null, activity.packageName)
         if (imageResource == 0) {
@@ -44,11 +44,11 @@ class CountryAdapter internal constructor(
 
     override fun getSuffixText(i: InducksCountryNameWithPossession): String? = null
 
-    override fun getText(i: InducksCountryNameWithPossession): String? = i.country.countryName
+    override fun getText(i: InducksCountryNameWithPossession): String = i.country.countryName
 
-    override fun getIdentifier(i: InducksCountryNameWithPossession): String? = i.country.countryCode
+    override fun getIdentifier(i: InducksCountryNameWithPossession): String = i.country.countryCode
 
-    override fun getComparatorText(i: InducksCountryNameWithPossession): String? = getText(i)
+    override fun getComparatorText(i: InducksCountryNameWithPossession): String = getText(i)
 
     override fun getLineFill(i: InducksCountryNameWithPossession): Float = 0.0F
 }
