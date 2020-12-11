@@ -1,3 +1,14 @@
+Version 2.6.2
+
+    Fix inverted logic for DB sync check
+    Show details in case of internal errors
+    Possible crash fix on landscape edge view
+    Fix edge view orientation
+
+Version 2.6.1
+
+    Bump version due to Play Console issue
+
 Version 2.6.0 "OK Quack"
 
     Allow to update and remove issues
