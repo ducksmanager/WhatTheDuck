@@ -146,6 +146,7 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
                     println("Ending cover search : " + System.currentTimeMillis())
                     if (response.body()!!.issues.values.isEmpty()) {
                         WhatTheDuck.alert(originActivityRef, R.string.add_cover_no_results)
+                        originActivityRef.get()!!.findViewById<View?>(R.id.progressBar)?.visibility = ProgressBar.GONE
                     }
                     else {
                         appDB!!.coverSearchIssueDao().deleteAll()
