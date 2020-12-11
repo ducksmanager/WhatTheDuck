@@ -14,6 +14,7 @@
     <string name="condition">Skick</string>
     <string name="condition_bad">Dåligt skick</string>
     <string name="condition_good">Bra skick</string>
+    <string name="condition_missing">Utgåva saknas</string>
     <string name="condition_none">Ospecificerat skick</string>
     <string name="condition_notsogood">Genomsnittligt skick</string>
     <string name="confirmation_message__collection_updated">Din samling har uppdaterats</string>
@@ -25,7 +26,9 @@
     <string name="edge_view">Bokhylla</string>
     <string name="email_address">E-mail</string>
     <string name="error">Fel</string>
+    <string name="error__cannot_create_upload_file">Det går inte att skapa uppladdningsfil från bitmapp</string>
     <string name="error__cannot_login">Inläsning av ditt DucksManager-konto misslyckades. Säkerställ att din internetuppkoppling är aktiv. Du kommer att kunna bläddra igenom din samling offline när samlingen har synkroniserats.</string>
+    <string name="error__could_not_create_empty_file">Det gick inte att skapa en tom fil för kameran</string>
     <string name="error__malformed_url">URLen är felaktig</string>
     <string name="filter">Filter</string>
     <string name="input_error">Input fel</string>
@@ -42,6 +45,11 @@
     <string name="internal_error__malformed_list">Utgåvolistan är felaktig</string>
     <string name="internal_error__purchase_creation_failed">Skapandet av inköpsdatum misslyckades</string>
     <string name="issue_already_possessed">Du har redan den här utgåvan i din samling</string>
+    <string name="issue_list_copied">Listan har kopierats till dina urklipp.</string>
+    <string name="issue_list_copy_missing">Kopiera saknade utgåvor</string>
+    <string name="issue_list_copy_missing_title">Saknade utgåvor av&#160;</string>
+    <string name="issue_list_copy_possessed">Kopiera ägda utgåvor</string>
+    <string name="issue_list_copy_possessed_title">Ägda utgåvor av&#160;</string>
     <string name="issue_selection_tip">Välj en utgåva genom att trycka på den.\nVälj en sekvens av utgåvor genom att trycka länge på den första i sekvensen.</string>
     <string name="item_description">Description</string>
     <string name="itemtitle">Utgåvans nummer</string>
@@ -56,6 +64,8 @@
     <string name="network_error__no_connection">Godkänn</string>
     <string name="new_feature">Nyhet i WhatTheDuck appen</string>
     <string name="new_features_18_text">Du kan nu se din bokhylla i WhatTheDuck!\n\nNär du är i utgåvolistan, tryck på bokhylleikonen för att ändra till bokhyllan.</string>
+    <string name="new_version_available">En ny version av What The Duck finns tillgänglig!\\nKlicka här för att uppdatera appen</string>
+    <string name="no_issue">Ingen utgåva</string>
     <string name="no_item">Förslagen uppdateras dagligen.</string>
     <string name="no_purchase_date">Inget inköpsdatum</string>
     <string name="no_suggestion">Vi har inga förslag åt dig. Se till att du betygsatt dina favoritförfattare på webbplatsen DucksManager.</string>
@@ -75,8 +85,12 @@
     <string name="report_description">Är det något som inte fungerar i appen? Beskriv ditt problem så ska vi försöka lösa det i nästa version :-)</string>
     <string name="report_hint">Beskriv problemet</string>
     <string name="report_send">Skicka</string>
+    <string name="reset_password_confirmation">Om emailadressen överensstämmer med ett DucksManager konto skickas en länk för att återställa ditt lösenord. Om du inte får ett email inom några minter, kolla din Spam mapp.</string>
+    <string name="reset_password_description">Skriv in din emailadress för att återställa ditt lösenord.</string>
+    <string name="reset_password_title">Glömt lösenord?</string>
     <string name="result">Resultat</string>
     <string name="save">Spara</string>
+    <string name="send">Skicka</string>
     <string name="settings">Inställningar</string>
     <string name="signup">Registrera</string>
     <string name="signup__confirm">Du har registrerat dig på DucksManager, vänligen logga in.</string>
@@ -93,16 +107,4 @@
     <string name="welcome_bookcase_view_portrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
     <string name="welcome_message">Din DucksManager-samling visas när du öppnar What The Duck. Klicka på ett land för att se de publikationer du har, eller tryck på \"+\" för att lägga till en utgåva  i din samling.</string>
     <string name="welcome_title">Välkommen till What The Duck!</string>
-    <string name="condition_missing">Utgåva saknas</string>
-    <string name="issue_list_copied">Listan har kopierats till dina urklipp.</string>
-    <string name="issue_list_copy_missing">Kopiera saknade utgåvor</string>
-    <string name="issue_list_copy_possessed">Kopiera ägda utgåvor</string>
-    <string name="issue_list_copy_missing_title">Saknade utgåvor av&#160;</string>
-    <string name="issue_list_copy_possessed_title">Ägda utgåvor av&#160;</string>
-    <string name="new_version_available">En ny version av What The Duck finns tillgänglig!\\nKlicka här för att uppdatera appen</string>
-    <string name="no_issue">Ingen utgåva</string>
-    <string name="reset_password_title">Glömt lösenord?</string>
-    <string name="reset_password_description">Skriv in din emailadress för att återställa ditt lösenord.</string>
-    <string name="reset_password_confirmation">Om emailadressen överensstämmer med ett DucksManager konto skickas en länk för att återställa ditt lösenord. Om du inte får ett email inom några minter, kolla din Spam mapp.</string>
-    <string name="send">Skicka</string>
 </resources>

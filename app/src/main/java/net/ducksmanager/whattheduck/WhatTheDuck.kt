@@ -138,6 +138,14 @@ class WhatTheDuck : Application() {
             activity.runOnUiThread { builder.create().show() }
         }
 
+        fun alert(activityRef: WeakReference<Activity>, titleId: Int, message: String) {
+            val activity = activityRef.get()
+            val builder = AlertDialog.Builder(activity)
+            builder.setTitle(activity!!.getString(titleId))
+            builder.setMessage(message)
+            activity.runOnUiThread { builder.create().show() }
+        }
+
         fun registerForNotifications(activityRef: WeakReference<Activity>, forceEnable: Boolean) {
             if (!isTestContext) {
                 try {

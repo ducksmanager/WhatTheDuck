@@ -26,7 +26,9 @@
     <string name="edge_view">Bookcase</string>
     <string name="email_address">E-mail</string>
     <string name="error">Error</string>
+    <string name="error__cannot_create_upload_file">Cannot create upload file from bitmap</string>
     <string name="error__cannot_login">Loading your DucksManager account failed, check that your Internet connection is active. You will be able to browse through your collection while offline once your collection is synchronized.</string>
+    <string name="error__could_not_create_empty_file">Could not create empty file for the camera</string>
     <string name="error__malformed_url">The URL is malformed</string>
     <string name="filter">Filter</string>
     <string name="input_error">Input error</string>

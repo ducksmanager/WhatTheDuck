@@ -14,6 +14,7 @@
     <string name="condition">Etat</string>
     <string name="condition_bad">Mauvais état</string>
     <string name="condition_good">Bon état</string>
+    <string name="condition_missing">Numéro manquant</string>
     <string name="condition_none">Etat non spécifié</string>
     <string name="condition_notsogood">Etat moyen</string>
     <string name="confirmation_message__collection_updated">Votre collection a été mise à jour</string>
@@ -25,7 +26,9 @@
     <string name="edge_view">Bibliothèque</string>
     <string name="email_address">Adresse e-mail</string>
     <string name="error">Erreur</string>
+    <string name="error__cannot_create_upload_file">Impossible de créer un fichier à envoyer à partir de la photo de couverture</string>
     <string name="error__cannot_login">La connexion à votre compte DucksManager a échoué, vérifiez que votre connexion Internet est active. Vous pourrez consulter votre collection hors-ligne une fois que votre collection sera synchronisée.</string>
+    <string name="error__could_not_create_empty_file">Impossible de créer un fichier pour la caméra Android</string>
     <string name="error__malformed_url">L\'adresse Web est mal formée</string>
     <string name="filter">Filtrer</string>
     <string name="input_error">Erreur de saisie</string>
@@ -42,6 +45,11 @@
     <string name="internal_error__malformed_list">La liste des numéros est mal formée</string>
     <string name="internal_error__purchase_creation_failed">La création de la date d\'achat a échoué</string>
     <string name="issue_already_possessed">Vous possédez déjà ce numéro dans votre collection</string>
+    <string name="issue_list_copied">La liste a été copiée dans votre presse-papiers.</string>
+    <string name="issue_list_copy_missing">Copier les numéros manquants</string>
+    <string name="issue_list_copy_missing_title">Numéros manquants de&#160;</string>
+    <string name="issue_list_copy_possessed">Copier les numéros possédés</string>
+    <string name="issue_list_copy_possessed_title">Numéros possédés de&#160;</string>
     <string name="issue_selection_tip">Sélectionnez un numéro en appuyant dessus.\nSélectionnez une liste de numéros consécutive en effectuant un appui long.</string>
     <string name="item_description">Description</string>
     <string name="itemtitle">Numéro</string>
@@ -56,6 +64,8 @@
     <string name="network_error__no_connection">Problème de réseau : vérifiez votre connexion Internet</string>
     <string name="new_feature">Nouveautés de WhatTheDuck</string>
     <string name="new_features_18_text">Vous pouvez maintenant voir votre bibliothèque depuis l\'application ! Lorsque vous consultez une liste de numéros, appuyez sur l\'icône \"bibliothèque\" pour passer à la vue bibliothèque.</string>
+    <string name="new_version_available">Une nouvelle version de What The Duck est disponible ! Cliquez ici pour mettre à jour l\'application</string>
+    <string name="no_issue">Aucun numéro</string>
     <string name="no_item">Aucun numéro. Tapez sur le bouton "+" pour ajouter des numéros à votre collection !</string>
     <string name="no_purchase_date">Pas de date d\'achat</string>
     <string name="no_suggestion">Nous n\'avons pas de suggestions à vous proposer. Assurez-vous d\'avoir noté vos auteurs préférés sur le site DucksManager.\nLes suggestions sont mises à jour quotidiennement.</string>
@@ -75,8 +85,12 @@
     <string name="report_description">Quelque chose ne fonctionne pas sur l\'application ?\nDétaillez votre problème et nous essaierons de le résoudre dans une prochaine version :-)</string>
     <string name="report_hint">Décrivez votre problème</string>
     <string name="report_send">Envoyer</string>
+    <string name="reset_password_confirmation">Si l\'adresse e-mail entrée correspond à un compte DucksManager, nous venons d\'y envoyer un lien permettant la réinitialisation du mot de passe. Si l\'e-mail ne vous parvient pas d\'ici quelques minutes, veuillez vérifier votre dossier Spam.</string>
+    <string name="reset_password_description">Indiquez votre addresse e-mail pour réinitialiser votre mot de passe</string>
+    <string name="reset_password_title">Mot de passe oublié ?</string>
     <string name="result">Résultat</string>
     <string name="save">OK</string>
+    <string name="send">Envoyer</string>
     <string name="settings">Paramètres</string>
     <string name="signup">Inscription</string>
     <string name="signup__confirm">L\'inscription à DucksManager est terminée, \nvous pouvez maintenant vous connecter.</string>
@@ -93,16 +107,4 @@
     <string name="welcome_bookcase_view_portrait">Bienvenue dans votre bibliothèque ! Orientez votre écran en mode paysage pour le meilleur effet ;-)</string>
     <string name="welcome_message">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur + pour ajouter un numéro.</string>
     <string name="welcome_title">Bienvenue sur What The Duck !</string>
-    <string name="send">Envoyer</string>
-    <string name="reset_password_title">Mot de passe oublié ?</string>
-    <string name="reset_password_description">Indiquez votre addresse e-mail pour réinitialiser votre mot de passe</string>
-    <string name="condition_missing">Numéro manquant</string>
-    <string name="reset_password_confirmation">Si l\'adresse e-mail entrée correspond à un compte DucksManager, nous venons d\'y envoyer un lien permettant la réinitialisation du mot de passe. Si l\'e-mail ne vous parvient pas d\'ici quelques minutes, veuillez vérifier votre dossier Spam.</string>
-    <string name="issue_list_copied">La liste a été copiée dans votre presse-papiers.</string>
-    <string name="issue_list_copy_possessed">Copier les numéros possédés</string>
-    <string name="issue_list_copy_missing">Copier les numéros manquants</string>
-    <string name="issue_list_copy_possessed_title">Numéros possédés de&#160;</string>
-    <string name="issue_list_copy_missing_title">Numéros manquants de&#160;</string>
-    <string name="no_issue">Aucun numéro</string>
-    <string name="new_version_available">Une nouvelle version de What The Duck est disponible ! Cliquez ici pour mettre à jour l\'application</string>
 </resources>

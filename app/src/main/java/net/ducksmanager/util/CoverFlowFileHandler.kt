@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.View
+import android.widget.ProgressBar
 import androidx.core.content.FileProvider
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
@@ -60,12 +61,12 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
                 ostream.close()
                 callback!!.onComplete(uploadFile)
             } catch (e: IOException) {
-                WhatTheDuck.alert(originActivityRef, R.string.internal_error)
+                e.message?.let { WhatTheDuck.alert(originActivityRef, R.string.internal_error, it) }
             }
         }
 
         override fun onBitmapFailed(errorDrawable: Drawable?) {
-            WhatTheDuck.alert(originActivityRef, R.string.internal_error)
+            WhatTheDuck.alert(originActivityRef, R.string.internal_error, R.string.error__cannot_create_upload_file)
             callback!!.onFail()
         }
 
@@ -83,7 +84,7 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
                 uploadFile!!.delete()
             }
             if (!uploadFile!!.createNewFile()) {
-                WhatTheDuck.alert(originActivityRef, R.string.internal_error)
+                WhatTheDuck.alert(originActivityRef, R.string.internal_error, context.getString(R.string.error__could_not_create_empty_file))
             }
             return FileProvider.getUriForFile(context, "net.ducksmanager.whattheduck.fileprovider", uploadFile!!)
         } catch (e: IOException) {
