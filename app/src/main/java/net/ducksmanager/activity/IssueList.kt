@@ -11,7 +11,6 @@ import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
-import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,6 +32,7 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
+import net.ducksmanager.whattheduck.databinding.WtdListBinding
 import retrofit2.Response
 import java.lang.ref.WeakReference
 import java.util.*
@@ -131,9 +131,10 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
     private fun updateAdapter() {
         itemAdapter = if (viewType == ViewType.EDGE_VIEW) {
-            val deviceOrientation = resources.configuration.orientation
-            IssueEdgeAdapter(this, recyclerView, deviceOrientation)
+            (binding.itemList.layoutManager as LinearLayoutManager).orientation = getListOrientation()
+            IssueEdgeAdapter(this, binding.itemList, resources.configuration.orientation)
         } else {
+            (binding.itemList.layoutManager as LinearLayoutManager).orientation = RecyclerView.VERTICAL
             IssueAdapter(this)
         }
     }
@@ -153,6 +154,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        binding = WtdListBinding.inflate(layoutInflater)
         updateAdapter()
         super.onCreate(savedInstanceState)
         setNavigationCountry(selectedCountry!!)
@@ -177,15 +179,14 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
             }
         }
 
-        val switchView = binding.switchView
-        switchView.setOnClickListener {
-            if (switchView.isChecked) {
+        binding.switchView.setOnClickListener {
+            if (binding.switchView.isChecked) {
                 if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_DATA_CONSUMPTION) && WhatTheDuck.isMobileConnection) {
                     val builder = AlertDialog.Builder(this@IssueList)
                     builder.setTitle(getString(bookcase_view_title))
                     builder.setMessage(getString(bookcase_view_message))
                     builder.setNegativeButton(cancel) { dialogInterface: DialogInterface, _: Int ->
-                        switchView.toggle()
+                        binding.switchView.toggle()
                         dialogInterface.dismiss()
                     }
                     builder.setPositiveButton(ok) { dialogInterface: DialogInterface, _: Int ->
@@ -194,28 +195,28 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
                         switchBetweenViews()
                     }
                     builder.create().show()
-                } else {
-                    switchBetweenViews()
+                    return@setOnClickListener
                 }
-            } else {
-                switchBetweenViews()
             }
+            switchBetweenViews()
         }
 
         if (viewType == ViewType.EDGE_VIEW) {
-            val deviceOrientation = resources.configuration.orientation
-            val listOrientation = if (deviceOrientation == Configuration.ORIENTATION_LANDSCAPE) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
+            val listOrientation = getListOrientation()
 
             if (Settings.shouldShowMessage(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW)
                 && listOrientation == RecyclerView.VERTICAL) {
                 WhatTheDuck.info(WeakReference(this), welcome_bookcase_view_portrait, Toast.LENGTH_LONG)
                 Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW)
             }
-            recyclerView.layoutManager = LinearLayoutManager(this, listOrientation, false)
+            binding.itemList.layoutManager = LinearLayoutManager(this, listOrientation, false)
         } else {
-            recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+            binding.itemList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         }
     }
+
+    private fun getListOrientation() =
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
 
     override fun shouldShowItemSelectionTip(): Boolean = isCoaList() && ! appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED)?.value.equals("0")
 
@@ -233,17 +234,12 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
 
     override fun shouldShowAddToCollectionButton() = !isCoaList() && !isOfflineMode && !isLandscapeEdgeView
 
-    private val recyclerView: RecyclerView
-        get() {
-            return findViewById(R.id.itemList)
-        }
-
     private val isLandscapeEdgeView: Boolean
         get() = viewType == ViewType.EDGE_VIEW && resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     private fun switchBetweenViews() {
         WhatTheDuck.trackEvent("issuelist/switchview")
-        viewType = if (findViewById<SwitchCompat>(R.id.switchView).isChecked)
+        viewType = if (binding.switchView.isChecked)
             ViewType.EDGE_VIEW
         else
             ViewType.LIST_VIEW
