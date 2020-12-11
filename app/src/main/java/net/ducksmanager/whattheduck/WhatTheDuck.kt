@@ -111,9 +111,6 @@ class WhatTheDuck : Application() {
         val dmUrl: String
             get() = config.getProperty(CONFIG_KEY_DM_URL)
 
-        val playStoreUrl: String
-            get() = config.getProperty(CONFIG_KEY_PLAY_STORE_URL)
-
         fun info(activity: WeakReference<Activity?>, titleId: Int, duration: Int) {
             Toast.makeText(activity.get(), titleId, duration).show()
         }
