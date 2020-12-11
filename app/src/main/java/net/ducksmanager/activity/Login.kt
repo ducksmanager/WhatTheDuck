@@ -54,7 +54,7 @@ class Login : AppCompatActivity() {
 
     companion object {
         fun isObsoleteSync(latestSync: Sync?): Boolean {
-            return latestSync == null || latestSync.timestamp.epochSecond - Instant.now().epochSecond > 12 * 60 * 60
+            return latestSync == null || Instant.now().epochSecond - latestSync.timestamp.epochSecond > 12 * 60 * 60
         }
 
         fun fetchCollection(activityRef: WeakReference<Activity>, alertIfError: Boolean?) {
