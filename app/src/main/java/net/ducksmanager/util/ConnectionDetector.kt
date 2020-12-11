@@ -41,14 +41,14 @@ open class ConnectionDetector(lifecycleScope: LifecycleCoroutineScope, callback:
 
     init {
         if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
-            connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), networkCallback)
+            connectivityManager?.registerNetworkCallback(NetworkRequest.Builder().build(), networkCallback)
         }
     }
 
     fun unregister() {
         if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
             try {
-                connectivityManager.unregisterNetworkCallback(networkCallback)
+                connectivityManager?.unregisterNetworkCallback(networkCallback)
             } catch (e: RuntimeException) { }
         }
     }

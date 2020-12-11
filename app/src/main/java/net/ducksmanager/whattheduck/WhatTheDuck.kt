@@ -90,7 +90,7 @@ class WhatTheDuck : Application() {
         lateinit var applicationVersion: String
         lateinit var applicationPackage: String
 
-        lateinit var connectivityManager: ConnectivityManager
+        var connectivityManager: ConnectivityManager? = null
 
         var DB_NAME = "appDB"
         var appDB: AppDatabase? = null
@@ -195,10 +195,13 @@ class WhatTheDuck : Application() {
 
         val isMobileConnection: Boolean
             get() {
+                if (connectivityManager == null) {
+                    return false
+                }
                 return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected && connectivityManager.activeNetworkInfo.type == ConnectivityManager.TYPE_MOBILE
+                    connectivityManager!!.activeNetworkInfo != null && connectivityManager!!.activeNetworkInfo.isConnected && connectivityManager!!.activeNetworkInfo.type == ConnectivityManager.TYPE_MOBILE
                 } else {
-                    connectivityManager.activeNetwork != null && connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
+                    connectivityManager!!.activeNetwork != null && connectivityManager!!.getNetworkCapabilities(connectivityManager!!.activeNetwork)?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
                 }
             }
 
