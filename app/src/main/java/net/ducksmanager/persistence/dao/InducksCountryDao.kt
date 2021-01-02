@@ -10,7 +10,13 @@ import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPosse
 
 @Dao
 interface InducksCountryDao {
-    @Query("SELECT DISTINCT inducks_countryname.*, CASE WHEN issues.country IS NULL THEN 0 ELSE 1 END AS isPossessed FROM inducks_countryname LEFT JOIN issues ON inducks_countryname.countryCode = issues.country ORDER BY inducks_countryname.countryName")
+    @Query("SELECT DISTINCT inducks_countryname.*, COUNT(user_issues.issueNumber) AS possessedIssues, issue_count.count AS referencedIssues" +
+                " FROM inducks_countryname" +
+                " LEFT JOIN issues AS user_issues ON inducks_countryname.countryCode = user_issues.country" +
+                " LEFT JOIN inducks_issue_count issue_count ON inducks_countryname.countryCode = issue_count.code" +
+                " WHERE issue_count.count > 0" +
+                " GROUP BY inducks_countryname.countryCode" +
+                " ORDER BY inducks_countryname.countryName")
     fun findAllWithPossession(): LiveData<List<InducksCountryNameWithPossession>>
 
     @Query("SELECT DISTINCT inducks_countryname.*, CASE WHEN notificationCountries.country IS NULL THEN 0 ELSE 1 END AS isNotified FROM inducks_countryname LEFT JOIN notificationCountries ON inducks_countryname.countryCode = notificationCountries.country ORDER BY inducks_countryname.countryName")

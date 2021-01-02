@@ -9,5 +9,8 @@ class InducksCountryNameWithPossession {
     lateinit var country: InducksCountryName
 
     @ColumnInfo
-    var isPossessed: Boolean = false
+    var possessedIssues: Int = 0
+
+    @ColumnInfo
+    var referencedIssues: Int = 0
 }

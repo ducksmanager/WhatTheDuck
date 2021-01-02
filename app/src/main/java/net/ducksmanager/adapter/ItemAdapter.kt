@@ -100,12 +100,18 @@ abstract class ItemAdapter<Item> internal constructor(
         val i = getItem(position)
 
         if (holder.row != null && holder.background != null) {
-            val backgroundWidth = holder.row.context.resources.displayMetrics.widthPixels * getLineFill(i)
-            if (backgroundWidth > 0) {
-                holder.background.layoutParams.width = max(1, backgroundWidth.toInt())
+            val lineFill = getLineFill(i)
+            if (lineFill == null) {
+                holder.background.layoutParams.width = 0
             }
             else {
-                holder.background.layoutParams.width = 0
+                val backgroundWidth = holder.row.context.resources.displayMetrics.widthPixels * lineFill
+                if ((backgroundWidth) > 0) {
+                    holder.background.layoutParams.width = max(1, backgroundWidth.toInt())
+                }
+                else {
+                    holder.background.layoutParams.width = 0
+                }
             }
         }
         if (holder.titleTextView != null) {

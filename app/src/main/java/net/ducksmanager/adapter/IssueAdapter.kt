@@ -109,6 +109,4 @@ class IssueAdapter internal constructor(
     override fun getComparatorText(i: InducksIssueWithUserIssueAndScore): String = getText(i)
 
     override fun isPossessed(item: InducksIssueWithUserIssueAndScore): Boolean = item.userIssue != null
-
-    override fun getLineFill(i: InducksIssueWithUserIssueAndScore): Float = 0.0F
 }

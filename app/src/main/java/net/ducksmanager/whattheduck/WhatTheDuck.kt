@@ -231,7 +231,10 @@ class WhatTheDuck : Application() {
         if (!isTestContext) {
             appDB = Room.databaseBuilder(applicationContext, AppDatabase::class.java, DB_NAME)
                 .allowMainThreadQueries()
-                .addMigrations(AppDatabase.MIGRATION_7_8)
+                .addMigrations(
+                    AppDatabase.MIGRATION_7_8,
+                    AppDatabase.MIGRATION_8_9
+                )
                 .fallbackToDestructiveMigration()
                 .build()
         }

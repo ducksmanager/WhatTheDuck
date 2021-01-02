@@ -10,7 +10,7 @@ class InducksIssueCount(
         @ColumnInfo
         @PrimaryKey
         @NonNull
-        val publicationCode: String,
+        val code: String,
         @ColumnInfo
         val count: Int
 )

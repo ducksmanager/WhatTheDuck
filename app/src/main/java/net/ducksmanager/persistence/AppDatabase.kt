@@ -35,7 +35,7 @@ import net.ducksmanager.persistence.models.internal.Sync
     User::class,
     UserMessage::class,
     UserSetting::class
-], version = 8, exportSchema = true)
+ ], version = 9, exportSchema = true)
 @TypeConverters(StringMutableSetConverter::class, InstantConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -43,6 +43,11 @@ abstract class AppDatabase : RoomDatabase() {
         val MIGRATION_7_8: Migration = object : Migration(7, 8) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("create table app_version(version text not null constraint app_version_pk primary key)")
+            }
+        }
+        val MIGRATION_8_9: Migration = object : Migration(8, 9) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("alter table inducks_issue_count rename column publicationCode to code")
             }
         }
     }

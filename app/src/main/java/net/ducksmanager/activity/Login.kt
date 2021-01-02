@@ -126,6 +126,7 @@ class Login : AppCompatActivity() {
                                 appDB!!.inducksIssueCountDao().insertList(response.body()!!.keys.map { publicationCode ->
                                     InducksIssueCount(publicationCode, response.body()!![publicationCode]!!)
                                 })
+                                appDB!!.inducksIssueCountDao().createCountryCountsFromPublicationCounts()
                             }
                         })
                     }

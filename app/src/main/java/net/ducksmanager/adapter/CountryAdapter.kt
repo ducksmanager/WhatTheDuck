@@ -9,6 +9,7 @@ import net.ducksmanager.activity.PublicationList
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
+import kotlin.math.roundToInt
 
 class CountryAdapter internal constructor(
     itemList: ItemList<InducksCountryNameWithPossession>
@@ -16,7 +17,7 @@ class CountryAdapter internal constructor(
 
     override fun getViewHolder(v: View?) = ViewHolder(v)
 
-    override fun isPossessed(item: InducksCountryNameWithPossession) = item.isPossessed
+    override fun isPossessed(item: InducksCountryNameWithPossession) = item.possessedIssues > 0
 
     override val onClickListener = View.OnClickListener { view: View ->
         val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
@@ -42,7 +43,7 @@ class CountryAdapter internal constructor(
 
     override fun getDescriptionText(i: InducksCountryNameWithPossession) : String? = null
 
-    override fun getSuffixText(i: InducksCountryNameWithPossession): String? = null
+    override fun getSuffixText(i: InducksCountryNameWithPossession): String = String.format("%d %%", ((100 * i.possessedIssues / i.referencedIssues).toDouble()).roundToInt())
 
     override fun getText(i: InducksCountryNameWithPossession): String = i.country.countryName
 
@@ -50,5 +51,5 @@ class CountryAdapter internal constructor(
 
     override fun getComparatorText(i: InducksCountryNameWithPossession): String = getText(i)
 
-    override fun getLineFill(i: InducksCountryNameWithPossession): Float = 0.0F
+    override fun getLineFill(i: InducksCountryNameWithPossession): Float = (i.possessedIssues.toFloat() / i.referencedIssues.toFloat())
 }
