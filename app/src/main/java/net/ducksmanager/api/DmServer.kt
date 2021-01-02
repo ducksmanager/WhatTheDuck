@@ -47,7 +47,7 @@ class DmServer {
         lateinit var completedSyncs: HashMap<String, Boolean>
 
         lateinit var api: DmServerApi
-        lateinit var appFollowApi: AppFollowApi
+        var appFollowApi: AppFollowApi? = null
 
         var apiDmUser: String? = null
         var apiDmPassword: String? = null
@@ -113,12 +113,15 @@ class DmServer {
                 .addInterceptor(interceptor)
                 .build()
 
-            val retrofitAppFollow = Retrofit.Builder()
-                .baseUrl(config.getProperty(CONFIG_KEY_APPFOLLOW_API_ENDPOINT_URL))
-                .client(okHttpClientAppFollowApi)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build()
-            appFollowApi = retrofitAppFollow.create(AppFollowApi::class.java)
+            val appFollowApiUrl = config.getProperty(CONFIG_KEY_APPFOLLOW_API_ENDPOINT_URL)
+            if (!appFollowApiUrl.isNullOrEmpty()) {
+                val retrofitAppFollow = Retrofit.Builder()
+                    .baseUrl(appFollowApiUrl)
+                    .client(okHttpClientAppFollowApi)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .build()
+                appFollowApi = retrofitAppFollow.create(AppFollowApi::class.java)
+            }
         }
     }
 

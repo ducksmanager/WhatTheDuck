@@ -106,7 +106,7 @@ class Login : AppCompatActivity() {
                     loadNotificationCountries(originActivity)
 
                     if (isObsoleteSync(latestSync)) {
-                        appFollowApi.getAppVersion().enqueue(object : Callback<Apps>(EVENT_RETRIEVE_LATEST_APP_VERSION, originActivity, true) {
+                        appFollowApi?.getAppVersion()?.enqueue(object : Callback<Apps>(EVENT_RETRIEVE_LATEST_APP_VERSION, originActivity, true) {
                             override fun onSuccessfulResponse(response: Response<Apps>) {
                                 appDB!!.appVersionDao().deleteAll()
                                 appDB!!.appVersionDao().insert(response.body()!!.apps.first().app)
