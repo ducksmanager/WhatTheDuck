@@ -152,6 +152,7 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
                     else {
                         appDB!!.coverSearchIssueDao().deleteAll()
                         appDB!!.coverSearchIssueDao().insertList(ArrayList(response.body()!!.issues.values))
+                        originActivity!!.findViewById<View>(R.id.progressBar).visibility = View.GONE
                         originActivity!!.startActivity(Intent(originActivity, CoverFlowActivity::class.java))
                     }
                 }
