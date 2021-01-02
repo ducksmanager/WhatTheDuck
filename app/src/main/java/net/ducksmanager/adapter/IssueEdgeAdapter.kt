@@ -49,8 +49,8 @@ class IssueEdgeAdapter internal constructor(
             WhatTheDuck.selectedCountry!!.countryCode,
             WhatTheDuck.selectedPublication!!.publicationCode
                 .replaceFirst("[^/]+/".toRegex(), "")
-                .replace(" ".toRegex(), ""),
-            i.issue.inducksIssueNumber.replace(" ".toRegex(), ""))
+                .replace(" ", ""),
+            i.issue.inducksIssueNumber.replace(" ", ""))
     }
 
     override fun isPossessed(item: InducksIssueWithUserIssueAndScore): Boolean = item.userIssue != null
