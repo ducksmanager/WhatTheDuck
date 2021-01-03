@@ -43,7 +43,14 @@ class CountryAdapter internal constructor(
 
     override fun getDescriptionText(i: InducksCountryNameWithPossession) : String? = null
 
-    override fun getSuffixText(i: InducksCountryNameWithPossession): String = String.format("%d %%", ((100 * i.possessedIssues / i.referencedIssues).toDouble()).roundToInt())
+    override fun getSuffixText(i: InducksCountryNameWithPossession): String {
+        val possessedRatio = 100 * i.possessedIssues.toDouble() / i.referencedIssues
+        return when {
+            possessedRatio == 0.0 -> ""
+            possessedRatio < 1 -> "< 1 %"
+            else -> String.format("%d %%", possessedRatio.roundToInt())
+        }
+    }
 
     override fun getText(i: InducksCountryNameWithPossession): String = i.country.countryName
 

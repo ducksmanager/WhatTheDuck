@@ -174,7 +174,7 @@ abstract class ItemAdapter<Item> internal constructor(
     protected abstract fun getComparatorText(i: Item): String?
     protected abstract fun getIdentifier(i: Item): String?
     protected abstract fun getText(i: Item): String?
-    protected abstract fun getLineFill(i: Item): Float
+    protected open fun getLineFill(i: Item): Float? = null
 
     private fun isHighlighted(i: Item): Boolean = isPossessed(i)
 
