@@ -1,3 +1,8 @@
+Version 2.6.3
+
+    Show ownership percentage per country
+    Fix country order when they contain accents
+
 Version 2.6.2
 
     Fix inverted logic for DB sync check
