@@ -93,6 +93,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:18.0.0'
     implementation 'com.google.firebase:firebase-messaging:21.0.1'
 
+    implementation 'com.quiph.ui:recyclerviewfastscroller:1.0.0'
+
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.pusher:push-notifications-android:1.6.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'

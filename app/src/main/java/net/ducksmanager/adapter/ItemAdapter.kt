@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
 import net.ducksmanager.activity.ItemList
 import net.ducksmanager.activity.ItemList.Companion.isCoaList
 import net.ducksmanager.util.FilterTextOnChangeListener
@@ -19,10 +20,11 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.max
 
+
 abstract class ItemAdapter<Item> internal constructor(
-        val originActivity: Activity,
-        val resourceToInflate: Int
-) : RecyclerView.Adapter<ItemAdapter<Item>.ViewHolder>() {
+    val originActivity: Activity,
+    val resourceToInflate: Int
+) : RecyclerView.Adapter<ItemAdapter<Item>.ViewHolder>(), RecyclerViewFastScroller.OnPopupTextUpdate {
 
     var items = emptyList<Item>()
     protected var filteredItems = mutableListOf<Item>()
@@ -186,4 +188,13 @@ abstract class ItemAdapter<Item> internal constructor(
     override fun getItemCount() = filteredItems.size
 
     fun getItem(position: Int) = filteredItems[position]
+
+    override fun onChange(position: Int): CharSequence {
+        val text = getText(getItem(position))
+        return if (text == null) {
+            ""
+        } else {
+            (text[0]).toString()
+        }
+    }
 }

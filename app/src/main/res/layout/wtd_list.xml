@@ -94,23 +94,26 @@
                 tools:ignore="HardcodedText" />
         </LinearLayout>
 
+        <com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
+            android:id="@+id/itemListScroller"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/tipIssueSelection"
+            app:handleDrawable="@drawable/fastscroll_background"
+            app:handleVisibilityDuration="5000"
+            app:handleHeight="50dp">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/itemList"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
             android:orientation="vertical"
-            android:scrollbars="vertical"
-            android:scrollbarSize="10dp"
-            app:fastScrollEnabled="true"
-            app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
-            app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
-            app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
-            app:fastScrollVerticalTrackDrawable="@drawable/line_drawable"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/row"
-            tools:itemCount="50"
-            android:layout_below="@id/tipIssueSelection" />
+            tools:itemCount="50" />
+
+        </com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller>
 
         <TextView
             android:id="@+id/emptyList"
