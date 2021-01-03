@@ -37,7 +37,9 @@ abstract class ItemAdapter<Item> internal constructor(
 
     internal fun setItems(items: List<Item>) {
         this.items = items
-        Collections.sort(this.items, comparator)
+        if (comparator != null) {
+            Collections.sort(this.items, comparator)
+        }
         filteredItems = ArrayList(items)
         this.notifyDataSetChanged()
     }
@@ -85,16 +87,15 @@ abstract class ItemAdapter<Item> internal constructor(
             .toMutableList()
     }
 
-    private val comparator: Comparator<Item>
-        get() = Comparator { i1: Item, i2: Item ->
-            val text1 = getComparatorText(i1)
-            val text2 = getComparatorText(i2)
-            when {
-                text1 == null -> -1
-                text2 == null -> 1
-                else -> CaseInsensitiveSimpleNaturalComparator.getInstance<CharSequence>().compare(text1, text2)
-            }
+    open val comparator: Comparator<Item>? = Comparator { i1: Item, i2: Item ->
+        val text1 = getComparatorText(i1)
+        val text2 = getComparatorText(i2)
+        when {
+            text1 == null -> -1
+            text2 == null -> 1
+            else -> CaseInsensitiveSimpleNaturalComparator.getInstance<CharSequence>().compare(text1, text2)
         }
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val i = getItem(position)

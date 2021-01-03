@@ -9,11 +9,14 @@ import net.ducksmanager.activity.PublicationList
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
+import java.util.*
 import kotlin.math.roundToInt
 
 class CountryAdapter internal constructor(
     itemList: ItemList<InducksCountryNameWithPossession>
 ) : ItemAdapter<InducksCountryNameWithPossession>(itemList, R.layout.row) {
+
+    override val comparator: Comparator<InducksCountryNameWithPossession>? = null
 
     override fun getViewHolder(v: View?) = ViewHolder(v)
 
