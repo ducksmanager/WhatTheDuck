@@ -1,3 +1,7 @@
+Version 2.6.4
+
+    Fix crash on old Android versions due to unsupported SQLite syntax
+
 Version 2.6.3
 
     Show ownership percentage per country
