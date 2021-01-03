@@ -47,7 +47,8 @@ abstract class AppDatabase : RoomDatabase() {
         }
         val MIGRATION_8_9: Migration = object : Migration(8, 9) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("alter table inducks_issue_count rename column publicationCode to code")
+                database.execSQL("DROP TABLE IF EXISTS inducks_issue_count")
+                database.execSQL("CREATE TABLE inducks_issue_count(`code` TEXT NOT NULL, `count` INTEGER NOT NULL, PRIMARY KEY(`code`))")
             }
         }
     }
