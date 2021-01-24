@@ -86,19 +86,18 @@ class Authors : AppCompatActivityWithDrawer() {
         api.authorNotations.enqueue(object : DmServer.Callback<List<AuthorNotation>>("getAuthorNotations", this, true) {
             override fun onSuccessfulResponse(response: Response<List<AuthorNotation>>) {
                 val authorNotations = response.body()!!.toMutableList()
-                binding.authorNotationsNoResults.visibility = if (authorNotations.isEmpty()) VISIBLE else GONE
                 binding.authorNotationsList.layoutManager = LinearLayoutManager(this@Authors)
 
                 if (authorNotations.isEmpty()) {
-                    binding.authorNotationsList.visibility = GONE
                     binding.authorNotationsList.adapter = AuthorNotationAdapter(this@Authors, authorNotations)
+                    toggleEmptyAuthorListVisibility()
                 }
                 else {
                     val personCodes = authorNotations.joinToString(",") { authorNotation -> authorNotation.personCode }
                     api.getAuthorNames(personCodes).enqueue(object : DmServer.Callback<HashMap<String, String>>("getAuthorNotations", this@Authors, true) {
                         override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
                             binding.authorNotationsList.adapter = AuthorNotationAdapter(this@Authors, authorNotations)
-                            binding.authorNotationsList.visibility = VISIBLE
+                            toggleEmptyAuthorListVisibility()
                             toggleMaxAuthorsWatchedVisibility()
                             authorNames.putAll(response.body()!!)
                         }
@@ -113,6 +112,12 @@ class Authors : AppCompatActivityWithDrawer() {
         val hasReachedMax = (binding.authorNotationsList.adapter as AuthorNotationAdapter).authorNotations.size >= 5
         binding.maxAuthorCountReached.visibility = if (hasReachedMax) { VISIBLE } else { GONE }
         binding.newAuthorName.visibility = if (hasReachedMax) { GONE } else { VISIBLE }
+    }
+
+    fun toggleEmptyAuthorListVisibility() {
+        val isEmptyList = (binding.authorNotationsList.adapter as AuthorNotationAdapter).authorNotations.isEmpty()
+        binding.authorNotationsNoResults.visibility = if (isEmptyList) { VISIBLE } else { GONE }
+        binding.authorNotationsList.visibility = if (isEmptyList) { GONE } else { VISIBLE }
     }
 
     class AuthorNotationAdapter internal constructor(
@@ -149,6 +154,7 @@ class Authors : AppCompatActivityWithDrawer() {
                     override fun onSuccessfulResponse(response: Response<Void>) {
                         authorNotations.removeAt(position)
                         notifyDataSetChanged()
+                        activity.toggleEmptyAuthorListVisibility()
                         activity.toggleMaxAuthorsWatchedVisibility()
                     }
                 })
