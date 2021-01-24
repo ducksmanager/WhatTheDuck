@@ -23,6 +23,7 @@
     <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
     <string name="create">Create</string>
     <string name="create_new_purchase_date">Create new purchase date</string>
+    <string name="delete_rating">Delete</string>
     <string name="edge_view">Bookcase</string>
     <string name="email_address">E-mail</string>
     <string name="error">Error</string>
@@ -30,8 +31,10 @@
     <string name="error__cannot_login">Loading your DucksManager account failed, check that your Internet connection is active. You will be able to browse through your collection while offline once your collection is synchronized.</string>
     <string name="error__could_not_create_empty_file">Could not create empty file for the camera</string>
     <string name="error__malformed_url">The URL is malformed</string>
+    <string name="favorite_authors">My favorite authors</string>
     <string name="filter">Filter</string>
     <string name="input_error">Input error</string>
+    <string name="input_error__author_already_rated">You have already rated this author!</string>
     <string name="input_error__empty_credentials">You need to enter your credentials to continue</string>
     <string name="input_error__invalid_credentials">Invalid credentials</string>
     <string name="input_error__no_issue_selected">Select at least one issue</string>
@@ -59,12 +62,14 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="long_tap_to_end_issue_range_selection">Long-tap on the last issue of your range</string>
+    <string name="max_watched_authors_reached">You have reached the maximum number of authors to watch. Remove already watched authors if you want to rate a new one.</string>
     <string name="my_collection">My collection</string>
     <string name="network_error">Network error</string>
     <string name="network_error__no_connection">Network issue: please check your Internet connection</string>
     <string name="new_feature">New features in the WhatTheDuck app</string>
     <string name="new_features_18_text">You can now see your bookcase on WhatTheDuck!\n\nWhen in an issue list, tap on the bookcase icon to switch to the bookcase view.</string>
     <string name="new_version_available">A new version of What The Duck is available !\nClick here to update the app</string>
+    <string name="no_author">You don\'t have any favorite authors</string>
     <string name="no_issue">No issue</string>
     <string name="no_item">No issue in this list. Click on the "+" icon to add issues to your collection!</string>
     <string name="no_purchase_date">No purchase date</string>
@@ -81,6 +86,9 @@
     <string name="purchase_date">Purchase date</string>
     <string name="purchase_name">Purchase name</string>
     <string name="rate_app">Remember to rate What The Duck on the Play Store :-)</string>
+    <string name="rate_description">Add your favorite authors hereunder and rate them according to your preferences.\nThanks to these ratings, DucksManager can suggest you issues to hunt for.\nThese suggestions are updated daily.</string>
+    <string name="rate_new_author">Rate an author</string>
+    <string name="rate_new_author_hint">Type an author name</string>
     <string name="report">Report a problem</string>
     <string name="report_description">Is something not working in the app? Explain your issue and we will try to fix it in the next version :-)</string>
     <string name="report_hint">Describe the issue…</string>
@@ -107,14 +115,4 @@
     <string name="welcome_bookcase_view_portrait">Welcome to the bookcase view! Rotate your screen to landscape for the best effect ;-)</string>
     <string name="welcome_message">Your DucksManager collection is displayed when you open What The Duck. Tap on a country to view the publications that you possess, or tap on \"+\" to add an issue to your collection.</string>
     <string name="welcome_title">Welcome on What The Duck!</string>
-    <string name="no_author">You don\'t have any favorite authors</string>
-    <string name="rate_new_author">Rate an author</string>
-    <string name="favorite_authors">My favorite authors</string>
-    <string name="rate_description">Add your favorite authors hereunder and rate them according to your preferences.\nThanks to these ratings, DucksManager can suggest you issues to hunt for.\nThese suggestions are updated daily.</string>
-    <string name="rate_new_author_hint">Type an author name</string>
-    <string name="input_error__author_already_rated">You have already rated this author!</string>
-    <string name="delete_rating">Delete</string>
-    <string name="author">Author</string>
-    <string name="max_watched_authors_reached">You have reached the maximum number of authors to watch. Remove already watched authors if you want to rate a new one.</string>
-    <string name="ratings_updated">Your ratings have been updated</string>
 </resources>

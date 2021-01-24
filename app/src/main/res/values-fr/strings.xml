@@ -23,6 +23,7 @@
     <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
     <string name="create">Créer</string>
     <string name="create_new_purchase_date">Créer une date d\'achat</string>
+    <string name="delete_rating">Supprimer</string>
     <string name="edge_view">Bibliothèque</string>
     <string name="email_address">Adresse e-mail</string>
     <string name="error">Erreur</string>
@@ -30,8 +31,10 @@
     <string name="error__cannot_login">La connexion à votre compte DucksManager a échoué, vérifiez que votre connexion Internet est active. Vous pourrez consulter votre collection hors-ligne une fois que votre collection sera synchronisée.</string>
     <string name="error__could_not_create_empty_file">Impossible de créer un fichier pour la caméra Android</string>
     <string name="error__malformed_url">L\'adresse Web est mal formée</string>
+    <string name="favorite_authors">Mes auteurs favoris</string>
     <string name="filter">Filtrer</string>
     <string name="input_error">Erreur de saisie</string>
+    <string name="input_error__author_already_rated">Vous avez déjà noté cet auteur !</string>
     <string name="input_error__empty_credentials">Vous devez saisir votre pseudonyme et votre mot de passe pour continuer</string>
     <string name="input_error__invalid_credentials">Vos identifiants sont invalides</string>
     <string name="input_error__no_issue_selected">Sélectionnez au moins un numéro</string>
@@ -59,12 +62,14 @@
     <string name="login">Connexion</string>
     <string name="logout">Déconnexion</string>
     <string name="long_tap_to_end_issue_range_selection">Faites un appui long sur le dernier numéro consécutif à sélectionner</string>
+    <string name="max_watched_authors_reached">" Vous avez atteint le nombre maximal d'auteurs surveillés. Supprimez des auteurs existants pour en ajouter d'autres."</string>
     <string name="my_collection">Ma collection</string>
     <string name="network_error">Erreur réseau</string>
     <string name="network_error__no_connection">Problème de réseau : vérifiez votre connexion Internet</string>
     <string name="new_feature">Nouveautés de WhatTheDuck</string>
     <string name="new_features_18_text">Vous pouvez maintenant voir votre bibliothèque depuis l\'application ! Lorsque vous consultez une liste de numéros, appuyez sur l\'icône \"bibliothèque\" pour passer à la vue bibliothèque.</string>
     <string name="new_version_available">Une nouvelle version de What The Duck est disponible ! Cliquez ici pour mettre à jour l\'application</string>
+    <string name="no_author">Vous n\'avez pas d\'auteurs favoris</string>
     <string name="no_issue">Aucun numéro</string>
     <string name="no_item">Aucun numéro. Tapez sur le bouton "+" pour ajouter des numéros à votre collection !</string>
     <string name="no_purchase_date">Pas de date d\'achat</string>
@@ -81,6 +86,9 @@
     <string name="purchase_date">Date d\'achat</string>
     <string name="purchase_name">Description</string>
     <string name="rate_app">Notez What The Duck sur le Play Store :-)</string>
+    <string name="rate_description">Ajoutez vos auteurs préférés ci-dessous et indiquez les notes que vous leur attribuez.\nGrâce à ces notes, DucksManager déterminera ensuite les magazines susceptibles de vous intéresser.</string>
+    <string name="rate_new_author">Noter un auteur</string>
+    <string name="rate_new_author_hint">Entrez le nom d\'un auteur</string>
     <string name="report">Signaler un problème</string>
     <string name="report_description">Quelque chose ne fonctionne pas sur l\'application ?\nDétaillez votre problème et nous essaierons de le résoudre dans une prochaine version :-)</string>
     <string name="report_hint">Décrivez votre problème</string>
@@ -107,8 +115,4 @@
     <string name="welcome_bookcase_view_portrait">Bienvenue dans votre bibliothèque ! Orientez votre écran en mode paysage pour le meilleur effet ;-)</string>
     <string name="welcome_message">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur + pour ajouter un numéro.</string>
     <string name="welcome_title">Bienvenue sur What The Duck !</string>
-    <string name="rate_description">Ajoutez vos auteurs préférés ci-dessous et indiquez les notes que vous leur attribuez.\nGrâce à ces notes, DucksManager déterminera ensuite les magazines susceptibles de vous intéresser.</string>
-    <string name="favorite_authors">Mes auteurs favoris</string>
-    <string name="rate_new_author">Noter un auteur</string>
-    <string name="no_author">Vous n\'avez pas d\'auteurs favoris</string>
 </resources>
