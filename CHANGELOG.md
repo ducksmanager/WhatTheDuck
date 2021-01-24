@@ -1,3 +1,8 @@
+Version 2.7.0
+
+    Add "My favorite authors" screen
+    Add decimal to country ownership percentage
+
 Version 2.6.4
 
     Fix crash on old Android versions due to unsupported SQLite syntax
