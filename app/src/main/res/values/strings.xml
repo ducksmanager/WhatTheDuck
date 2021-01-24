@@ -62,7 +62,7 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="long_tap_to_end_issue_range_selection">Long-tap on the last issue of your range</string>
-    <string name="max_watched_authors_reached">You have reached the maximum number of authors to watch. Remove already watched authors if you want to rate a new one.</string>
+    <string name="max_watched_authors_reached">You have reached the maximum number of authors to rate. Remove already watched authors if you want to rate a new one.</string>
     <string name="my_collection">My collection</string>
     <string name="network_error">Network error</string>
     <string name="network_error__no_connection">Network issue: please check your Internet connection</string>
@@ -73,7 +73,7 @@
     <string name="no_issue">No issue</string>
     <string name="no_item">No issue in this list. Click on the "+" icon to add issues to your collection!</string>
     <string name="no_purchase_date">No purchase date</string>
-    <string name="no_suggestion">We don\'t have any suggestion for you. Make sure that you rated your favorite authors on the DucksManager.\nThe suggestions are updated daily.</string>
+    <string name="no_suggestion">We don\'t have any suggestion for you. Make sure that you rated your favorite authors.\nThe suggestions are updated daily.</string>
     <string name="no_title">No title</string>
     <string name="notify_option">Notify me when new stories from my favorite authors come out</string>
     <string name="offline_mode">You are using offline mode. You can browse through your collection but not update it. Some features will not be available.</string>
@@ -86,7 +86,7 @@
     <string name="purchase_date">Purchase date</string>
     <string name="purchase_name">Purchase name</string>
     <string name="rate_app">Remember to rate What The Duck on the Play Store :-)</string>
-    <string name="rate_description">Add your favorite authors hereunder and rate them according to your preferences.\nThanks to these ratings, DucksManager can suggest you issues to hunt for.\nThese suggestions are updated daily.</string>
+    <string name="rate_description">Add your favorite authors and rate them according to your preferences.\nThanks to these ratings, What The Duck can suggest you issues to hunt for.\nThese suggestions are updated daily.</string>
     <string name="rate_new_author">Rate an author</string>
     <string name="rate_new_author_hint">Type an author name</string>
     <string name="report">Report a problem</string>

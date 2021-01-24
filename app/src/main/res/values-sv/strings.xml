@@ -68,7 +68,7 @@
     <string name="no_issue">Ingen utgåva</string>
     <string name="no_item">Förslagen uppdateras dagligen.</string>
     <string name="no_purchase_date">Inget inköpsdatum</string>
-    <string name="no_suggestion">Vi har inga förslag åt dig. Se till att du betygsatt dina favoritförfattare på webbplatsen DucksManager.</string>
+    <string name="no_suggestion">Vi har inga förslag åt dig. Se till att du betygsatt dina favoritförfattare.</string>
     <string name="no_title">Ingen titel</string>
     <string name="notify_option">Meddela mig om nya berättelser från mina favoritförfattare</string>
     <string name="offline_mode">Du är i offline-läge. Du kan bläddra igenom din samling men inte uppdatera den. Vissa funktioner är inte tillgängliga.</string>
@@ -107,4 +107,12 @@
     <string name="welcome_bookcase_view_portrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
     <string name="welcome_message">Din DucksManager-samling visas när du öppnar What The Duck. Klicka på ett land för att se de publikationer du har, eller tryck på \"+\" för att lägga till en utgåva  i din samling.</string>
     <string name="welcome_title">Välkommen till What The Duck!</string>
+    <string name="delete_rating">Radera</string>
+    <string name="favorite_authors">Mina favoritförfattare</string>
+    <string name="input_error__author_already_rated">Du har redan betygsatt denna författare!</string>
+    <string name="max_watched_authors_reached">Du har nått det maximala antalet författare att betygsätta. Radera redan betygsatta författare om du vill betygsätta en ny.</string>
+    <string name="no_author">Du har inga favoritförfattare</string>
+    <string name="rate_description">Lägg till dina favoritförfattare och betygsätt dem som du vill.\nTack vare dessa betyg kan What The Duck tipsa dig om utgåvor att leta efter.\nDessa tips uppdateras dagligen.</string>
+    <string name="rate_new_author">Betygsätt en författare</string>
+    <string name="rate_new_author_hint">Skriv ett författarnamn</string>
 </resources>

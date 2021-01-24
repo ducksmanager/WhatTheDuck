@@ -62,7 +62,7 @@
     <string name="login">Connexion</string>
     <string name="logout">Déconnexion</string>
     <string name="long_tap_to_end_issue_range_selection">Faites un appui long sur le dernier numéro consécutif à sélectionner</string>
-    <string name="max_watched_authors_reached">" Vous avez atteint le nombre maximal d'auteurs surveillés. Supprimez des auteurs existants pour en ajouter d'autres."</string>
+    <string name="max_watched_authors_reached">Vous avez atteint le nombre maximal d\'auteurs surveillés. Supprimez des auteurs existants pour en ajouter d\'autres.</string>
     <string name="my_collection">Ma collection</string>
     <string name="network_error">Erreur réseau</string>
     <string name="network_error__no_connection">Problème de réseau : vérifiez votre connexion Internet</string>
@@ -73,7 +73,7 @@
     <string name="no_issue">Aucun numéro</string>
     <string name="no_item">Aucun numéro. Tapez sur le bouton "+" pour ajouter des numéros à votre collection !</string>
     <string name="no_purchase_date">Pas de date d\'achat</string>
-    <string name="no_suggestion">Nous n\'avons pas de suggestions à vous proposer. Assurez-vous d\'avoir noté vos auteurs préférés sur le site DucksManager.\nLes suggestions sont mises à jour quotidiennement.</string>
+    <string name="no_suggestion">Nous n\'avons pas de suggestions à vous proposer. Assurez-vous d\'avoir noté vos auteurs préférés.\nLes suggestions sont mises à jour quotidiennement.</string>
     <string name="no_title">Sans titre</string>
     <string name="notify_option">Me notifier quand des nouvelles histoires de mes auteurs favoris sont publiées</string>
     <string name="offline_mode">Vous êtes en mode hors-ligne. Vous pouvez naviguer dans votre collection mais pas la modifier. Certaines fonctionnalités ne seront pas disponibles.</string>
@@ -86,7 +86,7 @@
     <string name="purchase_date">Date d\'achat</string>
     <string name="purchase_name">Description</string>
     <string name="rate_app">Notez What The Duck sur le Play Store :-)</string>
-    <string name="rate_description">Ajoutez vos auteurs préférés ci-dessous et indiquez les notes que vous leur attribuez.\nGrâce à ces notes, DucksManager déterminera ensuite les magazines susceptibles de vous intéresser.</string>
+    <string name="rate_description">Ajoutez vos auteurs préférés et indiquez les notes que vous leur attribuez.\nGrâce à ces notes, What The Duck déterminera ensuite les magazines susceptibles de vous intéresser.</string>
     <string name="rate_new_author">Noter un auteur</string>
     <string name="rate_new_author_hint">Entrez le nom d\'un auteur</string>
     <string name="report">Signaler un problème</string>
