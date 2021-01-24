@@ -1,0 +1,114 @@
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/settings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:title="Favorite authors" />
+
+        <TextView
+            android:id="@+id/warningMessage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:background="#f09313"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:text="@string/offline_mode"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_below="@+id/warningMessage"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/authors_description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:text="@string/rate_description" />
+
+            <RelativeLayout
+                android:id="@id/authorNotations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/authors_description"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/authorNotationsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:itemCount="5"
+                    tools:listitem="@layout/row_author_notation" />
+
+                <TextView
+                    android:id="@+id/authorNotationsNoResults"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:height="30dp"
+                    android:gravity="center"
+                    android:indeterminate="true"
+                    android:text="@string/no_author"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/addAuthorNotationLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/authorNotations"
+                android:text="@string/rate_new_author"
+                android:textSize="20sp"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/maxAuthorCountReached"
+                android:layout_below="@+id/addAuthorNotationLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:text="@string/max_watched_authors_reached"
+                android:visibility="gone" />
+
+            <AutoCompleteTextView
+                android:id="@+id/newAuthorName"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/maxAuthorCountReached"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:hint="@string/rate_new_author_hint"
+                android:inputType="textVisiblePassword"
+                android:labelFor="@id/addAuthorNotationLabel" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <include layout="@layout/drawer_navigation" />
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -58,6 +58,7 @@
             android:excludeFromRecents="true"
             android:theme="@style/AddIssueTheme" />
         <activity android:name="net.ducksmanager.activity.Settings" />
+        <activity android:name="net.ducksmanager.activity.Authors" />
         <activity android:name="net.ducksmanager.activity.Suggestions" />
         <activity
             android:name="net.ducksmanager.activity.Report"

@@ -37,6 +37,24 @@ interface DmServerApi {
     @get:GET("/collection/notifications/countries")
     val userNotificationCountries: Call<List<String>>
 
+    @GET("/coa/authorsfullnames/search/{nameStart}")
+    fun searchAuthor(@Path(value = "nameStart") nameStart: String): Call<HashMap<String, String>>
+
+    @GET("/coa/authorsfullnames/{personCodes}")
+    fun getAuthorNames(@Path(value = "personCodes") personCodes: String): Call<HashMap<String, String>>
+
+    @get:GET("/collection/authors/watched")
+    val authorNotations: Call<List<AuthorNotation>>
+
+    @PUT("/collection/authors/watched")
+    fun createAuthorNotation(@Body authorNotation: AuthorNotation): Call<Void>
+
+    @POST("/collection/authors/watched")
+    fun updateAuthorNotation(@Body authorNotation: AuthorNotation): Call<Void>
+
+    @HTTP(method="DELETE", path = "/collection/authors/watched", hasBody = true)
+    fun deleteAuthorNotation(@Body authorNotation: AuthorNotation): Call<Void>
+
     @get:GET("/collection/stats/suggestedissues/countries_to_notify/_")
     val suggestedIssues: Call<SuggestionList>
 

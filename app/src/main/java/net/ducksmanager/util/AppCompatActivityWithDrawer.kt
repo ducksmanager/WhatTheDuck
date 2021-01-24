@@ -24,6 +24,7 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
     companion object {
         private val menuActions: HashMap<Int, List<Class<*>>> = hashMapOf(
             R.id.action_collection to listOf(CountryList::class.java, PublicationList::class.java, IssueList::class.java),
+            R.id.action_favorite_authors to listOf(Authors::class.java),
             R.id.action_settings to listOf(Settings::class.java),
             R.id.action_suggestions to listOf(Suggestions::class.java)
         )
