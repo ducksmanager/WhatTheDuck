@@ -9,8 +9,8 @@ import net.ducksmanager.activity.PublicationList
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
+import java.math.RoundingMode
 import java.util.*
-import kotlin.math.roundToInt
 
 class CountryAdapter internal constructor(
     itemList: ItemList<InducksCountryNameWithPossession>
@@ -50,8 +50,8 @@ class CountryAdapter internal constructor(
         val possessedRatio = 100 * i.possessedIssues.toDouble() / i.referencedIssues
         return when {
             possessedRatio == 0.0 -> ""
-            possessedRatio < 1 -> "< 1 %"
-            else -> String.format("%d %%", possessedRatio.roundToInt())
+            possessedRatio < 0.1 -> "< 0.1 %"
+            else -> String.format("%3.1f %%", possessedRatio.toBigDecimal().setScale(1, RoundingMode.HALF_EVEN).toFloat())
         }
     }
 
