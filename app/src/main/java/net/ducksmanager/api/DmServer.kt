@@ -39,6 +39,7 @@ class DmServer {
         const val EVENT_RETRIEVE_ISSUE_COUNT = "retrieveIssueCount"
         const val EVENT_GET_PURCHASES = "getPurchases"
         const val EVENT_GET_SUGGESTED_ISSUES = "getSuggestedIssues"
+        const val EVENT_GET_SUGGESTED_ISSUES_BY_RELEASE_DATE = "getSuggestedIssuesByReleaseDate"
         const val EVENT_GET_USER_NOTIFICATION_COUNTRIES = "getUserNotificationCountries"
         const val EVENT_RETRIEVE_ALL_COUNTRIES = "getInducksCountries"
 

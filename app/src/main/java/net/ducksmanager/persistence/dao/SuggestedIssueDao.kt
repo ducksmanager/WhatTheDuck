@@ -8,7 +8,7 @@ import net.ducksmanager.persistence.models.composite.SuggestedIssueSimple
 
 @Dao
 interface SuggestedIssueDao {
-    @Query("SELECT suggested_issues.* FROM suggested_issues")
+    @Query("SELECT suggested_issues.* FROM suggested_issues ORDER BY suggestionScore DESC")
     fun findAll() : List<SuggestedIssueSimple>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

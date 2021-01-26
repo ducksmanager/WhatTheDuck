@@ -31,11 +31,12 @@ import net.ducksmanager.persistence.models.internal.Sync
     NotificationCountry::class,
     Purchase::class,
     SuggestedIssueSimple::class,
+    SuggestedIssueByReleaseDateSimple::class,
     Sync::class,
     User::class,
     UserMessage::class,
     UserSetting::class
- ], version = 9, exportSchema = true)
+ ], version = 10, exportSchema = true)
 @TypeConverters(StringMutableSetConverter::class, InstantConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -49,6 +50,11 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("DROP TABLE IF EXISTS inducks_issue_count")
                 database.execSQL("CREATE TABLE inducks_issue_count(`code` TEXT NOT NULL, `count` INTEGER NOT NULL, PRIMARY KEY(`code`))")
+            }
+        }
+        val MIGRATION_9_10: Migration = object : Migration(9, 10) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE suggested_issues_by_release_date(`publicationCode` TEXT NOT NULL, `issueNumber` TEXT NOT NULL, `suggestionScore` INTEGER NOT NULL, `oldestdate` TEXT, `stories` TEXT NOT NULL, PRIMARY KEY(`publicationCode`, `issueNumber`))")
             }
         }
     }
@@ -65,6 +71,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun notificationCountryDao(): NotificationCountryDao
     abstract fun purchaseDao(): PurchaseDao
     abstract fun suggestedIssueDao(): SuggestedIssueDao
+    abstract fun suggestedIssueByReleaseDateDao(): SuggestedIssueByReleaseDateDao
     abstract fun syncDao(): SyncDao
     abstract fun userDao(): UserDao
     abstract fun userMessageDao(): UserMessageDao

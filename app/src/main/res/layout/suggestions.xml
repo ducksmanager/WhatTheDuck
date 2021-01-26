@@ -53,8 +53,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textIsSelectable="false"
-                android:textOff="@string/sort_by_score"
-                android:textOn="@string/sort_by_publication_date" />
+                android:textOn="@string/sort_by_score"
+                android:textOff="@string/sort_by_publication_date" />
 
             <RelativeLayout
                 android:layout_width="match_parent"

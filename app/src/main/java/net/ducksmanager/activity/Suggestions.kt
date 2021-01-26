@@ -10,9 +10,11 @@ import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.row_suggested_issue.view.*
+import net.ducksmanager.persistence.dao.SuggestedIssueDao
 import net.ducksmanager.persistence.models.coa.InducksPerson
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.coa.InducksStory
+import net.ducksmanager.persistence.models.composite.SuggestedIssueByReleaseDateSimple
 import net.ducksmanager.persistence.models.composite.SuggestedIssueSimple
 import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.util.AppCompatActivityWithDrawer
@@ -30,7 +32,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
         lateinit var authorNames: List<InducksPerson>
         lateinit var storyDetails: List<InducksStory>
 
-        fun loadSuggestions(suggestionList: SuggestionList) {
+        fun loadSuggestions(suggestionList: SuggestionList, targetDaoClass: Class<*>) {
             val suggestions = suggestionList.issues.values.toMutableList()
 
             val storyDetails: Set<InducksStory> = suggestionList.storyDetails.map { (key, it) ->
@@ -46,12 +48,24 @@ class Suggestions : AppCompatActivityWithDrawer() {
             }
             appDB!!.inducksStoryDao().insertSet(storyDetails)
 
-            appDB!!.suggestedIssueDao().deleteAll()
-            appDB!!.suggestedIssueDao().insertList(suggestions.map {
-                val stories = mutableSetOf<String>()
-                it.stories.values.forEach { storycode -> stories.addAll(storycode) }
-                SuggestedIssueSimple(it.publicationcode, it.issuenumber, it.score, it.oldestdate, stories)
-            })
+            when (targetDaoClass) {
+                SuggestedIssueDao::class.java -> {
+                    appDB!!.suggestedIssueDao().deleteAll()
+                    appDB!!.suggestedIssueDao().insertList(suggestions.map {
+                        val stories = mutableSetOf<String>()
+                        it.stories.values.forEach { storycode -> stories.addAll(storycode) }
+                        SuggestedIssueSimple(it.publicationcode, it.issuenumber, it.score, it.oldestdate, stories)
+                    })
+                }
+                else -> {
+                    appDB!!.suggestedIssueByReleaseDateDao().deleteAll()
+                    appDB!!.suggestedIssueByReleaseDateDao().insertList(suggestions.map {
+                        val stories = mutableSetOf<String>()
+                        it.stories.values.forEach { storycode -> stories.addAll(storycode) }
+                        SuggestedIssueByReleaseDateSimple(SuggestedIssueSimple(it.publicationcode, it.issuenumber, it.score, it.oldestdate, stories))
+                    })
+                }
+            }
 
             appDB!!.inducksPersonDao().insertList(suggestionList.authors.map { (key, it) ->
                 InducksPerson(key, it)
@@ -69,37 +83,42 @@ class Suggestions : AppCompatActivityWithDrawer() {
 
         toggleToolbar()
 
-        val suggestionListView = binding.suggestionList
-        val noSuggestionView = binding.suggestionsNoResults
-
         if (isOfflineMode) {
             binding.warningMessage.visibility = View.VISIBLE
         }
 
-        val suggestions = appDB!!.suggestedIssueDao().findAll()
-        publicationTitles = appDB!!.inducksPublicationDao().findAll()
+        showSuggestions()
+
+        binding.sort.setOnClickListener {
+            showSuggestions((it as ToggleButton).isChecked)
+        }
+    }
+
+    private fun showSuggestions(orderByReleaseDate: Boolean = false) {
+        val suggestionListView = binding.suggestionList
+        val noSuggestionView = binding.suggestionsNoResults
+
+        println("get suggestions")
+        val suggestions = if (orderByReleaseDate) {
+            appDB!!.suggestedIssueByReleaseDateDao().findAll().map { suggestedIssueByReleaseDate -> suggestedIssueByReleaseDate.suggestedIssue }
+        } else {
+            appDB!!.suggestedIssueDao().findAll()
+        }
+        println("get publicationTitles")
+        publicationTitles = appDB!!.inducksPublicationDao().findByPublicationCodes(suggestions.map { suggestion -> suggestion.publicationCode }.toSet())
+        println("get authorNames")
         authorNames = appDB!!.inducksPersonDao().findAll()
+        println("get storyDetails")
         storyDetails = appDB!!.inducksStoryDao().findAll()
+        println("done")
 
         val showSuggestions = suggestions.isNotEmpty() && publicationTitles.isNotEmpty() && authorNames.isNotEmpty() && storyDetails.isNotEmpty()
 
-        suggestionListView.visibility = if (showSuggestions) View.VISIBLE else View.GONE
         noSuggestionView.visibility = if (!showSuggestions) View.VISIBLE else View.GONE
 
-        suggestionListView.adapter = SuggestedIssueAdapter(this@Suggestions, suggestions.toMutableList())
-        (suggestionListView.adapter as SuggestedIssueAdapter).orderByPublicationDate()
+        suggestionListView.visibility = if (showSuggestions) View.VISIBLE else View.GONE
         suggestionListView.layoutManager = LinearLayoutManager(this@Suggestions)
-
-
-        binding.sort.setOnClickListener {
-            val adapter = suggestionListView.adapter as SuggestedIssueAdapter
-            if ((it as ToggleButton).isChecked) {
-                adapter.orderByScore()
-            }
-            else {
-                adapter.orderByPublicationDate()
-            }
-        }
+        suggestionListView.adapter = SuggestedIssueAdapter(this@Suggestions, suggestions.toMutableList())
     }
 
     class SuggestedIssueAdapter internal constructor(
@@ -159,15 +178,6 @@ class Suggestions : AppCompatActivityWithDrawer() {
 
         override fun getItemCount() = suggestions.size
 
-        fun orderByPublicationDate() {
-            suggestions.sortByDescending { it.oldestdate }
-            notifyDataSetChanged()
-        }
-
-        fun orderByScore() {
-            suggestions.sortByDescending { it.suggestionScore }
-            notifyDataSetChanged()
-        }
     }
 
     class StoryAdapter internal constructor(

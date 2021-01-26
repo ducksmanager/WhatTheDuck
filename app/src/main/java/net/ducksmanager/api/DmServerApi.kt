@@ -58,6 +58,9 @@ interface DmServerApi {
     @get:GET("/collection/stats/suggestedissues/countries_to_notify/_")
     val suggestedIssues: Call<SuggestionList>
 
+    @get:GET("/collection/stats/suggestedissues/countries_to_notify/_/oldestdate")
+    val suggestedIssuesByReleaseDate: Call<SuggestionList>
+
     @POST("/collection/notifications/countries")
     fun updateUserNotificationCountries(@Body countryListToUpdate: CountryListToUpdate): Call<Void>
 

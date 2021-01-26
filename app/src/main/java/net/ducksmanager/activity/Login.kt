@@ -19,6 +19,7 @@ import com.pusher.pushnotifications.auth.BeamsTokenProvider
 import net.ducksmanager.api.DmServer.Callback
 import net.ducksmanager.api.DmServer.Companion.EVENT_GET_PURCHASES
 import net.ducksmanager.api.DmServer.Companion.EVENT_GET_SUGGESTED_ISSUES
+import net.ducksmanager.api.DmServer.Companion.EVENT_GET_SUGGESTED_ISSUES_BY_RELEASE_DATE
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_ALL_PUBLICATIONS
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_COLLECTION
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_ISSUE_COUNT
@@ -28,6 +29,8 @@ import net.ducksmanager.api.DmServer.Companion.apiDmPassword
 import net.ducksmanager.api.DmServer.Companion.apiDmUser
 import net.ducksmanager.api.DmServer.Companion.appFollowApi
 import net.ducksmanager.api.DmServer.Companion.getRequestHeaders
+import net.ducksmanager.persistence.dao.SuggestedIssueByReleaseDateDao
+import net.ducksmanager.persistence.dao.SuggestedIssueDao
 import net.ducksmanager.persistence.models.appfollow.Apps
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.InducksIssueCount
@@ -99,7 +102,13 @@ class Login : AppCompatActivity() {
 
                     api.suggestedIssues.enqueue(object : Callback<SuggestionList>(EVENT_GET_SUGGESTED_ISSUES, originActivity, true) {
                         override fun onSuccessfulResponse(response: Response<SuggestionList>) {
-                            Suggestions.loadSuggestions(response.body()!!)
+                            Suggestions.loadSuggestions(response.body()!!, SuggestedIssueDao::class.java)
+                        }
+                    })
+
+                    api.suggestedIssuesByReleaseDate.enqueue(object : Callback<SuggestionList>(EVENT_GET_SUGGESTED_ISSUES_BY_RELEASE_DATE, originActivity, true) {
+                        override fun onSuccessfulResponse(response: Response<SuggestionList>) {
+                            Suggestions.loadSuggestions(response.body()!!, SuggestedIssueByReleaseDateDao::class.java)
                         }
                     })
 
