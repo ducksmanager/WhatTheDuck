@@ -3,7 +3,7 @@ Version 2.7.1
     Fix missing suggestions when sorting them by release date
     Improve performance of suggestion screen
 
-Version 2.7.0
+Version 2.7.0 "Jubal Pomp"
 
     Add "My favorite authors" screen
     Add decimal to country ownership percentage
