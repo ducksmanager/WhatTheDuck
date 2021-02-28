@@ -19,7 +19,6 @@ import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.util.ConnectionDetector
 import net.ducksmanager.util.CoverFlowFileHandler
-import net.ducksmanager.util.CoverFlowFileHandler.SearchFromCover
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
@@ -38,7 +37,9 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         fun isCoaList(): Boolean = type == WhatTheDuck.CollectionType.COA.toString()
 
         const val MIN_ITEM_NUMBER_FOR_FILTER = 20
-        private const val REQUEST_IMAGE_CAPTURE = 1
+
+        private const val REQUEST_IMAGE_PICK = 1
+        private const val REQUEST_IMAGE_CAPTURE = 2
     }
 
     private lateinit var connectionDetector: ConnectionDetector
@@ -84,7 +85,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
                         urlFallback
                     }
                     val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(url))
-                    if(intent.resolveActivity(packageManager) != null)
+                    if (intent.resolveActivity(packageManager) != null)
                         this@ItemList.startActivity(intent)
                     else {
                         this@ItemList.startActivity(intent.setData(Uri.parse(urlFallback)))
@@ -139,10 +140,12 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.navigationCountry.root.selected?.setOnClickListener { _: View? -> goToView(PublicationList::class.java) }
 
         binding.addToCollectionWrapper.setOnClickListener {
+            binding.addToCollectionByFileButton.visibility = if (binding.addToCollectionByFileButton.visibility == GONE) VISIBLE else GONE
             binding.addToCollectionByPhotoButton.visibility = if (binding.addToCollectionByPhotoButton.visibility == GONE) VISIBLE else GONE
             binding.addToCollectionBySelectionButton.visibility = if (binding.addToCollectionBySelectionButton.visibility == GONE) VISIBLE else GONE
         }
 
+        binding.addToCollectionByFileButton.setOnClickListener { pickCoverPicture() }
         binding.addToCollectionByPhotoButton.setOnClickListener { takeCoverPicture() }
         binding.addToCollectionBySelectionButton.setOnClickListener { goToAlternativeView() }
 
@@ -192,12 +195,22 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     protected open fun show() {
         binding.warningMessage.visibility = if (isOfflineMode) VISIBLE else GONE
 
+        binding.addToCollectionByFileButton.visibility = GONE
         binding.addToCollectionByPhotoButton.visibility = GONE
         binding.addToCollectionBySelectionButton.visibility = GONE
 
         binding.tipIssueSelection.visibility = if (shouldShowItemSelectionTip()) VISIBLE else GONE
         binding.validateSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
         binding.cancelSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
+    }
+
+    private fun pickCoverPicture() {
+        val takePictureIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        if (takePictureIntent.resolveActivity(packageManager) != null) {
+            CoverFlowFileHandler.current = CoverFlowFileHandler(WeakReference(this))
+
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_PICK)
+        }
     }
 
     private fun takeCoverPicture() {
@@ -214,10 +227,17 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+        when (requestCode) {
+            REQUEST_IMAGE_PICK -> CoverFlowFileHandler.current.uploadUri = data!!.data
+            REQUEST_IMAGE_CAPTURE -> {
+            }
+            else -> return
+        }
+
+        CoverFlowFileHandler.current.resizeUntilFileSize(CoverFlowFileHandler.SearchFromCover())
+        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_PICK) && resultCode == Activity.RESULT_OK) {
             binding.addToCollectionWrapper.visibility = VISIBLE
             binding.progressBar.visibility = VISIBLE
-            CoverFlowFileHandler.current.resizeUntilFileSize(SearchFromCover())
         }
     }
 

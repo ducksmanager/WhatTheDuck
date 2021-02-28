@@ -7,6 +7,7 @@
     <string name="app_name">What The Duck</string>
     <string name="bookcase_view_message">Displaying the bookcase view when on a mobile network can lead to a high data consumption. Do you still want to display it?</string>
     <string name="bookcase_view_title">Bookcase view</string>
+    <string name="by_cover_file">By cover file</string>
     <string name="by_cover_photo">By cover photo</string>
     <string name="by_issue_selection">By issue selection</string>
     <string name="cancel">Cancel</string>

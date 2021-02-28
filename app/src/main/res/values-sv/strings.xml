@@ -7,6 +7,7 @@
     <string name="app_name">What The Duck</string>
     <string name="bookcase_view_message">Att visa bokhyllevyn på ett mobilt nätverk kan leda till höga kostnader. Vill du fortfarande visa den?</string>
     <string name="bookcase_view_title">Bokhyllevy</string>
+    <string name="by_cover_file">Efter omslagsfil</string>
     <string name="by_cover_photo">Från bild</string>
     <string name="by_issue_selection">Från utgåva</string>
     <string name="cancel">Ta bort</string>

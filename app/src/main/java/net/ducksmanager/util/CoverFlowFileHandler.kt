@@ -19,6 +19,7 @@ import net.ducksmanager.persistence.models.composite.CoverSearchResults
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -50,16 +51,19 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
         Companion.originActivityRef = originActivityRef
     }
 
-    private var uploadFile: File? = null
+    lateinit var uploadFile: File
+    internal var uploadUri: Uri? = null
+
     private var callback: TransformationCallback? = null
     private val target: Target = object : Target {
         override fun onBitmapLoaded(bitmap: Bitmap, from: LoadedFrom) {
             try {
-                val ostream = FileOutputStream(uploadFile)
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream)
-                ostream.flush()
-                ostream.close()
-                callback!!.onComplete(uploadFile)
+                val f = File.createTempFile("temp_file_name", ".jpg", applicationContext!!.cacheDir)
+                val outputStream = FileOutputStream(f)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+                outputStream.flush()
+                outputStream.close()
+                callback!!.onComplete(f)
             } catch (e: IOException) {
                 e.message?.let { WhatTheDuck.alert(originActivityRef, R.string.internal_error, it) }
             }
@@ -74,19 +78,17 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
     }
 
     fun createEmptyFileForCamera(context: Context): Uri? {
-        if (uploadFile == null) {
-            val imagePath = File(context.filesDir, SearchFromCover.uploadTempDir)
-            uploadFile = File(imagePath, SearchFromCover.uploadFileName)
-        }
-        uploadFile!!.parentFile.mkdirs()
+        val imagePath = File(context.filesDir, SearchFromCover.uploadTempDir)
+        uploadFile = File(imagePath, SearchFromCover.uploadFileName)
+        uploadFile.parentFile.mkdirs()
         try {
-            if (uploadFile!!.exists()) {
-                uploadFile!!.delete()
+            if (uploadFile.exists()) {
+                uploadFile.delete()
             }
-            if (!uploadFile!!.createNewFile()) {
+            if (!uploadFile.createNewFile()) {
                 WhatTheDuck.alert(originActivityRef, R.string.internal_error, context.getString(R.string.error__could_not_create_empty_file))
             }
-            return FileProvider.getUriForFile(context, "net.ducksmanager.whattheduck.fileprovider", uploadFile!!)
+            return FileProvider.getUriForFile(context, "net.ducksmanager.whattheduck.fileprovider", uploadFile)
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -121,22 +123,25 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
         val instance: RequestCreator = if (mockedRequestResource != null) {
             Picasso.with(originActivity).load(mockedRequestResource)
         } else {
-            Picasso.with(originActivity).invalidate(uploadFile)
-            Picasso.with(originActivity).load(uploadFile)
+            if (uploadUri != null) {
+                Picasso.with(originActivity).invalidate(uploadUri)
+                Picasso.with(originActivity).load(uploadUri)
+            } else {
+                Picasso.with(originActivity).invalidate(uploadFile)
+                Picasso.with(originActivity).load(uploadFile)
+            }
+
         }
         instance.transform(resizeTransformation).into(target)
     }
 
     interface TransformationCallback {
-        fun onComplete(outputFile: File?)
+        fun onComplete(outputFile: File)
         fun onFail()
     }
 
     class SearchFromCover : TransformationCallback {
-        override fun onComplete(outputFile: File?) {
-            if (outputFile == null) {
-                return
-            }
+        override fun onComplete(outputFile: File) {
             val requestBody: RequestBody = outputFile.asRequestBody("*/*".toMediaTypeOrNull())
             val fileToUpload = MultipartBody.Part.createFormData(uploadFileName, outputFile.name, requestBody)
             val fileName = outputFile.name.toRequestBody("text/plain".toMediaTypeOrNull())

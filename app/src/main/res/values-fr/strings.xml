@@ -7,6 +7,7 @@
     <string name="app_name">What The Duck</string>
     <string name="bookcase_view_message">L\'affichage de la bibliothèque en utilisant les données mobiles peut entraîner une consommation importante de données mobiles. Voulez-vous tout de même afficher la vue Bibliothèque ?</string>
     <string name="bookcase_view_title">Vue Bibliothèque</string>
+    <string name="by_cover_file">Depuis un fichier de couverture</string>
     <string name="by_cover_photo">Depuis une photo de couverture</string>
     <string name="by_issue_selection">Par sélection de numéro</string>
     <string name="cancel">Annuler</string>
