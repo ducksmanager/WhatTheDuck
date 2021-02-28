@@ -10,15 +10,15 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueAndScore
+import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithDetails
 import net.ducksmanager.whattheduck.databinding.ItemCoverflowBinding
 
 internal class CoverFlowAdapter(private val context: Context) : BaseAdapter() {
     private lateinit var binding: ItemCoverflowBinding
 
-    private var data: List<CoverSearchIssueWithUserIssueAndScore>? = null
+    private var data: List<CoverSearchIssueWithDetails>? = null
 
-    fun setData(data: List<CoverSearchIssueWithUserIssueAndScore>?) {
+    fun setData(data: List<CoverSearchIssueWithDetails>?) {
         this.data = data
     }
 

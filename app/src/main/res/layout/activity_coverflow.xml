@@ -41,6 +41,30 @@
             android:layout_gravity="center"
             android:layout_width="50dp"
             android:layout_height="30dp" />
+
+        <LinearLayout
+            android:id="@+id/quotation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp">
+            <TextView
+                android:id="@+id/quotationprefix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/quotation"
+                android:textColor="#FFFFFF" />
+            <TextView
+                android:id="@+id/quotationvalue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
     </LinearLayout>
 
     <it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow
@@ -57,23 +81,22 @@
         coverflow:spacing="0.9" />
 
     <LinearLayout
+        android:id="@+id/condition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/resultNumber"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
         <ImageView
             android:id="@+id/conditionbadge"
             android:layout_width="24dip"
             android:layout_height="fill_parent"
-            android:src="@drawable/condition_good"
-            android:paddingBottom="72dp" />
+            android:src="@drawable/condition_good" />
         <TextView
             android:id="@+id/conditiontext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="72dp"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:text="@string/condition_good"

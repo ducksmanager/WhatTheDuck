@@ -3,7 +3,7 @@ package net.ducksmanager.persistence.models.composite
 import androidx.room.Embedded
 import net.ducksmanager.persistence.models.dm.Issue
 
-class CoverSearchIssueWithUserIssueAndScore(
+class CoverSearchIssueWithDetails(
     @Embedded
     val coverSearchIssue: CoverSearchIssue,
 

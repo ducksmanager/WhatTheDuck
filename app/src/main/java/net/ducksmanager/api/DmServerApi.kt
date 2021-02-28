@@ -1,5 +1,6 @@
 package net.ducksmanager.api
 
+import net.ducksmanager.persistence.models.coa.InducksQuotation
 import net.ducksmanager.persistence.models.composite.*
 import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.Purchase
@@ -76,4 +77,7 @@ interface DmServerApi {
     @Multipart
     @POST("/cover-id/search")
     fun searchFromCover(@Part file: MultipartBody.Part, @Part("wtd_jpg") fileName: RequestBody): Call<CoverSearchResults>
+
+    @get:GET("/coa/quotations/{issueCodes}")
+    val quotations: Call<List<InducksQuotation>>
 }

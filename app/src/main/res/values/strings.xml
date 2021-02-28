@@ -86,6 +86,7 @@
     <string name="password_confirm">Password confirmation</string>
     <string name="purchase_date">Purchase date</string>
     <string name="purchase_name">Purchase name</string>
+    <string name="quotation">Quotation: </string>
     <string name="rate_app">Remember to rate What The Duck on the Play Store :-)</string>
     <string name="rate_description">Add your favorite authors and rate them according to your preferences.\nThanks to these ratings, What The Duck can suggest you issues to hunt for.\nThese suggestions are updated daily.</string>
     <string name="rate_new_author">Rate an author</string>

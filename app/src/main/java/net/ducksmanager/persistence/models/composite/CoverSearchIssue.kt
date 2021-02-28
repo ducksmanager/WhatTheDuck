@@ -30,5 +30,9 @@ class CoverSearchIssue(
 
     @SerializedName(value = "coverurl")
     @ColumnInfo
-    var coverUrl: String
+    var coverUrl: String,
+
+    @SerializedName(value = "quotation")
+    @ColumnInfo
+    var quotation: Map<String, Int>?
 )

@@ -10,6 +10,7 @@ import net.ducksmanager.persistence.models.appfollow.AppVersion
 import net.ducksmanager.persistence.models.coa.*
 import net.ducksmanager.persistence.models.composite.*
 import net.ducksmanager.persistence.models.converter.InstantConverter
+import net.ducksmanager.persistence.models.converter.StringIntMapConverter
 import net.ducksmanager.persistence.models.converter.StringMutableSetConverter
 import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.NotificationCountry
@@ -36,8 +37,8 @@ import net.ducksmanager.persistence.models.internal.Sync
     User::class,
     UserMessage::class,
     UserSetting::class
- ], version = 10, exportSchema = true)
-@TypeConverters(StringMutableSetConverter::class, InstantConverter::class)
+ ], version = 11, exportSchema = true)
+@TypeConverters(StringMutableSetConverter::class, StringIntMapConverter::class, InstantConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
@@ -55,6 +56,11 @@ abstract class AppDatabase : RoomDatabase() {
         val MIGRATION_9_10: Migration = object : Migration(9, 10) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("CREATE TABLE suggested_issues_by_release_date(`publicationCode` TEXT NOT NULL, `issueNumber` TEXT NOT NULL, `suggestionScore` INTEGER NOT NULL, `oldestdate` TEXT, `stories` TEXT NOT NULL, PRIMARY KEY(`publicationCode`, `issueNumber`))")
+            }
+        }
+        val MIGRATION_10_11: Migration = object : Migration(10, 11) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE coversearch_issue ADD `quotation` TEXT DEFAULT null")
             }
         }
     }

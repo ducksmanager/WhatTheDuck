@@ -3,13 +3,14 @@ package net.ducksmanager.util
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow.OnScrollPositionListener
 import net.ducksmanager.activity.AddIssues
-import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithUserIssueAndScore
+import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithDetails
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToResourceId
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToStringId
 import net.ducksmanager.whattheduck.R
@@ -21,13 +22,13 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
 import net.ducksmanager.whattheduck.databinding.ActivityCoverflowBinding
 
 class CoverFlowActivity : AppCompatActivity() {
-    private lateinit var data: List<CoverSearchIssueWithUserIssueAndScore>
+    private lateinit var data: List<CoverSearchIssueWithDetails>
     private lateinit var binding: ActivityCoverflowBinding
 
     private lateinit var adapter: CoverFlowAdapter
 
     companion object {
-        var currentSuggestion: CoverSearchIssueWithUserIssueAndScore? = null
+        var currentSuggestion: CoverSearchIssueWithDetails? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +37,7 @@ class CoverFlowActivity : AppCompatActivity() {
         binding = ActivityCoverflowBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        appDB!!.coverSearchIssueDao().findAll().observe(this, { searchIssues: List<CoverSearchIssueWithUserIssueAndScore> ->
+        appDB!!.coverSearchIssueDao().findAll().observe(this, { searchIssues: List<CoverSearchIssueWithDetails> ->
             if (searchIssues.isEmpty()) {
                 return@observe
             }
@@ -96,6 +97,23 @@ class CoverFlowActivity : AppCompatActivity() {
                     }
                     binding.score.scorevalue.text = currentSuggestion!!.suggestionScore.toString()
                     binding.score.scorevalue.textSize = 20F
+
+                    val quotation = currentSuggestion!!.coverSearchIssue.quotation
+                    if (quotation != null) {
+                        binding.quotation.visibility = VISIBLE
+                        if (quotation.containsKey("min") && quotation.containsKey("min")) {
+                            binding.quotationvalue.text = String.format("Entre %d et %d €", quotation["min"], quotation["max"])
+                        }
+                        else if (quotation.containsKey("min")) {
+                            binding.quotationvalue.text = String.format("Au moins %d €", quotation["min"])
+                        }
+                        else {
+                            binding.quotationvalue.text = String.format("Moins de %d €", quotation["max"])
+                        }
+                    }
+                    else {
+                        binding.quotation.visibility = GONE
+                    }
 
                     binding.resultNumber.text = resources.getString(
                         R.string.coversearch_result_template,
