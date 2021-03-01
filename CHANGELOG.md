@@ -1,3 +1,8 @@
+Version 2.7.2
+
+    Add quotation information on cover results, when available
+    Allow to search a cover by picking a file
+
 Version 2.7.1
 
     Fix missing suggestions when sorting them by release date
