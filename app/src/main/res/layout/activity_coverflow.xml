@@ -45,8 +45,17 @@
         <LinearLayout
             android:id="@+id/quotation"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:paddingBottom="5dp">
+
+            <ImageView
+                android:id="@+id/quotationicon"
+                android:layout_width="25dp"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/quotation"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_coin" />
             <TextView
                 android:id="@+id/quotationprefix"
                 android:layout_width="wrap_content"
@@ -60,6 +69,8 @@
                 android:id="@+id/quotationvalue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="12sp"
                 android:gravity="center"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"

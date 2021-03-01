@@ -87,6 +87,9 @@
     <string name="purchase_date">Date d\'achat</string>
     <string name="purchase_name">Description</string>
     <string name="quotation">Cote: </string>
+    <string name="quotation_between">Entre %d et %d €</string>
+    <string name="quotation_less_than">Moins de %d €</string>
+    <string name="quotation_more_than">Plus de %d €</string>
     <string name="rate_app">Notez What The Duck sur le Play Store :-)</string>
     <string name="rate_description">Ajoutez vos auteurs préférés et indiquez les notes que vous leur attribuez.\nGrâce à ces notes, What The Duck déterminera ensuite les magazines susceptibles de vous intéresser.</string>
     <string name="rate_new_author">Noter un auteur</string>

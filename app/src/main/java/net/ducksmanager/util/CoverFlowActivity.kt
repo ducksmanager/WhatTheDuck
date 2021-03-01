@@ -101,14 +101,14 @@ class CoverFlowActivity : AppCompatActivity() {
                     val quotation = currentSuggestion!!.coverSearchIssue.quotation
                     if (quotation != null) {
                         binding.quotation.visibility = VISIBLE
-                        if (quotation.containsKey("min") && quotation.containsKey("min")) {
-                            binding.quotationvalue.text = String.format("Entre %d et %d €", quotation["min"], quotation["max"])
+                        if (quotation.containsKey("min") && quotation.containsKey("max")) {
+                            binding.quotationvalue.text = String.format(resources.getString(R.string.quotation_between), quotation["min"], quotation["max"])
                         }
                         else if (quotation.containsKey("min")) {
-                            binding.quotationvalue.text = String.format("Au moins %d €", quotation["min"])
+                            binding.quotationvalue.text = String.format(resources.getString(R.string.quotation_more_than), quotation["min"])
                         }
                         else {
-                            binding.quotationvalue.text = String.format("Moins de %d €", quotation["max"])
+                            binding.quotationvalue.text = String.format(resources.getString(R.string.quotation_less_than), quotation["max"])
                         }
                     }
                     else {
@@ -140,6 +140,7 @@ class CoverFlowActivity : AppCompatActivity() {
                         binding.conditionbadge,
                         binding.conditiontext,
                         binding.score.root,
+                        binding.quotation,
                         binding.resultNumber
                     ).forEach{ it.visibility = visibility }
                 }

@@ -24,6 +24,7 @@
     <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
     <string name="create">Skapa</string>
     <string name="create_new_purchase_date">Skapa ett köpdatum</string>
+    <string name="delete_rating">Radera</string>
     <string name="edge_view">Bokhylla</string>
     <string name="email_address">E-mail</string>
     <string name="error">Fel</string>
@@ -31,8 +32,10 @@
     <string name="error__cannot_login">Inläsning av ditt DucksManager-konto misslyckades. Säkerställ att din internetuppkoppling är aktiv. Du kommer att kunna bläddra igenom din samling offline när samlingen har synkroniserats.</string>
     <string name="error__could_not_create_empty_file">Det gick inte att skapa en tom fil för kameran</string>
     <string name="error__malformed_url">URLen är felaktig</string>
+    <string name="favorite_authors">Mina favoritförfattare</string>
     <string name="filter">Filter</string>
     <string name="input_error">Input fel</string>
+    <string name="input_error__author_already_rated">Du har redan betygsatt denna författare!</string>
     <string name="input_error__empty_credentials">Du måste fylla i alla fälten för att fortsätta</string>
     <string name="input_error__invalid_credentials">Ogiltig information</string>
     <string name="input_error__no_issue_selected">Välj åtminstone en utgåva</string>
@@ -60,12 +63,14 @@
     <string name="login">Login</string>
     <string name="logout">Logga ut</string>
     <string name="long_tap_to_end_issue_range_selection">Tryck länge på den sista utgåvan</string>
+    <string name="max_watched_authors_reached">Du har nått det maximala antalet författare att betygsätta. Radera redan betygsatta författare om du vill betygsätta en ny.</string>
     <string name="my_collection">Min samling</string>
     <string name="network_error">Nätverksfel</string>
     <string name="network_error__no_connection">Godkänn</string>
     <string name="new_feature">Nyhet i WhatTheDuck appen</string>
     <string name="new_features_18_text">Du kan nu se din bokhylla i WhatTheDuck!\n\nNär du är i utgåvolistan, tryck på bokhylleikonen för att ändra till bokhyllan.</string>
     <string name="new_version_available">En ny version av What The Duck finns tillgänglig!\\nKlicka här för att uppdatera appen</string>
+    <string name="no_author">Du har inga favoritförfattare</string>
     <string name="no_issue">Ingen utgåva</string>
     <string name="no_item">Förslagen uppdateras dagligen.</string>
     <string name="no_purchase_date">Inget inköpsdatum</string>
@@ -81,7 +86,14 @@
     <string name="password_confirm">Upprepa lösenord</string>
     <string name="purchase_date">Inköpsdatum</string>
     <string name="purchase_name">Inköpsnamn</string>
+    <string name="quotation">Prisnotering:</string>
+    <string name="quotation_between">Mellan %d och %d €</string>
+    <string name="quotation_less_than">Mindre än %d €</string>
+    <string name="quotation_more_than">Åtminstone %d €</string>
     <string name="rate_app">Kom ihåg att betygsätta What The Duck på Play Store :-)</string>
+    <string name="rate_description">Lägg till dina favoritförfattare och betygsätt dem som du vill.\nTack vare dessa betyg kan What The Duck tipsa dig om utgåvor att leta efter.\nDessa tips uppdateras dagligen.</string>
+    <string name="rate_new_author">Betygsätt en författare</string>
+    <string name="rate_new_author_hint">Skriv ett författarnamn</string>
     <string name="report">Rapportera ett problem</string>
     <string name="report_description">Är det något som inte fungerar i appen? Beskriv ditt problem så ska vi försöka lösa det i nästa version :-)</string>
     <string name="report_hint">Beskriv problemet</string>
@@ -108,12 +120,4 @@
     <string name="welcome_bookcase_view_portrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
     <string name="welcome_message">Din DucksManager-samling visas när du öppnar What The Duck. Klicka på ett land för att se de publikationer du har, eller tryck på \"+\" för att lägga till en utgåva  i din samling.</string>
     <string name="welcome_title">Välkommen till What The Duck!</string>
-    <string name="delete_rating">Radera</string>
-    <string name="favorite_authors">Mina favoritförfattare</string>
-    <string name="input_error__author_already_rated">Du har redan betygsatt denna författare!</string>
-    <string name="max_watched_authors_reached">Du har nått det maximala antalet författare att betygsätta. Radera redan betygsatta författare om du vill betygsätta en ny.</string>
-    <string name="no_author">Du har inga favoritförfattare</string>
-    <string name="rate_description">Lägg till dina favoritförfattare och betygsätt dem som du vill.\nTack vare dessa betyg kan What The Duck tipsa dig om utgåvor att leta efter.\nDessa tips uppdateras dagligen.</string>
-    <string name="rate_new_author">Betygsätt en författare</string>
-    <string name="rate_new_author_hint">Skriv ett författarnamn</string>
 </resources>
