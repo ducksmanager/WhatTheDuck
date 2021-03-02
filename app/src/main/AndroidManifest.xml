@@ -74,6 +74,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <meta-data android:name="io.sentry.dsn" android:value="https://8eee9bc45a5c467482db0034be4e433b@o229092.ingest.sentry.io/5658663" />
     </application>
 
 </manifest>
