@@ -228,7 +228,12 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            REQUEST_IMAGE_PICK -> CoverFlowFileHandler.current.uploadUri = data!!.data
+            REQUEST_IMAGE_PICK -> {
+                if (data == null) {
+                    return
+                }
+                CoverFlowFileHandler.current.uploadUri = data.data
+            }
             REQUEST_IMAGE_CAPTURE -> {
             }
             else -> return
