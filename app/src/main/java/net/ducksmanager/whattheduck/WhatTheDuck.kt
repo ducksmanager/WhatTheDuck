@@ -48,6 +48,9 @@ class WhatTheDuck : Application() {
                 if (loadedConfig == null) {
                     var reader: InputStream? = null
                     try {
+                        if (instance.assets == null) {
+                            return Properties()
+                        }
                         reader = instance.assets.open(CONFIG)
                         loadedConfig = Properties()
                         loadedConfig!!.load(reader)
@@ -188,7 +191,7 @@ class WhatTheDuck : Application() {
                     return matomoTracker
                 }
 
-                val matomoUrl = config.getProperty(CONFIG_KEY_MATOMO_URL)
+                val matomoUrl = config.getProperty(CONFIG_KEY_MATOMO_URL) ?: return null
                 try {
                     matomoTracker = TrackerBuilder.createDefault(matomoUrl, 2).build(Matomo.getInstance(applicationContext))
                 } catch (e: RuntimeException) {
