@@ -1,3 +1,8 @@
+Version 2.7.3
+
+    Fix crash on return press when selecting a cover file
+    Add Sentry integration
+
 Version 2.7.2
 
     Add quotation information on cover results, when available
