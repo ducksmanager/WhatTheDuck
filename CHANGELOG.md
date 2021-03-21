@@ -1,3 +1,7 @@
+Version 2.7.4
+
+    Fix crash on cover search results when owned issues have an unspecified condition
+
 Version 2.7.3
 
     Fix crash on return press when selecting a cover file
