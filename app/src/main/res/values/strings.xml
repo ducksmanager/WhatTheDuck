@@ -120,4 +120,5 @@
     <string name="welcome_bookcase_view_portrait">Welcome to the bookcase view! Rotate your screen to landscape for the best effect ;-)</string>
     <string name="welcome_message">Your DucksManager collection is displayed when you open What The Duck. Tap on a country to view the publications that you possess, or tap on \"+\" to add an issue to your collection.</string>
     <string name="welcome_title">Welcome on What The Duck!</string>
+    <string name="max_copies_info">You can specify a maximum of 3 copies for each issue</string>
 </resources>

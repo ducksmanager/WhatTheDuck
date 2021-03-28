@@ -120,4 +120,5 @@
     <string name="welcome_bookcase_view_portrait">Bienvenue dans votre bibliothèque ! Orientez votre écran en mode paysage pour le meilleur effet ;-)</string>
     <string name="welcome_message">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur + pour ajouter un numéro.</string>
     <string name="welcome_title">Bienvenue sur What The Duck !</string>
+    <string name="max_copies_info">Vous pouvez spécifier un maximum de 3 exemplaires par numéro.</string>
 </resources>
