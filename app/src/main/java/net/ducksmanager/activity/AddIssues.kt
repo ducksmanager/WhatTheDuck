@@ -154,11 +154,24 @@ class AddIssues : AppCompatActivity(), OnClickListener {
 
                 binding.issueCopies.addOnTabSelectedListener(object : OnTabSelectedListener {
                     override fun onTabSelected(tab: Tab?) {
+                        if (tab!!.text == "Add a copy") {
+                            if (copies.purchaseIds.size >= MAX_COPIES) {
+                                info(WeakReference(this@AddIssues), R.string.max_copies_info, 1000)
+                                binding.issueCopies.getTabAt(0)!!.select()
+                                return
+                            } else {
+                                val firstCopyWithMissingCondition = copies.conditions.values.indexOfFirst { it == InducksIssueWithUserIssueAndScore.MISSING }
+                                if (firstCopyWithMissingCondition > -1) {
+                                    info(WeakReference(this@AddIssues), R.string.set_conditions_on_existing_copies_before_adding_new, 2000)
+                                    binding.issueCopies.getTabAt(firstCopyWithMissingCondition)!!.select()
+                                    return
+                                }
+                            }
+                        }
                         onCopyTabSelected(tab)
                     }
 
                     override fun onTabUnselected(tab: Tab?) {
-                        println("onTabUnselected")
                         if (tab!!.text != "Add a copy") {
                             copies.conditions[tab.position] = getConditionApiId()
                             copies.purchaseIds[tab.position] = getPurchaseId()
@@ -175,16 +188,11 @@ class AddIssues : AppCompatActivity(), OnClickListener {
     }
 
     private fun onCopyTabSelected(tab: Tab?) {
-        println("onTabSelected")
         if (tab!!.text == "Add a copy") {
-            if (copies.purchaseIds.size >= MAX_COPIES) {
-                info(WeakReference(this@AddIssues), R.string.max_copies_info, 1000)
-            } else {
-                val tabPosition = binding.issueCopies.tabCount - 1
-                val copyTab = binding.issueCopies.newTab()
-                copyTab.text = "Copy " + (tabPosition + 1)
-                binding.issueCopies.addTab(copyTab, tabPosition, true)
-            }
+            val tabPosition = binding.issueCopies.tabCount - 1
+            val copyTab = binding.issueCopies.newTab()
+            copyTab.text = "Copy " + (tabPosition + 1)
+            binding.issueCopies.addTab(copyTab, tabPosition, true)
         } else {
             setFromConditionApiId(copies.conditions[tab.position])
             setFromPurchaseId(copies.purchaseIds[tab.position])

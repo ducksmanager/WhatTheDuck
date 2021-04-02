@@ -121,4 +121,5 @@
     <string name="welcome_message">Your DucksManager collection is displayed when you open What The Duck. Tap on a country to view the publications that you possess, or tap on \"+\" to add an issue to your collection.</string>
     <string name="welcome_title">Welcome on What The Duck!</string>
     <string name="max_copies_info">You can specify a maximum of 3 copies for each issue</string>
+    <string name="set_conditions_on_existing_copies_before_adding_new">Set conditions on all existing copies before adding a new one</string>
 </resources>
