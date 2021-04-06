@@ -46,6 +46,7 @@ import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
 import net.ducksmanager.whattheduck.databinding.LoginBinding
 import retrofit2.Response
 import java.lang.ref.WeakReference
@@ -64,7 +65,11 @@ class Login : AppCompatActivity() {
             ItemList.type = WhatTheDuck.CollectionType.USER.toString()
 
             val originActivity = activityRef.get()!!
-            val targetClass = CountryList::class.java
+            val targetClass = if (selectedPublication != null) {
+                IssueList::class.java
+            } else {
+                CountryList::class.java
+            }
 
             val latestSync = appDB!!.syncDao().findLatest(applicationVersion)
 
