@@ -16,9 +16,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout.*
+import kotlinx.android.synthetic.main.addissues.*
 import net.ducksmanager.adapter.PurchaseAdapter
 import net.ducksmanager.adapter.PurchaseAdapter.NoPurchase
 import net.ducksmanager.api.DmServer
+import net.ducksmanager.api.DmServer.Companion.api
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.IssueCopiesToUpdate
 import net.ducksmanager.persistence.models.composite.IssueListToUpdate
@@ -39,7 +41,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
     private lateinit var purchases: MutableList<Purchase>
     private lateinit var binding: AddissuesBinding
 
-    private lateinit var copies: IssueCopiesToUpdate
+    private var copies: IssueCopiesToUpdate? = null
 
     companion object {
         private val myCalendar = Calendar.getInstance()
@@ -68,7 +70,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
     }
 
     private fun downloadPurchaseList() {
-        DmServer.api.userPurchases.enqueue(object : DmServer.Callback<List<Purchase>>("getpurchases", this, true) {
+        api.userPurchases.enqueue(object : DmServer.Callback<List<Purchase>>("getpurchases", this, true) {
             override fun onSuccessfulResponse(response: Response<List<Purchase>>) {
                 response.body()?.let {
                     appDB!!.purchaseDao().deleteAll()
@@ -84,8 +86,28 @@ class AddIssues : AppCompatActivity(), OnClickListener {
             this.purchases = arrayListOf(NoPurchase())
             this.purchases.addAll(purchases)
 
-            show()
+            if (selectedIssues.size > 1) {
+                show()
+            } else {
+                val publicationCode = selectedPublication!!.publicationCode
+                appDB!!.inducksIssueDao().findUserOwnedByPublicationCodeAndIssueNumber(publicationCode, selectedIssues.first()).observe(this, { dbCopies: List<InducksIssueWithUserIssueAndScore> ->
+                    copies = IssueCopiesToUpdate(
+                        publicationCode,
+                        selectedIssues,
+                        dbCopies.map { it.userIssue?.condition }.toMutableList(),
+                        dbCopies.map { it.userIssue?.purchaseId }.toMutableList()
+                    )
+                    show()
+                })
+            }
         })
+    }
+
+    private fun onSuccessfulUpdate() {
+        finish()
+        info(WeakReference(this@AddIssues), R.string.confirmation_message__collection_updated, Toast.LENGTH_SHORT)
+        WhatTheDuck.currentUser = null // Force to re-trigger a collection fetch
+        startActivity(Intent(this@AddIssues, Login::class.java))
     }
 
     private fun show() {
@@ -97,25 +119,29 @@ class AddIssues : AppCompatActivity(), OnClickListener {
 
         showPurchases()
 
-        PurchaseAdapter.selectedItem = purchases[0]
-
         binding.addissueOk.setOnClickListener {
-            val condition = getConditionApiId()
-            val issueListToUpdate = IssueListToUpdate(
-                selectedPublication!!.publicationCode,
-                selectedIssues,
-                condition,
-                getPurchaseId()
-            )
+            if (copies != null) {
+                saveCopyForCurrentTab(issueCopies.getTabAt(issueCopies.selectedTabPosition)!!)
+                api.updateUserIssueCopies(copies!!).enqueue(object : DmServer.Callback<Any>("updateIssues", this@AddIssues, true) {
+                    override fun onSuccessfulResponse(response: Response<Any>) {
+                        onSuccessfulUpdate()
+                    }
+                })
+            } else {
+                val condition = getConditionApiId()
+                val issueListToUpdate = IssueListToUpdate(
+                    selectedPublication!!.publicationCode,
+                    selectedIssues,
+                    condition,
+                    getPurchaseId()
+                )
 
-            DmServer.api.createUserIssues(issueListToUpdate).enqueue(object : DmServer.Callback<Any>("addissue", this@AddIssues, true) {
-                override fun onSuccessfulResponse(response: Response<Any>) {
-                    finish()
-                    info(WeakReference(this@AddIssues), R.string.confirmation_message__collection_updated, Toast.LENGTH_SHORT)
-                    WhatTheDuck.currentUser = null // Force to re-trigger a collection fetch
-                    startActivity(Intent(this@AddIssues, Login::class.java))
-                }
-            })
+                api.updateUserIssues(issueListToUpdate).enqueue(object : DmServer.Callback<Any>("updateIssues", this@AddIssues, true) {
+                    override fun onSuccessfulResponse(response: Response<Any>) {
+                        onSuccessfulUpdate()
+                    }
+                })
+            }
         }
 
         binding.addissueCancel.setOnClickListener { finish() }
@@ -126,65 +152,55 @@ class AddIssues : AppCompatActivity(), OnClickListener {
         }
         binding.progressBar.visibility = GONE
 
-        if (selectedIssues.size == 1) {
-            val publicationCode = selectedPublication!!.publicationCode
-            val issueNumber = selectedIssues.first()
-            appDB!!.inducksIssueDao().findByPublicationCodeAndIssueNumber(publicationCode, issueNumber).observe(this, { dbCopies: List<InducksIssueWithUserIssueAndScore> ->
-                if (::copies.isInitialized) {
-                    return@observe
+        if (copies == null) {
+            PurchaseAdapter.selectedItem = purchases[0]
+        } else {
+            copies!!.purchaseIds.ifEmpty { mutableListOf(null) }
+                .forEachIndexed { index, _ ->
+                    val copyTab = binding.issueCopies.newTab()
+                    copyTab.text = "Copy " + (index + 1)
+                    binding.issueCopies.addTab(copyTab)
                 }
-                val dbCopiesOwnedByUser = dbCopies.filter { it.userIssue != null }
 
-                copies = IssueCopiesToUpdate(
-                    publicationCode,
-                    issueNumber,
-                    dbCopiesOwnedByUser.mapIndexed { index: Int, it -> index to it.userIssue?.condition }.toMap().toMutableMap(),
-                    dbCopiesOwnedByUser.mapIndexed { index: Int, it -> index to it.userIssue?.purchaseId }.toMap().toMutableMap()
-                )
-                copies.purchaseIds.ifEmpty { mutableMapOf(Pair(0, null)) }
-                    .keys.forEach { idx ->
-                        val copyTab = binding.issueCopies.newTab()
-                        copyTab.text = "Copy " + (idx + 1)
-                        binding.issueCopies.addTab(copyTab)
-                    }
+            val addCopyTab = binding.issueCopies.newTab()
+            addCopyTab.text = "Add a copy"
+            binding.issueCopies.addTab(addCopyTab)
 
-                val addCopyTab = binding.issueCopies.newTab()
-                addCopyTab.text = "Add a copy"
-                binding.issueCopies.addTab(addCopyTab)
-
-                binding.issueCopies.addOnTabSelectedListener(object : OnTabSelectedListener {
-                    override fun onTabSelected(tab: Tab?) {
-                        if (tab!!.text == "Add a copy") {
-                            if (copies.purchaseIds.size >= MAX_COPIES) {
-                                info(WeakReference(this@AddIssues), R.string.max_copies_info, 1000)
-                                binding.issueCopies.getTabAt(0)!!.select()
+            binding.issueCopies.addOnTabSelectedListener(object : OnTabSelectedListener {
+                override fun onTabSelected(tab: Tab?) {
+                    if (tab!!.text == "Add a copy") {
+                        if (copies!!.purchaseIds.size >= MAX_COPIES) {
+                            info(WeakReference(this@AddIssues), R.string.max_copies_info, 1000)
+                            binding.issueCopies.getTabAt(0)!!.select()
+                            return
+                        } else {
+                            val firstCopyWithMissingCondition = copies!!.conditions.indexOfFirst { it == InducksIssueWithUserIssueAndScore.MISSING }
+                            if (firstCopyWithMissingCondition > -1) {
+                                info(WeakReference(this@AddIssues), R.string.set_conditions_on_existing_copies_before_adding_new, 2000)
+                                binding.issueCopies.getTabAt(firstCopyWithMissingCondition)!!.select()
                                 return
-                            } else {
-                                val firstCopyWithMissingCondition = copies.conditions.values.indexOfFirst { it == InducksIssueWithUserIssueAndScore.MISSING }
-                                if (firstCopyWithMissingCondition > -1) {
-                                    info(WeakReference(this@AddIssues), R.string.set_conditions_on_existing_copies_before_adding_new, 2000)
-                                    binding.issueCopies.getTabAt(firstCopyWithMissingCondition)!!.select()
-                                    return
-                                }
                             }
                         }
-                        onCopyTabSelected(tab)
                     }
+                    onCopyTabSelected(tab)
+                }
 
-                    override fun onTabUnselected(tab: Tab?) {
-                        if (tab!!.text != "Add a copy") {
-                            copies.conditions[tab.position] = getConditionApiId()
-                            copies.purchaseIds[tab.position] = getPurchaseId()
-                        }
+                override fun onTabUnselected(tab: Tab?) {
+                    if (tab!!.text != "Add a copy") {
+                        saveCopyForCurrentTab(tab)
                     }
+                }
 
-                    override fun onTabReselected(tab: Tab?) {}
-                })
-
-                onCopyTabSelected(binding.issueCopies.getTabAt(0))
-
+                override fun onTabReselected(tab: Tab?) {}
             })
+
+            onCopyTabSelected(binding.issueCopies.getTabAt(0))
         }
+    }
+
+    private fun saveCopyForCurrentTab(tab: Tab) {
+        copies!!.conditions[tab.position] = getConditionApiId()
+        copies!!.purchaseIds[tab.position] = getPurchaseId()
     }
 
     private fun onCopyTabSelected(tab: Tab?) {
@@ -194,18 +210,24 @@ class AddIssues : AppCompatActivity(), OnClickListener {
             copyTab.text = "Copy " + (tabPosition + 1)
             binding.issueCopies.addTab(copyTab, tabPosition, true)
         } else {
-            setFromConditionApiId(copies.conditions[tab.position])
-            setFromPurchaseId(copies.purchaseIds[tab.position])
+            if (copies!!.conditions.size <= tab.position) {
+                copies!!.conditions.add(tab.position, null)
+                copies!!.purchaseIds.add(tab.position, null)
+            }
+            setFromConditionApiId(copies!!.conditions[tab.position])
+            setFromPurchaseId(copies!!.purchaseIds[tab.position])
         }
     }
 
     private fun getPurchaseId() = if (PurchaseAdapter.selectedItem is NoPurchase) null else PurchaseAdapter.selectedItem?.id
 
     private fun setFromPurchaseId(purchaseId: Int?) {
-        when (purchaseId) {
-            null -> PurchaseAdapter.selectedItem = NoPurchase()
-            else -> PurchaseAdapter.selectedItem = purchases.find { it.id == purchaseId }
+        val selectedItemPosition = when (purchaseId) {
+            null, -2 -> 0
+            else -> purchases.indexOfFirst { it.id == purchaseId }
         }
+        PurchaseAdapter.selectedItem = purchases[selectedItemPosition]
+        showPurchases()
     }
 
     private fun getConditionApiId() = when (binding.condition.checkedRadioButtonId) {
@@ -266,7 +288,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
                 hideKeyboard(floatingButtonView)
 
                 val newPurchase = Purchase(purchaseDateNew.text.toString(), purchaseTitleNew.text.toString())
-                DmServer.api.createUserPurchase(newPurchase).enqueue(object : DmServer.Callback<Void>("createPurchase", this, true) {
+                api.createUserPurchase(newPurchase).enqueue(object : DmServer.Callback<Void>("createPurchase", this, true) {
                     override fun onSuccessfulResponse(response: Response<Void>) {
                         downloadPurchaseList()
                         toggleAddPurchaseButton(true)

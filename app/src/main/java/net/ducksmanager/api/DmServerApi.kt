@@ -72,7 +72,10 @@ interface DmServerApi {
     fun createUserPurchase(@Body purchase: Purchase): Call<Void>
 
     @POST("/collection/issues")
-    fun createUserIssues(@Body issueListToUpdate: IssueListToUpdate): Call<Any>
+    fun updateUserIssues(@Body issueListToUpdate: IssueListToUpdate): Call<Any>
+
+    @POST("/collection/issues")
+    fun updateUserIssueCopies(@Body issueCopiesToUpdate: IssueCopiesToUpdate): Call<Any>
 
     @Multipart
     @POST("/cover-id/search")
