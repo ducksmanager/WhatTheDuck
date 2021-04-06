@@ -53,7 +53,7 @@ class CoverFlowActivity : AppCompatActivity() {
                         selectedCountry = country
                         appDB!!.inducksPublicationDao().findByPublicationCode(currentSuggestion!!.coverSearchIssue.coverPublicationCode).observe(this, { publication ->
                             selectedPublication = publication
-                            selectedIssues = mutableSetOf(currentSuggestion!!.coverSearchIssue.coverIssueNumber)
+                            selectedIssues = mutableListOf(currentSuggestion!!.coverSearchIssue.coverIssueNumber)
                             this@CoverFlowActivity.startActivity(Intent(this@CoverFlowActivity, AddIssues::class.java))
                         })
                     })

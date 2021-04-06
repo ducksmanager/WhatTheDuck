@@ -103,7 +103,7 @@ class WhatTheDuck : Application() {
 
         var selectedCountry: InducksCountryName? = null
         var selectedPublication: InducksPublication? = null
-        var selectedIssues: MutableSet<String> = mutableSetOf()
+        var selectedIssues: MutableList<String> = mutableListOf()
 
         @JvmField
         var applicationContext: Context? = null

@@ -54,7 +54,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
         setContentView(binding.root)
 
         val issueNumber = selectedIssues.first()
-        when (selectedIssues.size) {
+        when (selectedIssues.toSet().size) {
             1 -> {
                 binding.addIssueTitle.text = getString(R.string.insert_issue__title_single_issue, issueNumber)
             }
@@ -83,17 +83,24 @@ class AddIssues : AppCompatActivity(), OnClickListener {
 
     private fun setData() {
         appDB!!.purchaseDao().findAll().observe(this, { purchases: List<Purchase> ->
+            if (this::purchases.isInitialized) {
+                return@observe
+            }
             this.purchases = arrayListOf(NoPurchase())
             this.purchases.addAll(purchases)
 
-            if (selectedIssues.size > 1) {
+            if (selectedIssues.toSet().size > 1) {
+                this.binding.issueCopies.visibility = GONE
+                if (selectedIssues.toSet().size != selectedIssues.size) {
+                    this.binding.multipleCopiesMultipleIssuesWarningMessage.visibility = VISIBLE
+                }
                 show()
             } else {
                 val publicationCode = selectedPublication!!.publicationCode
                 appDB!!.inducksIssueDao().findUserOwnedByPublicationCodeAndIssueNumber(publicationCode, selectedIssues.first()).observe(this, { dbCopies: List<InducksIssueWithUserIssueAndScore> ->
                     copies = IssueCopiesToUpdate(
                         publicationCode,
-                        selectedIssues,
+                        selectedIssues.toSet(),
                         dbCopies.map { it.userIssue?.condition }.toMutableList(),
                         dbCopies.map { it.userIssue?.purchaseId }.toMutableList()
                     )
@@ -131,7 +138,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
                 val condition = getConditionApiId()
                 val issueListToUpdate = IssueListToUpdate(
                     selectedPublication!!.publicationCode,
-                    selectedIssues,
+                    selectedIssues.toSet(),
                     condition,
                     getPurchaseId()
                 )

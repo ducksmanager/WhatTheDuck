@@ -160,7 +160,7 @@ class IssueList : ItemList<InducksIssueWithUserIssueAndScore>() {
         setNavigationCountry(selectedCountry!!)
         setNavigationPublication(selectedPublication!!)
 
-        selectedIssues = mutableSetOf()
+        selectedIssues = mutableListOf()
         DraggableRelativeLayout.makeDraggable(binding.switchViewWrapper)
 
         binding.tipIssueSelectionOK.setOnClickListener {

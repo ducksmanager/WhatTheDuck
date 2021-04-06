@@ -65,7 +65,10 @@ class IssueAdapter internal constructor(
     private fun toggleSelectedIssue(issueNumber: String) {
         if (selectedIssues.contains(issueNumber)) {
             selectedIssues.remove(issueNumber)
-        } else selectedIssues.add(issueNumber)
+        } else selectedIssues.addAll(filteredItems
+            .filter { it.issue.inducksIssueNumber == issueNumber }
+            .map { it.issue.inducksIssueNumber }
+        )
     }
 
     inner class ViewHolder(v: View?) : ItemAdapter<InducksIssueWithUserIssueAndScore>.ViewHolder(v!!)
