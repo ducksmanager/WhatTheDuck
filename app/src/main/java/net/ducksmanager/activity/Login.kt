@@ -24,6 +24,7 @@ import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_ALL_PUBLICATIONS
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_COLLECTION
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_ISSUE_COUNT
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_LATEST_APP_VERSION
+import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_POINTS
 import net.ducksmanager.api.DmServer.Companion.api
 import net.ducksmanager.api.DmServer.Companion.apiDmPassword
 import net.ducksmanager.api.DmServer.Companion.apiDmUser
@@ -35,6 +36,7 @@ import net.ducksmanager.persistence.models.appfollow.Apps
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.InducksIssueCount
 import net.ducksmanager.persistence.models.composite.SuggestionList
+import net.ducksmanager.persistence.models.dm.ContributionTotalPoints
 import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.persistence.models.dm.User
@@ -114,6 +116,13 @@ class Login : AppCompatActivity() {
                     api.suggestedIssuesByReleaseDate.enqueue(object : Callback<SuggestionList>(EVENT_GET_SUGGESTED_ISSUES_BY_RELEASE_DATE, originActivity, true) {
                         override fun onSuccessfulResponse(response: Response<SuggestionList>) {
                             Suggestions.loadSuggestions(response.body()!!, SuggestedIssueByReleaseDateDao::class.java)
+                        }
+                    })
+
+                    api.userPoints.enqueue(object : Callback<HashMap<Int, List<ContributionTotalPoints>>>(EVENT_RETRIEVE_POINTS, originActivity, true) {
+                        override fun onSuccessfulResponse(response: Response<HashMap<Int, List<ContributionTotalPoints>>>) {
+                            val userId = response.body()!!.keys.first()
+                            appDB!!.contributionTotalPointsDao().insertList(response.body()!![userId]!!)
                         }
                     })
 

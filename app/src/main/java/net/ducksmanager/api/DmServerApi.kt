@@ -2,13 +2,13 @@ package net.ducksmanager.api
 
 import net.ducksmanager.persistence.models.coa.InducksQuotation
 import net.ducksmanager.persistence.models.composite.*
+import net.ducksmanager.persistence.models.dm.ContributionTotalPoints
 import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.Purchase
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
-import java.util.*
 
 interface DmServerApi {
     @PUT("/ducksmanager/user")
@@ -37,6 +37,9 @@ interface DmServerApi {
 
     @get:GET("/collection/notifications/countries")
     val userNotificationCountries: Call<List<String>>
+
+    @get:GET("/collection/points")
+    val userPoints: Call<HashMap<Int, List<ContributionTotalPoints>>>
 
     @GET("/coa/authorsfullnames/search/{nameStart}")
     fun searchAuthor(@Path(value = "nameStart") nameStart: String): Call<HashMap<String, String>>

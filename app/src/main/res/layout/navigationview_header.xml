@@ -10,12 +10,23 @@
         android:layout_width="match_parent"
         android:layout_height="100dp">
         <ImageView
+            android:id="@+id/medal_edge_photographer"
             android:layout_weight="1"
             android:layout_width="0dip"
             android:layout_height="match_parent"
-
-            android:contentDescription="@string/app_name"
-            android:src="@mipmap/icon" />
+            android:src="@drawable/medal_edge_photographer_0_en" />
+        <ImageView
+            android:id="@+id/medal_edge_designer"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:src="@drawable/medal_edge_designer_0_en" />
+        <ImageView
+            android:id="@+id/medal_duckhunter"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:src="@drawable/medal_duckhunter_0_en" />
     </LinearLayout>
     <TextView
         android:id="@+id/username"

@@ -12,15 +12,13 @@ import net.ducksmanager.persistence.models.composite.*
 import net.ducksmanager.persistence.models.converter.InstantConverter
 import net.ducksmanager.persistence.models.converter.StringIntMapConverter
 import net.ducksmanager.persistence.models.converter.StringMutableSetConverter
-import net.ducksmanager.persistence.models.dm.Issue
-import net.ducksmanager.persistence.models.dm.NotificationCountry
-import net.ducksmanager.persistence.models.dm.Purchase
-import net.ducksmanager.persistence.models.dm.User
+import net.ducksmanager.persistence.models.dm.*
 import net.ducksmanager.persistence.models.internal.Sync
 
 
 @Database(entities = [
     AppVersion::class,
+    ContributionTotalPoints::class,
     CoverSearchIssue::class,
     InducksCountryName::class,
     InducksIssue::class,
@@ -37,7 +35,7 @@ import net.ducksmanager.persistence.models.internal.Sync
     User::class,
     UserMessage::class,
     UserSetting::class
- ], version = 11, exportSchema = true)
+ ], version = 12, exportSchema = true)
 @TypeConverters(StringMutableSetConverter::class, StringIntMapConverter::class, InstantConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -63,9 +61,15 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("ALTER TABLE coversearch_issue ADD `quotation` TEXT DEFAULT null")
             }
         }
+        val MIGRATION_11_12: Migration = object : Migration(11, 12) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE contribution_total_points(`contribution` TEXT NOT NULL, `totalPoints` INTEGER NOT NULL, PRIMARY KEY(`contribution`))")
+            }
+        }
     }
 
     abstract fun appVersionDao(): AppVersionDao
+    abstract fun contributionTotalPointsDao(): ContributionTotalPointsDao
     abstract fun coverSearchIssueDao(): CoverSearchIssueDao
     abstract fun inducksCountryDao(): InducksCountryDao
     abstract fun inducksIssueDao(): InducksIssueDao

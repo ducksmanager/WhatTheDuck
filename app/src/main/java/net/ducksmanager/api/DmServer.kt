@@ -37,6 +37,7 @@ class DmServer {
         const val EVENT_RETRIEVE_COLLECTION = "retrieveCollection"
         const val EVENT_RETRIEVE_ALL_PUBLICATIONS = "retrieveAllPublications"
         const val EVENT_RETRIEVE_ISSUE_COUNT = "retrieveIssueCount"
+        const val EVENT_RETRIEVE_POINTS = "getPoints"
         const val EVENT_GET_PURCHASES = "getPurchases"
         const val EVENT_GET_SUGGESTED_ISSUES = "getSuggestedIssues"
         const val EVENT_GET_SUGGESTED_ISSUES_BY_RELEASE_DATE = "getSuggestedIssuesByReleaseDate"
