@@ -24,6 +24,7 @@ import net.ducksmanager.api.DmServer.Companion.api
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.IssueCopiesToUpdate
 import net.ducksmanager.persistence.models.composite.IssueListToUpdate
+import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
@@ -89,12 +90,12 @@ class AddIssues : AppCompatActivity(), OnClickListener {
             this.purchases = arrayListOf(NoPurchase())
             this.purchases.addAll(purchases)
 
-            if (selectedIssues.toSet().size > 1) {
-                this.binding.issueCopies.visibility = GONE
-                show()
-            } else {
-                val publicationCode = selectedPublication!!.publicationCode
-                appDB!!.inducksIssueDao().findUserOwnedByPublicationCodeAndIssueNumber(publicationCode, selectedIssues.first()).observe(this, { dbCopies: List<InducksIssueWithUserIssueAndScore> ->
+            val publicationCode = selectedPublication!!.publicationCode
+            appDB!!.inducksIssueDao().findUserOwnedByPublicationCodeAndIssueNumber(publicationCode, selectedIssues.first()).observe(this, { dbCopies: List<InducksIssueWithUserIssueAndScore> ->
+                if (selectedIssues.toSet().size > 1) {
+                    this.binding.issueCopies.visibility = GONE
+                    show(dbCopies.firstOrNull()?.userIssue)
+                } else {
                     copies = IssueCopiesToUpdate(
                         publicationCode,
                         selectedIssues.toSet(),
@@ -102,8 +103,8 @@ class AddIssues : AppCompatActivity(), OnClickListener {
                         dbCopies.map { it.userIssue?.purchaseId }.toMutableList()
                     )
                     show()
-                })
-            }
+                }
+            })
         })
     }
 
@@ -114,7 +115,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
         startActivity(Intent(this@AddIssues, Login::class.java))
     }
 
-    private fun show() {
+    private fun show(firstSelectedIssue: Issue? = null) {
         binding.missing.setOnClickListener(this)
         binding.noCondition.setOnClickListener(this)
         binding.badCondition.setOnClickListener(this)
@@ -156,13 +157,14 @@ class AddIssues : AppCompatActivity(), OnClickListener {
         }
         binding.progressBar.visibility = GONE
 
-        if (copies == null) {
-            PurchaseAdapter.selectedItem = purchases[0]
+        if (firstSelectedIssue != null) {
+            setFromConditionApiId(firstSelectedIssue.condition)
+            setFromPurchaseId(firstSelectedIssue.purchaseId)
         } else {
             copies!!.purchaseIds.ifEmpty { mutableListOf(null) }
                 .forEachIndexed { index, _ ->
                     val copyTab = binding.issueCopies.newTab()
-                    copyTab.text = "Copy " + (index + 1)
+                    copyTab.text = getString(R.string.copy, index + 1)
                     binding.issueCopies.addTab(copyTab)
                 }
 
