@@ -68,7 +68,7 @@
     <string name="network_error">Nätverksfel</string>
     <string name="network_error__no_connection">Godkänn</string>
     <string name="new_feature">Nyhet i WhatTheDuck appen</string>
-    <string name="new_features_18_text">Du kan nu se din bokhylla i WhatTheDuck!\n\nNär du är i utgåvolistan, tryck på bokhylleikonen för att ändra till bokhyllan.</string>
+    <string name="new_features_28_text">Du kan nu lägga till flera kopior av samma utgåva i din samling!</string>
     <string name="new_version_available">En ny version av What The Duck finns tillgänglig!\\nKlicka här för att uppdatera appen</string>
     <string name="no_author">Du har inga favoritförfattare</string>
     <string name="no_issue">Ingen utgåva</string>
@@ -120,4 +120,8 @@
     <string name="welcome_bookcase_view_portrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
     <string name="welcome_message">Din DucksManager-samling visas när du öppnar What The Duck. Klicka på ett land för att se de publikationer du har, eller tryck på \"+\" för att lägga till en utgåva  i din samling.</string>
     <string name="welcome_title">Välkommen till What The Duck!</string>
+    <string name="add_copy">Lägg till kopia</string>
+    <string name="max_copies_info">Du kan välja maximalt 3 kopior per utgåva</string>
+    <string name="set_conditions_on_existing_copies_before_adding_new">Välj skick på alla existerande kopior innan du väljer ett nytt</string>
+    <string name="error__cannot_edit_issues_with_and_without_copies_at_same_time">Du kan inte ändra utgåvor som du äger flera kopior av samtidigt som utgåvor som du bara äger en kopia av</string>
 </resources>

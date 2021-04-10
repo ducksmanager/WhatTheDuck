@@ -36,7 +36,7 @@ class Settings {
             })
         }
 
-        fun shouldShowMessage(messageKey: String?) = appDB!!.userMessageDao().findByKey(messageKey!!)?.isShown == true
+        fun shouldShowMessage(messageKey: String) = appDB!!.userMessageDao().findByKey(messageKey) == null || appDB!!.userMessageDao().findByKey(messageKey)?.isShown == true
 
         fun addToMessagesAlreadyShown(messageKey: String?) {
             appDB!!.userMessageDao().insert(UserMessage(messageKey, false))

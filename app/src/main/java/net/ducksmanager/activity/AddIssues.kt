@@ -167,12 +167,12 @@ class AddIssues : AppCompatActivity(), OnClickListener {
                 }
 
             val addCopyTab = binding.issueCopies.newTab()
-            addCopyTab.text = "Add a copy"
+            addCopyTab.text = getString(R.string.add_copy)
             binding.issueCopies.addTab(addCopyTab)
 
             binding.issueCopies.addOnTabSelectedListener(object : OnTabSelectedListener {
                 override fun onTabSelected(tab: Tab?) {
-                    if (tab!!.text == "Add a copy") {
+                    if (tab!!.text == getString(R.string.add_copy)) {
                         if (copies!!.purchaseIds.size >= MAX_COPIES) {
                             info(WeakReference(this@AddIssues), R.string.max_copies_info, 1000)
                             binding.issueCopies.getTabAt(0)!!.select()
@@ -190,7 +190,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
                 }
 
                 override fun onTabUnselected(tab: Tab?) {
-                    if (tab!!.text != "Add a copy") {
+                    if (tab!!.text != getString(R.string.add_copy)) {
                         saveCopyForCurrentTab(tab)
                     }
                 }
@@ -208,10 +208,10 @@ class AddIssues : AppCompatActivity(), OnClickListener {
     }
 
     private fun onCopyTabSelected(tab: Tab?) {
-        if (tab!!.text == "Add a copy") {
+        if (tab!!.text == getString(R.string.add_copy)) {
             val tabPosition = binding.issueCopies.tabCount - 1
             val copyTab = binding.issueCopies.newTab()
-            copyTab.text = "Copy " + (tabPosition + 1)
+            copyTab.text = getString(R.string.copy, (tabPosition + 1))
             binding.issueCopies.addTab(copyTab, tabPosition, true)
         } else {
             if (copies!!.conditions.size <= tab.position) {

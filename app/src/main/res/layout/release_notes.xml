@@ -11,12 +11,11 @@
         android:textSize="16sp"
         android:textColor="#FFF" />
 
-    <ImageView
-        android:id="@+id/image"
+    <VideoView
+        android:id="@+id/video"
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_view_edge"
         android:contentDescription="@string/new_feature"/>
 
 </LinearLayout>
