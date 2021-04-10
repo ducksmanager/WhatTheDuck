@@ -16,21 +16,6 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/multipleCopiesMultipleIssuesWarningMessage"
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:background="#f09313"
-        android:padding="5dp"
-        android:layout_marginBottom="10dp"
-        android:textColor="@android:color/white"
-        android:text="@string/multiple_copies_multiple_issues"
-        android:visibility="gone"
-        />
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/issueCopies"
         android:layout_width="match_parent"

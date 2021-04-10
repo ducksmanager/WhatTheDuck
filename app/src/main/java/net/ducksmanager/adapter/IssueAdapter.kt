@@ -63,12 +63,19 @@ class IssueAdapter internal constructor(
     }
 
     private fun toggleSelectedIssue(issueNumber: String) {
-        if (selectedIssues.contains(issueNumber)) {
-            selectedIssues.remove(issueNumber)
-        } else selectedIssues.addAll(filteredItems
+        val futureSelectedIssues = selectedIssues.toMutableList()
+        if (futureSelectedIssues.contains(issueNumber)) {
+            futureSelectedIssues.removeAll { it == issueNumber }
+        } else futureSelectedIssues.addAll(filteredItems
             .filter { it.issue.inducksIssueNumber == issueNumber }
             .map { it.issue.inducksIssueNumber }
         )
+        if (futureSelectedIssues.toSet().size > 1 && futureSelectedIssues.size > futureSelectedIssues.toSet().size) {
+            WhatTheDuck.info(WeakReference(originActivity), R.string.error__cannot_edit_issues_with_and_without_copies_at_same_time, Toast.LENGTH_LONG)
+        }
+        else {
+            selectedIssues = futureSelectedIssues.toMutableList()
+        }
     }
 
     inner class ViewHolder(v: View?) : ItemAdapter<InducksIssueWithUserIssueAndScore>.ViewHolder(v!!)

@@ -91,9 +91,6 @@ class AddIssues : AppCompatActivity(), OnClickListener {
 
             if (selectedIssues.toSet().size > 1) {
                 this.binding.issueCopies.visibility = GONE
-                if (selectedIssues.toSet().size != selectedIssues.size) {
-                    this.binding.multipleCopiesMultipleIssuesWarningMessage.visibility = VISIBLE
-                }
                 show()
             } else {
                 val publicationCode = selectedPublication!!.publicationCode
