@@ -1,3 +1,8 @@
+Version 2.8.0 "Little Helper"
+
+    Allow to add multiple copies of the same issue
+    Show user medals in navigation drawer
+
 Version 2.7.4
 
     Fix crash on cover search results when owned issues have an unspecified condition
