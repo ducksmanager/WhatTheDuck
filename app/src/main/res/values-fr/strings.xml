@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="add_copy">Ajouter un exemplaire</string>
     <string name="add_cover">Cliquez sur la couverture\npour ajouter le numéro à la collection</string>
     <string name="add_cover_error_file_too_big">L\'image est trop grande, veuillez réessayer.</string>
     <string name="add_cover_no_results">Aucun résultat pour votre photo, veuillez réessayer.</string>
@@ -19,6 +20,7 @@
     <string name="condition_none">Etat non spécifié</string>
     <string name="condition_notsogood">Etat moyen</string>
     <string name="confirmation_message__collection_updated">Votre collection a été mise à jour</string>
+    <string name="copy">Exemplaire %d</string>
     <string name="country">Pays</string>
     <string name="cover_suggestion">Suggestion de couverture</string>
     <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
@@ -29,6 +31,7 @@
     <string name="email_address">Adresse e-mail</string>
     <string name="error">Erreur</string>
     <string name="error__cannot_create_upload_file">Impossible de créer un fichier à envoyer à partir de la photo de couverture</string>
+    <string name="error__cannot_edit_issues_with_and_without_copies_at_same_time">Il n\'est pas possible de modifier à la fois des numéros dont vous possédez plusieurs examplaires et des numéros avec un seul exemplaire</string>
     <string name="error__cannot_login">La connexion à votre compte DucksManager a échoué, vérifiez que votre connexion Internet est active. Vous pourrez consulter votre collection hors-ligne une fois que votre collection sera synchronisée.</string>
     <string name="error__could_not_create_empty_file">Impossible de créer un fichier pour la caméra Android</string>
     <string name="error__malformed_url">L\'adresse Web est mal formée</string>
@@ -63,12 +66,13 @@
     <string name="login">Connexion</string>
     <string name="logout">Déconnexion</string>
     <string name="long_tap_to_end_issue_range_selection">Faites un appui long sur le dernier numéro consécutif à sélectionner</string>
+    <string name="max_copies_info">Vous pouvez spécifier un maximum de 3 exemplaires par numéro.</string>
     <string name="max_watched_authors_reached">Vous avez atteint le nombre maximal d\'auteurs surveillés. Supprimez des auteurs existants pour en ajouter d\'autres.</string>
     <string name="my_collection">Ma collection</string>
     <string name="network_error">Erreur réseau</string>
     <string name="network_error__no_connection">Problème de réseau : vérifiez votre connexion Internet</string>
     <string name="new_feature">Nouveautés de WhatTheDuck</string>
-    <string name="new_features_18_text">Vous pouvez maintenant voir votre bibliothèque depuis l\'application ! Lorsque vous consultez une liste de numéros, appuyez sur l\'icône \"bibliothèque\" pour passer à la vue bibliothèque.</string>
+    <string name="new_features_28_text">Vous pouvez maintenant voir votre bibliothèque depuis l\'application ! Lorsque vous consultez une liste de numéros, appuyez sur l\'icône \"bibliothèque\" pour passer à la vue bibliothèque.</string>
     <string name="new_version_available">Une nouvelle version de What The Duck est disponible ! Cliquez ici pour mettre à jour l\'application</string>
     <string name="no_author">Vous n\'avez pas d\'auteurs favoris</string>
     <string name="no_issue">Aucun numéro</string>
@@ -104,6 +108,7 @@
     <string name="result">Résultat</string>
     <string name="save">OK</string>
     <string name="send">Envoyer</string>
+    <string name="set_conditions_on_existing_copies_before_adding_new">Indiquez les états des autres exemplaires avant d\'en ajouter un autre</string>
     <string name="settings">Paramètres</string>
     <string name="signup">Inscription</string>
     <string name="signup__confirm">L\'inscription à DucksManager est terminée, \nvous pouvez maintenant vous connecter.</string>
@@ -120,10 +125,4 @@
     <string name="welcome_bookcase_view_portrait">Bienvenue dans votre bibliothèque ! Orientez votre écran en mode paysage pour le meilleur effet ;-)</string>
     <string name="welcome_message">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur + pour ajouter un numéro.</string>
     <string name="welcome_title">Bienvenue sur What The Duck !</string>
-    <string name="max_copies_info">Vous pouvez spécifier un maximum de 3 exemplaires par numéro.</string>
-    <string name="add_copy">Ajouter un exemplaire</string>
-    <string name="copy">Exemplaire %d</string>
-    <string name="error__cannot_edit_issues_with_and_without_copies_at_same_time">Il n\'est pas possible de modifier à la fois des numéros dont vous possédez plusieurs examplaires et des numéros avec un seul exemplaire</string>
-    <string name="release_notes_multiple_copies">Vous pouvez maintenant ajouter plusieurs exemplaires du même numéro à votre collection !</string>
-    <string name="set_conditions_on_existing_copies_before_adding_new">Indiquez les états des autres exemplaires avant d\'en ajouter un autre</string>
 </resources>

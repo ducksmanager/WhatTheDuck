@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="add_copy">Lägg till kopia</string>
     <string name="add_cover">Klicka på framsidan\nför att lägga till den i samlingen</string>
     <string name="add_cover_error_file_too_big">Bilden är för stor, försök igen.</string>
     <string name="add_cover_no_results">Ingen framsida matchar din bild, försök igen.</string>
@@ -19,6 +20,7 @@
     <string name="condition_none">Ospecificerat skick</string>
     <string name="condition_notsogood">Genomsnittligt skick</string>
     <string name="confirmation_message__collection_updated">Din samling har uppdaterats</string>
+    <string name="copy">Kopia %d</string>
     <string name="country">Land</string>
     <string name="cover_suggestion">Framsideförslag</string>
     <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
@@ -29,6 +31,7 @@
     <string name="email_address">E-mail</string>
     <string name="error">Fel</string>
     <string name="error__cannot_create_upload_file">Det går inte att skapa uppladdningsfil från bitmapp</string>
+    <string name="error__cannot_edit_issues_with_and_without_copies_at_same_time">Du kan inte ändra utgåvor som du äger flera kopior av samtidigt som utgåvor som du bara äger en kopia av</string>
     <string name="error__cannot_login">Inläsning av ditt DucksManager-konto misslyckades. Säkerställ att din internetuppkoppling är aktiv. Du kommer att kunna bläddra igenom din samling offline när samlingen har synkroniserats.</string>
     <string name="error__could_not_create_empty_file">Det gick inte att skapa en tom fil för kameran</string>
     <string name="error__malformed_url">URLen är felaktig</string>
@@ -63,6 +66,7 @@
     <string name="login">Login</string>
     <string name="logout">Logga ut</string>
     <string name="long_tap_to_end_issue_range_selection">Tryck länge på den sista utgåvan</string>
+    <string name="max_copies_info">Du kan välja maximalt 3 kopior per utgåva</string>
     <string name="max_watched_authors_reached">Du har nått det maximala antalet författare att betygsätta. Radera redan betygsatta författare om du vill betygsätta en ny.</string>
     <string name="my_collection">Min samling</string>
     <string name="network_error">Nätverksfel</string>
@@ -104,6 +108,7 @@
     <string name="result">Resultat</string>
     <string name="save">Spara</string>
     <string name="send">Skicka</string>
+    <string name="set_conditions_on_existing_copies_before_adding_new">Välj skick på alla existerande kopior innan du väljer ett nytt</string>
     <string name="settings">Inställningar</string>
     <string name="signup">Registrera</string>
     <string name="signup__confirm">Du har registrerat dig på DucksManager, vänligen logga in.</string>
@@ -120,8 +125,4 @@
     <string name="welcome_bookcase_view_portrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
     <string name="welcome_message">Din DucksManager-samling visas när du öppnar What The Duck. Klicka på ett land för att se de publikationer du har, eller tryck på \"+\" för att lägga till en utgåva  i din samling.</string>
     <string name="welcome_title">Välkommen till What The Duck!</string>
-    <string name="add_copy">Lägg till kopia</string>
-    <string name="max_copies_info">Du kan välja maximalt 3 kopior per utgåva</string>
-    <string name="set_conditions_on_existing_copies_before_adding_new">Välj skick på alla existerande kopior innan du väljer ett nytt</string>
-    <string name="error__cannot_edit_issues_with_and_without_copies_at_same_time">Du kan inte ändra utgåvor som du äger flera kopior av samtidigt som utgåvor som du bara äger en kopia av</string>
 </resources>

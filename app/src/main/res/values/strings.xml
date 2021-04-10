@@ -98,7 +98,6 @@
     <string name="rate_description">Add your favorite authors and rate them according to your preferences.\nThanks to these ratings, What The Duck can suggest you issues to hunt for.\nThese suggestions are updated daily.</string>
     <string name="rate_new_author">Rate an author</string>
     <string name="rate_new_author_hint">Type an author name</string>
-    <string name="release_notes_multiple_copies">You can now add multiple copies of the same issue in your collection!</string>
     <string name="report">Report a problem</string>
     <string name="report_description">Is something not working in the app? Explain your issue and we will try to fix it in the next version :-)</string>
     <string name="report_hint">Describe the issue…</string>
