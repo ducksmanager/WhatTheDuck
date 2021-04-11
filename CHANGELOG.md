@@ -1,3 +1,8 @@
+Version 2.8.1
+
+    Fix crash when attempting to add multiple non-owned issues
+    Fix crash when the current issue's purchase is not found in the list of purchases
+
 Version 2.8.0 "Little Helper"
 
     Allow to add multiple copies of the same issue
