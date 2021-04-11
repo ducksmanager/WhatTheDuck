@@ -232,7 +232,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
             null, -2 -> 0
             else -> purchases.indexOfFirst { it.id == purchaseId }
         }
-        PurchaseAdapter.selectedItem = purchases[selectedItemPosition]
+        PurchaseAdapter.selectedItem = purchases[selectedItemPosition.run { if (this == -1) 0 else this }]
         showPurchases()
     }
 
