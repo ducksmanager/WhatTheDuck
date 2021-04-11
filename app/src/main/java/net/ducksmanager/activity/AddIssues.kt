@@ -157,9 +157,11 @@ class AddIssues : AppCompatActivity(), OnClickListener {
         }
         binding.progressBar.visibility = GONE
 
-        if (firstSelectedIssue != null) {
-            setFromConditionApiId(firstSelectedIssue.condition)
-            setFromPurchaseId(firstSelectedIssue.purchaseId)
+        if (copies == null) {
+            if (firstSelectedIssue != null) {
+                setFromConditionApiId(firstSelectedIssue.condition)
+                setFromPurchaseId(firstSelectedIssue.purchaseId)
+            }
         } else {
             copies!!.purchaseIds.ifEmpty { mutableListOf(null) }
                 .forEachIndexed { index, _ ->
