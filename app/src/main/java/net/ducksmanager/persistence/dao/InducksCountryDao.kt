@@ -10,7 +10,7 @@ import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPosse
 
 @Dao
 interface InducksCountryDao {
-    @Query("SELECT DISTINCT inducks_countryname.*, COUNT(user_issues.issueNumber) AS possessedIssues, issue_count.count AS referencedIssues" +
+    @Query("SELECT DISTINCT inducks_countryname.*, COUNT(DISTINCT user_issues.country || user_issues.magazine || user_issues.issueNumber) AS possessedIssues, issue_count.count AS referencedIssues" +
                 " FROM inducks_countryname" +
                 " LEFT JOIN issues AS user_issues ON inducks_countryname.countryCode = user_issues.country" +
                 " LEFT JOIN inducks_issue_count issue_count ON inducks_countryname.countryCode = issue_count.code" +
