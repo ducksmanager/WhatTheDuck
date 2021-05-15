@@ -145,23 +145,19 @@ class WhatTheDuck : Application() {
             activity.runOnUiThread { builder.create().show() }
         }
 
-        fun registerForNotifications(activityRef: WeakReference<Activity>, forceEnable: Boolean) {
+        fun registerForNotifications(activityRef: WeakReference<Activity>) {
             if (!isTestContext) {
                 try {
-                    val notificationSetting = appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)
-                    if (notificationSetting == null || notificationSetting.value == "1" || forceEnable) {
-                        PushNotifications.start(activityRef.get(), config.getProperty(CONFIG_KEY_PUSHER_INSTANCE_ID))
-                        PushNotifications.setUserId(currentUser!!.username, tokenProvider, object : BeamsCallback<Void, PusherCallbackError> {
-                            override fun onSuccess(vararg values: Void) {
-                                appDB!!.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED, "1"))
-                                Timber.i("Successfully registered for notifications")
-                            }
+                    PushNotifications.start(activityRef.get(), config.getProperty(CONFIG_KEY_PUSHER_INSTANCE_ID))
+                    PushNotifications.setUserId(currentUser!!.username, tokenProvider, object : BeamsCallback<Void, PusherCallbackError> {
+                        override fun onSuccess(vararg values: Void) {
+                            Timber.i("Successfully registered for notifications")
+                        }
 
-                            override fun onFailure(error: PusherCallbackError) {
-                                Timber.i("PusherBeams : Pusher Beams authentication failed: %s", error.message)
-                            }
-                        })
-                    }
+                        override fun onFailure(error: PusherCallbackError) {
+                            Timber.i("PusherBeams : Pusher Beams authentication failed: %s", error.message)
+                        }
+                    })
                 } catch (e: Exception) {
                     Timber.e("Pusher init failed : %s", e.message)
                 }

@@ -168,7 +168,7 @@ class Login : AppCompatActivity() {
                     override fun getAuthData(): AuthData = AuthData(getRequestHeaders(true), HashMap())
                 }
             )
-            WhatTheDuck.registerForNotifications(activityRef, false)
+            WhatTheDuck.registerForNotifications(activityRef)
         }
     }
 

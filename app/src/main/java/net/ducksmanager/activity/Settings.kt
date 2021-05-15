@@ -15,17 +15,14 @@ import kotlinx.android.synthetic.main.settings.*
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.CountryListToUpdate
-import net.ducksmanager.persistence.models.composite.UserSetting
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
-import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.databinding.SettingsBinding
 import retrofit2.Response
-import java.lang.ref.WeakReference
 
 
 class Settings : AppCompatActivityWithDrawer() {
@@ -40,8 +37,6 @@ class Settings : AppCompatActivityWithDrawer() {
         setContentView(binding.root)
         toggleToolbar()
 
-        binding.notifySwitch.isChecked = appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)?.value.equals("1")
-
         Settings.loadNotificationCountries(this) {
             appDB!!.inducksCountryDao().findAllWithNotification().observe(this, { countryNamesWithNotification ->
                 val countryNames = countryNamesWithNotification.map { it.country }
@@ -53,7 +48,6 @@ class Settings : AppCompatActivityWithDrawer() {
 
                 if (isOfflineMode) {
                     binding.warningMessage.visibility = View.VISIBLE
-                    binding.notifySwitch.isEnabled = false
                     binding.save.isEnabled = false
                 }
                 binding.progressBar.visibility = View.GONE
@@ -63,13 +57,6 @@ class Settings : AppCompatActivityWithDrawer() {
         binding.version.text = getString(R.string.version, applicationVersion)
 
         binding.save.setOnClickListener {
-            if (binding.notifySwitch.isChecked) {
-                WhatTheDuck.registerForNotifications(WeakReference(this@Settings), true)
-            }
-            else {
-                WhatTheDuck.unregisterFromNotifications()
-            }
-
             val countriesToNotifyTo = (binding.notifiedCountriesList.adapter as CountryToNotifyListAdapter).countriesToNotifyTo
             DmServer.api.updateUserNotificationCountries(CountryListToUpdate(countriesToNotifyTo))
                 .enqueue(object: DmServer.Callback<Void>("updateUserNotificationCountries", this, true) {

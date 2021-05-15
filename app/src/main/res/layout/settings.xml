@@ -82,13 +82,6 @@
                 android:paddingRight="30dp"
                 android:visibility="visible">
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/notifySwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/notify_option" />
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
