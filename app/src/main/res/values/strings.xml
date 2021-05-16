@@ -115,6 +115,7 @@
     <string name="signup_end">Finish signup</string>
     <string name="sort_by_publication_date">Sort by publication date</string>
     <string name="sort_by_score">Sort by score</string>
+    <string name="stats">Stats</string>
     <string name="suggestions">Suggestions</string>
     <string name="suggestions_intro">WhatTheDuck provides you with a personalized list of issues containing new stories from your favorite authors.\nYou can change what countries to show in the Settings screen and what authors to show in the My favorite authors screen.\nThe suggestions are updated daily.</string>
     <string name="thanks_report">Thanks for your report!</string>

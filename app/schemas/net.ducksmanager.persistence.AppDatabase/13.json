@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 12,
-    "identityHash": "427f834efaa009748b97c6e6d9927e03",
+    "version": 13,
+    "identityHash": "d14a6f7257a78c7ed3df10a350513c75",
     "entities": [
       {
         "tableName": "app_version",
@@ -283,7 +283,7 @@
       },
       {
         "tableName": "issues",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `country` TEXT NOT NULL, `magazine` TEXT NOT NULL, `issueNumber` TEXT NOT NULL, `condition` TEXT NOT NULL, `creationDate` TEXT NOT NULL, `issuePurchaseId` INTEGER, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `country` TEXT NOT NULL, `magazine` TEXT NOT NULL, `issueNumber` TEXT NOT NULL, `condition` TEXT NOT NULL, `creationDate` TEXT, `issuePurchaseId` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -319,7 +319,7 @@
             "fieldPath": "creationDate",
             "columnName": "creationDate",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "purchaseId",
@@ -593,7 +593,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '427f834efaa009748b97c6e6d9927e03')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd14a6f7257a78c7ed3df10a350513c75')"
     ]
   }
 }

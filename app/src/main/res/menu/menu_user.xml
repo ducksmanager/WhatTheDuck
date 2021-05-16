@@ -11,6 +11,11 @@
             android:icon="@drawable/ic_star"
             app:showAsAction="never"/>
 
+        <item android:id="@+id/action_stats"
+            android:title="@string/stats"
+            android:icon="@drawable/ic_view_edge"
+            app:showAsAction="never"/>
+
         <item android:id="@+id/action_suggestions"
             android:title="@string/suggestions"
             android:icon="@drawable/ic_fire"

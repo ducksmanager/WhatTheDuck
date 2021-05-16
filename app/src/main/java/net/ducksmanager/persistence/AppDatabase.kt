@@ -35,7 +35,7 @@ import net.ducksmanager.persistence.models.internal.Sync
     User::class,
     UserMessage::class,
     UserSetting::class
- ], version = 12, exportSchema = true)
+ ], version = 13, exportSchema = true)
 @TypeConverters(StringMutableSetConverter::class, StringIntMapConverter::class, InstantConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -64,6 +64,11 @@ abstract class AppDatabase : RoomDatabase() {
         val MIGRATION_11_12: Migration = object : Migration(11, 12) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("CREATE TABLE contribution_total_points(`contribution` TEXT NOT NULL, `totalPoints` INTEGER NOT NULL, PRIMARY KEY(`contribution`))")
+            }
+        }
+        val MIGRATION_12_13: Migration = object : Migration(12, 13) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE issues ADD `creationDate` TEXT DEFAULT null")
             }
         }
     }

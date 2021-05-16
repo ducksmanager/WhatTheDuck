@@ -33,6 +33,10 @@ class Issue {
     lateinit var condition: String
 
     @Expose
+    @ColumnInfo
+    var creationDate: String? = null
+
+    @Expose
     @ColumnInfo(name = "issuePurchaseId")
     var purchaseId: Int? = null
 
