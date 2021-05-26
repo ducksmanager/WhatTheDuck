@@ -25,7 +25,10 @@ interface IssueDao {
     fun countPerCondition(): LiveData<List<IssuesPerCondition>>
 
     @Query("" +
-        "SELECT issues.country || '/' || issues.magazine AS publicationcode, SUBSTR(COALESCE((SELECT purchases.date FROM purchases WHERE purchases.date = issues.issuePurchaseId), issues.creationDate, '0000-00-00'), 0, 8) AS month, COUNT(*) AS count FROM issues GROUP BY month, publicationcode ORDER BY month, publicationcode")
+        " SELECT issues.country || '/' || issues.magazine AS publicationcode, SUBSTR(COALESCE((SELECT purchases.date FROM purchases WHERE purchases.purchaseId = issues.issuePurchaseId), issues.creationDate, '0000-00-00'), 0, 8) AS month, COUNT(*) AS count" +
+        " FROM issues " +
+        " GROUP BY month, publicationcode" +
+        " ORDER BY month, publicationcode")
     fun countPerMonthAndPublication(): LiveData<List<IssueCountPerMonthAndPublication>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

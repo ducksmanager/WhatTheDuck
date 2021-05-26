@@ -125,4 +125,19 @@
     <string name="welcome_bookcase_view_portrait">Bienvenue dans votre bibliothèque ! Orientez votre écran en mode paysage pour le meilleur effet ;-)</string>
     <string name="welcome_message">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur + pour ajouter un numéro.</string>
     <string name="welcome_title">Bienvenue sur What The Duck !</string>
+    <string name="unknown_date">Date inconnue</string>
+    <string name="collection_size">Numéros</string>
+    <string name="show_purchase_history_since_forever">Depuis le début</string>
+    <string name="show_purchase_history_in_the_past_year">Depuis 1 an</string>
+    <string name="other">Autres</string>
+    <string name="in_this_condition">Dans cet état</string>
+    <string name="stats">Statistiques</string>
+    <string name="countries">pays</string>
+    <string name="publications">magazines</string>
+    <string name="issues">numéros</string>
+    <string name="issue_conditions">Etats des numéros</string>
+    <string name="collection_progression">Progression de la collection</string>
+    <string name="countries_singular">pays</string>
+    <string name="publications_singular">magazine</string>
+    <string name="issues_singular">numéro</string>
 </resources>

@@ -1,11 +1,8 @@
 package net.ducksmanager.activity
 
 import android.os.Bundle
-import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
-import com.github.aachartmodel.aainfographics.aachartcreator.AAChartStackingType
-import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
-import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
+import com.github.aachartmodel.aainfographics.aachartcreator.*
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aatools.AAColor
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToStringId
@@ -13,6 +10,9 @@ import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.databinding.StatsBinding
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 class Stats : AppCompatActivityWithDrawer() {
@@ -31,127 +31,158 @@ class Stats : AppCompatActivityWithDrawer() {
             binding.countryCount.text = "%d".format(collectionCount.countries)
             binding.publicationCount.text = "%d".format(collectionCount.publications)
             binding.issueCount.text = "%d".format(collectionCount.issues)
-        })
-
-        WhatTheDuck.appDB!!.issueDao().countPerCondition().observe(this, { issuesPerCondition ->
-            val colors = issuesPerCondition.map {
-                when (it.condition) {
-                    InducksIssueWithUserIssueAndScore.BAD_CONDITION -> AAColor.Red
-                    InducksIssueWithUserIssueAndScore.NOTSOGOOD_CONDITION -> AAColor.Orange
-                    InducksIssueWithUserIssueAndScore.GOOD_CONDITION -> AAColor.Green
-                    else -> AAColor.Gray
-                }
+            if (collectionCount.countries <= 1) {
+                binding.countryLabel.text = getString(R.string.countries_singular)
             }
-            val conditionModel = AAChartModel()
-                .chartType(AAChartType.Pie)
-                .backgroundColor(R.color.cardview_dark_background)
-                .title("Issue conditions")
-                .titleStyle(AAStyle().color(AAColor.Gray))
-                .colorsTheme(colors.toTypedArray())
-                .legendEnabled(false)
-                .series(
-                    arrayOf(
-                        AASeriesElement()
-                            .color(AAColor.White)
-                            .colorByPoint(true)
-                            .data(
-                                issuesPerCondition.map {
-                                    arrayOf(
-                                        getString(issueConditionToStringId(it.condition)),
-                                        it.count
-                                    )
-                                }
-                                    .toTypedArray()
-                            )
-                    )
-                )
-            binding.issueConditionChart.aa_drawChartWithChartModel(conditionModel)
-        })
+            if (collectionCount.publications <= 1) {
+                binding.countryLabel.text = getString(R.string.publications_singular)
+            }
+            if (collectionCount.issues <= 1) {
+                binding.countryLabel.text = getString(R.string.issues_singular)
+            }
 
-        val purchaseProgressModel = AAChartModel()
-            .chartType(AAChartType.Area)
-            .title("Collection progression")
-            .titleStyle(AAStyle().color(AAColor.Gray))
-            .legendEnabled(false)
-            .backgroundColor(R.color.cardview_dark_background)
-            .stacking(AAChartStackingType.Normal)
-            .series(
-                arrayOf(
-                    AASeriesElement()
-                        .name("Tokyo")
-                        .data(
-                            arrayOf(
-                                7.0,
-                                6.9,
-                                9.5,
-                                14.5,
-                                18.2,
-                                21.5,
-                                25.2,
-                                26.5,
-                                23.3,
-                                18.3,
-                                13.9,
-                                9.6
-                            )
-                        ),
-                    AASeriesElement()
-                        .name("NewYork")
-                        .data(
-                            arrayOf(
-                                0.2,
-                                0.8,
-                                5.7,
-                                11.3,
-                                17.0,
-                                22.0,
-                                24.8,
-                                24.1,
-                                20.1,
-                                14.1,
-                                8.6,
-                                2.5
-                            )
-                        ),
-                    AASeriesElement()
-                        .name("London")
-                        .data(
-                            arrayOf(
-                                0.9,
-                                0.6,
-                                3.5,
-                                8.4,
-                                13.5,
-                                17.0,
-                                18.6,
-                                17.9,
-                                14.3,
-                                9.0,
-                                3.9,
-                                1.0
-                            )
-                        ),
-                    AASeriesElement()
-                        .name("Berlin")
-                        .data(
-                            arrayOf(
-                                3.9,
-                                4.2,
-                                5.7,
-                                8.5,
-                                11.9,
-                                15.2,
-                                17.0,
-                                16.6,
-                                14.2,
-                                10.3,
-                                6.6,
-                                4.8
-                            )
+            if (collectionCount.issues.equals(0)) {
+                return@observe
+            }
+
+            WhatTheDuck.appDB!!.issueDao().countPerCondition().observe(this, { issuesPerCondition ->
+                val colors = issuesPerCondition.map {
+                    when (it.condition) {
+                        InducksIssueWithUserIssueAndScore.BAD_CONDITION -> AAColor.Red
+                        InducksIssueWithUserIssueAndScore.NOTSOGOOD_CONDITION -> AAColor.Orange
+                        InducksIssueWithUserIssueAndScore.GOOD_CONDITION -> AAColor.Green
+                        else -> AAColor.Gray
+                    }
+                }
+                val conditionModel = AAChartModel()
+                    .chartType(AAChartType.Pie)
+                    .backgroundColor(R.color.cardview_dark_background)
+                    .axesTextColor("white")
+                    .colorsTheme(colors.toTypedArray())
+                    .legendEnabled(false)
+                    .series(
+                        arrayOf(
+                            AASeriesElement()
+                                .color(AAColor.White)
+                                .colorByPoint(true)
+                                .name(getString(R.string.in_this_condition))
+                                .data(
+                                    issuesPerCondition.map {
+                                        arrayOf(
+                                            getString(issueConditionToStringId(it.condition)),
+                                            it.count
+                                        )
+                                    }
+                                        .toTypedArray()
+                                )
                         )
-                )
-            )
+                    )
+                binding.issueConditionChart.aa_drawChartWithChartModel(conditionModel)
+            })
 
-        binding.purchaseProgressChart.aa_drawChartWithChartModel(purchaseProgressModel)
+            WhatTheDuck.appDB!!.issueDao().countPerMonthAndPublication()
+                .observe(this, { issuesPerMonthAndPublication ->
+
+                    val countPerPublication =
+                        issuesPerMonthAndPublication
+                            .groupingBy { it.publicationcode }
+                            .aggregate { _, acc: Int?, element, first ->
+                                if (first)
+                                    element.count
+                                else
+                                    acc!! + element.count
+                            }
+
+                    val mostOwnedPublications = countPerPublication.filter { it.value >= (collectionCount.issues.toFloat() / 10) }.keys
+                    val allPublications = hashSetOf(getString(R.string.other)).plus(mostOwnedPublications)
+
+                    val series = allPublications.associateWith { mutableMapOf<Int, Any>() }.toMutableMap()
+                    val oldestMonth = issuesPerMonthAndPublication.find { it.month != "-0001-1" }?.month
+
+                    val allMonths = mutableListOf(getString(R.string.unknown_date))
+                    if (oldestMonth != null) {
+                        var currentDate = LocalDate.parse("$oldestMonth-01", DateTimeFormatter.ISO_DATE)
+                        do {
+                            allMonths.add(currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM")))
+                            currentDate = currentDate.plusMonths(1)
+                        } while (currentDate <= LocalDate.now())
+                    }
+
+                    val allMonthsArray = allMonths.toTypedArray()
+                    val cumulatedSumPerPublication = allPublications.associateWith { 0 }.toMutableMap()
+                    val cumulatedSumPerMonth = allMonths.associateWith { 0 }.toMutableMap()
+
+                    issuesPerMonthAndPublication.forEach {
+                        val monthIndex = allMonthsArray.indexOf(it.month)
+                        val isMostOwnedPublication = mostOwnedPublications.contains(it.publicationcode)
+                        val targetPublication = if (isMostOwnedPublication) {
+                            it.publicationcode
+                        } else getString(R.string.other)
+                        cumulatedSumPerPublication.computeIfPresent(targetPublication) { _, v -> v + it.count }
+                        for (month in monthIndex until allMonthsArray.size - 1) {
+                            series[targetPublication]?.set(
+                                month,
+                                cumulatedSumPerPublication[targetPublication]!!
+                            )
+                            cumulatedSumPerMonth.computeIfPresent(it.month) { _, v -> v + it.count }
+                        }
+                    }
+
+                    val monthsArrayLastYearOnly = allMonthsArray.slice(allMonthsArray.size - 12 until allMonthsArray.size).toTypedArray()
+                    val seriesLastYearOnly = series.mapValues { it.value.filterKeys { monthIndex: Int -> monthIndex != -1 && monthsArrayLastYearOnly.contains(allMonthsArray[monthIndex]) } }
+
+                    fun getChartModelOptions(
+                        series: Map<String, Map<Int, Any>>,
+                        monthsArray: Array<String>,
+                        scrollable: Boolean = true
+                    ): AAOptions {
+                        val model = AAChartModel()
+                            .chartType(AAChartType.Area)
+                            .legendEnabled(false)
+                            .axesTextColor("white")
+                            .backgroundColor(R.color.cardview_dark_background)
+                            .stacking(AAChartStackingType.Normal)
+                            .markerRadius(0.0f)
+                            .yAxisTitle(getString(R.string.collection_size))
+                            .categories(monthsArray)
+                            .series(
+                                series.map { (publicationcode, data) ->
+                                    AASeriesElement()
+                                        .name(publicationcode).data(data.values.toTypedArray())
+                                }.toTypedArray()
+                            )
+                        if (scrollable) {
+                            model.scrollablePlotArea(
+                                AAScrollablePlotArea()
+                                    .minWidth(3000)
+                                    .scrollPositionX(1f)
+                            )
+                        }
+                        val aaOptions = model.aa_toAAOptions()
+                        aaOptions.tooltip
+                            ?.shared(false)
+                            ?.formatter("""
+                                function () {
+                                    return '<b>' + this.x + '</b><br/>'
+                                    + this.series.name+ ': '+ this.y + '<br/>'
+                                    + 'Total: ' + this.point.stackTotal;
+                                }""".trimIndent()
+                            )
+                        return aaOptions
+                    }
+
+                    val purchaseProgressModel = getChartModelOptions(series, allMonthsArray)
+
+                    binding.purchaseProgressChart.aa_drawChartWithChartOptions(purchaseProgressModel)
+
+                    binding.showPurchaseHistorySinceForever.setOnClickListener {
+                        binding.purchaseProgressChart.aa_drawChartWithChartOptions(getChartModelOptions(series, allMonthsArray))
+                    }
+
+                    binding.showPurchaseHistoryInThePastYear.setOnClickListener {
+                        binding.purchaseProgressChart.aa_drawChartWithChartOptions(getChartModelOptions(seriesLastYearOnly, monthsArrayLastYearOnly, false))
+                    }
+                })
+        })
     }
 }

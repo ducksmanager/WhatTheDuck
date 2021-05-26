@@ -126,4 +126,18 @@
     <string name="welcome_bookcase_view_portrait">Welcome to the bookcase view! Rotate your screen to landscape for the best effect ;-)</string>
     <string name="welcome_message">Your DucksManager collection is displayed when you open What The Duck. Tap on a country to view the publications that you possess, or tap on \"+\" to add an issue to your collection.</string>
     <string name="welcome_title">Welcome on What The Duck!</string>
+    <string name="show_purchase_history_since_forever">Since forever</string>
+    <string name="show_purchase_history_in_the_past_year">In the past year</string>
+    <string name="other">Other</string>
+    <string name="in_this_condition">In this condition</string>
+    <string name="unknown_date">Unknown date</string>
+    <string name="collection_size">Collection size</string>
+    <string name="countries">countries</string>
+    <string name="publications">publications</string>
+    <string name="issues">issues</string>
+    <string name="countries_singular">country</string>
+    <string name="publications_singular">publication</string>
+    <string name="issues_singular">issue</string>
+    <string name="issue_conditions">Issue conditions</string>
+    <string name="collection_progression">Collection progression</string>
 </resources>

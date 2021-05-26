@@ -43,17 +43,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
-                            android:text="1"
                             android:textAlignment="center"
-                            app:autoSizeTextType="uniform"
+                            app:autoSizeMaxTextSize="60sp"
                             app:autoSizeMinTextSize="12sp"
-                            app:autoSizeMaxTextSize="60sp" />
+                            app:autoSizeTextType="uniform" />
 
                         <TextView
+                            android:id="@+id/country_label"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="countries"
+                            android:text="@string/countries"
                             android:textAlignment="center"
                             android:textSize="20sp" />
                     </LinearLayout>
@@ -69,17 +69,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
-                            android:text="1"
                             android:textAlignment="center"
-                            app:autoSizeTextType="uniform"
+                            app:autoSizeMaxTextSize="60sp"
                             app:autoSizeMinTextSize="12sp"
-                            app:autoSizeMaxTextSize="60sp" />
+                            app:autoSizeTextType="uniform" />
 
                         <TextView
+                            android:id="@+id/publication_label"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="publications"
+                            android:text="@string/publications"
                             android:textAlignment="center"
                             android:textSize="20sp" />
                     </LinearLayout>
@@ -95,29 +95,66 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
-                            android:text="1234"
                             android:textAlignment="center"
-                            app:autoSizeTextType="uniform"
+                            app:autoSizeMaxTextSize="60sp"
                             app:autoSizeMinTextSize="12sp"
-                            app:autoSizeMaxTextSize="60sp" />
+                            app:autoSizeTextType="uniform" />
 
                         <TextView
+                            android:id="@+id/issue_label"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="issues"
+                            android:text="@string/issues"
                             android:textAlignment="center"
                             android:textSize="20sp" />
                     </LinearLayout>
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:text="@string/issue_conditions"
+                    android:textSize="20sp" />
+
                 <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                     android:id="@+id/issue_condition_chart"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginVertical="50dp">
+                    android:layout_height="300dp">
 
                 </com.github.aachartmodel.aainfographics.aachartcreator.AAChartView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:text="@string/collection_progression"
+                    android:textSize="20sp" />
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/showPurchaseHistoryInThePastYear"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/show_purchase_history_in_the_past_year" />
+
+                    <Button
+                        android:id="@+id/showPurchaseHistorySinceForever"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/show_purchase_history_since_forever" />
+                </LinearLayout>
 
                 <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                     android:id="@+id/purchase_progress_chart"
