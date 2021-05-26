@@ -17,6 +17,7 @@ import com.pusher.pushnotifications.PusherCallbackError
 import com.pusher.pushnotifications.auth.BeamsTokenProvider
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.PicassoCache
+import io.sentry.Sentry
 import net.ducksmanager.api.DmServer.Companion.initApi
 import net.ducksmanager.persistence.AppDatabase
 import net.ducksmanager.persistence.models.coa.InducksCountryName
@@ -56,6 +57,7 @@ class WhatTheDuck : Application() {
                         loadedConfig!!.load(reader)
                     } catch (e: IOException) {
                         System.err.println("Config file not found, aborting")
+                        Sentry.captureException(e)
                         exitProcess(-1)
                     } finally {
                         if (reader != null) {
@@ -63,6 +65,7 @@ class WhatTheDuck : Application() {
                                 reader.close()
                             } catch (e: IOException) {
                                 System.err.println("Error while reading config file, aborting")
+                                Sentry.captureException(e)
                                 exitProcess(-1)
                             }
                         }
@@ -159,6 +162,7 @@ class WhatTheDuck : Application() {
                         }
                     })
                 } catch (e: Exception) {
+                    Sentry.captureException(e)
                     Timber.e("Pusher init failed : %s", e.message)
                 }
             }
@@ -170,6 +174,7 @@ class WhatTheDuck : Application() {
                     PushNotifications.stop()
                     Timber.i("Successfully unregistered from notifications")
                 } catch (e: Exception) {
+                    Sentry.captureException(e)
                     Timber.e("Pusher init failed to stop : %s", e.message)
                 }
                 val setting = appDB!!.userSettingDao().findByKey(UserSetting.SETTING_KEY_NOTIFICATIONS_ENABLED)
@@ -191,6 +196,7 @@ class WhatTheDuck : Application() {
                 try {
                     matomoTracker = TrackerBuilder.createDefault(matomoUrl, 2).build(Matomo.getInstance(applicationContext))
                 } catch (e: RuntimeException) {
+                    Sentry.captureException(e)
                     System.err.println("Couldn't initialize tracker")
                 }
                 return matomoTracker

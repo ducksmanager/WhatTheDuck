@@ -1,6 +1,7 @@
 package net.ducksmanager.util
 
 import android.app.Activity
+import io.sentry.Sentry
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.composite.UserMessage
 import net.ducksmanager.persistence.models.dm.NotificationCountry
@@ -59,6 +60,7 @@ class Settings {
                 md.update(text.toByteArray())
                 byteArray2Hex(md.digest())
             } catch (e: NoSuchAlgorithmException) {
+                Sentry.captureException(e)
                 if (activityRef != null) {
                     WhatTheDuck.alert(activityRef, R.string.internal_error, R.string.internal_error__crypting_failed)
                 }

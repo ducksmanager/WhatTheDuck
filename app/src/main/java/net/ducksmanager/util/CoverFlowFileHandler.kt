@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.RequestCreator
 import com.squareup.picasso.Target
 import com.squareup.picasso.Transformation
+import io.sentry.Sentry
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.composite.CoverSearchResults
 import net.ducksmanager.whattheduck.R
@@ -66,6 +67,7 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
                 callback!!.onComplete(f)
             } catch (e: IOException) {
                 e.message?.let { WhatTheDuck.alert(originActivityRef, R.string.internal_error, it) }
+                Sentry.captureException(e)
             }
         }
 
@@ -90,7 +92,7 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
             }
             return FileProvider.getUriForFile(context, "net.ducksmanager.whattheduck.fileprovider", uploadFile)
         } catch (e: IOException) {
-            e.printStackTrace()
+            Sentry.captureException(e)
         }
         return null
     }
