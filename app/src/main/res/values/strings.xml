@@ -5,7 +5,7 @@
     <string name="add_cover_error_file_too_big">The picture is too big, please try again.</string>
     <string name="add_cover_no_results">No cover matches your photo, please try again.</string>
     <string name="all_countries">All countries</string>
-    <string name="app_name">What The Duck</string>
+    <string name="app_name" translatable="false">What The Duck</string>
     <string name="bookcase_view_message">Displaying the bookcase view when on a mobile network can lead to a high data consumption. Do you still want to display it?</string>
     <string name="bookcase_view_title">Bookcase view</string>
     <string name="by_cover_file">By cover file</string>
@@ -13,6 +13,8 @@
     <string name="by_issue_selection">By issue selection</string>
     <string name="cancel">Cancel</string>
     <string name="collection">My collection</string>
+    <string name="collection_progression">Collection progression</string>
+    <string name="collection_size">Collection size</string>
     <string name="condition">Condition</string>
     <string name="condition_bad">Bad condition</string>
     <string name="condition_good">Good condition</string>
@@ -21,12 +23,15 @@
     <string name="condition_notsogood">Not-so-good condition</string>
     <string name="confirmation_message__collection_updated">Your collection has been updated</string>
     <string name="copy">Copy %d</string>
+    <string name="countries">countries</string>
+    <string name="countries_singular">country</string>
     <string name="country">Country</string>
     <string name="cover_suggestion">Cover suggestion</string>
-    <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
+    <string name="coversearch_result_template" translatable="false">%1$s %2$d/%3$d</string>
     <string name="create">Create</string>
     <string name="create_new_purchase_date">Create new purchase date</string>
     <string name="delete_rating">Delete</string>
+    <string name="discord" translatable="false">Discord</string>
     <string name="edge_view">Bookcase</string>
     <string name="email_address">E-mail</string>
     <string name="error">Error</string>
@@ -35,8 +40,10 @@
     <string name="error__cannot_login">Loading your DucksManager account failed, check that your Internet connection is active. You will be able to browse through your collection while offline once your collection is synchronized.</string>
     <string name="error__could_not_create_empty_file">Could not create empty file for the camera</string>
     <string name="error__malformed_url">The URL is malformed</string>
+    <string name="facebook" translatable="false">Facebook</string>
     <string name="favorite_authors">My favorite authors</string>
     <string name="filter">Filter</string>
+    <string name="in_this_condition">In this condition</string>
     <string name="input_error">Input error</string>
     <string name="input_error__author_already_rated">You have already rated this author!</string>
     <string name="input_error__empty_credentials">You need to enter your credentials to continue</string>
@@ -45,6 +52,7 @@
     <string name="insert_issue__title_multiple_issues_plural">Issue %1$s and %2$d others</string>
     <string name="insert_issue__title_multiple_issues_singular">Issue %1$s and 1 other</string>
     <string name="insert_issue__title_single_issue">Issue %1$s</string>
+    <string name="instagram" translatable="false">Instagram</string>
     <string name="internal_error">Internal error</string>
     <string name="internal_error__crypting_failed">The encryption of your credentials failed</string>
     <string name="internal_error__empty_list">Empty list</string>
@@ -52,12 +60,15 @@
     <string name="internal_error__malformed_list">The list is malformed, please try again later</string>
     <string name="internal_error__purchase_creation_failed">The creation of the purchase date failed</string>
     <string name="issue_already_possessed">You already have this issue in your collection</string>
+    <string name="issue_conditions">Issue conditions</string>
     <string name="issue_list_copied">The list has been copied to your clipboard.</string>
     <string name="issue_list_copy_missing">Copy missing issues</string>
     <string name="issue_list_copy_missing_title">Missing issues for&#160;</string>
     <string name="issue_list_copy_possessed">Copy possessed issues</string>
     <string name="issue_list_copy_possessed_title">Possessed issues for&#160;</string>
     <string name="issue_selection_tip">Select an issue by tapping on it.\nSelect a range of issues by long-tapping on the first item of the range.</string>
+    <string name="issues">issues</string>
+    <string name="issues_singular">issue</string>
     <string name="item_description">Description</string>
     <string name="itemtitle">Item</string>
     <string name="link_to_ducksmanager_website">What The Duck is the mobile app of DucksManager. Click here to access the DucksManager website.</string>
@@ -84,10 +95,13 @@
     <string name="offline_mode">You are using offline mode. You can browse through your collection but not update it. Some features will not be available.</string>
     <string name="offline_mode_cannot_login">What The Duck couldn\'t retrieve your collection. Are you connected to the Internet?</string>
     <string name="offline_mode_cannot_view">This view is not available in offline mode. Click here to go back to the collection view</string>
-    <string name="ok">OK</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="option_notified_countries">Suggest me issues released in the following countries:</string>
+    <string name="other">Other</string>
     <string name="password">Password</string>
     <string name="password_confirm">Password confirmation</string>
+    <string name="publications">publications</string>
+    <string name="publications_singular">publication</string>
     <string name="purchase_date">Purchase date</string>
     <string name="purchase_name">Purchase name</string>
     <string name="quotation">Quotation: </string>
@@ -110,6 +124,8 @@
     <string name="send">Send</string>
     <string name="set_conditions_on_existing_copies_before_adding_new">Set conditions on all existing copies before adding a new one</string>
     <string name="settings">Settings</string>
+    <string name="show_purchase_history_in_the_past_year">In the past year</string>
+    <string name="show_purchase_history_since_forever">Since forever</string>
     <string name="signup">Signup</string>
     <string name="signup__confirm">You have signed up to DucksManager successfully, please login.</string>
     <string name="signup_end">Finish signup</string>
@@ -119,25 +135,13 @@
     <string name="suggestions">Suggestions</string>
     <string name="suggestions_intro">WhatTheDuck provides you with a personalized list of issues containing new stories from your favorite authors.\nYou can change what countries to show in the Settings screen and what authors to show in the My favorite authors screen.\nThe suggestions are updated daily.</string>
     <string name="thanks_report">Thanks for your report!</string>
-    <string name="title_template">%1$s %2$s</string>
+    <string name="title_template" translatable="false">%1$s %2$s</string>
+    <string name="unknown_date">Unknown date</string>
     <string name="unknown_publication">Unknown publication</string>
     <string name="username">Username</string>
     <string name="version">What The Duck version %1$s</string>
     <string name="welcome_bookcase_view_portrait">Welcome to the bookcase view! Rotate your screen to landscape for the best effect ;-)</string>
     <string name="welcome_message">Your DucksManager collection is displayed when you open What The Duck. Tap on a country to view the publications that you possess, or tap on \"+\" to add an issue to your collection.</string>
     <string name="welcome_title">Welcome on What The Duck!</string>
-    <string name="show_purchase_history_since_forever">Since forever</string>
-    <string name="show_purchase_history_in_the_past_year">In the past year</string>
-    <string name="other">Other</string>
-    <string name="in_this_condition">In this condition</string>
-    <string name="unknown_date">Unknown date</string>
-    <string name="collection_size">Collection size</string>
-    <string name="countries">countries</string>
-    <string name="publications">publications</string>
-    <string name="issues">issues</string>
-    <string name="countries_singular">country</string>
-    <string name="publications_singular">publication</string>
-    <string name="issues_singular">issue</string>
-    <string name="issue_conditions">Issue conditions</string>
-    <string name="collection_progression">Collection progression</string>
+    <string name="youtube" translatable="false">YouTube</string>
 </resources>

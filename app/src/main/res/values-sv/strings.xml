@@ -5,7 +5,6 @@
     <string name="add_cover_error_file_too_big">Bilden är för stor, försök igen.</string>
     <string name="add_cover_no_results">Ingen framsida matchar din bild, försök igen.</string>
     <string name="all_countries">Alla länder</string>
-    <string name="app_name">What The Duck</string>
     <string name="bookcase_view_message">Att visa bokhyllevyn på ett mobilt nätverk kan leda till höga kostnader. Vill du fortfarande visa den?</string>
     <string name="bookcase_view_title">Bokhyllevy</string>
     <string name="by_cover_file">Efter omslagsfil</string>
@@ -23,7 +22,6 @@
     <string name="copy">Kopia %d</string>
     <string name="country">Land</string>
     <string name="cover_suggestion">Framsideförslag</string>
-    <string name="coversearch_result_template">%1$s %2$d/%3$d</string>
     <string name="create">Skapa</string>
     <string name="create_new_purchase_date">Skapa ett köpdatum</string>
     <string name="delete_rating">Radera</string>
@@ -84,7 +82,6 @@
     <string name="offline_mode">Du är i offline-läge. Du kan bläddra igenom din samling men inte uppdatera den. Vissa funktioner är inte tillgängliga.</string>
     <string name="offline_mode_cannot_login">What The Duck kunde inte hämta din samling. Är du ansluten till internet\?</string>
     <string name="offline_mode_cannot_view">Denna överblick är inte tillgänglig i offline-läget. Klicka här för att återgå till samlingsvyn.</string>
-    <string name="ok">OK</string>
     <string name="option_notified_countries">Föreslå utgåvor släppta i följande länder:</string>
     <string name="password">Lösenord</string>
     <string name="password_confirm">Upprepa lösenord</string>
@@ -118,7 +115,6 @@
     <string name="suggestions">Förslag</string>
     <string name="suggestions_intro">WhatTheDuck ger dig en personlig lista av samlingar som innehåller nya berättelser från dina favoritförfattare. Du kan ändra vilka länder som visas under Inställningar.</string>
     <string name="thanks_report">Tack för din feedback!</string>
-    <string name="title_template">%1$s %2$s</string>
     <string name="unknown_publication">Okänd publikation</string>
     <string name="username">Användarnamn</string>
     <string name="version">What The Duck version %1$s</string>

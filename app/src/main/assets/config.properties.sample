@@ -1,7 +1,11 @@
 api_endpoint_url=http://myserver/dm-server
 appfollow_api_endpoint_url=
 appfollow_api_secret=
-dm_url=https://dm.net
+dm_url=https://ducksmanager.net
+discord_url=
+youtube_url=
+instagram_url=
+facebook_url=
 edges_url=https://edges.ducksmanager.net
 matomo_url=http://myserver/matomo
 pusher_instance_id=

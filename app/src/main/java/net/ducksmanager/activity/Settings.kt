@@ -1,6 +1,8 @@
 package net.ducksmanager.activity
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +20,7 @@ import net.ducksmanager.persistence.models.composite.CountryListToUpdate
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
@@ -52,6 +55,38 @@ class Settings : AppCompatActivityWithDrawer() {
                 }
                 binding.progressBar.visibility = View.GONE
             })
+        }
+
+        binding.linkToDiscord.setOnClickListener { view: View? ->
+            this@Settings.startActivity(
+                Intent(Intent.ACTION_VIEW).setData(Uri.parse(
+                    WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_DISCORD_URL)
+                ))
+            )
+        }
+
+        binding.linkToYoutube.setOnClickListener { view: View? ->
+            this@Settings.startActivity(
+                Intent(Intent.ACTION_VIEW).setData(Uri.parse(
+                    WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_YOUTUBE_URL)
+                ))
+            )
+        }
+
+        binding.linkToInstagram.setOnClickListener { view: View? ->
+            this@Settings.startActivity(
+                Intent(Intent.ACTION_VIEW).setData(Uri.parse(
+                    WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_INSTAGRAM_URL)
+                ))
+            )
+        }
+
+        binding.linkToFacebook.setOnClickListener { view: View? ->
+            this@Settings.startActivity(
+                Intent(Intent.ACTION_VIEW).setData(Uri.parse(
+                    WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_FACEBOOK_URL)
+                ))
+            )
         }
 
         binding.version.text = getString(R.string.version, applicationVersion)
