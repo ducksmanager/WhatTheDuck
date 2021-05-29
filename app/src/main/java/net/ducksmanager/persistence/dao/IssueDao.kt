@@ -26,7 +26,7 @@ interface IssueDao {
 
     @Query("" +
         " SELECT issues.country || '/' || issues.magazine                 AS publicationcode," +
-        "        SUBSTR(COALESCE((SELECT purchases.date FROM purchases WHERE purchases.date = issues.issuePurchaseId)," +
+        "        SUBSTR(COALESCE((SELECT purchases.date FROM purchases WHERE purchases.purchaseId = issues.issuePurchaseId)," +
         "                        issues.creationDate, '0000-00-00'), 0, 8) AS month," +
         "        COUNT(*)                                                  AS count" +
         " FROM issues" +
