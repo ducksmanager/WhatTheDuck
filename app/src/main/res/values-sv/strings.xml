@@ -121,4 +121,19 @@
     <string name="welcome_bookcase_view_portrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
     <string name="welcome_message">Din DucksManager-samling visas när du öppnar What The Duck. Klicka på ett land för att se de publikationer du har, eller tryck på \"+\" för att lägga till en utgåva  i din samling.</string>
     <string name="welcome_title">Välkommen till What The Duck!</string>
+    <string name="collection_progression">Samlingens framfart</string>
+    <string name="collection_size">Samlingens storlek</string>
+    <string name="countries">länder</string>
+    <string name="countries_singular">land</string>
+    <string name="in_this_condition">I detta skick</string>
+    <string name="issue_conditions">Utgåvans skick</string>
+    <string name="issues">utgåvor</string>
+    <string name="issues_singular">utgåva</string>
+    <string name="other">Andra</string>
+    <string name="publications">publikationer</string>
+    <string name="publications_singular">publikation</string>
+    <string name="show_purchase_history_in_the_past_year">Det gångna året</string>
+    <string name="show_purchase_history_since_forever">Sedan alltid</string>
+    <string name="stats">Statistik</string>
+    <string name="unknown_date">Okänt datum</string>
 </resources>
