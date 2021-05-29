@@ -1,3 +1,10 @@
+Version 2.9.0
+    
+    Add Stats screen
+    Add social network links on Settings page
+    Fix notifications not registered in some cases
+    Fix calculation of number/percentage of owned issues per publication and per country when duplicate issues are owned 
+
 Version 2.8.1
 
     Fix crash when attempting to add multiple non-owned issues
