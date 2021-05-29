@@ -8,7 +8,7 @@ import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAn
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToStringId
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.whattheduck.R
-import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.databinding.StatsBinding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -27,7 +27,7 @@ class Stats : AppCompatActivityWithDrawer() {
         setContentView(binding.root)
         toggleToolbar()
 
-        WhatTheDuck.appDB!!.issueDao().countDistinct().observe(this, { collectionCount ->
+        appDB!!.issueDao().countDistinct().observe(this, { collectionCount ->
             binding.countryCount.text = "%d".format(collectionCount.countries)
             binding.publicationCount.text = "%d".format(collectionCount.publications)
             binding.issueCount.text = "%d".format(collectionCount.issues)
@@ -45,7 +45,7 @@ class Stats : AppCompatActivityWithDrawer() {
                 return@observe
             }
 
-            WhatTheDuck.appDB!!.issueDao().countPerCondition().observe(this, { issuesPerCondition ->
+            appDB!!.issueDao().countPerCondition().observe(this, { issuesPerCondition ->
                 val colors = issuesPerCondition.map {
                     when (it.condition) {
                         InducksIssueWithUserIssueAndScore.BAD_CONDITION -> AAColor.Red
@@ -80,9 +80,8 @@ class Stats : AppCompatActivityWithDrawer() {
                 binding.issueConditionChart.aa_drawChartWithChartModel(conditionModel)
             })
 
-            WhatTheDuck.appDB!!.issueDao().countPerMonthAndPublication()
+            appDB!!.issueDao().countPerMonthAndPublication()
                 .observe(this, { issuesPerMonthAndPublication ->
-
                     val countPerPublication =
                         issuesPerMonthAndPublication
                             .groupingBy { it.publicationcode }
@@ -94,7 +93,8 @@ class Stats : AppCompatActivityWithDrawer() {
                             }
 
                     val mostOwnedPublications = countPerPublication.filter { it.value >= (collectionCount.issues.toFloat() / 10) }.keys
-                    val allPublications = hashSetOf(getString(R.string.other)).plus(mostOwnedPublications)
+                    val mostOwnedPublicationNames = appDB!!.inducksPublicationDao().findByPublicationCodes(mostOwnedPublications)
+                    val allPublications = hashSetOf(getString(R.string.other)).plus(mostOwnedPublicationNames.map { it.title })
 
                     val series = allPublications.associateWith { mutableMapOf<Int, Any>() }.toMutableMap()
                     val oldestMonth = issuesPerMonthAndPublication.find { it.month != "-0001-1" }?.month
@@ -114,15 +114,18 @@ class Stats : AppCompatActivityWithDrawer() {
 
                     issuesPerMonthAndPublication.forEach {
                         val monthIndex = allMonthsArray.indexOf(it.month)
-                        val isMostOwnedPublication = mostOwnedPublications.contains(it.publicationcode)
-                        val targetPublication = if (isMostOwnedPublication) {
-                            it.publicationcode
-                        } else getString(R.string.other)
-                        cumulatedSumPerPublication.computeIfPresent(targetPublication) { _, v -> v + it.count }
+                        val publicationcode = it.publicationcode
+                        val isMostOwnedPublication = mostOwnedPublications.contains(publicationcode)
+                        val targetPublicationName = if (isMostOwnedPublication) {
+                            mostOwnedPublicationNames.find { publication -> publication.publicationCode == publicationcode }!!.title
+                        } else {
+                            getString(R.string.other)
+                        }
+                        cumulatedSumPerPublication.computeIfPresent(targetPublicationName) { _, v -> v + it.count }
                         for (month in monthIndex until allMonthsArray.size - 1) {
-                            series[targetPublication]?.set(
+                            series[targetPublicationName]?.set(
                                 month,
-                                cumulatedSumPerPublication[targetPublication]!!
+                                cumulatedSumPerPublication[targetPublicationName]!!
                             )
                             cumulatedSumPerMonth.computeIfPresent(it.month) { _, v -> v + it.count }
                         }
@@ -146,9 +149,12 @@ class Stats : AppCompatActivityWithDrawer() {
                             .yAxisTitle(getString(R.string.collection_size))
                             .categories(monthsArray)
                             .series(
-                                series.map { (publicationcode, data) ->
-                                    AASeriesElement()
-                                        .name(publicationcode).data(data.values.toTypedArray())
+                                series.map { (publicationname, data) ->
+                                    var seriesElement = AASeriesElement().name(publicationname).data(data.values.toTypedArray())
+                                    if (publicationname == getString(R.string.other)) {
+                                        seriesElement = seriesElement.color("#999")
+                                    }
+                                    seriesElement
                                 }.toTypedArray()
                             )
                         if (scrollable) {
@@ -175,12 +181,17 @@ class Stats : AppCompatActivityWithDrawer() {
 
                     binding.purchaseProgressChart.aa_drawChartWithChartOptions(purchaseProgressModel)
 
-                    binding.showPurchaseHistorySinceForever.setOnClickListener {
+                    binding.showPurchaseHistorySinceForever.setOnCheckedChangeListener { buttonView, isChecked ->
+                        buttonView.isChecked = isChecked
+                        binding.showPurchaseHistoryInThePastYear.isChecked = !isChecked
                         binding.purchaseProgressChart.aa_drawChartWithChartOptions(getChartModelOptions(series, allMonthsArray))
                     }
 
-                    binding.showPurchaseHistoryInThePastYear.setOnClickListener {
+                    binding.showPurchaseHistoryInThePastYear.setOnCheckedChangeListener { buttonView, isChecked ->
+                        buttonView.isChecked = isChecked
+                        binding.showPurchaseHistorySinceForever.isChecked = !isChecked
                         binding.purchaseProgressChart.aa_drawChartWithChartOptions(getChartModelOptions(seriesLastYearOnly, monthsArrayLastYearOnly, false))
+
                     }
                 })
         })

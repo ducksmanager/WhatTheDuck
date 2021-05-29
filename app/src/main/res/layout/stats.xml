@@ -141,19 +141,22 @@
                     android:layout_width="fill_parent"
                     android:layout_height="40dp"
                     android:orientation="horizontal">
-                    <Button
+                    <ToggleButton
                         android:id="@+id/showPurchaseHistoryInThePastYear"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/show_purchase_history_in_the_past_year" />
+                        android:textOff="@string/show_purchase_history_in_the_past_year"
+                        android:textOn="@string/show_purchase_history_in_the_past_year" />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/showPurchaseHistorySinceForever"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/show_purchase_history_since_forever" />
+                        android:checked="true"
+                        android:textOff="@string/show_purchase_history_since_forever"
+                        android:textOn="@string/show_purchase_history_since_forever" />
                 </LinearLayout>
 
                 <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
