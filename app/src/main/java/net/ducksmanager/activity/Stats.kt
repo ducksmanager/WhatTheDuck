@@ -10,6 +10,7 @@ import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.databinding.StatsBinding
+import java.lang.Integer.max
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -98,8 +99,9 @@ class Stats : AppCompatActivityWithDrawer() {
 
                     val series = allPublications.associateWith { mutableMapOf<Int, Any>() }.toMutableMap()
                     val oldestMonth = issuesPerMonthAndPublication.find { it.month != "-0001-1" }?.month
+                    val hasUnknownDate = issuesPerMonthAndPublication.any { it.month == "-0001-1"}
 
-                    val allMonths = mutableListOf(getString(R.string.unknown_date))
+                    val allMonths = if (hasUnknownDate) { mutableListOf(getString(R.string.unknown_date)) } else { mutableListOf() }
                     if (oldestMonth != null) {
                         var currentDate = LocalDate.parse("$oldestMonth-01", DateTimeFormatter.ISO_DATE)
                         do {
@@ -122,7 +124,7 @@ class Stats : AppCompatActivityWithDrawer() {
                             getString(R.string.other)
                         }
                         cumulatedSumPerPublication.computeIfPresent(targetPublicationName) { _, v -> v + it.count }
-                        for (month in monthIndex until allMonthsArray.size - 1) {
+                        for (month in monthIndex until allMonthsArray.size) {
                             series[targetPublicationName]?.set(
                                 month,
                                 cumulatedSumPerPublication[targetPublicationName]!!
@@ -131,7 +133,7 @@ class Stats : AppCompatActivityWithDrawer() {
                         }
                     }
 
-                    val monthsArrayLastYearOnly = allMonthsArray.slice(allMonthsArray.size - 12 until allMonthsArray.size).toTypedArray()
+                    val monthsArrayLastYearOnly = allMonthsArray.slice(max(0, allMonthsArray.size - 12) until allMonthsArray.size).toTypedArray()
                     val seriesLastYearOnly = series.mapValues { it.value.filterKeys { monthIndex: Int -> monthIndex != -1 && monthsArrayLastYearOnly.contains(allMonthsArray[monthIndex]) } }
 
                     fun getChartModelOptions(
@@ -157,7 +159,7 @@ class Stats : AppCompatActivityWithDrawer() {
                                     seriesElement
                                 }.toTypedArray()
                             )
-                        if (scrollable) {
+                        if (scrollable && monthsArray.size > 12) {
                             model.scrollablePlotArea(
                                 AAScrollablePlotArea()
                                     .minWidth(3000)
