@@ -44,7 +44,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
                             android:textAlignment="center"
-                            app:autoSizeMaxTextSize="60sp"
+                            app:autoSizeMaxTextSize="40sp"
                             app:autoSizeMinTextSize="12sp"
                             app:autoSizeTextType="uniform" />
 
@@ -70,7 +70,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
                             android:textAlignment="center"
-                            app:autoSizeMaxTextSize="60sp"
+                            app:autoSizeMaxTextSize="40sp"
                             app:autoSizeMinTextSize="12sp"
                             app:autoSizeTextType="uniform" />
 
@@ -96,7 +96,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
                             android:textAlignment="center"
-                            app:autoSizeMaxTextSize="60sp"
+                            app:autoSizeMaxTextSize="40sp"
                             app:autoSizeMinTextSize="12sp"
                             app:autoSizeTextType="uniform" />
 
