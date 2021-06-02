@@ -13,8 +13,8 @@ android {
         applicationId "net.ducksmanager.whattheduck"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 85
-        versionName "2.9.0"
+        versionCode 87
+        versionName "2.9.2"
         multiDexEnabled true
 
         javaCompileOptions {
@@ -107,7 +107,7 @@ dependencies {
     implementation 'org.conscrypt:conscrypt-android:2.5.2'
 
     implementation 'org.matomo.sdk:tracker:4.1.2'
-    implementation 'io.sentry:sentry-android:4.3.0'
+    implementation 'io.sentry:sentry-android:5.0.0'
 
     // Testing-only dependencies
     testImplementation 'junit:junit:4.13.2'

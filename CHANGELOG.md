@@ -1,4 +1,12 @@
-Version 2.9.0
+Version 2.9.2
+
+    Stats: Fix wrong x-axis label if the user has issues with an unknown purchase date
+
+Version 2.9.1
+
+    Stats: Fix crash when the user only has issues more recent than a year ago
+
+Version 2.9.0 "Phantom Blot"
     
     Add Stats screen
     Add social network links on Settings page
