@@ -112,10 +112,9 @@ class Stats : AppCompatActivityWithDrawer() {
 
                     val allMonthsArray = allMonths.toTypedArray()
                     val cumulatedSumPerPublication = allPublications.associateWith { 0 }.toMutableMap()
-                    val cumulatedSumPerMonth = allMonths.associateWith { 0 }.toMutableMap()
 
                     issuesPerMonthAndPublication.forEach {
-                        val monthIndex = allMonthsArray.indexOf(it.month)
+                        val monthIndex = max(allMonthsArray.indexOf(it.month), 0)
                         val publicationcode = it.publicationcode
                         val isMostOwnedPublication = mostOwnedPublications.contains(publicationcode)
                         val targetPublicationName = if (isMostOwnedPublication) {
@@ -129,7 +128,6 @@ class Stats : AppCompatActivityWithDrawer() {
                                 month,
                                 cumulatedSumPerPublication[targetPublicationName]!!
                             )
-                            cumulatedSumPerMonth.computeIfPresent(it.month) { _, v -> v + it.count }
                         }
                     }
 
