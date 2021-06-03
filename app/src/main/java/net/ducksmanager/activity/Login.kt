@@ -86,7 +86,11 @@ class Login : AppCompatActivity() {
                     }
                 }
 
-                override fun onErrorResponse(response: Response<List<Issue>>?) {}
+                override fun onErrorResponse(response: Response<List<Issue>>?) {
+                    WhatTheDuck.unregisterFromNotifications()
+                    appDB!!.userDao().deleteAll()
+                    originActivity.startActivity(Intent(activityRef.get(), Login::class.java))
+                }
 
                 override fun onSuccessfulResponse(response: Response<List<Issue>>) {
                     val user = User(apiDmUser!!, apiDmPassword!!)
