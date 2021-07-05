@@ -25,6 +25,7 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationPackage
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isNewVersionAvailable
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.numberOfIssues
 import net.ducksmanager.whattheduck.databinding.WtdListBinding
 import java.lang.ref.WeakReference
 
@@ -63,6 +64,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         if (!viewModel.data.hasObservers()) {
             val latestVersion = appDB!!.appVersionDao().find()
             isNewVersionAvailable = if (latestVersion == null) false else latestVersion.version > WhatTheDuck.applicationVersion
+
             viewModel.data.observe(this, onObserve())
         }
     }
@@ -202,6 +204,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.tipIssueSelection.visibility = if (shouldShowItemSelectionTip()) VISIBLE else GONE
         binding.validateSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
         binding.cancelSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
+        title = String.format(getString(R.string.my_collection), numberOfIssues)
     }
 
     private fun pickCoverPicture() {

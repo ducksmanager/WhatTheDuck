@@ -79,7 +79,7 @@
     <string name="long_tap_to_end_issue_range_selection">Long-tap on the last issue of your range</string>
     <string name="max_copies_info">You can specify a maximum of 3 copies for each issue</string>
     <string name="max_watched_authors_reached">You have reached the maximum number of authors to rate. Remove already watched authors if you want to rate a new one.</string>
-    <string name="my_collection">My collection</string>
+    <string name="my_collection">My collection (%d issues)</string>
     <string name="network_error">Network error</string>
     <string name="network_error__no_connection">Network issue: please check your Internet connection</string>
     <string name="new_feature">New features in the WhatTheDuck app</string>

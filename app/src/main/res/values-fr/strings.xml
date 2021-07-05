@@ -74,7 +74,7 @@
     <string name="long_tap_to_end_issue_range_selection">Faites un appui long sur le dernier numéro consécutif à sélectionner</string>
     <string name="max_copies_info">Vous pouvez spécifier un maximum de 3 exemplaires par numéro.</string>
     <string name="max_watched_authors_reached">Vous avez atteint le nombre maximal d\'auteurs surveillés. Supprimez des auteurs existants pour en ajouter d\'autres.</string>
-    <string name="my_collection">Ma collection</string>
+    <string name="my_collection">Ma collection (%d numéros)</string>
     <string name="network_error">Erreur réseau</string>
     <string name="network_error__no_connection">Problème de réseau : vérifiez votre connexion Internet</string>
     <string name="new_feature">Nouveautés de WhatTheDuck</string>

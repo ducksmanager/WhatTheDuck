@@ -50,8 +50,8 @@ class CountryAdapter internal constructor(
         val possessedRatio = 100 * i.possessedIssues.toDouble() / i.referencedIssues
         return when {
             possessedRatio == 0.0 -> ""
-            possessedRatio < 0.1 -> "< 0.1 %"
-            else -> String.format("%3.1f %%", possessedRatio.toBigDecimal().setScale(1, RoundingMode.HALF_EVEN).toFloat())
+            possessedRatio < 0.1 -> String.format("%d (< %3.1f %%)", i.possessedIssues, 0.1f)
+            else -> String.format("%d (%3.1f %%)", i.possessedIssues, possessedRatio.toBigDecimal().setScale(1, RoundingMode.HALF_EVEN).toFloat())
         }
     }
 
