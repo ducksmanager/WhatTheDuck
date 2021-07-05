@@ -36,10 +36,10 @@ class Stats : AppCompatActivityWithDrawer() {
                 binding.countryLabel.text = getString(R.string.countries_singular)
             }
             if (collectionCount.publications <= 1) {
-                binding.countryLabel.text = getString(R.string.publications_singular)
+                binding.publicationLabel.text = getString(R.string.publications_singular)
             }
             if (collectionCount.issues <= 1) {
-                binding.countryLabel.text = getString(R.string.issues_singular)
+                binding.issueLabel.text = getString(R.string.issues_singular)
             }
 
             if (collectionCount.issues.equals(0)) {
