@@ -219,7 +219,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
             binding.issueCopies.addTab(copyTab, tabPosition, true)
         } else {
             if (copies!!.conditions.size <= tab.position) {
-                copies!!.conditions.add(tab.position, null)
+                copies!!.conditions.add(tab.position, InducksIssueWithUserIssueAndScore.NO_CONDITION)
                 copies!!.purchaseIds.add(tab.position, null)
             }
             setFromConditionApiId(copies!!.conditions[tab.position])
