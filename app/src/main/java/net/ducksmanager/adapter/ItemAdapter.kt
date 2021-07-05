@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import net.ducksmanager.activity.ItemList
 import net.ducksmanager.activity.ItemList.Companion.isCoaList
 import net.ducksmanager.util.FilterTextOnChangeListener
@@ -22,7 +23,8 @@ import kotlin.math.max
 abstract class ItemAdapter<Item> internal constructor(
         val originActivity: Activity,
         val resourceToInflate: Int
-) : RecyclerView.Adapter<ItemAdapter<Item>.ViewHolder>() {
+) : RecyclerView.Adapter<ItemAdapter<Item>.ViewHolder>(),
+    FastScrollRecyclerView.SectionedAdapter {
 
     var items = emptyList<Item>()
     protected var filteredItems = mutableListOf<Item>()
@@ -187,4 +189,8 @@ abstract class ItemAdapter<Item> internal constructor(
     override fun getItemCount() = filteredItems.size
 
     fun getItem(position: Int) = filteredItems[position]
+
+    override fun getSectionName(position: Int): String {
+        return (getText(getItem(position))?:"-") + ""
+    }
 }

@@ -10,8 +10,6 @@ import android.view.View.*
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.wtd_list_navigation_country.view.*
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.persistence.models.coa.InducksCountryName
@@ -152,16 +150,6 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.addToCollectionBySelectionButton.setOnClickListener { goToAlternativeView() }
 
         binding.itemList.adapter = itemAdapter
-        val recyclerView = binding.itemList
-        while (recyclerView.itemDecorationCount > 0) {
-            recyclerView.removeItemDecorationAt(0)
-        }
-        if (hasDividers()) {
-            recyclerView.addItemDecoration(DividerItemDecoration(
-                recyclerView.context,
-                LinearLayoutManager(this).orientation
-            ))
-        }
 
         (application as WhatTheDuck).trackActivity(this)
         loadList()

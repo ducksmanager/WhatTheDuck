@@ -95,19 +95,21 @@
                 tools:ignore="HardcodedText" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
             android:id="@+id/itemList"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:orientation="vertical"
-            android:scrollbars="vertical"
-            android:scrollbarSize="10dp"
-            app:fastScrollEnabled="true"
-            app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
-            app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
-            app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
-            app:fastScrollVerticalTrackDrawable="@drawable/line_drawable"
+            android:scrollbarStyle="outsideInset"
+            app:fastScrollAutoHide="false"
+            app:fastScrollPopupTextSize="20sp"
+            app:fastScrollPopupBgColor="@color/fab_color"
+            app:fastScrollPopupTextColor="#fff"
+            app:fastScrollPopupBackgroundSize="40dp"
+            app:fastScrollThumbColor="@color/fab_color"
+            app:fastScrollTrackColor="#aaaaaa"
+            app:fastScrollThumbEnabled="true"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/row"
             tools:itemCount="50"
