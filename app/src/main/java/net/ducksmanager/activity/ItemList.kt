@@ -61,7 +61,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     open fun downloadAndShowList() {
         if (!viewModel.data.hasObservers()) {
             val latestVersion = appDB!!.appVersionDao().find()
-            isNewVersionAvailable = if (latestVersion == null) false else latestVersion.version > WhatTheDuck.applicationVersion
+            isNewVersionAvailable =
+                if (latestVersion == null) false
+                else getAppVersionFromString(latestVersion.version) >
+                    getAppVersionFromString(WhatTheDuck.applicationVersion)
 
             viewModel.data.observe(this, onObserve())
         }
@@ -272,5 +275,13 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             type = WhatTheDuck.CollectionType.USER.toString()
             startActivity(Intent(this, CountryList::class.java))
         }
+    }
+
+    private fun getAppVersionFromString(version: String): Int {
+        val versions = version.split(".")
+        val major = versions[0].toInt() * 10000
+        val minor = versions[1].toInt() * 100
+        val patch = versions[2].toInt()
+        return major + minor + patch
     }
 }

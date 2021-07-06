@@ -1,3 +1,7 @@
+Version 2.10.1
+
+    Fix new version detection
+
 Version 2.10.0
 
     Add fast scroll
