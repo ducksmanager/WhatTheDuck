@@ -1,3 +1,15 @@
+Version 2.10.0
+
+    Add fast scroll
+    Show the number of issues owned for each country
+    Show the total number of issues owned in the item list activity title
+    Set a condition by default when adding issues
+    Stats: Fix text if the user only owns issues from a single country or a single publication
+
+Version 2.9.3
+
+    Redirect to the login screen if the user has changed his password elsewhere
+
 Version 2.9.2
 
     Stats: Fix wrong x-axis label if the user has issues with an unknown purchase date

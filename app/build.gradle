@@ -13,8 +13,8 @@ android {
         applicationId "net.ducksmanager.whattheduck"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 88
-        versionName "2.9.3"
+        versionCode 89
+        versionName "2.10.0"
         multiDexEnabled true
 
         javaCompileOptions {
