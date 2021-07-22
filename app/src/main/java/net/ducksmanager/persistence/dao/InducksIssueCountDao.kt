@@ -13,7 +13,7 @@ interface InducksIssueCountDao {
     @Query("DELETE FROM inducks_issue_count")
     fun deleteAll()
 
-    @Query(" INSERT INTO inducks_issue_count" +
+    @Query(" INSERT OR REPLACE INTO inducks_issue_count" +
                  " SELECT substr(code, 0, instr(code, '/')) AS countryCode, SUM(count) AS countryCount" +
                  " FROM inducks_issue_count" +
                  " GROUP BY substr(code, 0, instr(code, '/'))")
