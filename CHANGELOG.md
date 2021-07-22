@@ -1,8 +1,12 @@
+Version 2.10.2
+
+    Fix crash when an Inducks issue doesn't have a publication code
+
 Version 2.10.1
 
     Fix new version detection
 
-Version 2.10.0
+Version 2.10.0 "Fantomius"
 
     Add fast scroll
     Show the number of issues owned for each country
