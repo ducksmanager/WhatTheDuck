@@ -1,7 +1,9 @@
 package net.ducksmanager.activity
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +22,7 @@ import net.ducksmanager.persistence.models.composite.SuggestionList
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.config
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.databinding.SuggestionsBinding
 
@@ -200,6 +203,15 @@ class Suggestions : AppCompatActivityWithDrawer() {
             val currentStory = stories.values.toList()[position]
             val storyCode = stories.keys.toList()[position]
             val story = storyDetails.find { inducksStory -> inducksStory.storycode == storyCode }
+            if (story?.storycode != null) {
+                holder.storyTitleView.setOnClickListener { view: View? ->
+                    this@StoryAdapter.context.startActivity(
+                        Intent(Intent.ACTION_VIEW).setData(
+                            Uri.parse(String.format("%s%s", config.getProperty("inducks_story_url"), story.storycode))
+                        )
+                    )
+                }
+            }
             holder.storyTitleView.text = if (story?.title?.isEmpty()!!) {
                 context.getString(R.string.no_title)
             } else {
