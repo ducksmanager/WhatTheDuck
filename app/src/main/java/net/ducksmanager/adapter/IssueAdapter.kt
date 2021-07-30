@@ -4,11 +4,10 @@ import android.app.Activity
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import net.ducksmanager.activity.IssueList
 import net.ducksmanager.activity.ItemList
 import net.ducksmanager.activity.ItemList.Companion.isCoaList
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToResourceId
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData.Companion.issueConditionToResourceId
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.R.drawable.*
 import net.ducksmanager.whattheduck.WhatTheDuck
@@ -16,14 +15,14 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
 import java.lang.ref.WeakReference
 
 class IssueAdapter internal constructor(
-        itemList: ItemList<InducksIssueWithUserIssueAndScore>
-) : ItemAdapter<InducksIssueWithUserIssueAndScore>(itemList, R.layout.row) {
+        itemList: ItemList<InducksIssueWithUserData>
+) : ItemAdapter<InducksIssueWithUserData>(itemList, R.layout.row) {
 
     private var firstRangeIssueNumber: String? = null
 
     override fun getViewHolder(v: View?) = ViewHolder(v)
 
-    override fun shouldShowFilter() = filteredItems.size > ItemList.MIN_ITEM_NUMBER_FOR_FILTER && IssueList.viewType == IssueList.ViewType.LIST_VIEW
+    override fun hasEnoughItemsForFilter() = filteredItems.size > ItemList.MIN_ITEM_NUMBER_FOR_FILTER
 
     override val onClickListener = View.OnClickListener { view: View ->
         if (isCoaList()) {
@@ -78,9 +77,9 @@ class IssueAdapter internal constructor(
         }
     }
 
-    inner class ViewHolder(v: View?) : ItemAdapter<InducksIssueWithUserIssueAndScore>.ViewHolder(v!!)
+    inner class ViewHolder(v: View?) : ItemAdapter<InducksIssueWithUserData>.ViewHolder(v!!)
 
-    override fun getCheckboxImageResource(i: InducksIssueWithUserIssueAndScore, activity: Activity): Int? {
+    override fun getCheckboxImageResource(i: InducksIssueWithUserData, activity: Activity): Int? {
         return when {
             !isCoaList() -> null
             selectedIssues.contains(i.issue.inducksIssueNumber) -> ic_checkbox_checked
@@ -88,7 +87,7 @@ class IssueAdapter internal constructor(
         }
     }
 
-    override fun getPrefixImageResource(i: InducksIssueWithUserIssueAndScore, activity: Activity): Int {
+    override fun getPrefixImageResource(i: InducksIssueWithUserData, activity: Activity): Int {
         return if (resourceToInflate == R.layout.row && i.userIssue != null) {
             issueConditionToResourceId(i.userIssue.condition) ?: android.R.color.transparent
         } else {
@@ -96,27 +95,27 @@ class IssueAdapter internal constructor(
         }
     }
 
-    override fun getSuffixImageResource(i: InducksIssueWithUserIssueAndScore): Int? {
+    override fun getSuffixImageResource(i: InducksIssueWithUserData): Int? {
         return when {
             i.userPurchase != null -> ic_clock
             else -> null
         }
     }
 
-    override fun getDescriptionText(i: InducksIssueWithUserIssueAndScore): String = i.issue.title
+    override fun getDescriptionText(i: InducksIssueWithUserData): String = i.issue.title
 
-    override fun getSuffixText(i: InducksIssueWithUserIssueAndScore): String? {
+    override fun getSuffixText(i: InducksIssueWithUserData): String? {
         return when {
             i.userPurchase != null -> i.userPurchase.date
             else -> null
         }
     }
 
-    override fun getIdentifier(i: InducksIssueWithUserIssueAndScore): String = i.issue.inducksIssueNumber
+    override fun getIdentifier(i: InducksIssueWithUserData): String = i.issue.inducksIssueNumber
 
-    override fun getText(i: InducksIssueWithUserIssueAndScore): String = i.issue.inducksIssueNumber
+    override fun getText(i: InducksIssueWithUserData): String = i.issue.inducksIssueNumber
 
-    override fun getComparatorText(i: InducksIssueWithUserIssueAndScore): String = getText(i)
+    override fun getComparatorText(i: InducksIssueWithUserData): String = getText(i)
 
-    override fun isPossessed(item: InducksIssueWithUserIssueAndScore): Boolean = item.userIssue != null
+    override fun isPossessed(item: InducksIssueWithUserData): Boolean = item.userIssue != null
 }

@@ -1,14 +1,14 @@
 package net.ducksmanager.persistence.models.composite
 
 import androidx.room.Embedded
-import net.ducksmanager.persistence.models.coa.InducksIssue
+import net.ducksmanager.persistence.models.coa.InducksIssueWithCoverUrl
 import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.whattheduck.R
 
-class InducksIssueWithUserIssueAndScore(
+class InducksIssueWithUserData(
     @Embedded
-    val issue: InducksIssue,
+    val issue: InducksIssueWithCoverUrl,
 
     @Embedded
     val userIssue: Issue?,

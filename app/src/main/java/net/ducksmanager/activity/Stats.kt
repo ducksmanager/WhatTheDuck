@@ -4,8 +4,8 @@ import android.os.Bundle
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aatools.AAColor
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToStringId
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData.Companion.issueConditionToStringId
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
@@ -49,9 +49,9 @@ class Stats : AppCompatActivityWithDrawer() {
             appDB!!.issueDao().countPerCondition().observe(this, { issuesPerCondition ->
                 val colors = issuesPerCondition.map {
                     when (it.condition) {
-                        InducksIssueWithUserIssueAndScore.BAD_CONDITION -> AAColor.Red
-                        InducksIssueWithUserIssueAndScore.NOTSOGOOD_CONDITION -> AAColor.Orange
-                        InducksIssueWithUserIssueAndScore.GOOD_CONDITION -> AAColor.Green
+                        InducksIssueWithUserData.BAD_CONDITION -> AAColor.Red
+                        InducksIssueWithUserData.NOTSOGOOD_CONDITION -> AAColor.Orange
+                        InducksIssueWithUserData.GOOD_CONDITION -> AAColor.Green
                         else -> AAColor.Gray
                     }
                 }

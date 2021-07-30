@@ -21,7 +21,7 @@ import net.ducksmanager.persistence.models.internal.Sync
     ContributionTotalPoints::class,
     CoverSearchIssue::class,
     InducksCountryName::class,
-    InducksIssue::class,
+    InducksIssueWithCoverUrl::class,
     InducksIssueCount::class,
     InducksPerson::class,
     InducksPublication::class,
@@ -35,7 +35,7 @@ import net.ducksmanager.persistence.models.internal.Sync
     User::class,
     UserMessage::class,
     UserSetting::class
- ], version = 13, exportSchema = true)
+ ], version = 14, exportSchema = true)
 @TypeConverters(StringMutableSetConverter::class, StringIntMapConverter::class, InstantConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -69,6 +69,11 @@ abstract class AppDatabase : RoomDatabase() {
         val MIGRATION_12_13: Migration = object : Migration(12, 13) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE issues ADD `creationDate` TEXT DEFAULT null")
+            }
+        }
+        val MIGRATION_13_14: Migration = object : Migration(13, 14) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE inducks_issue ADD `coverUrl` TEXT DEFAULT null")
             }
         }
     }

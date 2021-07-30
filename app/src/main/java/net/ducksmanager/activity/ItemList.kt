@@ -57,6 +57,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     protected abstract fun shouldShowAddToCollectionButton(): Boolean
     protected abstract fun shouldShowItemSelectionTip(): Boolean
     protected abstract fun shouldShowSelectionValidation(): Boolean
+    protected abstract fun shouldShowZoom(): Boolean
 
     open fun downloadAndShowList() {
         if (!viewModel.data.hasObservers()) {
@@ -113,13 +114,15 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
         val filterEditText = binding.filter
         itemAdapter.updateFilteredList("")
-        if (itemAdapter.shouldShowFilter()) {
+        if (itemAdapter.hasEnoughItemsForFilter() && isFilterableList()) {
             itemAdapter.addOrReplaceFilterOnChangeListener(filterEditText)
         } else {
             filterEditText.visibility = GONE
         }
         binding.progressBar.visibility = GONE
     }
+
+    protected abstract fun isFilterableList(): Boolean;
 
     protected abstract var itemAdapter: ItemAdapter<Item>
 
@@ -170,11 +173,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     }
 
     private fun goToAlternativeView() {
-        if (isCoaList()) {
-            type = WhatTheDuck.CollectionType.USER.toString()
+        type = if (isCoaList()) {
+            WhatTheDuck.CollectionType.USER.toString()
         } else {
-            IssueList.viewType = IssueList.ViewType.LIST_VIEW
-            type = WhatTheDuck.CollectionType.COA.toString()
+            WhatTheDuck.CollectionType.COA.toString()
         }
         (application as WhatTheDuck).trackActivity(this)
         loadList()
@@ -195,6 +197,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.tipIssueSelection.visibility = if (shouldShowItemSelectionTip()) VISIBLE else GONE
         binding.validateSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
         binding.cancelSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
+        binding.zoomWrapper.visibility = if (shouldShowZoom()) VISIBLE else GONE
         title = String.format(getString(R.string.my_collection), numberOfIssues)
     }
 

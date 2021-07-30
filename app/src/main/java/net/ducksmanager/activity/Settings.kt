@@ -57,7 +57,7 @@ class Settings : AppCompatActivityWithDrawer() {
             })
         }
 
-        binding.linkToDiscord.setOnClickListener { view: View? ->
+        binding.linkToDiscord.setOnClickListener {
             this@Settings.startActivity(
                 Intent(Intent.ACTION_VIEW).setData(Uri.parse(
                     WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_DISCORD_URL)
@@ -65,7 +65,7 @@ class Settings : AppCompatActivityWithDrawer() {
             )
         }
 
-        binding.linkToYoutube.setOnClickListener { view: View? ->
+        binding.linkToYoutube.setOnClickListener {
             this@Settings.startActivity(
                 Intent(Intent.ACTION_VIEW).setData(Uri.parse(
                     WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_YOUTUBE_URL)
@@ -73,7 +73,7 @@ class Settings : AppCompatActivityWithDrawer() {
             )
         }
 
-        binding.linkToInstagram.setOnClickListener { view: View? ->
+        binding.linkToInstagram.setOnClickListener {
             this@Settings.startActivity(
                 Intent(Intent.ACTION_VIEW).setData(Uri.parse(
                     WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_INSTAGRAM_URL)
@@ -81,7 +81,7 @@ class Settings : AppCompatActivityWithDrawer() {
             )
         }
 
-        binding.linkToFacebook.setOnClickListener { view: View? ->
+        binding.linkToFacebook.setOnClickListener {
             this@Settings.startActivity(
                 Intent(Intent.ACTION_VIEW).setData(Uri.parse(
                     WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_FACEBOOK_URL)

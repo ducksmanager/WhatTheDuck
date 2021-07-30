@@ -90,6 +90,7 @@ class WhatTheDuck : Application() {
         const val CONFIG_KEY_ROLE_NAME = "role_name"
         const val CONFIG_KEY_ROLE_PASSWORD = "role_password"
         const val CONFIG_KEY_EDGES_URL = "edges_url"
+        const val CONFIG_KEY_EDGE_COVERS_URL = "edge_covers_url"
         private const val CONFIG_KEY_MATOMO_URL = "matomo_url"
         private const val CONFIG_MATOMO_DIMENSION_USER = 1
         private const val CONFIG_MATOMO_DIMENSION_VERSION = 2
@@ -213,7 +214,7 @@ class WhatTheDuck : Application() {
                     return false
                 }
                 return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    connectivityManager!!.activeNetworkInfo != null && connectivityManager!!.activeNetworkInfo.isConnected && connectivityManager!!.activeNetworkInfo.type == ConnectivityManager.TYPE_MOBILE
+                    connectivityManager!!.activeNetworkInfo != null && connectivityManager!!.activeNetworkInfo?.isConnected == true && connectivityManager!!.activeNetworkInfo?.type == ConnectivityManager.TYPE_MOBILE
                 } else {
                     connectivityManager!!.activeNetwork != null && connectivityManager!!.getNetworkCapabilities(connectivityManager!!.activeNetwork)?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
                 }
@@ -247,7 +248,8 @@ class WhatTheDuck : Application() {
                     AppDatabase.MIGRATION_9_10,
                     AppDatabase.MIGRATION_10_11,
                     AppDatabase.MIGRATION_11_12,
-                    AppDatabase.MIGRATION_12_13
+                    AppDatabase.MIGRATION_12_13,
+                    AppDatabase.MIGRATION_13_14
                 )
                 .fallbackToDestructiveMigration()
                 .build()

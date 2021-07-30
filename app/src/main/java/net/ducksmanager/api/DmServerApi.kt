@@ -1,5 +1,6 @@
 package net.ducksmanager.api
 
+import net.ducksmanager.persistence.models.coa.InducksIssueWithCoverUrl
 import net.ducksmanager.persistence.models.coa.InducksQuotation
 import net.ducksmanager.persistence.models.composite.*
 import net.ducksmanager.persistence.models.dm.ContributionTotalPoints
@@ -26,8 +27,8 @@ interface DmServerApi {
     @get:GET("/coa/list/issues/count")
     val issueCount: Call<HashMap<String, Int>>
 
-    @GET("/coa/list/issues/withTitle/{publicationCode}")
-    fun getIssues(@Path(value = "publicationCode", encoded = true) publicationCode: String): Call<HashMap<String, String>>
+    @GET("/coa/list/issues/withDetails/{publicationCode}")
+    fun getIssues(@Path(value = "publicationCode", encoded = true) publicationCode: String): Call<List<InducksIssueWithCoverUrl>>
 
     @get:GET("/collection/issues")
     val userIssues: Call<List<Issue>>

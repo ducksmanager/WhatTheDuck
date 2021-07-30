@@ -46,7 +46,7 @@ class PurchaseAdapter internal constructor(private val context: Context, private
 
         init {
             val clickListener = View.OnClickListener {
-                selectedItem = items[adapterPosition]
+                selectedItem = items[bindingAdapterPosition]
                 notifyItemRangeChanged(0, items.size)
             }
             itemView.setOnClickListener(clickListener)

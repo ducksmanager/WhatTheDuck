@@ -11,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow.OnScrollPositionListener
 import net.ducksmanager.activity.AddIssues
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithDetails
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToResourceId
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore.Companion.issueConditionToStringId
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData.Companion.issueConditionToResourceId
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData.Companion.issueConditionToStringId
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB

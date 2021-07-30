@@ -28,7 +28,7 @@ open class ConnectionDetector(lifecycleScope: LifecycleCoroutineScope, callback:
             }
         }
 
-        override fun onLost(network: Network?) {
+        override fun onLost(network: Network) {
             if (!isOfflineMode) {
                 isOfflineMode = true
                 lifecycleScope.launch {

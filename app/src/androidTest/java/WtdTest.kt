@@ -23,7 +23,6 @@ import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnitRunner
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
-import net.ducksmanager.activity.IssueList
 import net.ducksmanager.activity.Login
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.persistence.AppDatabase
@@ -173,7 +172,6 @@ open class WtdTest : AndroidJUnitRunner {
 
     @Before
     fun resetConfigs() {
-        IssueList.viewType = IssueList.ViewType.LIST_VIEW
         WhatTheDuck.isOfflineMode = false
         DownloadHandlerMock.state["offlineMode"] = false
     }

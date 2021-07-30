@@ -29,7 +29,7 @@ abstract class ItemAdapter<Item> internal constructor(
     var items = emptyList<Item>()
     protected var filteredItems = mutableListOf<Item>()
 
-    open fun shouldShowFilter() = filteredItems.size > ItemList.MIN_ITEM_NUMBER_FOR_FILTER
+    open fun hasEnoughItemsForFilter() = filteredItems.size > ItemList.MIN_ITEM_NUMBER_FOR_FILTER
 
     companion object {
         private var filterTextOnChangeListener: FilterTextOnChangeListener? = null
@@ -84,7 +84,9 @@ abstract class ItemAdapter<Item> internal constructor(
         filteredItems = items
             .filter {
                 (isCoaList() || isPossessed(it)) &&
-                        (textFilter == "" || getText(it)!!.toLowerCase(Locale.FRANCE).contains(textFilter.toLowerCase(Locale.getDefault())))
+                        (textFilter == "" || getText(it)!!.lowercase(Locale.FRANCE).contains(
+                            textFilter.lowercase(Locale.getDefault())
+                        ))
             }
             .toMutableList()
     }

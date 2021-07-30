@@ -21,7 +21,7 @@ import net.ducksmanager.adapter.PurchaseAdapter
 import net.ducksmanager.adapter.PurchaseAdapter.NoPurchase
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.api.DmServer.Companion.api
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserIssueAndScore
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData
 import net.ducksmanager.persistence.models.composite.IssueCopiesToUpdate
 import net.ducksmanager.persistence.models.composite.IssueListToUpdate
 import net.ducksmanager.persistence.models.dm.Issue
@@ -91,7 +91,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
             this.purchases.addAll(purchases)
 
             val publicationCode = selectedPublication!!.publicationCode
-            appDB!!.inducksIssueDao().findUserOwnedByPublicationCodeAndIssueNumber(publicationCode, selectedIssues.first()).observe(this, { dbCopies: List<InducksIssueWithUserIssueAndScore> ->
+            appDB!!.inducksIssueDao().findUserOwnedByPublicationCodeAndIssueNumber(publicationCode, selectedIssues.first()).observe(this, { dbCopies: List<InducksIssueWithUserData> ->
                 if (selectedIssues.toSet().size > 1) {
                     this.binding.issueCopies.visibility = GONE
                     show(dbCopies.firstOrNull()?.userIssue)
@@ -182,7 +182,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
                             binding.issueCopies.getTabAt(0)!!.select()
                             return
                         } else {
-                            val firstCopyWithMissingCondition = copies!!.conditions.indexOfFirst { it == InducksIssueWithUserIssueAndScore.MISSING }
+                            val firstCopyWithMissingCondition = copies!!.conditions.indexOfFirst { it == InducksIssueWithUserData.MISSING }
                             if (firstCopyWithMissingCondition > -1) {
                                 info(WeakReference(this@AddIssues), R.string.set_conditions_on_existing_copies_before_adding_new, 2000)
                                 binding.issueCopies.getTabAt(firstCopyWithMissingCondition)!!.select()
@@ -219,7 +219,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
             binding.issueCopies.addTab(copyTab, tabPosition, true)
         } else {
             if (copies!!.conditions.size <= tab.position) {
-                copies!!.conditions.add(tab.position, InducksIssueWithUserIssueAndScore.NO_CONDITION)
+                copies!!.conditions.add(tab.position, InducksIssueWithUserData.NO_CONDITION)
                 copies!!.purchaseIds.add(tab.position, null)
             }
             setFromConditionApiId(copies!!.conditions[tab.position])
@@ -239,19 +239,19 @@ class AddIssues : AppCompatActivity(), OnClickListener {
     }
 
     private fun getConditionApiId() = when (binding.condition.checkedRadioButtonId) {
-        R.id.missing -> InducksIssueWithUserIssueAndScore.MISSING
-        R.id.badCondition -> InducksIssueWithUserIssueAndScore.BAD_CONDITION
-        R.id.notSoGoodCondition -> InducksIssueWithUserIssueAndScore.NOTSOGOOD_CONDITION
-        R.id.goodCondition -> InducksIssueWithUserIssueAndScore.GOOD_CONDITION
-        else -> InducksIssueWithUserIssueAndScore.NO_CONDITION
+        R.id.missing -> InducksIssueWithUserData.MISSING
+        R.id.badCondition -> InducksIssueWithUserData.BAD_CONDITION
+        R.id.notSoGoodCondition -> InducksIssueWithUserData.NOTSOGOOD_CONDITION
+        R.id.goodCondition -> InducksIssueWithUserData.GOOD_CONDITION
+        else -> InducksIssueWithUserData.NO_CONDITION
     }
 
     private fun setFromConditionApiId(condition: String?) {
         when (condition) {
-            InducksIssueWithUserIssueAndScore.BAD_CONDITION -> binding.badCondition.performClick()
-            InducksIssueWithUserIssueAndScore.NOTSOGOOD_CONDITION -> binding.notSoGoodCondition.performClick()
-            InducksIssueWithUserIssueAndScore.GOOD_CONDITION -> binding.goodCondition.performClick()
-            InducksIssueWithUserIssueAndScore.NO_CONDITION -> binding.noCondition.performClick()
+            InducksIssueWithUserData.BAD_CONDITION -> binding.badCondition.performClick()
+            InducksIssueWithUserData.NOTSOGOOD_CONDITION -> binding.notSoGoodCondition.performClick()
+            InducksIssueWithUserData.GOOD_CONDITION -> binding.goodCondition.performClick()
+            InducksIssueWithUserData.NO_CONDITION -> binding.noCondition.performClick()
             else -> binding.missing.performClick()
         }
     }

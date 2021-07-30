@@ -88,4 +88,8 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
     override fun shouldShowItemSelectionTip() = false
 
     override fun shouldShowSelectionValidation() = false
+
+    override fun shouldShowZoom() = false
+
+    override fun isFilterableList() = true
 }
