@@ -222,7 +222,7 @@ open class WtdTest : AndroidJUnitRunner {
     }
 
     protected fun goToPublicationListView(countryCode: String) {
-        val countryMatcher = getItemMatcher(countryCode.toLowerCase())
+        val countryMatcher = getItemMatcher(countryCode.lowercase(Locale.getDefault()))
 
         onView(ViewMatchers.withId(R.id.itemList))
             .perform(

@@ -18,5 +18,4 @@ class IssueCopiesToUpdate(
     @Expose
     @SerializedName("purchaseId")
     val purchaseIds: MutableList<Int?>,
-) {
-}
+)

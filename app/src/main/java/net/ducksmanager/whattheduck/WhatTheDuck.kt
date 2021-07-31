@@ -90,7 +90,7 @@ class WhatTheDuck : Application() {
         const val CONFIG_KEY_ROLE_NAME = "role_name"
         const val CONFIG_KEY_ROLE_PASSWORD = "role_password"
         const val CONFIG_KEY_EDGES_URL = "edges_url"
-        const val CONFIG_KEY_EDGE_COVERS_URL = "edge_covers_url"
+        const val CONFIG_KEY_COVERS_URL = "covers_url"
         private const val CONFIG_KEY_MATOMO_URL = "matomo_url"
         private const val CONFIG_MATOMO_DIMENSION_USER = 1
         private const val CONFIG_MATOMO_DIMENSION_VERSION = 2

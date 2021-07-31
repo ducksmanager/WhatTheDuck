@@ -30,6 +30,7 @@
     <string name="create_new_purchase_date">Skapa ett köpdatum</string>
     <string name="delete_rating">Radera</string>
     <string name="edge_view">Bokhylla</string>
+    <string name="edit">Redigera</string>
     <string name="email_address">E-mail</string>
     <string name="error">Fel</string>
     <string name="error__cannot_create_upload_file">Det går inte att skapa uppladdningsfil från bitmapp</string>
@@ -138,4 +139,5 @@
     <string name="welcome_bookcase_view_portrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
     <string name="welcome_message">Din DucksManager-samling visas när du öppnar What The Duck. Klicka på ett land för att se de publikationer du har, eller tryck på \"+\" för att lägga till en utgåva  i din samling.</string>
     <string name="welcome_title">Välkommen till What The Duck!</string>
+    <string name="zoom">Zoom</string>
 </resources>

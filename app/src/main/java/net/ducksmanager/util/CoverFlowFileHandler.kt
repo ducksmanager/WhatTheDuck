@@ -52,7 +52,7 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
         Companion.originActivityRef = originActivityRef
     }
 
-    lateinit var uploadFile: File
+    private lateinit var uploadFile: File
     internal var uploadUri: Uri? = null
 
     private var callback: TransformationCallback? = null

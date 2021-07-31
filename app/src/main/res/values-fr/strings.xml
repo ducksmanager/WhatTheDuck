@@ -30,6 +30,7 @@
     <string name="create_new_purchase_date">Créer une date d\'achat</string>
     <string name="delete_rating">Supprimer</string>
     <string name="edge_view">Bibliothèque</string>
+    <string name="edit">Modifier</string>
     <string name="email_address">Adresse e-mail</string>
     <string name="error">Erreur</string>
     <string name="error__cannot_create_upload_file">Impossible de créer un fichier à envoyer à partir de la photo de couverture</string>
@@ -138,4 +139,5 @@
     <string name="welcome_bookcase_view_portrait">Bienvenue dans votre bibliothèque ! Orientez votre écran en mode paysage pour le meilleur effet ;-)</string>
     <string name="welcome_message">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur + pour ajouter un numéro.</string>
     <string name="welcome_title">Bienvenue sur What The Duck !</string>
+    <string name="zoom">Zoom</string>
 </resources>

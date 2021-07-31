@@ -171,7 +171,7 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
                     }
                 })
                 binding.itemList.layoutManager = GridLayoutManager(this, spanCount)
-                IssueCoverAdapter(this, binding.itemList, resources.configuration.orientation)
+                IssueCoverAdapter(this, binding.itemList)
             }
         }
     }

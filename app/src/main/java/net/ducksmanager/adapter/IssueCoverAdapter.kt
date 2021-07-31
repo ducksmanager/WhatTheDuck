@@ -13,11 +13,8 @@ import net.ducksmanager.whattheduck.WhatTheDuck
 
 class IssueCoverAdapter internal constructor(
     itemList: ItemList<InducksIssueWithUserData>,
-    private val recyclerView: RecyclerView,
-    private val orientation: Int
+    private val recyclerView: RecyclerView
 ) : ItemAdapter<InducksIssueWithUserData>(itemList, R.layout.cell_cover) {
-    private var expectedEdgeHeight: Int? = null
-
     override fun getViewHolder(v: View?) = ViewHolder(v)
 
     override val onClickListener: View.OnClickListener? = null
@@ -31,23 +28,19 @@ class IssueCoverAdapter internal constructor(
         val itemHolder = holder as ViewHolder
         val item = getItem(position)
 
-//        if (expectedEdgeHeight == null) {
-//            expectedEdgeHeight = if (orientation == Configuration.ORIENTATION_LANDSCAPE) recyclerView.height else recyclerView.width
-//        }
         Picasso
             .with(holder.itemView.context)
             .load(getEdgeUrl(item))
             .resize(0,
                 (recyclerView.measuredWidth / (recyclerView.layoutManager as GridLayoutManager).spanCount)
             )
-//            .rotate(if (orientation == Configuration.ORIENTATION_LANDSCAPE) 0f else 90f)
             .into(itemHolder.coverImage)
     }
 
     private fun getEdgeUrl(i: InducksIssueWithUserData): String {
         return String.format(
             "%s/%s",
-            WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_EDGE_COVERS_URL),
+            WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_COVERS_URL),
             i.issue.coverUrl
         )
     }

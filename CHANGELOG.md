@@ -1,3 +1,11 @@
+Version 2.11.0
+
+    Add gallery view
+    Migrate the carousel layout to a new library
+    Show number of copies on stats screen
+    Redirect to the Inducks story webpage when the user taps on a story in the suggestion list
+    Add missing Luxembourg flag
+
 Version 2.10.2
 
     Fix crash when an Inducks issue doesn't have a publication code

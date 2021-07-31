@@ -122,7 +122,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.progressBar.visibility = GONE
     }
 
-    protected abstract fun isFilterableList(): Boolean;
+    protected abstract fun isFilterableList(): Boolean
 
     protected abstract var itemAdapter: ItemAdapter<Item>
 

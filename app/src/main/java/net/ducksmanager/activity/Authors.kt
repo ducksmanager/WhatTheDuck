@@ -133,15 +133,15 @@ class Authors : AppCompatActivityWithDrawer() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(inflater.inflate(R.layout.row_author_notation, parent, false))
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val currentNotation = authorNotations[position]
+        override fun onBindViewHolder(holder: ViewHolder, _position: Int) {
+            val currentNotation = authorNotations[holder.bindingAdapterPosition]
             holder.authorName.text = authorNames[currentNotation.personCode]
             holder.notation.rating = currentNotation.notation.toFloat()
             holder.notation.setOnRatingBarChangeListener { _, value, _ ->
-                val updatedAuthorNotation = AuthorNotation(authorNotations[position].personCode, value.toInt())
+                val updatedAuthorNotation = AuthorNotation(authorNotations[holder.bindingAdapterPosition].personCode, value.toInt())
                 api.updateAuthorNotation(updatedAuthorNotation).enqueue(object : DmServer.Callback<Void>("updateAuthorNotation", activity, true) {
                     override fun onSuccessfulResponse(response: Response<Void>) {
-                        authorNotations[position] = updatedAuthorNotation
+                        authorNotations[holder.bindingAdapterPosition] = updatedAuthorNotation
                         notifyDataSetChanged()
                     }
                 })
@@ -150,7 +150,7 @@ class Authors : AppCompatActivityWithDrawer() {
             holder.deleteRating.setOnClickListener {
                 api.deleteAuthorNotation(currentNotation).enqueue(object : DmServer.Callback<Void>("deleteAuthorNotation", activity, true) {
                     override fun onSuccessfulResponse(response: Response<Void>) {
-                        authorNotations.removeAt(position)
+                        authorNotations.removeAt(holder.bindingAdapterPosition)
                         notifyDataSetChanged()
                         activity.toggleEmptyAuthorListVisibility()
                         activity.toggleMaxAuthorsWatchedVisibility()

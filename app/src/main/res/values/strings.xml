@@ -33,6 +33,7 @@
     <string name="delete_rating">Delete</string>
     <string name="discord" translatable="false">Discord</string>
     <string name="edge_view">Bookcase</string>
+    <string name="edit">Edit</string>
     <string name="email_address">E-mail</string>
     <string name="error">Error</string>
     <string name="error__cannot_create_upload_file">Cannot create upload file from bitmap</string>
@@ -146,4 +147,5 @@
     <string name="welcome_message">Your DucksManager collection is displayed when you open What The Duck. Tap on a country to view the publications that you possess, or tap on \"+\" to add an issue to your collection.</string>
     <string name="welcome_title">Welcome on What The Duck!</string>
     <string name="youtube" translatable="false">YouTube</string>
+    <string name="zoom">Zoom</string>
 </resources>

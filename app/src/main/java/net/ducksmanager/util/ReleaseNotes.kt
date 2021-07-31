@@ -38,7 +38,7 @@ class ReleaseNotes private constructor(private val majorVersion: String, private
                 val videoView = view.findViewById<VideoView>(R.id.video)
                 videoView.setVideoURI(uri)
                 videoView.setOnPreparedListener { it.isLooping = true }
-                videoView.start();
+                videoView.start()
             } else {
                 view.findViewById<ImageView>(R.id.video).visibility = View.GONE
             }

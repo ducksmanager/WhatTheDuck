@@ -209,7 +209,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerHorizontal="false"
                 android:layout_marginBottom="10dp"
-                android:contentDescription="Cancel"
+                android:contentDescription="@string/cancel"
                 android:src="@drawable/ic_cancel"
                 app:backgroundTint="#555"
                 app:rippleColor="@android:color/white" />
@@ -221,7 +221,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="false"
-                android:contentDescription="Validate"
+                android:contentDescription="@string/ok"
                 android:src="@drawable/ic_check"
                 app:backgroundTint="@android:color/holo_green_dark"
                 app:rippleColor="@android:color/white" />
@@ -295,7 +295,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="false"
                 android:layout_marginEnd="10dp"
-                android:contentDescription="Edit issues"
+                android:contentDescription="@string/edit"
                 android:src="@drawable/ic_pen"
                 android:visibility="invisible"
                 app:backgroundTint="@android:color/holo_green_dark"

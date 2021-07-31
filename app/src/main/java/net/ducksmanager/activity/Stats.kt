@@ -50,7 +50,7 @@ class Stats : AppCompatActivityWithDrawer() {
                 binding.issueLabel.text = getString(R.string.issues_singular)
             }
 
-            if (collectionCount.issues.equals(0)) {
+            if (collectionCount.issues == 0) {
                 return@observe
             }
 
