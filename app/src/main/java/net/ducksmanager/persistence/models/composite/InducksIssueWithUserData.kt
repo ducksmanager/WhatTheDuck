@@ -44,8 +44,7 @@ class InducksIssueWithUserData(
                 BAD_CONDITION -> R.string.condition_bad
                 NOTSOGOOD_CONDITION -> R.string.condition_notsogood
                 GOOD_CONDITION -> R.string.condition_good
-                NO_CONDITION -> R.string.condition_none
-                else -> -1
+                else -> R.string.condition_none
             }
         }
     }
