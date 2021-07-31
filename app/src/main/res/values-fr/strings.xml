@@ -40,6 +40,8 @@
     <string name="favorite_authors">Mes auteurs favoris</string>
     <string name="filter">Filtrer</string>
     <string name="in_this_condition">Dans cet état</string>
+    <string name="including1Copy">dont %d double</string>
+    <string name="includingXCopies">dont %d doubles</string>
     <string name="input_error">Erreur de saisie</string>
     <string name="input_error__author_already_rated">Vous avez déjà noté cet auteur !</string>
     <string name="input_error__empty_credentials">Vous devez saisir votre pseudonyme et votre mot de passe pour continuer</string>

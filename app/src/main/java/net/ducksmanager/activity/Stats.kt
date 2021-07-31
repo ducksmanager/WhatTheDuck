@@ -27,9 +27,19 @@ class Stats : AppCompatActivityWithDrawer() {
         toggleToolbar()
 
         appDB!!.issueDao().countDistinct().observe(this, { collectionCount ->
+            val copies = collectionCount.issues - collectionCount.distinctIssues
+
             binding.countryCount.text = "%d".format(collectionCount.countries)
             binding.publicationCount.text = "%d".format(collectionCount.publications)
             binding.issueCount.text = "%d".format(collectionCount.issues)
+            binding.issueDetails.text = getString(
+                if (copies <= 1) {
+                    R.string.including1Copy
+                } else {
+                    R.string.includingXCopies
+                }
+            ).format(copies)
+
             if (collectionCount.countries <= 1) {
                 binding.countryLabel.text = getString(R.string.countries_singular)
             }

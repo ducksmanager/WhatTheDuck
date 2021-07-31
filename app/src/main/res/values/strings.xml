@@ -44,6 +44,8 @@
     <string name="favorite_authors">My favorite authors</string>
     <string name="filter">Filter</string>
     <string name="in_this_condition">In this condition</string>
+    <string name="including1Copy">incl. %d copy</string>
+    <string name="includingXCopies">incl. %d copies</string>
     <string name="input_error">Input error</string>
     <string name="input_error__author_already_rated">You have already rated this author!</string>
     <string name="input_error__empty_credentials">You need to enter your credentials to continue</string>

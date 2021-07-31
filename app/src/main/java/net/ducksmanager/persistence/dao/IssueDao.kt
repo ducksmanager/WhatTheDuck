@@ -18,7 +18,8 @@ interface IssueDao {
     @Query("SELECT" +
         "(select COUNT(distinct issues.country) FROM issues) AS countries," +
         "(select COUNT(distinct issues.country || '/' || issues.magazine) FROM issues) AS publications," +
-        "(select COUNT(*) FROM issues) AS issues")
+        "(select COUNT(*) FROM issues) AS issues," +
+        "(select COUNT(distinct issues.country || '/' || issues.magazine || ' ' || issues.issueNumber) FROM issues) AS distinctIssues")
     fun countDistinct(): LiveData<CollectionCount>
 
     @Query(" SELECT issues.condition, COUNT(*) AS count FROM issues GROUP BY issues.condition ORDER BY issues.condition")
