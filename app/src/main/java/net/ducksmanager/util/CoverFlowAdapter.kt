@@ -4,75 +4,50 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithDetails
 import net.ducksmanager.whattheduck.databinding.ItemCoverflowBinding
 
-internal class CoverFlowAdapter(private val context: Context) : BaseAdapter() {
-    private lateinit var binding: ItemCoverflowBinding
-
+class CoverFlowAdapter(private val context: Context) : RecyclerView.Adapter<CoverflowViewHolder>() {
     private var data: List<CoverSearchIssueWithDetails>? = null
+    private var height: Int? = null
 
     fun setData(data: List<CoverSearchIssueWithDetails>?) {
         this.data = data
     }
 
-    override fun getCount(): Int = data!!.size
-
-    override fun getItem(pos: Int): Any = data!![pos]
+    override fun getItemCount(): Int = data!!.size
 
     override fun getItemId(pos: Int): Long = pos.toLong()
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var rowView = convertView
-        val viewHolder: ViewHolder
-
-        if (rowView == null) {
-            val coverFullUrl = data!![position].coverSearchIssue.coverUrl
-
-            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            binding = ItemCoverflowBinding.inflate(inflater, parent, false)
-            rowView = binding.root
-
-            viewHolder = ViewHolder()
-            viewHolder.text = binding.label
-
-            viewHolder.image = binding.image
-            viewHolder.image.tag = coverFullUrl
-
-            viewHolder.progressBar = binding.progressBar
-
-            Picasso
-                .with(rowView.context)
-                .load(coverFullUrl)
-                .into(viewHolder.image, object: Callback {
-                    override fun onSuccess() {
-                        viewHolder.progressBar.visibility = View.GONE
-                        viewHolder.image.visibility = View.VISIBLE
-                    }
-
-                    override fun onError() {
-                        viewHolder.progressBar.visibility = View.GONE
-                        viewHolder.image.visibility = View.VISIBLE
-                    }
-                })
-
-            rowView.tag = viewHolder
-        } else {
-            viewHolder = rowView.tag as ViewHolder
-        }
-        viewHolder.text.text = data!![position].coverSearchIssue.coverIssueNumber
-        return rowView
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoverflowViewHolder {
+        height = parent.height
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        return CoverflowViewHolder(ItemCoverflowBinding.inflate(inflater, parent, false))
     }
 
-    private class ViewHolder {
-        lateinit var text: TextView
-        lateinit var image: ImageView
-        lateinit var progressBar: ProgressBar
+    override fun onBindViewHolder(holder: CoverflowViewHolder, position: Int) {
+        val item = data!![position]
+        holder.binding.label.text = data!![position].coverSearchIssue.coverIssueNumber
+
+        Picasso
+            .with(context)
+            .load(item.coverSearchIssue.coverUrl).resize(0, height!!)
+            .into(holder.binding.image, object: Callback {
+                override fun onSuccess() {
+                    holder.binding.progressBar.visibility = View.GONE
+                    holder.binding.image.visibility = View.VISIBLE
+                }
+
+                override fun onError() {
+                    holder.binding.progressBar.visibility = View.GONE
+                    holder.binding.image.visibility = View.VISIBLE
+                }
+            })
     }
 }
+
+class CoverflowViewHolder internal constructor(val binding: ItemCoverflowBinding) :
+    RecyclerView.ViewHolder(binding.root)

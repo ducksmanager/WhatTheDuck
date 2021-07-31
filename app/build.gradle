@@ -87,7 +87,7 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.3.0'
     implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.1'
 
-    implementation 'com.github.moondroid.coverflow:library:1.0'
+    implementation 'com.mig35:carousellayoutmanager:1.4.6'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation "com.google.firebase:firebase-messaging:22.0.0"
@@ -95,7 +95,7 @@ dependencies {
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.pusher:push-notifications-android:1.7.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'

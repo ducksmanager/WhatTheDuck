@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:coverflow="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -78,18 +77,13 @@
         </LinearLayout>
     </LinearLayout>
 
-    <it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow
-        android:id="@+id/coverflow"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_horizontal"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        coverflow:coverHeight="@dimen/cover_height"
-        coverflow:coverWidth="@dimen/cover_width"
-        coverflow:maxScaleFactor="1.5"
-        coverflow:reflectionOpacity="0"
-        coverflow:rotationThreshold="0.5"
-        coverflow:scalingThreshold="0.5"
-        coverflow:spacing="0.9" />
+        android:layout_height="350dp"
+        android:layout_centerInParent="true"
+        tools:listitem="@layout/item_coverflow"/>
 
     <LinearLayout
         android:id="@+id/condition"

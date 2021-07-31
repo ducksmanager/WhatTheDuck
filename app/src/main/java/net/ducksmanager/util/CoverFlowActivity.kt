@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow.OnScrollPositionListener
+import com.mig35.carousellayoutmanager.CarouselLayoutManager
+import com.mig35.carousellayoutmanager.CarouselZoomPostLayoutListener
+import com.mig35.carousellayoutmanager.CenterScrollListener
+import com.mig35.carousellayoutmanager.DefaultChildSelectionListener
 import net.ducksmanager.activity.AddIssues
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithDetails
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData.Companion.issueConditionToResourceId
@@ -20,6 +22,9 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
 import net.ducksmanager.whattheduck.databinding.ActivityCoverflowBinding
+
+
+
 
 class CoverFlowActivity : AppCompatActivity() {
     private lateinit var data: List<CoverSearchIssueWithDetails>
@@ -36,6 +41,8 @@ class CoverFlowActivity : AppCompatActivity() {
         (application as WhatTheDuck).trackActivity(this)
         binding = ActivityCoverflowBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val layoutManager = CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, false)
+        layoutManager.setPostLayoutListener(CarouselZoomPostLayoutListener())
 
         appDB!!.coverSearchIssueDao().findAll().observe(this, { searchIssues: List<CoverSearchIssueWithDetails> ->
             if (searchIssues.isEmpty()) {
@@ -45,15 +52,19 @@ class CoverFlowActivity : AppCompatActivity() {
             adapter = CoverFlowAdapter(this)
             adapter.setData(searchIssues)
 
-            binding.coverflow.visibility = VISIBLE
-            binding.coverflow.adapter = adapter
-            binding.coverflow.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, _: Int, _: Long ->
-                if (currentSuggestion!!.userIssue == null) {
-                    appDB!!.inducksCountryDao().findByCountryCode(currentSuggestion!!.coverSearchIssue.coverCountryCode).observe(this, { country ->
+            binding.listHorizontal.layoutManager = layoutManager
+            binding.listHorizontal.setHasFixedSize(false)
+            binding.listHorizontal.adapter = adapter
+            binding.listHorizontal.addOnScrollListener(CenterScrollListener())
+            DefaultChildSelectionListener.initCenterItemListener({ recyclerView, _, v ->
+                val position = recyclerView.getChildLayoutPosition(v)
+                val currentSuggestion = data[position]
+                if (currentSuggestion.userIssue == null) {
+                    appDB!!.inducksCountryDao().findByCountryCode(currentSuggestion.coverSearchIssue.coverCountryCode).observe(this, { country ->
                         selectedCountry = country
-                        appDB!!.inducksPublicationDao().findByPublicationCode(currentSuggestion!!.coverSearchIssue.coverPublicationCode).observe(this, { publication ->
+                        appDB!!.inducksPublicationDao().findByPublicationCode(currentSuggestion.coverSearchIssue.coverPublicationCode).observe(this, { publication ->
                             selectedPublication = publication
-                            selectedIssues = mutableListOf(currentSuggestion!!.coverSearchIssue.coverIssueNumber)
+                            selectedIssues = mutableListOf(currentSuggestion.coverSearchIssue.coverIssueNumber)
                             this@CoverFlowActivity.startActivity(Intent(this@CoverFlowActivity, AddIssues::class.java))
                         })
                     })
@@ -64,11 +75,15 @@ class CoverFlowActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT)
                         .show()
                 }
-            }
-            binding.coverflow.setOnScrollPositionListener(object : OnScrollPositionListener {
-                override fun onScrolledToPosition(position: Int) {
-                    currentSuggestion = data[position]
-                    val uri = "@drawable/flags_" + currentSuggestion!!.coverSearchIssue.coverCountryCode
+            }, binding.listHorizontal, layoutManager)
+
+            layoutManager.addOnItemSelectionListener { position ->
+                if (CarouselLayoutManager.INVALID_POSITION == position) {
+                    toggleInfoVisibility(View.INVISIBLE)
+                }
+                else {
+                    val currentSuggestion = data[position]
+                    val uri = "@drawable/flags_${currentSuggestion.coverSearchIssue.coverCountryCode}"
                     var imageResource = resources.getIdentifier(uri, null, packageName)
                     if (imageResource == 0) {
                         imageResource = R.drawable.flags_unknown
@@ -78,40 +93,48 @@ class CoverFlowActivity : AppCompatActivity() {
 
                     binding.countrybadge.setImageResource(imageResource)
 
-                    val condition = currentSuggestion!!.userIssue?.condition
+                    val condition = currentSuggestion.userIssue?.condition
                     if (condition != null) {
                         val conditionResourceId = issueConditionToResourceId(condition)
                         if (conditionResourceId != null) {
                             binding.conditionbadge.setImageResource(conditionResourceId)
-                            binding.conditiontext.text = getString(issueConditionToStringId(condition))
+                            binding.conditiontext.text =
+                                getString(issueConditionToStringId(condition))
                         }
                         binding.conditiontext.textSize = 18f
                     } else {
-                        binding.conditionbadge.visibility = View.GONE
+                        binding.conditionbadge.visibility = GONE
                         binding.conditiontext.text = getString(R.string.add_cover)
                         binding.conditiontext.textSize = 14f
                     }
 
-                    if (currentSuggestion!!.suggestionScore <= 0) {
-                        binding.score.root.visibility = View.GONE
+                    if (currentSuggestion.suggestionScore <= 0) {
+                        binding.score.root.visibility = GONE
                     }
-                    binding.score.scorevalue.text = currentSuggestion!!.suggestionScore.toString()
+                    binding.score.scorevalue.text = currentSuggestion.suggestionScore.toString()
                     binding.score.scorevalue.textSize = 20F
 
-                    val quotation = currentSuggestion!!.coverSearchIssue.quotation
+                    val quotation = currentSuggestion.coverSearchIssue.quotation
                     if (quotation != null) {
                         binding.quotation.visibility = VISIBLE
                         if (quotation.containsKey("min") && quotation.containsKey("max")) {
-                            binding.quotationvalue.text = String.format(resources.getString(R.string.quotation_between), quotation["min"], quotation["max"])
+                            binding.quotationvalue.text = String.format(
+                                resources.getString(R.string.quotation_between),
+                                quotation["min"],
+                                quotation["max"]
+                            )
+                        } else if (quotation.containsKey("min")) {
+                            binding.quotationvalue.text = String.format(
+                                resources.getString(R.string.quotation_more_than),
+                                quotation["min"]
+                            )
+                        } else {
+                            binding.quotationvalue.text = String.format(
+                                resources.getString(R.string.quotation_less_than),
+                                quotation["max"]
+                            )
                         }
-                        else if (quotation.containsKey("min")) {
-                            binding.quotationvalue.text = String.format(resources.getString(R.string.quotation_more_than), quotation["min"])
-                        }
-                        else {
-                            binding.quotationvalue.text = String.format(resources.getString(R.string.quotation_less_than), quotation["max"])
-                        }
-                    }
-                    else {
+                    } else {
                         binding.quotation.visibility = GONE
                     }
 
@@ -128,23 +151,19 @@ class CoverFlowActivity : AppCompatActivity() {
                         data[position].coverSearchIssue.coverIssueNumber
                     )
                 }
-
-                override fun onScrolling() {
-                    toggleInfoVisibility(View.INVISIBLE)
-                }
-
-                fun toggleInfoVisibility(visibility: Int) {
-                    listOf(
-                        binding.countrybadge,
-                        binding.issuetitle,
-                        binding.conditionbadge,
-                        binding.conditiontext,
-                        binding.score.root,
-                        binding.quotation,
-                        binding.resultNumber
-                    ).forEach{ it.visibility = visibility }
-                }
-            })
+            }
         })
+    }
+
+    private fun toggleInfoVisibility(visibility: Int) {
+        listOf(
+            binding.countrybadge,
+            binding.issuetitle,
+            binding.conditionbadge,
+            binding.conditiontext,
+            binding.score.root,
+            binding.quotation,
+            binding.resultNumber
+        ).forEach{ it.visibility = visibility }
     }
 }
