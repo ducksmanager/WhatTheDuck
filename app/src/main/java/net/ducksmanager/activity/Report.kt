@@ -13,8 +13,6 @@ import java.lang.ref.WeakReference
 class Report : AppCompatActivityWithDrawer() {
     private lateinit var binding: ReportBinding
 
-    override fun shouldShowToolbar() = true
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

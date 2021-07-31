@@ -257,18 +257,13 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
 
     override fun shouldShow() = selectedCountry != null && selectedPublication != null
 
-    override fun shouldShowNavigationCountry() = !isLandscapeEdgeOrCoverView
+    override fun shouldShowNavigationCountry() = true
 
-    override fun shouldShowNavigationPublication() = !isLandscapeEdgeOrCoverView
+    override fun shouldShowNavigationPublication() = true
 
-    override fun shouldShowToolbar() = !isLandscapeEdgeOrCoverView
+    override fun shouldShowAddToCollectionButton() = !isCoaList() && !isOfflineMode
 
-    override fun shouldShowAddToCollectionButton() = !isCoaList() && !isOfflineMode && !isLandscapeEdgeOrCoverView
-
-    override fun shouldShowZoom() = !isCoaList() && !isOfflineMode && !isLandscapeEdgeOrCoverView
-
-    private val isLandscapeEdgeOrCoverView: Boolean
-        get() = zoomLevel > 0 && resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE
+    override fun shouldShowZoom() = !isCoaList() && !isOfflineMode
 
     private fun switchBetweenViews() {
         WhatTheDuck.trackEvent("issuelist/switchview")

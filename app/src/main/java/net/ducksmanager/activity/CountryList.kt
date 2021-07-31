@@ -73,8 +73,6 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
     override fun shouldShowNavigationPublication() =  false
 
-    override fun shouldShowToolbar() = true
-
     override fun shouldShowAddToCollectionButton() = !isCoaList() && !isOfflineMode
 
     override fun hasDividers() = true

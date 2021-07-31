@@ -33,8 +33,6 @@ class Authors : AppCompatActivityWithDrawer() {
         private var authorNames: HashMap<String, String> = hashMapOf()
     }
 
-    override fun shouldShowToolbar() = true
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

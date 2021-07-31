@@ -19,8 +19,6 @@ import java.util.*
 class Stats : AppCompatActivityWithDrawer() {
     private lateinit var binding: StatsBinding
 
-    override fun shouldShowToolbar() = true
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

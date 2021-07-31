@@ -30,8 +30,6 @@ import retrofit2.Response
 
 class Settings : AppCompatActivityWithDrawer() {
     private lateinit var binding: SettingsBinding
-    
-    override fun shouldShowToolbar() = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

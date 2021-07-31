@@ -47,17 +47,11 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
     private val drawerLayout: DrawerLayout?
         get() = findViewById(R.id.drawerLayout)
 
-    protected abstract fun shouldShowToolbar(): Boolean
-
     protected open fun toggleToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        if (shouldShowToolbar()) {
-            toolbar.visibility = View.VISIBLE
-            setSupportActionBar(toolbar)
-            createNavigationDrawer()
-        } else {
-            toolbar.visibility = View.GONE
-        }
+        toolbar.visibility = View.VISIBLE
+        setSupportActionBar(toolbar)
+        createNavigationDrawer()
     }
 
     private fun createNavigationDrawer() {
