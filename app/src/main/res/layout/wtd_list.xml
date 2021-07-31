@@ -64,7 +64,7 @@
             android:focusableInTouchMode="true"
             android:hint="@string/filter"
             android:inputType="textNoSuggestions"
-            android:visibility="gone"></EditText>
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/tipIssueSelection"
@@ -194,18 +194,21 @@
             </LinearLayout>
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_above="@id/zoomWrapper">
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/cancelSelection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/validateSelection"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerHorizontal="false"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
             android:src="@drawable/ic_cancel"
+            android:contentDescription="Cancel"
             app:backgroundTint="#555"
             app:rippleColor="@android:color/white" />
 
@@ -213,14 +216,11 @@
             android:id="@+id/validateSelection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="false"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="50dp"
             android:src="@drawable/ic_check"
+            android:contentDescription="Validate"
             app:backgroundTint="@android:color/holo_green_dark"
             app:rippleColor="@android:color/white" />
 
@@ -230,10 +230,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/addToCollectionByPhotoButton"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerHorizontal="false"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:contentDescription="@string/by_issue_selection"
             android:gravity="center"
@@ -254,10 +251,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/addToCollectionByFileButton"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerHorizontal="false"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:padding="5dp"
@@ -277,10 +271,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/addToCollectionWrapper"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerHorizontal="false"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:padding="5dp"
@@ -299,17 +290,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="false"
             android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="50dp"
             android:src="@drawable/ic_pen"
+            android:contentDescription="Edit issues"
             android:visibility="invisible"
             app:backgroundTint="@android:color/holo_green_dark"
             app:rippleColor="@android:color/white"
             app:tint="@android:color/white" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <include layout="@layout/drawer_navigation" />
