@@ -1,3 +1,9 @@
+Version 2.11.1
+
+    Fix displayed app name
+    Make the zoom wrapper be non-draggable
+    Add default cover if it can't be retrieved
+
 Version 2.11.0
 
     Add gallery view
