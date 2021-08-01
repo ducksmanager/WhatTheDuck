@@ -29,7 +29,6 @@ import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksIssueWithCoverUrl
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData
 import net.ducksmanager.persistence.models.composite.UserSetting
-import net.ducksmanager.util.DraggableRelativeLayout
 import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.R.string.*
@@ -194,7 +193,6 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
         setNavigationPublication(selectedPublication!!)
 
         selectedIssues = mutableListOf()
-        DraggableRelativeLayout.makeDraggable(binding.zoomWrapper)
 
         binding.tipIssueSelectionOK.setOnClickListener {
             appDB!!.userSettingDao().insert(UserSetting(UserSetting.SETTING_KEY_ISSUE_SELECTION_TIP_ENABLED, "0"))
