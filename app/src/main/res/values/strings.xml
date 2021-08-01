@@ -69,6 +69,7 @@
     <string name="issue_list_copy_missing_title">Missing issues for&#160;</string>
     <string name="issue_list_copy_possessed">Copy possessed issues</string>
     <string name="issue_list_copy_possessed_title">Possessed issues for&#160;</string>
+    <string name="issue_no_cover">Issue %1s (no cover)</string>
     <string name="issue_selection_tip">Select an issue by tapping on it.\nSelect a range of issues by long-tapping on the first item of the range.</string>
     <string name="issues">issues</string>
     <string name="issues_singular">issue</string>

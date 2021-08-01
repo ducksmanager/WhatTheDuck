@@ -3,38 +3,52 @@ package net.ducksmanager.adapter
 import android.app.Activity
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import net.ducksmanager.activity.ItemList
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
+import kotlin.math.sqrt
 
 class IssueCoverAdapter internal constructor(
     itemList: ItemList<InducksIssueWithUserData>,
     private val recyclerView: RecyclerView
 ) : ItemAdapter<InducksIssueWithUserData>(itemList, R.layout.cell_cover) {
+
     override fun getViewHolder(v: View?) = ViewHolder(v)
 
     override val onClickListener: View.OnClickListener? = null
 
     inner class ViewHolder(v: View?) : ItemAdapter<InducksIssueWithUserData>.ViewHolder(v!!) {
         val coverImage: ImageView = v!!.findViewById(R.id.coverimage)
+        val defaultCover: TextView = v!!.findViewById(R.id.defaultcover)
     }
 
     override fun onBindViewHolder(holder: ItemAdapter<InducksIssueWithUserData>.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         val itemHolder = holder as ViewHolder
         val item = getItem(position)
+        val itemWidth = (recyclerView.measuredWidth / (recyclerView.layoutManager as GridLayoutManager).spanCount)
 
         Picasso
             .with(holder.itemView.context)
             .load(getEdgeUrl(item))
-            .resize(0,
-                (recyclerView.measuredWidth / (recyclerView.layoutManager as GridLayoutManager).spanCount)
-            )
-            .into(itemHolder.coverImage)
+            .resize(0, itemWidth)
+            .into(itemHolder.coverImage, object: Callback {
+                override fun onSuccess() {
+                    itemHolder.defaultCover.visibility = View.GONE
+                }
+
+                override fun onError() {
+                    itemHolder.defaultCover.minHeight = (itemWidth * sqrt(2.0)).toInt()
+                    itemHolder.defaultCover.text = recyclerView.context.getString(R.string.issue_no_cover).format(item.issue.inducksIssueNumber)
+                    itemHolder.defaultCover.visibility = View.VISIBLE
+                }
+            })
     }
 
     private fun getEdgeUrl(i: InducksIssueWithUserData): String {

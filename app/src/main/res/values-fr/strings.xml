@@ -64,6 +64,7 @@
     <string name="issue_list_copy_missing_title">Numéros manquants de&#160;</string>
     <string name="issue_list_copy_possessed">Copier les numéros possédés</string>
     <string name="issue_list_copy_possessed_title">Numéros possédés de&#160;</string>
+    <string name="issue_no_cover">Numéro %1s (pas de couverture)</string>
     <string name="issue_selection_tip">Sélectionnez un numéro en appuyant dessus.\nSélectionnez une liste de numéros consécutive en effectuant un appui long.</string>
     <string name="issues">numéros</string>
     <string name="issues_singular">numéro</string>

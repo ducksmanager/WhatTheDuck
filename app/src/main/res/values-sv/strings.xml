@@ -64,6 +64,7 @@
     <string name="issue_list_copy_missing_title">Saknade utgåvor av&#160;</string>
     <string name="issue_list_copy_possessed">Kopiera ägda utgåvor</string>
     <string name="issue_list_copy_possessed_title">Ägda utgåvor av&#160;</string>
+    <string name="issue_no_cover">Utgåva %1s (inte omslag)</string>
     <string name="issue_selection_tip">Välj en utgåva genom att trycka på den.\nVälj en sekvens av utgåvor genom att trycka länge på den första i sekvensen.</string>
     <string name="issues">utgåvor</string>
     <string name="issues_singular">utgåva</string>
