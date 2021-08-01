@@ -59,7 +59,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/navigation"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:hint="@string/filter"
@@ -101,6 +100,7 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/tipIssueSelection"
+            android:layout_above="@id/zoomWrapper"
             android:layout_marginTop="5dp"
             android:orientation="vertical"
             android:scrollbarStyle="outsideInset"
@@ -122,7 +122,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/filter"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:text="@string/no_item"
             android:visibility="invisible" />
 
@@ -137,19 +136,21 @@
 
         <LinearLayout
             android:id="@+id/zoomWrapper"
-            android:layout_alignParentEnd="true"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:background="?android:colorBackground"
-            android:orientation="vertical">
+            android:background="@drawable/bordertop"
+            android:orientation="vertical"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:gravity="center"
-                android:text="Zoom" />
+                android:text="@string/zoom" />
 
             <SeekBar
                 android:id="@+id/viewSeekBar"
@@ -170,27 +171,33 @@
                     android:id="@+id/listViewIcon"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight=".2"
+                    android:layout_weight=".13"
+                    android:layout_marginStart="30dp"
+                    android:scaleType="fitStart"
                     android:contentDescription="@string/list_view"
-                    android:src="@drawable/ic_view_headline"/>
+                    android:src="@drawable/ic_view_headline" />
+
                 <ImageView
                     android:id="@+id/edgeViewIcon"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight=".2"
+                    android:layout_weight=".13"
                     android:contentDescription="@string/edge_view"
-                    android:src="@drawable/ic_view_edge"/>
+                    android:src="@drawable/ic_view_edge" />
+
                 <ImageView
                     android:id="@+id/coverViewIcon"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight=".2"
+                    android:layout_weight=".13"
+                    android:scaleType="fitEnd"
                     android:contentDescription="@string/edge_view"
-                    android:src="@drawable/ic_view_cover"/>
+                    android:src="@drawable/ic_view_cover" />
+
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight=".4"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_weight=".4" />
             </LinearLayout>
         </LinearLayout>
 
