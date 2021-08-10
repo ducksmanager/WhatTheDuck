@@ -36,7 +36,7 @@ import java.util.*
 
 class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
     companion object {
-        private const val MAX_COVER_DIMENSION = 1000
+        private const val MAX_COVER_DIMENSION: Double = 300.0
 
         lateinit var current: CoverFlowFileHandler
 
@@ -102,13 +102,13 @@ class CoverFlowFileHandler(originActivityRef: WeakReference<Activity>) {
         val resizeTransformation: Transformation = object : Transformation {
             override fun transform(source: Bitmap): Bitmap {
                 var result: Bitmap? = null
-                val height = source.height
-                val width = source.width
+                val height = source.height.toDouble()
+                val width = source.width.toDouble()
                 if (height > MAX_COVER_DIMENSION || width > MAX_COVER_DIMENSION) {
                     result = if (height > width) {
-                        Bitmap.createScaledBitmap(source, width / (height / MAX_COVER_DIMENSION), MAX_COVER_DIMENSION, false)
+                        Bitmap.createScaledBitmap(source, (width / (height / MAX_COVER_DIMENSION)).toInt(), MAX_COVER_DIMENSION.toInt(), true)
                     } else {
-                        Bitmap.createScaledBitmap(source, MAX_COVER_DIMENSION, height / (width / MAX_COVER_DIMENSION), false)
+                        Bitmap.createScaledBitmap(source, MAX_COVER_DIMENSION.toInt(), (height / (width / MAX_COVER_DIMENSION)).toInt(), true)
                     }
                 }
                 return if (result == null) {
