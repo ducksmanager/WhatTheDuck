@@ -23,9 +23,6 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
 import net.ducksmanager.whattheduck.databinding.ActivityCoverflowBinding
 
-
-
-
 class CoverFlowActivity : AppCompatActivity() {
     private lateinit var data: List<CoverSearchIssueWithDetails>
     private lateinit var binding: ActivityCoverflowBinding

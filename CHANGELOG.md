@@ -1,3 +1,7 @@
+Version 2.11.2
+
+    Improve cover search results
+
 Version 2.11.1
 
     Fix displayed app name
