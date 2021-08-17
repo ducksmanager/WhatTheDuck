@@ -1,4 +1,4 @@
-package net.ducksmanager.util
+package net.ducksmanager.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,10 +11,10 @@ import com.mig35.carousellayoutmanager.CarouselLayoutManager
 import com.mig35.carousellayoutmanager.CarouselZoomPostLayoutListener
 import com.mig35.carousellayoutmanager.CenterScrollListener
 import com.mig35.carousellayoutmanager.DefaultChildSelectionListener
-import net.ducksmanager.activity.AddIssues
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithDetails
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData.Companion.issueConditionToResourceId
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData.Companion.issueConditionToStringId
+import net.ducksmanager.util.CoverFlowAdapter
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
@@ -110,6 +110,8 @@ class CoverFlowActivity : AppCompatActivity() {
                     }
                     binding.score.scorevalue.text = currentSuggestion.suggestionScore.toString()
                     binding.score.scorevalue.textSize = 20F
+
+                    binding.popularity.text = String.format("%d utilisateurs possèdent ce numéro", currentSuggestion.coverSearchIssue.popularity)
 
                     val quotation = currentSuggestion.coverSearchIssue.quotation
                     if (quotation != null) {

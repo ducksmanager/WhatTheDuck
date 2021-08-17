@@ -15,6 +15,7 @@ import com.squareup.picasso.RequestCreator
 import com.squareup.picasso.Target
 import com.squareup.picasso.Transformation
 import io.sentry.Sentry
+import net.ducksmanager.activity.CoverFlowActivity
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.composite.CoverSearchResults
 import net.ducksmanager.whattheduck.R

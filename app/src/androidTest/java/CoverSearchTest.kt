@@ -13,7 +13,7 @@ import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.filters.LargeTest
-import net.ducksmanager.util.CoverFlowActivity
+import net.ducksmanager.activity.CoverFlowActivity
 import net.ducksmanager.util.CoverFlowFileHandler
 import net.ducksmanager.whattheduck.R
 import org.hamcrest.Description

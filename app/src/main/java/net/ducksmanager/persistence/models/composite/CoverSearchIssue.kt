@@ -34,5 +34,9 @@ class CoverSearchIssue(
 
     @SerializedName(value = "quotation")
     @ColumnInfo
-    var quotation: Map<String, Int>?
+    var quotation: Map<String, Int>?,
+
+    @SerializedName(value = "popularity")
+    @ColumnInfo
+    var popularity: Int = 0
 )

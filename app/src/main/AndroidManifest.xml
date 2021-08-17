@@ -54,7 +54,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="net.ducksmanager.util.CoverFlowActivity"
+            android:name="net.ducksmanager.activity.CoverFlowActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity

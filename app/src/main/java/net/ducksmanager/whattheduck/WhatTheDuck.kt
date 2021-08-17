@@ -237,7 +237,7 @@ class WhatTheDuck : Application() {
         initApplicationVersion()
         initConnectivityManager()
         Companion.applicationContext = applicationContext
-        locale = applicationContext.resources.configuration.locale.language
+        locale = applicationContext.resources.configuration.locales.get(0).language
 
         if (!isTestContext) {
             appDB = Room.databaseBuilder(applicationContext, AppDatabase::class.java, DB_NAME)
@@ -249,7 +249,8 @@ class WhatTheDuck : Application() {
                     AppDatabase.MIGRATION_10_11,
                     AppDatabase.MIGRATION_11_12,
                     AppDatabase.MIGRATION_12_13,
-                    AppDatabase.MIGRATION_13_14
+                    AppDatabase.MIGRATION_13_14,
+                    AppDatabase.MIGRATION_14_15
                 )
                 .fallbackToDestructiveMigration()
                 .build()

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="net.ducksmanager.util.CoverFlowActivity">
+    tools:context="net.ducksmanager.activity.CoverFlowActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +28,8 @@
                 android:id="@+id/issuetitle"
                 android:paddingStart="5dp"
                 android:paddingLeft="5dp"
-                android:text="@string/itemtitle"
+                android:textAlignment="center"
+                tools:text="Item"
                 android:textSize="20sp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -40,6 +41,17 @@
             android:layout_gravity="center"
             android:layout_width="50dp"
             android:layout_height="30dp" />
+
+        <TextView
+            android:id="@+id/popularity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textColor="#FFFFFF"
+            tools:text="x users own this issue"/>
 
         <LinearLayout
             android:id="@+id/quotation"
