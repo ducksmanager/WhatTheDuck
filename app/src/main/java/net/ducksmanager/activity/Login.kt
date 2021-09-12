@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.pusher.pushnotifications.auth.AuthData
 import com.pusher.pushnotifications.auth.AuthDataGetter
 import com.pusher.pushnotifications.auth.BeamsTokenProvider
+import io.sentry.Sentry
 import net.ducksmanager.api.DmServer.Callback
 import net.ducksmanager.api.DmServer.Companion.EVENT_GET_PURCHASES
 import net.ducksmanager.api.DmServer.Companion.EVENT_GET_SUGGESTED_ISSUES
@@ -161,6 +162,7 @@ class Login : AppCompatActivity() {
                     }
 
                     registerForNotifications(activityRef)
+                    Sentry.setUser(io.sentry.protocol.User().apply { email = user.email })
                 }
             })
         }
