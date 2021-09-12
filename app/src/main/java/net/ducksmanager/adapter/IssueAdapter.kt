@@ -29,7 +29,7 @@ class IssueAdapter internal constructor(
             val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
             val clickedIssue = getItem(position)
             toggleSelectedIssue(clickedIssue.issue.inducksIssueNumber)
-            this.notifyDataSetChanged()
+            this.notifyItemChanged(position)
         }
     }
 
@@ -49,14 +49,15 @@ class IssueAdapter internal constructor(
                         hasReachedFirstRangeIssueNumber = true
                     }
                 }
+                this.notifyItemRangeChanged(filteredItems.indexOfFirst { it.issue.inducksIssueNumber == firstRangeIssueNumber }, selectedIssues.size)
                 null
             } else {
                 val currentIssueNumber = getItem(position).issue.inducksIssueNumber
                 toggleSelectedIssue(currentIssueNumber)
                 WhatTheDuck.info(WeakReference(originActivity), R.string.long_tap_to_end_issue_range_selection, Toast.LENGTH_SHORT)
+                this.notifyItemChanged(filteredItems.indexOfFirst { it.issue.inducksIssueNumber == currentIssueNumber })
                 currentIssueNumber
             }
-            this.notifyDataSetChanged()
         }
         true
     }
