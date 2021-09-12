@@ -7,7 +7,6 @@ import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleCoroutineScope
-import io.sentry.Sentry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -50,9 +49,7 @@ open class ConnectionDetector(lifecycleScope: LifecycleCoroutineScope, callback:
         if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
             try {
                 connectivityManager?.unregisterNetworkCallback(networkCallback)
-            } catch (e: RuntimeException) {
-                Sentry.captureException(e)
-            }
+            } catch (e: RuntimeException) {}
         }
     }
 }
