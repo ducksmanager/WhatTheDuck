@@ -86,7 +86,7 @@
     <string name="new_version_available">Une nouvelle version de What The Duck est disponible ! Cliquez ici pour mettre à jour l\'application</string>
     <string name="no_author">Vous n\'avez pas d\'auteurs favoris</string>
     <string name="no_issue">Aucun numéro</string>
-    <string name="no_item">Aucun numéro. Tapez sur le bouton "+" pour ajouter des numéros à votre collection !</string>
+    <string name="no_item">Aucun numéro. Tapez sur le bouton 🖊️ pour ajouter des numéros à votre collection !</string>
     <string name="no_purchase_date">Pas de date d\'achat</string>
     <string name="no_suggestion">Nous n\'avons pas de suggestions à vous proposer. Assurez-vous d\'avoir noté vos auteurs préférés.\nLes suggestions sont mises à jour quotidiennement.</string>
     <string name="no_title">Sans titre</string>

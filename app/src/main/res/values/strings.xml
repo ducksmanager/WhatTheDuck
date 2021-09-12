@@ -91,7 +91,7 @@
     <string name="new_version_available">A new version of What The Duck is available !\nClick here to update the app</string>
     <string name="no_author">You don\'t have any favorite authors</string>
     <string name="no_issue">No issue</string>
-    <string name="no_item">No issue in this list. Click on the "+" icon to add issues to your collection!</string>
+    <string name="no_item">No issue in this list. Click on the 🖊️ icon to add issues to your collection!</string>
     <string name="no_purchase_date">No purchase date</string>
     <string name="no_suggestion">We don\'t have any suggestion for you. Make sure that you rated your favorite authors.\nThe suggestions are updated daily.</string>
     <string name="no_title">No title</string>
