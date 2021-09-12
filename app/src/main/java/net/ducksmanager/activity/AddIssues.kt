@@ -84,9 +84,6 @@ class AddIssues : AppCompatActivity(), OnClickListener {
 
     private fun setData() {
         appDB!!.purchaseDao().findAll().observe(this, { purchases: List<Purchase> ->
-            if (this::purchases.isInitialized) {
-                return@observe
-            }
             this.purchases = arrayListOf(NoPurchase())
             this.purchases.addAll(purchases)
 
