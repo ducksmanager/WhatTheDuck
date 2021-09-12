@@ -11,6 +11,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.wtd_list_navigation_country.view.*
+import net.ducksmanager.adapter.CountryAdapter
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.coa.InducksPublication
@@ -28,7 +29,6 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.numberOfIssues
 import net.ducksmanager.whattheduck.databinding.WtdListBinding
 import java.lang.ref.WeakReference
-
 
 abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
@@ -101,6 +101,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             else -> binding.warningMessage.visibility = GONE
         }
         itemAdapter.setItems(items)
+        if (itemAdapter is CountryAdapter) {
+            numberOfIssues = items.sumOf { (it as InducksCountryNameWithPossession).possessedIssues }
+        }
+        title = String.format(getString(R.string.my_collection), numberOfIssues)
 
         val isEmptyList = (isCoaList() && isOfflineMode) || (!isCoaList() && items.none {
             when (it) {
@@ -206,7 +210,6 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.validateSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
         binding.cancelSelection.visibility = if (shouldShowSelectionValidation()) VISIBLE else GONE
         binding.zoomWrapper.visibility = if (shouldShowZoom()) VISIBLE else GONE
-        title = String.format(getString(R.string.my_collection), numberOfIssues)
     }
 
     private fun pickCoverPicture() {
