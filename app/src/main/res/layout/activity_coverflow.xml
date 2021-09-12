@@ -26,8 +26,7 @@
                 android:adjustViewBounds="true" />
             <TextView
                 android:id="@+id/issuetitle"
-                android:paddingStart="5dp"
-                android:paddingLeft="5dp"
+                android:paddingHorizontal="5dp"
                 android:textAlignment="center"
                 tools:text="Item"
                 android:textSize="20sp"
