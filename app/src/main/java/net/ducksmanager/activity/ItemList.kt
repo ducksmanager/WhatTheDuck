@@ -15,6 +15,7 @@ import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
+import net.ducksmanager.persistence.models.composite.InducksPublicationWithPossession
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.util.ConnectionDetector
 import net.ducksmanager.util.CoverFlowFileHandler
@@ -101,7 +102,13 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         }
         itemAdapter.setItems(items)
 
-        val isEmptyList = (isCoaList() && isOfflineMode) || (!isCoaList() && items.none { (it as InducksCountryNameWithPossession).possessedIssues > 0 })
+        val isEmptyList = (isCoaList() && isOfflineMode) || (!isCoaList() && items.none {
+            when (it) {
+                is InducksCountryNameWithPossession -> it.possessedIssues > 0
+                is InducksPublicationWithPossession -> it.possessedIssues > 0
+                else -> true
+            }
+        })
         binding.emptyList.visibility = if (isEmptyList) VISIBLE else INVISIBLE
         binding.itemList.visibility = if (isEmptyList) INVISIBLE else VISIBLE
         if (isCoaList() && isOfflineMode) {
