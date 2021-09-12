@@ -1,6 +1,7 @@
 *.iml
 *.keystore
 .gradle
+private_key.pepk
 /.idea/
 /app/build/
 /app/libs/
