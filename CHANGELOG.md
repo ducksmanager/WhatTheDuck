@@ -1,3 +1,10 @@
+Version 2.12.0
+
+    Show issue popularity in cover search results
+    Fix purchase list refresh after purchase creation
+    Fix "No issue in list" message not shown when the user has no issue at all
+    Fix total number of issues shown as 0 when in offline mode
+
 Version 2.11.2
 
     Improve cover search results
