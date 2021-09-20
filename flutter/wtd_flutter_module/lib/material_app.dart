@@ -42,18 +42,18 @@ class NavigationExample extends StatelessWidget {
                   .copyWith(fontStyle: FontStyle.italic),
               decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: 'What is on your mind?'),
+                  hintText: 'Type the title of a story (3 characters min.)'),
             ),
             suggestionsCallback: (pattern) async {
               return await BackendService.getSuggestions(pattern);
             },
-            itemBuilder: (context, Map<String, String> suggestion) {
+            itemBuilder: (context, Story suggestion) {
               return ListTile(
-                title: Text(suggestion['name']!),
-                subtitle: Text('${suggestion['score']}'),
+                title: Text(suggestion.code ?? 'none'),
+                subtitle: Text('${suggestion.score ?? 0}'),
               );
             },
-            onSuggestionSelected: (Map<String, String> suggestion) {
+            onSuggestionSelected: (Story suggestion) {
               // your implementation here
             },
           ),
