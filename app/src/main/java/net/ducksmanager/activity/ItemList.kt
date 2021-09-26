@@ -1,12 +1,12 @@
 package net.ducksmanager.activity
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.view.View.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
@@ -38,9 +38,6 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         fun isCoaList(): Boolean = type == WhatTheDuck.CollectionType.COA.toString()
 
         const val MIN_ITEM_NUMBER_FOR_FILTER = 20
-
-        private const val REQUEST_IMAGE_PICK = 1
-        private const val REQUEST_IMAGE_CAPTURE = 2
     }
 
     private lateinit var connectionDetector: ConnectionDetector
@@ -60,6 +57,22 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     protected abstract fun shouldShowItemSelectionTip(): Boolean
     protected abstract fun shouldShowSelectionValidation(): Boolean
     protected abstract fun shouldShowZoom(): Boolean
+
+    private var getCameraImage = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success) {
+            CoverFlowFileHandler.current.resizeUntilFileSize(CoverFlowFileHandler.SearchFromCover())
+            binding.addToCollectionWrapper.visibility = VISIBLE
+            binding.progressBar.visibility = VISIBLE
+        }
+    }
+    private var pickCameraImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.data != null) {
+            CoverFlowFileHandler.current.uploadUri = result.data!!.data
+            CoverFlowFileHandler.current.resizeUntilFileSize(CoverFlowFileHandler.SearchFromCover())
+            binding.addToCollectionWrapper.visibility = VISIBLE
+            binding.progressBar.visibility = VISIBLE
+        }
+    }
 
     open fun downloadAndShowList() {
         if (!viewModel.data.hasObservers()) {
@@ -213,45 +226,15 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     }
 
     private fun pickCoverPicture() {
-        val takePictureIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        if (takePictureIntent.resolveActivity(packageManager) != null) {
-            CoverFlowFileHandler.current = CoverFlowFileHandler(WeakReference(this))
-
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_PICK)
-        }
+        CoverFlowFileHandler.current = CoverFlowFileHandler(WeakReference(this))
+        pickCameraImage.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
     }
 
     private fun takeCoverPicture() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (takePictureIntent.resolveActivity(packageManager) != null) {
-            CoverFlowFileHandler.current = CoverFlowFileHandler(WeakReference(this))
+        CoverFlowFileHandler.current = CoverFlowFileHandler(WeakReference(this))
+        val photoURI = CoverFlowFileHandler.current.createEmptyFileForCamera(this@ItemList)
 
-            val photoURI = CoverFlowFileHandler.current.createEmptyFileForCamera(this@ItemList)
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_IMAGE_PICK -> {
-                if (data == null) {
-                    return
-                }
-                CoverFlowFileHandler.current.uploadUri = data.data
-            }
-            REQUEST_IMAGE_CAPTURE -> {
-            }
-            else -> return
-        }
-
-        CoverFlowFileHandler.current.resizeUntilFileSize(CoverFlowFileHandler.SearchFromCover())
-        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_PICK) && resultCode == Activity.RESULT_OK) {
-            binding.addToCollectionWrapper.visibility = VISIBLE
-            binding.progressBar.visibility = VISIBLE
-        }
+        getCameraImage.launch(photoURI)
     }
 
     private fun toggleNavigation() {
