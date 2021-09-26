@@ -105,13 +105,9 @@ class Suggestions : AppCompatActivityWithDrawer() {
         } else {
             appDB!!.suggestedIssueDao().findAll()
         }
-        println("get publicationTitles")
         publicationTitles = appDB!!.inducksPublicationDao().findByPublicationCodes(suggestions.map { suggestion -> suggestion.publicationCode }.toSet())
-        println("get authorNames")
         authorNames = appDB!!.inducksPersonDao().findAll()
-        println("get storyDetails")
         storyDetails = appDB!!.inducksStoryDao().findAll()
-        println("done")
 
         val showSuggestions = suggestions.isNotEmpty() && publicationTitles.isNotEmpty() && authorNames.isNotEmpty() && storyDetails.isNotEmpty()
 
@@ -193,7 +189,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
             val storyTitleView: TextView = itemView.findViewById(R.id.storyTitle)
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(inflater.inflate(R.layout.row_story, parent, false))
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(inflater.inflate(R.layout.story_with_authors, parent, false))
 
         override fun getItemCount() = stories.size
 
@@ -202,7 +198,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
             val storyCode = stories.keys.toList()[position]
             val story = storyDetails.find { inducksStory -> inducksStory.storycode == storyCode }
             if (story?.storycode != null) {
-                holder.storyTitleView.setOnClickListener { view: View? ->
+                holder.storyTitleView.setOnClickListener {
                     this@StoryAdapter.context.startActivity(
                         Intent(Intent.ACTION_VIEW).setData(
                             Uri.parse(String.format("%s%s", config.getProperty("inducks_story_url"), story.storycode))

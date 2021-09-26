@@ -1,6 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:checkableBehavior="single">
+        <item android:id="@+id/action_search"
+            android:title="@string/search"
+            android:icon="@drawable/ic_search"
+            app:showAsAction="never"/>
+
         <item android:id="@+id/action_collection"
             android:title="@string/collection"
             android:icon="@drawable/ic_list"

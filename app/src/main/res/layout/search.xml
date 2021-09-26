@@ -1,0 +1,66 @@
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/search"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_marginStart="-10dp"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:title="@string/search" />
+
+        <TextView
+            android:id="@+id/search_section"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lineHeight="20dp"
+            android:textAlignment="center"
+            android:text="@string/search_intro"
+            tools:ignore="RtlSymmetry" />
+
+        <AutoCompleteTextView
+            android:id="@+id/search_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:hint="@string/search_hint"
+            android:inputType="textVisiblePassword" />
+
+        <TextView
+            android:id="@+id/search_results_story_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            tools:text="Story"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/search_results_story_details_intro"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/story_was_published_in" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/issuelist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            tools:listitem="@layout/issue" />
+    </LinearLayout>
+
+    <include layout="@layout/drawer_navigation" />
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -15,6 +15,9 @@ interface IssueDao {
     @Query(" SELECT issues.* FROM issues WHERE (issues.country || '/' || issues.magazine) = :publicationCode")
     fun findByPublicationCode(publicationCode: String): LiveData<List<Issue>>
 
+    @Query("SELECT * FROM issues WHERE (issues.country || '/' || issues.magazine || '-' || issues.issueNumber) in (:issueCodes)")
+    fun findByIssueCodes(issueCodes: Set<String>): LiveData<List<Issue>>
+
     @Query("SELECT" +
         "(select COUNT(distinct issues.country) FROM issues) AS countries," +
         "(select COUNT(distinct issues.country || '/' || issues.magazine) FROM issues) AS publications," +

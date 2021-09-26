@@ -141,4 +141,5 @@
     <string name="welcome_message">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur + pour ajouter un numéro.</string>
     <string name="welcome_title">Bienvenue sur What The Duck !</string>
     <string name="zoom">Zoom</string>
+    <string name="search_intro">Entrez le titre d\'une histoire. What The Duck vous indiquera les magazines qui contiennent cette histoire et précisera les histoires et magazines que vous possédez.</string>
 </resources>

@@ -3,8 +3,7 @@ package net.ducksmanager.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.mig35.carousellayoutmanager.CarouselLayoutManager
@@ -13,7 +12,6 @@ import com.mig35.carousellayoutmanager.CenterScrollListener
 import com.mig35.carousellayoutmanager.DefaultChildSelectionListener
 import net.ducksmanager.persistence.models.composite.CoverSearchIssueWithDetails
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData.Companion.issueConditionToResourceId
-import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData.Companion.issueConditionToStringId
 import net.ducksmanager.util.CoverFlowAdapter
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
@@ -81,28 +79,25 @@ class CoverFlowActivity : AppCompatActivity() {
                 else {
                     val currentSuggestion = data[position]
                     val uri = "@drawable/flags_${currentSuggestion.coverSearchIssue.coverCountryCode}"
-                    var imageResource = resources.getIdentifier(uri, null, packageName)
-                    if (imageResource == 0) {
-                        imageResource = R.drawable.flags_unknown
+                    var countryImageResource = resources.getIdentifier(uri, null, packageName)
+                    if (countryImageResource == 0) {
+                        countryImageResource = R.drawable.flags_unknown
                     }
 
                     toggleInfoVisibility(VISIBLE)
 
-                    binding.countrybadge.setImageResource(imageResource)
+                    binding.issue.countrybadge.setImageResource(countryImageResource)
 
                     val condition = currentSuggestion.userIssue?.condition
                     if (condition != null) {
                         val conditionResourceId = issueConditionToResourceId(condition)
                         if (conditionResourceId != null) {
-                            binding.conditionbadge.setImageResource(conditionResourceId)
-                            binding.conditiontext.text =
-                                getString(issueConditionToStringId(condition))
+                            binding.issue.conditionbadge.setImageResource(conditionResourceId)
                         }
-                        binding.conditiontext.textSize = 18f
-                    } else {
-                        binding.conditionbadge.visibility = GONE
-                        binding.conditiontext.text = getString(R.string.add_cover)
-                        binding.conditiontext.textSize = 14f
+                        binding.clickToAdd.visibility = INVISIBLE
+                    }
+                    else {
+                        binding.issue.conditionbadge.visibility = GONE
                     }
 
                     if (currentSuggestion.suggestionScore <= 0) {
@@ -144,7 +139,7 @@ class CoverFlowActivity : AppCompatActivity() {
                         data.size
                     )
 
-                    binding.issuetitle.text = resources.getString(
+                    binding.issue.issuetitle.text = resources.getString(
                         R.string.title_template,
                         data[position].coverSearchIssue.coverPublicationTitle,
                         data[position].coverSearchIssue.coverIssueNumber
@@ -156,10 +151,9 @@ class CoverFlowActivity : AppCompatActivity() {
 
     private fun toggleInfoVisibility(visibility: Int) {
         listOf(
-            binding.countrybadge,
-            binding.issuetitle,
-            binding.conditionbadge,
-            binding.conditiontext,
+            binding.issue.countrybadge,
+            binding.issue.issuetitle,
+            binding.clickToAdd,
             binding.score.root,
             binding.quotation,
             binding.resultNumber

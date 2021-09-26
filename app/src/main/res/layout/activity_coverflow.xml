@@ -12,27 +12,13 @@
         android:layout_marginTop="24dp"
         android:gravity="center"
         android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
+        <include layout="@layout/issue"
+            android:id="@+id/issue"
             android:paddingTop="24dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/countrybadge"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/flags_fr"
-                android:adjustViewBounds="true" />
-            <TextView
-                android:id="@+id/issuetitle"
-                android:paddingHorizontal="5dp"
-                android:textAlignment="center"
-                tools:text="Item"
-                android:textSize="20sp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <include
             layout="@layout/score"
@@ -96,28 +82,17 @@
         android:layout_centerInParent="true"
         tools:listitem="@layout/item_coverflow"/>
 
-    <LinearLayout
-        android:id="@+id/condition"
+    <TextView
+        android:id="@+id/clickToAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/resultNumber"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
-        <ImageView
-            android:id="@+id/conditionbadge"
-            android:layout_width="24dip"
-            android:layout_height="fill_parent"
-            android:src="@drawable/condition_good" />
-        <TextView
-            android:id="@+id/conditiontext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:text="@string/condition_good"
-            android:textColor="#FFFFFF" />
-    </LinearLayout>
+        android:layout_centerHorizontal="true"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:text="@string/add_cover"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/resultNumber"

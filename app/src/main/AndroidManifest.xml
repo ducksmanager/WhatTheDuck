@@ -34,6 +34,7 @@
             </intent-filter>
         </activity>
         <activity android:name="net.ducksmanager.activity.Signup" />
+        <activity android:name="net.ducksmanager.activity.Search" />
         <activity android:name="net.ducksmanager.activity.ForgotPassword" />
         <activity android:name="net.ducksmanager.activity.CountryList">
             <intent-filter>

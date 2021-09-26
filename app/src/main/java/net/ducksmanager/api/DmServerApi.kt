@@ -44,6 +44,9 @@ interface DmServerApi {
     @GET("/coa/authorsfullnames/search/{nameStart}")
     fun searchAuthor(@Path(value = "nameStart") nameStart: String): Call<HashMap<String, String>>
 
+    @POST("/coa/stories/search/withIssues")
+    fun searchStory(@Body searchInput: StorySearchInput): Call<StorySearchResults>
+
     @GET("/coa/authorsfullnames/{personCodes}")
     fun getAuthorNames(@Path(value = "personCodes") personCodes: String): Call<HashMap<String, String>>
 

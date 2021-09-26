@@ -15,10 +15,9 @@
         tools:listitem="@layout/row_author" />
     <TextView
         android:id="@+id/storyTitle"
-        android:paddingStart="10dp"
-        android:paddingLeft="10dp"
+        android:paddingHorizontal="10dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:text="@string/itemtitle"/>
+        tools:text="@string/story"/>
 </LinearLayout>
