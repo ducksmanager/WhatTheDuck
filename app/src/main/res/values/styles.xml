@@ -11,6 +11,9 @@
     <style name="AddIssueTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="DisabledTheme" parent="android:Widget.TextView">
+        <item name="android:textColor">#444</item>
+    </style>
     <style name="radioButtonMissing">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>

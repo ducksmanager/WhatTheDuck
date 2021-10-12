@@ -33,11 +33,24 @@
             android:textAlignment="center"
             android:textColor="@android:color/white" />
 
+        <TextView
+            android:id="@+id/suggestionMessage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/warningMessage"
+            android:background="#17a2b8"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:text="@string/edge_missing_explanation"
+            android:textAlignment="center"
+            android:textColor="@android:color/white" />
+
         <LinearLayout
             android:id="@+id/navigation"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/warningMessage"
+            android:layout_below="@+id/suggestionMessage"
             android:orientation="horizontal">
 
             <include

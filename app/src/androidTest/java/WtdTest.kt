@@ -31,8 +31,8 @@ import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_API_ENDPOINT_URL
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_DM_URL
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_EDGES_URL
-import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_ROLE_NAME
-import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_ROLE_PASSWORD
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_ROLE_DUCKSMANAGER_NAME
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_ROLE_DUCKSMANAGER_PASSWORD
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.config
 import okhttp3.mockwebserver.MockWebServer
@@ -84,8 +84,8 @@ open class WtdTest : AndroidJUnitRunner {
             mockServer!!.dispatcher = DownloadHandlerMock.dispatcher
 
             WhatTheDuck.loadedConfig = Properties()
-            config.setProperty(CONFIG_KEY_ROLE_NAME, "test")
-            config.setProperty(CONFIG_KEY_ROLE_PASSWORD, "test")
+            config.setProperty(CONFIG_KEY_ROLE_DUCKSMANAGER_NAME, "test")
+            config.setProperty(CONFIG_KEY_ROLE_DUCKSMANAGER_PASSWORD, "test")
 
             config.setProperty(
                 CONFIG_KEY_DM_URL,

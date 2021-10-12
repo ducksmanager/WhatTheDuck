@@ -10,7 +10,7 @@
         android:id="@+id/conditionbadge"
         android:layout_width="14dip"
         android:layout_height="14dip"
-        android:layout_marginEnd="5dp"
+        android:layout_marginHorizontal="5dp"
         tools:src="@drawable/condition_good" />
     <TextView
         android:id="@+id/storyTitle"

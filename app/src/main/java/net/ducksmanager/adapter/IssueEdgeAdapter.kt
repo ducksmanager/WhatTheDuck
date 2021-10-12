@@ -1,12 +1,14 @@
 package net.ducksmanager.adapter
 
 import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration
 import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import net.ducksmanager.activity.ItemList
+import net.ducksmanager.activity.SendEdgePhoto
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
@@ -33,6 +35,12 @@ class IssueEdgeAdapter internal constructor(
 
         if (expectedEdgeHeight == null) {
             expectedEdgeHeight = if (orientation == Configuration.ORIENTATION_LANDSCAPE) recyclerView.height else recyclerView.width
+        }
+        itemHolder.edgeImage.setOnClickListener {
+            val intent = Intent(originActivity, SendEdgePhoto::class.java)
+            intent.putExtra("publicationCode", WhatTheDuck.selectedPublication!!.publicationCode)
+            intent.putExtra("issueNumber", item.issue.inducksIssueNumber)
+            originActivity.startActivity(intent)
         }
         Picasso
             .with(holder.itemView.context)

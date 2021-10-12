@@ -18,7 +18,8 @@ import com.pusher.pushnotifications.auth.BeamsTokenProvider
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.PicassoCache
 import io.sentry.Sentry
-import net.ducksmanager.api.DmServer.Companion.initApi
+import net.ducksmanager.api.DmServer
+import net.ducksmanager.api.EdgeCreator
 import net.ducksmanager.persistence.AppDatabase
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.coa.InducksPublication
@@ -80,6 +81,7 @@ class WhatTheDuck : Application() {
         private const val CONFIG = "config.properties"
         private const val CONFIG_KEY_PUSHER_INSTANCE_ID = "pusher_instance_id"
         const val CONFIG_KEY_API_ENDPOINT_URL = "api_endpoint_url"
+        const val CONFIG_KEY_EDGECREATOR_URL = "edgecreator_base_url"
         const val CONFIG_KEY_APPFOLLOW_API_ENDPOINT_URL = "appfollow_api_endpoint_url"
         const val CONFIG_KEY_APPFOLLOW_API_USER = "appfollow_api_secret"
         const val CONFIG_KEY_DM_URL = "dm_url"
@@ -87,8 +89,10 @@ class WhatTheDuck : Application() {
         const val CONFIG_KEY_YOUTUBE_URL = "youtube_url"
         const val CONFIG_KEY_INSTAGRAM_URL = "instagram_url"
         const val CONFIG_KEY_FACEBOOK_URL = "facebook_url"
-        const val CONFIG_KEY_ROLE_NAME = "role_name"
-        const val CONFIG_KEY_ROLE_PASSWORD = "role_password"
+        const val CONFIG_KEY_ROLE_DUCKSMANAGER_NAME = "role_ducksmanager_name"
+        const val CONFIG_KEY_ROLE_DUCKSMANAGER_PASSWORD = "role_ducksmanager_password"
+        const val CONFIG_KEY_ROLE_EDGECREATOR_NAME = "role_edgecreator_name"
+        const val CONFIG_KEY_ROLE_EDGECREATOR_PASSWORD = "role_edgecreator_password"
         const val CONFIG_KEY_EDGES_URL = "edges_url"
         const val CONFIG_KEY_COVERS_URL = "covers_url"
         private const val CONFIG_KEY_MATOMO_URL = "matomo_url"
@@ -256,7 +260,8 @@ class WhatTheDuck : Application() {
                 .build()
         }
 
-        initApi()
+        DmServer.initApi()
+        EdgeCreator.initApi()
         PicassoCache.clearCache(Picasso.with(applicationContext))
 
     }

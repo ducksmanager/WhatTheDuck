@@ -9,8 +9,8 @@ import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_API_ENDPOINT_URL
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_APPFOLLOW_API_ENDPOINT_URL
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_APPFOLLOW_API_USER
-import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_ROLE_NAME
-import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_ROLE_PASSWORD
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_ROLE_DUCKSMANAGER_NAME
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.CONFIG_KEY_ROLE_DUCKSMANAGER_PASSWORD
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.alert
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
@@ -58,8 +58,8 @@ class DmServer {
             val filledUserCredentials = withUserCredentials && apiDmUser != null && apiDmPassword != null
             return hashMapOf(
                 "Authorization" to Credentials.basic(
-                    config.getProperty(CONFIG_KEY_ROLE_NAME),
-                    config.getProperty(CONFIG_KEY_ROLE_PASSWORD)
+                    config.getProperty(CONFIG_KEY_ROLE_DUCKSMANAGER_NAME),
+                    config.getProperty(CONFIG_KEY_ROLE_DUCKSMANAGER_PASSWORD)
                 ),
                 "x-dm-version" to applicationVersion,
                 "x-dm-user" to if (filledUserCredentials) apiDmUser!! else "",

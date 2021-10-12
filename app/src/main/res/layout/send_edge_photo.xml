@@ -1,0 +1,273 @@
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/search"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="10dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="Envoi de la photo de tranche de Picsou Magazine 200" />
+
+            <LinearLayout
+                android:id="@+id/medal_progress_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginVertical="10dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/medalCurrent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/medal_edge_photographer_2_en" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/medal_incentive_1"
+                        android:textAlignment="center"
+                        android:textSize="11sp" />
+
+                    <ProgressBar
+                        android:id="@+id/medal_progress"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical" />
+
+                    <TextView
+                        android:id="@+id/medal_incentive"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/medal_incentive_2"
+                        android:textAlignment="center"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/medalTarget"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/medal_edge_photographer_3_en" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/cameraWrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <com.otaliastudios.cameraview.CameraView
+                    android:id="@+id/camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="350dp"
+                    android:keepScreenOn="true"
+                    app:cameraAudio="off"
+                    app:cameraMode="picture"
+                    app:cameraPlaySounds="false">
+
+                </com.otaliastudios.cameraview.CameraView>
+
+                <ImageButton
+                    android:id="@+id/takePhoto"
+                    android:layout_width="56dp"
+                    android:layout_height="52dp"
+                    android:layout_below="@id/camera"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="-60dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/by_cover_photo"
+                    android:src="@drawable/ic_shutter" />
+            </RelativeLayout>
+
+            <com.canhub.cropper.CropImageView
+                android:id="@+id/cropImageView"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_marginTop="20dp" />
+
+            <ImageView
+                android:id="@+id/croppedImage"
+                android:layout_width="match_parent"
+                android:layout_height="350dp" />
+
+            <TextView
+                android:id="@+id/form1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/send_edge__take_photo_intro" />
+
+            <LinearLayout
+                android:id="@+id/form2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/send_edge__crop_photo" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/cropImageOK"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:text="@string/i_have_cropped_the_photo"
+                        android:textAlignment="center"
+                        android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/resetPhoto"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:text="@string/take_another_photo"
+                        android:textAlignment="center"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dimensionsWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/dimensionsIntro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/send_edge__set_dimensions_intro" />
+
+                <LinearLayout
+                    android:id="@+id/widthForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="@string/width"
+                        android:textAlignment="viewEnd" />
+
+                    <EditText
+                        android:id="@+id/width"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_weight="1"
+                        android:textAlignment="center"
+                        android:inputType="numberSigned" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="mm"
+                        android:textAlignment="viewStart"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/heightForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="@string/height"
+                        android:textAlignment="viewEnd" />
+
+                    <EditText
+                        android:id="@+id/height"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_weight="1"
+                        android:textAlignment="center"
+                        android:inputType="numberSigned" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="mm"
+                        android:textAlignment="viewStart"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/form3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/sendEdgeImage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="@string/send_edge_photo"
+                    android:textAlignment="center" />
+
+                <Button
+                    android:id="@+id/backToCropping"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="@string/change_photo_crop"
+                    android:textAlignment="center" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.drawerlayout.widget.DrawerLayout>

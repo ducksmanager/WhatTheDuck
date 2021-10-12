@@ -3,7 +3,6 @@ package net.ducksmanager.util
 import android.content.Intent
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -14,13 +13,14 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import net.ducksmanager.activity.*
 import net.ducksmanager.activity.Settings
+import net.ducksmanager.util.Medals.Companion.CONTRIBUTION_MEDAL_IDS
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.currentUser
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 
-abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
+abstract class AppCompatActivityWithDrawer : AppCompatActivity(), Medals {
 
     companion object {
         private val menuActions: HashMap<Int, List<Class<*>>> = hashMapOf(
@@ -30,18 +30,6 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
             R.id.action_stats to listOf(Stats::class.java),
             R.id.action_settings to listOf(Settings::class.java),
             R.id.action_suggestions to listOf(Suggestions::class.java)
-        )
-
-        val CONTRIBUTION_MEDAL_IDS = mapOf(
-            "edge_photographer" to R.id.medal_edge_photographer,
-            "edge_designer" to R.id.medal_edge_designer,
-            "duckhunter" to R.id.medal_duckhunter,
-        )
-
-        val MEDAL_LEVELS = mapOf(
-            R.id.medal_edge_photographer to mapOf(1 to 50, 2 to 150, 3 to 600),
-            R.id.medal_edge_designer to mapOf(1 to 20, 2 to 70, 3 to 150),
-            R.id.medal_duckhunter to mapOf(1 to 1, 2 to 3, 3 to 15)
         )
     }
 
@@ -97,12 +85,7 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity() {
         appDB!!.contributionTotalPointsDao().contributions.observe(this, { contributions ->
             contributions.forEach {
                 val medalImageId = CONTRIBUTION_MEDAL_IDS[it.contribution]!!
-                for ((medalLevel, medalMinimumPoints) in MEDAL_LEVELS[medalImageId]!!) {
-                    if (it.totalPoints >= medalMinimumPoints) {
-                        val medalDrawableId = "medal_${it.contribution}_${medalLevel}_${resources.configuration.locales[0].language}"
-                        drawerContents.findViewById<ImageView>(medalImageId).setImageResource(resources.getIdentifier(medalDrawableId, "drawable", packageName))
-                    }
-                }
+                setMedalDrawable(it, drawerContents.findViewById(medalImageId))
             }
         })
     }
