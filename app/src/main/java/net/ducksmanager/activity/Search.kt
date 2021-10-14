@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.score.view.*
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.api.DmServer.Companion.api
 import net.ducksmanager.persistence.models.composite.*
+import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData.Companion.ALL_CONDITIONS
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData.Companion.issueConditionToStringId
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.whattheduck.R
@@ -105,7 +106,11 @@ class Search : AppCompatActivityWithDrawer() {
                                     story.issues?.forEach { issue ->
                                         issue.condition = ownedIssuesConditions["${issue.publicationcode}-${issue.issuenumber}"]
                                         if (issue.condition != null) {
-                                            story.condition = issue.condition
+                                            val issueConditionLevel = ALL_CONDITIONS.indexOf(issue.condition)
+                                            val storyConditionLevel = ALL_CONDITIONS.indexOf(story.condition)
+                                            if (issueConditionLevel > storyConditionLevel) {
+                                                story.condition = ALL_CONDITIONS[issueConditionLevel]
+                                            }
                                         }
                                     }
                                 }

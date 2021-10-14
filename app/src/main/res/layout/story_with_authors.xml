@@ -19,5 +19,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        tools:text="@string/story"/>
+        tools:text="Story"/>
 </LinearLayout>

@@ -151,10 +151,8 @@
     <string name="youtube" translatable="false">YouTube</string>
     <string name="zoom">Zoom</string>
     <string name="search">Search...</string>
-    <string name="search_hint">Entrez le titre d\'une histoire</string>
     <string name="search_more_results">-- More than 10 results, refine your search --</string>
     <string name="story_was_published_in">was published in the following issues:</string>
-    <string name="story">Story</string>
     <string name="search_intro">Type the title of a story. What The Duck will show you the magazines that contain this story and will indicate which stories and issues you have in your collection.</string>
     <string name="medal_incentive_2">and earn %1$d photographer points!</string>
     <string name="medal_incentive_1">Send us photos of this magazine\'s edge</string>
@@ -162,10 +160,12 @@
     <string name="send_edge__crop_photo">On the photo, select the rectangle corresponding to where the magazine\'s edge is.</string>
     <string name="i_have_cropped_the_photo">I have cropped the photo</string>
     <string name="take_another_photo">Take another photo</string>
-    <string name="send_edge__set_dimensions_intro">Indiquez les dimensions de la tranche, en millimètres.</string>
+    <string name="send_edge__set_dimensions_intro">Enter the dimensions of the edge, in millimeters.</string>
     <string name="width">Width:</string>
     <string name="height">Height:</string>
-    <string name="send_edge_photo">Envoyer la photo de tranche</string>
+    <string name="send_edge_photo">Send the edge photo</string>
     <string name="change_photo_crop">Change the photo cropping</string>
     <string name="edge_missing_explanation">Some of the magazines below don\'t have a nice edge because we don\'t have a photo of them. Tap here to send us a photo and earn points!</string>
+    <string name="by_story_title">By story title</string>
+    <string name="search_hint">Type the title of a story</string>
 </resources>

@@ -24,7 +24,12 @@ class InducksIssueWithUserData(
         const val NOTSOGOOD_CONDITION = "moyen"
         const val GOOD_CONDITION = "bon"
         const val NO_CONDITION = "indefini"
-        @JvmStatic
+
+        val ALL_CONDITIONS: List<String>
+            get() {
+                return listOf(NO_CONDITION, BAD_CONDITION, NOTSOGOOD_CONDITION, GOOD_CONDITION)
+            }
+
         fun issueConditionToResourceId(issueCondition: String?): Int? {
             return if (issueCondition == null) {
                 R.drawable.condition_none
@@ -37,7 +42,6 @@ class InducksIssueWithUserData(
             }
         }
 
-        @JvmStatic
         fun issueConditionToStringId(issueCondition: String?): Int {
             return when (issueCondition) {
                 MISSING -> R.string.condition_missing

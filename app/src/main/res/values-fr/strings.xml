@@ -141,5 +141,22 @@
     <string name="welcome_message">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur + pour ajouter un numéro.</string>
     <string name="welcome_title">Bienvenue sur What The Duck !</string>
     <string name="zoom">Zoom</string>
-    <string name="search_intro">Entrez le titre d\'une histoire. What The Duck vous indiquera les magazines qui contiennent cette histoire et précisera les histoires et magazines que vous possédez.</string>
+    <string name="search_intro">Entrez le titre d\'une histoire. What The Duck vous indiquera les magazines qui contiennent cette histoire et précisera les histoires et magazines correspondants que vous possédez.</string>
+    <string name="search">Rechercher...</string>
+    <string name="search_hint">Entrez le titre d\'une histoire</string>
+    <string name="search_more_results">-- Plus de 10 résultats, affinez votre recherche --</string>
+    <string name="story_was_published_in">a été publiée dans les numéros suivants :</string>
+    <string name="medal_incentive_1">Envoyez-nous la photo de cette tranche de magazine</string>
+    <string name="medal_incentive_2">et gagnez %1$d points Photographe !</string>
+    <string name="send_edge__take_photo_intro">Prenez une photo de cette tranche de magazine.</string>
+    <string name="send_edge__crop_photo">Sur la photo, sélectionnez le rectangle correspondant à l\'emplacement de la tranche du magazine.</string>
+    <string name="i_have_cropped_the_photo">J\'ai découpé la photo</string>
+    <string name="take_another_photo">Prendre une autre photo</string>
+    <string name="send_edge__set_dimensions_intro">Indiquez les dimensions de la tranche, en millimètres.</string>
+    <string name="width">Largeur :</string>
+    <string name="height">Hauteur :</string>
+    <string name="send_edge_photo">Envoyer la photo de tranche</string>
+    <string name="change_photo_crop">Modifier le découpage de la photo</string>
+    <string name="edge_missing_explanation">Certains des magazines ci-dessous n\'ont pas une belle tranche car nous n\'en possédons pas de photo. Cliquez ici pour nous envoyer une photo et gagnez des points !</string>
+    <string name="by_story_title">Par titre d\'histoire</string>
 </resources>

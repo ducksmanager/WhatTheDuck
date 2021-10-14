@@ -171,11 +171,13 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.navigationCountry.root.selected?.setOnClickListener { _: View? -> goToView(PublicationList::class.java) }
 
         binding.addToCollectionWrapper.setOnClickListener {
+            binding.addToCollectionByStoryTitle.visibility = if (binding.addToCollectionByStoryTitle.visibility == GONE) VISIBLE else GONE
             binding.addToCollectionByFileButton.visibility = if (binding.addToCollectionByFileButton.visibility == GONE) VISIBLE else GONE
             binding.addToCollectionByPhotoButton.visibility = if (binding.addToCollectionByPhotoButton.visibility == GONE) VISIBLE else GONE
             binding.addToCollectionBySelectionButton.visibility = if (binding.addToCollectionBySelectionButton.visibility == GONE) VISIBLE else GONE
         }
 
+        binding.addToCollectionByStoryTitle.setOnClickListener { startActivity(Intent(this, Search::class.java)) }
         binding.addToCollectionByFileButton.setOnClickListener { pickCoverPicture() }
         binding.addToCollectionByPhotoButton.setOnClickListener { takeCoverPicture() }
         binding.addToCollectionBySelectionButton.setOnClickListener { goToAlternativeView() }
@@ -215,6 +217,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     protected open fun show() {
         binding.warningMessage.visibility = if (isOfflineMode) VISIBLE else GONE
 
+        binding.addToCollectionByStoryTitle.visibility = GONE
         binding.addToCollectionByFileButton.visibility = GONE
         binding.addToCollectionByPhotoButton.visibility = GONE
         binding.addToCollectionBySelectionButton.visibility = GONE
