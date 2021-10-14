@@ -5,6 +5,7 @@ import net.ducksmanager.persistence.models.composite.*
 import net.ducksmanager.persistence.models.dm.ContributionTotalPoints
 import net.ducksmanager.persistence.models.dm.Issue
 import net.ducksmanager.persistence.models.dm.Purchase
+import net.ducksmanager.persistence.models.edge.Edge
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -40,6 +41,9 @@ interface DmServerApi {
 
     @get:GET("/collection/points")
     val userPoints: Call<HashMap<Int, List<ContributionTotalPoints>>>
+
+    @GET("/edges/{publicationcode}")
+    fun getEdgeList(@Path(value = "publicationcode") publicationCode: String): Call<List<Edge>>
 
     @GET("/coa/authorsfullnames/search/{nameStart}")
     fun searchAuthor(@Path(value = "nameStart") nameStart: String): Call<HashMap<String, String>>

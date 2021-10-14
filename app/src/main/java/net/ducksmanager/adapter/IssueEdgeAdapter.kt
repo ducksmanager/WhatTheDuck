@@ -7,15 +7,18 @@ import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import net.ducksmanager.activity.IssueList
 import net.ducksmanager.activity.ItemList
 import net.ducksmanager.activity.SendEdgePhoto
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData
+import net.ducksmanager.persistence.models.edge.Edge
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 
 class IssueEdgeAdapter internal constructor(
     itemList: ItemList<InducksIssueWithUserData>,
     private val recyclerView: RecyclerView,
+    private val existingEdges: List<Edge>,
     private val orientation: Int
 ) : ItemAdapter<InducksIssueWithUserData>(itemList, R.layout.row_edge) {
     private var expectedEdgeHeight: Int? = null
@@ -36,11 +39,14 @@ class IssueEdgeAdapter internal constructor(
         if (expectedEdgeHeight == null) {
             expectedEdgeHeight = if (orientation == Configuration.ORIENTATION_LANDSCAPE) recyclerView.height else recyclerView.width
         }
-        itemHolder.edgeImage.setOnClickListener {
-            val intent = Intent(originActivity, SendEdgePhoto::class.java)
-            intent.putExtra("publicationCode", WhatTheDuck.selectedPublication!!.publicationCode)
-            intent.putExtra("issueNumber", item.issue.inducksIssueNumber)
-            originActivity.startActivity(intent)
+        if (! existingEdges.any { it.issuenumber === item.issue.inducksIssueNumber }) {
+            (originActivity as IssueList).binding.suggestionMessage.visibility = View.VISIBLE
+            itemHolder.edgeImage.setOnClickListener {
+                val intent = Intent(originActivity, SendEdgePhoto::class.java)
+                    .putExtra("publicationCode", WhatTheDuck.selectedPublication!!.publicationCode)
+                    .putExtra("issueNumber", item.issue.inducksIssueNumber)
+                originActivity.startActivity(intent)
+            }
         }
         Picasso
             .with(holder.itemView.context)
