@@ -1,9 +1,12 @@
 package net.ducksmanager.activity
 
+import android.animation.ObjectAnimator
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Base64
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.otaliastudios.cameraview.CameraListener
@@ -23,6 +26,7 @@ import net.ducksmanager.util.Medals.Companion.MEDAL_LEVELS
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.alert
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.info
 import net.ducksmanager.whattheduck.databinding.SendEdgePhotoBinding
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
@@ -33,6 +37,7 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
     private lateinit var binding: SendEdgePhotoBinding
     private lateinit var publicationCode: String
     private lateinit var issueNumber: String
+    private var popularity: Int = 1
 
     private fun encodeImage(bm: Bitmap): String {
         val baos = ByteArrayOutputStream()
@@ -50,7 +55,7 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
         binding.dimensionsWrapper.visibility = if (step == 3) { View.VISIBLE } else { View.GONE }
     }
 
-    private fun getSvgContents(width: Int, height: Int, username: String) =
+    private fun getSvgContents(width: Int, height: Int, username: String, photoFileName: String) =
         """
             <svg
                 id="edge-canvas"
@@ -62,6 +67,7 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
                 preserveAspectRatio="none"
                 class="edge-canvas position-relative">
                 <metadata type="contributor-photographer">$username</metadata>
+                <metadata type="photo">$photoFileName</metadata>
                 <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" fill="none" stroke="black" stroke-width="1" class="border"></rect>
             </svg>
         """.trimIndent()
@@ -71,14 +77,18 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
 
         publicationCode = intent.getStringExtra("publicationCode")!!
         issueNumber = intent.getStringExtra("issueNumber")!!
+        popularity = intent.getIntExtra("popularity", 1)
 
         binding = SendEdgePhotoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         toggleStep(1)
 
+        val publicationNames = WhatTheDuck.appDB!!.inducksPublicationDao().findByPublicationCodes(
+            setOf(publicationCode))
+
         binding.title.text = String.format(
             resources.getString(R.string.send_edge_photo_title),
-            publicationCode,
+            publicationNames.find { it.publicationCode == publicationCode }!!.title,
             issueNumber
         )
 
@@ -88,14 +98,15 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
             setMedalDrawable(photographerContributions, binding.medalTarget, true)
 
             val currentMedalLevel = getCurrentMedalLevel(photographerContributions)
-            val currentMedalMin = MEDAL_LEVELS[R.id.medal_edge_photographer]?.get(currentMedalLevel) ?: 0
-            val currentMedalMax = MEDAL_LEVELS[R.id.medal_edge_photographer]?.get(currentMedalLevel+1) ?: 0
-            val currentMedalProgress = photographerContributions.totalPoints - currentMedalMin
-            binding.medalProgress.min = currentMedalMin
-            binding.medalProgress.max = currentMedalMax
-            binding.medalProgress.progress = currentMedalProgress
-            binding.medalIncentive.text = getString(R.string.medal_incentive_2, 2)
+            binding.medalProgress.min = MEDAL_LEVELS[R.id.medal_edge_photographer]?.get(currentMedalLevel) ?: 0
+            binding.medalProgress.max = MEDAL_LEVELS[R.id.medal_edge_photographer]?.get(currentMedalLevel+1) ?: 0
+            binding.medalProgress.progress = photographerContributions.totalPoints
+            binding.medalIncentive.text = getString(R.string.medal_incentive_2, popularity)
             binding.medalProgressWrapper.visibility = View.VISIBLE
+            val animator = ObjectAnimator.ofInt(binding.medalProgress, "progress",  photographerContributions.totalPoints + popularity)
+            animator.repeatCount = ObjectAnimator.INFINITE
+            animator.interpolator = DecelerateInterpolator()
+            animator.setDuration(1000).start();
         })
 
         binding.takePhoto.setOnClickListener {
@@ -165,14 +176,14 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
                         val country = publicationCode.split("/")[0]
                         val magazine = publicationCode.split("/")[1]
 
-                        val svgContents = getSvgContents(width, height, username)
                         EdgeCreator.api.upload(EdgePhoto(country, magazine, issueNumber, base64))
-                            .enqueue(object : DmServer.Callback<Void>(
+                            .enqueue(object : DmServer.Callback<HashMap<String, String>>(
                                 EdgeCreator.EVENT_UPLOAD_PHOTO,
                                 this@SendEdgePhoto,
                                 false
                             ) {
-                                override fun onSuccessfulResponse(response: Response<Void>) {
+                                override fun onSuccessfulResponse(response: Response<HashMap<String, String>>) {
+                                    val svgContents = getSvgContents(width, height, username, response.body()!!["fileName"]!!)
                                     EdgeCreator.api.saveEdgeCanvas(
                                         EdgeCanvas(
                                             country = country,
@@ -187,22 +198,25 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
                                         false
                                     ) {
                                         override fun onSuccessfulResponse(response: Response<Void>) {
-                                            alert(
+                                            info(
                                                 WeakReference(this@SendEdgePhoto),
-                                                "Thank you for your contribution! If your photo is accepted, you will receive an e-mail when the corresponding edge is published."
+                                                R.string.send_edge_thanks,
+                                                Toast.LENGTH_LONG
                                             )
+                                            startActivity(Intent(this@SendEdgePhoto, IssueList::class.java))
                                         }
 
-                                        override fun onErrorResponse(response: Response<Void>?) {
-                                            alert(
-                                                WeakReference(this@SendEdgePhoto),
-                                                "An error occurred when sending the edge"
-                                            )
-                                        }
+                                        override fun onFailureFailover() { onEdgeSubmitError() }
+
+                                        override fun onErrorResponse(response: Response<Void>?) { onEdgeSubmitError() }
                                     })
                                 }
 
-                                override fun onErrorResponse(response: Response<Void>?) {
+                                override fun onErrorResponse(response: Response<HashMap<String, String>>?) { onEdgeSubmitError() }
+
+                                override fun onFailureFailover() { onEdgeSubmitError() }
+
+                                private fun onEdgeSubmitError() {
                                     alert(
                                         WeakReference(this@SendEdgePhoto),
                                         "An error occurred when sending the edge"

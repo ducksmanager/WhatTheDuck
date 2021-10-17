@@ -4,6 +4,7 @@ import net.ducksmanager.persistence.models.coa.InducksIssueWithCoverUrl
 import net.ducksmanager.persistence.models.composite.*
 import net.ducksmanager.persistence.models.dm.ContributionTotalPoints
 import net.ducksmanager.persistence.models.dm.Issue
+import net.ducksmanager.persistence.models.dm.IssuePopularity
 import net.ducksmanager.persistence.models.dm.Purchase
 import net.ducksmanager.persistence.models.edge.Edge
 import okhttp3.MultipartBody
@@ -86,6 +87,9 @@ interface DmServerApi {
 
     @POST("/collection/issues")
     fun updateUserIssueCopies(@Body issueCopiesToUpdate: IssueCopiesToUpdate): Call<Any>
+
+    @GET("/collection/popular")
+    fun getIssuePopularities(): Call<List<IssuePopularity>>
 
     @Multipart
     @POST("/cover-id/search")

@@ -157,6 +157,7 @@
     <string name="height">Hauteur :</string>
     <string name="send_edge_photo">Envoyer la photo de tranche</string>
     <string name="change_photo_crop">Modifier le découpage de la photo</string>
-    <string name="edge_missing_explanation">Certains des magazines ci-dessous n\'ont pas une belle tranche car nous n\'en possédons pas de photo. Cliquez sur l'une de ces tranches pour nous envoyer une photo et gagnez des points !</string>
+    <string name="edge_missing_explanation">Certains des magazines ci-dessous n\'ont pas une belle tranche car nous n\'en possédons pas de photo. Cliquez sur l\'une de ces tranches pour nous envoyer une photo et gagnez des points !</string>
     <string name="by_story_title">Par titre d\'histoire</string>
+    <string name="send_edge_photo_title">Envoi de photo pour le numéro %1$s %2$s</string>
 </resources>

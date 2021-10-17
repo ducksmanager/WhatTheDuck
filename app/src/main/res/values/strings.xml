@@ -168,4 +168,5 @@
     <string name="edge_missing_explanation">Some of the magazines below don\'t have a nice edge because we don\'t have a photo of them. Tap on one of these edges to send us a photo and earn points!</string>
     <string name="by_story_title">By story title</string>
     <string name="search_hint">Type the title of a story</string>
+    <string name="send_edge_thanks">Thank you for your contribution! If your photo is accepted, you will receive an e-mail when the corresponding edge is published.</string>
 </resources>

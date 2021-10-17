@@ -105,7 +105,7 @@ dependencies {
     implementation 'org.conscrypt:conscrypt-android:2.5.2'
 
     implementation 'com.github.matomo-org:matomo-sdk-android:v4.1.2'
-    implementation 'io.sentry:sentry-android:5.2.0'
+    implementation 'io.sentry:sentry-android:5.2.3'
 
     api 'com.otaliastudios:cameraview:2.7.1'
     implementation 'com.github.CanHub:Android-Image-Cropper:3.3.5'

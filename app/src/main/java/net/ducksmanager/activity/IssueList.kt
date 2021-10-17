@@ -29,6 +29,7 @@ import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksIssueWithCoverUrl
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData
 import net.ducksmanager.persistence.models.composite.UserSetting
+import net.ducksmanager.persistence.models.dm.IssuePopularity
 import net.ducksmanager.persistence.models.edge.Edge
 import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
@@ -48,8 +49,6 @@ import java.util.*
 class IssueList : ItemList<InducksIssueWithUserData>() {
 
     override lateinit var itemAdapter: ItemAdapter<InducksIssueWithUserData>
-
-    lateinit var existingEdges: List<Edge>
 
     companion object {
         var zoomLevel = 0
@@ -156,7 +155,7 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
                     Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME_BOOKCASE_VIEW)
                 }
                 binding.itemList.layoutManager = LinearLayoutManager(this, getListOrientation(), false)
-                IssueEdgeAdapter(this, binding.itemList, existingEdges, resources.configuration.orientation)
+                IssueEdgeAdapter(this, binding.itemList, resources.configuration.orientation)
             }
             else -> {
                 val spanCount = 5 - zoomLevel
@@ -185,18 +184,20 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
     override fun show() {
         super.show()
         if (!isCoaList() && zoomLevel == 1) {
-            DmServer.api.getEdgeList(getPublicationCode()).enqueue(object : DmServer.Callback<List<Edge>>("getEdges", this, false) {
-                override fun onSuccessfulResponse(response: Response<List<Edge>>) {
-                    existingEdges = response.body()!!
-                    updateAdapter()
-                    binding.itemList.adapter = itemAdapter
-                }
-            })
+            DmServer.api.getEdgeList(getPublicationCode())
+                .enqueue(object : DmServer.Callback<List<Edge>>("getEdges", this, false) {
+                    override fun onSuccessfulResponse(response: Response<List<Edge>>) {
+                        (binding.itemList.adapter as IssueEdgeAdapter).existingEdges = response.body()!!
+                        DmServer.api.getIssuePopularities().enqueue(object : DmServer.Callback<List<IssuePopularity>>("getIssuePopularities", this@IssueList, false) {
+                            override fun onSuccessfulResponse(response: Response<List<IssuePopularity>>) {
+                                (binding.itemList.adapter as IssueEdgeAdapter).issuePopularities = response.body()!!
+                            }
+                        })
+                    }
+                })
         }
-        else {
-            updateAdapter()
-            binding.itemList.adapter = itemAdapter
-        }
+        updateAdapter()
+        binding.itemList.adapter = itemAdapter
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -279,6 +280,7 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
 
     private fun switchBetweenViews() {
         WhatTheDuck.trackEvent("issuelist/switchview")
+        binding.suggestionMessage.visibility = GONE
         binding.itemList.adapter = itemAdapter
         loadList()
     }
