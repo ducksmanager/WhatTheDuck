@@ -125,6 +125,7 @@
                 android:id="@+id/form1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAlignment="center"
                 android:text="@string/send_edge__take_photo_intro" />
 
             <LinearLayout
@@ -137,6 +138,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:textAlignment="center"
                     android:text="@string/send_edge__crop_photo" />
 
                 <LinearLayout
@@ -177,6 +179,7 @@
                     android:id="@+id/dimensionsIntro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAlignment="center"
                     android:text="@string/send_edge__set_dimensions_intro" />
 
                 <LinearLayout

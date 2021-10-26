@@ -155,9 +155,9 @@
     <string name="story_was_published_in">was published in the following issues:</string>
     <string name="search_intro">Type the title of a story. What The Duck will show you the magazines that contain this story and will indicate which stories and issues you have in your collection.</string>
     <string name="medal_incentive_2">and earn %1$d photographer points!</string>
-    <string name="medal_incentive_1">Send us photos of this magazine\'s edge</string>
-    <string name="send_edge__take_photo_intro">Take a photo of the magazine\'s edge.</string>
-    <string name="send_edge__crop_photo">On the photo, select the rectangle corresponding to where the magazine\'s edge is.</string>
+    <string name="medal_incentive_1">Send us photos of this book\'s edge</string>
+    <string name="send_edge__take_photo_intro">Take a photo of the book\'s edge.</string>
+    <string name="send_edge__crop_photo">On the photo, select the zone corresponding to where the book\'s edge is.</string>
     <string name="i_have_cropped_the_photo">I have cropped the photo</string>
     <string name="take_another_photo">Take another photo</string>
     <string name="send_edge__set_dimensions_intro">Enter the dimensions of the edge, in millimeters.</string>
@@ -165,8 +165,14 @@
     <string name="height">Height:</string>
     <string name="send_edge_photo">Send the edge photo</string>
     <string name="change_photo_crop">Change the photo cropping</string>
-    <string name="edge_missing_explanation">Some of the magazines below don\'t have a nice edge because we don\'t have a photo of them. Tap on one of these edges to send us a photo and earn points!</string>
+    <string name="edge_missing_explanation">Some of the magazines below don\'t have a proper edge because we don\'t have a photo of them. Tap on one of these edges to send us a photo and earn points!</string>
     <string name="by_story_title">By story title</string>
     <string name="search_hint">Type the title of a story</string>
     <string name="send_edge_thanks">Thank you for your contribution! If your photo is accepted, you will receive an e-mail when the corresponding edge is published.</string>
+    <string name="invalid_selection">Invalid selection</string>
+    <string name="error_width_is_bigger_than_height">The width of your selection must be smaller than its height</string>
+    <string name="error_width_restrictions">The width of the edge must be between 5 and 50 millimeters</string>
+    <string name="error_height_restrictions">The height of the edge must be between 100 and 350 millimeters</string>
+    <string name="error_sending_edge">An error occurred when sending the edge</string>
+    <string name="error_invalid_number_format">Please enter valid numbers in the width and height fields!</string>
 </resources>

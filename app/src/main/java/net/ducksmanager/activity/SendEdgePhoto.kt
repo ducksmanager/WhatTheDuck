@@ -134,13 +134,13 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
         binding.cropImageOK.setOnClickListener {
             val bitmap = binding.cropImageView.croppedImage
             if (bitmap == null) {
-                alert(WeakReference(this@SendEdgePhoto), "Invalid selection")
+                alert(WeakReference(this@SendEdgePhoto), R.string.invalid_selection)
             }
             else {
                 val width = bitmap.width
                 val height = bitmap.height
                 if (width > height) {
-                    alert(WeakReference(this@SendEdgePhoto), "The width of your selection must be smaller than its height")
+                    alert(WeakReference(this@SendEdgePhoto), R.string.error_width_is_bigger_than_height)
                 }
                 else {
                     binding.croppedImage.setImageBitmap(bitmap)
@@ -161,13 +161,13 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
                     width !in 5..50 -> {
                         alert(
                             WeakReference(this@SendEdgePhoto),
-                            "The width of the edge must be between 5 and 50 millimeters"
+                            R.string.error_width_restrictions
                         )
                     }
                     height !in 100..350 -> {
                         alert(
                             WeakReference(this@SendEdgePhoto),
-                            "The height of the edge must be between 100 and 350 millimeters"
+                            R.string.error_height_restrictions
                         )
                     }
                     else -> {
@@ -219,7 +219,7 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
                                 private fun onEdgeSubmitError() {
                                     alert(
                                         WeakReference(this@SendEdgePhoto),
-                                        "An error occurred when sending the edge"
+                                        R.string.error_sending_edge
                                     )
                                 }
                             })
@@ -229,7 +229,7 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
             catch(e: NumberFormatException) {
                 alert(
                     WeakReference(this@SendEdgePhoto),
-                    "Please enter valid numbers in the width and height fields!"
+                    R.string.error_invalid_number_format
                 )
             }
         }
