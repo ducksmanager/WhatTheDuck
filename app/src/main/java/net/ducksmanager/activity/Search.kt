@@ -1,6 +1,7 @@
 package net.ducksmanager.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,13 +18,17 @@ import kotlinx.android.synthetic.main.row_suggested_issue.view.*
 import kotlinx.android.synthetic.main.score.view.*
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.api.DmServer.Companion.api
+import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.*
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData.Companion.ALL_CONDITIONS
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData.Companion.issueConditionToStringId
 import net.ducksmanager.util.AppCompatActivityWithDrawer
 import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationContext
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
 import net.ducksmanager.whattheduck.databinding.SearchBinding
 import retrofit2.Response
 import java.util.*
@@ -163,7 +168,7 @@ class Search : AppCompatActivityWithDrawer() {
     }
 
     class IssueAdapter internal constructor(
-        private val context: Context,
+        private val context: Search,
         private val issues: List<SimpleStoryIssue>,
         private val publicationNames: Map<String, String>
     ) : RecyclerView.Adapter<IssueAdapter.ViewHolder>() {
@@ -182,8 +187,8 @@ class Search : AppCompatActivityWithDrawer() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val currentItem = issues[position]
-            val country = currentItem.publicationcode.split('/')[0]
-            val countryUri = "@drawable/flags_${country}"
+            val countryCode = currentItem.publicationcode.split('/')[0]
+            val countryUri = "@drawable/flags_${countryCode}"
             var countryImageResource = context.resources.getIdentifier(countryUri, null, context.packageName)
             if (countryImageResource == 0) {
                 countryImageResource = R.drawable.flags_unknown
@@ -192,13 +197,26 @@ class Search : AppCompatActivityWithDrawer() {
 
             populateConditionBadge(holder.conditionbadge, currentItem.condition)
 
+            val publicationName = publicationNames[currentItem.publicationcode]
             holder.issueTitle.text = context.resources.getString(
                 R.string.title_template,
-                publicationNames[currentItem.publicationcode],
+                publicationName,
                 currentItem.issuenumber
             )
             holder.issueTitle.textSize = 14f
             holder.issueTitle.textAlignment = View.TEXT_ALIGNMENT_TEXT_START
+            holder.issueTitle.setOnClickListener {
+                appDB!!.inducksCountryDao().findByCountryCode(countryCode).observe(context, { country ->
+                    selectedCountry = country
+                    selectedPublication = InducksPublication(currentItem.publicationcode, publicationName!!)
+                    ItemList.type = if (currentItem.condition != null) {
+                        WhatTheDuck.CollectionType.USER.toString()
+                    } else {
+                        WhatTheDuck.CollectionType.COA.toString()
+                    }
+                    context.startActivity(Intent(context, IssueList::class.java))
+                })
+            }
         }
     }
 }
