@@ -1,4 +1,5 @@
 api_endpoint_url=http://myserver/dm-server
+edgecreator_base_url=
 appfollow_api_endpoint_url=
 appfollow_api_secret=
 dm_url=https://ducksmanager.net
