@@ -175,4 +175,5 @@
     <string name="error_height_restrictions">The height of the edge must be between 100 and 350 millimeters</string>
     <string name="error_sending_edge">An error occurred when sending the edge</string>
     <string name="error_invalid_number_format">Please enter valid numbers in the width and height fields!</string>
+    <string name="number_of_users_own_issue">%d users own this issue</string>
 </resources>

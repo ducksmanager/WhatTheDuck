@@ -160,4 +160,12 @@
     <string name="edge_missing_explanation">Certains des magazines ci-dessous n\'ont pas une belle tranche car nous n\'en possédons pas de photo. Cliquez sur l\'une de ces tranches pour nous envoyer une photo et gagnez des points !</string>
     <string name="by_story_title">Par titre d\'histoire</string>
     <string name="send_edge_photo_title">Envoi de photo pour le numéro %1$s %2$s</string>
+    <string name="number_of_users_own_issue">%d utilisateurs possèdent ce numéro</string>
+    <string name="send_edge_thanks">Merci pour votre contribution ! Si votre photo est acceptée, vous recevrez un e-mail lorsque la tranche est publiée.</string>
+    <string name="invalid_selection">Sélection invalide</string>
+    <string name="error_width_is_bigger_than_height">La largeur de votre sélection doit être plus petite que sa hauteur</string>
+    <string name="error_width_restrictions">La largeur de votre sélection doit être comprise entre 5 et 50 millimètres</string>
+    <string name="error_height_restrictions">La largeur de votre sélection doit être comprise entre 100 et 350 millimètres</string>
+    <string name="error_sending_edge">Une erreur est survenue pendant l\'envoi de la tranche</string>
+    <string name="error_invalid_number_format">Veuillez entrer des nombres valides dans les champs \"largeur\" et \"hauteur\" !</string>
 </resources>

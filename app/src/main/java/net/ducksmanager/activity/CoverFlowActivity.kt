@@ -106,7 +106,7 @@ class CoverFlowActivity : AppCompatActivity() {
                     binding.score.scorevalue.text = currentSuggestion.suggestionScore.toString()
                     binding.score.scorevalue.textSize = 20F
 
-                    binding.popularity.text = String.format("%d utilisateurs possèdent ce numéro", currentSuggestion.coverSearchIssue.popularity)
+                    binding.popularity.text = String.format(getString(R.string.number_of_users_own_issue), currentSuggestion.coverSearchIssue.popularity)
 
                     val quotation = currentSuggestion.coverSearchIssue.quotation
                     if (quotation != null) {

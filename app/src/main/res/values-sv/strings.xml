@@ -167,4 +167,5 @@
     <string name="edge_missing_explanation">Vissa av tidningarna nedan har inte en riktig bokrygg för att vi inte har ett foto av dem. Klicka på en av dessa bokryggar för att skicka ett foto till oss och tjäna poäng!</string>
     <string name="send_edge_photo_title">Bokrygg fotouppladdning för utgåva %1$s %2$s</string>
     <string name="by_story_title">Från berättelsetitel</string>
+    <string name="number_of_users_own_issue">%d användare äger denna utgåva</string>
 </resources>
