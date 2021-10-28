@@ -64,33 +64,24 @@ class Search : AppCompatActivityWithDrawer() {
         setContentView(binding.root)
         toggleToolbar()
 
-        binding.searchField.setAdapter(
-            ArrayAdapter(
-                this,
-                android.R.layout.simple_dropdown_item_1line,
-                arrayOf<String>()
-            )
-        )
         binding.issuelist.adapter = IssueAdapter(this@Search, emptyList(), emptyMap())
         binding.issuelist.layoutManager = LinearLayoutManager(this@Search)
 
         binding.searchField.setOnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             binding.searchResultsStoryDetailsIntro.visibility = View.VISIBLE
             val story = binding.searchField.adapter.getItem(position) as SimpleStoryWithIssues
-            if (story.issues != null) {
-                binding.searchResultsStoryTitle.text = story.title
-                val publicationNames = appDB!!.inducksPublicationDao().findByPublicationCodes(story.issues!!.map { it.publicationcode }.toSet())
-                val issueAdapter = IssueAdapter(
-                    this@Search,
-                    story.issues!!,
-                    publicationNames.map { it.publicationCode to it.title }.toMap()
-                )
-                binding.issuelist.adapter = issueAdapter
-                issueAdapter.notifyItemRangeChanged(0, story.issues!!.size)
-                binding.searchField.text.clear()
-                hideKeyboard(binding.searchField)
-                binding.searchField.clearFocus()
-            }
+            binding.searchResultsStoryTitle.text = story.title
+            val publicationNames = appDB!!.inducksPublicationDao().findByPublicationCodes(story.issues!!.map { it.publicationcode }.toSet())
+            val issueAdapter = IssueAdapter(
+                this@Search,
+                story.issues!!,
+                publicationNames.map { it.publicationCode to it.title }.toMap()
+            )
+            binding.issuelist.adapter = issueAdapter
+            issueAdapter.notifyItemRangeChanged(0, story.issues!!.size)
+            binding.searchField.text.clear()
+            hideKeyboard(binding.searchField)
+            binding.searchField.clearFocus()
         }
         binding.searchField.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -164,6 +155,14 @@ class Search : AppCompatActivityWithDrawer() {
                 populateConditionBadge(v.findViewById<View>(R.id.conditionbadge) as ImageView, storyWithIssues.condition)
             }
             return v
+        }
+
+        override fun areAllItemsEnabled(): Boolean {
+            return items.size <= 10
+        }
+
+        override fun isEnabled(position: Int): Boolean {
+            return items[position].issues != null
         }
     }
 
