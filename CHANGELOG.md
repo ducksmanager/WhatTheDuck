@@ -1,3 +1,8 @@
+Version 2.13.0
+
+    Allow to search for issues by story title
+    Allow to send edge photos
+
 Version 2.12.0
 
     Show issue popularity in cover search results
