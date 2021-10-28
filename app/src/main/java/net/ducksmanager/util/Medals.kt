@@ -28,9 +28,14 @@ interface Medals {
         if (medalLevel < 0 || medalLevel > 3) {
             return
         }
+        val language = if (resources.configuration.locales[0].language.matches("/fr/".toRegex())) {
+            resources.configuration.locales[0].language
+        } else {
+            "en"
+        }
         drawable.setImageResource(
             resources.getIdentifier(
-                "medal_${contribution.contribution}_${medalLevel}_${resources.configuration.locales[0].language}",
+                "medal_${contribution.contribution}_${medalLevel}_$language",
                 "drawable",
                 packageName
             )
