@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Base64
 import android.view.View
-import android.view.animation.DecelerateInterpolator
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.otaliastudios.cameraview.CameraListener
@@ -98,15 +97,14 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
             setMedalDrawable(photographerContributions, binding.medalTarget, true)
 
             val currentMedalLevel = getCurrentMedalLevel(photographerContributions)
-            binding.medalProgress.min = MEDAL_LEVELS[R.id.medal_edge_photographer]?.get(currentMedalLevel) ?: 0
-            binding.medalProgress.max = MEDAL_LEVELS[R.id.medal_edge_photographer]?.get(currentMedalLevel+1) ?: 0
+            binding.medalProgress.min = MEDAL_LEVELS["edge_photographer"]!![currentMedalLevel] ?: 0
+            binding.medalProgress.max = MEDAL_LEVELS["edge_photographer"]!![currentMedalLevel+1] ?: 0
             binding.medalProgress.progress = photographerContributions.totalPoints
             binding.medalIncentive.text = getString(R.string.medal_incentive_2, popularity)
             binding.medalProgressWrapper.visibility = View.VISIBLE
             val animator = ObjectAnimator.ofInt(binding.medalProgress, "progress",  photographerContributions.totalPoints + popularity)
             animator.repeatCount = ObjectAnimator.INFINITE
-            animator.interpolator = DecelerateInterpolator()
-            animator.setDuration(1000).start();
+            animator.setDuration(2000).start();
         })
 
         binding.takePhoto.setOnClickListener {

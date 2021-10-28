@@ -14,9 +14,9 @@ interface Medals {
         )
 
         val MEDAL_LEVELS = mapOf(
-            R.id.medal_edge_photographer to mapOf(1 to 50, 2 to 150, 3 to 600),
-            R.id.medal_edge_designer to mapOf(1 to 20, 2 to 70, 3 to 150),
-            R.id.medal_duckhunter to mapOf(1 to 1, 2 to 3, 3 to 15)
+            "edge_photographer" to mapOf(1 to 50, 2 to 150, 3 to 600),
+            "edge_designer" to mapOf(1 to 20, 2 to 70, 3 to 150),
+            "duckhunter" to mapOf(1 to 1, 2 to 3, 3 to 15)
         )
     }
 
@@ -44,8 +44,7 @@ interface Medals {
 
     fun getCurrentMedalLevel(contribution: ContributionTotalPoints) : Int {
         var currentMedalLevel = 0
-        val medalImageId = CONTRIBUTION_MEDAL_IDS[contribution.contribution]!!
-        for ((medalLevel, medalMinimumPoints) in MEDAL_LEVELS[medalImageId]!!) {
+        for ((medalLevel, medalMinimumPoints) in MEDAL_LEVELS[contribution.contribution]!!) {
             if (contribution.totalPoints >= medalMinimumPoints) {
                 currentMedalLevel = medalLevel
             }
