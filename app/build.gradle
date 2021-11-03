@@ -13,8 +13,8 @@ android {
         applicationId "net.ducksmanager.whattheduck"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 97
-        versionName "2.13.1"
+        versionCode 99
+        versionName "2.13.3"
         multiDexEnabled true
 
         javaCompileOptions {
@@ -105,7 +105,7 @@ dependencies {
     implementation 'org.conscrypt:conscrypt-android:2.5.2'
 
     implementation 'com.github.matomo-org:matomo-sdk-android:v4.1.2'
-    implementation 'io.sentry:sentry-android:5.2.4'
+    implementation 'io.sentry:sentry-android:5.3.0'
 
     api 'com.otaliastudios:cameraview:2.7.2'
     implementation 'com.github.CanHub:Android-Image-Cropper:3.3.5'

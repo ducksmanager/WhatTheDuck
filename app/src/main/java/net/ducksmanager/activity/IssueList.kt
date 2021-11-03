@@ -183,14 +183,15 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
 
     override fun show() {
         super.show()
-        if (!isCoaList() && zoomLevel == 1) {
+        val adapter = binding.itemList.adapter
+        if (!isCoaList() && adapter is IssueEdgeAdapter) {
             DmServer.api.getEdgeList(getPublicationCode())
                 .enqueue(object : DmServer.Callback<List<Edge>>("getEdges", this, false) {
                     override fun onSuccessfulResponse(response: Response<List<Edge>>) {
-                        (binding.itemList.adapter as IssueEdgeAdapter).existingEdges = response.body()!!
+                        adapter.existingEdges = response.body()!!
                         DmServer.api.getIssuePopularities().enqueue(object : DmServer.Callback<List<IssuePopularity>>("getIssuePopularities", this@IssueList, false) {
                             override fun onSuccessfulResponse(response: Response<List<IssuePopularity>>) {
-                                (binding.itemList.adapter as IssueEdgeAdapter).issuePopularities = response.body()!!
+                                adapter.issuePopularities = response.body()!!
                             }
                         })
                     }
