@@ -1,3 +1,9 @@
+Version 2.13.4
+
+    Fix crash on camera opening due to unrequested permissions
+    Fix crash on edge upload screen for Android < 8
+    Fix edge upload suggestion message appearing even when all the edges are available
+
 Version 2.13.0
 
     Allow to search for issues by story title
