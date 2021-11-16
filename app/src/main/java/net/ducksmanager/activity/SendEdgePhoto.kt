@@ -1,13 +1,17 @@
 package net.ducksmanager.activity
 
+import android.Manifest
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Base64
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.PictureResult
 import kotlinx.android.synthetic.main.author_notations.*
@@ -31,12 +35,17 @@ import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.lang.ref.WeakReference
 import java.util.*
+import kotlin.math.max
 
 class SendEdgePhoto : AppCompatActivity(), Medals {
     private lateinit var binding: SendEdgePhotoBinding
     private lateinit var publicationCode: String
     private lateinit var issueNumber: String
     private var popularity: Int = 1
+
+    companion object {
+        const val MY_PERMISSIONS_REQUEST = 0
+    }
 
     private fun encodeImage(bm: Bitmap): String {
         val baos = ByteArrayOutputStream()
@@ -74,6 +83,24 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), MY_PERMISSIONS_REQUEST)
+        }
+        else {
+            show()
+        }
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode != MY_PERMISSIONS_REQUEST) {
+            finishActivity(requestCode)
+            return
+        }
+    }
+
+    fun show() {
         publicationCode = intent.getStringExtra("publicationCode")!!
         issueNumber = intent.getStringExtra("issueNumber")!!
         popularity = intent.getIntExtra("popularity", 1)
@@ -97,14 +124,16 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
             setMedalDrawable(photographerContributions, binding.medalTarget, true)
 
             val currentMedalLevel = getCurrentMedalLevel(photographerContributions)
-            binding.medalProgress.min = MEDAL_LEVELS["edge_photographer"]!![currentMedalLevel] ?: 0
+            if (binding.medalProgress.javaClass.kotlin.members.any { it.name == "min" }) {
+                binding.medalProgress.min = MEDAL_LEVELS["edge_photographer"]!![currentMedalLevel] ?: 0
+            }
             binding.medalProgress.max = MEDAL_LEVELS["edge_photographer"]!![currentMedalLevel+1] ?: 0
             binding.medalProgress.progress = photographerContributions.totalPoints
             binding.medalIncentive.text = getString(R.string.medal_incentive_2, popularity)
             binding.medalProgressWrapper.visibility = View.VISIBLE
-            val animator = ObjectAnimator.ofInt(binding.medalProgress, "progress",  photographerContributions.totalPoints + popularity)
+            val animator = ObjectAnimator.ofInt(binding.medalProgress, "progress",  max(photographerContributions.totalPoints + popularity, 2))
             animator.repeatCount = ObjectAnimator.INFINITE
-            animator.setDuration(2000).start();
+            animator.setDuration(2000).start()
         })
 
         binding.takePhoto.setOnClickListener {

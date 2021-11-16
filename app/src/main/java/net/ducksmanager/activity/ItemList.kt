@@ -1,12 +1,16 @@
 package net.ducksmanager.activity
 
+import android.Manifest.permission.CAMERA
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.view.View.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
@@ -35,9 +39,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
     companion object {
         var type = WhatTheDuck.CollectionType.USER.toString()
 
-        fun isCoaList(): Boolean = type == WhatTheDuck.CollectionType.COA.toString()
-
         const val MIN_ITEM_NUMBER_FOR_FILTER = 20
+        const val MY_PERMISSIONS_REQUEST = 0
+
+        fun isCoaList(): Boolean = type == WhatTheDuck.CollectionType.COA.toString()
     }
 
     private lateinit var connectionDetector: ConnectionDetector
@@ -235,8 +240,23 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
     private fun takeCoverPicture() {
         CoverFlowFileHandler.current = CoverFlowFileHandler(WeakReference(this))
-        val photoURI = CoverFlowFileHandler.current.createEmptyFileForCamera(this@ItemList)
+        if (ContextCompat.checkSelfPermission(this, CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(CAMERA), MY_PERMISSIONS_REQUEST)
+        }
+        else {
+            launchCamera()
+        }
+    }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST -> launchCamera()
+        }
+    }
+
+    fun launchCamera() {
+        val photoURI = CoverFlowFileHandler.current.createEmptyFileForCamera(this@ItemList)
         getCameraImage.launch(photoURI)
     }
 
