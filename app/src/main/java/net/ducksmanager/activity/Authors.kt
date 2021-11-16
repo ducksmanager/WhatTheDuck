@@ -142,7 +142,7 @@ class Authors : AppCompatActivityWithDrawer() {
                 api.updateAuthorNotation(updatedAuthorNotation).enqueue(object : DmServer.Callback<Void>("updateAuthorNotation", activity, true) {
                     override fun onSuccessfulResponse(response: Response<Void>) {
                         authorNotations[holder.bindingAdapterPosition] = updatedAuthorNotation
-                        notifyDataSetChanged()
+                        notifyItemChanged(holder.bindingAdapterPosition)
                     }
                 })
             }
@@ -151,7 +151,7 @@ class Authors : AppCompatActivityWithDrawer() {
                 api.deleteAuthorNotation(currentNotation).enqueue(object : DmServer.Callback<Void>("deleteAuthorNotation", activity, true) {
                     override fun onSuccessfulResponse(response: Response<Void>) {
                         authorNotations.removeAt(holder.bindingAdapterPosition)
-                        notifyDataSetChanged()
+                        notifyItemRemoved(holder.bindingAdapterPosition)
                         activity.toggleEmptyAuthorListVisibility()
                         activity.toggleMaxAuthorsWatchedVisibility()
                     }
@@ -163,7 +163,7 @@ class Authors : AppCompatActivityWithDrawer() {
 
         fun addAuthor(author: AuthorNotation) {
             authorNotations.add(author)
-            notifyDataSetChanged()
+            notifyItemInserted(authorNotations.size - 1)
             activity.toggleMaxAuthorsWatchedVisibility()
         }
 

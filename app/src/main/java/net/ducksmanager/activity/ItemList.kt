@@ -255,7 +255,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         }
     }
 
-    fun launchCamera() {
+    private fun launchCamera() {
         val photoURI = CoverFlowFileHandler.current.createEmptyFileForCamera(this@ItemList)
         getCameraImage.launch(photoURI)
     }
