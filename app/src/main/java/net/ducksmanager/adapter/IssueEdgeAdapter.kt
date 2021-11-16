@@ -23,7 +23,9 @@ class IssueEdgeAdapter internal constructor(
 ) : ItemAdapter<InducksIssueWithUserData>(itemList, R.layout.row_edge) {
     private var expectedEdgeHeight: Int? = null
 
-    var existingEdges: List<Edge> = listOf()
+    companion object {
+        var existingEdges: List<Edge> = listOf()
+    }
     var issuePopularities: List<IssuePopularity> = listOf()
 
     override fun getViewHolder(v: View?) = ViewHolder(v)

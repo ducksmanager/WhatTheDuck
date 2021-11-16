@@ -188,7 +188,7 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
             DmServer.api.getEdgeList(getPublicationCode())
                 .enqueue(object : DmServer.Callback<List<Edge>>("getEdges", this, false) {
                     override fun onSuccessfulResponse(response: Response<List<Edge>>) {
-                        adapter.existingEdges = response.body()!!
+                        IssueEdgeAdapter.existingEdges = response.body()!!
                         DmServer.api.getIssuePopularities().enqueue(object : DmServer.Callback<List<IssuePopularity>>("getIssuePopularities", this@IssueList, false) {
                             override fun onSuccessfulResponse(response: Response<List<IssuePopularity>>) {
                                 adapter.issuePopularities = response.body()!!
