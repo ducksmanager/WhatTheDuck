@@ -26,7 +26,7 @@ interface InducksCountryDao {
     fun findAllWithNotification(): LiveData<List<InducksCountryNameWithNotification>>
 
     @Query("SELECT * FROM inducks_countryname WHERE countryCode = :countryCode")
-    fun findByCountryCode(countryCode: String?): LiveData<InducksCountryName>
+    fun findByCountryCode(countryCode: String): LiveData<InducksCountryName>
 
     @Insert
     fun insertList(issueList: List<InducksCountryName>)

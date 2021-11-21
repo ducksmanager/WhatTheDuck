@@ -14,11 +14,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.PictureResult
-import kotlinx.android.synthetic.main.author_notations.*
-import kotlinx.android.synthetic.main.release_notes.view.*
-import kotlinx.android.synthetic.main.row_suggested_issue.view.*
-import kotlinx.android.synthetic.main.score.view.*
-import kotlinx.android.synthetic.main.send_edge_photo.view.*
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.api.EdgeCreator
 import net.ducksmanager.persistence.models.composite.*

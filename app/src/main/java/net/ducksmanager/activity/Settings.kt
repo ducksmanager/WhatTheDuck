@@ -12,8 +12,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.row.view.*
-import kotlinx.android.synthetic.main.settings.*
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.CountryListToUpdate
@@ -117,9 +115,6 @@ class Settings : AppCompatActivityWithDrawer() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val itemView = inflater.inflate(R.layout.row_notified_country, parent, false)
-            itemView.suffiximage.visibility = View.GONE
-            itemView.suffixtext.visibility = View.GONE
-            itemView.itemdescription.visibility = View.GONE
             return ViewHolder(itemView)
         }
 

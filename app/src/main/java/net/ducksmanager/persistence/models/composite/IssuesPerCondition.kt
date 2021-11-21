@@ -4,6 +4,6 @@ import androidx.room.ColumnInfo
 
 class IssuesPerCondition(
     @ColumnInfo(name = "condition") val condition: String,
-    @ColumnInfo(name = "count") val count: Integer
+    @ColumnInfo(name = "count") val count: Int
 
 )

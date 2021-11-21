@@ -11,10 +11,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.author_notations.*
-import kotlinx.android.synthetic.main.release_notes.view.*
-import kotlinx.android.synthetic.main.row_suggested_issue.view.*
-import kotlinx.android.synthetic.main.score.view.*
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.api.DmServer.Companion.api
 import net.ducksmanager.persistence.models.composite.AuthorNotation

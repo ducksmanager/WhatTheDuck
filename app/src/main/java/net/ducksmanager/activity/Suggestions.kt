@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.row_suggested_issue.view.*
 import net.ducksmanager.persistence.dao.SuggestedIssueDao
 import net.ducksmanager.persistence.models.coa.InducksPerson
 import net.ducksmanager.persistence.models.coa.InducksPublication
@@ -142,7 +141,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
                 inducksPublication -> inducksPublication.publicationCode == currentIssue.publicationCode
             }?.title
 
-            val title = holder.textWrapperView.itemtitle
+            val title = holder.textWrapperView.findViewById<TextView>(R.id.itemtitle)
             title.text = context.getString(
                 R.string.title_template,
                 publicationName ?: context.getString(R.string.unknown_publication),

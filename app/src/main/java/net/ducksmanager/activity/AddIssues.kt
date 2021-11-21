@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout.*
-import kotlinx.android.synthetic.main.addissues.*
 import net.ducksmanager.adapter.PurchaseAdapter
 import net.ducksmanager.adapter.PurchaseAdapter.NoPurchase
 import net.ducksmanager.api.DmServer
@@ -123,7 +122,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
 
         binding.addissueOk.setOnClickListener {
             if (copies != null) {
-                saveCopyForCurrentTab(issueCopies.getTabAt(issueCopies.selectedTabPosition)!!)
+                saveCopyForCurrentTab(binding.issueCopies.getTabAt(binding.issueCopies.selectedTabPosition)!!)
                 api.updateUserIssueCopies(copies!!).enqueue(object : DmServer.Callback<Any>("updateIssues", this@AddIssues, true) {
                     override fun onSuccessfulResponse(response: Response<Any>) {
                         onSuccessfulUpdate()

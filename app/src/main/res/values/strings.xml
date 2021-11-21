@@ -109,7 +109,7 @@
     <string name="purchase_date">Purchase date</string>
     <string name="purchase_name">Purchase name</string>
     <string name="quotation">Quotation: </string>
-    <string name="quotation_between">Between %d and %d €</string>
+    <string name="quotation_between">Between %1d and %1d €</string>
     <string name="quotation_less_than">Less than %d €</string>
     <string name="quotation_more_than">At least %d €</string>
     <string name="rate_app">Remember to rate What The Duck on the Play Store :-)</string>

@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import kotlinx.android.synthetic.main.wtd_list.*
 import net.ducksmanager.adapter.IssueAdapter
 import net.ducksmanager.adapter.IssueCoverAdapter
 import net.ducksmanager.adapter.IssueEdgeAdapter

@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
 import android.view.View.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -14,7 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
-import kotlinx.android.synthetic.main.wtd_list_navigation_country.view.*
 import net.ducksmanager.adapter.CountryAdapter
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.persistence.models.coa.InducksCountryName
@@ -173,7 +171,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         toggleNavigation()
 
         binding.navigationAllCountries.root.setOnClickListener { goToView(CountryList::class.java) }
-        binding.navigationCountry.root.selected?.setOnClickListener { _: View? -> goToView(PublicationList::class.java) }
+        binding.navigationCountry.selected.setOnClickListener { goToView(PublicationList::class.java) }
 
         binding.addToCollectionWrapper.setOnClickListener {
             binding.addToCollectionByStoryTitle.visibility = if (binding.addToCollectionByStoryTitle.visibility == GONE) VISIBLE else GONE
