@@ -112,6 +112,8 @@ class AddIssues : AppCompatActivity(), OnClickListener {
     }
 
     private fun show(firstSelectedIssue: Issue? = null) {
+        binding.issueCopies.removeAllTabs()
+
         binding.missing.setOnClickListener(this)
         binding.noCondition.setOnClickListener(this)
         binding.badCondition.setOnClickListener(this)
@@ -170,6 +172,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
             addCopyTab.text = getString(R.string.add_copy)
             binding.issueCopies.addTab(addCopyTab)
 
+            binding.issueCopies.clearOnTabSelectedListeners()
             binding.issueCopies.addOnTabSelectedListener(object : OnTabSelectedListener {
                 override fun onTabSelected(tab: Tab?) {
                     if (tab!!.text == getString(R.string.add_copy)) {
