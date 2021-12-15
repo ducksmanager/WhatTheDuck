@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.*
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
@@ -46,10 +47,10 @@ class Settings : AppCompatActivityWithDrawer() {
                 recyclerView.layoutManager = LinearLayoutManager(this@Settings)
 
                 if (isOfflineMode) {
-                    binding.warningMessage.visibility = View.VISIBLE
+                    binding.warningMessage.visibility = VISIBLE
                     binding.save.isEnabled = false
                 }
-                binding.progressBar.visibility = View.GONE
+                binding.progressBar.visibility = GONE
             })
         }
 
@@ -111,6 +112,9 @@ class Settings : AppCompatActivityWithDrawer() {
             val countryItemView: TextView = itemView.findViewById(R.id.itemtitle)
             val prefixImageView: ImageView = itemView.findViewById(R.id.prefiximage)
             val isNotifiedCountry: CheckBox = itemView.findViewById(R.id.isNotifiedCountry)
+            val itemdescription: TextView = itemView.findViewById(R.id.itemdescription)
+            val suffiximage: ImageView = itemView.findViewById(R.id.suffiximage)
+            val suffixtext: TextView = itemView.findViewById(R.id.suffixtext)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -120,6 +124,10 @@ class Settings : AppCompatActivityWithDrawer() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val currentItem = countries[position]
+            holder.itemdescription.visibility = GONE
+            holder.suffiximage.visibility = GONE
+            holder.suffixtext.visibility = GONE
+
             holder.background?.layoutParams?.width = 0
             holder.countryItemView.text = currentItem.countryName
             holder.prefixImageView.setImageResource(getImageResourceFromCountry(currentItem))
