@@ -1,3 +1,7 @@
+Version 2.13.5
+
+    Fix crash on clicking on "Add a copy" tab in some race conditions
+
 Version 2.13.4
 
     Fix crash on camera opening due to unrequested permissions
