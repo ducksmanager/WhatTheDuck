@@ -4,6 +4,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import net.ducksmanager.persistence.models.dm.ContributionTotalPoints
 import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 
 interface Medals {
     companion object {
@@ -28,8 +29,8 @@ interface Medals {
         if (medalLevel < 0 || medalLevel > 3) {
             return
         }
-        val language = if (resources.configuration.locales[0].language.matches("/fr/".toRegex())) {
-            resources.configuration.locales[0].language
+        val language = if (WhatTheDuck.locale.matches("/fr/".toRegex())) {
+            WhatTheDuck.locale
         } else {
             "en"
         }

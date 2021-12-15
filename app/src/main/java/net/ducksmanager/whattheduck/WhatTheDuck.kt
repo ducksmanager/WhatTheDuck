@@ -241,7 +241,11 @@ class WhatTheDuck : Application() {
         initApplicationVersion()
         initConnectivityManager()
         Companion.applicationContext = applicationContext
-        locale = applicationContext.resources.configuration.locales.get(0).language
+        locale = if (applicationContext.resources.configuration.javaClass.kotlin.members.any { it.name == "locales" }) {
+            applicationContext.resources.configuration.locales[0].language
+        } else {
+            applicationContext.resources.configuration.locale.language
+        }
 
         if (!isTestContext) {
             appDB = Room.databaseBuilder(applicationContext, AppDatabase::class.java, DB_NAME)
