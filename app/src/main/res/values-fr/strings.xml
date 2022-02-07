@@ -103,7 +103,7 @@
     <string name="purchase_date">Date d\'achat</string>
     <string name="purchase_name">Description</string>
     <string name="quotation">Cote: </string>
-    <string name="quotation_between">Entre %1d et %1d €</string>
+    <string name="quotation_between">Entre %1d et %2d €</string>
     <string name="quotation_less_than">Moins de %d €</string>
     <string name="quotation_more_than">Plus de %d €</string>
     <string name="rate_app">Notez What The Duck sur le Play Store :-)</string>
