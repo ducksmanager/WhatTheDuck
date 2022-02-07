@@ -38,7 +38,7 @@ class CoverFlowActivity : AppCompatActivity() {
         val layoutManager = CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, false)
         layoutManager.setPostLayoutListener(CarouselZoomPostLayoutListener())
 
-        appDB!!.coverSearchIssueDao().findAll().observe(this, { searchIssues: List<CoverSearchIssueWithDetails> ->
+        appDB!!.coverSearchIssueDao().findAll().observe(this) { searchIssues: List<CoverSearchIssueWithDetails> ->
             if (searchIssues.isEmpty()) {
                 return@observe
             }
@@ -54,19 +54,30 @@ class CoverFlowActivity : AppCompatActivity() {
                 val position = recyclerView.getChildLayoutPosition(v)
                 val currentSuggestion = data[position]
                 if (currentSuggestion.userIssue == null) {
-                    appDB!!.inducksCountryDao().findByCountryCode(currentSuggestion.coverSearchIssue.coverCountryCode).observe(this, { country ->
-                        selectedCountry = country
-                        appDB!!.inducksPublicationDao().findByPublicationCode(currentSuggestion.coverSearchIssue.coverPublicationCode).observe(this, { publication ->
-                            selectedPublication = publication
-                            selectedIssues = mutableListOf(currentSuggestion.coverSearchIssue.coverIssueNumber)
-                            this@CoverFlowActivity.startActivity(Intent(this@CoverFlowActivity, AddIssues::class.java))
-                        })
-                    })
+                    appDB!!.inducksCountryDao()
+                        .findByCountryCode(currentSuggestion.coverSearchIssue.coverCountryCode)
+                        .observe(this) { country ->
+                            selectedCountry = country
+                            appDB!!.inducksPublicationDao()
+                                .findByPublicationCode(currentSuggestion.coverSearchIssue.coverPublicationCode)
+                                .observe(this) { publication ->
+                                    selectedPublication = publication
+                                    selectedIssues =
+                                        mutableListOf(currentSuggestion.coverSearchIssue.coverIssueNumber)
+                                    this@CoverFlowActivity.startActivity(
+                                        Intent(
+                                            this@CoverFlowActivity,
+                                            AddIssues::class.java
+                                        )
+                                    )
+                                }
+                        }
                 } else {
                     Toast.makeText(
                         this@CoverFlowActivity,
                         R.string.issue_already_possessed,
-                        Toast.LENGTH_SHORT)
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }, binding.listHorizontal, layoutManager)
@@ -74,10 +85,10 @@ class CoverFlowActivity : AppCompatActivity() {
             layoutManager.addOnItemSelectionListener { position ->
                 if (CarouselLayoutManager.INVALID_POSITION == position) {
                     toggleInfoVisibility(INVISIBLE)
-                }
-                else {
+                } else {
                     val currentSuggestion = data[position]
-                    val uri = "@drawable/flags_${currentSuggestion.coverSearchIssue.coverCountryCode}"
+                    val uri =
+                        "@drawable/flags_${currentSuggestion.coverSearchIssue.coverCountryCode}"
                     var countryImageResource = resources.getIdentifier(uri, null, packageName)
                     if (countryImageResource == 0) {
                         countryImageResource = R.drawable.flags_unknown
@@ -94,8 +105,7 @@ class CoverFlowActivity : AppCompatActivity() {
                             binding.issue.conditionbadge.setImageResource(conditionResourceId)
                         }
                         binding.clickToAdd.visibility = INVISIBLE
-                    }
-                    else {
+                    } else {
                         binding.issue.conditionbadge.visibility = GONE
                     }
 
@@ -105,7 +115,10 @@ class CoverFlowActivity : AppCompatActivity() {
                     binding.score.scorevalue.text = currentSuggestion.suggestionScore.toString()
                     binding.score.scorevalue.textSize = 20F
 
-                    binding.popularity.text = String.format(getString(R.string.number_of_users_own_issue), currentSuggestion.coverSearchIssue.popularity)
+                    binding.popularity.text = String.format(
+                        getString(R.string.number_of_users_own_issue),
+                        currentSuggestion.coverSearchIssue.popularity
+                    )
 
                     val quotation = currentSuggestion.coverSearchIssue.quotation
                     if (quotation != null) {
@@ -145,7 +158,7 @@ class CoverFlowActivity : AppCompatActivity() {
                     )
                 }
             }
-        })
+        }
     }
 
     private fun toggleInfoVisibility(visibility: Int) {

@@ -27,7 +27,6 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
 import net.ducksmanager.whattheduck.databinding.SearchBinding
 import retrofit2.Response
-import java.util.*
 
 class Search : AppCompatActivityWithDrawer() {
     private lateinit var binding: SearchBinding
@@ -71,7 +70,7 @@ class Search : AppCompatActivityWithDrawer() {
             val issueAdapter = IssueAdapter(
                 this@Search,
                 story.issues!!,
-                publicationNames.map { it.publicationCode to it.title }.toMap()
+                publicationNames.associate { it.publicationCode to it.title }
             )
             binding.issuelist.adapter = issueAdapter
             issueAdapter.notifyItemRangeChanged(0, story.issues!!.size)
@@ -91,29 +90,33 @@ class Search : AppCompatActivityWithDrawer() {
                         if (response.body()!!.hasmore) {
                             results.add(SimpleStoryWithIssues())
                         }
-                        appDB!!.issueDao().findByIssueCodes(results.flatMap { story -> story.issues?.map { "${it.publicationcode}-${it.issuenumber}"} ?: listOf() }.toSet()).observe(this@Search,
-                            { issues ->
-                                val ownedIssuesConditions = issues.map { "${it.country}/${it.magazine}-${it.issueNumber}" to it.condition }.toMap()
-                                results.forEach { story ->
-                                    story.issues?.forEach { issue ->
-                                        issue.condition = ownedIssuesConditions["${issue.publicationcode}-${issue.issuenumber}"]
-                                        if (issue.condition != null) {
-                                            val issueConditionLevel = ALL_CONDITIONS.indexOf(issue.condition)
-                                            val storyConditionLevel = ALL_CONDITIONS.indexOf(story.condition)
-                                            if (issueConditionLevel > storyConditionLevel) {
-                                                story.condition = ALL_CONDITIONS[issueConditionLevel]
-                                            }
+                        appDB!!.issueDao().findByIssueCodes(results.flatMap { story -> story.issues?.map { "${it.publicationcode}-${it.issuenumber}"} ?: listOf() }.toSet()).observe(this@Search
+                        ) { issues ->
+                            val ownedIssuesConditions =
+                                issues.associate { "${it.country}/${it.magazine}-${it.issueNumber}" to it.condition }
+                            results.forEach { story ->
+                                story.issues?.forEach { issue ->
+                                    issue.condition =
+                                        ownedIssuesConditions["${issue.publicationcode}-${issue.issuenumber}"]
+                                    if (issue.condition != null) {
+                                        val issueConditionLevel =
+                                            ALL_CONDITIONS.indexOf(issue.condition)
+                                        val storyConditionLevel =
+                                            ALL_CONDITIONS.indexOf(story.condition)
+                                        if (issueConditionLevel > storyConditionLevel) {
+                                            story.condition = ALL_CONDITIONS[issueConditionLevel]
                                         }
                                     }
                                 }
-                                val storyAdapter = StoryAdapter(
-                                    this@Search,
-                                    R.layout.story_with_condition,
-                                    results.toMutableList()
-                                )
-                                binding.searchField.setAdapter(storyAdapter)
-                                storyAdapter.notifyDataSetChanged()
-                            })
+                            }
+                            val storyAdapter = StoryAdapter(
+                                this@Search,
+                                R.layout.story_with_condition,
+                                results.toMutableList()
+                            )
+                            binding.searchField.setAdapter(storyAdapter)
+                            storyAdapter.notifyDataSetChanged()
+                        }
                     }
                 })
             }
@@ -201,16 +204,17 @@ class Search : AppCompatActivityWithDrawer() {
             holder.issueTitle.textSize = 14f
             holder.issueTitle.textAlignment = View.TEXT_ALIGNMENT_TEXT_START
             holder.issueTitle.setOnClickListener {
-                appDB!!.inducksCountryDao().findByCountryCode(countryCode).observe(context, { country ->
+                appDB!!.inducksCountryDao().findByCountryCode(countryCode).observe(context) { country ->
                     selectedCountry = country
-                    selectedPublication = InducksPublication(currentItem.publicationcode, publicationName!!)
+                    selectedPublication =
+                        InducksPublication(currentItem.publicationcode, publicationName!!)
                     ItemList.type = if (currentItem.condition != null) {
                         WhatTheDuck.CollectionType.USER.toString()
                     } else {
                         WhatTheDuck.CollectionType.COA.toString()
                     }
                     context.startActivity(Intent(context, IssueList::class.java))
-                })
+                }
             }
         }
     }

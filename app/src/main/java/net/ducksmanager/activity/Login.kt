@@ -56,7 +56,6 @@ import net.ducksmanager.whattheduck.databinding.LoginBinding
 import retrofit2.Response
 import java.lang.ref.WeakReference
 import java.time.Instant
-import java.util.*
 
 class Login : AppCompatActivity() {
     private lateinit var binding: LoginBinding
@@ -197,18 +196,17 @@ class Login : AppCompatActivity() {
             return
         }
 
-        appDB!!.userDao().currentUser.observe(this, { user ->
+        appDB!!.userDao().currentUser.observe(this) { user ->
             if (user == null) {
                 showLoginForm()
-            }
-            else if (WhatTheDuck.currentUser == null) {
+            } else if (WhatTheDuck.currentUser == null) {
                 apiDmUser = user.username
                 apiDmPassword = user.password
 
                 binding.progressBar.visibility = VISIBLE
                 fetchCollection(WeakReference(this@Login), false)
             }
-        })
+        }
     }
 
     private fun showLoginForm() {

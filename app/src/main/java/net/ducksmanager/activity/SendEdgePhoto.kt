@@ -8,7 +8,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Base64
 import android.view.View
-import android.widget.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -16,7 +16,6 @@ import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.PictureResult
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.api.EdgeCreator
-import net.ducksmanager.persistence.models.composite.*
 import net.ducksmanager.persistence.models.edgecreator.EdgeCanvas
 import net.ducksmanager.persistence.models.edgecreator.EdgePhoto
 import net.ducksmanager.util.Medals
@@ -29,7 +28,6 @@ import net.ducksmanager.whattheduck.databinding.SendEdgePhotoBinding
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.lang.ref.WeakReference
-import java.util.*
 import kotlin.math.max
 
 class SendEdgePhoto : AppCompatActivity(), Medals {
@@ -113,23 +111,30 @@ class SendEdgePhoto : AppCompatActivity(), Medals {
             issueNumber
         )
 
-        WhatTheDuck.appDB!!.contributionTotalPointsDao().contributions.observe(this, { contributions ->
-            val photographerContributions = contributions.find { it.contribution == "edge_photographer" }!!
+        WhatTheDuck.appDB!!.contributionTotalPointsDao().contributions.observe(this) { contributions ->
+            val photographerContributions =
+                contributions.find { it.contribution == "edge_photographer" }!!
             setMedalDrawable(photographerContributions, binding.medalCurrent)
             setMedalDrawable(photographerContributions, binding.medalTarget, true)
 
             val currentMedalLevel = getCurrentMedalLevel(photographerContributions)
             if (binding.medalProgress.javaClass.kotlin.members.any { it.name == "min" }) {
-                binding.medalProgress.min = MEDAL_LEVELS["edge_photographer"]!![currentMedalLevel] ?: 0
+                binding.medalProgress.min =
+                    MEDAL_LEVELS["edge_photographer"]!![currentMedalLevel] ?: 0
             }
-            binding.medalProgress.max = MEDAL_LEVELS["edge_photographer"]!![currentMedalLevel+1] ?: 0
+            binding.medalProgress.max =
+                MEDAL_LEVELS["edge_photographer"]!![currentMedalLevel + 1] ?: 0
             binding.medalProgress.progress = photographerContributions.totalPoints
             binding.medalIncentive.text = getString(R.string.medal_incentive_2, popularity)
             binding.medalProgressWrapper.visibility = View.VISIBLE
-            val animator = ObjectAnimator.ofInt(binding.medalProgress, "progress",  max(photographerContributions.totalPoints + popularity, 2))
+            val animator = ObjectAnimator.ofInt(
+                binding.medalProgress,
+                "progress",
+                max(photographerContributions.totalPoints + popularity, 2)
+            )
             animator.repeatCount = ObjectAnimator.INFINITE
             animator.setDuration(2000).start()
-        })
+        }
 
         binding.takePhoto.setOnClickListener {
             binding.camera.takePicture()

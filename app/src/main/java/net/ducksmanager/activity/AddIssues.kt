@@ -8,7 +8,7 @@ import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.os.Bundle
 import android.view.View
-import android.view.View.*
+import android.view.View.OnClickListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import android.widget.Toast
@@ -82,12 +82,15 @@ class AddIssues : AppCompatActivity(), OnClickListener {
     }
 
     private fun setData() {
-        appDB!!.purchaseDao().findAll().observe(this, { purchases: List<Purchase> ->
+        appDB!!.purchaseDao().findAll().observe(this) { purchases: List<Purchase> ->
             this.purchases = arrayListOf(NoPurchase())
             this.purchases.addAll(purchases)
 
             val publicationCode = selectedPublication!!.publicationCode
-            appDB!!.inducksIssueDao().findUserOwnedByPublicationCodeAndIssueNumber(publicationCode, selectedIssues.first()).observe(this, { dbCopies: List<InducksIssueWithUserData> ->
+            appDB!!.inducksIssueDao().findUserOwnedByPublicationCodeAndIssueNumber(
+                publicationCode,
+                selectedIssues.first()
+            ).observe(this) { dbCopies: List<InducksIssueWithUserData> ->
                 if (selectedIssues.toSet().size > 1) {
                     this.binding.issueCopies.visibility = GONE
                     show(dbCopies.firstOrNull()?.userIssue)
@@ -100,8 +103,8 @@ class AddIssues : AppCompatActivity(), OnClickListener {
                     )
                     show()
                 }
-            })
-        })
+            }
+        }
     }
 
     private fun onSuccessfulUpdate() {

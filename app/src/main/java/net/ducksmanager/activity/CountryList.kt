@@ -11,7 +11,6 @@ import net.ducksmanager.api.DmServer
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_ALL_COUNTRIES
 import net.ducksmanager.persistence.models.coa.InducksCountryName
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
-import net.ducksmanager.util.ReleaseNotes
 import net.ducksmanager.util.Settings
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
@@ -19,8 +18,6 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import retrofit2.Response
-import java.lang.ref.WeakReference
-import java.util.*
 
 class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
@@ -53,13 +50,10 @@ class CountryList : ItemList<InducksCountryNameWithPossession>() {
             builder.setTitle(getString(R.string.welcome_title))
             builder.setMessage(getString(R.string.welcome_message))
             builder.setPositiveButton(R.string.ok) { dialogInterface: DialogInterface, _: Int ->
-                ReleaseNotes.current.showOnVersionUpdate(WeakReference(this@CountryList))
                 dialogInterface.dismiss()
             }
             Settings.addToMessagesAlreadyShown(Settings.MESSAGE_KEY_WELCOME)
             builder.create().show()
-        } else {
-            ReleaseNotes.current.showOnVersionUpdate(WeakReference(this))
         }
         WhatTheDuck.selectedCountry = null
         WhatTheDuck.selectedPublication = null

@@ -13,7 +13,6 @@ import net.ducksmanager.whattheduck.databinding.StatsBinding
 import java.lang.Integer.max
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 class Stats : AppCompatActivityWithDrawer() {
@@ -26,7 +25,7 @@ class Stats : AppCompatActivityWithDrawer() {
         setContentView(binding.root)
         toggleToolbar()
 
-        appDB!!.issueDao().countDistinct().observe(this, { collectionCount ->
+        appDB!!.issueDao().countDistinct().observe(this) { collectionCount ->
             val copies = collectionCount.issues - collectionCount.distinctIssues
 
             binding.countryCount.text = "%d".format(collectionCount.countries)
@@ -54,7 +53,7 @@ class Stats : AppCompatActivityWithDrawer() {
                 return@observe
             }
 
-            appDB!!.issueDao().countPerCondition().observe(this, { issuesPerCondition ->
+            appDB!!.issueDao().countPerCondition().observe(this) { issuesPerCondition ->
                 val colors = issuesPerCondition.map {
                     when (it.condition) {
                         InducksIssueWithUserData.BAD_CONDITION -> AAColor.Red
@@ -87,10 +86,10 @@ class Stats : AppCompatActivityWithDrawer() {
                         )
                     )
                 binding.issueConditionChart.aa_drawChartWithChartModel(conditionModel)
-            })
+            }
 
             appDB!!.issueDao().countPerMonthAndPublication()
-                .observe(this, { issuesPerMonthAndPublication ->
+                .observe(this) { issuesPerMonthAndPublication ->
                     val countPerPublication =
                         issuesPerMonthAndPublication
                             .groupingBy { it.publicationcode }
@@ -101,17 +100,27 @@ class Stats : AppCompatActivityWithDrawer() {
                                     acc!! + element.count
                             }
 
-                    val mostOwnedPublications = countPerPublication.filter { it.value >= (collectionCount.issues.toFloat() / 10) }.keys
-                    val mostOwnedPublicationNames = appDB!!.inducksPublicationDao().findByPublicationCodes(mostOwnedPublications)
-                    val allPublications = hashSetOf(getString(R.string.other)).plus(mostOwnedPublicationNames.map { it.title })
+                    val mostOwnedPublications =
+                        countPerPublication.filter { it.value >= (collectionCount.issues.toFloat() / 10) }.keys
+                    val mostOwnedPublicationNames = appDB!!.inducksPublicationDao()
+                        .findByPublicationCodes(mostOwnedPublications)
+                    val allPublications =
+                        hashSetOf(getString(R.string.other)).plus(mostOwnedPublicationNames.map { it.title })
 
-                    val series = allPublications.associateWith { mutableMapOf<Int, Any>() }.toMutableMap()
-                    val oldestMonth = issuesPerMonthAndPublication.find { it.month != "-0001-1" }?.month
-                    val hasUnknownDate = issuesPerMonthAndPublication.any { it.month == "-0001-1"}
+                    val series =
+                        allPublications.associateWith { mutableMapOf<Int, Any>() }.toMutableMap()
+                    val oldestMonth =
+                        issuesPerMonthAndPublication.find { it.month != "-0001-1" }?.month
+                    val hasUnknownDate = issuesPerMonthAndPublication.any { it.month == "-0001-1" }
 
-                    val allMonths = if (hasUnknownDate) { mutableListOf(getString(R.string.unknown_date)) } else { mutableListOf() }
+                    val allMonths = if (hasUnknownDate) {
+                        mutableListOf(getString(R.string.unknown_date))
+                    } else {
+                        mutableListOf()
+                    }
                     if (oldestMonth != null) {
-                        var currentDate = LocalDate.parse("$oldestMonth-01", DateTimeFormatter.ISO_DATE)
+                        var currentDate =
+                            LocalDate.parse("$oldestMonth-01", DateTimeFormatter.ISO_DATE)
                         do {
                             allMonths.add(currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM")))
                             currentDate = currentDate.plusMonths(1)
@@ -119,7 +128,8 @@ class Stats : AppCompatActivityWithDrawer() {
                     }
 
                     val allMonthsArray = allMonths.toTypedArray()
-                    val cumulatedSumPerPublication = allPublications.associateWith { 0 }.toMutableMap()
+                    val cumulatedSumPerPublication =
+                        allPublications.associateWith { 0 }.toMutableMap()
 
                     issuesPerMonthAndPublication.forEach {
                         val monthIndex = max(allMonthsArray.indexOf(it.month), 0)
@@ -139,8 +149,17 @@ class Stats : AppCompatActivityWithDrawer() {
                         }
                     }
 
-                    val monthsArrayLastYearOnly = allMonthsArray.slice(max(0, allMonthsArray.size - 12) until allMonthsArray.size).toTypedArray()
-                    val seriesLastYearOnly = series.mapValues { it.value.filterKeys { monthIndex: Int -> monthIndex != -1 && monthsArrayLastYearOnly.contains(allMonthsArray[monthIndex]) } }
+                    val monthsArrayLastYearOnly = allMonthsArray.slice(
+                        max(
+                            0,
+                            allMonthsArray.size - 12
+                        ) until allMonthsArray.size
+                    ).toTypedArray()
+                    val seriesLastYearOnly = series.mapValues {
+                        it.value.filterKeys { monthIndex: Int ->
+                            monthIndex != -1 && monthsArrayLastYearOnly.contains(allMonthsArray[monthIndex])
+                        }
+                    }
 
                     fun getChartModelOptions(
                         series: Map<String, Map<Int, Any>>,
@@ -158,7 +177,8 @@ class Stats : AppCompatActivityWithDrawer() {
                             .categories(monthsArray)
                             .series(
                                 series.map { (publicationname, data) ->
-                                    var seriesElement = AASeriesElement().name(publicationname).data(data.values.toTypedArray())
+                                    var seriesElement = AASeriesElement().name(publicationname)
+                                        .data(data.values.toTypedArray())
                                     if (publicationname == getString(R.string.other)) {
                                         seriesElement = seriesElement.color("#999")
                                     }
@@ -175,7 +195,8 @@ class Stats : AppCompatActivityWithDrawer() {
                         val aaOptions = model.aa_toAAOptions()
                         aaOptions.tooltip
                             ?.shared(false)
-                            ?.formatter("""
+                            ?.formatter(
+                                """
                                 function () {
                                     return '<b>' + this.x + '</b><br/>'
                                     + this.series.name+ ': '+ this.y + '<br/>'
@@ -192,16 +213,20 @@ class Stats : AppCompatActivityWithDrawer() {
                     binding.showPurchaseHistorySinceForever.setOnCheckedChangeListener { buttonView, isChecked ->
                         buttonView.isChecked = isChecked
                         binding.showPurchaseHistoryInThePastYear.isChecked = !isChecked
-                        binding.purchaseProgressChart.aa_drawChartWithChartOptions(getChartModelOptions(series, allMonthsArray))
+                        binding.purchaseProgressChart.aa_drawChartWithChartOptions(
+                            getChartModelOptions(series, allMonthsArray)
+                        )
                     }
 
                     binding.showPurchaseHistoryInThePastYear.setOnCheckedChangeListener { buttonView, isChecked ->
                         buttonView.isChecked = isChecked
                         binding.showPurchaseHistorySinceForever.isChecked = !isChecked
-                        binding.purchaseProgressChart.aa_drawChartWithChartOptions(getChartModelOptions(seriesLastYearOnly, monthsArrayLastYearOnly, false))
+                        binding.purchaseProgressChart.aa_drawChartWithChartOptions(
+                            getChartModelOptions(seriesLastYearOnly, monthsArrayLastYearOnly, false)
+                        )
 
                     }
-                })
-        })
+                }
+        }
     }
 }

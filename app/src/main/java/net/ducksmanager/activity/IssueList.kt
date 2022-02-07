@@ -42,7 +42,6 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
 import net.ducksmanager.whattheduck.databinding.WtdListBinding
 import retrofit2.Response
 import java.lang.ref.WeakReference
-import java.util.*
 
 
 class IssueList : ItemList<InducksIssueWithUserData>() {
@@ -63,19 +62,25 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
     override fun downloadAndShowList() {
         DmServer.api.getIssues(getPublicationCode()).enqueue(object : DmServer.Callback<List<InducksIssueWithCoverUrl>>("getInducksIssues", this, false) {
             override fun onFailureFailover() {
-                viewModel.data.observe(this@IssueList, { existingInducksIssues ->
+                viewModel.data.observe(this@IssueList) { existingInducksIssues ->
                     if (existingInducksIssues.isEmpty()) {
                         // Create fake Inducks issues in the local DB corresponding to the user's issues
-                        appDB!!.issueDao().findByPublicationCode(getPublicationCode()).observe(this@IssueList, { userIssues ->
-                            appDB!!.inducksIssueDao().insertList(userIssues.map { issue ->
-                                InducksIssueWithCoverUrl(getPublicationCode(), issue.issueNumber, "", "")
-                            })
-                            super@IssueList.downloadAndShowList()
-                        })
+                        appDB!!.issueDao().findByPublicationCode(getPublicationCode())
+                            .observe(this@IssueList) { userIssues ->
+                                appDB!!.inducksIssueDao().insertList(userIssues.map { issue ->
+                                    InducksIssueWithCoverUrl(
+                                        getPublicationCode(),
+                                        issue.issueNumber,
+                                        "",
+                                        ""
+                                    )
+                                })
+                                super@IssueList.downloadAndShowList()
+                            }
                     } else {
                         super@IssueList.downloadAndShowList()
                     }
-                })
+                }
             }
 
             override fun onSuccessfulResponse(response: Response<List<InducksIssueWithCoverUrl>>) {

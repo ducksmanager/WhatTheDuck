@@ -6,7 +6,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
@@ -38,12 +39,14 @@ class Settings : AppCompatActivityWithDrawer() {
         toggleToolbar()
 
         Settings.loadNotificationCountries(this) {
-            appDB!!.inducksCountryDao().findAllWithNotification().observe(this, { countryNamesWithNotification ->
+            appDB!!.inducksCountryDao().findAllWithNotification().observe(this) { countryNamesWithNotification ->
                 val countryNames = countryNamesWithNotification.map { it.country }
-                val countriesToNotifyTo = countryNamesWithNotification.filter { it.isNotified }.map { it.country.countryCode }.toMutableSet()
+                val countriesToNotifyTo = countryNamesWithNotification.filter { it.isNotified }
+                    .map { it.country.countryCode }.toMutableSet()
 
                 val recyclerView = binding.notifiedCountriesList
-                recyclerView.adapter = CountryToNotifyListAdapter(this@Settings, countryNames, countriesToNotifyTo)
+                recyclerView.adapter =
+                    CountryToNotifyListAdapter(this@Settings, countryNames, countriesToNotifyTo)
                 recyclerView.layoutManager = LinearLayoutManager(this@Settings)
 
                 if (isOfflineMode) {
@@ -51,7 +54,7 @@ class Settings : AppCompatActivityWithDrawer() {
                     binding.save.isEnabled = false
                 }
                 binding.progressBar.visibility = GONE
-            })
+            }
         }
 
         binding.linkToDiscord.setOnClickListener {

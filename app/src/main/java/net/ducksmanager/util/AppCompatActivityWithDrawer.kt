@@ -82,12 +82,12 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity(), Medals {
                 true
             }
 
-        appDB!!.contributionTotalPointsDao().contributions.observe(this, { contributions ->
+        appDB!!.contributionTotalPointsDao().contributions.observe(this) { contributions ->
             contributions.forEach {
                 val medalImageId = CONTRIBUTION_MEDAL_IDS[it.contribution]!!
                 setMedalDrawable(it, drawerContents.findViewById(medalImageId))
             }
-        })
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
