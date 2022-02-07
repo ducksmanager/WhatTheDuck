@@ -52,9 +52,11 @@
     <string name="input_error__empty_credentials">You need to enter your credentials to continue</string>
     <string name="input_error__invalid_credentials">Invalid credentials</string>
     <string name="input_error__no_issue_selected">Select at least one issue</string>
-    <string name="insert_issue__title_multiple_issues_plural">Issue %1$s and %2$d others</string>
-    <string name="insert_issue__title_multiple_issues_singular">Issue %1$s and 1 other</string>
-    <string name="insert_issue__title_single_issue">Issue %1$s</string>
+    <plurals name="insert_issue__title">
+        <item quantity="one">Issue %1$s</item>
+        <item quantity="two">Issue %1$s and %2$d other</item>
+        <item quantity="other">Issue %1$s and %2$d others</item>
+    </plurals>
     <string name="instagram" translatable="false">Instagram</string>
     <string name="internal_error">Internal error</string>
     <string name="internal_error__crypting_failed">The encryption of your credentials failed</string>

@@ -54,17 +54,12 @@ class AddIssues : AppCompatActivity(), OnClickListener {
         setContentView(binding.root)
 
         val issueNumber = selectedIssues.first()
-        when (selectedIssues.toSet().size) {
-            1 -> {
-                binding.addIssueTitle.text = getString(R.string.insert_issue__title_single_issue, issueNumber)
-            }
-            2 -> {
-                binding.addIssueTitle.text = getString(R.string.insert_issue__title_multiple_issues_singular, issueNumber)
-            }
-            else -> {
-                binding.addIssueTitle.text = getString(R.string.insert_issue__title_multiple_issues_plural, issueNumber, selectedIssues.size - 1)
-            }
-        }
+        binding.addIssueTitle.text = resources.getQuantityString(
+            R.plurals.insert_issue__title,
+            selectedIssues.size,
+            issueNumber,
+            selectedIssues.size - 1
+        )
 
         downloadPurchaseList()
     }

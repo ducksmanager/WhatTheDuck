@@ -48,9 +48,10 @@
     <string name="input_error__empty_credentials">Du måste fylla i alla fälten för att fortsätta</string>
     <string name="input_error__invalid_credentials">Ogiltig information</string>
     <string name="input_error__no_issue_selected">Välj åtminstone en utgåva</string>
-    <string name="insert_issue__title_multiple_issues_plural">Utgåva %1$s och %2$d andra</string>
-    <string name="insert_issue__title_multiple_issues_singular">Utgåva %1$s och en till</string>
-    <string name="insert_issue__title_single_issue">Utgåva %1$s</string>
+    <plurals name="insert_issue__title">
+        <item quantity="one">Utgåva %1$s</item>
+        <item quantity="other">Utgåva %1$s och %2$d andra</item>
+    </plurals>
     <string name="internal_error">Internt fel</string>
     <string name="internal_error__crypting_failed">Krypteringen av din information misslyckades</string>
     <string name="internal_error__empty_list">Tom lista</string>

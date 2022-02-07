@@ -48,9 +48,11 @@
     <string name="input_error__empty_credentials">Vous devez saisir votre pseudonyme et votre mot de passe pour continuer</string>
     <string name="input_error__invalid_credentials">Vos identifiants sont invalides</string>
     <string name="input_error__no_issue_selected">Sélectionnez au moins un numéro</string>
-    <string name="insert_issue__title_multiple_issues_plural">Numéro %1$s et %2$d autres</string>
-    <string name="insert_issue__title_multiple_issues_singular">Numéro %1$s et 1 autre</string>
-    <string name="insert_issue__title_single_issue">Numéro %1$s</string>
+    <plurals name="insert_issue__title">
+        <item quantity="one">Numéro %1$s</item>
+        <item quantity="many">Numéro %1$s et 1 autre</item>
+        <item quantity="other">Numéro %1$s et %2$d autres</item>
+    </plurals>
     <string name="internal_error">Erreur interne</string>
     <string name="internal_error__crypting_failed">L\'encryptage de vos identifiants a échoué</string>
     <string name="internal_error__empty_list">Liste vide</string>
