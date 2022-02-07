@@ -7,6 +7,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -130,6 +132,10 @@ class Suggestions : AppCompatActivityWithDrawer() {
             val suffixtextView1: TextView = itemView.findViewById(R.id.suffixtext1)
             val suffixtextView2: TextView = itemView.findViewById(R.id.scorevalue)
             val storyListView: RecyclerView = itemView.findViewById(R.id.storylist)
+            val storyListCountView: TextView = itemView.findViewById(R.id.story_list_count)
+            val storyListCollapsedView: ImageView = itemView.findViewById(R.id.story_list_collapsed)
+            val storyListExpandedView: ImageView = itemView.findViewById(R.id.story_list_expanded)
+            val storyListCollapsibleLayout: LinearLayout = itemView.findViewById(R.id.story_list_collapsible)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(inflater.inflate(R.layout.row_suggested_issue, parent, false))
@@ -160,6 +166,19 @@ class Suggestions : AppCompatActivityWithDrawer() {
             }
             holder.storyListView.adapter = StoryAdapter(context, storiesWithAuthors)
             holder.storyListView.layoutManager = LinearLayoutManager(context)
+
+            holder.storyListCountView.text = context.resources.getQuantityString(R.plurals.new_stories, issueStories.size, issueStories.size)
+            holder.storyListCollapsibleLayout.setOnClickListener {
+                if (holder.storyListView.visibility == GONE) {
+                    holder.storyListView.visibility = VISIBLE
+                    holder.storyListCollapsedView.visibility = GONE
+                    holder.storyListExpandedView.visibility = VISIBLE
+                } else {
+                    holder.storyListView.visibility = GONE
+                    holder.storyListCollapsedView.visibility = VISIBLE
+                    holder.storyListExpandedView.visibility = GONE
+                }
+            }
         }
 
         private fun getImageResourceFromCountry(countryCode: String): Int {

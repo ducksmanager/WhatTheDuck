@@ -66,10 +66,39 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/story_list_collapsible"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/ripple"
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <ImageView
+            android:id="@+id/story_list_expanded"
+            android:visibility="gone"
+            android:layout_marginStart="26dp"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_arrow_up" />
+        <ImageView
+            android:id="@+id/story_list_collapsed"
+            android:layout_marginStart="26dp"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_arrow_down" />
+        <TextView
+            android:id="@+id/story_list_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="6 new stories"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginStart="30dp"
         android:orientation="horizontal"
         android:id="@+id/storylist"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/story_with_authors"/>

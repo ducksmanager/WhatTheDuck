@@ -168,4 +168,8 @@
     <string name="error_height_restrictions">La largeur de votre sélection doit être comprise entre 100 et 350 millimètres</string>
     <string name="error_sending_edge">Une erreur est survenue pendant l\'envoi de la tranche</string>
     <string name="error_invalid_number_format">Veuillez entrer des nombres valides dans les champs \"largeur\" et \"hauteur\" !</string>
+    <plurals name="new_stories">
+        <item quantity="one">1 nouvelle histoire</item>
+        <item quantity="other">%d nouvelles histoires</item>
+    </plurals>
 </resources>

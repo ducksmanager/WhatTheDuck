@@ -176,4 +176,8 @@
     <string name="error_sending_edge">An error occurred when sending the edge</string>
     <string name="error_invalid_number_format">Please enter valid numbers in the width and height fields!</string>
     <string name="number_of_users_own_issue">%d users own this issue</string>
+    <plurals name="new_stories">
+        <item quantity="one">%d new story</item>
+        <item quantity="other">%d new stories</item>
+    </plurals>
 </resources>
