@@ -19,6 +19,12 @@ interface InducksIssueDao {
     fun findByPublicationCode(publicationCode: String): LiveData<List<InducksIssueWithUserData>>
 
     @Query(
+        " SELECT inducks_issue.*" +
+        " FROM inducks_issue" +
+        " WHERE inducksPublicationCode = :publicationCode AND inducksIssueNumber = :issueNumber")
+    fun findByPublicationCodeAndIssueNumber(publicationCode: String, issueNumber: String): InducksIssueWithCoverUrl
+
+    @Query(
         " SELECT inducks_issue.*, issues.*, purchases.*, suggested_issues.suggestionScore" +
         " FROM inducks_issue" +
         " INNER JOIN issues ON inducks_issue.inducksPublicationCode = issues.country || '/' || issues.magazine AND inducks_issue.inducksIssueNumber = issues.issueNumber" +

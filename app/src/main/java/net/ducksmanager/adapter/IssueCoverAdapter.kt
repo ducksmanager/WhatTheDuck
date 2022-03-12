@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import net.ducksmanager.activity.ItemList
+import net.ducksmanager.persistence.models.coa.InducksIssueWithCoverUrl
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData
 import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
@@ -18,6 +19,16 @@ class IssueCoverAdapter internal constructor(
     itemList: ItemList<InducksIssueWithUserData>,
     private val recyclerView: RecyclerView
 ) : ItemAdapter<InducksIssueWithUserData>(itemList, R.layout.cell_cover) {
+
+    companion object {
+        public fun getCoverUrl(i: InducksIssueWithCoverUrl): String {
+            return String.format(
+                "%s/%s",
+                WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_COVERS_URL),
+                i.coverUrl
+            )
+        }
+    }
 
     override fun getViewHolder(v: View?) = ViewHolder(v)
 
@@ -36,7 +47,7 @@ class IssueCoverAdapter internal constructor(
 
         Picasso
             .with(holder.itemView.context)
-            .load(getEdgeUrl(item))
+            .load(getCoverUrl(item.issue))
             .resize(0, itemWidth)
             .into(itemHolder.coverImage, object: Callback {
                 override fun onSuccess() {
@@ -49,14 +60,6 @@ class IssueCoverAdapter internal constructor(
                     itemHolder.defaultCover.visibility = View.VISIBLE
                 }
             })
-    }
-
-    private fun getEdgeUrl(i: InducksIssueWithUserData): String {
-        return String.format(
-            "%s/%s",
-            WhatTheDuck.config.getProperty(WhatTheDuck.CONFIG_KEY_COVERS_URL),
-            i.issue.coverUrl
-        )
     }
 
     override fun isPossessed(item: InducksIssueWithUserData) = item.userIssue != null

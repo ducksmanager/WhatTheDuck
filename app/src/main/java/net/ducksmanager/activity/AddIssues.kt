@@ -16,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout.*
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
+import net.ducksmanager.adapter.IssueCoverAdapter.Companion.getCoverUrl
 import net.ducksmanager.adapter.PurchaseAdapter
 import net.ducksmanager.adapter.PurchaseAdapter.NoPurchase
 import net.ducksmanager.api.DmServer
@@ -54,6 +57,20 @@ class AddIssues : AppCompatActivity(), OnClickListener {
         setContentView(binding.root)
 
         val issueNumber = selectedIssues.first()
+
+        val issue = appDB!!.inducksIssueDao().findByPublicationCodeAndIssueNumber(selectedPublication!!.publicationCode, issueNumber)
+
+        Picasso
+            .with(applicationContext)
+            .load(getCoverUrl(issue))
+            .into(binding.coverimage, object: Callback {
+                override fun onSuccess() {}
+
+                override fun onError() {
+                    binding.coverimage.visibility = View.GONE
+                }
+            })
+
         binding.addIssueTitle.text = resources.getQuantityString(
             R.plurals.insert_issue__title,
             selectedIssues.size,
