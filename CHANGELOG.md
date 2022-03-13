@@ -1,3 +1,11 @@
+Version 2.14.0
+
+    Make the story list of a suggestion collapsible
+    Show the cover of the issue that's about to be added
+    Allow to add an issue from a list of recent issues
+    Add ripple effect on countries, publications and recent issues
+    Animate item to scroll to Update translations
+
 Version 2.13.5
 
     Fix crash on clicking on "Add a copy" tab in some race conditions
