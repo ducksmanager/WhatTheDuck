@@ -39,6 +39,8 @@ class IssueEdgeAdapter internal constructor(
     override fun onBindViewHolder(holder: ItemAdapter<InducksIssueWithUserData>.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         val itemHolder = holder as ViewHolder
+        itemHolder.itemView.background = null
+
         val item = getItem(position)
 
         if (expectedEdgeHeight == null) {

@@ -42,6 +42,8 @@ class IssueCoverAdapter internal constructor(
     override fun onBindViewHolder(holder: ItemAdapter<InducksIssueWithUserData>.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         val itemHolder = holder as ViewHolder
+        itemHolder.itemView.background = null
+
         val item = getItem(position)
         val itemWidth = (recyclerView.measuredWidth / (recyclerView.layoutManager as GridLayoutManager).spanCount)
 

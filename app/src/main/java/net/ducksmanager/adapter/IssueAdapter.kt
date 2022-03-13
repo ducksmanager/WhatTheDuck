@@ -33,6 +33,14 @@ class IssueAdapter internal constructor(
         }
     }
 
+    override fun onBindViewHolder(
+        holder: ItemAdapter<InducksIssueWithUserData>.ViewHolder,
+        position: Int
+    ) {
+        super.onBindViewHolder(holder, position)
+        holder.itemView.background = null
+    }
+
     override var onLongClickListener = View.OnLongClickListener { view: View ->
         if (isCoaList()) {
             val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
