@@ -175,4 +175,6 @@
         <item quantity="other">%d nouvelles histoires</item>
     </plurals>
     <string name="from_recent_issue">Depuis un magazine récent</string>
+    <string name="recent_issues_intro">Tapotez sur un magazine récent pour l\'ajouter à votre collection</string>
+    <string name="recent_issues">Magazines récents</string>
 </resources>

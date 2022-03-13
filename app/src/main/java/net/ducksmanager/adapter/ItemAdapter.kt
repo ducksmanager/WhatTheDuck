@@ -1,5 +1,6 @@
 package net.ducksmanager.adapter
 
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.graphics.Typeface
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import net.ducksmanager.activity.ItemList
 import net.ducksmanager.activity.ItemList.Companion.isCoaList
 import net.ducksmanager.util.FilterTextOnChangeListener
 import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.itemToScrollTo
 import net.greypanther.natsort.CaseInsensitiveSimpleNaturalComparator
 import java.util.*
 import kotlin.math.max
@@ -122,6 +124,17 @@ abstract class ItemAdapter<Item> internal constructor(
             holder.titleTextView.text = getText(i)
             holder.titleTextView.tag = getIdentifier(i)
             holder.titleTextView.setTypeface(null, if (isHighlighted(i)) Typeface.BOLD else Typeface.NORMAL)
+
+            if (holder.titleTextView.text == itemToScrollTo) {
+                val animator = ObjectAnimator.ofFloat(
+                    holder.titleTextView,
+                    "textSize",
+                    14f, 18f, 14f
+                )
+                animator.setDuration(4000).start()
+                itemToScrollTo = null
+            }
+
         }
         if (holder.checkboxImage != null) {
             val imageResource = getCheckboxImageResource(i, originActivity)

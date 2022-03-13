@@ -115,7 +115,7 @@ class WhatTheDuck : Application() {
 
         var selectedCountry: InducksCountryName? = null
         var selectedPublication: InducksPublication? = null
-        var issueToScrollTo: String? = null
+        var itemToScrollTo: String? = null
         var selectedIssues: MutableList<String> = mutableListOf()
         var numberOfIssues: Int? = 0
 

@@ -140,6 +140,8 @@ class Suggestions : AppCompatActivityWithDrawer() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(inflater.inflate(R.layout.row_suggested_issue, parent, false))
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.itemView.background = null
+
             val currentIssue = suggestions[position]
             val countryCode = currentIssue.publicationCode.split("/")[0]
             val publicationName = publicationTitles.find {

@@ -109,7 +109,7 @@ class RecentIssues : AppCompatActivityWithDrawer() {
             holder.itemView.setOnClickListener {
                 WhatTheDuck.selectedCountry = countryNames.find { it.countryCode == countryCode }
                 WhatTheDuck.selectedPublication = publication
-                WhatTheDuck.issueToScrollTo = currentIssue.issue.inducksIssueNumber
+                WhatTheDuck.itemToScrollTo = currentIssue.issue.inducksIssueNumber
                 ItemList.type = WhatTheDuck.CollectionType.COA.toString()
                 context.startActivity(Intent(context, IssueList::class.java))
             }

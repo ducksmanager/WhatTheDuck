@@ -36,7 +36,7 @@ import net.ducksmanager.whattheduck.R.string.*
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
-import net.ducksmanager.whattheduck.WhatTheDuck.Companion.issueToScrollTo
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.itemToScrollTo
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
@@ -302,10 +302,11 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
     }
 
     override fun scrollToSavedPosition() {
-        if (issueToScrollTo != null) {
+        if (itemToScrollTo != null) {
             binding.itemList.post {
-                binding.itemList.scrollToPosition(itemAdapter.items.indexOfFirst { it.issue.inducksIssueNumber == issueToScrollTo })
-                issueToScrollTo = null
+                val itemPosition = itemAdapter.items.indexOfFirst { it.issue.inducksIssueNumber == itemToScrollTo }
+                binding.itemList.scrollToPosition(itemPosition)
+
             }
         }
     }

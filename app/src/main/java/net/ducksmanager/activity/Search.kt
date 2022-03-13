@@ -206,13 +206,14 @@ class Search : AppCompatActivityWithDrawer() {
             holder.issueTitle.setOnClickListener {
                 appDB!!.inducksCountryDao().findByCountryCode(countryCode).observe(context) { country ->
                     selectedCountry = country
-                    selectedPublication =
-                        InducksPublication(currentItem.publicationcode, publicationName!!)
+                    selectedPublication = InducksPublication(currentItem.publicationcode, publicationName!!)
+                    WhatTheDuck.itemToScrollTo = currentItem.issuenumber
                     ItemList.type = if (currentItem.condition != null) {
                         WhatTheDuck.CollectionType.USER.toString()
                     } else {
                         WhatTheDuck.CollectionType.COA.toString()
                     }
+
                     context.startActivity(Intent(context, IssueList::class.java))
                 }
             }
