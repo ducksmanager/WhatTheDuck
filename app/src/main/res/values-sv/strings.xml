@@ -169,4 +169,9 @@
     <string name="send_edge_photo_title">Bokrygg fotouppladdning för utgåva %1$s %2$s</string>
     <string name="by_story_title">Från berättelsetitel</string>
     <string name="number_of_users_own_issue">%d användare äger denna utgåva</string>
+    <string name="from_recent_issue">Från en ny utgåva</string>
+    <string name="from_recent_issue">Från en ny tidning</string>
+    <string name="recent_issues_intro">Tryck på ett nytt utgåva för att lägga till det i din samling</string>
+    <string name="recent_issues">Senaste utgåvor</string>
+    <string name="recent_issues">S</string>
 </resources>
