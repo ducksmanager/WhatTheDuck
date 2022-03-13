@@ -31,7 +31,7 @@
             android:visibility="gone" />
 
         <ImageView
-            android:id="@+id/prefiximage"
+            android:id="@+id/flagimage"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/checkbox"
@@ -47,8 +47,8 @@
             android:id="@+id/itemtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/prefiximage"
-            android:layout_toRightOf="@id/prefiximage"
+            android:layout_toEndOf="@id/flagimage"
+            android:layout_toRightOf="@id/flagimage"
             android:gravity="center_vertical"
             android:text="@string/itemtitle" />
 

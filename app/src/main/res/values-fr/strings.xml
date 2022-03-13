@@ -174,4 +174,5 @@
         <item quantity="one">1 nouvelle histoire</item>
         <item quantity="other">%d nouvelles histoires</item>
     </plurals>
+    <string name="from_recent_issue">Depuis un magazine récent</string>
 </resources>

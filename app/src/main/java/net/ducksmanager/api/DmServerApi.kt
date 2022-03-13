@@ -31,6 +31,9 @@ interface DmServerApi {
     @GET("/coa/list/issues/withDetails/{publicationCode}")
     fun getIssues(@Path(value = "publicationCode", encoded = true) publicationCode: String): Call<List<InducksIssueWithCoverUrl>>
 
+    @get:GET("/coa/list/issues/recent")
+    val recentIssues: Call<List<InducksIssueWithCoverUrl>>
+
     @get:GET("/collection/issues")
     val userIssues: Call<List<Issue>>
 

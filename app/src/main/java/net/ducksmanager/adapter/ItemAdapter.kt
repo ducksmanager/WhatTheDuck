@@ -17,7 +17,6 @@ import net.ducksmanager.util.FilterTextOnChangeListener
 import net.ducksmanager.whattheduck.R
 import net.greypanther.natsort.CaseInsensitiveSimpleNaturalComparator
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.max
 
 abstract class ItemAdapter<Item> internal constructor(
@@ -74,7 +73,7 @@ abstract class ItemAdapter<Item> internal constructor(
         val background: ImageView? = v.findViewById(R.id.background)
         val titleTextView: TextView? = v.findViewById(R.id.itemtitle)
         val checkboxImage: ImageView? = v.findViewById(R.id.checkbox)
-        val prefixImage: ImageView? = v.findViewById(R.id.prefiximage)
+        val prefixImage: ImageView? = v.findViewById(R.id.flagimage)
         val descriptionText: TextView? = v.findViewById(R.id.itemdescription)
         val suffixImage: ImageView? = v.findViewById(R.id.suffiximage)
         val suffixText: TextView? = v.findViewById(R.id.suffixtext)

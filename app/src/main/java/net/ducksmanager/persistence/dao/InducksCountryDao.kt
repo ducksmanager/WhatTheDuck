@@ -28,6 +28,9 @@ interface InducksCountryDao {
     @Query("SELECT * FROM inducks_countryname WHERE countryCode = :countryCode")
     fun findByCountryCode(countryCode: String): LiveData<InducksCountryName>
 
+    @Query("SELECT * FROM inducks_countryname WHERE countryCode IN (:countryCodes)")
+    fun findByCountryCodes(countryCodes: Set<String>): List<InducksCountryName>
+
     @Insert
     fun insertList(issueList: List<InducksCountryName>)
 

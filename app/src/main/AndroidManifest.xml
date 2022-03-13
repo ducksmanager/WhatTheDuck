@@ -68,6 +68,7 @@
         <activity android:name="net.ducksmanager.activity.Authors" />
         <activity android:name="net.ducksmanager.activity.Stats" />
         <activity android:name="net.ducksmanager.activity.Suggestions" />
+        <activity android:name="net.ducksmanager.activity.RecentIssues" />
         <activity android:name="net.ducksmanager.activity.SendEdgePhoto" />
         <activity
             android:name="net.ducksmanager.activity.Report"

@@ -113,7 +113,7 @@ class Settings : AppCompatActivityWithDrawer() {
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val background: ImageView? = itemView.findViewById(R.id.background)
             val countryItemView: TextView = itemView.findViewById(R.id.itemtitle)
-            val prefixImageView: ImageView = itemView.findViewById(R.id.prefiximage)
+            val prefixImageView: ImageView = itemView.findViewById(R.id.flagimage)
             val isNotifiedCountry: CheckBox = itemView.findViewById(R.id.isNotifiedCountry)
             val itemdescription: TextView = itemView.findViewById(R.id.itemdescription)
             val suffiximage: ImageView = itemView.findViewById(R.id.suffiximage)

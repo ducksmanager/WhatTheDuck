@@ -36,6 +36,7 @@ import net.ducksmanager.whattheduck.R.string.*
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.issueToScrollTo
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedIssues
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
@@ -297,6 +298,15 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
             onBackFromAddIssueActivity()
         } else {
             startActivity(Intent(this, PublicationList::class.java))
+        }
+    }
+
+    override fun scrollToSavedPosition() {
+        if (issueToScrollTo != null) {
+            binding.itemList.post {
+                binding.itemList.scrollToPosition(itemAdapter.items.indexOfFirst { it.issue.inducksIssueNumber == issueToScrollTo })
+                issueToScrollTo = null
+            }
         }
     }
 }

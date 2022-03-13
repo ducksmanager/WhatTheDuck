@@ -86,7 +86,7 @@ class Suggestions : AppCompatActivityWithDrawer() {
         toggleToolbar()
 
         if (isOfflineMode) {
-            binding.warningMessage.visibility = View.VISIBLE
+            binding.warningMessage.visibility = VISIBLE
         }
 
         showSuggestions()
@@ -100,7 +100,6 @@ class Suggestions : AppCompatActivityWithDrawer() {
         val suggestionListView = binding.suggestionList
         val noSuggestionView = binding.suggestionsNoResults
 
-        println("get suggestions")
         val suggestions = if (orderByReleaseDate) {
             appDB!!.suggestedIssueByReleaseDateDao().findAll().map { suggestedIssueByReleaseDate -> suggestedIssueByReleaseDate.suggestedIssue }
         } else {
@@ -112,9 +111,9 @@ class Suggestions : AppCompatActivityWithDrawer() {
 
         val showSuggestions = suggestions.isNotEmpty() && publicationTitles.isNotEmpty() && authorNames.isNotEmpty() && storyDetails.isNotEmpty()
 
-        noSuggestionView.visibility = if (!showSuggestions) View.VISIBLE else View.GONE
+        noSuggestionView.visibility = if (!showSuggestions) VISIBLE else GONE
 
-        suggestionListView.visibility = if (showSuggestions) View.VISIBLE else View.GONE
+        suggestionListView.visibility = if (showSuggestions) VISIBLE else GONE
         suggestionListView.layoutManager = LinearLayoutManager(this@Suggestions)
         suggestionListView.adapter = SuggestedIssueAdapter(this@Suggestions, suggestions.toMutableList())
     }
@@ -128,8 +127,8 @@ class Suggestions : AppCompatActivityWithDrawer() {
 
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val textWrapperView: LinearLayout = itemView.findViewById(R.id.textwrapper)
-            val prefixImageView: ImageView = itemView.findViewById(R.id.prefiximage)
-            val suffixtextView1: TextView = itemView.findViewById(R.id.suffixtext1)
+            val prefixImageView: ImageView = itemView.findViewById(R.id.flagimage)
+            val suffixtextView1: TextView = itemView.findViewById(R.id.issuedatetext)
             val suffixtextView2: TextView = itemView.findViewById(R.id.scorevalue)
             val storyListView: RecyclerView = itemView.findViewById(R.id.storylist)
             val storyListCountView: TextView = itemView.findViewById(R.id.story_list_count)

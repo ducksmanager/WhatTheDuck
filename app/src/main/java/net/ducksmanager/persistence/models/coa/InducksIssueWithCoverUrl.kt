@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "inducks_issue", primaryKeys = ["inducksPublicationCode", "inducksIssueNumber"])
-class InducksIssueWithCoverUrl(
+class InducksIssueWithCoverUrl @JvmOverloads constructor(
     @ColumnInfo
     @Expose
     @SerializedName("publicationcode")
@@ -24,5 +24,10 @@ class InducksIssueWithCoverUrl(
     @ColumnInfo
     @Expose
     @SerializedName("cover_url")
-    val coverUrl: String?
+    val coverUrl: String?,
+
+    @Expose
+    @androidx.room.Ignore
+    @SerializedName("oldestdate")
+    val oldestDate: String? = null
 )

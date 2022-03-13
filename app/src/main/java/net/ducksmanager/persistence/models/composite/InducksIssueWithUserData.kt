@@ -14,7 +14,7 @@ class InducksIssueWithUserData(
     val userIssue: Issue?,
 
     @Embedded
-    val userPurchase: Purchase?,
+    val userPurchase: Purchase? = null,
 
     val suggestionScore: Int = 0
 ) {

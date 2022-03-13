@@ -148,7 +148,11 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
             filterEditText.visibility = GONE
         }
         binding.progressBar.visibility = GONE
+
+        scrollToSavedPosition()
     }
+
+    open fun scrollToSavedPosition() {}
 
     protected abstract fun isFilterableList(): Boolean
 
@@ -175,12 +179,14 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
 
         binding.addToCollectionWrapper.setOnClickListener {
             binding.addToCollectionByStoryTitle.visibility = if (binding.addToCollectionByStoryTitle.visibility == GONE) VISIBLE else GONE
+            binding.addToCollectionFromRecentIssues.visibility = if (binding.addToCollectionFromRecentIssues.visibility == GONE) VISIBLE else GONE
             binding.addToCollectionByFileButton.visibility = if (binding.addToCollectionByFileButton.visibility == GONE) VISIBLE else GONE
             binding.addToCollectionByPhotoButton.visibility = if (binding.addToCollectionByPhotoButton.visibility == GONE) VISIBLE else GONE
             binding.addToCollectionBySelectionButton.visibility = if (binding.addToCollectionBySelectionButton.visibility == GONE) VISIBLE else GONE
         }
 
         binding.addToCollectionByStoryTitle.setOnClickListener { startActivity(Intent(this, Search::class.java)) }
+        binding.addToCollectionFromRecentIssues.setOnClickListener { startActivity(Intent(this, RecentIssues::class.java)) }
         binding.addToCollectionByFileButton.setOnClickListener { pickCoverPicture() }
         binding.addToCollectionByPhotoButton.setOnClickListener { takeCoverPicture() }
         binding.addToCollectionBySelectionButton.setOnClickListener { goToAlternativeView() }
@@ -221,6 +227,7 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.warningMessage.visibility = if (isOfflineMode) VISIBLE else GONE
 
         binding.addToCollectionByStoryTitle.visibility = GONE
+        binding.addToCollectionFromRecentIssues.visibility = GONE
         binding.addToCollectionByFileButton.visibility = GONE
         binding.addToCollectionByPhotoButton.visibility = GONE
         binding.addToCollectionBySelectionButton.visibility = GONE

@@ -10,6 +10,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <ImageView
+            android:id="@+id/conditionimage"
+            android:layout_width="20dp"
+            android:layout_height="fill_parent"
+            android:layout_marginEnd="4dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            tools:src="@drawable/condition_good"
+            android:contentDescription="@+id/prefiximage_description" />
+        <ImageView
             android:id="@+id/flagimage"
             android:layout_width="20dp"
             android:layout_height="fill_parent"
@@ -35,9 +44,9 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="5dp">
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
             <LinearLayout
                 android:id="@+id/suffix1"
                 android:layout_width="90dp"
@@ -45,6 +54,7 @@
                 android:paddingTop="5dp"
                 android:orientation="horizontal">
                 <ImageView
+                    android:id="@+id/suffiximage1"
                     android:layout_width="20dp"
                     android:layout_height="match_parent"
                     android:gravity="start"
@@ -62,44 +72,6 @@
                     android:text="@string/purchase_date"
                     android:textSize="12sp" />
             </LinearLayout>
-            <include layout="@layout/score" />
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/story_list_collapsible"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="@drawable/ripple"
-        android:layout_width="match_parent"
-        android:layout_height="30dp">
-        <ImageView
-            android:id="@+id/story_list_expanded"
-            android:visibility="gone"
-            android:layout_marginStart="26dp"
-            android:layout_width="24dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_arrow_up" />
-        <ImageView
-            android:id="@+id/story_list_collapsed"
-            android:layout_marginStart="26dp"
-            android:layout_width="24dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_arrow_down" />
-        <TextView
-            android:id="@+id/story_list_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="6 new stories"
-            android:layout_gravity="center" />
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginStart="30dp"
-        android:orientation="horizontal"
-        android:id="@+id/storylist"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/story_with_authors"/>
 </LinearLayout>
