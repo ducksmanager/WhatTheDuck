@@ -129,9 +129,9 @@ abstract class ItemAdapter<Item> internal constructor(
                 val animator = ObjectAnimator.ofFloat(
                     holder.titleTextView,
                     "textSize",
-                    14f, 18f, 14f
+                    14f, 20f, 14f
                 )
-                animator.setDuration(4000).start()
+                animator.setDuration(5000).start()
                 itemToScrollTo = null
             }
 
