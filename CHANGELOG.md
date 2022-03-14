@@ -4,7 +4,7 @@ Version 2.14.0
     Show the cover of the issue that's about to be added
     Allow to add an issue from a list of recent issues
     Add ripple effect on countries, publications and recent issues
-    Animate item to scroll to Update translations
+    Animate item to scroll to
 
 Version 2.13.5
 
