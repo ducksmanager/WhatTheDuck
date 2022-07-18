@@ -22,7 +22,7 @@
     <string name="condition_none">Unspecified condition</string>
     <string name="condition_notsogood">Not-so-good condition</string>
     <string name="confirmation_message__collection_updated">Your collection has been updated</string>
-    <string name="copy">Copy %d</string>
+    <string name="copy_title">Copy %d</string>
     <string name="countries">countries</string>
     <string name="countries_singular">country</string>
     <string name="country">Country</string>

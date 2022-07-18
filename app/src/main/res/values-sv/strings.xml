@@ -21,7 +21,7 @@
     <string name="condition_none">Ospecificerat skick</string>
     <string name="condition_notsogood">Genomsnittligt skick</string>
     <string name="confirmation_message__collection_updated">Din samling har uppdaterats</string>
-    <string name="copy">Kopia %d</string>
+    <string name="copy_title">Kopia %d</string>
     <string name="countries">länder</string>
     <string name="countries_singular">land</string>
     <string name="country">Land</string>

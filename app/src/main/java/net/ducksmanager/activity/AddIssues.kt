@@ -179,7 +179,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
             copies!!.purchaseIds.ifEmpty { mutableListOf(null) }
                 .forEachIndexed { index, _ ->
                     val copyTab = binding.issueCopies.newTab()
-                    copyTab.text = getString(R.string.copy, index + 1)
+                    copyTab.text = getString(R.string.copy_title, index + 1)
                     binding.issueCopies.addTab(copyTab)
                 }
 
@@ -229,7 +229,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
         if (tab!!.text == getString(R.string.add_copy)) {
             val tabPosition = binding.issueCopies.tabCount - 1
             val copyTab = binding.issueCopies.newTab()
-            copyTab.text = getString(R.string.copy, (tabPosition + 1))
+            copyTab.text = getString(R.string.copy_title, (tabPosition + 1))
             binding.issueCopies.addTab(copyTab, tabPosition, true)
         } else {
             if (copies!!.conditions.size <= tab.position) {
