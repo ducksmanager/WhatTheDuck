@@ -11,17 +11,19 @@
         android:layout_width="fill_parent"
         android:layout_height="60dp"
         android:layout_gravity="center"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:gravity="center"
+        android:gravity="center_vertical"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        tools:text="Issue 1" />
+        tools:text="Issue 1234 and 15 others" />
 
     <RelativeLayout
         android:layout_width="100dp"
         android:layout_height="60dp"
         android:layout_alignParentStart="true"
+        android:gravity="center"
         android:layout_marginTop="10dp">
 
         <ImageView
