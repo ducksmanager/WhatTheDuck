@@ -125,29 +125,89 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:gravity="center"
+                        android:text="@string/issue_conditions"
+                        android:textAlignment="center"
+                        android:textSize="20sp" />
+
+                    <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+                        android:id="@+id/issue_condition_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:text="@string/value_estimation"
+                        android:textAlignment="center"
+                        android:textSize="20sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/estimation_total"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:textAlignment="center"
+                            app:autoSizeMaxTextSize="48sp"
+                            app:autoSizeMinTextSize="18sp"
+                            app:autoSizeTextType="uniform"
+                            tools:text="0€" />
+
+                        <TextView
+                            android:id="@+id/estimation_most_valued_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/highest_quoted_issue"
+                            android:textAlignment="center"
+                            android:textSize="14sp" />
+
+                        <include
+                            android:id="@+id/estimation_most_valued_issue"
+                            layout="@layout/issue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/estimation_most_valued_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:textSize="16sp"
+                            tools:text="5€" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:gravity="center"
-                    android:textAlignment="center"
-                    android:text="@string/issue_conditions"
-                    android:textSize="20sp" />
-
-                <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
-                    android:id="@+id/issue_condition_chart"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp">
-
-                </com.github.aachartmodel.aainfographics.aachartcreator.AAChartView>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:gravity="center"
-                    android:textAlignment="center"
                     android:text="@string/collection_progression"
+                    android:textAlignment="center"
                     android:textSize="20sp" />
 
 
@@ -155,6 +215,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="40dp"
                     android:orientation="horizontal">
+
                     <ToggleButton
                         android:id="@+id/showPurchaseHistoryInThePastYear"
                         android:layout_width="0dp"
@@ -176,9 +237,7 @@
                 <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                     android:id="@+id/purchase_progress_chart"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp">
-
-                </com.github.aachartmodel.aainfographics.aachartcreator.AAChartView>
+                    android:layout_height="300dp" />
             </LinearLayout>
         </ScrollView>
 

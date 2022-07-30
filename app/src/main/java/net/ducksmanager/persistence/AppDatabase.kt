@@ -23,6 +23,7 @@ import net.ducksmanager.persistence.models.internal.Sync
     InducksCountryName::class,
     InducksIssueWithCoverUrl::class,
     InducksIssueCount::class,
+    InducksIssueQuotation::class,
     InducksPerson::class,
     InducksPublication::class,
     InducksStory::class,
@@ -35,7 +36,7 @@ import net.ducksmanager.persistence.models.internal.Sync
     User::class,
     UserMessage::class,
     UserSetting::class
- ], version = 15, exportSchema = true)
+ ], version = 16, exportSchema = true)
 @TypeConverters(StringMutableSetConverter::class, StringIntMapConverter::class, InstantConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -81,22 +82,28 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("ALTER TABLE coversearch_issue ADD `popularity` INTEGER NOT NULL DEFAULT 0")
             }
         }
+        val MIGRATION_15_16: Migration = object : Migration(15, 16) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE IF NOT EXISTS `inducks_issuequotation` (`publicationCode` TEXT NOT NULL, `issueNumber` TEXT NOT NULL, `estimationMin` REAL, `estimationMax` REAL, PRIMARY KEY(`publicationCode`, `issueNumber`))")
+            }
+        }
     }
 
     abstract fun appVersionDao(): AppVersionDao
     abstract fun contributionTotalPointsDao(): ContributionTotalPointsDao
     abstract fun coverSearchIssueDao(): CoverSearchIssueDao
     abstract fun inducksCountryDao(): InducksCountryDao
-    abstract fun inducksIssueDao(): InducksIssueDao
     abstract fun inducksIssueCountDao(): InducksIssueCountDao
+    abstract fun inducksIssueDao(): InducksIssueDao
+    abstract fun inducksIssueQuotationDao(): InducksIssueQuotationDao
     abstract fun inducksPersonDao(): InducksPersonDao
     abstract fun inducksPublicationDao(): InducksPublicationDao
     abstract fun inducksStoryDao(): InducksStoryDao
     abstract fun issueDao(): IssueDao
     abstract fun notificationCountryDao(): NotificationCountryDao
     abstract fun purchaseDao(): PurchaseDao
-    abstract fun suggestedIssueDao(): SuggestedIssueDao
     abstract fun suggestedIssueByReleaseDateDao(): SuggestedIssueByReleaseDateDao
+    abstract fun suggestedIssueDao(): SuggestedIssueDao
     abstract fun syncDao(): SyncDao
     abstract fun userDao(): UserDao
     abstract fun userMessageDao(): UserMessageDao

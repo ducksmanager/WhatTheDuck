@@ -1,5 +1,6 @@
 package net.ducksmanager.api
 
+import net.ducksmanager.persistence.models.coa.InducksIssueQuotation
 import net.ducksmanager.persistence.models.coa.InducksIssueWithCoverUrl
 import net.ducksmanager.persistence.models.composite.*
 import net.ducksmanager.persistence.models.dm.ContributionTotalPoints
@@ -33,6 +34,9 @@ interface DmServerApi {
 
     @get:GET("/coa/list/issues/recent")
     val recentIssues: Call<List<InducksIssueWithCoverUrl>>
+
+    @GET("/coa/quotations/{publicationCodes}")
+    fun getQuotations(@Path(value = "publicationCodes") publicationCodes: String): Call<List<InducksIssueQuotation>>
 
     @get:GET("/collection/issues")
     val userIssues: Call<List<Issue>>

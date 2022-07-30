@@ -20,6 +20,7 @@ import io.sentry.Scope
 import io.sentry.Sentry
 import net.ducksmanager.api.DmServer.Callback
 import net.ducksmanager.api.DmServer.Companion.EVENT_GET_PURCHASES
+import net.ducksmanager.api.DmServer.Companion.EVENT_GET_QUOTATIONS
 import net.ducksmanager.api.DmServer.Companion.EVENT_GET_SUGGESTED_ISSUES
 import net.ducksmanager.api.DmServer.Companion.EVENT_GET_SUGGESTED_ISSUES_BY_RELEASE_DATE
 import net.ducksmanager.api.DmServer.Companion.EVENT_RETRIEVE_ALL_PUBLICATIONS
@@ -35,6 +36,7 @@ import net.ducksmanager.api.DmServer.Companion.getRequestHeaders
 import net.ducksmanager.persistence.dao.SuggestedIssueByReleaseDateDao
 import net.ducksmanager.persistence.dao.SuggestedIssueDao
 import net.ducksmanager.persistence.models.appfollow.Apps
+import net.ducksmanager.persistence.models.coa.InducksIssueQuotation
 import net.ducksmanager.persistence.models.coa.InducksPublication
 import net.ducksmanager.persistence.models.composite.InducksIssueCount
 import net.ducksmanager.persistence.models.composite.SuggestionList
@@ -111,6 +113,14 @@ class Login : AppCompatActivity() {
                         override fun onSuccessfulResponse(response: Response<List<Purchase>>) {
                             appDB!!.purchaseDao().deleteAll()
                             appDB!!.purchaseDao().insertList(response.body()!!)
+                        }
+                    })
+
+                    val userPublicationCodes = appDB!!.issueDao().getPublicationCodes()
+                    api.getQuotations(userPublicationCodes.joinToString(",")).enqueue(object : Callback<List<InducksIssueQuotation>>(EVENT_GET_QUOTATIONS, originActivity, true) {
+                        override fun onSuccessfulResponse(response: Response<List<InducksIssueQuotation>>) {
+                            appDB!!.inducksIssueQuotationDao().deleteAll()
+                            appDB!!.inducksIssueQuotationDao().insertList(response.body()!!)
                         }
                     })
 

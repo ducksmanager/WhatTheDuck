@@ -176,4 +176,7 @@
     <string name="from_recent_issue">Depuis un magazine récent</string>
     <string name="recent_issues_intro">Tapotez sur un magazine récent pour l\'ajouter à votre collection</string>
     <string name="recent_issues">Magazines récents</string>
+    <string name="value_estimation">Valeur de la collection</string>
+    <string name="highest_quoted_issue">Magazine le plus côté :</string>
+    <string name="you_dont_own_any_quoted_issue">Vous ne possédez pas de numéro côté.</string>
 </resources>

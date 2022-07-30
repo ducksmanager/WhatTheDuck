@@ -111,6 +111,7 @@
     <string name="purchase_date">Purchase date</string>
     <string name="purchase_name">Purchase name</string>
     <string name="quotation">Quotation: </string>
+    <string name="quotation_equals" translatable="false">%1d €</string>
     <string name="quotation_between">Between %1d and %2d €</string>
     <string name="quotation_less_than">Less than %d €</string>
     <string name="quotation_more_than">At least %d €</string>
@@ -181,6 +182,9 @@
     <string name="from_recent_issue">From a recent issue</string>
     <string name="recent_issues_intro">Tap on a recent issue to add it to your collection</string>
     <string name="recent_issues">Recent issues</string>
+    <string name="value_estimation">Value estimation</string>
+    <string name="highest_quoted_issue">Highest quoted issue:</string>
+    <string name="you_dont_own_any_quoted_issue">You don\'t own any quoted issue.</string>
     <plurals name="new_stories">
         <item quantity="one">%d new story</item>
         <item quantity="other">%d new stories</item>

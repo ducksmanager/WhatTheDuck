@@ -1,6 +1,7 @@
 package net.ducksmanager.activity
 
 import android.os.Bundle
+import android.view.View
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aatools.AAColor
@@ -51,6 +52,64 @@ class Stats : AppCompatActivityWithDrawer() {
 
             if (collectionCount.issues == 0) {
                 return@observe
+            }
+
+            appDB!!.inducksIssueQuotationDao().getTotalEstimation().observe(this) { totalEstimation ->
+                binding.estimationTotal.text = String.format(
+                    resources.getString(R.string.quotation_equals),
+                    totalEstimation.toInt()
+                )
+                if (totalEstimation == null) {
+                    binding.estimationMostValuedIssue.countrybadge.visibility = View.GONE
+                    binding.estimationMostValuedText.text = getString(R.string.you_dont_own_any_quoted_issue)
+                }
+                else {
+                    appDB!!.inducksIssueQuotationDao().getMostRatedIssue().observe(this) { mostRatedIssue ->
+                        appDB!!.issueDao().findByIssueCodes(hashSetOf("${mostRatedIssue.publicationCode}-${mostRatedIssue.issueNumber}")).observe(this) { issueWithCondition ->
+                            if (issueWithCondition.isNotEmpty()) {
+                                val condition = issueWithCondition[0].condition
+                                val conditionResourceId =
+                                    InducksIssueWithUserData.issueConditionToResourceId(
+                                        condition
+                                    )
+                                if (conditionResourceId != null) {
+                                    binding.estimationMostValuedIssue.conditionbadge.setImageResource(
+                                        conditionResourceId
+                                    )
+                                }
+                            }
+                        }
+
+                        val publications =
+                            appDB!!.inducksPublicationDao().findByPublicationCodes(
+                                hashSetOf(mostRatedIssue.publicationCode)
+                            )
+                        if (publications.isNotEmpty()) {
+                            val uri =
+                                "@drawable/flags_${mostRatedIssue.publicationCode.split("/")[0]}"
+                            var countryImageResource =
+                                resources.getIdentifier(uri, null, packageName)
+                            if (countryImageResource == 0) {
+                                countryImageResource = R.drawable.flags_unknown
+                            }
+
+                            binding.estimationMostValuedIssue.countrybadge.setImageResource(
+                                countryImageResource
+                            )
+                            binding.estimationMostValuedIssue.issuetitle.textSize = 14F
+                            binding.estimationMostValuedAmount.text = String.format(
+                                resources.getString(R.string.quotation_equals),
+                                mostRatedIssue.estimationMin!!.toInt()
+                            )
+                            binding.estimationMostValuedIssue.issuetitle.text =
+                                resources.getString(
+                                    R.string.title_template,
+                                    publications[0].title,
+                                    mostRatedIssue.issueNumber
+                                )
+                        }
+                    }
+                }
             }
 
             appDB!!.issueDao().countPerCondition().observe(this) { issuesPerCondition ->

@@ -28,6 +28,9 @@ interface IssueDao {
     @Query(" SELECT issues.condition, COUNT(*) AS count FROM issues GROUP BY issues.condition ORDER BY issues.condition")
     fun countPerCondition(): LiveData<List<IssuesPerCondition>>
 
+    @Query(" SELECT DISTINCT issues.country || '/' || issues.magazine FROM issues")
+    fun getPublicationCodes(): List<String>
+
     @Query("" +
         " SELECT issues.country || '/' || issues.magazine                 AS publicationcode," +
         "        SUBSTR(COALESCE((SELECT purchases.date FROM purchases WHERE purchases.purchaseId = issues.issuePurchaseId)," +
