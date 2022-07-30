@@ -143,7 +143,7 @@
     <string name="welcome_title">Bienvenue sur What The Duck !</string>
     <string name="zoom">Zoom</string>
     <string name="search_intro">Entrez le titre d\'une histoire. What The Duck vous indiquera les magazines qui contiennent cette histoire et précisera les histoires et magazines correspondants que vous possédez.</string>
-    <string name="search">Rechercher…</string>
+    <string name="search">Rechercher une histoire</string>
     <string name="search_hint">Entrez le titre d\'une histoire</string>
     <string name="search_more_results">-- Plus de 10 résultats, affinez votre recherche --</string>
     <string name="story_was_published_in">a été publiée dans les numéros suivants :</string>

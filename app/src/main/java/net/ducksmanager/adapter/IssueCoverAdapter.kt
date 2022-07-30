@@ -66,7 +66,7 @@ class IssueCoverAdapter internal constructor(
         val request: Request = Request.Builder().url(getCoverUrl(item.issue)).build()
         OkHttpClient().newCall(request).enqueue(object : Callback, okhttp3.Callback {
             override fun onFailure(call: Call, e: java.io.IOException) {
-                TODO("Not yet implemented")
+                showDefaultCover()
             }
 
             @Throws(IOException::class)
@@ -115,9 +115,7 @@ class IssueCoverAdapter internal constructor(
                 }
             }
 
-            override fun onSuccess() {
-                TODO("Not yet implemented")
-            }
+            override fun onSuccess() {}
 
             override fun onError() {
                 showDefaultCover()

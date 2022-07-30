@@ -152,7 +152,7 @@
     <string name="welcome_title">Welcome on What The Duck!</string>
     <string name="youtube" translatable="false">YouTube</string>
     <string name="zoom">Zoom</string>
-    <string name="search">Search…</string>
+    <string name="search">Find a story</string>
     <string name="search_more_results">-- More than 10 results, refine your search --</string>
     <string name="story_was_published_in">was published in the following issues:</string>
     <string name="search_intro">Type the title of a story. What The Duck will show you the magazines that contain this story and will indicate which stories and issues you have in your collection.</string>

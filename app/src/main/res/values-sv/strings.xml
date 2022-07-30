@@ -160,7 +160,7 @@
     <string name="error_sending_edge">Ett fel skedde när fotot skickades</string>
     <string name="error_invalid_number_format">Välj giltiga nummer i Bredd och Längd fälten!</string>
     <string name="send_edge_thanks">Tack för ditt bidrag! Om ditt foto blir accepterat får du ett email när bokryggen är publicerad.</string>
-    <string name="search">Sök…</string>
+    <string name="search">Hitta en berättelse</string>
     <string name="search_intro">Skriv in titeln på en berättelse. What The Duck visar dig tidningarna som innehåller denna berättelse och indikerar vilka berättelser och utgåvor du har i din samling.</string>
     <string name="search_hint">Skriv in titeln på berättelsen</string>
     <string name="search_more_results">-- Fler än 10 resultat, förfina din sökning --</string>
