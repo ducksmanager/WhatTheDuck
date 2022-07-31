@@ -34,6 +34,11 @@ class Issue {
 
     @Expose
     @ColumnInfo
+    @NotNull
+    var isToRead: Boolean = false
+
+    @Expose
+    @ColumnInfo
     var creationDate: String? = null
 
     @Expose

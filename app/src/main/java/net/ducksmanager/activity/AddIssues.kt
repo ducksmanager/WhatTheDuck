@@ -111,6 +111,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
                         publicationCode,
                         selectedIssues.toSet(),
                         dbCopies.map { it.userIssue?.condition }.toMutableList(),
+                        dbCopies.map { it.userIssue?.isToRead }.toMutableList(),
                         dbCopies.map { it.userIssue?.purchaseId }.toMutableList()
                     )
                     show()
@@ -146,11 +147,11 @@ class AddIssues : AppCompatActivity(), OnClickListener {
                     }
                 })
             } else {
-                val condition = getConditionApiId()
                 val issueListToUpdate = IssueListToUpdate(
                     selectedPublication!!.publicationCode,
                     selectedIssues.toSet(),
-                    condition,
+                    getConditionApiId(),
+                    getIsToRead(),
                     getPurchaseId()
                 )
 
@@ -222,6 +223,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
 
     private fun saveCopyForCurrentTab(tab: Tab) {
         copies!!.conditions[tab.position] = getConditionApiId()
+        copies!!.areToRead[tab.position] = binding.isToRead.isChecked
         copies!!.purchaseIds[tab.position] = getPurchaseId()
     }
 
@@ -238,6 +240,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
             }
             setFromConditionApiId(copies!!.conditions[tab.position])
             setFromPurchaseId(copies!!.purchaseIds[tab.position])
+            setFromIsToRead(copies!!.areToRead[tab.position])
         }
     }
 
@@ -268,6 +271,12 @@ class AddIssues : AppCompatActivity(), OnClickListener {
             InducksIssueWithUserData.NO_CONDITION -> binding.noCondition.performClick()
             else -> binding.missing.performClick()
         }
+    }
+
+    private fun getIsToRead() = binding.isToRead.isChecked
+
+    private fun setFromIsToRead(isToRead: Boolean?) {
+        binding.isToRead.isChecked = isToRead == true
     }
 
     private fun toggleAddPurchaseButton(toggle: Boolean) {

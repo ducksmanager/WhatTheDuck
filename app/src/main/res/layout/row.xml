@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/ripple">
 
     <ImageView
@@ -57,8 +58,8 @@
             android:id="@+id/itemdescription"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="95dp"
-            android:layout_marginRight="95dp"
+            android:layout_marginEnd="150dp"
+            android:layout_marginRight="150dp"
             android:layout_toEndOf="@id/itemtitle"
             android:layout_toRightOf="@id/itemtitle"
             android:gravity="center_vertical"
@@ -67,27 +68,44 @@
             android:text="@string/item_description"
             android:textColor="#fff" />
 
-        <ImageView
-            android:id="@+id/suffiximage"
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/suffixtext"
-            android:layout_toLeftOf="@id/suffixtext"
-            android:adjustViewBounds="true"
-            android:contentDescription="@+id/suffiximage_description"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_clock" />
-
-        <TextView
-            android:id="@+id/suffixtext"
-            android:layout_width="80dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:gravity="end|center"
-            android:paddingStart="5dp"
-            android:paddingLeft="5dp"
-            android:text="@string/purchase_date"
-            android:textSize="12sp" />
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                android:id="@+id/suffiximage"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@+id/suffiximage_description"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_clock" />
+
+            <TextView
+                android:id="@+id/suffixtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:gravity="start|center"
+                android:text="@string/purchase_date"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/isToRead"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:src="@drawable/ic_bookmark_check" />
+        </LinearLayout>
+
     </RelativeLayout>
 </RelativeLayout>

@@ -46,7 +46,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/issueCopies"
-        android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
@@ -75,7 +74,7 @@
                     android:id="@+id/condition"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:layout_gravity="start"
+                    android:layout_gravity="center"
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
                     android:orientation="horizontal">
@@ -116,7 +115,34 @@
                     android:id="@+id/addissue_condition_text"
                     android:layout_width="fill_parent"
                     android:layout_height="20dp"
+                    android:gravity="center"
                     android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="1"
+                android:text="@string/in_to_read_stack" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center">
+                <CheckBox
+                    android:id="@+id/isToRead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </LinearLayout>
 
@@ -167,7 +193,7 @@
                             android:inputType="none"
                             android:paddingTop="0dp"
                             android:paddingBottom="8dp"
-                            android:textSize="14sp"></EditText>
+                            android:textSize="14sp" />
 
                         <EditText
                             android:id="@+id/purchasetitlenew"

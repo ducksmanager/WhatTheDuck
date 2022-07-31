@@ -16,6 +16,10 @@ class IssueCopiesToUpdate(
     val conditions: MutableList<String?>,
 
     @Expose
+    @SerializedName("istoread")
+    val areToRead: MutableList<Boolean?>,
+
+    @Expose
     @SerializedName("purchaseId")
     val purchaseIds: MutableList<Int?>,
 )

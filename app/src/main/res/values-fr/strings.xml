@@ -179,4 +179,5 @@
     <string name="width">Largeur :</string>
     <string name="you_dont_own_any_quoted_issue">Vous ne possédez pas de numéro côté.</string>
     <string name="zoom">Zoom</string>
+    <string name="in_to_read_stack">A lire</string>
 </resources>

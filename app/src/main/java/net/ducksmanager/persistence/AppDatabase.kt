@@ -36,7 +36,7 @@ import net.ducksmanager.persistence.models.internal.Sync
     User::class,
     UserMessage::class,
     UserSetting::class
- ], version = 16, exportSchema = true)
+ ], version = 17, exportSchema = true)
 @TypeConverters(StringMutableSetConverter::class, StringIntMapConverter::class, InstantConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -85,6 +85,11 @@ abstract class AppDatabase : RoomDatabase() {
         val MIGRATION_15_16: Migration = object : Migration(15, 16) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("CREATE TABLE IF NOT EXISTS `inducks_issuequotation` (`publicationCode` TEXT NOT NULL, `issueNumber` TEXT NOT NULL, `estimationMin` REAL, `estimationMax` REAL, PRIMARY KEY(`publicationCode`, `issueNumber`))")
+            }
+        }
+        val MIGRATION_16_17: Migration = object : Migration(16, 17) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE issues ADD `isToRead` INTEGER NOT NULL")
             }
         }
     }

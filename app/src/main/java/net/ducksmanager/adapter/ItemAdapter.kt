@@ -79,6 +79,7 @@ abstract class ItemAdapter<Item> internal constructor(
         val descriptionText: TextView? = v.findViewById(R.id.itemdescription)
         val suffixImage: ImageView? = v.findViewById(R.id.suffiximage)
         val suffixText: TextView? = v.findViewById(R.id.suffixtext)
+        val isToRead: ImageView? = v.findViewById(R.id.isToRead)
     }
 
     fun updateFilteredList(textFilter: String) {
@@ -181,6 +182,9 @@ abstract class ItemAdapter<Item> internal constructor(
                 holder.suffixText.text = text
             }
         }
+        if (holder.isToRead != null) {
+            holder.isToRead.visibility = if (isToRead(i)) View.VISIBLE else View.GONE
+        }
     }
 
     protected abstract fun getCheckboxImageResource(i: Item, activity: Activity): Int?
@@ -207,4 +211,6 @@ abstract class ItemAdapter<Item> internal constructor(
     override fun getSectionName(position: Int): String {
         return (getText(getItem(position))?:"-") + ""
     }
+
+    open fun isToRead(item: Item): Boolean = false
 }

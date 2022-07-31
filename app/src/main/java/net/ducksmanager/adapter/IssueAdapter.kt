@@ -127,4 +127,6 @@ class IssueAdapter internal constructor(
     override fun getComparatorText(i: InducksIssueWithUserData): String = getText(i)
 
     override fun isPossessed(item: InducksIssueWithUserData): Boolean = item.userIssue != null
+
+    override fun isToRead(item: InducksIssueWithUserData): Boolean = isPossessed(item) && item.userIssue!!.isToRead
 }

@@ -13,5 +13,8 @@ class IssueListToUpdate(
     private val condition: String,
 
     @Expose
+    private val isToRead: Boolean?,
+
+    @Expose
     private val purchaseId: Int?
 )
