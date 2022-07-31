@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <plurals name="insert_issue__title">
+        <item quantity="one">Utgåva %1$s</item>
+        <item quantity="other">Utgåva %1$s och %2$d andra</item>
+    </plurals>
+    <plurals name="new_stories" tools:ignore="MissingQuantity">
+        <item quantity="one">%d ny berättelse</item>
+        <item quantity="other">%d nya berättelser</item>
+    </plurals>
     <string name="add_copy">Lägg till kopia</string>
     <string name="add_cover">Klicka på framsidan\nför att lägga till den i samlingen</string>
     <string name="add_cover_error_file_too_big">Bilden är för stor, försök igen.</string>
@@ -10,7 +18,9 @@
     <string name="by_cover_file">Efter omslagsfil</string>
     <string name="by_cover_photo">Från bild</string>
     <string name="by_issue_selection">Från utgåva</string>
+    <string name="by_story_title">Från berättelsetitel</string>
     <string name="cancel">Ta bort</string>
+    <string name="change_photo_crop">Ändra fotobeskärningen</string>
     <string name="collection">Min samling</string>
     <string name="collection_progression">Samlingens framfart</string>
     <string name="collection_size">Samlingens storlek</string>
@@ -29,6 +39,7 @@
     <string name="create">Skapa</string>
     <string name="create_new_purchase_date">Skapa ett köpdatum</string>
     <string name="delete_rating">Radera</string>
+    <string name="edge_missing_explanation">Vissa av tidningarna nedan har inte en riktig bokrygg för att vi inte har ett foto av dem. Klicka på en av dessa bokryggar för att skicka ett foto till oss och tjäna poäng!</string>
     <string name="edge_view">Bokhylla</string>
     <string name="edit">Redigera</string>
     <string name="email_address">E-mail</string>
@@ -38,8 +49,17 @@
     <string name="error__cannot_login">Inläsning av ditt DucksManager-konto misslyckades. Säkerställ att din internetuppkoppling är aktiv. Du kommer att kunna bläddra igenom din samling offline när samlingen har synkroniserats.</string>
     <string name="error__could_not_create_empty_file">Det gick inte att skapa en tom fil för kameran</string>
     <string name="error__malformed_url">URLen är felaktig</string>
+    <string name="error_height_restrictions">Bokryggens längd måste vara mellan 100 och 350 millimeter</string>
+    <string name="error_invalid_number_format">Välj giltiga nummer i Bredd och Längd fälten!</string>
+    <string name="error_sending_edge">Ett fel skedde när fotot skickades</string>
+    <string name="error_width_is_bigger_than_height">Bredden av zonen måste vara mindre än längden</string>
+    <string name="error_width_restrictions">Bokryggens bredd måste vara mellan 5 och 50 millimeter</string>
     <string name="favorite_authors">Mina favoritförfattare</string>
     <string name="filter">Filter</string>
+    <string name="from_recent_issue">Från en ny utgåva</string>
+    <string name="height">Längd:</string>
+    <string name="highest_quoted_issue">Högsta uppskattat värde:</string>
+    <string name="i_have_cropped_the_photo">Jag har beskurit fotot</string>
     <string name="in_this_condition">I detta skick</string>
     <string name="including1Copy">inkl. %d kopia</string>
     <string name="includingXCopies">inkl. %d kopior</string>
@@ -48,16 +68,13 @@
     <string name="input_error__empty_credentials">Du måste fylla i alla fälten för att fortsätta</string>
     <string name="input_error__invalid_credentials">Ogiltig information</string>
     <string name="input_error__no_issue_selected">Välj åtminstone en utgåva</string>
-    <plurals name="insert_issue__title">
-        <item quantity="one">Utgåva %1$s</item>
-        <item quantity="other">Utgåva %1$s och %2$d andra</item>
-    </plurals>
     <string name="internal_error">Internt fel</string>
     <string name="internal_error__crypting_failed">Krypteringen av din information misslyckades</string>
     <string name="internal_error__empty_list">Tom lista</string>
     <string name="internal_error__issue_insertion_failed">Adderingen av utgåvan i din samling misslyckades</string>
     <string name="internal_error__malformed_list">Utgåvolistan är felaktig</string>
     <string name="internal_error__purchase_creation_failed">Skapandet av inköpsdatum misslyckades</string>
+    <string name="invalid_selection">Ogiltigt val</string>
     <string name="issue_already_possessed">Du har redan den här utgåvan i din samling</string>
     <string name="issue_conditions">Utgåvans skick</string>
     <string name="issue_list_copied">Listan har kopierats till dina urklipp.</string>
@@ -79,6 +96,8 @@
     <string name="long_tap_to_end_issue_range_selection">Tryck länge på den sista utgåvan</string>
     <string name="max_copies_info">Du kan välja maximalt 3 kopior per utgåva</string>
     <string name="max_watched_authors_reached">Du har nått det maximala antalet författare att betygsätta. Radera redan betygsatta författare om du vill betygsätta en ny.</string>
+    <string name="medal_incentive_1">Skicka ett foto till oss av denna bokrygg</string>
+    <string name="medal_incentive_2">och tjäna %1$d fotografpoäng!</string>
     <string name="my_collection">Min samling (%d utgåvor)</string>
     <string name="network_error">Nätverksfel</string>
     <string name="network_error__no_connection">Godkänn</string>
@@ -92,6 +111,7 @@
     <string name="no_suggestion">Vi har inga förslag åt dig. Se till att du betygsatt dina favoritförfattare.\nFörslagen uppdateras dagligen.</string>
     <string name="no_title">Ingen titel</string>
     <string name="notify_option">Meddela mig om nya berättelser från mina favoritförfattare</string>
+    <string name="number_of_users_own_issue">%d användare äger denna utgåva</string>
     <string name="offline_mode">Du är i offline-läge. Du kan bläddra igenom din samling men inte uppdatera den. Vissa funktioner är inte tillgängliga.</string>
     <string name="offline_mode_cannot_login">What The Duck kunde inte hämta din samling. Är du ansluten till internet\?</string>
     <string name="offline_mode_cannot_view">Denna överblick är inte tillgänglig i offline-läget. Klicka här för att återgå till samlingsvyn.</string>
@@ -111,6 +131,8 @@
     <string name="rate_description">Lägg till dina favoritförfattare och betygsätt dem som du vill.\nTack vare dessa betyg kan What The Duck tipsa dig om utgåvor att leta efter.\nDessa tips uppdateras dagligen.</string>
     <string name="rate_new_author">Betygsätt en författare</string>
     <string name="rate_new_author_hint">Skriv ett författarnamn</string>
+    <string name="recent_issues">Senaste utgåvor</string>
+    <string name="recent_issues_intro">Tryck på ett nytt utgåva för att lägga till det i din samling</string>
     <string name="report">Rapportera ett problem</string>
     <string name="report_description">Är det något som inte fungerar i appen? Beskriv ditt problem så ska vi försöka lösa det i nästa version :-)</string>
     <string name="report_hint">Beskriv problemet</string>
@@ -120,7 +142,17 @@
     <string name="reset_password_title">Glömt lösenord?</string>
     <string name="result">Resultat</string>
     <string name="save">Spara</string>
+    <string name="search">Hitta en berättelse</string>
+    <string name="search_hint">Skriv in titeln på berättelsen</string>
+    <string name="search_intro">Skriv in titeln på en berättelse. What The Duck visar dig tidningarna som innehåller denna berättelse och indikerar vilka berättelser och utgåvor du har i din samling.</string>
+    <string name="search_more_results">-- Fler än 10 resultat, förfina din sökning --</string>
     <string name="send">Skicka</string>
+    <string name="send_edge__crop_photo">På fotot, välj zonen där bokryggen är.</string>
+    <string name="send_edge__set_dimensions_intro">Lägg till dimensionerna av bokryggen, i millimeter.</string>
+    <string name="send_edge__take_photo_intro">Ta ett foto av bokryggen.</string>
+    <string name="send_edge_photo">Skicka fotot</string>
+    <string name="send_edge_photo_title">Bokrygg fotouppladdning för utgåva %1$s %2$s</string>
+    <string name="send_edge_thanks">Tack för ditt bidrag! Om ditt foto blir accepterat får du ett email när bokryggen är publicerad.</string>
     <string name="set_conditions_on_existing_copies_before_adding_new">Välj skick på alla existerande kopior innan du väljer ett nytt</string>
     <string name="settings">Inställningar</string>
     <string name="show_purchase_history_in_the_past_year">Det gångna året</string>
@@ -131,45 +163,20 @@
     <string name="sort_by_publication_date">Sortera efter publiceringsdatum</string>
     <string name="sort_by_score">Sortera efter poäng</string>
     <string name="stats">Statistik</string>
+    <string name="story_was_published_in">har publicerats i följande utgåvor:</string>
     <string name="suggestions">Förslag</string>
     <string name="suggestions_intro">WhatTheDuck ger dig en personlig lista av samlingar som innehåller nya berättelser från dina favoritförfattare. Du kan ändra vilka länder som visas under Inställningar.</string>
+    <string name="take_another_photo">Ta ytterligare ett foto</string>
     <string name="thanks_report">Tack för din feedback!</string>
     <string name="unknown_date">Okänt datum</string>
     <string name="unknown_publication">Okänd publikation</string>
     <string name="username">Användarnamn</string>
+    <string name="value_estimation">Uppskattat värde</string>
     <string name="version">What The Duck version %1$s</string>
     <string name="welcome_bookcase_view_portrait">Välkommen till bohyllan! Rotera din skärm till landskapsläge för bästa effekt ;-)</string>
     <string name="welcome_message">Din DucksManager-samling visas när du öppnar What The Duck. Klicka på ett land för att se de publikationer du har, eller tryck på \"+\" för att lägga till en utgåva  i din samling.</string>
     <string name="welcome_title">Välkommen till What The Duck!</string>
-    <string name="zoom">Zoom</string>
-    <string name="medal_incentive_1">Skicka ett foto till oss av denna bokrygg</string>
-    <string name="medal_incentive_2">och tjäna %1$d fotografpoäng!</string>
-    <string name="send_edge__take_photo_intro">Ta ett foto av bokryggen.</string>
-    <string name="send_edge__crop_photo">På fotot, välj zonen där bokryggen är.</string>
-    <string name="take_another_photo">Ta ytterligare ett foto</string>
-    <string name="i_have_cropped_the_photo">Jag har beskurit fotot</string>
-    <string name="send_edge__set_dimensions_intro">Lägg till dimensionerna av bokryggen, i millimeter.</string>
     <string name="width">Bredd:</string>
-    <string name="height">Längd:</string>
-    <string name="send_edge_photo">Skicka fotot</string>
-    <string name="change_photo_crop">Ändra fotobeskärningen</string>
-    <string name="invalid_selection">Ogiltigt val</string>
-    <string name="error_width_is_bigger_than_height">Bredden av zonen måste vara mindre än längden</string>
-    <string name="error_width_restrictions">Bokryggens bredd måste vara mellan 5 och 50 millimeter</string>
-    <string name="error_height_restrictions">Bokryggens längd måste vara mellan 100 och 350 millimeter</string>
-    <string name="error_sending_edge">Ett fel skedde när fotot skickades</string>
-    <string name="error_invalid_number_format">Välj giltiga nummer i Bredd och Längd fälten!</string>
-    <string name="send_edge_thanks">Tack för ditt bidrag! Om ditt foto blir accepterat får du ett email när bokryggen är publicerad.</string>
-    <string name="search">Hitta en berättelse</string>
-    <string name="search_intro">Skriv in titeln på en berättelse. What The Duck visar dig tidningarna som innehåller denna berättelse och indikerar vilka berättelser och utgåvor du har i din samling.</string>
-    <string name="search_hint">Skriv in titeln på berättelsen</string>
-    <string name="search_more_results">-- Fler än 10 resultat, förfina din sökning --</string>
-    <string name="story_was_published_in">har publicerats i följande utgåvor:</string>
-    <string name="edge_missing_explanation">Vissa av tidningarna nedan har inte en riktig bokrygg för att vi inte har ett foto av dem. Klicka på en av dessa bokryggar för att skicka ett foto till oss och tjäna poäng!</string>
-    <string name="send_edge_photo_title">Bokrygg fotouppladdning för utgåva %1$s %2$s</string>
-    <string name="by_story_title">Från berättelsetitel</string>
-    <string name="number_of_users_own_issue">%d användare äger denna utgåva</string>
-    <string name="from_recent_issue">Från en ny utgåva</string>
-    <string name="recent_issues_intro">Tryck på ett nytt utgåva för att lägga till det i din samling</string>
-    <string name="recent_issues">Senaste utgåvor</string>
+    <string name="you_dont_own_any_quoted_issue">Du äger ingen värderad utgåva.</string>
+    <string name="zoom">Zoom</string>
 </resources>

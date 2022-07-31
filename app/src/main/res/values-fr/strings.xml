@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <plurals name="new_stories" tools:ignore="MissingQuantity">
+        <item quantity="one">%d nouvelle histoire</item>
+        <item quantity="other">%d nouvelles histoires</item>
+    </plurals>
+    <plurals name="insert_issue__title" tools:ignore="MissingQuantity">
+        <item quantity="one">Numéro %1$s</item>
+        <item quantity="other">Numéro %1$s et %2$d autre(s)</item>
+    </plurals>
     <string name="add_copy">Ajouter un exemplaire</string>
     <string name="add_cover">Cliquez sur la couverture\npour ajouter le numéro à la collection</string>
     <string name="add_cover_error_file_too_big">L\'image est trop grande, veuillez réessayer.</string>
@@ -10,7 +18,9 @@
     <string name="by_cover_file">Depuis un fichier de couverture</string>
     <string name="by_cover_photo">Depuis une photo de couverture</string>
     <string name="by_issue_selection">Par sélection de numéro</string>
+    <string name="by_story_title">Par titre d\'histoire</string>
     <string name="cancel">Annuler</string>
+    <string name="change_photo_crop">Modifier le découpage de la photo</string>
     <string name="collection">Ma collection</string>
     <string name="collection_progression">Progression de la collection</string>
     <string name="collection_size">Numéros</string>
@@ -29,6 +39,7 @@
     <string name="create">Créer</string>
     <string name="create_new_purchase_date">Créer une date d\'achat</string>
     <string name="delete_rating">Supprimer</string>
+    <string name="edge_missing_explanation">Certains des magazines ci-dessous n\'ont pas une belle tranche car nous n\'en possédons pas de photo. Cliquez sur l\'une de ces tranches pour nous envoyer une photo et gagnez des points !</string>
     <string name="edge_view">Bibliothèque</string>
     <string name="edit">Modifier</string>
     <string name="email_address">Adresse e-mail</string>
@@ -38,8 +49,17 @@
     <string name="error__cannot_login">La connexion à votre compte DucksManager a échoué, vérifiez que votre connexion Internet est active. Vous pourrez consulter votre collection hors-ligne une fois que votre collection sera synchronisée.</string>
     <string name="error__could_not_create_empty_file">Impossible de créer un fichier pour la caméra Android</string>
     <string name="error__malformed_url">L\'adresse Web est mal formée</string>
+    <string name="error_height_restrictions">La largeur de votre sélection doit être comprise entre 100 et 350 millimètres</string>
+    <string name="error_invalid_number_format">Veuillez entrer des nombres valides dans les champs \"largeur\" et \"hauteur\" !</string>
+    <string name="error_sending_edge">Une erreur est survenue pendant l\'envoi de la tranche</string>
+    <string name="error_width_is_bigger_than_height">La largeur de votre sélection doit être plus petite que sa hauteur</string>
+    <string name="error_width_restrictions">La largeur de votre sélection doit être comprise entre 5 et 50 millimètres</string>
     <string name="favorite_authors">Mes auteurs favoris</string>
     <string name="filter">Filtrer</string>
+    <string name="from_recent_issue">Depuis un magazine récent</string>
+    <string name="height">Hauteur :</string>
+    <string name="highest_quoted_issue">Magazine le plus côté :</string>
+    <string name="i_have_cropped_the_photo">J\'ai découpé la photo</string>
     <string name="in_this_condition">Dans cet état</string>
     <string name="including1Copy">dont %d double</string>
     <string name="includingXCopies">dont %d doubles</string>
@@ -48,16 +68,13 @@
     <string name="input_error__empty_credentials">Vous devez saisir votre pseudonyme et votre mot de passe pour continuer</string>
     <string name="input_error__invalid_credentials">Vos identifiants sont invalides</string>
     <string name="input_error__no_issue_selected">Sélectionnez au moins un numéro</string>
-    <plurals name="insert_issue__title" tools:ignore="MissingQuantity">
-        <item quantity="one">Numéro %1$s</item>
-        <item quantity="other">Numéro %1$s et %2$d autre(s)</item>
-    </plurals>
     <string name="internal_error">Erreur interne</string>
     <string name="internal_error__crypting_failed">L\'encryptage de vos identifiants a échoué</string>
     <string name="internal_error__empty_list">Liste vide</string>
     <string name="internal_error__issue_insertion_failed">L\'insertion du numéro dans votre collection a échoué</string>
     <string name="internal_error__malformed_list">La liste des numéros est mal formée</string>
     <string name="internal_error__purchase_creation_failed">La création de la date d\'achat a échoué</string>
+    <string name="invalid_selection">Sélection invalide</string>
     <string name="issue_already_possessed">Vous possédez déjà ce numéro dans votre collection</string>
     <string name="issue_conditions">Etats des numéros</string>
     <string name="issue_list_copied">La liste a été copiée dans votre presse-papiers.</string>
@@ -79,6 +96,8 @@
     <string name="long_tap_to_end_issue_range_selection">Faites un appui long sur le dernier numéro consécutif à sélectionner</string>
     <string name="max_copies_info">Vous pouvez spécifier un maximum de 3 exemplaires par numéro.</string>
     <string name="max_watched_authors_reached">Vous avez atteint le nombre maximal d\'auteurs surveillés. Supprimez des auteurs existants pour en ajouter d\'autres.</string>
+    <string name="medal_incentive_1">Envoyez-nous la photo de cette tranche de magazine</string>
+    <string name="medal_incentive_2">et gagnez %1$d points Photographe !</string>
     <string name="my_collection">Ma collection (%d numéros)</string>
     <string name="network_error">Erreur réseau</string>
     <string name="network_error__no_connection">Problème de réseau : vérifiez votre connexion Internet</string>
@@ -92,6 +111,7 @@
     <string name="no_suggestion">Nous n\'avons pas de suggestions à vous proposer. Assurez-vous d\'avoir noté vos auteurs préférés.\nLes suggestions sont mises à jour quotidiennement.</string>
     <string name="no_title">Sans titre</string>
     <string name="notify_option">Me notifier quand des nouvelles histoires de mes auteurs favoris sont publiées</string>
+    <string name="number_of_users_own_issue">%d utilisateurs possèdent ce numéro</string>
     <string name="offline_mode">Vous êtes en mode hors-ligne. Vous pouvez naviguer dans votre collection mais pas la modifier. Certaines fonctionnalités ne sont pas disponibles.</string>
     <string name="offline_mode_cannot_login">What The Duck n\'a pas pu récupérer votre collection. Vérifiez votre connection Internet.</string>
     <string name="offline_mode_cannot_view">Cette vue n\'est pas disponible en mode hors-ligne. Tapez ici pour revenir à votre collection.</string>
@@ -111,6 +131,8 @@
     <string name="rate_description">Ajoutez vos auteurs préférés et indiquez les notes que vous leur attribuez.\nGrâce à ces notes, What The Duck déterminera ensuite les magazines susceptibles de vous intéresser.</string>
     <string name="rate_new_author">Noter un auteur</string>
     <string name="rate_new_author_hint">Entrez le nom d\'un auteur</string>
+    <string name="recent_issues">Magazines récents</string>
+    <string name="recent_issues_intro">Tapotez sur un magazine récent pour l\'ajouter à votre collection</string>
     <string name="report">Signaler un problème</string>
     <string name="report_description">Quelque chose ne fonctionne pas sur l\'application ?\nDétaillez votre problème et nous essaierons de le résoudre dans une prochaine version :-)</string>
     <string name="report_hint">Décrivez votre problème</string>
@@ -120,7 +142,17 @@
     <string name="reset_password_title">Mot de passe oublié ?</string>
     <string name="result">Résultat</string>
     <string name="save">OK</string>
+    <string name="search">Rechercher une histoire</string>
+    <string name="search_hint">Entrez le titre d\'une histoire</string>
+    <string name="search_intro">Entrez le titre d\'une histoire. What The Duck vous indiquera les magazines qui contiennent cette histoire et précisera les histoires et magazines correspondants que vous possédez.</string>
+    <string name="search_more_results">-- Plus de 10 résultats, affinez votre recherche --</string>
     <string name="send">Envoyer</string>
+    <string name="send_edge__crop_photo">Sur la photo, sélectionnez le rectangle correspondant à l\'emplacement de la tranche du magazine.</string>
+    <string name="send_edge__set_dimensions_intro">Indiquez les dimensions de la tranche, en millimètres.</string>
+    <string name="send_edge__take_photo_intro">Prenez une photo de cette tranche de magazine.</string>
+    <string name="send_edge_photo">Envoyer la photo de tranche</string>
+    <string name="send_edge_photo_title">Envoi de photo pour le numéro %1$s %2$s</string>
+    <string name="send_edge_thanks">Merci pour votre contribution ! Si votre photo est acceptée, vous recevrez un e-mail lorsque la tranche est publiée.</string>
     <string name="set_conditions_on_existing_copies_before_adding_new">Indiquez les états des autres exemplaires avant d\'en ajouter un autre</string>
     <string name="settings">Paramètres</string>
     <string name="show_purchase_history_in_the_past_year">Depuis 1 an</string>
@@ -131,52 +163,20 @@
     <string name="sort_by_publication_date">Trier par date de publication</string>
     <string name="sort_by_score">Trier par score</string>
     <string name="stats">Statistiques</string>
+    <string name="story_was_published_in">a été publiée dans les numéros suivants :</string>
     <string name="suggestions">Suggestions</string>
     <string name="suggestions_intro">WhatTheDuck vous propose une liste personalisée de magazines contenant des histoires inédites de vos auteurs favoris.\nVous pouvez changer les pays des magazines à afficher dans l\'écran Paramètres, et la liste d\'auteurs dans l\'écran Mes auteurs favoris.\nLes suggestions sont mises à jour quotidiennement</string>
+    <string name="take_another_photo">Prendre une autre photo</string>
     <string name="thanks_report">Merci pour votre retour !</string>
     <string name="unknown_date">Date inconnue</string>
     <string name="unknown_publication">Magazine inconnu</string>
     <string name="username">Nom d\'utilisateur DucksManager</string>
+    <string name="value_estimation">Valeur de la collection</string>
     <string name="version">What The Duck version %1$s</string>
     <string name="welcome_bookcase_view_portrait">Bienvenue dans votre bibliothèque ! Orientez votre écran en mode paysage pour le meilleur effet ;-)</string>
     <string name="welcome_message">Votre collection s\'affiche lorsque vous ouvrez What The Duck. Tapotez sur un pays pour visualiser les magazines que vous possédez, ou tapotez sur + pour ajouter un numéro.</string>
     <string name="welcome_title">Bienvenue sur What The Duck !</string>
-    <string name="zoom">Zoom</string>
-    <string name="search_intro">Entrez le titre d\'une histoire. What The Duck vous indiquera les magazines qui contiennent cette histoire et précisera les histoires et magazines correspondants que vous possédez.</string>
-    <string name="search">Rechercher une histoire</string>
-    <string name="search_hint">Entrez le titre d\'une histoire</string>
-    <string name="search_more_results">-- Plus de 10 résultats, affinez votre recherche --</string>
-    <string name="story_was_published_in">a été publiée dans les numéros suivants :</string>
-    <string name="medal_incentive_1">Envoyez-nous la photo de cette tranche de magazine</string>
-    <string name="medal_incentive_2">et gagnez %1$d points Photographe !</string>
-    <string name="send_edge__take_photo_intro">Prenez une photo de cette tranche de magazine.</string>
-    <string name="send_edge__crop_photo">Sur la photo, sélectionnez le rectangle correspondant à l\'emplacement de la tranche du magazine.</string>
-    <string name="i_have_cropped_the_photo">J\'ai découpé la photo</string>
-    <string name="take_another_photo">Prendre une autre photo</string>
-    <string name="send_edge__set_dimensions_intro">Indiquez les dimensions de la tranche, en millimètres.</string>
     <string name="width">Largeur :</string>
-    <string name="height">Hauteur :</string>
-    <string name="send_edge_photo">Envoyer la photo de tranche</string>
-    <string name="change_photo_crop">Modifier le découpage de la photo</string>
-    <string name="edge_missing_explanation">Certains des magazines ci-dessous n\'ont pas une belle tranche car nous n\'en possédons pas de photo. Cliquez sur l\'une de ces tranches pour nous envoyer une photo et gagnez des points !</string>
-    <string name="by_story_title">Par titre d\'histoire</string>
-    <string name="send_edge_photo_title">Envoi de photo pour le numéro %1$s %2$s</string>
-    <string name="number_of_users_own_issue">%d utilisateurs possèdent ce numéro</string>
-    <string name="send_edge_thanks">Merci pour votre contribution ! Si votre photo est acceptée, vous recevrez un e-mail lorsque la tranche est publiée.</string>
-    <string name="invalid_selection">Sélection invalide</string>
-    <string name="error_width_is_bigger_than_height">La largeur de votre sélection doit être plus petite que sa hauteur</string>
-    <string name="error_width_restrictions">La largeur de votre sélection doit être comprise entre 5 et 50 millimètres</string>
-    <string name="error_height_restrictions">La largeur de votre sélection doit être comprise entre 100 et 350 millimètres</string>
-    <string name="error_sending_edge">Une erreur est survenue pendant l\'envoi de la tranche</string>
-    <string name="error_invalid_number_format">Veuillez entrer des nombres valides dans les champs \"largeur\" et \"hauteur\" !</string>
-    <plurals name="new_stories" tools:ignore="MissingQuantity">
-        <item quantity="one">%d nouvelle histoire</item>
-        <item quantity="other">%d nouvelles histoires</item>
-    </plurals>
-    <string name="from_recent_issue">Depuis un magazine récent</string>
-    <string name="recent_issues_intro">Tapotez sur un magazine récent pour l\'ajouter à votre collection</string>
-    <string name="recent_issues">Magazines récents</string>
-    <string name="value_estimation">Valeur de la collection</string>
-    <string name="highest_quoted_issue">Magazine le plus côté :</string>
     <string name="you_dont_own_any_quoted_issue">Vous ne possédez pas de numéro côté.</string>
+    <string name="zoom">Zoom</string>
 </resources>

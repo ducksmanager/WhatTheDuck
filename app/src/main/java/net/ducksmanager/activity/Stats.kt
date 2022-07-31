@@ -57,7 +57,7 @@ class Stats : AppCompatActivityWithDrawer() {
             appDB!!.inducksIssueQuotationDao().getTotalEstimation().observe(this) { totalEstimation ->
                 binding.estimationTotal.text = String.format(
                     resources.getString(R.string.quotation_equals),
-                    totalEstimation.toInt()
+                    totalEstimation?.toInt() ?: 0
                 )
                 if (totalEstimation == null) {
                     binding.estimationMostValuedIssue.countrybadge.visibility = View.GONE
