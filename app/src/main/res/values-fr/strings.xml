@@ -8,6 +8,14 @@
         <item quantity="one">Numéro %1$s</item>
         <item quantity="other">Numéro %1$s et %2$d autre(s)</item>
     </plurals>
+    <plurals name="issues_to_read" tools:ignore="MissingQuantity">
+        <item quantity="one">%d numéro à lire</item>
+        <item quantity="other">%d numéros à lire</item>
+    </plurals>
+    <plurals name="filter_to_read" tools:ignore="MissingQuantity">
+        <item quantity="one">%1$s (%2$d numéro)</item>
+        <item quantity="other">%1$s (%2$d numéros)</item>
+    </plurals>
     <string name="add_copy">Ajouter un exemplaire</string>
     <string name="add_cover">Cliquez sur la couverture\npour ajouter le numéro à la collection</string>
     <string name="add_cover_error_file_too_big">L\'image est trop grande, veuillez réessayer.</string>
@@ -180,4 +188,7 @@
     <string name="you_dont_own_any_quoted_issue">Vous ne possédez pas de numéro côté.</string>
     <string name="zoom">Zoom</string>
     <string name="in_to_read_stack">A lire</string>
+    <string name="no_item_in_to_read_list">Vous n\'avez pas de magazine à lire. Choisissez \"Toute la collection\" dans le filtre en haut à droite de l\'écran, puis indiquez un numéro comme \"à lire\" pour qu\'il s\'affiche ici.</string>
+    <string name="filter_all_collection">Toute la collection</string>
+    <string name="filter_to_read">Mes livres à lire</string>
 </resources>
