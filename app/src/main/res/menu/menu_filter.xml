@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_funnel"
+        android:orderInCategory="100"
+        yourapp:showAsAction="always"
+        android:title="@string/filter">
+
+        <menu>
+
+            <item
+                android:id="@+id/menu_item_all_collection"
+                android:icon="@drawable/ic_circle_fill"
+                android:title="@string/filter_all_collection" />
+
+            <item
+                android:id="@+id/menu_item_issues_to_read"
+                android:icon="@drawable/ic_bookmark_check"
+                android:title="@string/filter_to_read" />
+
+        </menu>
+    </item>
+</menu>

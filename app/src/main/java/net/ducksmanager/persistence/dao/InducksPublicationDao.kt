@@ -17,6 +17,14 @@ interface InducksPublicationDao {
             " GROUP BY inducks_publication.publicationCode")
     fun findByCountry(countryName: String): LiveData<List<InducksPublicationWithPossession>>
 
+    @Query("SELECT DISTINCT inducks_publication.*, COUNT(DISTINCT user_issues.issueNumber) AS possessedIssues, issue_count.count AS referencedIssues" +
+            " FROM inducks_publication" +
+            " LEFT JOIN issues AS user_issues ON inducks_publication.publicationCode = user_issues.country || '/' || user_issues.magazine" +
+            " LEFT JOIN inducks_issue_count issue_count ON inducks_publication.publicationCode = issue_count.code" +
+            " WHERE inducks_publication.publicationCode LIKE (:countryName || '/%') AND issue_count.count > 0 AND user_issues.isToRead = 1" +
+            " GROUP BY inducks_publication.publicationCode")
+    fun findToReadByCountry(countryName: String): LiveData<List<InducksPublicationWithPossession>>
+
     @Query("SELECT * FROM inducks_publication WHERE publicationCode = :publicationCode")
     fun findByPublicationCode(publicationCode: String): LiveData<InducksPublication>
 

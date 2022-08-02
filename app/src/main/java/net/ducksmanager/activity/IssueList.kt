@@ -58,7 +58,10 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
     }
 
     override val AndroidViewModel.data: LiveData<List<InducksIssueWithUserData>>
-        get() = appDB!!.inducksIssueDao().findByPublicationCode(getPublicationCode())
+        get() = when(WhatTheDuck.selectedFilter) {
+            getString(filter_to_read) -> appDB!!.inducksIssueDao().findToReadByPublicationCode(getPublicationCode())
+            else -> appDB!!.inducksIssueDao().findByPublicationCode(getPublicationCode())
+        }
 
     override fun downloadAndShowList() {
         DmServer.api.getIssues(getPublicationCode()).enqueue(object : DmServer.Callback<List<InducksIssueWithCoverUrl>>("getInducksIssues", this, false) {
@@ -98,23 +101,22 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
         val retValue = super.onCreateOptionsMenu(menu)
         if (VERSION.SDK_INT >= VERSION_CODES.M) {
             menuInflater.inflate(R.menu.menu_issue_list, menu)
-
         }
         return retValue
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (setOf(getString(issue_list_copy_missing), getString(issue_list_copy_possessed)).contains(item.title)) {
-            if (VERSION.SDK_INT >= VERSION_CODES.M) {
+        if (VERSION.SDK_INT >= VERSION_CODES.M) {
+            if (setOf(R.id.copyPossessed, R.id.copyMissing).contains(item.itemId)) {
                 val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 lateinit var title: String
                 lateinit var contents: String
-                when (item.title) {
-                    getString(issue_list_copy_possessed) -> {
+                when (item.itemId) {
+                    R.id.copyPossessed -> {
                         title = getString(issue_list_copy_possessed_title) + selectedPublication!!.title
                         contents = getListAsText(true)
                     }
-                    getString(issue_list_copy_missing) -> {
+                    R.id.copyMissing -> {
                         title = getString(issue_list_copy_missing_title) + selectedPublication!!.title
                         contents = getListAsText(false)
                     }
@@ -123,9 +125,7 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
                 WhatTheDuck.info(WeakReference(this), issue_list_copied, 1000)
             }
         }
-        else {
-            super.onOptionsItemSelected(item)
-        }
+        super.onOptionsItemSelected(item)
         return true
     }
 

@@ -113,12 +113,16 @@ class IssueAdapter internal constructor(
 
     override fun getDescriptionText(i: InducksIssueWithUserData): String = i.issue.title
 
-    override fun getSuffixText(i: InducksIssueWithUserData): String? {
-        return when {
-            i.userPurchase != null -> i.userPurchase.date
-            else -> null
+    override fun getSuffixText(i: InducksIssueWithUserData): String? =
+        when(WhatTheDuck.selectedFilter) {
+            WhatTheDuck.applicationContext!!.getString(R.string.filter_to_read) -> null
+            else -> {
+                when {
+                    i.userPurchase != null -> i.userPurchase.date
+                    else -> null
+                }
+            }
         }
-    }
 
     override fun getIdentifier(i: InducksIssueWithUserData): String = i.issue.inducksIssueNumber
 

@@ -8,6 +8,7 @@ import net.ducksmanager.activity.IssueList
 import net.ducksmanager.activity.ItemList
 import net.ducksmanager.persistence.models.composite.InducksPublicationWithPossession
 import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
 
 class PublicationAdapter internal constructor(
@@ -36,7 +37,16 @@ class PublicationAdapter internal constructor(
 
     override fun getIdentifier(i: InducksPublicationWithPossession): String = i.publication.publicationCode
 
-    override fun getSuffixText(i: InducksPublicationWithPossession): String = String.format("%d/%d", i.possessedIssues, i.referencedIssues)
+    override fun getSuffixText(i: InducksPublicationWithPossession): String =
+        when (WhatTheDuck.selectedFilter) {
+            WhatTheDuck.applicationContext!!.getString(R.string.filter_to_read) -> String.format(
+                WhatTheDuck.applicationContext!!.resources.getQuantityString(
+                    R.plurals.issues_to_read,
+                    i.possessedIssues,
+                ), i.possessedIssues
+            )
+            else -> String.format("%d/%d", i.possessedIssues, i.referencedIssues)
+        }
 
     override fun getText(i: InducksPublicationWithPossession): String = i.publication.title
 

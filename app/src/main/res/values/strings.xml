@@ -5,6 +5,14 @@
         <item quantity="two">Issue %1$s and %2$d other</item>
         <item quantity="other">Issue %1$s and %2$d others</item>
     </plurals>
+    <plurals name="issues_to_read">
+        <item quantity="one">%d issue to read</item>
+        <item quantity="other">%d issues to read</item>
+    </plurals>
+    <plurals name="filter_to_read">
+        <item quantity="one">%1$s (%2$d issue)</item>
+        <item quantity="other">%1$s (%2$d issues)</item>
+    </plurals>
     <plurals name="new_stories">
         <item quantity="one">%d new story</item>
         <item quantity="other">%d new stories</item>
@@ -61,6 +69,8 @@
     <string name="facebook" translatable="false">Facebook</string>
     <string name="favorite_authors">My favorite authors</string>
     <string name="filter">Filter</string>
+    <string name="filter_all_collection">Whole collection</string>
+    <string name="filter_to_read">My to-read list</string>
     <string name="from_recent_issue">From a recent issue</string>
     <string name="height">Height:</string>
     <string name="highest_quoted_issue">Highest quoted issue:</string>
@@ -114,6 +124,7 @@
     <string name="no_author">You don\'t have any favorite authors</string>
     <string name="no_issue">No issue</string>
     <string name="no_item">No issue in this list. Click on the 🖊️ icon to add issues to your collection!</string>
+    <string name="no_item_in_to_read_list">You don\'t have any issue to read. Set an existing issue as "In to-read list" to show it here.</string>
     <string name="no_purchase_date">No purchase date</string>
     <string name="no_suggestion">We don\'t have any suggestion for you. Make sure that you rated your favorite authors.\nThe suggestions are updated daily.</string>
     <string name="no_title">No title</string>

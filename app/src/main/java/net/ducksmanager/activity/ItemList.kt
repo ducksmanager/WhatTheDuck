@@ -4,12 +4,16 @@ import android.Manifest.permission.CAMERA
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
@@ -29,6 +33,8 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationPackage
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isNewVersionAvailable
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.numberOfIssues
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.numberOfToIssuesToRead
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedFilter
 import net.ducksmanager.whattheduck.databinding.WtdListBinding
 import java.lang.ref.WeakReference
 
@@ -77,6 +83,46 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val retValue = super.onCreateOptionsMenu(menu)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            menuInflater.inflate(R.menu.menu_filter, menu)
+            menu.getItem(0).icon = ContextCompat.getDrawable(
+                this,
+                if (selectedFilter != null && selectedFilter != getString(R.string.filter_all_collection)) {
+                    R.drawable.ic_funnel_fill
+                } else {
+                    R.drawable.ic_funnel
+            })
+            menu.getItem(0).subMenu.children.find { it.title.startsWith(getString(R.string.filter_to_read)) }?.title =
+                String.format(
+                    resources.getQuantityString(
+                        R.plurals.filter_to_read,
+                        numberOfToIssuesToRead!!,
+                    ),
+                    getString(R.string.filter_to_read),
+                    numberOfToIssuesToRead
+                )
+        }
+        return retValue
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val menuItemTitle = item.title.toString()
+            if (menuItemTitle == getString(R.string.filter_all_collection) || menuItemTitle.startsWith(getString(R.string.filter_to_read))) {
+                selectedFilter = if (menuItemTitle.startsWith(getString(R.string.filter_to_read))) {
+                    getString(R.string.filter_to_read)
+                } else {
+                    menuItemTitle
+                }
+                startActivity(Intent(this, CountryList::class.java))
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     open fun downloadAndShowList() {
         if (!viewModel.data.hasObservers()) {
             val latestVersion = appDB!!.appVersionDao().find()
@@ -120,7 +166,15 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         if (itemAdapter is CountryAdapter) {
             numberOfIssues = items.sumOf { (it as InducksCountryNameWithPossession).possessedIssues }
         }
-        title = String.format(getString(R.string.my_collection), numberOfIssues)
+        title = when(selectedFilter) {
+            getString(R.string.filter_to_read) -> String.format(
+                resources.getQuantityString(
+                    R.plurals.filter_to_read,
+                    numberOfToIssuesToRead!!,
+                ), getString(R.string.filter_to_read), numberOfToIssuesToRead
+            )
+            else -> String.format(getString(R.string.my_collection), numberOfIssues)
+        }
 
         val isEmptyList = (isCoaList() && isOfflineMode) || (!isCoaList() && items.none {
             when (it) {
@@ -133,10 +187,9 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.itemList.visibility = if (isEmptyList) INVISIBLE else VISIBLE
         if (isCoaList() && isOfflineMode) {
             binding.emptyList.text = getString(R.string.offline_mode_cannot_view)
-            binding.emptyList.setOnClickListener {
-                type = WhatTheDuck.CollectionType.USER.toString()
-                startActivity(Intent(this, CountryList::class.java))
-            }
+        }
+        else if (selectedFilter != null && selectedFilter != getString(R.string.filter_all_collection)) {
+            binding.emptyList.text = getString(R.string.no_item_in_to_read_list)
         }
         binding.addToCollectionWrapper.visibility = if (shouldShowAddToCollectionButton()) VISIBLE else INVISIBLE
 

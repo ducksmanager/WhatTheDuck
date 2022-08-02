@@ -16,7 +16,9 @@ import net.ducksmanager.activity.ItemList
 import net.ducksmanager.activity.ItemList.Companion.isCoaList
 import net.ducksmanager.util.FilterTextOnChangeListener
 import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationContext
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.itemToScrollTo
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedFilter
 import net.greypanther.natsort.CaseInsensitiveSimpleNaturalComparator
 import java.util.*
 import kotlin.math.max
@@ -108,7 +110,7 @@ abstract class ItemAdapter<Item> internal constructor(
 
         if (holder.row != null && holder.background != null) {
             val lineFill = getLineFill(i)
-            if (lineFill == null) {
+            if (lineFill == null || (selectedFilter != null && selectedFilter != applicationContext!!.getString(R.string.filter_all_collection))) {
                 holder.background.layoutParams.width = 0
             }
             else {

@@ -115,9 +115,12 @@ class WhatTheDuck : Application() {
 
         var selectedCountry: InducksCountryName? = null
         var selectedPublication: InducksPublication? = null
+        var selectedFilter: String? = null
+
         var itemToScrollTo: String? = null
         var selectedIssues: MutableList<String> = mutableListOf()
         var numberOfIssues: Int? = 0
+        var numberOfToIssuesToRead: Int? = 0
 
         @JvmField
         var applicationContext: Context? = null

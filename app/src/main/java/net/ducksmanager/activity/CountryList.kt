@@ -17,14 +17,19 @@ import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedFilter
 import retrofit2.Response
+
 
 class CountryList : ItemList<InducksCountryNameWithPossession>() {
 
     override var itemAdapter: ItemAdapter<InducksCountryNameWithPossession> = CountryAdapter(this)
 
     override val AndroidViewModel.data: LiveData<List<InducksCountryNameWithPossession>>
-        get() = appDB!!.inducksCountryDao().findAllWithPossession()
+        get() = when(selectedFilter) {
+            getString(R.string.filter_to_read) -> appDB!!.inducksCountryDao().findAllToReadWithPossession()
+            else -> appDB!!.inducksCountryDao().findAllWithPossession()
+        }
 
     override fun downloadAndShowList() {
         if (!isOfflineMode && Login.isObsoleteSync(appDB!!.syncDao().findLatest(applicationVersion))) {

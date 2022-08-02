@@ -53,6 +53,7 @@ import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationVersion
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.numberOfIssues
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.numberOfToIssuesToRead
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedPublication
 import net.ducksmanager.whattheduck.databinding.LoginBinding
 import retrofit2.Response
@@ -106,6 +107,7 @@ class Login : AppCompatActivity() {
                     appDB!!.issueDao().deleteAll()
                     appDB!!.issueDao().insertList(response.body()!!)
                     numberOfIssues = response.body()!!.size
+                    numberOfToIssuesToRead = response.body()!!.filter { it.isToRead }.size
 
                     originActivity.startActivity(Intent(activityRef.get(), targetClass))
 

@@ -8,9 +8,11 @@ import net.ducksmanager.activity.ItemList
 import net.ducksmanager.activity.PublicationList
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
 import net.ducksmanager.whattheduck.R
+import net.ducksmanager.whattheduck.WhatTheDuck
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationContext
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
+import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedFilter
 import java.math.RoundingMode
-import java.util.*
 
 class CountryAdapter internal constructor(
     itemList: ItemList<InducksCountryNameWithPossession>
@@ -46,14 +48,23 @@ class CountryAdapter internal constructor(
 
     override fun getDescriptionText(i: InducksCountryNameWithPossession) : String? = null
 
-    override fun getSuffixText(i: InducksCountryNameWithPossession): String {
-        val possessedRatio = 100 * i.possessedIssues.toDouble() / i.referencedIssues
-        return when {
-            possessedRatio == 0.0 -> ""
-            possessedRatio < 0.1 -> String.format("%d (< %3.1f %%)", i.possessedIssues, 0.1f)
-            else -> String.format("%d (%3.1f %%)", i.possessedIssues, possessedRatio.toBigDecimal().setScale(1, RoundingMode.HALF_EVEN).toFloat())
+    override fun getSuffixText(i: InducksCountryNameWithPossession): String =
+        when(selectedFilter) {
+            applicationContext!!.getString(R.string.filter_to_read) -> String.format(
+                applicationContext!!.resources.getQuantityString(
+                    R.plurals.issues_to_read,
+                    WhatTheDuck.numberOfIssues!!,
+                ), WhatTheDuck.numberOfIssues
+            )
+            else -> {
+                val possessedRatio = 100 * i.possessedIssues.toDouble() / i.referencedIssues
+                when {
+                    possessedRatio == 0.0 -> ""
+                    possessedRatio < 0.1 -> String.format("%d (< %3.1f %%)", i.possessedIssues, 0.1f)
+                    else -> String.format("%d (%3.1f %%)", i.possessedIssues, possessedRatio.toBigDecimal().setScale(1, RoundingMode.HALF_EVEN).toFloat())
+                }
+            }
         }
-    }
 
     override fun getText(i: InducksCountryNameWithPossession): String = i.country.countryName
 

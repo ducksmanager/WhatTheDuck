@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import net.ducksmanager.adapter.ItemAdapter
 import net.ducksmanager.adapter.PublicationAdapter
 import net.ducksmanager.persistence.models.composite.InducksPublicationWithPossession
+import net.ducksmanager.whattheduck.R
 import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.appDB
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.isOfflineMode
@@ -16,7 +17,10 @@ class PublicationList : ItemList<InducksPublicationWithPossession>() {
     override var itemAdapter: ItemAdapter<InducksPublicationWithPossession> = PublicationAdapter(this)
 
     override val AndroidViewModel.data: LiveData<List<InducksPublicationWithPossession>>
-        get() = appDB!!.inducksPublicationDao().findByCountry(WhatTheDuck.selectedCountry!!.countryCode)
+        get() = when(WhatTheDuck.selectedFilter) {
+            getString(R.string.filter_to_read) -> appDB!!.inducksPublicationDao().findToReadByCountry(WhatTheDuck.selectedCountry!!.countryCode)
+            else -> appDB!!.inducksPublicationDao().findByCountry(WhatTheDuck.selectedCountry!!.countryCode)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
