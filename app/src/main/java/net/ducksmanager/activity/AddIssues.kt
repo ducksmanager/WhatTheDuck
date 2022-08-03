@@ -23,6 +23,7 @@ import net.ducksmanager.adapter.PurchaseAdapter
 import net.ducksmanager.adapter.PurchaseAdapter.NoPurchase
 import net.ducksmanager.api.DmServer
 import net.ducksmanager.api.DmServer.Companion.api
+import net.ducksmanager.persistence.models.coa.InducksIssueWithCoverUrl
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData
 import net.ducksmanager.persistence.models.composite.IssueCopiesToUpdate
 import net.ducksmanager.persistence.models.composite.IssueListToUpdate
@@ -59,18 +60,17 @@ class AddIssues : AppCompatActivity(), OnClickListener {
         val issueNumber = selectedIssues.first()
 
         val issue = appDB!!.inducksIssueDao().findByPublicationCodeAndIssueNumber(selectedPublication!!.publicationCode, issueNumber)
-
-        Picasso
-            .with(applicationContext)
-            .load(getCoverUrl(issue))
-            .into(binding.coverimage, object: Callback {
-                override fun onSuccess() {}
-
-                override fun onError() {
-                    binding.coverimage.visibility = View.GONE
+        if (issue == null) {
+            api.getIssues(selectedPublication!!.publicationCode).enqueue(object : DmServer.Callback<List<InducksIssueWithCoverUrl>>("getInducksIssues", this, false) {
+                override fun onSuccessfulResponse(response: Response<List<InducksIssueWithCoverUrl>>) {
+                    showCover(response.body()!!.find { it.inducksIssueNumber == issueNumber })
                 }
             })
+        }
 
+        else {
+            showCover(issue)
+        }
         binding.addIssueTitle.text = resources.getQuantityString(
             R.plurals.insert_issue__title,
             selectedIssues.size,
@@ -79,6 +79,22 @@ class AddIssues : AppCompatActivity(), OnClickListener {
         )
 
         downloadPurchaseList()
+    }
+
+    fun showCover(issue: InducksIssueWithCoverUrl?) {
+        if (issue == null) {
+            return
+        }
+        Picasso
+            .with(applicationContext)
+            .load(getCoverUrl(issue))
+            .into(binding.coverimage, object : Callback {
+                override fun onSuccess() {}
+
+                override fun onError() {
+                    binding.coverimage.visibility = View.GONE
+                }
+            })
     }
 
     private fun downloadPurchaseList() {
@@ -237,6 +253,7 @@ class AddIssues : AppCompatActivity(), OnClickListener {
             if (copies!!.conditions.size <= tab.position) {
                 copies!!.conditions.add(tab.position, InducksIssueWithUserData.NO_CONDITION)
                 copies!!.purchaseIds.add(tab.position, null)
+                copies!!.areToRead.add(tab.position, false)
             }
             setFromConditionApiId(copies!!.conditions[tab.position])
             setFromPurchaseId(copies!!.purchaseIds[tab.position])

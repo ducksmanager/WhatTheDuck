@@ -31,7 +31,7 @@ interface InducksIssueDao {
         " SELECT inducks_issue.*" +
         " FROM inducks_issue" +
         " WHERE inducksPublicationCode = :publicationCode AND inducksIssueNumber = :issueNumber")
-    fun findByPublicationCodeAndIssueNumber(publicationCode: String, issueNumber: String): InducksIssueWithCoverUrl
+    fun findByPublicationCodeAndIssueNumber(publicationCode: String, issueNumber: String): InducksIssueWithCoverUrl?
 
     @Query(
         " SELECT inducks_issue.*, issues.*, purchases.*, suggested_issues.suggestionScore" +
