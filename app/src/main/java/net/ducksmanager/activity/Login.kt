@@ -119,12 +119,22 @@ class Login : AppCompatActivity() {
                     })
 
                     val userPublicationCodes = appDB!!.issueDao().getPublicationCodes()
-                    api.getQuotations(userPublicationCodes.joinToString(",")).enqueue(object : Callback<List<InducksIssueQuotation>>(EVENT_GET_QUOTATIONS, originActivity, true) {
-                        override fun onSuccessfulResponse(response: Response<List<InducksIssueQuotation>>) {
-                            appDB!!.inducksIssueQuotationDao().deleteAll()
-                            appDB!!.inducksIssueQuotationDao().insertList(response.body()!!)
-                        }
-                    })
+                    val userPublicationCodesSublists: List<List<String>> = userPublicationCodes.chunked(50)
+                    userPublicationCodesSublists.forEachIndexed { index, userPublicationCodesSublist ->
+                        api.getQuotations(userPublicationCodesSublist.joinToString(",")).enqueue(object :
+                            Callback<List<InducksIssueQuotation>>(
+                                EVENT_GET_QUOTATIONS,
+                                originActivity,
+                                true
+                            ) {
+                            override fun onSuccessfulResponse(response: Response<List<InducksIssueQuotation>>) {
+                                if (index == 0) {
+                                    appDB!!.inducksIssueQuotationDao().deleteAll()
+                                }
+                                appDB!!.inducksIssueQuotationDao().insertList(response.body()!!)
+                            }
+                        })
+                    }
 
                     api.suggestedIssues.enqueue(object : Callback<SuggestionList>(EVENT_GET_SUGGESTED_ISSUES, originActivity, true) {
                         override fun onSuccessfulResponse(response: Response<SuggestionList>) {
