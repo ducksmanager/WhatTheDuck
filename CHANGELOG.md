@@ -1,3 +1,9 @@
+Version 2.15.0
+
+    Support to-read list
+    Show collection estimation in statistics
+    Allow to edit an existing issue by tapping on it in a user issue list or in cover search results
+
 Version 2.14.1
 
     Add Tunisia flag
