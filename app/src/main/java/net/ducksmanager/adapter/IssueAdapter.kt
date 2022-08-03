@@ -1,9 +1,11 @@
 package net.ducksmanager.adapter
 
 import android.app.Activity
+import android.content.Intent
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import net.ducksmanager.activity.AddIssues
 import net.ducksmanager.activity.ItemList
 import net.ducksmanager.activity.ItemList.Companion.isCoaList
 import net.ducksmanager.persistence.models.composite.InducksIssueWithUserData
@@ -25,11 +27,15 @@ class IssueAdapter internal constructor(
     override fun hasEnoughItemsForFilter() = filteredItems.size > ItemList.MIN_ITEM_NUMBER_FOR_FILTER
 
     override val onClickListener = View.OnClickListener { view: View ->
+        val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
         if (isCoaList()) {
-            val position = (view.parent as RecyclerView).getChildLayoutPosition(view)
             val clickedIssue = getItem(position)
             toggleSelectedIssue(clickedIssue.issue.inducksIssueNumber)
             this.notifyItemChanged(position)
+        }
+        else {
+            selectedIssues = mutableListOf(getItem(position).issue.inducksIssueNumber)
+            originActivity.startActivity(Intent(originActivity, AddIssues::class.java))
         }
     }
 

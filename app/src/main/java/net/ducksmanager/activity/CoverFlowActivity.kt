@@ -3,7 +3,6 @@ package net.ducksmanager.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.mig35.carousellayoutmanager.CarouselLayoutManager
 import com.mig35.carousellayoutmanager.CarouselZoomPostLayoutListener
@@ -53,33 +52,24 @@ class CoverFlowActivity : AppCompatActivity() {
             DefaultChildSelectionListener.initCenterItemListener({ recyclerView, _, v ->
                 val position = recyclerView.getChildLayoutPosition(v)
                 val currentSuggestion = data[position]
-                if (currentSuggestion.userIssue == null) {
-                    appDB!!.inducksCountryDao()
-                        .findByCountryCode(currentSuggestion.coverSearchIssue.coverCountryCode)
-                        .observe(this) { country ->
-                            selectedCountry = country
-                            appDB!!.inducksPublicationDao()
-                                .findByPublicationCode(currentSuggestion.coverSearchIssue.coverPublicationCode)
-                                .observe(this) { publication ->
-                                    selectedPublication = publication
-                                    selectedIssues =
-                                        mutableListOf(currentSuggestion.coverSearchIssue.coverIssueNumber)
-                                    this@CoverFlowActivity.startActivity(
-                                        Intent(
-                                            this@CoverFlowActivity,
-                                            AddIssues::class.java
-                                        )
+                appDB!!.inducksCountryDao()
+                    .findByCountryCode(currentSuggestion.coverSearchIssue.coverCountryCode)
+                    .observe(this) { country ->
+                        selectedCountry = country
+                        appDB!!.inducksPublicationDao()
+                            .findByPublicationCode(currentSuggestion.coverSearchIssue.coverPublicationCode)
+                            .observe(this) { publication ->
+                                selectedPublication = publication
+                                selectedIssues =
+                                    mutableListOf(currentSuggestion.coverSearchIssue.coverIssueNumber)
+                                this@CoverFlowActivity.startActivity(
+                                    Intent(
+                                        this@CoverFlowActivity,
+                                        AddIssues::class.java
                                     )
-                                }
-                        }
-                } else {
-                    Toast.makeText(
-                        this@CoverFlowActivity,
-                        R.string.issue_already_possessed,
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                }
+                                )
+                            }
+                    }
             }, binding.listHorizontal, layoutManager)
 
             layoutManager.addOnItemSelectionListener { position ->
