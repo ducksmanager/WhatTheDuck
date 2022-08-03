@@ -8,7 +8,6 @@ import net.ducksmanager.activity.ItemList
 import net.ducksmanager.activity.PublicationList
 import net.ducksmanager.persistence.models.composite.InducksCountryNameWithPossession
 import net.ducksmanager.whattheduck.R
-import net.ducksmanager.whattheduck.WhatTheDuck
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.applicationContext
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedCountry
 import net.ducksmanager.whattheduck.WhatTheDuck.Companion.selectedFilter
@@ -53,8 +52,8 @@ class CountryAdapter internal constructor(
             applicationContext!!.getString(R.string.filter_to_read) -> String.format(
                 applicationContext!!.resources.getQuantityString(
                     R.plurals.issues_to_read,
-                    WhatTheDuck.numberOfIssues!!,
-                ), WhatTheDuck.numberOfIssues
+                    i.possessedIssues,
+                ), i.possessedIssues
             )
             else -> {
                 val possessedRatio = 100 * i.possessedIssues.toDouble() / i.referencedIssues
