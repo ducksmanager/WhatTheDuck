@@ -64,11 +64,14 @@
     <string name="error_width_restrictions">La largeur de votre sélection doit être comprise entre 5 et 50 millimètres</string>
     <string name="favorite_authors">Mes auteurs favoris</string>
     <string name="filter">Filtrer</string>
+    <string name="filter_all_collection">Toute la collection</string>
+    <string name="filter_to_read">Mes livres à lire</string>
     <string name="from_recent_issue">Depuis un magazine récent</string>
     <string name="height">Hauteur :</string>
     <string name="highest_quoted_issue">Magazine le plus côté :</string>
     <string name="i_have_cropped_the_photo">J\'ai découpé la photo</string>
     <string name="in_this_condition">Dans cet état</string>
+    <string name="in_to_read_list">A lire</string>
     <string name="including1Copy">dont %d double</string>
     <string name="includingXCopies">dont %d doubles</string>
     <string name="input_error">Erreur de saisie</string>
@@ -115,6 +118,7 @@
     <string name="no_author">Vous n\'avez pas d\'auteurs favoris</string>
     <string name="no_issue">Aucun numéro</string>
     <string name="no_item">Aucun numéro. Tapez sur le bouton 🖊️ pour ajouter des numéros à votre collection !</string>
+    <string name="no_item_in_to_read_list">Vous n\'avez pas de magazine à lire. Choisissez \"Toute la collection\" dans le filtre en haut à droite de l\'écran, puis indiquez un numéro comme \"à lire\" pour qu\'il s\'affiche ici.</string>
     <string name="no_purchase_date">Pas de date d\'achat</string>
     <string name="no_suggestion">Nous n\'avons pas de suggestions à vous proposer. Assurez-vous d\'avoir noté vos auteurs préférés.\nLes suggestions sont mises à jour quotidiennement.</string>
     <string name="no_title">Sans titre</string>
@@ -187,8 +191,4 @@
     <string name="width">Largeur :</string>
     <string name="you_dont_own_any_quoted_issue">Vous ne possédez pas de numéro côté.</string>
     <string name="zoom">Zoom</string>
-    <string name="in_to_read_stack">A lire</string>
-    <string name="no_item_in_to_read_list">Vous n\'avez pas de magazine à lire. Choisissez \"Toute la collection\" dans le filtre en haut à droite de l\'écran, puis indiquez un numéro comme \"à lire\" pour qu\'il s\'affiche ici.</string>
-    <string name="filter_all_collection">Toute la collection</string>
-    <string name="filter_to_read">Mes livres à lire</string>
 </resources>

@@ -56,11 +56,14 @@
     <string name="error_width_restrictions">Bokryggens bredd måste vara mellan 5 och 50 millimeter</string>
     <string name="favorite_authors">Mina favoritförfattare</string>
     <string name="filter">Filter</string>
+    <string name="filter_all_collection">Hela samlingen</string>
+    <string name="filter_to_read">Min att läsa lista</string>
     <string name="from_recent_issue">Från en ny utgåva</string>
     <string name="height">Längd:</string>
     <string name="highest_quoted_issue">Högsta uppskattat värde:</string>
     <string name="i_have_cropped_the_photo">Jag har beskurit fotot</string>
     <string name="in_this_condition">I detta skick</string>
+    <string name="in_to_read_list">I att läsa lista</string>
     <string name="including1Copy">inkl. %d kopia</string>
     <string name="includingXCopies">inkl. %d kopior</string>
     <string name="input_error">Input fel</string>
@@ -106,7 +109,8 @@
     <string name="new_version_available">En ny version av What The Duck finns tillgänglig!\\nKlicka här för att uppdatera appen</string>
     <string name="no_author">Du har inga favoritförfattare</string>
     <string name="no_issue">Ingen utgåva</string>
-    <string name="no_item">Ingen utgåva i den här listan. Klicka på ikonen 🖊️ för att lägga till problem i din samling!</string>
+    <string name="no_item">Ingen utgåva i den här listan. Klicka på ikonen 🖊️ för att lägga till utgåva i din samling!</string>
+    <string name="no_item_in_to_read_list">Du har inga utgåva att läsa. Ställ in ett befintligt utgåva som \"I att-läsa lista\" för att visa det här.</string>
     <string name="no_purchase_date">Inget inköpsdatum</string>
     <string name="no_suggestion">Vi har inga förslag åt dig. Se till att du betygsatt dina favoritförfattare.\nFörslagen uppdateras dagligen.</string>
     <string name="no_title">Ingen titel</string>

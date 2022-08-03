@@ -133,7 +133,7 @@
                 android:layout_marginRight="4dp"
                 android:layout_marginBottom="4dp"
                 android:layout_weight="1"
-                android:text="@string/in_to_read_stack" />
+                android:text="@string/in_to_read_list" />
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

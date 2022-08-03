@@ -75,8 +75,8 @@
     <string name="height">Height:</string>
     <string name="highest_quoted_issue">Highest quoted issue:</string>
     <string name="i_have_cropped_the_photo">I have cropped the photo</string>
-    <string name="in_to_read_stack">In to-read stack</string>
     <string name="in_this_condition">In this condition</string>
+    <string name="in_to_read_list">In to-read stack</string>
     <string name="including1Copy">incl. %d copy</string>
     <string name="includingXCopies">incl. %d copies</string>
     <string name="input_error">Input error</string>
@@ -124,7 +124,7 @@
     <string name="no_author">You don\'t have any favorite authors</string>
     <string name="no_issue">No issue</string>
     <string name="no_item">No issue in this list. Click on the 🖊️ icon to add issues to your collection!</string>
-    <string name="no_item_in_to_read_list">You don\'t have any issue to read. Set an existing issue as "In to-read list" to show it here.</string>
+    <string name="no_item_in_to_read_list">You don\'t have any issue to read. Set an existing issue as \"In to-read list\" to show it here.</string>
     <string name="no_purchase_date">No purchase date</string>
     <string name="no_suggestion">We don\'t have any suggestion for you. Make sure that you rated your favorite authors.\nThe suggestions are updated daily.</string>
     <string name="no_title">No title</string>
