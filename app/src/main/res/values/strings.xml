@@ -143,6 +143,7 @@
     <string name="purchase_date">Purchase date</string>
     <string name="purchase_name">Purchase name</string>
     <string name="quotation">Quotation: </string>
+    <string name="quotation_around">Around %1d €</string>
     <string name="quotation_between">Between %1d and %2d €</string>
     <string name="quotation_equals" translatable="false">%1d €</string>
     <string name="quotation_less_than">Less than %d €</string>

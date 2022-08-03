@@ -114,11 +114,19 @@ class CoverFlowActivity : AppCompatActivity() {
                     if (quotation != null) {
                         binding.quotation.visibility = VISIBLE
                         if (quotation.containsKey("min") && quotation.containsKey("max")) {
-                            binding.quotationvalue.text = String.format(
-                                resources.getString(R.string.quotation_between),
-                                quotation["min"],
-                                quotation["max"]
-                            )
+                            if (quotation["min"] == quotation["max"]) {
+                                binding.quotationvalue.text = String.format(
+                                    resources.getString(R.string.quotation_around),
+                                    quotation["min"]
+                                )
+                            }
+                            else {
+                                binding.quotationvalue.text = String.format(
+                                    resources.getString(R.string.quotation_between),
+                                    quotation["min"],
+                                    quotation["max"]
+                                )
+                            }
                         } else if (quotation.containsKey("min")) {
                             binding.quotationvalue.text = String.format(
                                 resources.getString(R.string.quotation_more_than),
