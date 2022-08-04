@@ -58,9 +58,11 @@ class IssueList : ItemList<InducksIssueWithUserData>() {
     }
 
     override val AndroidViewModel.data: LiveData<List<InducksIssueWithUserData>>
-        get() = when(WhatTheDuck.selectedFilter) {
-            getString(filter_to_read) -> appDB!!.inducksIssueDao().findToReadByPublicationCode(getPublicationCode())
-            else -> appDB!!.inducksIssueDao().findByPublicationCode(getPublicationCode())
+        get() {
+            return when(WhatTheDuck.selectedFilter) {
+                getString(filter_to_read) -> appDB!!.inducksIssueDao().findToReadByPublicationCode(getPublicationCode())
+                else -> appDB!!.inducksIssueDao().findByPublicationCode(getPublicationCode())
+            }
         }
 
     override fun downloadAndShowList() {

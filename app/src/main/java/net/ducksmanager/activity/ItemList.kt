@@ -242,7 +242,10 @@ abstract class ItemList<Item> : AppCompatActivityWithDrawer() {
         binding.addToCollectionFromRecentIssues.setOnClickListener { startActivity(Intent(this, RecentIssues::class.java)) }
         binding.addToCollectionByFileButton.setOnClickListener { pickCoverPicture() }
         binding.addToCollectionByPhotoButton.setOnClickListener { takeCoverPicture() }
-        binding.addToCollectionBySelectionButton.setOnClickListener { goToAlternativeView() }
+        binding.addToCollectionBySelectionButton.setOnClickListener {
+            selectedFilter = getString(R.string.filter_all_collection);
+            goToAlternativeView()
+        }
 
         binding.itemList.adapter = itemAdapter
 
