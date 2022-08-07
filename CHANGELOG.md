@@ -1,3 +1,8 @@
+Version 2.15.1
+
+    Fix crash on update to 2.15.0
+    Fix setting multiple issues to "to read" had no effect
+
 Version 2.15.0
 
     Support to-read list
