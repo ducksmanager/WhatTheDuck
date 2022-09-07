@@ -169,7 +169,7 @@ class Stats : AppCompatActivityWithDrawer() {
                     val series =
                         allPublications.associateWith { mutableMapOf<Int, Any>() }.toMutableMap()
                     val oldestMonth =
-                        issuesPerMonthAndPublication.find { it.month != "-0001-1" }?.month
+                        issuesPerMonthAndPublication.find { it.month != "-0001-1" && it.month != "0000-00" }?.month
                     val hasUnknownDate = issuesPerMonthAndPublication.any { it.month == "-0001-1" }
 
                     val allMonths = if (hasUnknownDate) {
