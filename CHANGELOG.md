@@ -1,3 +1,9 @@
+Version 2.15.2
+
+    Add index on issues (isToRead)
+    Fix crash on stats screen for some collections
+    Fix crash on startup when the user has more than 50 quoted issues and the 1st data response is not the first chunk of quotations to retrieve
+
 Version 2.15.1
 
     Fix crash on update to 2.15.0
