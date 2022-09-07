@@ -94,7 +94,7 @@ abstract class AppDatabase : RoomDatabase() {
         }
         val MIGRATION_17_18: Migration = object : Migration(17, 18) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL(" CREATE INDEX issues_to_read ON issues (isToRead)")
+                database.execSQL(" CREATE INDEX index_issues_isToRead ON issues (isToRead)")
             }
         }
     }
