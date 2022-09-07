@@ -42,7 +42,7 @@ class WhatTheDuck : Application() {
     }
 
     companion object {
-        private lateinit var instance: WhatTheDuck
+        lateinit var instance: WhatTheDuck
         var loadedConfig: Properties? = null
 
         val config: Properties
@@ -252,28 +252,33 @@ class WhatTheDuck : Application() {
         }
 
         if (!isTestContext) {
-            appDB = Room.databaseBuilder(applicationContext, AppDatabase::class.java, DB_NAME)
-                .allowMainThreadQueries()
-                .addMigrations(
-                    AppDatabase.MIGRATION_7_8,
-                    AppDatabase.MIGRATION_8_9,
-                    AppDatabase.MIGRATION_9_10,
-                    AppDatabase.MIGRATION_10_11,
-                    AppDatabase.MIGRATION_11_12,
-                    AppDatabase.MIGRATION_12_13,
-                    AppDatabase.MIGRATION_13_14,
-                    AppDatabase.MIGRATION_14_15,
-                    AppDatabase.MIGRATION_15_16,
-                    AppDatabase.MIGRATION_16_17
-                )
-                .fallbackToDestructiveMigration()
-                .build()
+            initDb()
         }
 
         DmServer.initApi()
         EdgeCreator.initApi()
         PicassoCache.clearCache(Picasso.with(applicationContext))
 
+    }
+
+    fun initDb() {
+        appDB = Room.databaseBuilder(applicationContext, AppDatabase::class.java, DB_NAME)
+            .allowMainThreadQueries()
+            .addMigrations(
+                AppDatabase.MIGRATION_7_8,
+                AppDatabase.MIGRATION_8_9,
+                AppDatabase.MIGRATION_9_10,
+                AppDatabase.MIGRATION_10_11,
+                AppDatabase.MIGRATION_11_12,
+                AppDatabase.MIGRATION_12_13,
+                AppDatabase.MIGRATION_13_14,
+                AppDatabase.MIGRATION_14_15,
+                AppDatabase.MIGRATION_15_16,
+                AppDatabase.MIGRATION_16_17,
+                AppDatabase.MIGRATION_17_18
+            )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     private fun initConnectivityManager() {

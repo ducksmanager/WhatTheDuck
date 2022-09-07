@@ -42,6 +42,9 @@ abstract class AppCompatActivityWithDrawer : AppCompatActivity(), Medals {
     }
 
     private fun createNavigationDrawer() {
+        if (appDB == null) {
+            WhatTheDuck.instance.initDb()
+        }
         val toggle = ActionBarDrawerToggle(this, drawerLayout, findViewById(R.id.toolbar), R.string.ok, R.string.cancel)
         drawerLayout!!.addDrawerListener(toggle)
         toggle.syncState()
