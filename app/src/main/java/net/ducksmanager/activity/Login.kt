@@ -120,6 +120,7 @@ class Login : AppCompatActivity() {
 
                     val userPublicationCodes = appDB!!.issueDao().getPublicationCodes()
                     val userPublicationCodesSublists: List<List<String>> = userPublicationCodes.chunked(50)
+                    var isClean = false
                     userPublicationCodesSublists.forEachIndexed { index, userPublicationCodesSublist ->
                         api.getQuotations(userPublicationCodesSublist.joinToString(",")).enqueue(object :
                             Callback<List<InducksIssueQuotation>>(
@@ -128,8 +129,9 @@ class Login : AppCompatActivity() {
                                 true
                             ) {
                             override fun onSuccessfulResponse(response: Response<List<InducksIssueQuotation>>) {
-                                if (index == 0) {
+                                if (!isClean) {
                                     appDB!!.inducksIssueQuotationDao().deleteAll()
+                                    isClean = true
                                 }
                                 appDB!!.inducksIssueQuotationDao().insertList(response.body()!!)
                             }
