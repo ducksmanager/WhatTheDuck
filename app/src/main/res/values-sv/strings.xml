@@ -82,9 +82,9 @@
     <string name="issue_conditions">Utgåvans skick</string>
     <string name="issue_list_copied">Listan har kopierats till dina urklipp.</string>
     <string name="issue_list_copy_missing">Kopiera saknade utgåvor</string>
-    <string name="issue_list_copy_missing_title">Saknade utgåvor av&#160;</string>
+    <string name="issue_list_copy_missing_title">Saknade utgåvor av </string>
     <string name="issue_list_copy_possessed">Kopiera ägda utgåvor</string>
-    <string name="issue_list_copy_possessed_title">Ägda utgåvor av&#160;</string>
+    <string name="issue_list_copy_possessed_title">Ägda utgåvor av </string>
     <string name="issue_no_cover">Utgåva %1s (inte omslag)</string>
     <string name="issue_selection_tip">Välj en utgåva genom att trycka på den.\nVälj en sekvens av utgåvor genom att trycka länge på den första i sekvensen.</string>
     <string name="issues">utgåvor</string>
@@ -170,7 +170,9 @@
     <string name="stats">Statistik</string>
     <string name="story_was_published_in">har publicerats i följande utgåvor:</string>
     <string name="suggestions">Förslag</string>
-    <string name="suggestions_intro">WhatTheDuck ger dig en personlig lista av samlingar som innehåller nya berättelser från dina favoritförfattare. Du kan ändra vilka länder som visas under Inställningar.</string>
+    <string name="suggestions_intro">WhatTheDuck ger dig en personlig lista med nummer som innehåller nya berättelser från dina favoritförfattare.
+\nDu kan ändra vilka länder som ska visas på skärmen Inställningar och vilka författare som ska visas på skärmen Mina favoritförfattare.
+\nFörslagen uppdateras dagligen.</string>
     <string name="take_another_photo">Ta ytterligare ett foto</string>
     <string name="thanks_report">Tack för din feedback!</string>
     <string name="unknown_date">Okänt datum</string>
@@ -184,4 +186,8 @@
     <string name="width">Bredd:</string>
     <string name="you_dont_own_any_quoted_issue">Du äger ingen värderad utgåva.</string>
     <string name="zoom">Zoom</string>
+    <plurals name="issues_to_read">
+        <item quantity="one">%d nummer att läsa</item>
+        <item quantity="other">%d nummer att läsa</item>
+    </plurals>
 </resources>
